@@ -1,3 +1,4 @@
+import { ProjectListComponent } from './modules/project-list/project-list.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -21,7 +22,9 @@ import { ChangePasswordComponent } from './users/change-password/change-password
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },
-                    { path: 'update-password', component: ChangePasswordComponent }
+                    { path: 'update-password', component: ChangePasswordComponent },
+                    { path: 'project', component: ProjectListComponent, canActivate: [AppRouteGuard]  },
+
                 ]
             }
         ])
