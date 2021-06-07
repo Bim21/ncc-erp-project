@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Abp.UI;
+using Microsoft.AspNetCore.Mvc;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.Projects.Dto;
@@ -39,6 +40,26 @@ namespace ProjectManagement.APIs.Projects
         {
             await WorkScope.UpdateAsync(ObjectMapper.Map<Project>(input));
             return input;
+        }
+        public async Task<ProjectDto> Create(ProjectDto input)
+        {
+            var checkP = WorkScope.GetAll<Project>().Any(x => x.Code == input.Code);
+            if (checkP)
+            {
+                throw new UserFriendlyException("Code project exists.");
+            }
+            input.Id = await WorkScope.InsertAndGetIdAsync(new Project
+            {
+                Name = input.Name,
+                Code = input.Code,
+                IsActive = input.IsActive,
+                Number = input.Number,
+            });
+            return input;
+        }
+        public async Task Delete(long id)
+        {
+            await WorkScope.DeleteAsync<Project>(id);
         }
     }
 }
