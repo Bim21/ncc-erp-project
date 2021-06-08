@@ -4,6 +4,7 @@ import {
   OnInit,
   Injector
 } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   UserServiceProxy,
@@ -20,9 +21,11 @@ export class HeaderLanguageMenuComponent extends AppComponentBase
   implements OnInit {
   languages: abp.localization.ILanguageInfo[];
   currentLanguage: abp.localization.ILanguageInfo;
-
-  constructor(injector: Injector, private _userService: UserServiceProxy) {
+  isEnglish = false;
+  constructor(injector: Injector, private _userService: UserServiceProxy,private translate: TranslateService) {
     super(injector);
+    translate.setDefaultLang('vn');
+    translate.use('vn');
   }
 
   ngOnInit() {
@@ -32,7 +35,14 @@ export class HeaderLanguageMenuComponent extends AppComponentBase
     );
     this.currentLanguage = this.localization.currentLanguage;
   }
-
+  switchLanguage(language: string) {
+    this.translate.use(language);
+    if(language === 'en') {
+      this.isEnglish = true;
+    } else {
+      this.isEnglish = false;
+    }
+  }
   changeLanguage(languageName: string): void {
     const input = new ChangeUserLanguageDto();
     input.languageName = languageName;

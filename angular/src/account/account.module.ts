@@ -17,6 +17,7 @@ import { AccountFooterComponent } from './layout/account-footer.component';
 // tenants
 import { TenantChangeComponent } from './tenant/tenant-change.component';
 import { TenantChangeDialogComponent } from './tenant/tenant-change-dialog.component';
+import { GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 
 @NgModule({
     imports: [
@@ -39,6 +40,21 @@ import { TenantChangeDialogComponent } from './tenant/tenant-change-dialog.compo
         // tenant
         TenantChangeComponent,
         TenantChangeDialogComponent,
+    ],
+    providers: [
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                autoLogin: true,
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider('879411761479-bgjd9vk52gsrs937ve5vumnmcd7v64oe.apps.googleusercontent.com'
+                        ),
+                    },
+                ],
+            } as SocialAuthServiceConfig,
+        }
     ],
     entryComponents: [
         // tenant
