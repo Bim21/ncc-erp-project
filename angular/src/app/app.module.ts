@@ -1,3 +1,4 @@
+import { FilterComponent } from './../shared/filter/filter.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -42,6 +43,12 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ProjectListComponent } from './modules/project-list/project-list.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -71,7 +78,12 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     SidebarComponent,
     SidebarLogoComponent,
     SidebarUserPanelComponent,
-    SidebarMenuComponent
+    SidebarMenuComponent,
+
+    // 
+    FilterComponent,
+    // 
+    ProjectListComponent,
   ],
   imports: [
     CommonModule,
@@ -91,11 +103,11 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
     TranslateModule.forRoot({
-      // loader: {
-      //   provide: TranslateLoader,
-      //   useFactory: HttpLoaderFactory,
-      //   deps: [HttpClient],
-      // }
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      }
     })
   ],
   exports: [

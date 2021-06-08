@@ -157,7 +157,7 @@ import {MatSelectModule} from '@angular/material/select';
         MatToolbarModule,
         MatTooltipModule,
         MatTreeModule,
-        MatFormFieldModule
+        MatFormFieldModule,
     ]
 })
 export class SharedModule {
