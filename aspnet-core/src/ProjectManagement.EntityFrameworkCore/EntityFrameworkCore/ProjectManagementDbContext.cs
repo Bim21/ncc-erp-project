@@ -11,6 +11,8 @@ namespace ProjectManagement.EntityFrameworkCore
     {
         /* Define a DbSet for each entity of the application */
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<UserProjectResource> UserProjectResources { set; get; }
 
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)

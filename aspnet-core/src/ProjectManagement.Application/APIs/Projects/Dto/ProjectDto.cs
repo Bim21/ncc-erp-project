@@ -5,6 +5,7 @@ using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static ProjectManagement.Constants.StatusEnum;
 
 namespace ProjectManagement.APIs.Projects.Dto
 {
@@ -12,9 +13,12 @@ namespace ProjectManagement.APIs.Projects.Dto
     public class ProjectDto : EntityDto<long>
     {
         [ApplySearchAttribute]
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public int? Number { get; set; }
-        public bool IsActive { get; set; }
+        public string name { get; set; }
+        public ProjectType projectType { get; set; }
+        public ProjectStatus projectStatus{ get; set; }
+        public string clientName { get; set; }
+        public Boolean stillCharge { set; get; }
+        public DateTime startTime { set; get; }
+        public DateTime? endTime { set; get; }
     }
 }
