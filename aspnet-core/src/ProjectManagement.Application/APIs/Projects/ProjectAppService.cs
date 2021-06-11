@@ -6,6 +6,15 @@ using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.Entities;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
+using NccCore.DataExport;
+using NccCore.DataExport.Excel;
+using System.Collections.Generic;
+using System;
+using System.IO;
+using ProjectManagement.Net.MimeTypes;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -14,18 +23,22 @@ namespace ProjectManagement.APIs.Projects
         [HttpPost]
         public async Task<GridResult<ProjectDto>> GetAllPaging(GridParam input)
         {
+
+            //var result1 = WorkScope.GetAll<Project>().ProjectTo<ProjectDto>(null);
+
+
             var result = WorkScope.GetAll<Project>().Select(x => new ProjectDto
             {
                 Name = x.Name,
                 Code = x.Code,
                 IsActive = x.IsActive,
-                Number = x.Number, 
+                Number = x.Number,
             });
             return await result.GetGridResult(result, input);
         }
         public async Task<ProjectDto> Get(long id)
         {
-            var rs =  await WorkScope.GetAsync<Project>(id);
+            var rs = await WorkScope.GetAsync<Project>(id);
             return new ProjectDto
             {
                 Id = rs.Id,
@@ -61,5 +74,50 @@ namespace ProjectManagement.APIs.Projects
         {
             await WorkScope.DeleteAsync<Project>(id);
         }
+
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public async Task<FileBase64Dto> TestExportProject(List<ProjectDto> input)
+        {
+            //SecurityValidator.Validate(_ws, MangLuoiInfo.Id, input.AncestorId);
+            foreach (var item in input)
+            {
+                item.SkipCount = 0;
+                item.MaxResultCount = int.MaxValue;
+            }
+
+
+            //List<ProjectDto> items = new List<ProjectDto>();
+            //items.Add(input);
+            var excelExporter = new EpPlusExcelExporter(_hostingEnvironment);
+
+            var fileName = $"THONG_KE_THONG_CHI_{DateTime.Now.Ticks.ToString()}.xlsx";
+            var properties = new List<string>() {
+                "stt",
+                nameof(ProjectDto.Name),
+                nameof(ProjectDto.Code),
+                nameof(ProjectDto.Number),
+                nameof(ProjectDto.IsActive),
+            };
+
+            var templateFolderPath = Path.Combine(/*_hostingEnvironment.ContentRootPath*/ "C:\\Ncc\\ncc-erp-project\\aspnet-core\\src\\ProjectManagement.Core\\NccCore\\DataExport", "ExcelTemplates");
+            var templateFilePath = Path.Combine(templateFolderPath, "test.xlsx");
+
+            //var headervalues =
+            //    (await getbaocaocommondonvi(input.ancestorid))
+            //    .union(getbaocaocommonngaythang(input.from, input.to))
+            //    .tolist();
+
+
+            var fileBytes = excelExporter.Export(templateFilePath, input, properties, null, true);
+            string fileBase64 = Convert.ToBase64String(fileBytes, 0, fileBytes.Length);
+
+            return new FileBase64Dto
+            {
+                FileName = fileName,
+                FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
+                Base64 = fileBase64
+            };
+        }
+
     }
 }

@@ -53,6 +53,14 @@ namespace NccCore.Extension
             return Convert.ChangeType(value, type);
         }
 
+        public static object ChangeType(System.Reflection.PropertyInfo property, object value)
+        {
+            var targetType = property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition().Equals(typeof(Nullable<>))
+                ? Nullable.GetUnderlyingType(property.PropertyType)
+                : property.PropertyType;
+            return value == null ? null : Convert.ChangeType(value, targetType);
+        }
+
         /// <summary>
         /// Get Object from Json object
         /// </summary>
