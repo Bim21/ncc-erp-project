@@ -10,8 +10,9 @@ using static ProjectManagement.Constants.StatusEnum;
 namespace ProjectManagement.APIs.Projects.Dto
 {
     [AutoMapTo(typeof(Project))]
-    public class ProjectDto : EntityDto<long>
+    public class ProjectDto : /*EntityDto<long>,*/  PagedResultRequestDto
     {
+        public long Id { get; set; }
         [ApplySearchAttribute]
         public string name { get; set; }
         public ProjectType projectType { get; set; }
