@@ -1,4 +1,4 @@
-﻿using Abp.UI;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
@@ -104,6 +104,26 @@ namespace ProjectManagement.APIs.Projects
                 await WorkScope.UpdateAsync(item);
             }
             return input;
+        }
+        public async Task<ProjectDto> Create(ProjectDto input)
+        {
+            var checkP = WorkScope.GetAll<Project>().Any(x => x.Code == input.Code);
+            if (checkP)
+            {
+                throw new UserFriendlyException("Code project exists.");
+            }
+            input.Id = await WorkScope.InsertAndGetIdAsync(new Project
+            {
+                Name = input.Name,
+                Code = input.Code,
+                IsActive = input.IsActive,
+                Number = input.Number,
+            });
+            return input;
+        }
+        public async Task Delete(long id)
+        {
+            await WorkScope.DeleteAsync<Project>(id);
         }
     }
 }
