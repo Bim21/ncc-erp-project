@@ -20,12 +20,12 @@ namespace ProjectManagement.APIs.Projects
 {
     public class ProjectAppService : ProjectManagementAppServiceBase
     {
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        //private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public ProjectAppService(IWebHostEnvironment hostingEnvironment)
-        {
-            this._hostingEnvironment = hostingEnvironment;
-        }
+        //public ProjectAppService(IWebHostEnvironment hostingEnvironment)
+        //{
+        //    this._hostingEnvironment = hostingEnvironment;
+        //}
 
 
         /// <summary>
