@@ -1,13 +1,15 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ProjectManagement.Entities
 {
-    public class Client : FullAuditedEntity<long>
+    public class PMReport : FullAuditedEntity<long>
     {
         public string Name { get; set; }
-        public string Code { get; set; }
+        public PMReportStatus Status { get; set; }
+        public PMReportType Type { get; set; }
     }
 }

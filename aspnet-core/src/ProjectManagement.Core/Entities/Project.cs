@@ -1,26 +1,29 @@
-﻿using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities.Auditing;
+using ProjectManagement.Authorization.Users;
+using ProjectManagement.Constants;
+using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using static ProjectManagement.Constants.StatusEnum;
 
 namespace ProjectManagement.Entities
 {
-    public class Project: FullAuditedEntity<long>,IMayHaveTenant
+    public class Project : FullAuditedEntity<long>
     {
-        public int? TenantId { get; set; }
         public string Name { get; set; }
-        public DateTime? EndTime { set; get; }
-        public DateTime StartTime { set; get; }
-        public Boolean StillCharge { set; get; }
-        public ProjectType Type { set; get; }
-        public ProjectStatus Status { set; get; }
-
+        public string Code { get; set; }
+        public ProjectType ProjectType { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public ProjectStatus Status { get; set; }
+        public long ClientId { get; set; }
         [ForeignKey(nameof(ClientId))]
-        public Client Client { get; set; }
-        public long? ClientId { get; set; }
-
+        public Client Clients { get; set; }
+        public bool IsCharge { get; set; }
+        public long PmId { get; set; }
+        [ForeignKey(nameof(PmId))]
+        public User PM { get; set; }
+       
     }
 }

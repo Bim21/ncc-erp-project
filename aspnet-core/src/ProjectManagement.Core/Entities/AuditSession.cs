@@ -5,9 +5,10 @@ using System.Text;
 
 namespace ProjectManagement.Entities
 {
-    public class Client : FullAuditedEntity<long>
+    public class AuditSession : FullAuditedEntity<long>
     {
         public string Name { get; set; }
-        public string Code { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }

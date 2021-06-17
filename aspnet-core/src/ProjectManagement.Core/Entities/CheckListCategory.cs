@@ -5,9 +5,8 @@ using System.Text;
 
 namespace ProjectManagement.Entities
 {
-    public class Client : FullAuditedEntity<long>
+    public class CheckListCategory : FullAuditedEntity<long>
     {
         public string Name { get; set; }
-        public string Code { get; set; }
     }
 }

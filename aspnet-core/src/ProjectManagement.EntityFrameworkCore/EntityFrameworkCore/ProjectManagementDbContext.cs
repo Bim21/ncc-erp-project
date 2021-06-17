@@ -10,10 +10,25 @@ namespace ProjectManagement.EntityFrameworkCore
     public class ProjectManagementDbContext : AbpZeroDbContext<Tenant, Role, User, ProjectManagementDbContext>
     {
         /* Define a DbSet for each entity of the application */
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<UserProjectResource> UserProjectResources { set; get; }
 
+        public DbSet<AuditResult> AuditResults { get; set; }
+        public DbSet<AuditResultPeople> AuditResultPeoples { get; set; }
+        public DbSet<AuditSession> AuditSessions { get; set; }
+        public DbSet<CheckListCategory> CheckListCategories { get; set; }
+        public DbSet<CheckListItem> CheckListItems { get; set; }
+        public DbSet<CheckListItemMandatory> CheckListItemMandatorys { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<PMReport> PMReports { get; set; }
+        public DbSet<PMReportProject> PMReportProjects { get; set; }
+        public DbSet<PMReportProjectIssue> PMReportProjectIssues { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectCheckList> ProjectCheckLists { get; set; }
+        public DbSet<ProjectMilestone> ProjectMilestones { get; set; }
+        public DbSet<ProjectUser> ProjectUsers { get; set; }
+        public DbSet<ProjectUserBill> ProjectUserBills { get; set; }
+        public DbSet<ResourceRequest> ResourceRequests { get; set; }
+        public DbSet<Timesheet> Timesheets { get; set; }
+        public DbSet<TimesheetProject> TimesheetProjects { get; set; }
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)
         {
