@@ -11,7 +11,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
   styleUrls: ['./project-list.component.css']
 })
 export class ProjectListComponent extends PagedListingComponentBase<ProjectDto> implements OnInit {
-  projectList:ProjectDto[]=[]
+  public projectList:ProjectDto[]=[]
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.projectService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
