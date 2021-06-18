@@ -3,6 +3,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -21,6 +22,7 @@ namespace ProjectManagement.Entities
         public long PMId { get; set; }
         [ForeignKey(nameof(PMId))]
         public User PM { get; set; }
+        [MaxLength(10000)]
         public string Note { get; set; }
     }
 }

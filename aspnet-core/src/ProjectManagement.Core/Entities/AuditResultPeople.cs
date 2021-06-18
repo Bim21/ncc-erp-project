@@ -3,6 +3,7 @@ using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -21,7 +22,7 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
         public long UserId { get; set; }
-
+        [MaxLength(10000)]
         public string Note { get; set; }
 
         public byte Quantity { get; set; }
