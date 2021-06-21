@@ -6,11 +6,9 @@ using System.Text;
 
 namespace ProjectManagement.Entities
 {
-    public class Client : FullAuditedEntity<long>
+    public class CheckListCategory : FullAuditedEntity<long>
     {
-        [MaxLength(255)]
+        [MaxLength(1000)]
         public string Name { get; set; }
-        [MaxLength(50)]
-        public string Code { get; set; }
     }
 }
