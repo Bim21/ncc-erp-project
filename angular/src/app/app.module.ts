@@ -43,8 +43,8 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { ProjectListComponent } from './modules/project-list/project-list.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TimesheetComponent } from './modules/timesheet/timesheet.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -80,10 +80,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     SidebarUserPanelComponent,
     SidebarMenuComponent,
 
-    // 
     FilterComponent,
-    // 
-    ProjectListComponent,
+    
+    TimesheetComponent,
+
   ],
   imports: [
     CommonModule,

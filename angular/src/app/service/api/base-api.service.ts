@@ -1,7 +1,7 @@
 import { AppConsts } from './../../../shared/AppConsts';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { FilterRequest } from '../model/common-DTO';
 import { PagedRequestDto } from './../../../shared/paged-listing-component-base';
 
@@ -21,23 +21,22 @@ export abstract class BaseApiService {
 
     abstract changeUrl();
 
-    protected getUrl(url: string) {        
+    protected getUrl(url: string) {
         return this.rootUrl + '/' + url;
     }
 
-    //
-    getOne(id: any, includes?: any): Observable<any> {
+    public getOne(id: any, includes?: any): Observable<any> {
         return this.http.get(this.rootUrl + '/Get?' + 'id=${id}');
     }
 
-    filterAndPaging(request: FilterRequest): Observable<any> {
+    public filterAndPaging(request: FilterRequest): Observable<any> {
         return this.http.post<any>(this.rootUrl + '/GetAllPaging', request);
     }
 
-    getAllPaging(request: PagedRequestDto): Observable<any> {
+    public getAllPaging(request: PagedRequestDto): Observable<any> {
         return this.http.post<any>(this.rootUrl + '/GetAllPaging', request);
     }
-    getAll(): Observable<any> {
+    public getAll(): Observable<any> {
         return this.http.get<any>(this.rootUrl + '/GetAll');
     }
     public getById(id: any): Observable<any> {
@@ -58,12 +57,23 @@ export abstract class BaseApiService {
         return this.http.post<any>(this.rootUrl + '/Create', item);
     }
 
-    filter(key: FilterRequest): Observable<any> {
+    public filter(key: FilterRequest): Observable<any> {
         return this.http.get(this.rootUrl + '/Filter?' + `Includes=${key.includes}&Filters=${key.filters}&Sorts=${key.sorts}&Page=${key.page}&PageSize=${key.pageSize}`);
     }
-    
-    save(data: object): Observable<any> {
+
+    public save(data: object): Observable<any> {
         return this.http.post(this.rootUrl + '/Save', data);
     }
     
+    public handleError(error: any) {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}`;
+        } else {
+            errorMessage = `Error: ${error.error.error.message}`;
+        }
+        abp.notify.error(errorMessage);
+        return throwError(errorMessage);
+    }
+
 }
