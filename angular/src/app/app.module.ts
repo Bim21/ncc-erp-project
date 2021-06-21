@@ -45,6 +45,10 @@ import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
+import { ChecklistTitleComponent } from './modules/checklist-title/checklist-title.component';
+import { CreateEditChecklistTitleComponent } from './modules/checklist-title/create-edit-checklist-title/create-edit-checklist-title.component';
+import { ChecklistComponent } from './modules/checklist/checklist.component';
+import { CreateChecklistItemComponent } from './modules/checklist/create-checklist-item/create-checklist-item.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -84,6 +88,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     
     TimesheetComponent,
 
+    ChecklistTitleComponent,
+    CreateEditChecklistTitleComponent,
+    ChecklistComponent,
+    CreateChecklistItemComponent,
   ],
   imports: [
     CommonModule,

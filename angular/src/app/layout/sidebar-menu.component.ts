@@ -75,12 +75,18 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         "",
         "fas fa-circle",
         "",[
-          // new MenuItem(
-          //   this.l("Project"),
-          //   "/app/project",
-          //   "fas fa-building",
-          //   ""
-          // )
+          new MenuItem(
+            this.l("Checklist Title"),
+            "/app/checklist-title",
+            "fas fa-building",
+            ""
+          ),
+          new MenuItem(
+            this.l("Checklist"),
+            "/app/checklist",
+            "fas fa-building",
+            ""
+          )
 
         ]
       ),

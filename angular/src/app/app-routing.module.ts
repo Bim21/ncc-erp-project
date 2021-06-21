@@ -9,6 +9,8 @@ import { UsersComponent } from './users/users.component';
 import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
+import { ChecklistTitleComponent } from './modules/checklist-title/checklist-title.component';
+import { ChecklistComponent } from './modules/checklist/checklist.component';
 
 @NgModule({
     imports: [
@@ -26,7 +28,8 @@ import { ChangePasswordComponent } from './users/change-password/change-password
                     // timesheet
                     { path: 'timesheet', component: TimesheetComponent, data: { permission: '' }, canActivate: [AppRouteGuard] },
 
-
+                    { path: 'checklist-title', component: ChecklistTitleComponent, canActivate: [AppRouteGuard]  },
+                    { path: 'checklist', component: ChecklistComponent, canActivate: [AppRouteGuard]  },
 
                 ]
             }
