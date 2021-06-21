@@ -6,3 +6,7 @@ export class AppTenantAvailabilityState {
     static InActive: number = TenantAvailabilityState._2;
     static NotFound: number = TenantAvailabilityState._3;
 }
+export const APP_ENUMS = {
+
+    
+}

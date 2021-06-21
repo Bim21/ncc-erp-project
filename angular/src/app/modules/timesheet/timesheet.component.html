@@ -2,17 +2,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
-                <h1>{{'m4_child2.no' | translate}}</h1>
+                <h1>timesheet</h1>
             </div>
-           
         </div>
     </div>
 </section>
-
 <section class="content px-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
@@ -27,7 +26,6 @@
                                 [class.fa-angle-down]="!advancedFiltersVisible"></i>
                         </button>
                     </div>
-
                 </div>
             </div>
             <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
@@ -56,30 +54,30 @@
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Number</th>
-                            <th>is Active</th>
-
+                            <th>name</th>
+                            <th>date</th>
+                            <th>number of project</th>
+                            <th>number of timesheet</th>
+                            <th>action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let project of projectList  |paginate
-                : {
-                    id: 'server',
-                    itemsPerPage: pageSize,
-                    currentPage: pageNumber,
-                    totalItems: totalItems
-                  }; let i = index">
-                            <td>{{i+1}}</td>
-                            <td>{{project.name}}</td>
-                            <td>{{project.code}}</td>
-                            <td>{{project.number}}</td>
-                            <td>{{project.isActive}}</td>
+                        <tr *ngFor="let item of timesheetList |paginate
+                            : {
+                                id: 'server',
+                                itemsPerPage: pageSize,
+                                currentPage: pageNumber,
+                                totalItems: totalItems
+                              }; let i = index"  >
+                            <td><span >{{ i +1 }}</span></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td ></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
-
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">
@@ -121,7 +119,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </section>

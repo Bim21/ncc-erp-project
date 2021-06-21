@@ -1,4 +1,4 @@
-import { ProjectListComponent } from './modules/project-list/project-list.component';
+import { TimesheetComponent } from './modules/timesheet/timesheet.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -23,7 +23,10 @@ import { ChangePasswordComponent } from './users/change-password/change-password
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent },
                     { path: 'update-password', component: ChangePasswordComponent },
-                    { path: 'project', component: ProjectListComponent, canActivate: [AppRouteGuard]  },
+                    // timesheet
+                    { path: 'timesheet', component: TimesheetComponent, data: { permission: '' }, canActivate: [AppRouteGuard] },
+
+
 
                 ]
             }

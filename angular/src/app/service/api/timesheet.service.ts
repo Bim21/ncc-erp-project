@@ -6,12 +6,12 @@ import { BaseApiService } from './base-api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService extends BaseApiService {
-
-  constructor(http: HttpClient) { 
-    super(http)
-  }
+export class TimesheetService extends BaseApiService{
   changeUrl() {
-    return 'Project';
+    return 'Timesheet';
+  }
+
+  constructor(http:HttpClient) { 
+    super(http)
   }
 }
