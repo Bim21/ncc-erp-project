@@ -7,6 +7,18 @@ export class AppTenantAvailabilityState {
     static NotFound: number = TenantAvailabilityState._3;
 }
 export const APP_ENUMS = {
+    ProjectType: {
+        ODC: 0,
+        'T&M': 1,
+        FIXPRICE: 2,
+        PRODUCT: 3
+    },
+    ProjectStatus: {
+        POTENTIAL: 0,
+        'IN PROGRESS': 1,
+        MAINTAIN: 2,
+        CLOSED: 3
+    }
 
     
 }

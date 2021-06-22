@@ -49,7 +49,9 @@ import { ChecklistTitleComponent } from './modules/checklist-title/checklist-tit
 import { CreateEditChecklistTitleComponent } from './modules/checklist-title/create-edit-checklist-title/create-edit-checklist-title.component';
 import { ChecklistComponent } from './modules/checklist/checklist.component';
 import { CreateChecklistItemComponent } from './modules/checklist/create-checklist-item/create-checklist-item.component';
-
+import { SaoDoComponent } from './modules/sao-do/sao-do.component';
+import { ListProjectComponent } from './modules/list-project/list-project.component';
+import { CreateEditListProjectComponent } from './modules/list-project/create-edit-list-project/create-edit-list-project.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -92,6 +94,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateEditChecklistTitleComponent,
     ChecklistComponent,
     CreateChecklistItemComponent,
+    SaoDoComponent,
+    ListProjectComponent,
+    CreateEditListProjectComponent,
   ],
   imports: [
     CommonModule,

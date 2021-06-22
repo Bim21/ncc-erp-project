@@ -11,9 +11,11 @@ import {
 } from 'abp-ng2-module';
 
 import { AppSessionService } from '@shared/session/app-session.service';
+import { APP_ENUMS } from './AppEnums';
 
 export abstract class AppComponentBase {
 
+    APP_ENUM = APP_ENUMS;
     localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
 
     localization: LocalizationService;

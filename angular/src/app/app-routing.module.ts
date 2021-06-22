@@ -11,6 +11,8 @@ import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { ChecklistTitleComponent } from './modules/checklist-title/checklist-title.component';
 import { ChecklistComponent } from './modules/checklist/checklist.component';
+import { SaoDoComponent } from './modules/sao-do/sao-do.component';
+import { ListProjectComponent } from './modules/list-project/list-project.component';
 
 @NgModule({
     imports: [
@@ -30,6 +32,8 @@ import { ChecklistComponent } from './modules/checklist/checklist.component';
 
                     { path: 'checklist-title', component: ChecklistTitleComponent, canActivate: [AppRouteGuard]  },
                     { path: 'checklist', component: ChecklistComponent, canActivate: [AppRouteGuard]  },
+                    { path: 'sao-do', component: SaoDoComponent, canActivate: [AppRouteGuard]  },
+                    { path: 'list-project', component: ListProjectComponent, canActivate: [AppRouteGuard]  },
 
                 ]
             }

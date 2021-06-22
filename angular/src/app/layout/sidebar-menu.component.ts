@@ -61,8 +61,8 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         "fas fa-circle",
         "",[
           new MenuItem(
-            this.l("Project"),
-            "",
+            this.l("List Project"),
+            "/app/list-project",
             "fas fa-circle",
 
             ""
@@ -71,7 +71,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         ]
       ),
       new MenuItem(
-        this.l("Sao đỏ"),
+        this.l("Sao đỏ"),
+        "/app/sao-do",
+        "far fa-calendar-alt",
+        ""
+      ),
+      new MenuItem(
+        this.l("CheckList"),
         "",
         "fas fa-circle",
         "",[
