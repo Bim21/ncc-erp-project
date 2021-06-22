@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.Clients
 {
-    [AbpAuthorize]
     public class ClientAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
