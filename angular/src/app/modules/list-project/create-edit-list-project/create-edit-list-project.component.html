@@ -1,0 +1,56 @@
+<form class="form-horizontal" autocomplete="off" #bankForm="ngForm">
+    <div class="card-header">
+        <h3>{{'Thêm mới' | localize}}</h3>
+        <!-- <h3 *ngIf="isEdit">{{'m3_child3.editTitle' | translate}} </h3> -->
+    </div>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="accountTypeName">
+                {{ 'name' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2"
+                    maxlength="64" required [(ngModel)]="listProject.name" #accountTypeNameModel="ngModel"
+                    #accountTypeNameEl />
+                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="accountTypeName">
+                {{ 'Description' | localize }}
+            </label>
+            <div class="col-md-9">
+                <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
+                    <mat-label>Favorite food</mat-label>
+                    <mat-select [(ngModel)]="listProject.projectType" name="food">
+                        <mat-option *ngFor="let type of tableHeaderType" [value]="type.id">
+                            {{type.value}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <!-- <textarea type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
+                    required [(ngModel)]="checklist" #accountTypeNameModel="ngModel" #accountTypeNameEl></textarea>
+                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                </abp-validation-summary> -->
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="accountTypeName">
+                {{ '' | localize }}
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2"
+                    maxlength="64" required [(ngModel)]="listProject.name" #accountTypeNameModel="ngModel"
+                    #accountTypeNameEl />
+                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+    </div>
+    <div style="background-color: white;" align="end" class="mat-dialog-actions card-footer" mat-dialog-actions="">
+        <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button color="primary" class="saving-btn" mat-button
+            [disabled]="!bankForm.form.valid" (click)='saveAndClose()'>Save</button>
+    </div>
+</form>
