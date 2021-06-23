@@ -18,11 +18,12 @@ namespace ProjectManagement.APIs.TimeSheets
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PM_Manager_Timesheet_ViewAll)]
+        [AbpAuthorize(PermissionNames.PmManager_Timesheet_ViewAll)]
         public async Task<GridResult<TimesheetDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Timesheet>().Select(x => new TimesheetDto
             {
+                Id = x.Id,
                 Name = x.Name,
                 Month = x.Month,
                 Year = x.Year,
@@ -32,7 +33,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PM_Manager_Timesheet_Create)]
+        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Create)]
         public async Task<TimesheetDto> Create(TimesheetDto input)
         {
             var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
@@ -52,7 +53,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PM_Manager_Timesheet_Update)]
+        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Update)]
         public async Task<TimesheetDto> Update(TimesheetDto input)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
@@ -68,7 +69,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PM_Manager_Timesheet_Delete)]
+        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Delete)]
         public async Task Delete(long timesheetId)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);

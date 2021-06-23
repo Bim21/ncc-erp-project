@@ -14,6 +14,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static ProjectManagement.Authorization.GrantPermissionRoles;
 
 namespace ProjectManagement.Roles
 {
@@ -131,16 +132,17 @@ namespace ProjectManagement.Roles
 
         public async Task<GetRoleForEditOutput> GetRoleForEdit(EntityDto input)
         {
-            var permissions = PermissionManager.GetAllPermissions();
+            var permissions = SystemPermission.TreePermissions;
             var role = await _roleManager.GetRoleByIdAsync(input.Id);
             var grantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).ToArray();
+            var users = (await _userManager.GetUsersInRoleAsync(role.NormalizedName)).ToArray();
             var roleEditDto = ObjectMapper.Map<RoleEditDto>(role);
 
             return new GetRoleForEditOutput
             {
                 Role = roleEditDto,
-                Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
-                GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
+                Permissions = permissions,
+                GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList(),
             };
         }
     }

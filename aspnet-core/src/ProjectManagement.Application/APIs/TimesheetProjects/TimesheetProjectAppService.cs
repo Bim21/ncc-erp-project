@@ -1,8 +1,10 @@
-﻿using Abp.UI;
+﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,28 @@ namespace ProjectManagement.APIs.TimesheetProjects
              _hostingEnvironment = environment;
         }
 
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllByproject)]
+        public async Task<List<GetTimesheetProjectDto>> GetAllByProject(long projectId)
+        {
+            var query = from ts in WorkScope.GetAll<Timesheet>()
+                        join tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.ProjectId == projectId)
+                        on ts.Id equals tsp.ProjectId into pp
+                        from p in pp.DefaultIfEmpty()
+                        select new GetTimesheetProjectDto
+                        {
+                            Id = p.Id,
+                            TimeSheet = $"T{ts.Month}/{ts.Year}",
+                            TimesheetId = p.TimesheetId,
+                            ProjectId = p.ProjectId,
+                            TimesheetFile = p.TimesheetFile,
+                            Note = p.Note
+                        };
+            return await query.ToListAsync();
+        }
+
         [HttpPost]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Create)]
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
         {
             var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId);
@@ -31,27 +54,63 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProject>(input));
 
-            await UpdateFileTimeSheet(new FileInputDto
+            if(input.TimesheetFile != null)
             {
-                File = input.File,
-                TimesheetProjectId = input.Id
-            });
+                await UpdateFileTimeSheet(new FileInputDto
+                {
+                    File = input.File,
+                    TimesheetProjectId = input.Id
+                });
+            }
 
             return input;
         }
 
-        //[HttpPut]
-        //public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
-        //{
-        //    var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(input.Id);
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Update)]
+        public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
+        {
+            var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(input.Id);
 
-        //    var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.Id != input.Id && (x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId));
-        //    if (isExist)
-        //        throw new UserFriendlyException($"TimesheetProject with ProjectId {input.ProjectId} already exist in Timesheet !");
-        //}
+            var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.Id != input.Id && (x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId));
+            if (isExist)
+                throw new UserFriendlyException($"TimesheetProject with ProjectId {input.ProjectId} already exist in Timesheet !");
+
+            if(input.File != null)
+            {
+                await UpdateFileTimeSheet(new FileInputDto
+                {
+                    File = input.File,
+                    TimesheetProjectId = input.Id
+                });
+            } else
+            {
+                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timeSheetProject.TimesheetFile));
+                input.TimesheetFile = null;
+            }
+
+            ObjectMapper.Map<TimesheetProjectDto, TimesheetProject>(input, timeSheetProject);
+            await WorkScope.GetRepo<TimesheetProject, long>().UpdateAsync(timeSheetProject);
+
+            return input;
+        }
+
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Delete)]
+        public async Task Delete(long timesheetProjectId)
+        {
+            var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
+
+            if(timeSheetProject.TimesheetFile != null)
+            {
+                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timeSheetProject.TimesheetFile));
+            }
+
+            await WorkScope.DeleteAsync(timeSheetProject);
+        }
 
         [HttpPost]
-        public async Task UpdateFileTimeSheet([FromForm] FileInputDto input)
+        private async Task UpdateFileTimeSheet([FromForm] FileInputDto input)
         {
             String path = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets");
             if (!Directory.Exists(path))
@@ -66,7 +125,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 if (FileExtension == "xlsx" || FileExtension == "xltx")
                 {
                     var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(input.TimesheetProjectId);
-                    var filePath = fileName;
+                    var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
+
+                    if(timesheetProject.TimesheetFile != null && timesheetProject.TimesheetFile != fileName)
+                    {
+                        File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.TimesheetFile));
+
+                        timesheetProject.TimesheetFile = null;
+                        await WorkScope.UpdateAsync(timesheetProject);
+                    }
+
                     using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", filePath)))
                     {
                         await input.File.CopyToAsync(stream);
@@ -83,7 +151,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 throw new UserFriendlyException(String.Format("No file upload!"));
             }
-
         }
+
     }
 }
