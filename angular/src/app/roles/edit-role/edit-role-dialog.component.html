@@ -1,13 +1,5 @@
-<form
-  class="form-horizontal"
-  autocomplete="off"
-  #editRoleForm="ngForm"
-  (ngSubmit)="save()"
->
-  <abp-modal-header
-    [title]="'EditRole' | localize"
-    (onCloseClick)="bsModalRef.hide()"
-  ></abp-modal-header>
+<form class="form-horizontal" autocomplete="off" #editRoleForm="ngForm">
+  <abp-modal-header [title]="'EditRole' | localize " (onCloseClick)="bsModalRef.hide()"></abp-modal-header>
   <div class="modal-body">
     <tabset>
       <tab [heading]="'Details' | localize" class="pt-3 px-2">
@@ -16,22 +8,9 @@
             {{ "Name" | localize }}
           </label>
           <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="name"
-              id="name"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="role.name"
-              #nameModel="ngModel"
-              #nameEl
-            />
-            <abp-validation-summary
-              [control]="nameModel"
-              [controlEl]="nameEl"
-            ></abp-validation-summary>
+            <input type="text" class="form-control" name="name" id="name" required minlength="2" maxlength="32"
+              [(ngModel)]="role.name" #nameModel="ngModel" #nameEl />
+            <abp-validation-summary [control]="nameModel" [controlEl]="nameEl"></abp-validation-summary>
           </div>
         </div>
         <div class="form-group row required">
@@ -39,22 +18,9 @@
             {{ "DisplayName" | localize }}
           </label>
           <div class="col-md-9">
-            <input
-              type="text"
-              class="form-control"
-              name="displayName"
-              id="displayName"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="role.displayName"
-              #displayNameModel="ngModel"
-              #displayNameEl
-            />
-            <abp-validation-summary
-              [control]="displayNameModel"
-              [controlEl]="displayNameEl"
-            ></abp-validation-summary>
+            <input type="text" class="form-control" name="displayName" id="displayName" required minlength="2"
+              maxlength="32" [(ngModel)]="role.displayName" #displayNameModel="ngModel" #displayNameEl />
+            <abp-validation-summary [control]="displayNameModel" [controlEl]="displayNameEl"></abp-validation-summary>
           </div>
         </div>
         <div class="form-group row mb-0">
@@ -62,43 +28,59 @@
             {{ "RoleDescription" | localize }}
           </label>
           <div class="col-md-9">
-            <textarea
-              type="text"
-              class="form-control"
-              name="description"
-              id="description"
-              [(ngModel)]="role.description"
-            >
+            <textarea type="text" class="form-control" name="description" id="description"
+              [(ngModel)]="role.description">
             </textarea>
           </div>
         </div>
+        <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!editRoleForm.form.valid || saving"
+          (onCancelClick)="bsModalRef.hide()" (onSaveClick)="onSaveClick()">
+        </abp-modal-footer>
       </tab>
-      <tab [heading]="'Permissions' | localize" class="pt-3 px-2">
-        <div class="form-group row mb-0">
-          <ng-container *ngFor="let permission of permissions; let i = index">
-            <div class="col-md-6">
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  [id]="'permission_' + i"
-                  [checked]="isPermissionChecked(permission.name)"
-                  [disabled]="role.isStatic"
-                  (change)="onPermissionChange(permission, $event)"
-                />
-                <label class="custom-control-label" [for]="'permission_' + i">
-                  {{ permission.displayName }}
-                </label>
-              </div>
-            </div>
-          </ng-container>
+      <!-- TAB PERMISSIONS -->
+      <tab [heading]="'Permissions' | localize" class="pt-3 px-2 test">
+        <br />
+        <div class="row-fluid">
+          <div class="col-md-12">
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                <li class="mat-tree-node">
+                  <!-- <button mat-icon-button disabled></button> -->
+                  <div class="spinner" *ngIf="node.isLoading">
+                    <mat-spinner [diameter]="16" style="margin-right: 8px;"></mat-spinner>{{node.displayName}}
+                  </div>
+                  <mat-checkbox [ngClass]="node.childrens == null?'noChild':''" color="primary" *ngIf="!node.isLoading" [disabled]="isStatic "
+                    [checked]="isSelected(node)" (change)="todoLeafItemSelectionToggle(node)">
+                    {{node.displayName}}</mat-checkbox>
+                </li>
+              </mat-tree-node>
+              <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                <li>
+                  <div class="mat-tree-node">
+                    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle '">
+                      <!-- <mat-icon class="material-icons-outlined">
+                        
+                        {{!treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                      </mat-icon> -->
+                      <i class="nav-icon {{!treeControl.isExpanded(node) ? 'fas fa-chevron-down' : 'fas fa-chevron-right' }}"></i>
+                    </button>
+                    <div class="spinner" *ngIf="node.isLoading">
+                      <mat-spinner [diameter]="16" style="margin-right: 8px;"></mat-spinner>{{node.displayName}}
+                    </div>
+                    <mat-checkbox color="primary" *ngIf="!node.isLoading" [disabled]="isStatic"
+                      [checked]="descendantsAllSelected(node)" [indeterminate]="descendantsPartiallySelected(node)"
+                      (change)="todoItemSelectionToggle(node)">
+                      {{node.displayName}}</mat-checkbox>
+                  </div>
+                  <ul [class.example-tree-invisible]="treeControl.isExpanded(node)">
+                    <ng-container matTreeNodeOutlet></ng-container>
+                  </ul>
+                </li>
+              </mat-nested-tree-node>
+            </mat-tree>
+          </div>
         </div>
       </tab>
     </tabset>
   </div>
-  <abp-modal-footer
-    [cancelDisabled]="saving"
-    [saveDisabled]="!editRoleForm.form.valid || saving"
-    (onCancelClick)="bsModalRef.hide()"
-  ></abp-modal-footer>
 </form>
