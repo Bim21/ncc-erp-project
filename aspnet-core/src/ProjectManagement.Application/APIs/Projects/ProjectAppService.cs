@@ -32,7 +32,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PM_Manager_Project_ViewAll)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
         {
             //Dm duoc view all, PM chi duoc xem nhung du an cua minh tham giam voi vai tro pm
@@ -60,7 +60,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PM_Manager_Project_ViewDetail)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<GetProjectDto> Get(long projectId)
         {
             var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
@@ -83,7 +83,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PM_Manager_Project_Create)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
         public async Task<ProjectDto> Create(ProjectDto input)
         {
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
@@ -97,7 +97,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PM_Manager_Project_Update)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
         public async Task<ProjectDto> Update(ProjectDto input)
         {
             var project = await WorkScope.GetAsync<Project>(input.Id);
@@ -112,7 +112,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PM_Manager_Project_Delete)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_Delete)]
         public async Task Delete(long projectID)
         {
             var project = await WorkScope.GetAsync<Project>(projectID);
