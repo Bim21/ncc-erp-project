@@ -1,3 +1,9 @@
+import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
+import { WeeklyReportComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/weekly-report.component';
+import { MilestoneComponent } from './modules/pm-management/list-project/list-project-detail/milestone/milestone.component';
+import { ResourceManagementComponent } from './modules/pm-management/list-project/list-project-detail/resource-management/resource-management.component';
+import { ListProjectDetailComponent } from './modules/pm-management/list-project/list-project-detail/list-project-detail.component';
+import { TimesheetDetailComponent } from './modules/timesheet/timesheet-detail/timesheet-detail.component';
 import { ListProjectComponent } from './modules/pm-management/list-project/list-project.component';
 import { ChecklistComponent } from './modules/checklist-management/checklist/checklist.component';
 import { ChecklistTitleComponent } from './modules/checklist-management/checklist-title/checklist-title.component';
@@ -13,6 +19,7 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
+
 
 @NgModule({
     imports: [
@@ -34,6 +41,31 @@ import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.compone
                     { path: 'checklist', component: ChecklistComponent, canActivate: [AppRouteGuard]  },
                     { path: 'sao-do', component: SaoDoComponent, canActivate: [AppRouteGuard]  },
                     { path: 'list-project', component: ListProjectComponent, canActivate: [AppRouteGuard]  },
+                    { path: 'timesheetDetail', component: TimesheetDetailComponent, canActivate: [AppRouteGuard]  },
+                    { path: 'list-project-detail', component: ListProjectDetailComponent, canActivate: [AppRouteGuard] ,
+                    children: [{
+                        path: "resourcemanagement",
+                        component: ResourceManagementComponent,
+                        canActivate: [AppRouteGuard]
+                    },
+                    {
+                        path: "milestone",
+                        component: MilestoneComponent,
+                        canActivate: [AppRouteGuard]
+                    },
+                    {
+                        path: "weeklyreport",
+                        component: WeeklyReportComponent,
+                        canActivate: [AppRouteGuard]
+                    },
+                    {
+                        path: "projectchecklist",
+                        component: ProjectChecklistComponent,
+                        canActivate: [AppRouteGuard]
+                    }],
+                    
+                    
+                }
 
                 ]
             }

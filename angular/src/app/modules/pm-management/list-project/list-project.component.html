@@ -78,7 +78,8 @@
                     currentPage: pageNumber,
                     totalItems: totalItems
                   }; let i = index">
-                            <td>{{project.name}}</td>
+                  <td ><span
+                    class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
                             <td>{{setValueProjectType(project.projectType,APP_ENUM.ProjectType)}}</td>
                             <td>{{project.pmName}}</td>
                             <td>{{setValueProjectType(project.status,APP_ENUM.ProjectStatus)}}</td>

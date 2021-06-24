@@ -1,0 +1,169 @@
+<section class="content px-2">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Resource đã thay đổi trong tuần vừa qua</h3>
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
+            
+            <div class="card-body table-responsive p-4">
+               
+                  
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
+                    <thead class="bg-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>Nhân viên</th>
+                            <th>Project Role</th>
+                            <th>Thời gian thay đổi</th>
+                            <th>Loại thay đổi</th>
+                            <th>% Sử dụng nhân sự</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span ></span></td>
+                            <td>
+                                <!-- <input [ngModel]="item.name" #inputName="ngModel" #inputNameEl required
+                                [readonly]="item.createMode ==null" class="form-control" type="text"
+                                name="inputName" [value]=" item?.createMode ==null?item.name:newDetail.name "
+                                [placeholder]="item.createMode !=null?'name':''" #name minlength="2"> -->
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button style="border: none;" [hidden]="!isAllowed" (click)="addMore()" class=" bg-blue mt-2">
+                    <i class="fa fa-plus-square"></i>
+                </button>
+            </div>
+           
+        </div>
+    </div>
+</section>
+<section class="content px-2">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Resource dự kiến thay đổi trong tương lai</h3>
+                    </div>
+                    
+                </div>
+                
+                
+            </div>
+            
+            <div class="card-body table-responsive p-4">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
+                    <thead class="bg-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>Nhân viên</th>
+                            <th>Thời gian thay đổi</th>
+                            <th>Loại thay đổi</th>
+                            <th>%Sử dụng nhân sự</th>
+                            <th></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span ></span></td>
+                            <td>
+                                <!-- <input [ngModel]="item.name" #inputName="ngModel" #inputNameEl required
+                                [readonly]="item.createMode ==null" class="form-control" type="text"
+                                name="inputName" [value]=" item?.createMode ==null?item.name:newDetail.name "
+                                [placeholder]="item.createMode !=null?'name':''" #name minlength="2"> -->
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          
+                        </tr>
+                    </tbody>
+                </table>
+                <button style="border: none;" [hidden]="!isAllowed" (click)="addMore()" class=" bg-blue mt-2">
+                    <i class="fa fa-plus-square"></i>
+                </button>
+            </div>
+           
+        </div>
+    </div>
+</section>
+<section class="content px-2">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Các vấn đề trong tuần</h3>
+                    </div>
+                    <div class="col-md-6">
+
+                        <mat-form-field class="myFilter"  appearance="outline">
+                            <mat-select name="status" placeholder="Status">
+                                <mat-option >
+                                   
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        
+                    </div>
+                </div>
+            </div>  
+                <div class="card-body table-responsive p-4">
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
+                        <thead class="bg-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Vấn đề</th>
+                                <th>Impact</th>
+                                <th>Trạng thái</th>
+                                <th>Solution</th>
+                                <th>Loại</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span ></span></td>
+                                <td>
+                                    <!-- <input [ngModel]="item.name" #inputName="ngModel" #inputNameEl required
+                                    [readonly]="item.createMode ==null" class="form-control" type="text"
+                                    name="inputName" [value]=" item?.createMode ==null?item.name:newDetail.name "
+                                    [placeholder]="item.createMode !=null?'name':''" #name minlength="2"> -->
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button style="border: none;" [hidden]="!isAllowed" (click)="addMore()" class=" bg-blue mt-2">
+                        <i class="fa fa-plus-square"></i>
+                    </button>
+                </div>
+            </div>
+           
+        </div>
+  
+</section>
+
+
+
+
