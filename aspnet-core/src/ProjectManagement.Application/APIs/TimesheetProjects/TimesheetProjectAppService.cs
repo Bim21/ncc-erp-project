@@ -3,8 +3,11 @@ using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
+using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -56,7 +59,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             if(input.TimesheetFile != null)
             {
-                await UpdateFileTimeSheet(new FileInputDto
+                await UpdateFileTimeSheetProject(new FileInputDto
                 {
                     File = input.File,
                     TimesheetProjectId = input.Id
@@ -64,6 +67,25 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
 
             return input;
+        }
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllRemainProjectInTimesheet)]
+        public async Task<List<ProjectDto>> GetAllRemainProjectInTimesheet(long timesheetId)
+        {
+            var timesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId);
+            var query = WorkScope.GetAll<Project>().Where(x => x.IsCharge == true && x.Status != ProjectStatus.Closed && !timesheetProjects.Contains(x.Id))
+                                .Select(x => new ProjectDto
+                                {
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    Code = x.Code,
+                                    ProjectType = x.ProjectType,
+                                    StartTime = x.StartTime.Date,
+                                    EndTime = x.EndTime.Value.Date,
+                                    Status = x.Status
+                                });
+
+            return await query.ToListAsync();
         }
 
         [HttpPut]
@@ -78,14 +100,17 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             if(input.File != null)
             {
-                await UpdateFileTimeSheet(new FileInputDto
+                await UpdateFileTimeSheetProject(new FileInputDto
                 {
                     File = input.File,
                     TimesheetProjectId = input.Id
                 });
             } else
             {
-                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timeSheetProject.TimesheetFile));
+                if(timeSheetProject.TimesheetFile != null)
+                {
+                    File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timeSheetProject.TimesheetFile));
+                }
                 input.TimesheetFile = null;
             }
 
@@ -103,14 +128,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             if(timeSheetProject.TimesheetFile != null)
             {
-                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timeSheetProject.TimesheetFile));
+                throw new UserFriendlyException("Timesheet already has attachments, cannot be deleted !");
             }
 
             await WorkScope.DeleteAsync(timeSheetProject);
         }
 
         [HttpPost]
-        private async Task UpdateFileTimeSheet([FromForm] FileInputDto input)
+        private async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
         {
             String path = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets");
             if (!Directory.Exists(path))
