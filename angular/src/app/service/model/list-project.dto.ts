@@ -11,3 +11,9 @@ export interface ProjectDto {
     pmId: number;
     id: number;
 }
+
+export interface ClientDto {
+    name: string;
+    code: string;
+    id: number;
+}

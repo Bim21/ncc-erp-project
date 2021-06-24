@@ -1,3 +1,9 @@
+import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
+import { MilestoneComponent } from './modules/pm-management/list-project/list-project-detail/milestone/milestone.component';
+import { WeeklyReportComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/weekly-report.component';
+import { ResourceManagementComponent } from './modules/pm-management/list-project/list-project-detail/resource-management/resource-management.component';
+import { ListProjectDetailComponent } from './modules/pm-management/list-project/list-project-detail/list-project-detail.component';
+import { TimesheetDetailComponent } from './modules/timesheet/timesheet-detail/timesheet-detail.component';
 import { ListProjectComponent } from './modules/pm-management/list-project/list-project.component';
 import { CreateEditListProjectComponent } from './modules/pm-management/list-project/create-edit-list-project/create-edit-list-project.component';
 import { ChecklistComponent } from './modules/checklist-management/checklist/checklist.component';
@@ -52,6 +58,11 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
+import { CreateEditTimesheetComponent } from './modules/timesheet/create-edit-timesheet/create-edit-timesheet.component';
+
+
+
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -97,6 +108,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     SaoDoComponent,
     ListProjectComponent,
     CreateEditListProjectComponent,
+    CreateEditTimesheetComponent,
+    TimesheetDetailComponent,
+    ListProjectDetailComponent,
+    ResourceManagementComponent,
+    MilestoneComponent,
+    WeeklyReportComponent,
+    ProjectChecklistComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -113,6 +132,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     NgxPaginationModule,
     SocialLoginModule,
+   
+  
 
 
     TranslateModule.forRoot({

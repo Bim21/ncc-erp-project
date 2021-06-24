@@ -1,18 +1,19 @@
-import { TimesheetDto } from './../../service/model/timesheet.dto';
+import { CreateEditTimesheetComponent } from './../create-edit-timesheet/create-edit-timesheet.component';
+import { ProjectDto } from '@app/service/model/list-project.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import {TimesheetService} from '@app/service/api/timesheet.service'
 import { catchError, finalize } from 'rxjs/operators';
-import { CreateEditTimesheetComponent } from './create-edit-timesheet/create-edit-timesheet.component';
 import { MatDialog } from '@angular/material/dialog';
+
 @Component({
-  selector: 'app-timesheet',
-  templateUrl: './timesheet.component.html',
-  styleUrls: ['./timesheet.component.css']
+  selector: 'app-timesheet-detail',
+  templateUrl: './timesheet-detail.component.html',
+  styleUrls: ['./timesheet-detail.component.css']
 })
-export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> implements OnInit {
-  public timesheetList:TimesheetDto[] = [];
+export class TimesheetDetailComponent extends PagedListingComponentBase<ProjectDto> implements OnInit {
+  public projectList:ProjectDto[] = [];
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -30,7 +31,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
 
     })
   }
-  protected delete (item: TimesheetDto): void {
+  protected delete (item: ProjectDto): void {
     // throw new Error('Method not implemented.');
     abp.message.confirm(
       "Delete TimeSheet " + item.name + "?",
@@ -58,15 +59,9 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.refresh()
   }
    showDialog(command: String, Timesheet:any): void {
-    let timesheet = {} as TimesheetDto
+    let timesheet = {} as ProjectDto
     if (command == "edit") {
-      timesheet = {
-        name :  Timesheet.name,
-        month : Timesheet.month,
-        year : Timesheet.year,
-        status : Timesheet.status,
-        id: Timesheet.id
-      }
+      
     }
 
     this.dialog.open(CreateEditTimesheetComponent, {
@@ -82,21 +77,9 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   createTimeSheet() {
     this.showDialog('create', {})
   }
-  editTimesheet(timesheet: TimesheetDto) {
+  editTimesheet(timesheet: ProjectDto) {
     this.showDialog("edit", timesheet);
   }
-
-  
-  showDetail(id:any){
-    
-      this.router.navigate(['app/timesheetDetail'], {
-        queryParams: {
-          id: id,
-        }
-      })
-    }
-  
-  
 
 
 }

@@ -90,4 +90,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       this.refresh();
     });
   }
+  showDetail(id:any){
+    
+    this.router.navigate(['app/list-project-detail'], {
+      queryParams: {
+        id: id,
+      }
+    })
+  }
 }
