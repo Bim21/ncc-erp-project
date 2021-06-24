@@ -5,27 +5,26 @@
     </div>
     <div class="modal-body">
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
+            <label class="col-md-3 col-form-label" for="projectName">
                 {{ 'name' | localize }}
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2"
-                    maxlength="64" required [(ngModel)]="listProject.name" #accountTypeNameModel="ngModel"
-                    #accountTypeNameEl />
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                <input type="text" class="form-control" name="projectName" id="projectName" minlength="2"
+                    maxlength="64" required [(ngModel)]="project.name" #projectNameModel="ngModel"
+                    #projectNameEl />
+                <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
                 </abp-validation-summary>
             </div>
         </div>
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
+            <label class="col-md-3 col-form-label" for="projectType">
                 {{ 'Description' | localize }}
             </label>
             <div class="col-md-9">
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
-                    <mat-label>Favorite food</mat-label>
-                    <mat-select [(ngModel)]="listProject.projectType" name="food">
-                        <mat-option *ngFor="let type of tableHeaderType" [value]="type.id">
-                            {{type.value}}
+                    <mat-select placeholder="Select project type" [(ngModel)]="project.projectType" name="projectType">
+                        <mat-option *ngFor="let type of projectTypeList" [value]="APP_ENUM.ProjectType[type]">
+                            {{type}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -35,18 +34,18 @@
                 </abp-validation-summary> -->
             </div>
         </div>
-        <div class="form-group row required">
+        <!-- <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ '' | localize }}
+                {{ 'abc' | localize }}
             </label>
             <div class="col-md-9">
                 <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2"
-                    maxlength="64" required [(ngModel)]="listProject.name" #accountTypeNameModel="ngModel"
+                    maxlength="64" required [(ngModel)]="project.name" #accountTypeNameModel="ngModel"
                     #accountTypeNameEl />
                 <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
                 </abp-validation-summary>
             </div>
-        </div>
+        </div> -->
     </div>
     <div style="background-color: white;" align="end" class="mat-dialog-actions card-footer" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import * as moment from 'moment';
 import { FilterDto } from 'shared/paged-listing-component-base';
 
 @Component({
@@ -8,7 +9,6 @@ import { FilterDto } from 'shared/paged-listing-component-base';
 })
 
 export class FilterComponent {
-
   @Input() inputFilters: InputFilterDto[];
   @Input() item: any;
   @Output() emitChange = new EventEmitter<any>();
@@ -16,9 +16,11 @@ export class FilterComponent {
   selectedPropertyName: string;
   selectedComparision: number;
   value: any;
+  isDateProperty:boolean;
 
   comparisions: ComparisionDto[] = [];
-  constructor() { }
+  constructor() {
+   }
   ngOnInit(): void {
     if (this.item.propertyName === '') {
       this.comparisions = [];
@@ -31,11 +33,13 @@ export class FilterComponent {
         com.name = COMPARISIONS[element];
         this.comparisions.push(com);
       });
-    }
-  }
 
+    }
+    this.isDateProperty =this.item.isDate
+  }
   onChange(value: string | number, name: string): void {
     if (name === 'propertyName') {
+      this.item.value =''
       this.emitChange.emit({ name: 'comparision', value: undefined })
       if (value == '') {
         this.comparisions = [];
@@ -49,8 +53,21 @@ export class FilterComponent {
         com.name = COMPARISIONS[element];
         this.comparisions.push(com);
       });
+        this.isDateProperty = this.inputFilters.filter(item => item.propertyName == value)[0].isDate
+        if(this.isDateProperty ==true){
+          this.item.value = moment(new Date()).format("YYYY-MM-DD")
+          this.item.isDate = true
+        }
+        else{
+          this.item.isDate =false
+        }
     }
+    
     this.emitChange.emit({ name, value })
+  }
+  onDateChange(){
+    this.item.value = moment(this.item.value).format("YYYY-MM-DD")
+    this.item.isDate = true
   }
 
   deleteFilter() {
@@ -62,6 +79,7 @@ export class InputFilterDto {
   propertyName: string;
   displayName: string;
   comparisions: number[];
+  isDate?:boolean
 }
 
 export class ComparisionDto {

@@ -1,3 +1,6 @@
+import { ListProjectComponent } from './modules/pm-management/list-project/list-project.component';
+import { ChecklistComponent } from './modules/checklist-management/checklist/checklist.component';
+import { ChecklistTitleComponent } from './modules/checklist-management/checklist-title/checklist-title.component';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -9,10 +12,7 @@ import { UsersComponent } from './users/users.component';
 import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
-import { ChecklistTitleComponent } from './modules/checklist-title/checklist-title.component';
-import { ChecklistComponent } from './modules/checklist/checklist.component';
-import { SaoDoComponent } from './modules/sao-do/sao-do.component';
-import { ListProjectComponent } from './modules/list-project/list-project.component';
+import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
 
 @NgModule({
     imports: [

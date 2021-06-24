@@ -9,22 +9,7 @@ export class ListProjectService extends BaseApiService {
   changeUrl() {
     return 'Project'
   }
-
   constructor(http: HttpClient) {
     super(http);
   }
-  handleError(error: any) {
-    let errorMessage = '';
-
-    if (error.error instanceof ErrorEvent) {
-
-        errorMessage = `Error: ${error.error.message}`;
-    } else {
-
-        errorMessage = `Error: ${error.error.error.message}`;
-    }
-
-    abp.notify.error(errorMessage);
-    return throwError(errorMessage);
-}
 }
