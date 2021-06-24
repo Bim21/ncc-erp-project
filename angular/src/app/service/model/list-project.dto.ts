@@ -1,4 +1,4 @@
-export interface ListProjectDto {
+export interface ProjectDto {
     name: string;
     code: string;
     projectType: number;

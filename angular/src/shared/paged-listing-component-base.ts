@@ -10,6 +10,7 @@ export class FilterDto {
     propertyName: string;
     value: any;
     comparision: number;
+    isDate?:boolean;
 }
 export class EntityDto {
     id: number;

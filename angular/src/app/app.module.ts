@@ -1,3 +1,9 @@
+import { ListProjectComponent } from './modules/pm-management/list-project/list-project.component';
+import { CreateEditListProjectComponent } from './modules/pm-management/list-project/create-edit-list-project/create-edit-list-project.component';
+import { ChecklistComponent } from './modules/checklist-management/checklist/checklist.component';
+import { CreateChecklistItemComponent } from './modules/checklist-management/checklist/create-checklist-item/create-checklist-item.component';
+import { CreateEditChecklistTitleComponent } from './modules/checklist-management/checklist-title/create-edit-checklist-title/create-edit-checklist-title.component';
+import { ChecklistTitleComponent } from './modules/checklist-management/checklist-title/checklist-title.component';
 import { FilterComponent } from './../shared/filter/filter.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -45,13 +51,7 @@ import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
-import { ChecklistTitleComponent } from './modules/checklist-title/checklist-title.component';
-import { CreateEditChecklistTitleComponent } from './modules/checklist-title/create-edit-checklist-title/create-edit-checklist-title.component';
-import { ChecklistComponent } from './modules/checklist/checklist.component';
-import { CreateChecklistItemComponent } from './modules/checklist/create-checklist-item/create-checklist-item.component';
-import { SaoDoComponent } from './modules/sao-do/sao-do.component';
-import { ListProjectComponent } from './modules/list-project/list-project.component';
-import { CreateEditListProjectComponent } from './modules/list-project/create-edit-list-project/create-edit-list-project.component';
+import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

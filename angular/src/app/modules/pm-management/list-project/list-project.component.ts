@@ -1,11 +1,10 @@
+import { ListProjectService } from './../../../service/api/list-project.service';
+import { ProjectDto } from './../../../service/model/list-project.dto';
 import { Component, Injector, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PagedListingComponentBase, PagedRequestDto, PagedResultResultDto } from '@shared/paged-listing-component-base';
 import { finalize } from 'rxjs/operators';
 import { CreateEditListProjectComponent } from './create-edit-list-project/create-edit-list-project.component';
-import { ListProjectDto } from '../../service/model/list-project.dto';
-import { ListProjectService } from '../../service/api/list-project.service';
-import { APP_ENUMS } from '@shared/AppEnums';
 @Component({
   selector: 'app-list-project',
   templateUrl: './list-project.component.html',
@@ -13,7 +12,7 @@ import { APP_ENUMS } from '@shared/AppEnums';
 })
 export class ListProjectComponent extends PagedListingComponentBase<any> implements OnInit {
 
-  dayProjectTypeList = Object.keys(APP_ENUMS.ProjectType) 
+  projectTypeList:string[] = Object.keys(this.APP_ENUM.ProjectType) 
 
   setValueProjectType(projectType, enumObject) {
     for (const key in enumObject) {
@@ -24,7 +23,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
 
-  listProjects: ListProjectDto[] = [];
+  listProjects: ProjectDto[] = [];
   protected delete(entity: any): void {
     throw new Error('Method not implemented.');
   }
