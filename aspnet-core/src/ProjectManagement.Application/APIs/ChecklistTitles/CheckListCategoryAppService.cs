@@ -1,9 +1,11 @@
-﻿using Abp.UI;
+﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.ChecklistTitles.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,7 @@ namespace ProjectManagement.APIs.ChecklistTitles
     public class CheckListCategoryAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
+        [AbpAuthorize(PermissionNames.SaoDo_CheckListCategory_ViewAll)]
         public async Task<GridResult<CheckListCategoryDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<CheckListCategory>()
@@ -34,7 +37,7 @@ namespace ProjectManagement.APIs.ChecklistTitles
                             Name = x.Name
                         }).ToListAsync();
         }
-
+        [AbpAuthorize(PermissionNames.SaoDo_CheckListCategory_Create)]
         public async Task<CheckListCategoryDto> Create(CheckListCategoryDto input)
         {
             var isExist = await WorkScope.GetAll<CheckListCategory>().AnyAsync(x => x.Name.ToLower().Contains(input.Name));
@@ -46,7 +49,7 @@ namespace ProjectManagement.APIs.ChecklistTitles
             input.Id = await WorkScope.InsertAndGetIdAsync(item);
             return input;
         }
-
+        [AbpAuthorize(PermissionNames.SaoDo_CheckListCategory_Update)]
         public async Task<CheckListCategoryDto> Update(CheckListCategoryDto input)
         {
             var isExist = await WorkScope.GetAll<CheckListCategory>()
@@ -60,7 +63,7 @@ namespace ProjectManagement.APIs.ChecklistTitles
             await WorkScope.UpdateAsync(item);
             return input;
         }
-
+        [AbpAuthorize(PermissionNames.SaoDo_CheckListCategory_Delete)]
         public async Task Delete(long id)
         {
             var item = await WorkScope.GetAsync<CheckListCategory>(id);
