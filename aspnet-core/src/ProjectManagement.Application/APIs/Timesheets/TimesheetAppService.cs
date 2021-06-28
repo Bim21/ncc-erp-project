@@ -92,19 +92,21 @@ namespace ProjectManagement.APIs.TimeSheets
                                       BillRate = p.BillRate
                                   };
 
-            var query = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+            var query = WorkScope.GetAll<TimesheetProject>()
+                                .Where(x => x.TimesheetId == timesheetId)
                                 .Where(x => userRolePMs.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.PmId == AbpSession.UserId.Value : true)
                                 .Where(x => userRoleKetoan.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.Status != ProjectStatus.Closed : true)
                                 .Select(x => new GetTimesheetDetailDto
                                 {
                                     Id = x.Id,
                                     ProjectId = x.ProjectId,
+                                    TimesheetId = x.TimesheetId,
                                     ProjectName = x.Project.Name,
                                     PmId = x.Project.PmId,
                                     PmName = x.Project.PM.Name,
                                     ClientId = x.Project.ClientId,
                                     ClientName = x.Project.Clients.Name,
-                                    File = x.TimesheetFile,
+                                    File = "/timesheets/" + x.TimesheetFile,
                                     ProjectUserBill = projectUserBill.Where(y => y.ProjectId == x.ProjectId).Select(y => new GetProjectUserBillDto
                                     {
                                         UserId = y.userId,
