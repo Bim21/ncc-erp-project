@@ -19,6 +19,5 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public TimesheetStatus Status { get; set; }
         public long TotalProject { get; set; }
         public long TotalTimesheet { get; set; }
-        public bool HasInvoice { get; set; }
     }
 }

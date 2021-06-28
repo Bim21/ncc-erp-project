@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using ProjectManagement.APIs.ProjectUserBills.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long ClientId { get; set; }
         public string ClientName { get; set; }
         public string File { get; set; }
+        public List<GetProjectUserBillDto> ProjectUserBill { get; set; }
         public string Note { get; set; }
     }
 }

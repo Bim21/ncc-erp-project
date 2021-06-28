@@ -6,7 +6,7 @@ namespace ProjectManagement.Constants.Enum
 {
     public enum TimesheetStatus
     {
-        Done = 0,
-        Active = 1
+        Active = 0,
+        Done = 1
     }
 }

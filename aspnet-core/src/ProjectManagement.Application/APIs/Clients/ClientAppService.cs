@@ -8,6 +8,7 @@ using ProjectManagement.APIs.Clients.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,20 @@ namespace ProjectManagement.APIs.Clients
                 });
             return await query.GetGridResult(query, input);
         }
+
+        [HttpGet]
+        public async Task<List<ClientDto>> GetAll()
+        {
+            var query = WorkScope.GetAll<Client>()
+              .Select(s => new ClientDto
+              {
+                  Id = s.Id,
+                  Name = s.Name,
+                  Code = s.Code
+              });
+            return await query.ToListAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Admin_Client_Create)]
         public async Task<ClientDto> Create(ClientDto input)
