@@ -47,8 +47,8 @@ namespace ProjectManagement.APIs.Projects
                             Name = p.Name,
                             Code = p.Code,
                             ProjectType = p.ProjectType,
-                            StartTime = $"{ p.StartTime.Date}",
-                            EndTime = $"{p.EndTime.Value.Date}",
+                            StartTime = p.StartTime.Date,
+                            EndTime = p.EndTime.Value.Date,
                             Status = p.Status,
                             ClientId = p.ClientId,
                             ClientName = p.Clients.Name,
@@ -57,6 +57,26 @@ namespace ProjectManagement.APIs.Projects
                             PmName = p.PM.Name
                         };
             return await query.GetGridResult(query, input);
+        }
+
+        [HttpGet]
+        public async Task<List<ProjectDto>> GetAll()
+        {
+            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Closed)
+                .Select(x => new ProjectDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Code = x.Code,
+                ProjectType = x.ProjectType,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime,
+                Status = x.Status,
+                ClientId = x.ClientId,
+                IsCharge = x.IsCharge,
+                PmId = x.PmId
+            });
+            return await query.ToListAsync();
         }
 
         [HttpGet]
@@ -70,8 +90,8 @@ namespace ProjectManagement.APIs.Projects
                                     Name = x.Name,
                                     Code = x.Code,
                                     ProjectType = x.ProjectType,
-                                    StartTime = $"{ x.StartTime.Date}",
-                                    EndTime = $"{x.EndTime.Value.Date}",
+                                    StartTime = x.StartTime.Date,
+                                    EndTime = x.EndTime.Value.Date,
                                     Status = x.Status,
                                     ClientId = x.ClientId,
                                     ClientName = x.Clients.Name,

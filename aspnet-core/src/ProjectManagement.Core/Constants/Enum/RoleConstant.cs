@@ -9,5 +9,6 @@ namespace ProjectManagement.Constants.Enum
         //Role
         public const string ROLE_PM = "PM";
         public const string ROLE_DM = "DM";
+        public const string ROLE_KETOAN = "Kế toán";
     }
 }

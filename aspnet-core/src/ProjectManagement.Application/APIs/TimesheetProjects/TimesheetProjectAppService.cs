@@ -147,7 +147,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 string fileName = input.File.FileName;
                 string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
-                if (FileExtension == "xlsx" || FileExtension == "xltx")
+                if (FileExtension == "xlsx" || FileExtension == "xltx" || FileExtension == "docx")
                 {
                     var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(input.TimesheetProjectId);
                     var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
