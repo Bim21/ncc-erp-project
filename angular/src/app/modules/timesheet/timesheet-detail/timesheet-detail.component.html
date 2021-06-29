@@ -68,20 +68,21 @@
                     </div>
                 </div>
                 <div class="col-12 text-right">
-                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isTableLoading">
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                         <thead class="bg-light">
                             <tr>
                                 <th>STT</th>
                                 <th>Tên Project</th>
                                 <th>Tên PM</th>
                                 <th>Tên Khách hàng</th>
+                                <th>Note</th>
                                 <th>Thông tin Bill dự án</th>
                                 <th>File</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of projectList |paginate
+                            <tr *ngFor="let item of TimesheetDetaiList |paginate
                                 : {
                                     id: 'server',
                                     itemsPerPage: pageSize,
@@ -89,16 +90,17 @@
                                     totalItems: totalItems
                                   }; let i = index"  >
                                 <td><span >{{ i +1 }}</span></td>
-                                <td ><span
-                                    class="hyperlink" (click)="showDetail(item.id)">{{ item.name }}</span></td>
-                                <td>{{item.month}}/{{item.year}}</td>
+                                <td>{{item.projectName}}</td>
+                                <td>{{item.pmName}}</td>
+                                <td>{{item.clientName}}</td>
+                                <td>{{item.note}}</td>
                                 <td></td>
-                                <td></td>
+                                <td style="text-align: center;">{{item.file}}</td>
                                 <td  class="text-center">
                                    
                                     <button 
                                     class="btn btn-sm bg-secondary mr-1" 
-                                    (click)="editTimesheet(item);$event.stopPropagation()" >
+                                    (click)="editTimesheet(item.id);$event.stopPropagation()" >
                                     <i class="fas fa-pencil-alt"></i>
     
                                     Edit
@@ -109,6 +111,13 @@
                                      #deleteBtn>
                                     <i class="fas fa-trash"></i>
                                     Delete
+                                </button>
+                                <button
+                                    class="btn btn-sm bg-danger ml-1"
+                                    (click)="importExcel(item.id)"
+                                     #importFileBtn>
+                                    <i class="fas fa-trash"></i>
+                                    Import File
                                 </button>
                                 </td>
                             </tr>
