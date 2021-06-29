@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
     {
         public long ProjectId { get; set; }
         public string TimesheetFile { get; set; }
-        public IFormFile File { get; set; }
         public long TimesheetId { get; set; }
         public string Note { get; set; }
     }

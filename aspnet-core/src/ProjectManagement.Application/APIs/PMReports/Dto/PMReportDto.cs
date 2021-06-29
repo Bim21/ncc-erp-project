@@ -1,16 +1,17 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using ProjectManagement.Constants.Enum;
+using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.Entities
+namespace ProjectManagement.APIs.PMReports.Dto
 {
-    public class PMReport : FullAuditedEntity<long>
+    [AutoMapTo(typeof(PMReport))]
+    public class PMReportDto : EntityDto<long>
     {
-        [MaxLength(255)]
         public string Name { get; set; }
         public PMReportStatus Status { get; set; }
         public PMReportType Type { get; set; }
