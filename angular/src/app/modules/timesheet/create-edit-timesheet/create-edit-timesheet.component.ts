@@ -27,7 +27,7 @@ export class CreateEditTimesheetComponent implements OnInit {
   public isDisable = false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
   public dialogRef: MatDialogRef<CreateEditTimesheetComponent>,
-  private timesheetService :TimesheetService,
+  private timesheetService:TimesheetService,
   private router: Router) { }
 
   ngOnInit(): void {

@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { TimesheetDto } from './../../service/model/timesheet.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
@@ -23,7 +24,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     request.sortDirection = this.sortDrirect;
     this.timesheetService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
-    })).subscribe(data => {
+    }), catchError(this.timesheetService.handleError)).subscribe(data => {
 
       this.timesheetList = data.result.items;
       this.showPaging(data.result, pageNumber);
@@ -50,12 +51,15 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
 
   constructor(private timesheetService :TimesheetService,
     private dialog: MatDialog,
-    injector:Injector
+    injector:Injector,
+    private route: ActivatedRoute
     ) {
     super(injector)
    }
    ngOnInit(): void {
     this.refresh()
+    this.requestId = this.route.snapshot.queryParamMap.get("id")
+    
   }
    showDialog(command: String, Timesheet:any): void {
     let timesheet = {} as TimesheetDto
@@ -88,7 +92,6 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
 
   
   showDetail(id:any){
-    
       this.router.navigate(['app/timesheetDetail'], {
         queryParams: {
           id: id,
