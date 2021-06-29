@@ -21,7 +21,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
   routerEvents: BehaviorSubject<RouterEvent> = new BehaviorSubject(undefined);
   homeRoute = "/app/home";
 
-  constructor(injector: Injector, private router: Router) {
+  constructor(injector: Injector,private router:Router) {
     super(injector);
     this.router.events.subscribe(this.routerEvents);
   }
@@ -98,17 +98,9 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       ),
       new MenuItem(
         this.l("Delivery Management"),
-        "",
+        "/app/delivery",
         "fas fa-circle",
-        "",[
-          // new MenuItem(
-          //   this.l("Project"),
-          //   "/app/project",
-          //   "fas fa-building",
-          //   ""
-          // )
-
-        ]
+        "",
       ),
       new MenuItem(
         this.l("Timesheet"),

@@ -3,20 +3,15 @@
         <div class="row mb-4 card">
             <div class="col-12">
                 <nav mat-tab-nav-bar>
-                    <!-- <a [ngClass]="currentUrl.includes('resourcemanagement')?'active':''" mat-tab-link (click)="routingResourceTab()">
-                        Resource Management 
+                    <a [ngClass]="currentUrl.includes('status-tab')?'active':''"  mat-tab-link (click)="routingStatusTab()">
+                       Project Status
                     </a>
-                    <a [ngClass]="currentUrl.includes('mistone')?'active':''" mat-tab-link (click)="routingMilestoneTab()">
-                        Milestone
-                    </a> -->
-                    
-                    
+                    <a [ngClass]="currentUrl.includes('milestone-tab')?'active':''"  mat-tab-link (click)="routingMileStoneTab()">
+                        Project MileStone
+                    </a>
                 </nav>
-                
                 <router-outlet></router-outlet>
             </div>
-            
-            
 
 
         </div>

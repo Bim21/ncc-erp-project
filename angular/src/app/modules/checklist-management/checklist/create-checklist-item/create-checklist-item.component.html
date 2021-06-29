@@ -1,76 +1,117 @@
-<form class="form-horizontal" autocomplete="off" #bankForm="ngForm">
-    <div class="card-header">
-        <h3>{{'Thêm mới' | localize}}</h3>
-        <!-- <h3 *ngIf="isEdit">{{'m3_child3.editTitle' | translate}} </h3> -->
-    </div>
+<form class="form-horizontal" autocomplete="off" #checkListForm="ngForm">
+    <abp-modal-header title="Create new checklist " (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ 'name' | localize }}
+            <label class="col-md-3 col-form-label" for="checkListName">
+                {{ 'Name' | localize }}:
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
-                    required [(ngModel)]="checklist" #accountTypeNameModel="ngModel" #accountTypeNameEl />
+                <input type="text" class="form-control" name="checklistName" id="accountTypeName" required
+                    [(ngModel)]="checklist.name" #accountTypeNameModel="ngModel" #accountTypeNameEl />
                 <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
                 </abp-validation-summary>
             </div>
         </div>
+
+        <div class="form-group row ">
+            <label class="col-md-3 col-form-label" for="title">Checklist title:</label>
+            <div class="col-md-9 ">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-select [(ngModel)]="checklist.title" name="checklisttitle"
+                        placeholder="select a checklsit title" #checklistTitle="ngModel" required>
+                        <!-- <mat-form-field class="w-100 px-3"
+                            style="position: sticky; top: 0;; z-index: 2; background-color: white;">
+                            <input type="text" name="searchFrom" id="" matInput placeholder="Search"
+                                [(ngModel)]="searchToBank" (ngModelChange)="filterToBank()">
+                        </mat-form-field> -->
+                        <ng-container *ngFor="let title of checklistTitleList">
+                            <mat-option [value]="title.id">
+                                {{title.name}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+             
+            </div>
+
+        </div>
+
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ 'Description' | localize }}
+            <label class="col-md-3 col-form-label" for="checklistDescription">
+                {{ 'Description' | localize }}:
             </label>
             <div class="col-md-9">
-                <textarea type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
-                    required [(ngModel)]="checklist" #accountTypeNameModel="ngModel" #accountTypeNameEl></textarea>
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                <textarea type="text" class="form-control" name="checklistDescription" id="checklistDescription"
+                    required [(ngModel)]="checklist.description" #checklistDescription="ngModel"
+                    #checklistDescriptionEl></textarea>
+                <abp-validation-summary [control]="checklistDescription" [controlEl]="checklistDescriptionEl">
                 </abp-validation-summary>
             </div>
         </div>
+
         <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ 'Title' | localize }}
+            <label class="col-md-3 col-form-label" for="mandatory">
+                {{ 'Mandatory' | localize }}:
             </label>
-            <div class="col-md-9">
-                <textarea type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
-                    required [(ngModel)]="checklist" #accountTypeNameModel="ngModel" #accountTypeNameEl></textarea>
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
-                </abp-validation-summary>
+            <div class="col-md-9 pt-2">
+                    <mat-checkbox   name="mandatory" [(ngModel)]="checklist.mandatorys" (click)="isshowProject=!isshowProject">Mandatory
+                    </mat-checkbox>
+              
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ 'Mandatory' | localize }}
+        <div class="form-group row " *ngIf="isshowProject">
+            <label class="col-md-3 col-form-label" for="projectType">Project type:</label>
+            <div class="col-md-9 ">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-select multiple [(ngModel)]="checklist.mandatorys" name="projectType"
+                        placeholder="select a project type" #projectType="ngModel">
+                        <!-- <mat-form-field class="w-100 px-3"
+                            style="position: sticky; top: 0;; z-index: 2; background-color: white;">
+                            <input type="text" name="searchFrom" id="" matInput placeholder="Search"
+                                [(ngModel)]="searchToBank" (ngModelChange)="filterToBank()">
+                        </mat-form-field> -->
+                        <ng-container *ngFor="let projectType of projectTypeList">
+                            <mat-option [value]="APP_ENUM.ProjectType[projectType]">
+                                {{projectType}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+               
+            </div>
+
+        </div>
+        <div class="form-group row ">
+            <label class="col-md-3 col-form-label" for="auditTarget">
+                {{ 'Audit Target' | localize }}:
             </label>
             <div class="col-md-9">
-                <mat-checkbox class="example-margin" name="mandatory" [(ngModel)]="checked">Checked</mat-checkbox>
+                <input type="text" class="form-control" name="auditTarget" id="auditTarget" 
+                    [(ngModel)]="checklist.auditTarget" #auditTarget="ngModel" #auditTargetEl />
+            
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ 'Audit Target' | localize }}
+        <div class="form-group row ">
+            <label class="col-md-3 col-form-label" for="personInCharge">
+                {{ 'Person In Charge' | localize }}:
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
-                    required [(ngModel)]="checklist" #accountTypeNameModel="ngModel" #accountTypeNameEl />
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
-                </abp-validation-summary>
+                <input type="text" class="form-control" name="personInCharge" id="personInCharge" 
+                    [(ngModel)]="checklist.personInCharge" #personInCharge="ngModel" #personInChargeEl />
+                
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="accountTypeName">
-                {{ 'Person In Charge' | localize }}
+        <div class="form-group row ">
+            <label class="col-md-3 col-form-label" for="note">
+                {{ 'Note' | localize }}
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
-                    required [(ngModel)]="checklist" #accountTypeNameModel="ngModel" #accountTypeNameEl />
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
-                </abp-validation-summary>
+                <textarea type="text" class="form-control" name="note" id="note" [(ngModel)]="checklist.note"></textarea>
             </div>
         </div>
     </div>
-    <div style="background-color: white;" align="end" class="mat-dialog-actions card-footer" mat-dialog-actions="">
+    <div  align="end" class="form-group row d-flex justify-content-between mt-2">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button mat-raised-button color="primary" class="saving-btn"mat-button 
-        [disabled]="!bankForm.form.valid">Save</button>
+        <button class="btn btn-primary" [mat-dialog-close]= "checklist" (click)="saveAndClose()"
+            [disabled]="!checkListForm.valid || isLoading">Save</button>
     </div>
 </form>
