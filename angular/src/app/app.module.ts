@@ -62,6 +62,8 @@ import { CreateEditTimesheetComponent } from './modules/timesheet/create-edit-ti
 import { ImportFileTimesheetDetailComponent } from './modules/timesheet/timesheet-detail/import-file-timesheet-detail/import-file-timesheet-detail.component';
 import { CreateEditTimesheetDetailComponent } from './modules/timesheet/timesheet-detail/create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
+import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
+import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
 
 
 
@@ -121,6 +123,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImportFileTimesheetDetailComponent,
     CreateEditTimesheetDetailComponent,
     DeliveryComponent,
+    ProjectStatusTabComponent,
+    ProjectMilestoneTabComponent,
     
   ],
   imports: [

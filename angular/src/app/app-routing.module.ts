@@ -1,3 +1,6 @@
+import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
+import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
+import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
 import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
 import { WeeklyReportComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/weekly-report.component';
 import { MilestoneComponent } from './modules/pm-management/list-project/list-project-detail/milestone/milestone.component';
@@ -37,36 +40,43 @@ import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.compone
                     // timesheet
                     { path: 'timesheet', component: TimesheetComponent, data: { permission: '' }, canActivate: [AppRouteGuard] },
 
-                    { path: 'checklist-title', component: ChecklistTitleComponent, canActivate: [AppRouteGuard]  },
-                    { path: 'checklist', component: ChecklistComponent, canActivate: [AppRouteGuard]  },
-                    { path: 'sao-do', component: SaoDoComponent, canActivate: [AppRouteGuard]  },
-                    { path: 'list-project', component: ListProjectComponent, canActivate: [AppRouteGuard]  },
-                    { path: 'timesheetDetail', component: TimesheetDetailComponent, canActivate: [AppRouteGuard]  },
-                    { path: 'list-project-detail', component: ListProjectDetailComponent, canActivate: [AppRouteGuard] ,
-                    children: [{
-                        path: "resourcemanagement",
-                        component: ResourceManagementComponent,
-                        canActivate: [AppRouteGuard]
-                    },
+                    { path: 'checklist-title', component: ChecklistTitleComponent, canActivate: [AppRouteGuard] },
+                    { path: 'checklist', component: ChecklistComponent, canActivate: [AppRouteGuard] },
+                    { path: 'sao-do', component: SaoDoComponent, canActivate: [AppRouteGuard] },
+                    { path: 'list-project', component: ListProjectComponent, canActivate: [AppRouteGuard] },
+                    { path: 'timesheetDetail', component: TimesheetDetailComponent, canActivate: [AppRouteGuard] },
                     {
-                        path: "milestone",
-                        component: MilestoneComponent,
-                        canActivate: [AppRouteGuard]
-                    },
-                    {
-                        path: "weeklyreport",
-                        component: WeeklyReportComponent,
-                        canActivate: [AppRouteGuard]
-                    },
-                    {
-                        path: "projectchecklist",
-                        component: ProjectChecklistComponent,
-                        canActivate: [AppRouteGuard]
-                    }],
-                    
-                    
-                }
+                        path: 'list-project-detail', component: ListProjectDetailComponent, canActivate: [AppRouteGuard],
+                        children: [{
+                            path: "resourcemanagement",
+                            component: ResourceManagementComponent,
+                            canActivate: [AppRouteGuard]
+                        },
+                        {
+                            path: "milestone",
+                            component: MilestoneComponent,
+                            canActivate: [AppRouteGuard]
+                        },
+                        {
+                            path: "weeklyreport",
+                            component: WeeklyReportComponent,
+                            canActivate: [AppRouteGuard]
+                        },
+                        {
+                            path: "projectchecklist",
+                            component: ProjectChecklistComponent,
+                            canActivate: [AppRouteGuard]
+                        }],
 
+
+                    },
+                    {
+                        path: 'delivery', component: DeliveryComponent, canActivate: [AppRouteGuard],
+                        children: [
+                            { path: 'status-tab', component: ProjectStatusTabComponent, canActivate: [AppRouteGuard] },
+                            { path: "milestone-tab", component: ProjectMilestoneTabComponent, canActivate: [AppRouteGuard] }
+                        ]
+                    },
                 ]
             }
         ])

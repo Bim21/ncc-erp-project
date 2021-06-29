@@ -1,8 +1,8 @@
+import { ProjectTimesheetDto, TimesheetDetailDto } from './../../../../service/model/timesheet.dto';
 import { filter } from 'rxjs/operators';
 import { ListProjectService } from '@app/service/api/list-project.service';
 import { ProjectDto } from './../../../../service/model/list-project.dto';
 import { BaseApiService } from '@app/service/api/base-api.service';
-import { TimesheetDetailDto, ProjectTimesheetDto } from './../../../../service/model/timesheet.dto';
 import { ImportFileTimesheetDetailComponent } from './../import-file-timesheet-detail/import-file-timesheet-detail.component';
 import { TimesheetService } from '@app/service/api/timesheet.service';
 import { Component, Inject, OnInit } from '@angular/core';
@@ -11,7 +11,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
-import * as XLSX from 'xlsx';
 import { Binary } from '@angular/compiler';
 import * as _ from 'lodash';
 @Component({
