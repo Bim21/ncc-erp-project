@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimeSheets
 {
@@ -137,7 +138,7 @@ namespace ProjectManagement.APIs.TimeSheets
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
 
-            var project = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Closed && x.IsCharge == true).ToListAsync();
+            var project = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && x.IsCharge == true).ToListAsync();
             foreach (var item in project)
             {
                 var timesheetProject = new TimesheetProject

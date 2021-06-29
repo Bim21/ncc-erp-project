@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -62,7 +63,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<ProjectDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Closed)
+            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new ProjectDto
             {
                 Id = x.Id,

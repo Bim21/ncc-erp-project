@@ -5,6 +5,7 @@ using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {

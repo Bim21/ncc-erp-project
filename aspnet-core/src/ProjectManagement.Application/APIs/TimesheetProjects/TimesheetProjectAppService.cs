@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -41,7 +42,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
                             TimesheetId = p.TimesheetId,
                             ProjectId = p.ProjectId,
-                            TimesheetFile = p.TimesheetFile,
+                            TimesheetFile = "/timesheets/" + p.TimesheetFile,
                             Note = p.Note
                         };
             return await query.ToListAsync();
@@ -65,7 +66,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<List<ProjectDto>> GetAllRemainProjectInTimesheet(long timesheetId)
         {
             var timesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId);
-            var query = WorkScope.GetAll<Project>().Where(x => x.IsCharge == true && x.Status != ProjectStatus.Closed && !timesheetProjects.Contains(x.Id))
+            var query = WorkScope.GetAll<Project>().Where(x => x.IsCharge == true && x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && !timesheetProjects.Contains(x.Id))
                                 .Select(x => new ProjectDto
                                 {
                                     Id = x.Id,
@@ -111,6 +112,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_UploadFileTimesheetProject)]
         public async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
         {
             String path = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets");
@@ -129,7 +131,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 if (FileExtension == "xlsx" || FileExtension == "xltx" || FileExtension == "docx")
                 {
                     var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
-                    if(timesheetProject.TimesheetFile.Trim() != null  && timesheetProject.TimesheetFile != fileName)
+                    if(timesheetProject.TimesheetFile != null && timesheetProject.TimesheetFile != "" && timesheetProject.TimesheetFile != fileName)
                     {
                         File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.TimesheetFile));
 
@@ -146,7 +148,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 }
                 else
                 {
-                    throw new UserFriendlyException(String.Format("Only accept files xlsx,xltx"));
+                    throw new UserFriendlyException(String.Format("Only accept files xlsx, xltx, docx !"));
                 }
             }
             else

@@ -1,10 +1,10 @@
 ﻿using Abp.AutoMapper;
 using Abp.Domain.Entities;
 using NccCore.Anotations;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Checklists.Dto
 {
