@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using NccCore.Paging;
 using NccCore.Extension;
-using NccCore.Paging;
 
 namespace NccCore.Extension
 {

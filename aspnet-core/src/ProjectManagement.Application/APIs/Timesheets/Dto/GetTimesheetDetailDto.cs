@@ -9,6 +9,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
     public class GetTimesheetDetailDto : EntityDto<long>
     {
         public long ProjectId { get; set; }
+        public long TimesheetId { get; set; }
         public string ProjectName { get; set; }
         public long PmId { get; set; }
         public string PmName { get; set; }
