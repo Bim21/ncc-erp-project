@@ -10,7 +10,6 @@ export class TimesheetDto{
      id?:number;
 }
 export class TimesheetDetailDto{
-     
     projectId: number;
     projectName: string;
     pmId : number;
@@ -25,6 +24,7 @@ export class ProjectTimesheetDto{
     projectId: number;
     timesheetId: number;
     note:string;
+    id?:number;
 }
 export class UploadFileDto{
     TimesheetProjectId: number;

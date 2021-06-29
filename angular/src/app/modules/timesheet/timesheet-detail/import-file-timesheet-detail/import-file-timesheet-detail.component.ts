@@ -18,6 +18,7 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
   currentFileUpload: File;
   public uploadFile= {} as UploadFileDto;
   public isDisable = false;
+  public TimesheetProjectId:any;
   constructor(private dialogRef: MatDialogRef<ImportFileTimesheetDetailComponent> ,
     private timesheeService: TimesheetService,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -28,36 +29,38 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.uploadFile.TimesheetProjectId= this.data.id;
-    console.log(this.uploadFile.TimesheetProjectId)
   }
-  // selectFile(event) {
-  //   this.selectedFiles = event.target.files;
+  selectFile(event) {
+    this.selectedFiles = event.target.files.item(0);
+    // this.currentFileUpload = this.selectedFiles.item(0);
+    //   this.selectedFiles = event.target.files;
   //   this.currentFileUpload = this.selectedFiles.item(0);
-    
-  // }
+  }
+  
 
   importExcel() {
     // if (!this.selectedFiles) {
     //   abp.message.error("Choose a file!")
     //   return
     // }
-    const formData = new FormData();
     
     // formData.append('TimesheetProjectId', this.uploadFile.TimesheetProjectId.toString());
-    formData.append('file', this.currentFileUpload);
-    this.uploadFile.File= formData;
-    this.uploadFile.TimesheetProjectId = this.data.id
+    // formData.append('file', this.currentFileUpload);
+    // this.uploadFile.File= formData;
+  
     console.log(this.uploadFile)
-    this.timesheetProjectService.UpdateFileTimeSheetProject(this.uploadFile)
+    this.timesheetProjectService.UpdateFileTimeSheetProject(this.selectedFiles, this.data.id )
     .pipe(catchError(this.timesheetProjectService.handleError)).subscribe((res) => {
       abp.notify.success("Upload File Successful!");
       this.dialogRef.close();
     }, () => this.isDisable = false);
   }
 
+}
+
 
     
     
   
 
-}
+

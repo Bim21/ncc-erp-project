@@ -1,6 +1,8 @@
+import { AppComponentBase } from '@shared/app-component-base';
+import { BaseApiService } from '@app/service/api/base-api.service';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TimesheetDetailDto, ProjectTimesheetDto,UploadFileDto } from './../../../service/model/timesheet.dto';
 import { CreateEditTimesheetComponent } from './../create-edit-timesheet/create-edit-timesheet.component';
 import { ProjectDto } from '@app/service/model/list-project.dto';
@@ -16,36 +18,36 @@ import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-deta
   templateUrl: './timesheet-detail.component.html',
   styleUrls: ['./timesheet-detail.component.css']
 })
-export class TimesheetDetailComponent extends PagedListingComponentBase<ProjectDto> implements OnInit {
+export class TimesheetDetailComponent extends AppComponentBase implements OnInit {
  
-  public TimesheetDetaiList:TimesheetDetailDto[] = []
+  public TimesheetDetaiList:TimesheetDetailDto[] = [];
+  public tempTimesheetDetaiList:TimesheetDetailDto[] = [];
+
   public requestId:any;
   public projectTimesheetDetailId:any;
+  public searchText: string = "";
+  public timesheetId:any;
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
   ];
-  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    // throw new Error('Method not implemented.');
-    request.sort = this.transDate;
-    request.sortDirection = this.sortDrirect;
+  protected getAllTimesheetDetail(): void {
     this.timesheetService.GetTimesheetDetail(this.timesheetId).subscribe(data => {
       this.TimesheetDetaiList= data.result;
+      this.tempTimesheetDetaiList= data.result;
       this.projectTimesheetDetailId=data.result.map(el=>{return el.projectId})
       console.log(this.projectTimesheetDetailId)
-      this.showPaging(data.result, pageNumber);
     })
   }
-  protected delete (item: ProjectDto): void {
-    // throw new Error('Method not implemented.');
+  protected delete (item: TimesheetDetailDto): void {
     abp.message.confirm(
-      "Delete TimeSheet " + item.name + "?",
+      "Delete TimeSheet " + item.projectName + "?",
       "",
       (result: boolean) => {
         if (result) {
           this.timesheetProjectService.delete(item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted Project Timesheet " + item.name);
-            this.refresh()
+            abp.notify.success("Deleted Project Timesheet " + item.projectName);
+            this.getAllTimesheetDetail();
           });
         }
       }
@@ -55,29 +57,29 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<ProjectD
  
 
   constructor(private timesheetService :TimesheetService,
-    private timesheetProjectService: TimesheetProjectService,
+    public timesheetProjectService: TimesheetProjectService,
+    private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector:Injector
     ) {
     super(injector)
-    this.timesheetId = this.route.snapshot.queryParamMap.get('id');
+    
 
    }
    ngOnInit(): void {
-    this.refresh();
+    this.timesheetId = this.route.snapshot.queryParamMap.get('id');
+    this.getAllTimesheetDetail();
     
   }
    showDialog(command: String, Timesheet:any): void {
     let timesheetDetail = {} as ProjectTimesheetDto;
-    // let timesheetDetailId={} as TimesheetDetailDto;
-    // let uploadFile= {} as UploadFileDto;
     if (command == "edit") {
      timesheetDetail={
-      projectId: timesheetDetail.projectId,
-      timesheetId: timesheetDetail.timesheetId,
-      note:timesheetDetail.note
-      // file:timesheetDetail.file,
+      projectId: Timesheet.projectId,
+      timesheetId: Timesheet.timesheetId,
+      note:Timesheet.note,
+      id:Timesheet.id
      }
       
     }
@@ -85,7 +87,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<ProjectD
       data: {
         item: timesheetDetail,
         command: command,
-        // timesheetDetailId:timesheetDetailId.id,
         projectTimesheetDetailId: this.projectTimesheetDetailId,
      
       },
@@ -93,10 +94,10 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<ProjectD
       disableClose: true,
     });
     show.afterClosed().subscribe(result => {
-      // if (result === 'refresh') {
-      //   this.ngOnInit();
-      // }
-      this.refresh();
+      console.log("aaaaaaaaaaaaaa",result)
+      if(result){
+        this.getAllTimesheetDetail();
+      }
     });
     
     
@@ -106,18 +107,46 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<ProjectD
   createTimeSheet() {
     this.showDialog('create', {})
   }
-  editTimesheet(id:any) {
+  editTimesheet(timesheet: TimesheetDetailDto) {
     //ProjectDto
-    this.showDialog("edit", id);
+    this.showDialog("edit", timesheet);
   }
   
+  showDialogUpdateFile(command:string){
+    
+  }
   importExcel(id:any) {
     const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, { data:{id:id,width: '500px'}
     });
     dialog.afterClosed().subscribe(result => {
-      this.refresh();
+      this.getAllTimesheetDetail();
     });
   }
+  DeleteFile(item:any){
+    abp.message.confirm(
+      "Delete File " + item.file + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.timesheetProjectService.UpdateFileTimeSheetProject(null,item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted File  " + item.file);
+            this.getAllTimesheetDetail();
+          });
+        }
+      }
+    );
+   
+  }
+  search() {
+   
+    this.TimesheetDetaiList = this.tempTimesheetDetaiList.filter((item) => {
+      return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.file?.toLowerCase().includes(this.searchText.toLowerCase());
+    });
+
+      
+  }
+ 
   
 
 

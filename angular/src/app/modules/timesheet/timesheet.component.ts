@@ -24,7 +24,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     request.sortDirection = this.sortDrirect;
     this.timesheetService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
-    })).subscribe(data => {
+    }), catchError(this.timesheetService.handleError)).subscribe(data => {
 
       this.timesheetList = data.result.items;
       this.showPaging(data.result, pageNumber);

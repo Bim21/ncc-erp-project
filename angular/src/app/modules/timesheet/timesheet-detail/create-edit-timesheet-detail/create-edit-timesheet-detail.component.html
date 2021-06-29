@@ -4,22 +4,24 @@
         <h3 *ngIf="data.command!=='create'">Edit</h3>
     </div>
     <div class="modal-body">
-        <div class="form-group row required">
+        <div class="form-group row">
             <label class="col-md-3 col-form-label" for="tenancyName">
                Note:
             </label>
             <div class="col-md-9">
-                <input type="text" name="note" [(ngModel)]="projectTimesheet.note">
+                <mat-form-field appearance="outline" class="w-100">
+                    <input matInput type="text" name="note" [(ngModel)]="projectTimesheet.note">
+                </mat-form-field>
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="tenancyName">
-               Timesheet Project Id:
+        <div class="form-group row required" *ngIf="data.command == 'create'">
+            <label class="col-md-3 col-form-label" for="type">
+               Timesheet Project:
             </label>
             <div class="col-md-9">
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
-                    <mat-select placeholder="Select project name" [(ngModel)]="projectTimesheet.projectId" name="projectType">
-                        <mat-option *ngFor="let project of projectList" [value]="project.id" >
+                    <mat-select required placeholder="Select project name" [(ngModel)]="projectTimesheet.projectId" name="projectType">
+                        <mat-option *ngFor="let project of projectList" [value]="project.id"  >
                             {{project.name}}
                         </mat-option>
                     </mat-select>
@@ -30,7 +32,7 @@
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button mat-raised-button color="primary" class="saving-btn"mat-button
-        [disabled]="!timesheetDetailForm.form.valid ||isDisable" (click)="SaveAndClose()" >Save</button>
+        [disabled]="!timesheetDetailForm.form.valid ||isDisable" (click)="SaveAndClose()" [mat-dialog-close]="projectTimesheet" >Save</button>
     </div>
 </form>
 

@@ -7,7 +7,7 @@
         </div>
         <div style="padding-top: 10px; border-top: 1px solid #eee;">
             <label style="display: block; margin-bottom: 15px;">Choose file</label>
-            <input name="upload" type="file" class="form-group" id="file" [(ngModel)]="currentFileUpload" >
+            <input type="file" class="form-group" id="file"  (change)="selectFile($event)">
         </div>
         <div style="margin-top: 30px;">
             <button mat-flat-button color="primary"  class="btn_accept" (click)="importExcel()">Import</button>
