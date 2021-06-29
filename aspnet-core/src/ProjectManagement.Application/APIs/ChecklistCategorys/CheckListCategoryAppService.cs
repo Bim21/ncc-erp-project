@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.Checklists;
 using ProjectManagement.APIs.ChecklistTitles.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,13 @@ namespace ProjectManagement.APIs.ChecklistTitles
 {
     public class CheckListCategoryAppService : ProjectManagementAppServiceBase
     {
+        private readonly CheckListItemAppService _checkListItem;
+
+        public CheckListCategoryAppService(CheckListItemAppService checkListItem)
+        {
+            _checkListItem = checkListItem;
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.SaoDo_CheckListCategory_ViewAll)]
         public async Task<GridResult<CheckListCategoryDto>> GetAllPaging(GridParam input)
@@ -67,7 +76,13 @@ namespace ProjectManagement.APIs.ChecklistTitles
         public async Task Delete(long id)
         {
             var item = await WorkScope.GetAsync<CheckListCategory>(id);
+            var delItem = await WorkScope.GetAll<CheckListItem>().Where(x => x.CategoryId == id).Select(x => x.Id).ToListAsync();
+            foreach (var i in delItem)
+            {
+                await _checkListItem.Delete(i);
+            }
             await WorkScope.DeleteAsync<CheckListCategory>(id);
         }
+
     }
 }
