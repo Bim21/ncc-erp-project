@@ -62,13 +62,14 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
+                            <th>Code</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Mandatory</th>
-                            <th>Project Type</th>
                             <th>Audit Target</th>
                             <th>Person in Charge</th>
                             <th>Note</th>
+                            <th>Action</th>
 
                         </tr>
                     </thead>
@@ -81,14 +82,31 @@
                     totalItems: totalItems
                   }; let i = index">
                             <td>{{i+1}}</td>
-                            <td>{{checklist.name}}</td>
+                            <td style="white-space: normal">{{checklist.name}}</td>
+                            <td>{{checklist.code}}</td>
                             <td>{{checklist.title}}</td>
-                            <td>{{checklist.description}}</td>
-                            <td>{{checklist.mandatorys[0]}}</td>
-                            <td></td>
+                            <td style="white-space: normal; min-width: 300px;">{{checklist.description}}</td>
+                            <td><span *ngFor="let item of checklist.mandatorys;
+                                 let j=index">{{getProjectTypefromEnum(item,APP_ENUM.ProjectType)}}<span *ngIf="j < checklist.mandatorys.length-1">, </span></span></td>
                             <td>{{checklist.auditTarget}}</td>
                             <td>{{checklist.personInCharge}}</td>
                             <td>{{checklist.note}}</td>
+                            <td  class="text-center">
+                                <button  
+                                class="btn btn-sm bg-secondary mr-1" 
+                                (click)="editCheckList(checklist);$event.stopPropagation()" >
+                                <i class="fas fa-pencil-alt"></i>
+
+                                Edit
+                            </button>
+                            <button 
+                                class="btn btn-sm bg-danger ml-1"
+                                (click)="delete(checklist);$event.stopPropagation()"
+                                 #deleteBtn>
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
+                            </td>
 
                         </tr>
                     </tbody>

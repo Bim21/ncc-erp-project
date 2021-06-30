@@ -13,49 +13,96 @@ import { ChecklistDto } from '@app/service/model/checklist.dto';
   styleUrls: ['./checklist.component.css']
 })
 export class ChecklistComponent extends PagedListingComponentBase<any> implements OnInit {
-  checklistList:ChecklistDto[] =[]
+  checklistList: ChecklistDto[] = []
+  public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.isTLoading = true
     this.checklistService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
-    }), catchError( this.checklistService.handleError)).subscribe(data => {
+    }), catchError(this.checklistService.handleError)).subscribe(data => {
       this.isTLoading = false
       this.checklistList = data.result.items;
       this.showPaging(data.result, pageNumber);
     },
-    ()=>{
-      this.isLoading = false
-    })
+      () => {
+        this.isLoading = false
+      })
   }
   protected delete(entity: any): void {
-    throw new Error('Method not implemented.');
+    abp.message.confirm(
+      "Delete checklist: " + entity.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.checklistService.delete(entity.id).pipe(catchError(this.checklistService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted checklist: " + entity.name);
+            this.refresh()
+          });
+        }
+      }
+    );
   }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
-    { propertyName: 'Name', comparisions: [0, 6, 7, 8], displayName: "Name" },
-    { propertyName: 'Title', comparisions: [0, 6, 7, 8], displayName: "Title" },
-    { propertyName: 'Mandatory', comparisions: [0, 6, 7, 8], displayName: "Mandatory" },
-    { propertyName: 'projectType', comparisions: [0, 6, 7, 8], displayName: "Loại dự án" },
+    { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
+    { propertyName: 'code', comparisions: [0, 6, 7, 8], displayName: "Code" },
+    { propertyName: 'title', comparisions: [0, 6, 7, 8], displayName: "Title" },
+    { propertyName: 'mandatorys', comparisions: [0, 6, 7, 8], displayName: "mandatorys" },
     { propertyName: 'personInCharge', comparisions: [0, 6, 7, 8], displayName: "Person in Charge" },
+    { propertyName: 'auditTarget', comparisions: [0, 6, 7, 8], displayName: "auditTarget" },
+    { propertyName: 'note', comparisions: [0, 6, 7, 8], displayName: "note" },
+
   ];
 
-  constructor(injector: Injector,public dialog: MatDialog, private checklistService:ChecklistService) {
+  constructor(injector: Injector, public dialog: MatDialog, private checklistService: ChecklistService) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.refresh()
   }
-  createChecklistTitle() {
-    this.showDialogChecklistTitle();
+  public createChecklistTitle() {
+    this.showDialogChecklistTitle("create");
   }
-  showDialogChecklistTitle() {
+
+  public getProjectTypefromEnum(projectType: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == projectType) {
+        return key;
+      }
+    }
+  }
+  public editCheckList(checklist: ChecklistDto) {
+    this.showDialogChecklistTitle("edit", checklist)
+  }
+
+  private showDialogChecklistTitle(command: string, checkList?: ChecklistDto) {
+    let dialogData = {} as ChecklistDto
+    if (command == "edit") {
+      dialogData = {
+        id: checkList.id,
+        name: checkList.name,
+        code: checkList.code,
+        title: checkList.title,
+        auditTarget: checkList.auditTarget,
+        categoryId: checkList.categoryId,
+        description: checkList.description,
+        mandatorys: checkList.mandatorys,
+        personInCharge: checkList.personInCharge,
+        note: checkList.note
+      }
+    }
     const dialogRef = this.dialog.open(CreateChecklistItemComponent, {
       width: '700px',
-      disableClose: true
+      disableClose: true,
+      data: {
+        dialogData: dialogData,
+        command: command,
+      },
     });
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result) {
+        this.refresh()
+      }
     });
   }
 }

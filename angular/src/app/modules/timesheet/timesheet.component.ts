@@ -32,7 +32,6 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     })
   }
   protected delete (item: TimesheetDto): void {
-    // throw new Error('Method not implemented.');
     abp.message.confirm(
       "Delete TimeSheet " + item.name + "?",
       "",

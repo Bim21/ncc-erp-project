@@ -1,5 +1,5 @@
 <form class="form-horizontal" autocomplete="off" #checkListTitle="ngForm">
-    <abp-modal-header title="Create new checklist title" (onCloseClick)="dialogRef.close()">
+    <abp-modal-header title="Create/edit checklist title" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
@@ -14,9 +14,9 @@
             </div>
         </div>
     </div>
-    <div style="background-color: white;" align="end" class="mat-dialog-actions card-footer" mat-dialog-actions="">
+    <div style="background-color: white;" align="end" class="d-flex justify-content-between" >
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary" (click)="saveAndClose()" [mat-dialog-close]="checklistTitle"
+        <button class="btn btn-primary" (click)="saveAndClose()" 
             [disabled]="!checkListTitle.valid || isLoading">Save</button>
     </div>
 </form>
