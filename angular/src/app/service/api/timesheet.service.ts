@@ -20,4 +20,8 @@ export class TimesheetService extends BaseApiService{
         params: new HttpParams().set('timesheetId', id)
     })
 }
+public GetTimesheetDetail(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetTimesheetDetail?timesheetId=' + id);
+}
+
 }

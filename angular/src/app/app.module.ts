@@ -59,6 +59,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
 import { CreateEditTimesheetComponent } from './modules/timesheet/create-edit-timesheet/create-edit-timesheet.component';
+import { ImportFileTimesheetDetailComponent } from './modules/timesheet/timesheet-detail/import-file-timesheet-detail/import-file-timesheet-detail.component';
+import { CreateEditTimesheetDetailComponent } from './modules/timesheet/timesheet-detail/create-edit-timesheet-detail/create-edit-timesheet-detail.component';
+import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
+import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
+import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
 
 
 
@@ -115,6 +120,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     MilestoneComponent,
     WeeklyReportComponent,
     ProjectChecklistComponent,
+    ImportFileTimesheetDetailComponent,
+    CreateEditTimesheetDetailComponent,
+    DeliveryComponent,
+    ProjectStatusTabComponent,
+    ProjectMilestoneTabComponent,
     
   ],
   imports: [

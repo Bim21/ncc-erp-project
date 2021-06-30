@@ -38,7 +38,6 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
     public pageNumber:number = 1;
     public totalPages:number = 1;
     public totalItems: number;
-    public isTableLoading:boolean = false;
     public searchText: string = '';
     public filterItems: FilterDto[] = [];
     public pageSizeType:number = 20;
@@ -89,13 +88,13 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
         req.skipCount = (page - 1) * this.pageSize;
         req.filterItems = this.filterItems;
         req.searchText = this.searchText;
-        this.isTableLoading = true;
+        this.isLoading = true;
         this.pageNumber = page;
         this.router.navigate([], { queryParamsHandling: "merge",
       replaceUrl: true,
         queryParams: { pageNumber: this.pageNumber, pageSize: this.pageSize, searchText: this.searchText, filterItems: JSON.stringify(this.filterItems) } })
             .then(_ => this.list(req, page, () => {
-                this.isTableLoading = false;
+                this.isLoading = false;
             }));
     }
 

@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isTableLoading">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
@@ -80,17 +80,17 @@
                             <td ><span
                                 class="hyperlink" (click)="showDetail(item.id)">{{ item.name }}</span></td>
                             <td>{{item.month}}/{{item.year}}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{{item.totalProject}}</td>
+                            <td>{{item.totalTimesheet}}</td>
                             <td  class="text-center">
-                                <button 
+                                <button  *ngIf="item.status==0"
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editTimesheet(item);$event.stopPropagation()" >
                                 <i class="fas fa-pencil-alt"></i>
 
                                 Edit
                             </button>
-                            <button
+                            <button *ngIf="item.status==0"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(item);$event.stopPropagation()"
                                  #deleteBtn>

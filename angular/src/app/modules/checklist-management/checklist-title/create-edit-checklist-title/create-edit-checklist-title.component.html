@@ -1,16 +1,14 @@
-<form class="form-horizontal" autocomplete="off" #bankForm="ngForm">
-    <div class="card-header">
-        <h3 *ngIf="!isEdit">{{'Thêm mới' | localize}}</h3>
-        <!-- <h3 *ngIf="isEdit">{{'m3_child3.editTitle' | translate}} </h3> -->
-    </div>
+<form class="form-horizontal" autocomplete="off" #checkListTitle="ngForm">
+    <abp-modal-header title="Create new checklist title" (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="accountTypeName">
                 {{ 'name' | localize }}
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="accountTypeName" id="accountTypeName" minlength="2" maxlength="64"
-                    required [(ngModel)]="checklistTitle.name" #accountTypeNameModel="ngModel" #accountTypeNameEl />
+                <input type="text" class="form-control" name="name" minlength="2" required
+                    [(ngModel)]="checklistTitle.name" #accountTypeNameModel="ngModel" #accountTypeNameEl />
                 <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
                 </abp-validation-summary>
             </div>
@@ -18,7 +16,7 @@
     </div>
     <div style="background-color: white;" align="end" class="mat-dialog-actions card-footer" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button mat-raised-button color="primary" class="saving-btn"mat-button 
-        [disabled]="!bankForm.form.valid">Save</button>
+        <button class="btn btn-primary" (click)="saveAndClose()" [mat-dialog-close]="checklistTitle"
+            [disabled]="!checkListTitle.valid || isLoading">Save</button>
     </div>
 </form>
