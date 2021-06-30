@@ -1,4 +1,5 @@
 export class ChecklistTitleDto{
+  id?:number;
   name: string;
 }
 export class ChecklistDto{

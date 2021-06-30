@@ -77,7 +77,7 @@ export const APP_ENUMS = {
     ProjectType:
     {
         ODC: 0,
-        TandM: 1,
+        'T&M': 1,
         FIXPRICE: 2,
         PRODUCT: 3,
         NoBill: 4

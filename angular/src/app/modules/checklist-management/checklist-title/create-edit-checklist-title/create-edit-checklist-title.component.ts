@@ -1,8 +1,9 @@
+import { DialogDataDto } from './../../../../service/model/common-DTO';
 import { ChecklistTitleDto } from './../../../../service/model/checklist.dto';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppComponentBase } from '@shared/app-component-base';
 import { ChecklistCategoryService } from './../../../../service/api/checklist-category.service';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-create-edit-checklist-title',
@@ -11,17 +12,30 @@ import { Component, OnInit, Injector } from '@angular/core';
 })
 export class CreateEditChecklistTitleComponent extends AppComponentBase implements OnInit {
   isEdit: boolean;
-  constructor(private checkListTitleService: ChecklistCategoryService, injector: Injector,
+  constructor(private checkListTitleService: ChecklistCategoryService, injector: Injector, @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
   public dialogRef: MatDialogRef<CreateEditChecklistTitleComponent>) {
     super(injector)
   }
   checklistTitle = {} as ChecklistTitleDto;
   ngOnInit(): void {
+    if(this.data.command =="edit"){
+      this.checklistTitle = this.data.dialogData
+    }
   }
   public saveAndClose(): void {
     this.isLoading = true;
-    this.checkListTitleService.create(this.checklistTitle).subscribe(res => {
-      abp.notify.success("create and linked transaction ");
-    }, () => this.isLoading = false);
+    if(this.data.command =="create"){
+      this.checkListTitleService.create(this.checklistTitle).subscribe(res => {
+        abp.notify.success("created checklist title: "+this.checklistTitle.name);
+        this.dialogRef.close(this.checklistTitle)
+      }, () => this.isLoading = false);
+    }
+    else if(this.data.command == "edit"){
+      this.checkListTitleService.update(this.checklistTitle).subscribe(res => {
+        abp.notify.success("Edited: "+this.checklistTitle.name);
+        this.dialogRef.close(this.checklistTitle)
+      }, () => this.isLoading = false);
+    }
+   
   }
 }
