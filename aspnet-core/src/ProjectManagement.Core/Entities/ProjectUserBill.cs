@@ -18,10 +18,11 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }
         public long ProjectId { get; set; }
-        public UserRole BillRole { get; set; }
+        public string BillRole { get; set; }
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public CurrencyEnum Currency { get; set; }
+        public Currency Currency { get; set; }
+        public bool isActive { get; set; }
     }
 }

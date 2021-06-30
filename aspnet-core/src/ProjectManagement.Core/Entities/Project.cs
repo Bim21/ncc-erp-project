@@ -13,6 +13,7 @@ namespace ProjectManagement.Entities
 {
     public class Project : FullAuditedEntity<long>
     {
+        [MaxLength(255)]
         public string Name { get; set; }
         [MaxLength(255)]
         public string Code { get; set; }
@@ -22,10 +23,10 @@ namespace ProjectManagement.Entities
         public ProjectStatus Status { get; set; }
         public long ClientId { get; set; }
         [ForeignKey(nameof(ClientId))]
-        public Client Clients { get; set; }
+        public Client Client { get; set; }
         public bool IsCharge { get; set; }
-        public long PmId { get; set; }
-        [ForeignKey(nameof(PmId))]
+        public long PMId { get; set; }
+        [ForeignKey(nameof(PMId))]
         public User PM { get; set; }
        
     }

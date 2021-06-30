@@ -1,9 +1,11 @@
-﻿using Abp.UI;
+﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.PMReports.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
@@ -18,47 +20,53 @@ namespace ProjectManagement.APIs.PMReports
     public class PMReportAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<GridResult<PMReportDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
             {
                 Name = x.Name,
-                Status = x.Status,
+                IsActive = x.IsActive,
+                Year = x.Year,
                 Type = x.Type
             });
             return await query.GetGridResult(query, input);
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<List<PMReportDto>> GetAll()
         {
-           return await WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
+            return await WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
             {
+
                 Name = x.Name,
-                Status = x.Status,
+                IsActive = x.IsActive,
+                Year = x.Year,
                 Type = x.Type
             }).ToListAsync();
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Create)]
         public async Task<PMReportDto> Create(PMReportDto input)
         {
             var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Name == input.Name && x.Type == input.Type);
-            if(isExist)
+            if (isExist)
                 throw new UserFriendlyException("PM Report already exist !");
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReport>(input));
 
             var projectActive = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed).ToListAsync();
-            foreach(var item in projectActive)
+            foreach (var item in projectActive)
             {
                 var pmReportProject = new PMReportProject
                 {
                     PMReportId = input.Id,
                     ProjectId = item.Id,
                     Status = PMReportProjectStatus.Draft,
-                    ProjectHealth = ProjectHealthEnum.Green,
-                    PMId = item.PmId,
+                    ProjectHealth = ProjectHealth.Green,
+                    PMId = item.PMId,
                     Note = null
                 };
                 await WorkScope.InsertAndGetIdAsync(pmReportProject);
@@ -68,6 +76,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpPut]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Update)]
         public async Task<PMReportDto> Update(PMReportDto input)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(input.Id);
@@ -81,6 +90,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpDelete]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Delete)]
         public async Task Delete(long pmReportId)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);

@@ -1,9 +1,11 @@
-﻿using Abp.UI;
+﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.PMReportProjects.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
@@ -17,6 +19,7 @@ namespace ProjectManagement.APIs.PMReportProjects
     public class PMReportProjectAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAll)]
         public async Task<GridResult<GetPMReportProjectDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<PMReportProject>().Select(x => new GetPMReportProjectDto
@@ -26,7 +29,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                 PMReportName = x.PMReport.Name,
                 ProjectId = x.ProjectId,
                 ProjectName = x.Project.Name,
-                Status = x.Status,
+                Status = x.Status.ToString(),
                 ProjectHealth = x.ProjectHealth,
                 PMId = x.PMId,
                 PmName = x.PM.Name,
@@ -36,6 +39,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Create)]
         public async Task<PMReportProjectDto> Create(PMReportProjectDto input)
         {
             var isExist = await WorkScope.GetAll<PMReportProject>().AnyAsync(x => x.PMReportId == input.PMReportId && x.ProjectId == input.ProjectId);
@@ -47,6 +51,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPut]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Update)]
         public async Task<PMReportProjectDto> Update(PMReportProjectDto input)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(input.Id);
@@ -60,6 +65,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpDelete]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Delete)]
         public async Task Delete(long pmPeportProjectId)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmPeportProjectId);

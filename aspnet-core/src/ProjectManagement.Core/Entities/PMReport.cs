@@ -12,7 +12,9 @@ namespace ProjectManagement.Entities
     {
         [MaxLength(255)]
         public string Name { get; set; }
-        public PMReportStatus Status { get; set; }
+        
+        public bool IsActive { get; set; }
+        public int Year { get; set; }
         public PMReportType Type { get; set; }
     }
 }

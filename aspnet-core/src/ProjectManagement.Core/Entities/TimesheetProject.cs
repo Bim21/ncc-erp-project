@@ -13,7 +13,7 @@ namespace ProjectManagement.Entities
         public Project Project { get; set; }
         public long ProjectId { get; set; }
         [MaxLength(1000)]
-        public string TimesheetFile { get; set; }
+        public string FilePath { get; set; }
         [ForeignKey(nameof(TimesheetId))]
         public Timesheet Timesheet { get; set; }
         public long TimesheetId { get; set; }

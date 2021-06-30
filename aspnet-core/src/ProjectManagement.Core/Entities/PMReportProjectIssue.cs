@@ -18,8 +18,8 @@ namespace ProjectManagement.Entities
         public string Description { get; set; }
         [MaxLength(10000)]
         public string Impact { get; set; }
-        public CriticalEnum Critical { get; set; }
-        public SourceEmum Source { get; set; }
+        public IssueCritical Critical { get; set; }
+        public ProjectIssueSource Source { get; set; }
         [MaxLength(10000)]
         public string Solution { get; set; }
         public string MeetingSolution { get; set; }// consider

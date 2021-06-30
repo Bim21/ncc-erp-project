@@ -25,15 +25,16 @@ namespace ProjectManagement.APIs.ProjectUserBills
             var query = WorkScope.GetAll<ProjectUserBill>()
                         .Select(x => new GetProjectUserBillDto
                         {
-                            ProjectId = x.ProjectId,
-                            ProjectName = x.Project.Name,
-                            UserId = x.UserId,
-                            UserName = x.User.FullName,
-                            BillRole = x.BillRole,
-                            BillRate = x.BillRate,
-                            StartTime = x.StartTime.Date,
-                            EndTime = x.EndTime.Value.Date,
-                            Currency = x.Currency
+                           UserId = x.UserId,
+                           UserName = x.User.FullName,
+                           ProjectId = x.ProjectId,
+                           ProjectName = x.Project.Name,
+                           BillRole = x.BillRole,
+                           BillRate = x.BillRate,
+                           StartTime = x.StartTime.Date,
+                           EndTime = x.EndTime.Value.Date,
+                           Currency = x.Currency,
+                           isActive = x.isActive
                         });
             return await query.GetGridResult(query, input);
         }
@@ -44,15 +45,16 @@ namespace ProjectManagement.APIs.ProjectUserBills
             var query = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId)
                         .Select(x => new GetProjectUserBillDto
                         {
+                            UserId = x.UserId,
+                            UserName = x.User.Name,
                             ProjectId = x.ProjectId,
                             ProjectName = x.Project.Name,
-                            UserId = x.UserId,
-                            UserName = x.User.FullName,
                             BillRole = x.BillRole,
                             BillRate = x.BillRate,
                             StartTime = x.StartTime.Date,
                             EndTime = x.EndTime.Value.Date,
-                            Currency = x.Currency
+                            Currency = x.Currency,
+                            isActive = x.isActive
                         });
             return await query.ToListAsync();
         }
@@ -62,10 +64,10 @@ namespace ProjectManagement.APIs.ProjectUserBills
         public async Task<ProjectUserBillDto> Create(ProjectUserBillDto input)
         {
             var isExist = await WorkScope.GetAll<ProjectUserBill>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId);
-            if(isExist)
+            if (isExist)
                 throw new UserFriendlyException($"Project User Bill with ProjectId: {input.ProjectId}, UserId: {input.UserId} already exist !");
 
-            if(input.StartTime.Date > input.EndTime.Value.Date)
+            if (input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
@@ -86,7 +88,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             if (input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
-            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserBillDto,ProjectUserBill>(input, projectUserBill));
+            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserBillDto, ProjectUserBill>(input, projectUserBill));
 
             return input;
         }

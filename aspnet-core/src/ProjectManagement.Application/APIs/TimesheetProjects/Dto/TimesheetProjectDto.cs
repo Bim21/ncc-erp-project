@@ -13,7 +13,6 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
     public class TimesheetProjectDto : EntityDto<long>
     {
         public long ProjectId { get; set; }
-        public string TimesheetFile { get; set; }
         public long TimesheetId { get; set; }
         public string Note { get; set; }
     }

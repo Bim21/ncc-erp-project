@@ -25,11 +25,6 @@ namespace ProjectManagement.Entities
         [MaxLength(10000)]
         public string Note { get; set; }
 
-        public byte Quantity { get; set; }
-        public UserRole Role { get; set; }
-
-        [ForeignKey(nameof(PMId))]
-        public User PM { get; set; }
-        public long PMId { get; set; }
+        public bool IsPass { get; set; }
     }
 }

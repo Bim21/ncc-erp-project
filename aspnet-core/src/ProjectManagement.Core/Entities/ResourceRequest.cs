@@ -18,8 +18,8 @@ namespace ProjectManagement.Entities
         public long ProjectId { get; set; }
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }
-        public DateTime TimeDone { get; set; }
-        [MaxLength(10000)]
+        public DateTime? TimeDone { get; set; }
+        [MaxLength(10000)]        
         public string Note { get; set; }
     }
 }

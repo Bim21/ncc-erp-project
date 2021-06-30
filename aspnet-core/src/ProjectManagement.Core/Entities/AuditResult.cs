@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities.Auditing;
+using ProjectManagement.Authorization.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,5 +19,9 @@ namespace ProjectManagement.Entities
         public long ProjectId { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
+
+        [ForeignKey(nameof(PMId))]
+        public User PM { get; set; }
+        public long PMId { get; set; }
     }
 }
