@@ -29,16 +29,6 @@ namespace ProjectManagement.Authorization
             public const string PmManager_Project_Update = "PmManager.Project.Update";
             public const string PmManager_Project_Delete = "PmManager.Project.Delete";
 
-            //Timesheet
-            public const string PmManager_Timesheet = "PmManager.Timesheet";
-            public const string PmManager_Timesheet_ViewAll = "PmManager.Timesheet.ViewAll";
-            public const string PmManager_Timesheet_Get = "PmManager.Timesheet.Get";
-            
-            public const string PmManager_Timesheet_Create = "PmManager.Timesheet.Create";
-            public const string PmManager_Timesheet_Update = "PmManager.Timesheet.Update";
-            public const string PmManager_Timesheet_Delete = "PmManager.Timesheet.Delete";
-            public const string PmManager_Timesheet_DoneTimesheetById = "PmManager.Timesheet.DoneTimesheetById";
-
             //TimesheetProject
             public const string PmManager_TimesheetProject = "PmManager.TimesheetProject";
             public const string PmManager_TimesheetProject_GetAllByproject = "PmManager.TimesheetProject.GetAllByProject";
@@ -66,22 +56,43 @@ namespace ProjectManagement.Authorization
             public const string PmManager_ProjectUser_Update = "PmManager.ProjectUser.Update";
             public const string PmManager_ProjectUser_Delete = "PmManager.ProjectUser.Delete";
 
-        //Sao Do
-        public const string SaoDo = "SaoDo";
+        //Timesheet
+        public const string Timesheet = "Timesheet";
+            //Timesheet
+            public const string Timesheet_Timesheet = "Timesheet.Timesheet";
+            public const string Timesheet_Timesheet_ViewAll = "Timesheet.Timesheet.ViewAll";
+            public const string Timesheet_Timesheet_Get = "Timesheet.Timesheet.Get";
+
+            public const string Timesheet_Timesheet_Create = "Timesheet.Timesheet.Create";
+            public const string Timesheet_Timesheet_Update = "Timesheet.Timesheet.Update";
+            public const string Timesheet_Timesheet_Delete = "Timesheet.Timesheet.Delete";
+            public const string Timesheet_Timesheet_DoneTimesheetById = "Timesheet.Timesheet.DoneTimesheetById";
+
+        //Checklist
+        public const string CheckList = "CheckList";
             // Check List Category
-            public const string SaoDo_CheckListCategory = "SaoDo.CheckListCategory";
-            public const string SaoDo_CheckListCategory_ViewAll = "SaoDo.CheckListCategory.ViewAll";
-            public const string SaoDo_CheckListCategory_Create = "SaoDo.CheckListCategory.Create";
-            public const string SaoDo_CheckListCategory_Update = "SaoDo.CheckListCategory.Update";
-            public const string SaoDo_CheckListCategory_Delete = "SaoDo.CheckListCategory.Delete";
+            public const string CheckList_CheckListCategory = "CheckList.CheckListCategory";
+            public const string CheckList_CheckListCategory_ViewAll = "CheckList.CheckListCategory.ViewAll";
+            public const string CheckList_CheckListCategory_Create = "CheckList.CheckListCategory.Create";
+            public const string CheckList_CheckListCategory_Update = "CheckList.CheckListCategory.Update";
+            public const string CheckList_CheckListCategory_Delete = "CheckList.CheckListCategory.Delete";
 
             // Check List Item
-            public const string SaoDo_CheckListItem = "SaoDo.CheckListItem";
-            public const string SaoDo_CheckListItem_ViewAll = "SaoDo.CheckListItem.ViewAll";
-            public const string SaoDo_CheckListItem_Create = "SaoDo.CheckListItem.Create";
-            public const string SaoDo_CheckListItem_Update = "SaoDo.CheckListItem.Update";
-            public const string SaoDo_CheckListItem_Delete = "SaoDo.CheckListItem.Delete";
+            public const string CheckList_CheckListItem = "CheckList.CheckListItem";
+            public const string CheckList_CheckListItem_ViewAll = "CheckList.CheckListItem.ViewAll";
+            public const string CheckList_CheckListItem_Create = "CheckList.CheckListItem.Create";
+            public const string CheckList_CheckListItem_Update = "CheckList.CheckListItem.Update";
+            public const string CheckList_CheckListItem_Delete = "CheckList.CheckListItem.Delete";
 
+            // Project Checklist
+            public const string CheckList_ProjectChecklist = "CheckList.ProjectChecklist";
+            public const string CheckList_ProjectChecklist_Create = "CheckList.ProjectChecklist.Create";
+            public const string CheckList_ProjectChecklist_Delete = "CheckList.ProjectChecklist.Delete";
+            public const string CheckList_ProjectChecklist_ReverseActive = "CheckList.ProjectChecklist.ReverseActive";
+            public const string CheckList_ProjectChecklist_AddByProjectType = "CheckList.ProjectChecklist.AddByProjectType";
+
+        //Sao Do
+        public const string SaoDo = "SaoDo";       
             // Audit Result People
             public const string SaoDo_AuditResultPeople = "SaoDo.AuditResultPeople";
             public const string SaoDo_AuditResultPeople_Create = "SaoDo.AuditResultPeople.Create";
@@ -96,13 +107,6 @@ namespace ProjectManagement.Authorization
             public const string SaoDo_AuditSession_View = "SaoDo.AuditSession.View";
             public const string SaoDo_AuditSession_ViewAll = "SaoDo.AuditSession.ViewAll";
             public const string SaoDo_AuditSession_AddAuditResult = "SaoDo.AuditSession.AddAuditResult";
-
-            // Project Checklist
-            public const string SaoDo_ProjectChecklist = "SaoDo.ProjectChecklist";
-            public const string SaoDo_ProjectChecklist_Create = "SaoDo.ProjectChecklist.Create";
-            public const string SaoDo_ProjectChecklist_Delete = "SaoDo.ProjectChecklist.Delete";
-            public const string SaoDo_ProjectChecklist_ReverseActive = "SaoDo.ProjectChecklist.ReverseActive";
-            public const string SaoDo_ProjectChecklist_AddByProjectType = "SaoDo.ProjectChecklist.AddByProjectType";
 
         //Delivery Management
         public const string DeliveryManagement = "DeliveryManagement";
@@ -137,6 +141,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin,
                     PermissionNames.PmManager,
                     PermissionNames.SaoDo,
+                    PermissionNames.CheckList,
+                    PermissionNames.Timesheet,
 
                     PermissionNames.Pages_Users,
                     PermissionNames.Pages_Tenants,
@@ -159,13 +165,13 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_Project_Delete,
 
                     //TimeSheet
-                    PermissionNames.PmManager_Timesheet,
-                    PermissionNames.PmManager_Timesheet_ViewAll,
-                    PermissionNames.PmManager_Timesheet_Get,
-                    PermissionNames.PmManager_Timesheet_Create,
-                    PermissionNames.PmManager_Timesheet_Update,
-                    PermissionNames.PmManager_Timesheet_Delete,
-                    PermissionNames.PmManager_Timesheet_DoneTimesheetById,
+                    PermissionNames.Timesheet_Timesheet,
+                    PermissionNames.Timesheet_Timesheet_ViewAll,
+                    PermissionNames.Timesheet_Timesheet_Get,
+                    PermissionNames.Timesheet_Timesheet_Create,
+                    PermissionNames.Timesheet_Timesheet_Update,
+                    PermissionNames.Timesheet_Timesheet_Delete,
+                    PermissionNames.Timesheet_Timesheet_DoneTimesheetById,
 
                     //Timesheet Project
                     PermissionNames.PmManager_TimesheetProject,
@@ -193,18 +199,18 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_ProjectUser_Delete,
 
                     //Check List Category
-                    PermissionNames.SaoDo_CheckListCategory,
-                    PermissionNames.SaoDo_CheckListCategory_Create,
-                    PermissionNames.SaoDo_CheckListCategory_Delete,
-                    PermissionNames.SaoDo_CheckListCategory_Update,
-                    PermissionNames.SaoDo_CheckListCategory_ViewAll,
+                    PermissionNames.CheckList_CheckListCategory,
+                    PermissionNames.CheckList_CheckListCategory_Create,
+                    PermissionNames.CheckList_CheckListCategory_Delete,
+                    PermissionNames.CheckList_CheckListCategory_Update,
+                    PermissionNames.CheckList_CheckListCategory_ViewAll,
 
                     //Check List Item
-                    PermissionNames.SaoDo_CheckListItem,
-                    PermissionNames.SaoDo_CheckListItem_Create,
-                    PermissionNames.SaoDo_CheckListItem_Delete,
-                    PermissionNames.SaoDo_CheckListItem_Update,
-                    PermissionNames.SaoDo_CheckListItem_ViewAll,
+                    PermissionNames.CheckList_CheckListItem,
+                    PermissionNames.CheckList_CheckListItem_Create,
+                    PermissionNames.CheckList_CheckListItem_Delete,
+                    PermissionNames.CheckList_CheckListItem_Update,
+                    PermissionNames.CheckList_CheckListItem_ViewAll,
 
                     // Audit Result People
                     PermissionNames.SaoDo_AuditResultPeople,
@@ -222,11 +228,11 @@ namespace ProjectManagement.Authorization
                     PermissionNames.SaoDo_AuditSession_AddAuditResult,
 
                     // Project Checklist
-                    PermissionNames.SaoDo_ProjectChecklist,
-                    PermissionNames.SaoDo_ProjectChecklist_AddByProjectType,
-                    PermissionNames.SaoDo_ProjectChecklist_Create,
-                    PermissionNames.SaoDo_ProjectChecklist_Delete,
-                    PermissionNames.SaoDo_ProjectChecklist_ReverseActive,
+                    PermissionNames.CheckList_ProjectChecklist,
+                    PermissionNames.CheckList_ProjectChecklist_AddByProjectType,
+                    PermissionNames.CheckList_ProjectChecklist_Create,
+                    PermissionNames.CheckList_ProjectChecklist_Delete,
+                    PermissionNames.CheckList_ProjectChecklist_ReverseActive,
 
                     //PMReport
                     PermissionNames.DeliveryManagement_PMReport,
@@ -261,6 +267,8 @@ namespace ProjectManagement.Authorization
                 new SystemPermission{ Name =  PermissionNames.Admin, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Admin" },
                 new SystemPermission{ Name =  PermissionNames.PmManager, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Manager" },
                 new SystemPermission{ Name =  PermissionNames.SaoDo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sao Do" },
+                new SystemPermission{ Name =  PermissionNames.CheckList, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List" },
+                new SystemPermission{ Name =  PermissionNames.Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
 
                  new SystemPermission{ Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles" },
@@ -283,13 +291,13 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project" },
 
                  // TimeSheet
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Timesheet" },
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Get, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Timesheet" },
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet" },
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet" },
-                 new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_DoneTimesheetById, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Done Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Get, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet" },
+                 new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_DoneTimesheetById, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Done Timesheet" },
 
                  //Timesheet Project
                   new SystemPermission{ Name =  PermissionNames.PmManager_TimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet Project" },
@@ -319,18 +327,18 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project User" },
 
                   //Check List Category
-                  new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Category" },
-                  new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Category" },
-                  new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Category" },
-                  new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Category" },
-                  new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Category" },
+                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Category" },
+                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Category" },
+                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Category" },
+                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Category" },
+                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Category" },
                   
                  //Check List Item
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Item" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Item" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Item" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Item" },                 
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Item" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Item" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Item" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Item" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Item" },                 
+                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Item" },
 
                  //Audit Result People
                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResultPeople, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Audit Result People" },
@@ -348,11 +356,11 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditSession_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Audit Session" },
 
                  //Project Checklist
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Checklist" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_AddByProjectType, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project Checklist by Project Type" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project Checklist" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project Checklist" },
-                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_ReverseActive, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reverse Active Project Checklist" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Checklist" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_AddByProjectType, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project Checklist by Project Type" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project Checklist" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project Checklist" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_ReverseActive, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reverse Active Project Checklist" },
 
                  //PmReport
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Report" },
@@ -407,19 +415,7 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project" },
                             }
-                        },
-                    //Timesheet
-                       new SystemPermission { Name =  PermissionNames.PmManager_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet",
-                            Childrens = new List<SystemPermission>()
-                            {
-                                    new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Timesheet" },
-                                    new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Get, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Timesheet" },
-                                    new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet" },
-                                    new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
-                                    new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet" },
-                                    new SystemPermission{ Name =  PermissionNames.PmManager_Timesheet_DoneTimesheetById, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Done Timesheet" },
-                            }
-                        },
+                        },                   
                        //Timesheet Project
                        new SystemPermission { Name =  PermissionNames.PmManager_TimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project",
                             Childrens = new List<SystemPermission>()
@@ -462,27 +458,6 @@ namespace ProjectManagement.Authorization
                 //Sao Do
                 new SystemPermission { Name =  PermissionNames.SaoDo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sao Do",
                     Childrens = new List<SystemPermission>() {
-                        //Check List Category
-                        new SystemPermission { Name =  PermissionNames.SaoDo_CheckListCategory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Category",
-                            Childrens = new List<SystemPermission>()
-                            {
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Category" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Category" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Category" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListCategory_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Category" },
-                            }
-                        },
-                        //Check List Item
-                        new SystemPermission { Name =  PermissionNames.SaoDo_CheckListItem, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Item",
-                            Childrens = new List<SystemPermission>()
-                            {
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Item" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Item" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Item" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_CheckListItem_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Item" },
-                            }
-                        },
-
                         //Audit Result People
                         new SystemPermission { Name =  PermissionNames.SaoDo_AuditResultPeople, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Audit Result People",
                             Childrens = new List<SystemPermission>()
@@ -506,16 +481,6 @@ namespace ProjectManagement.Authorization
                             }
                         },
                         
-                        //Project Checklist
-                        new SystemPermission { Name =  PermissionNames.SaoDo_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Checklist",
-                            Childrens = new List<SystemPermission>()
-                            {
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project Checklist" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project Checklist" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_ReverseActive, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reverse Active Project Checklist" },
-                                 new SystemPermission{ Name =  PermissionNames.SaoDo_ProjectChecklist_AddByProjectType, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project Checklist by Project Type" },
-                            }
-                        },
                     }
                 },
                 //Delivery Management
@@ -548,6 +513,58 @@ namespace ProjectManagement.Authorization
                             Childrens = new List<SystemPermission>()
                             {
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By Project" },
+                            }
+                        },
+                    }
+                },
+                //Check List
+                new SystemPermission { Name =  PermissionNames.CheckList, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List",
+                    Childrens = new List<SystemPermission>() {
+                        //Check List Category
+                        new SystemPermission { Name =  PermissionNames.CheckList_CheckListCategory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Category",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Category" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Category" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Category" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Category" },
+                            }
+                        },
+                        //Check List Item
+                        new SystemPermission { Name =  PermissionNames.CheckList_CheckListItem, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Item",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Item" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Item" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Item" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Item" },
+                            }
+                        },                                             
+                        //Project Checklist
+                        new SystemPermission { Name =  PermissionNames.CheckList_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Checklist",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project Checklist" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project Checklist" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_ReverseActive, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reverse Active Project Checklist" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_AddByProjectType, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project Checklist by Project Type" },
+                            }
+                        },
+                    }
+                },
+                //Timesheet
+                new SystemPermission { Name =  PermissionNames.Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet",
+                    Childrens = new List<SystemPermission>() {
+                       //Timesheet
+                       new SystemPermission { Name =  PermissionNames.Timesheet_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Get, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet_DoneTimesheetById, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Done Timesheet" },
                             }
                         },
                     }

@@ -16,16 +16,10 @@ namespace ProjectManagement.APIs.CheckListItems
     public class CheckListItemAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        [AbpAuthorize(PermissionNames.SaoDo_CheckListItem_ViewAll)]
+        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_ViewAll)]
         public async Task<GridResult<CheckListItemDetailDto>> GetAllPaging(GridParam input)
         {
-            var listMan = WorkScope.GetAll<CheckListItemMandatory>()
-                        .Select(x => new CheckListItemMandatoryDto
-                        {
-                            Id = x.Id,
-                            CheckListItemId = x.CheckListItemId,
-                            ProjectType = x.ProjectType
-                        });
+            var listMan = WorkScope.GetAll<CheckListItemMandatory>();
             var query = from i in WorkScope.GetAll<CheckListItem>()
                         select new CheckListItemDetailDto
                         {
@@ -38,12 +32,12 @@ namespace ProjectManagement.APIs.CheckListItems
                             AuditTarget = i.AuditTarget,
                             PersonInCharge = i.PersonInCharge,
                             Note = i.Note,
-                            mandatorys = listMan.Where(x => x.CheckListItemId == i.Id).ToList()
+                            mandatorys = listMan.Where(x => x.CheckListItemId == i.Id).Select(x=>x.ProjectType).ToList()
                         };
             return await query.GetGridResult(query, input);
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_CheckListItem_Create)]
+        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Create)]
         public async Task<CheckListItemDetailDto> Create(CheckListItemDetailDto input)
         {
             var isExist = await WorkScope.GetAll<CheckListItem>().AnyAsync(x => x.Code.Contains(input.Code));
@@ -56,13 +50,17 @@ namespace ProjectManagement.APIs.CheckListItems
  
             foreach (var i in input.mandatorys)
             {// insert mandatory
-                i.CheckListItemId = input.Id;
-                i.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<CheckListItemMandatory>(i));
+                var itemMan = new CheckListItemMandatory
+                {
+                    CheckListItemId = input.Id,
+                    ProjectType = i,
+                };
+                await WorkScope.InsertAndGetIdAsync(itemMan);
             }
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_CheckListItem_Update)]
+        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Update)]
         public async Task<CheckListItemDetailDto> Update(CheckListItemDetailDto input)
         {
             var checkExist = await WorkScope.GetAll<CheckListItem>()
@@ -80,7 +78,7 @@ namespace ProjectManagement.APIs.CheckListItems
 
             // delete mandatory not exist in input
             var deleteMan = await WorkScope.GetAll<CheckListItemMandatory>()
-                              .Where(x => x.CheckListItemId == input.Id && !input.mandatorys.Select(x=>x.ProjectType).Contains(x.ProjectType))
+                              .Where(x => x.CheckListItemId == input.Id && !input.mandatorys.Contains(x.ProjectType))
                               .ToListAsync();
             foreach (var i in deleteMan)
             {
@@ -90,19 +88,19 @@ namespace ProjectManagement.APIs.CheckListItems
             foreach (var i in input.mandatorys)
             {
                 var isExist = await WorkScope.GetAll<CheckListItemMandatory>()
-                                .AnyAsync(x => x.CheckListItemId == input.Id && x.ProjectType == i.ProjectType);
+                                .AnyAsync(x => x.CheckListItemId == input.Id && x.ProjectType == i);
                 if (isExist) continue;
                 var itemMan = new CheckListItemMandatory
                 {
                     CheckListItemId = input.Id,
-                    ProjectType = i.ProjectType,
+                    ProjectType = i,
                 };
                 itemMan.Id = await WorkScope.InsertAndGetIdAsync(itemMan);
             }
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_CheckListItem_Delete)]
+        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Delete)]
         public async Task Delete(long id)
         {
             // delete mandatory

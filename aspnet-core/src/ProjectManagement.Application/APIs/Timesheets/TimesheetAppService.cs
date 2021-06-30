@@ -36,7 +36,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_ViewAll)]
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ViewAll)]
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
             var timesheetProject = WorkScope.GetAll<TimesheetProject>();
@@ -70,7 +70,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Get)]
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Get)]
         public async Task<TimesheetDto> Get(long timesheetId)
         {
             var query = WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId)
@@ -86,7 +86,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Create)]
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Create)]
         public async Task<TimesheetDto> Create(TimesheetDto input)
         {
             var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
@@ -118,7 +118,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Update)]
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Update)]
         public async Task<TimesheetDto> Update(TimesheetDto input)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
@@ -134,7 +134,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Delete)]
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Delete)]
         public async Task Delete(long timesheetId)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
@@ -147,7 +147,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         //[HttpPost]
-        //[AbpAuthorize(PermissionNames.PmManager_Timesheet_DoneTimesheetById)]
+        //[AbpAuthorize(PermissionNames.Timesheet_Timesheet_DoneTimesheetById)]
         //public async Task DoneTimesheetById(long timesheetId)
         //{
         //    var timeSheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
