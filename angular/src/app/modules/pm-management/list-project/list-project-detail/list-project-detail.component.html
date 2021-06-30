@@ -3,6 +3,9 @@
         <div class="row mb-4 card">
             <div class="col-12">
                 <nav mat-tab-nav-bar>
+                    <a [ngClass]="currentUrl.includes('list-project-general')?'active':''" mat-tab-link (click)="routingGeneralTab()">
+                        List Project General
+                    </a>
                     <a [ngClass]="currentUrl.includes('resourcemanagement')?'active':''" mat-tab-link (click)="routingResourceTab()">
                         Resource Management 
                     </a>
@@ -15,6 +18,7 @@
                     <a [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
                         Project Checklist
                     </a>
+                    
                     
                 </nav>
                 

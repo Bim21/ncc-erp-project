@@ -6,7 +6,7 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 import {TimesheetService} from '@app/service/api/timesheet.service'
 import { catchError, finalize } from 'rxjs/operators';
 import { CreateEditTimesheetComponent } from './create-edit-timesheet/create-edit-timesheet.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-timesheet',
   templateUrl: './timesheet.component.html',
@@ -14,7 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> implements OnInit {
   public timesheetList:TimesheetDto[] = [];
-
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
   ];
@@ -48,7 +47,8 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   }
  
 
-  constructor(private timesheetService :TimesheetService,
+  constructor(
+    private timesheetService :TimesheetService,
     private dialog: MatDialog,
     injector:Injector,
     private route: ActivatedRoute
@@ -72,13 +72,18 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
       }
     }
 
-    this.dialog.open(CreateEditTimesheetComponent, {
+    const show=this.dialog.open(CreateEditTimesheetComponent, {
       data: {
         item: timesheet,
         command: command,
       },
       width: "700px",
       disableClose: true,
+    });
+    show.afterClosed().subscribe(result => {
+      if(result){
+        this.refresh()
+      }
     });
 
   }
@@ -89,7 +94,6 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.showDialog("edit", timesheet);
   }
 
-  
   showDetail(id:any){
       this.router.navigate(['app/timesheetDetail'], {
         queryParams: {
