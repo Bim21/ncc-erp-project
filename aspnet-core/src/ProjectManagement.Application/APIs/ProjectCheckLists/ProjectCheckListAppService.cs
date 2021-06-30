@@ -13,7 +13,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
 {
     public class ProjectCheckListAppService : ProjectManagementAppServiceBase
     {
-        [AbpAuthorize(PermissionNames.SaoDo_ProjectChecklist_Create)]
+        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_Create)]
         public async Task<ProjectCheckListDto> Create(ProjectCheckListDto input)
         {
             var isExist = await WorkScope.GetAll<ProjectCheckList>()
@@ -26,7 +26,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_ProjectChecklist_Delete)]
+        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_Delete)]
         public async Task Delete(long ProjectId, long CheckListItemId)
         {
             var isExist = await WorkScope.GetAll<ProjectCheckList>()
@@ -38,7 +38,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             await WorkScope.DeleteAsync(isExist);
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_ProjectChecklist_ReverseActive)]
+        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_ReverseActive)]
         public async Task ReverseActive(long ProjectId, long CheckListItemId)
         {
             var isExist = await WorkScope.GetAll<ProjectCheckList>()
@@ -51,7 +51,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             await WorkScope.UpdateAsync(isExist);
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_ProjectChecklist_AddByProjectType)]
+        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_AddByProjectType)]
         public async Task<List<ProjectCheckListDto>> AddByProjectType(ProjectType input)
         {
             var projectChecklists = await (from p in WorkScope.GetAll<Project>()

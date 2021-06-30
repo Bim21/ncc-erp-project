@@ -4,6 +4,7 @@ using Abp.Domain.Entities;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.CheckListItems.Dto
 {
@@ -24,6 +25,6 @@ namespace ProjectManagement.APIs.CheckListItems.Dto
         public string PersonInCharge { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
-        public List<CheckListItemMandatoryDto> mandatorys { get; set; }
+        public List<ProjectType> mandatorys { get; set; }
     }
 }
