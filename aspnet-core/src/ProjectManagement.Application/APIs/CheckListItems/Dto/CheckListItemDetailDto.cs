@@ -1,33 +1,29 @@
-﻿using Abp.AutoMapper;
+﻿
+using Abp.AutoMapper;
 using Abp.Domain.Entities;
-using NccCore.Anotations;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.APIs.Checklists.Dto
+namespace ProjectManagement.APIs.CheckListItems.Dto
 {
     [AutoMapTo(typeof(CheckListItem))]
-    public class CheckListItemDto : Entity<long>
+    public class CheckListItemDetailDto : Entity<long>
     {
-        [ApplySearchAttribute]
         [MaxLength(255)]
         public string Name { get; set; }
         public string Code { get; set; }
         public long CategoryId { get; set; }
-        [ApplySearchAttribute]
-        public string Title { get; set; }   // get from category
+        [MaxLength(1000)]
+        public string CategoryName { get; set; }
         [MaxLength(10000)]
-        [ApplySearchAttribute]
         public string Description { get; set; }
-        public List<ProjectType> Mandatorys { get; set; }
         [MaxLength(255)]
         public string AuditTarget { get; set; }
         [MaxLength(255)]
-        [ApplySearchAttribute]
         public string PersonInCharge { get; set; }
+        [MaxLength(10000)]
         public string Note { get; set; }
-
+        public List<CheckListItemMandatoryDto> mandatorys { get; set; }
     }
 }

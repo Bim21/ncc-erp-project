@@ -13,5 +13,6 @@ namespace ProjectManagement.APIs.AuditSessions.Dto
         public long ProjectId { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
+        public long PMId { get; set; }
     }
 }

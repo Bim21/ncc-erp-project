@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
-using ProjectManagement.APIs.Checklists;
+using ProjectManagement.APIs.CheckListItems;
 using ProjectManagement.APIs.ChecklistTitles.Dto;
 using ProjectManagement.Authorization;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +74,6 @@ namespace ProjectManagement.APIs.ChecklistTitles
         [AbpAuthorize(PermissionNames.SaoDo_CheckListCategory_Delete)]
         public async Task Delete(long id)
         {
-            var item = await WorkScope.GetAsync<CheckListCategory>(id);
             var delItem = await WorkScope.GetAll<CheckListItem>().Where(x => x.CategoryId == id).Select(x => x.Id).ToListAsync();
             foreach (var i in delItem)
             {

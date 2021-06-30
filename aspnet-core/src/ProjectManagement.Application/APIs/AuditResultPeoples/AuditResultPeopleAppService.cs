@@ -18,8 +18,7 @@ namespace ProjectManagement.APIs.AuditResultPeoples
         [AbpAuthorize(PermissionNames.SaoDo_AuditResultPeople_Delete)]
         public async Task Delete(long id)
         {
-            var isExist = await WorkScope.GetAsync<AuditResultPeople>(id);
-            await WorkScope.DeleteAsync(isExist);
+            await WorkScope.DeleteAsync<AuditResultPeople>(id);
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditResultPeople_Update)]
