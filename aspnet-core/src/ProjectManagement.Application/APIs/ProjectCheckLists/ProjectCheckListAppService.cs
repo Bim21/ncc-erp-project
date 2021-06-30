@@ -23,7 +23,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                 throw new UserFriendlyException("Project with Id '" + input.ProjectId + "' created with item with id '" + input.CheckListItemId + "'");
             }
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectCheckList>(input));
-            return null;
+            return input;
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_ProjectChecklist_Delete)]

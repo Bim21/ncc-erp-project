@@ -13,8 +13,5 @@ namespace ProjectManagement.APIs.AuditSessions.Dto
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public long CountProjectCreate { get; set; }
-        public long CountProjectCheck { get; set; }
-        public long CountFail { get; set; }
     }
 }

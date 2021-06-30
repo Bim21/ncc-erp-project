@@ -13,9 +13,6 @@ namespace ProjectManagement.APIs.AuditResultPeoples.Dto
         public long UserId { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
-
-        public byte Quantity { get; set; }
-        //public UserRole Role { get; set; }
         public long PMId { get; set; }
     }
 }
