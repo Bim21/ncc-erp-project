@@ -15,33 +15,22 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   }
 
   ngOnInit(): void {
-    this.requestId = this.route.snapshot.queryParamMap.get("id")
-    this.router.navigate(['resourcemanagement'], {
-      relativeTo: this.route, queryParams: {
-        id: this.requestId
+    this.requestId = this.route.snapshot.queryParamMap.get("id");
+    this.router.navigate(['list-project-general'],{
+      relativeTo:this.route, queryParams:{
+        id:this.requestId
       },
-      replaceUrl: true
+      replaceUrl:true
     })
-    this.router.navigate(['milestone'], {
-      relativeTo: this.route, queryParams: {
-        id: this.requestId
-      },
-      replaceUrl: true
-    })
-    this.router.navigate(['milestone'], {
-      relativeTo: this.route, queryParams: {
-        id: this.requestId
-      },
-      replaceUrl: true
-    })
-    this.router.navigate(['milestone'], {
-      relativeTo: this.route, queryParams: {
-        id: this.requestId
-      },
-      replaceUrl: true
-    })
-    this.router.events.subscribe(res => this.currentUrl = this.router.url)
   }
+  routingGeneralTab(){
+    this.router.navigate(['list-project-general'],{
+      relativeTo:this.route, queryParams:{
+        id:this.requestId
+      },
+    })
+  }
+
   routingResourceTab() {
     this.router.navigate(['resourcemanagement'], {
       relativeTo: this.route, queryParams: {
@@ -51,6 +40,8 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     })
     
   }
+
+ 
   routingMilestoneTab() {
     this.router.navigate(['milestone'], {
       relativeTo: this.route, queryParams: {

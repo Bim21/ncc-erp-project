@@ -25,14 +25,7 @@ export class TimesheetProjectService extends BaseApiService{
         params: new HttpParams().set('timesheetProjectId', id)
     })
   }
-  // public UpdateFileTimeSheetProject(item:any):Observable<any>{
-  //   const httpOptions = {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data; charset=utf-8'
-  //     },
-  // };
-  //   return this.http.post<any>(this.rootUrl+'/UpdateFileTimeSheetProject',item,httpOptions);
-  // }
+  
   public UpdateFileTimeSheetProject(file, id): Observable<any> {
     const formData = new FormData();
     if (navigator.msSaveBlob) {
@@ -48,5 +41,8 @@ export class TimesheetProjectService extends BaseApiService{
         }
     );
     return this.http.request(uploadReq);
-}
+  }
+  public GetTimesheetDetail(id: any): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/GetAllProjectTimesheetByTimesheet?timesheetId=' + id);
+  }
 }

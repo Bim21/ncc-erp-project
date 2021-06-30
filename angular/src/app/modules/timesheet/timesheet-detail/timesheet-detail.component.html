@@ -56,20 +56,23 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of TimesheetDetaiList let i = index"  >
-                                <td><span >{{ i +1 }}</span></td>
-                                <td>{{item.projectName}}</td>
-                                <td>{{item.pmName}}</td>
-                                <td>{{item.clientName}}</td>
-                                <td>{{item.note}}</td>
-                                <td></td>
+                                <td  class="text-center"><span >{{ i +1 }}</span></td>
+                                <td  class="text-center">{{item.projectName}}</td>
+                                <td  class="text-center">{{item.pmName}}</td>
+                                <td  class="text-center">{{item.clientName}}</td>
+                                <td  class="text-center">{{item.note}}</td>
+                                <td  class="text-center"></td>
                                 <td style="text-align: center;"> 
-                                    <a [href]="timesheetProjectService.baseUrl+item.file">{{item.file}}</a>
-                                    <span *ngIf="item.file !==null" >
+                                    <a [href]="timesheetProjectService.baseUrl+item.file">
+
+                                        <span>{{item.file}}</span>
+
+                                    </a>
+                                    <span *ngIf="item.file !==null" style="margin-left: 5px;">
                                         <i class="fas fa-times" (click)="DeleteFile(item)"></i>
                                     </span>
                                 </td>
                                 <td  class="text-center">
-                                   
                                     <button 
                                     class="btn btn-sm bg-secondary mr-1" 
                                     (click)="editTimesheet(item);$event.stopPropagation()" >

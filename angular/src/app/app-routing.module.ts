@@ -22,65 +22,127 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
+import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
 
 
 @NgModule({
-    imports: [
-        RouterModule.forChild([
-            {
-                path: '',
-                component: AppComponent,
-                children: [
-                    { path: 'home', component: HomeComponent, canActivate: [AppRouteGuard] },
-                    { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
-                    { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
-                    { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
-                    { path: 'about', component: AboutComponent },
-                    { path: 'update-password', component: ChangePasswordComponent },
-                    // timesheet
-                    { path: 'timesheet', component: TimesheetComponent, data: { permission: '' }, canActivate: [AppRouteGuard] },
+  imports: [
+    RouterModule.forChild([
+      {
+        path: "",
+        component: AppComponent,
+        children: [
+          {
+            path: "home",
+            component: HomeComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "users",
+            component: UsersComponent,
+            data: { permission: "Pages.Users" },
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "roles",
+            component: RolesComponent,
+            data: { permission: "Pages.Roles" },
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "tenants",
+            component: TenantsComponent,
+            data: { permission: "Pages.Tenants" },
+            canActivate: [AppRouteGuard],
+          },
+          { path: "about", component: AboutComponent },
+          { path: "update-password", component: ChangePasswordComponent },
+          // timesheet
+          {
+            path: "timesheet",
+            component: TimesheetComponent,
+            data: { permission: "" },
+            canActivate: [AppRouteGuard],
+          },
 
-                    { path: 'checklist-title', component: ChecklistTitleComponent, canActivate: [AppRouteGuard] },
-                    { path: 'checklist', component: ChecklistComponent, canActivate: [AppRouteGuard] },
-                    { path: 'sao-do', component: SaoDoComponent, canActivate: [AppRouteGuard] },
-                    { path: 'list-project', component: ListProjectComponent, canActivate: [AppRouteGuard] },
-                    { path: 'timesheetDetail', component: TimesheetDetailComponent, canActivate: [AppRouteGuard] },
-                    {
-                        path: 'list-project-detail', component: ListProjectDetailComponent, canActivate: [AppRouteGuard],
-                        children: [{
-                            path: "resourcemanagement",
-                            component: ResourceManagementComponent,
-                            canActivate: [AppRouteGuard]
-                        },
-                        {
-                            path: "milestone",
-                            component: MilestoneComponent,
-                            canActivate: [AppRouteGuard]
-                        },
-                        {
-                            path: "weeklyreport",
-                            component: WeeklyReportComponent,
-                            canActivate: [AppRouteGuard]
-                        },
-                        {
-                            path: "projectchecklist",
-                            component: ProjectChecklistComponent,
-                            canActivate: [AppRouteGuard]
-                        }],
-
-
-                    },
-                    {
-                        path: 'delivery', component: DeliveryComponent, canActivate: [AppRouteGuard],
-                        children: [
-                            { path: 'status-tab', component: ProjectStatusTabComponent, canActivate: [AppRouteGuard] },
-                            { path: "milestone-tab", component: ProjectMilestoneTabComponent, canActivate: [AppRouteGuard] }
-                        ]
-                    },
-                ]
-            }
-        ])
-    ],
-    exports: [RouterModule]
+          {
+            path: "checklist-title",
+            component: ChecklistTitleComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "checklist",
+            component: ChecklistComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "sao-do",
+            component: SaoDoComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "list-project",
+            component: ListProjectComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "timesheetDetail",
+            component: TimesheetDetailComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "list-project-detail",
+            component: ListProjectDetailComponent,
+            canActivate: [AppRouteGuard],
+            children: [
+                {
+                    path: "list-project-general",
+                    component: ListProjectGeneralComponent,
+                    canActivate: [AppRouteGuard],
+              },
+              {
+                path: "resourcemanagement",
+                component: ResourceManagementComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "milestone",
+                component: MilestoneComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "weeklyreport",
+                component: WeeklyReportComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "projectchecklist",
+                component: ProjectChecklistComponent,
+                canActivate: [AppRouteGuard],
+              },
+            ],
+          },
+          {
+            path: "delivery",
+            component: DeliveryComponent,
+            canActivate: [AppRouteGuard],
+            children: [
+              {
+                path: "status-tab",
+                component: ProjectStatusTabComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "milestone-tab",
+                component: ProjectMilestoneTabComponent,
+                canActivate: [AppRouteGuard],
+              },
+            ]
+          },
+        ]
+      }
+    ])
+  ],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

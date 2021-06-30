@@ -64,6 +64,7 @@ import { CreateEditTimesheetDetailComponent } from './modules/timesheet/timeshee
 import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
 import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
 import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
+import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
 
 
 
@@ -125,6 +126,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DeliveryComponent,
     ProjectStatusTabComponent,
     ProjectMilestoneTabComponent,
+    ListProjectGeneralComponent,
     
   ],
   imports: [

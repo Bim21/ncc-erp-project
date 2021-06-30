@@ -1,9 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
 import { Router } from '@angular/router';
 import { TimesheetDto } from '@app/service/model/timesheet.dto';
 import { TimesheetService } from '@app/service/api/timesheet.service';
@@ -43,16 +39,14 @@ export class CreateEditTimesheetComponent implements OnInit {
       // this.timesheet.value = 0
       this.timesheetService.create(this.timesheet).pipe(catchError(this.timesheetService.handleError)).subscribe((res) => {
         abp.notify.success("created outcomeRequest ");
-        this.reloadComponent()
-        this.dialogRef.close();
+        this.dialogRef.close(this.timesheet);
       }, () => this.isDisable = false);
       // 
     }
     else {
       this.timesheetService.update(this.timesheet).pipe(catchError(this.timesheetService.handleError)).subscribe((res) => {
         abp.notify.success("edited outcomeRequest ");
-        this.reloadComponent()
-        this.dialogRef.close();
+        this.dialogRef.close(this.timesheet);
       }, () => this.isDisable = false);
     }
   }
