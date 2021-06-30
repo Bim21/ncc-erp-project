@@ -13,7 +13,9 @@ namespace ProjectManagement.APIs.PMReports.Dto
     public class PMReportDto : EntityDto<long>
     {
         public string Name { get; set; }
-        public PMReportStatus Status { get; set; }
+
+        public bool IsActive { get; set; }
+        public int Year { get; set; }
         public PMReportType Type { get; set; }
     }
 }

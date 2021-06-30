@@ -37,87 +37,52 @@ namespace ProjectManagement.APIs.TimeSheets
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Timesheet_ViewAll)]
-        //public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
-        //{
-        //    var timesheetProject = WorkScope.GetAll<TimesheetProject>();
-        //    var query = WorkScope.GetAll<Timesheet>()
-        //        .Select(x => new GetTimesheetDto
-        //        {
-        //            Id = x.Id,
-        //            Name = x.Name,
-        //            Month = x.Month,
-        //            Year = x.Year,
-        //            Status = x.IsActive,
-        //            TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Select(x => x.ProjectId).Distinct().Count(),
-        //            TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Select(x => x.TimesheetId).Distinct().Count()
-        //        });
+        public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
+        {
+            var timesheetProject = WorkScope.GetAll<TimesheetProject>();
+            var query = WorkScope.GetAll<Timesheet>()
+                .Select(x => new GetTimesheetDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Month = x.Month,
+                    Year = x.Year,
+                    IsActive = x.IsActive,
+                    TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Select(x => x.ProjectId).Count(),
+                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Select(x => x.TimesheetId).Count()
+                });
+            //var query1 = from ts in WorkScope.GetAll<Timesheet>()
+            //             join tsp in WorkScope.GetAll<TimesheetProject>() on ts.Id equals tsp.TimesheetId
+            //             /*group tsp by new { ts.Id, ts.Name, ts.Month, ts.Year, ts.IsActive }*/ into pp
+            //             from p in pp.DefaultIfEmpty()
+            //             select new GetTimesheetDto
+            //             {
+            //                 Id = ts.Id,
+            //                 Name = ts.Name,
+            //                 Month = ts.Month,
+            //                 Year = ts.Year,
+            //                 IsActive = ts.IsActive,
+            //                 TotalProject = pp.Count(),
+            //                 TotalTimesheet = pp.Where(x => x.FilePath != null).Count()
+            //             };
 
-        //    return await query.GetGridResult(query, input);
-        //}
-
-        //[HttpGet]
-        //[AbpAuthorize(PermissionNames.PmManager_Timesheet_Get)]
-        //public async Task<TimesheetDto> Get(long timesheetId)
-        //{
-        //    var query = WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId)
-        //                        .Select(x => new TimesheetDto
-        //                        {
-        //                            Id = x.Id,
-        //                            Name = x.Name,
-        //                            Month = x.Month,
-        //                            Year = x.Year,
-        //                            Status = x.IsActive
-        //                        });
-        //    return await query.FirstOrDefaultAsync();
-        //}
+            return await query.GetGridResult(query, input);
+        }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_GetTimesheetDetail)]
-        public async Task<List<GetTimesheetDetailDto>> GetTimesheetDetail(long timesheetId)
+        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Get)]
+        public async Task<TimesheetDto> Get(long timesheetId)
         {
-            var rolePM = _roleManager.GetRoleByName(RoleConstants.ROLE_PM);
-            var userRolePMs = (await _userManager.GetUsersInRoleAsync(rolePM.NormalizedName)).ToList();
-
-            var roleKetoan = _roleManager.GetRoleByName(RoleConstants.ROLE_KETOAN);
-            var userRoleKetoan = (await _userManager.GetUsersInRoleAsync(rolePM.NormalizedName)).ToList();
-
-            var projectUserBill = from pu in WorkScope.GetAll<ProjectUser>()
-                                  join pub in WorkScope.GetAll<ProjectUserBill>() on pu.UserId equals pub.UserId into pp
-                                  from p in pp.DefaultIfEmpty()
-                                  select new
-                                  {
-                                      ProjectId = pu.ProjectId,
-                                      userId = pu.UserId,
-                                      UserName = pu.User.Name,
-                                      Role = pu.ProjectRole,
-                                      BillRate = p.BillRate
-                                  };
-
-            var query = WorkScope.GetAll<TimesheetProject>()
-                                .Where(x => x.TimesheetId == timesheetId)
-                                .Where(x => userRolePMs.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.PMId == AbpSession.UserId.Value : true)
-                                .Where(x => userRoleKetoan.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.Status != ProjectStatus.Closed : true)
-                                .Select(x => new GetTimesheetDetailDto
+            var query = WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId)
+                                .Select(x => new TimesheetDto
                                 {
                                     Id = x.Id,
-                                    ProjectId = x.ProjectId,
-                                    TimesheetId = x.TimesheetId,
-                                    ProjectName = x.Project.Name,
-                                    PmId = x.Project.PMId,
-                                    PmName = x.Project.PM.Name,
-                                    ClientId = x.Project.ClientId,
-                                    ClientName = x.Project.Client.Name,
-                                    File = "/timesheets/" + x.FilePath,
-                                    ProjectUserBill = projectUserBill.Where(y => y.ProjectId == x.ProjectId).Select(y => new GetProjectUserBillDto
-                                    {
-                                        UserId = y.userId,
-                                        UserName = y.UserName,
-                                        BillRole = y.Role,
-                                        BillRate = y.BillRate
-                                    }).ToList(),
-                                    Note = x.Note
+                                    Name = x.Name,
+                                    Month = x.Month,
+                                    Year = x.Year,
+                                    IsActive = x.IsActive,
                                 });
-            return await query.ToListAsync();
+            return await query.FirstOrDefaultAsync();
         }
 
         [HttpPost]

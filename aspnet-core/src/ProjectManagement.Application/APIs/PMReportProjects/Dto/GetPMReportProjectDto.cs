@@ -13,7 +13,7 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public string PMReportName { get; set; }
         public long ProjectId { get; set; }
         public string ProjectName { get; set; }
-        public PMReportProjectStatus Status { get; set; }
+        public string Status { get; set; }
         public ProjectHealth ProjectHealth { get; set; }
         public long PMId { get; set; }
         public string PmName { get; set; }

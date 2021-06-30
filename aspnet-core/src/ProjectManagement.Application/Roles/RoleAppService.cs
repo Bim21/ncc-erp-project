@@ -145,6 +145,23 @@ namespace ProjectManagement.Roles
                 GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList(),
             };
         }
+
+        public async Task<RolePermissionDto> ChangeRolePermission(RolePermissionDto input)
+        {
+            CheckUpdatePermission();
+
+            var role = await _roleManager.GetRoleByIdAsync(input.Id);
+
+            var p = PermissionManager.GetAllPermissions().ToList();
+            var grantedPermissions = PermissionManager
+               .GetAllPermissions()
+               .Where(p => input.Permissions.Contains(p.Name))
+               .ToList();
+
+            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+
+            return input;
+        }
     }
 }
 

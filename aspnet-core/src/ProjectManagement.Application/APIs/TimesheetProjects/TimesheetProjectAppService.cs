@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.Projects.Dto;
+using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
@@ -48,6 +49,51 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return await query.ToListAsync();
         }
 
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllProjectTimesheetByTimesheet, PermissionNames.PmManager_TimesheetProject_ViewOnlyme, PermissionNames.PmManager_TimesheetProject_ViewOnlyActiveProject)]
+        public async Task<List<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(long timesheetId)
+        {
+            var viewAll = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_GetAllProjectTimesheetByTimesheet);
+            var viewonlyme = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_ViewOnlyme);
+            var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_ViewOnlyActiveProject);
+
+            var projectUserBill = from pu in WorkScope.GetAll<ProjectUser>()
+                                  join pub in WorkScope.GetAll<ProjectUserBill>() on pu.UserId equals pub.UserId into pp
+                                  from p in pp.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      ProjectId = pu.ProjectId,
+                                      userId = pu.UserId,
+                                      UserName = pu.User.Name,
+                                      BillRole = pu.ProjectRole,
+                                      BillRate = p.BillRate
+                                  };
+
+            var query = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+                                .Where(x => viewAll || (viewonlyme ? x.Project.PMId == AbpSession.UserId.Value : !viewActiveProject || x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed))
+                                .Select(x => new GetTimesheetDetailDto
+                                {
+                                    Id = x.Id,
+                                    ProjectId = x.ProjectId,
+                                    TimesheetId = x.TimesheetId,
+                                    ProjectName = x.Project.Name,
+                                    PmId = x.Project.PMId,
+                                    PmName = x.Project.PM.Name,
+                                    ClientId = x.Project.ClientId,
+                                    ClientName = x.Project.Client.Name,
+                                    File = "/timesheets/" + x.FilePath,
+                                    ProjectUserBill = projectUserBill.Where(y => y.ProjectId == x.ProjectId).Select(y => new GetProjectUserBillDto
+                                    {
+                                        UserId = y.userId,
+                                        UserName = y.UserName,
+                                        BillRole = y.BillRole.ToString(),
+                                        BillRate = y.BillRate
+                                    }).ToList(),
+                                    Note = x.Note
+                                });
+            return await query.ToListAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Create)]
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
@@ -66,7 +112,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<List<ProjectDto>> GetAllRemainProjectInTimesheet(long timesheetId)
         {
             var timesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId);
-            var query = WorkScope.GetAll<Project>().Where(x => x.IsCharge == true && x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && !timesheetProjects.Contains(x.Id))
+            var query = WorkScope.GetAll<Project>().Where(x => !timesheetProjects.Contains(x.Id) && x.IsCharge == true && x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                                 .Select(x => new ProjectDto
                                 {
                                     Id = x.Id,
@@ -93,7 +139,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             ObjectMapper.Map<TimesheetProjectDto, TimesheetProject>(input, timeSheetProject);
             await WorkScope.GetRepo<TimesheetProject, long>().UpdateAsync(timeSheetProject);
-
             return input;
         }
 
@@ -121,8 +166,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 Directory.CreateDirectory(path);
             }
             var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(input.TimesheetProjectId);
-            if (timesheetProject == null)
-                throw new UserFriendlyException($"Timesheetproject With Id {input.TimesheetProjectId} not exist !");
 
             if (input != null && input.File != null && input.File.Length > 0)
             {
@@ -131,7 +174,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 if (FileExtension == "xlsx" || FileExtension == "xltx" || FileExtension == "docx")
                 {
                     var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
-                    if(timesheetProject.FilePath != null && timesheetProject.FilePath != "" && timesheetProject.FilePath != fileName)
+                    if(timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
                     {
                         File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
 
