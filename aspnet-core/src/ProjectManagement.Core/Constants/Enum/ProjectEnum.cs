@@ -6,22 +6,23 @@ namespace ProjectManagement.Constants.Enum
 {
     public class ProjectEnum
     {
-        public enum CriticalEnum
+        public enum IssueCritical
         {
             Low = 0,
             Medium = 1,
             High = 2
         }
-        public enum CurrencyEnum
+        public enum Currency
         {
             VND = 0,
             USD = 1,
             EUR = 2,
         }
-        public enum FlagEnum
+        public enum MilestoneFlag
         {
-            Red = 0,
-            Green = 1
+            Green = 0,
+            Red = 1
+            
         }
         public enum PMReportProjectIssueStatus
         {
@@ -43,7 +44,7 @@ namespace ProjectManagement.Constants.Enum
             Weekly = 0,
             Monthly = 1
         }
-        public enum ProjectHealthEnum
+        public enum ProjectHealth
         {
             Green = 0,
             Yellow = 1,
@@ -58,15 +59,15 @@ namespace ProjectManagement.Constants.Enum
         {
             Potential = 0,
             InProgress = 1,
-            Maintain = 2,
-            Closed = 3
+            Closed = 2
         }
         public enum ProjectType
         {
             ODC = 0,
             TandM = 1,
             FIXPRICE = 2,
-            PRODUCT = 3
+            PRODUCT = 3,
+            NoBill = 4
         }
         public enum ProjectUserStatus
         {
@@ -76,11 +77,11 @@ namespace ProjectManagement.Constants.Enum
         }
         public enum ResourceRequestStatus
         {
-            DONE = 0,
-            PENDING = 1,
+            PENDING = 0,
+            DONE = 1,            
             CANCELLED = 2
         }
-        public enum SourceEmum
+        public enum ProjectIssueSource
         {
             Internal = 0,
             External = 1,
@@ -91,12 +92,13 @@ namespace ProjectManagement.Constants.Enum
             Active = 0,
             Done = 1
         }
-        public enum UserRole
+        public enum ProjectUserRole
         {
             PM = 0,
             DEV = 1,
             TESTER = 2,
-            DM = 3
+            BA = 3,
+            Artist = 4,
         }
     }
 }

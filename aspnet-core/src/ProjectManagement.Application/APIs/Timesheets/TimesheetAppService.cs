@@ -37,39 +37,39 @@ namespace ProjectManagement.APIs.TimeSheets
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Timesheet_ViewAll)]
-        public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
-        {
-            var timesheetProject = WorkScope.GetAll<TimesheetProject>();
-            var query = WorkScope.GetAll<Timesheet>()
-                .Select(x => new GetTimesheetDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Month = x.Month,
-                    Year = x.Year,
-                    Status = x.Status,
-                    TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Select(x => x.ProjectId).Distinct().Count(),
-                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.TimesheetFile != null).Select(x => x.TimesheetId).Distinct().Count()
-                });
+        //public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
+        //{
+        //    var timesheetProject = WorkScope.GetAll<TimesheetProject>();
+        //    var query = WorkScope.GetAll<Timesheet>()
+        //        .Select(x => new GetTimesheetDto
+        //        {
+        //            Id = x.Id,
+        //            Name = x.Name,
+        //            Month = x.Month,
+        //            Year = x.Year,
+        //            Status = x.IsActive,
+        //            TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Select(x => x.ProjectId).Distinct().Count(),
+        //            TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Select(x => x.TimesheetId).Distinct().Count()
+        //        });
 
-            return await query.GetGridResult(query, input);
-        }
+        //    return await query.GetGridResult(query, input);
+        //}
 
-        [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_Get)]
-        public async Task<TimesheetDto> Get(long timesheetId)
-        {
-            var query = WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId)
-                                .Select(x => new TimesheetDto
-                                {
-                                    Id = x.Id,
-                                    Name = x.Name,
-                                    Month = x.Month,
-                                    Year = x.Year,
-                                    Status = x.Status
-                                });
-            return await query.FirstOrDefaultAsync();
-        }
+        //[HttpGet]
+        //[AbpAuthorize(PermissionNames.PmManager_Timesheet_Get)]
+        //public async Task<TimesheetDto> Get(long timesheetId)
+        //{
+        //    var query = WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId)
+        //                        .Select(x => new TimesheetDto
+        //                        {
+        //                            Id = x.Id,
+        //                            Name = x.Name,
+        //                            Month = x.Month,
+        //                            Year = x.Year,
+        //                            Status = x.IsActive
+        //                        });
+        //    return await query.FirstOrDefaultAsync();
+        //}
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_Timesheet_GetTimesheetDetail)]
@@ -95,7 +95,7 @@ namespace ProjectManagement.APIs.TimeSheets
 
             var query = WorkScope.GetAll<TimesheetProject>()
                                 .Where(x => x.TimesheetId == timesheetId)
-                                .Where(x => userRolePMs.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.PmId == AbpSession.UserId.Value : true)
+                                .Where(x => userRolePMs.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.PMId == AbpSession.UserId.Value : true)
                                 .Where(x => userRoleKetoan.Select(y => y.Id).Contains(AbpSession.UserId.Value) ? x.Project.Status != ProjectStatus.Closed : true)
                                 .Select(x => new GetTimesheetDetailDto
                                 {
@@ -103,11 +103,11 @@ namespace ProjectManagement.APIs.TimeSheets
                                     ProjectId = x.ProjectId,
                                     TimesheetId = x.TimesheetId,
                                     ProjectName = x.Project.Name,
-                                    PmId = x.Project.PmId,
+                                    PmId = x.Project.PMId,
                                     PmName = x.Project.PM.Name,
                                     ClientId = x.Project.ClientId,
-                                    ClientName = x.Project.Clients.Name,
-                                    File = "/timesheets/" + x.TimesheetFile,
+                                    ClientName = x.Project.Client.Name,
+                                    File = "/timesheets/" + x.FilePath,
                                     ProjectUserBill = projectUserBill.Where(y => y.ProjectId == x.ProjectId).Select(y => new GetProjectUserBillDto
                                     {
                                         UserId = y.userId,
@@ -181,14 +181,14 @@ namespace ProjectManagement.APIs.TimeSheets
             await WorkScope.DeleteAsync(timesheet);
         }
 
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Timesheet_DoneTimesheetById)]
-        public async Task DoneTimesheetById(long timesheetId)
-        {
-            var timeSheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
+        //[HttpPost]
+        //[AbpAuthorize(PermissionNames.PmManager_Timesheet_DoneTimesheetById)]
+        //public async Task DoneTimesheetById(long timesheetId)
+        //{
+        //    var timeSheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
 
-            timeSheet.Status = TimesheetStatus.Done;
-            await WorkScope.UpdateAsync(timeSheet);
-        }
+        //    timeSheet.IsActive = TimesheetStatus.Done;
+        //    await WorkScope.UpdateAsync(timeSheet);
+        //}
     }
 }

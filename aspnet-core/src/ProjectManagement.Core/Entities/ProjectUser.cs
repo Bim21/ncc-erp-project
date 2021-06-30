@@ -19,11 +19,11 @@ namespace ProjectManagement.Entities
         public Project Project { get; set; }
         public long ProjectId { get; set; }
 
-        public UserRole ProjectRole { get; set; }
-        public float AllocatePercentage { get; set; }
+        public ProjectUserRole ProjectRole { get; set; }
+        public byte AllocatePercentage { get; set; }
         public DateTime StartTime { get; set; }
         public ProjectUserStatus Status { get; set; }
-        public bool ExpenseCount { get; set; }
+        public bool IsExpense { get; set; }
 
         [ForeignKey(nameof(ResourceRequestId))]
         public ResourceRequest ResourceRequest { get; set; }
@@ -32,6 +32,6 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(PMReportId))]
         public PMReport PMReport { get; set; }
         public long PMReportId { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsFutureActive { get; set; }
     }
 }

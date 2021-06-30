@@ -42,7 +42,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
                             TimesheetId = p.TimesheetId,
                             ProjectId = p.ProjectId,
-                            TimesheetFile = "/timesheets/" + p.TimesheetFile,
+                            TimesheetFile = "/timesheets/" + p.FilePath,
                             Note = p.Note
                         };
             return await query.ToListAsync();
@@ -103,7 +103,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
 
-            if(timeSheetProject.TimesheetFile != null)
+            if(timeSheetProject.FilePath != null)
             {
                 throw new UserFriendlyException("Timesheet already has attachments, cannot be deleted !");
             }
@@ -131,18 +131,18 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 if (FileExtension == "xlsx" || FileExtension == "xltx" || FileExtension == "docx")
                 {
                     var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
-                    if(timesheetProject.TimesheetFile != null && timesheetProject.TimesheetFile != "" && timesheetProject.TimesheetFile != fileName)
+                    if(timesheetProject.FilePath != null && timesheetProject.FilePath != "" && timesheetProject.FilePath != fileName)
                     {
-                        File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.TimesheetFile));
+                        File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
 
-                        timesheetProject.TimesheetFile = null;
+                        timesheetProject.FilePath = null;
                         await WorkScope.UpdateAsync(timesheetProject);
                     }
 
                     using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", filePath)))
                     {
                         await input.File.CopyToAsync(stream);
-                        timesheetProject.TimesheetFile = filePath;
+                        timesheetProject.FilePath = filePath;
                         await WorkScope.UpdateAsync(timesheetProject);
                     }
                 }
@@ -153,9 +153,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             else
             {
-                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.TimesheetFile));
+                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
 
-                timesheetProject.TimesheetFile = null;
+                timesheetProject.FilePath = null;
                 await WorkScope.UpdateAsync(timesheetProject);
             }
         }

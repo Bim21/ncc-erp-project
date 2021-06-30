@@ -14,7 +14,7 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
     {
         public long UserId { get; set; }
         public long ProjectId { get; set; }
-        public UserRole ProjectRole { get; set; }
+        public ProjectUserRole ProjectRole { get; set; }
         public float AllocatePercentage { get; set; }
         public DateTime StartTime { get; set; }
         public ProjectUserStatus Status { get; set; }

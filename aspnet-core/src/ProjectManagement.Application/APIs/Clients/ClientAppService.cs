@@ -60,9 +60,7 @@ namespace ProjectManagement.APIs.Clients
         [AbpAuthorize(PermissionNames.Admin_Client_Edit)]
         public async Task<ClientDto> Update(ClientDto input)
         {
-            var client = await WorkScope.GetAsync<Client>(input.Id);
-            if(client == null)
-                throw new UserFriendlyException(String.Format("Client Not exist !"));
+            var client = await WorkScope.GetAsync<Client>(input.Id);           
 
             var isExist = await WorkScope.GetAll<Client>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
 
@@ -77,11 +75,7 @@ namespace ProjectManagement.APIs.Clients
         [AbpAuthorize(PermissionNames.Admin_Client_Delete)]
         public async Task Delete(long clientId)
         {
-            var client = await WorkScope.GetAsync<Client>(clientId);
-            if (client == null)
-                throw new UserFriendlyException(String.Format("Client Not exist !"));
-
-            await WorkScope.DeleteAsync(client);
+            await WorkScope.DeleteAsync<Client>(clientId);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace ProjectManagement.Entities
         public string Name { get; set; }
         [MaxLength(10000)]
         public string Description { get; set; }
-        public FlagEnum Flag { get; set; }
+        public MilestoneFlag Flag { get; set; }
         public ProjectMilestoneStatus Status { get; set; }
         public DateTime UATTimeStart { get; set; }
         public DateTime UATTimeEnd { get; set; }

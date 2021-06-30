@@ -11,6 +11,7 @@ using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,24 +25,44 @@ namespace ProjectManagement.APIs.Projects
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
-        public ProjectAppService(
+        public ProjectAppService(                    
                    UserManager userManager,
                    RoleManager roleManager)
-        {
+        {            
             _userManager = userManager;
             _roleManager = roleManager;
         }
+
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
         {
-            //Dm duoc view all, PM chi duoc xem nhung du an cua minh tham giam voi vai tro pm
-            var role = _roleManager.GetRoleByName(RoleConstants.ROLE_DM);
-            var users = (await _userManager.GetUsersInRoleAsync(role.NormalizedName)).ToList();
+            bool isViewAll = false;// await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
+
+            //var query = from p in WorkScope.GetAll<Project>()
+            //            where isViewAll || p.PMId == AbpSession.UserId.Value
+            //            select new GetProjectDto
+            //            {
+            //                Id = p.Id,
+            //                Name = p.Name,
+            //                Code = p.Code,
+            //                ProjectType = p.ProjectType,
+            //                StartTime = p.StartTime.Date,
+            //                EndTime = p.EndTime.Value.Date,
+            //                Status = p.Status,
+            //                ClientId = p.ClientId,
+            //               // ClientName = p.Client.Name,
+            //                IsCharge = p.IsCharge,
+            //                PmId = p.PMId,
+            //               // PmName = p.PM.Name,
+            //                //StatusName = Enum.GetName(typeof(ProjectStatus), p.Status)
+            //            };
+
 
             var query = from p in WorkScope.GetAll<Project>()
-                        where users.Select(x => x.Id).Contains(AbpSession.UserId.Value) || p.PmId == AbpSession.UserId.Value
+                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
+                        where isViewAll || p.PMId == AbpSession.UserId.Value
                         select new GetProjectDto
                         {
                             Id = p.Id,
@@ -52,12 +73,18 @@ namespace ProjectManagement.APIs.Projects
                             EndTime = p.EndTime.Value.Date,
                             Status = p.Status,
                             ClientId = p.ClientId,
-                            ClientName = p.Clients.Name,
+                             ClientName = c.Name,
                             IsCharge = p.IsCharge,
-                            PmId = p.PmId,
-                            PmName = p.PM.Name
+                            PmId = p.PMId,
+                            // PmName = p.PM.Name,
+                            //StatusName = Enum.GetName(typeof(ProjectStatus), p.Status)
                         };
-            return await query.GetGridResult(query, input);
+            var result = await query.GetGridResult(query, input);
+            foreach (var item in result.Items)
+            {
+                item.StatusName = Enum.GetName(typeof(ProjectStatus), item.Status);
+            }
+            return result;
         }
 
         [HttpGet]
@@ -75,7 +102,7 @@ namespace ProjectManagement.APIs.Projects
                 Status = x.Status,
                 ClientId = x.ClientId,
                 IsCharge = x.IsCharge,
-                PmId = x.PmId
+                PmId = x.PMId
             });
             return await query.ToListAsync();
         }
@@ -95,9 +122,9 @@ namespace ProjectManagement.APIs.Projects
                                     EndTime = x.EndTime.Value.Date,
                                     Status = x.Status,
                                     ClientId = x.ClientId,
-                                    ClientName = x.Clients.Name,
+                                    ClientName = x.Client.Name,
                                     IsCharge = x.IsCharge,
-                                    PmId = x.PmId,
+                                    PmId = x.PMId,
                                     PmName = x.PM.Name
                                 });
             return await query.FirstOrDefaultAsync();
