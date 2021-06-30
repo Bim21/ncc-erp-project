@@ -5,7 +5,7 @@
                 <h1>{{'Checklist Title' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button type="button" class="btn bg-blue" (click)="createChecklistTitle()">
+                <button *ngIf="permission.isGranted(CheckList_CheckListItem_Create)" type="button" class="btn bg-blue" (click)="createChecklistTitle()">
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -90,16 +90,16 @@
                                  let j=index">{{getProjectTypefromEnum(item,APP_ENUM.ProjectType)}}<span *ngIf="j < checklist.mandatorys.length-1">, </span></span></td>
                             <td>{{checklist.auditTarget}}</td>
                             <td>{{checklist.personInCharge}}</td>
-                            <td>{{checklist.note}}</td>
+                            <td style="white-space: nowrap; min-width: 300px;">{{checklist.note}}</td>
                             <td  class="text-center">
-                                <button  
+                                <button   *ngIf="permission.isGranted(CheckList_CheckListItem_Update)" 
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editCheckList(checklist);$event.stopPropagation()" >
                                 <i class="fas fa-pencil-alt"></i>
 
                                 Edit
                             </button>
-                            <button 
+                            <button  *ngIf="permission.isGranted(CheckList_CheckListItem_Delete)" 
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(checklist);$event.stopPropagation()"
                                  #deleteBtn>

@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { ChecklistTitleDto } from './../../../service/model/checklist.dto';
 import { ChecklistCategoryService } from './../../../service/api/checklist-category.service';
 import { finalize, catchError } from 'rxjs/operators';
@@ -13,6 +14,14 @@ import { CreateEditChecklistTitleComponent } from './create-edit-checklist-title
   styleUrls: ['./checklist-title.component.css']
 })
 export class ChecklistTitleComponent extends PagedListingComponentBase<ChecklistTitleDto> implements OnInit {
+
+
+  CheckList_CheckListCategory = PERMISSIONS_CONSTANT.CheckList_CheckListCategory;
+  CheckList_CheckListCategory_Create = PERMISSIONS_CONSTANT.CheckList_CheckListCategory_Create;
+  CheckList_CheckListCategory_Delete = PERMISSIONS_CONSTANT.CheckList_CheckListCategory_Delete;
+  CheckList_CheckListCategory_Update = PERMISSIONS_CONSTANT.CheckList_CheckListCategory_Update;
+  CheckList_CheckListCategory_ViewAll = PERMISSIONS_CONSTANT.CheckList_CheckListCategory_ViewAll;
+
   public checkListTitleList: ChecklistTitleDto[] = []
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'Name', comparisions: [0, 6, 7, 8], displayName: "Name" },
@@ -60,7 +69,7 @@ export class ChecklistTitleComponent extends PagedListingComponentBase<Checklist
       checkListTitle = {
         name: checklist.name,
         id: checklist.id
-      } 
+      }
     }
     const dialogRef = this.dialog.open(CreateEditChecklistTitleComponent, {
       width: '500px',
@@ -69,9 +78,9 @@ export class ChecklistTitleComponent extends PagedListingComponentBase<Checklist
         dialogData: checkListTitle,
         command: command,
       },
-      
+
     });
-   
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.refresh()
