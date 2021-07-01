@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { catchError, finalize } from 'rxjs/operators';
 import { ChecklistService } from './../../../service/api/checklist.service';
 import { Component, Injector, OnInit } from '@angular/core';
@@ -13,6 +14,12 @@ import { ChecklistDto } from '@app/service/model/checklist.dto';
   styleUrls: ['./checklist.component.css']
 })
 export class ChecklistComponent extends PagedListingComponentBase<any> implements OnInit {
+  
+  CheckList_CheckListItem = PERMISSIONS_CONSTANT.CheckList_CheckListItem;
+  CheckList_CheckListItem_Create = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Create;
+  CheckList_CheckListItem_Delete = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Delete;
+  CheckList_CheckListItem_Update = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Update;
+  CheckList_CheckListItem_ViewAll = PERMISSIONS_CONSTANT.CheckList_CheckListItem_ViewAll;
   checklistList: ChecklistDto[] = []
   public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {

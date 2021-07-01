@@ -21,7 +21,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
   routerEvents: BehaviorSubject<RouterEvent> = new BehaviorSubject(undefined);
   homeRoute = "/app/home";
 
-  constructor(injector: Injector,private router:Router) {
+  constructor(injector: Injector, private router: Router) {
     super(injector);
     this.router.events.subscribe(this.routerEvents);
   }
@@ -59,16 +59,16 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("PM Management"),
         "",
         "fas fa-circle",
-        "",[
-          new MenuItem(
-            this.l("List Project"),
-            "/app/list-project",
-            "fas fa-circle",
+        "", [
+        new MenuItem(
+          this.l("List Project"),
+          "/app/list-project",
+          "fas fa-circle",
 
-            ""
-          )
+          ""
+        )
 
-        ]
+      ]
       ),
       new MenuItem(
         this.l("Sao đỏ"),
@@ -80,21 +80,21 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("CheckList"),
         "",
         "fas fa-circle",
-        "",[
-          new MenuItem(
-            this.l("Checklist Title"),
-            "/app/checklist-title",
-            "fas fa-building",
-            ""
-          ),
-          new MenuItem(
-            this.l("Checklist"),
-            "/app/checklist",
-            "fas fa-building",
-            ""
-          )
+        "CheckList", [
+        new MenuItem(
+          this.l("Checklist Title"),
+          "/app/checklist-title",
+          "fas fa-building",
+          "CheckList.CheckListCategory"
+        ),
+        new MenuItem(
+          this.l("Checklist"),
+          "/app/checklist",
+          "fas fa-building",
+          "CheckList.CheckListItem"
+        )
 
-        ]
+      ]
       ),
       new MenuItem(
         this.l("Delivery Management"),
