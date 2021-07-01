@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210701041128_add_Field_ProjectBillInformation_To_Table_TimesheetProject")]
+    partial class add_Field_ProjectBillInformation_To_Table_TimesheetProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1553,9 +1555,6 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuditSessionId");
@@ -1608,9 +1607,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -1662,9 +1658,6 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("AuditSessions");
@@ -1701,9 +1694,6 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1764,9 +1754,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -1806,9 +1793,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("ProjectType")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1854,9 +1838,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Clients");
@@ -1896,9 +1877,6 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -1956,9 +1934,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2027,9 +2002,6 @@ namespace ProjectManagement.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PMReportProjectId");
@@ -2094,9 +2066,6 @@ namespace ProjectManagement.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
@@ -2142,9 +2111,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -2202,9 +2168,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UATTimeEnd")
@@ -2275,9 +2238,6 @@ namespace ProjectManagement.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -2340,9 +2300,6 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -2400,9 +2357,6 @@ namespace ProjectManagement.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("TimeDone")
                         .HasColumnType("datetime2");
 
@@ -2454,9 +2408,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
@@ -2506,9 +2457,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
 
                     b.Property<long>("TimesheetId")
                         .HasColumnType("bigint");

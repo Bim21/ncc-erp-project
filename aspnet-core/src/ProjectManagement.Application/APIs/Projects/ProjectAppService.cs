@@ -130,7 +130,7 @@ namespace ProjectManagement.APIs.Projects
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
 
-            await WorkScope.UpdateAsync(ObjectMapper.Map<Project>(input));
+            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
             return input;
         }
 

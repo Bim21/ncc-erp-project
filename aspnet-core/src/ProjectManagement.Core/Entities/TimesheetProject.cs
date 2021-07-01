@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,8 +8,9 @@ using System.Text;
 
 namespace ProjectManagement.Entities
 {
-    public class TimesheetProject : FullAuditedEntity<long>
+    public class TimesheetProject : FullAuditedEntity<long>, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }
         public long ProjectId { get; set; }
@@ -19,5 +21,6 @@ namespace ProjectManagement.Entities
         public long TimesheetId { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
+        public string ProjectBillInfomation { get; set; }
     }
 }

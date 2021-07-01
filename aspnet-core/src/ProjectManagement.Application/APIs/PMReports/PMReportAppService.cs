@@ -21,15 +21,20 @@ namespace ProjectManagement.APIs.PMReports
     {
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
-        public async Task<GridResult<PMReportDto>> GetAllPaging(GridParam input)
+        public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
-            var query = WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
-            {
-                Name = x.Name,
-                IsActive = x.IsActive,
-                Year = x.Year,
-                Type = x.Type
-            });
+            var query = from pr in WorkScope.GetAll<PMReport>()
+                        join prp in WorkScope.GetAll<PMReportProject>() on pr.Id equals prp.PMReportId
+                        group prp by new { pr.Id, pr.Name, pr.Year, pr.Type, pr.IsActive } into pp
+                        select new GetPMReportDto
+                        {
+                            Id = pp.Key.Id,
+                            Name = pp.Key.Name,
+                            Year = pp.Key.Year,
+                            IsActive = pp.Key.IsActive,
+                            Type = pp.Key.Type,
+                            NumberOfProject = pp.Count()
+                        };
             return await query.GetGridResult(query, input);
         }
 
@@ -39,7 +44,7 @@ namespace ProjectManagement.APIs.PMReports
         {
             return await WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
             {
-
+                Id = x.Id,
                 Name = x.Name,
                 IsActive = x.IsActive,
                 Year = x.Year,
@@ -100,6 +105,34 @@ namespace ProjectManagement.APIs.PMReports
                 throw new UserFriendlyException("PM Report has PmReportProject !");
 
             await WorkScope.DeleteAsync(pmReport);
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_CloseReport)]
+        public async Task<string> CloseReport(long pmReportId)
+        {
+            var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
+            var oldPmReport = await WorkScope.GetAll<PMReport>().Where(x => x.Id != pmReportId && x.IsActive).ToListAsync();
+
+            pmReport.IsActive = false;
+            await WorkScope.UpdateAsync(pmReport);
+
+            foreach(var item in oldPmReport)
+            {
+                item.IsActive = false;
+                await WorkScope.UpdateAsync(item);
+            }
+
+            var newPmReport = new PMReport
+            {
+                Name = pmReport.Name + " (1)",
+                Year = DateTime.Now.Year,
+                IsActive = true,
+                Type = PMReportType.Weekly
+            };
+            await WorkScope.InsertAndGetIdAsync(newPmReport);
+
+            return $"{pmReport.Name} locked, new PmReport with name {pmReport.Name} (1) created";
         }
     }
 }

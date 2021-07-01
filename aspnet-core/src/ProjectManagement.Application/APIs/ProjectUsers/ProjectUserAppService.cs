@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Constants.Enum;
@@ -46,26 +47,33 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto input)
         {
             var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId);
             if (isExist)
                 throw new UserFriendlyException("User already exist in project !");
 
+            if(input.Status == ProjectUserStatus.Past)
+                throw new UserFriendlyException("Can't add people to the past !");
+
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
             return input;
         }
 
         [HttpPut]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Update)]
         public async Task<ProjectUserDto> Update(ProjectUserDto input)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserDto, ProjectUser>(input, projectUser));
+
             return input;
         }
 
         [HttpDelete]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Delete)]
         public async Task Delete(long projectUserId)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);

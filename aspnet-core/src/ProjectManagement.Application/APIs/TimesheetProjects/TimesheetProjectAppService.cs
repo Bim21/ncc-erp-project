@@ -8,6 +8,7 @@ using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
@@ -57,40 +58,26 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_ViewOnlyActiveProject);
 
-            var projectUserBill = from pu in WorkScope.GetAll<ProjectUser>()
-                                  join pub in WorkScope.GetAll<ProjectUserBill>() on pu.UserId equals pub.UserId into pp
-                                  from p in pp.DefaultIfEmpty()
-                                  select new
-                                  {
-                                      ProjectId = pu.ProjectId,
-                                      userId = pu.UserId,
-                                      UserName = pu.User.Name,
-                                      BillRole = pu.ProjectRole,
-                                      BillRate = p.BillRate
-                                  };
+            var query = from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+                        join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
+                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
+                         join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
+                         where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
+                         select new GetTimesheetDetailDto
+                         {
+                             Id = tsp.Id,
+                             ProjectId = tsp.ProjectId,
+                             TimesheetId = tsp.TimesheetId,
+                             ProjectName = p.Name,
+                             PmId = u.Id,
+                             PmName = u.FullName,
+                             ClientId = c.Id,
+                             ClientName = c.Name,
+                             File = "/timesheets/" + tsp.FilePath,
+                             ProjectBillInfomation = tsp.ProjectBillInfomation,
+                             Note = tsp.Note
+                         };
 
-            var query = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
-                                .Where(x => viewAll || (viewonlyme ? x.Project.PMId == AbpSession.UserId.Value : !viewActiveProject || x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed))
-                                .Select(x => new GetTimesheetDetailDto
-                                {
-                                    Id = x.Id,
-                                    ProjectId = x.ProjectId,
-                                    TimesheetId = x.TimesheetId,
-                                    ProjectName = x.Project.Name,
-                                    PmId = x.Project.PMId,
-                                    PmName = x.Project.PM.Name,
-                                    ClientId = x.Project.ClientId,
-                                    ClientName = x.Project.Client.Name,
-                                    File = "/timesheets/" + x.FilePath,
-                                    ProjectUserBill = projectUserBill.Where(y => y.ProjectId == x.ProjectId).Select(y => new GetProjectUserBillDto
-                                    {
-                                        UserId = y.userId,
-                                        UserName = y.UserName,
-                                        BillRole = y.BillRole.ToString(),
-                                        BillRate = y.BillRate
-                                    }).ToList(),
-                                    Note = x.Note
-                                });
             return await query.ToListAsync();
         }
 
