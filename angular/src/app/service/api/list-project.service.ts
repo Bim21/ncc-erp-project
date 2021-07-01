@@ -12,6 +12,9 @@ export class ListProjectService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
+  public getProjectById(id: any): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/Get?projectId=' + id);
+}
   public delete(id: any): Observable<any> {
     return this.http.delete<any>(this.rootUrl + '/Delete', {
         params: new HttpParams().set('projectID', id)

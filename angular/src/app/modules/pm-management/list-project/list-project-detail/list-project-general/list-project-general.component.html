@@ -22,9 +22,9 @@
                            Dự án:
                         </label>
                         <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
+                            <div class="col-md-4 mt-2">
+                                <p>{{project.name}}</p>
+                             </div>
                 
                         </div>
                     </div>
@@ -32,20 +32,17 @@
                         <label class="col-md-2 col-form-label" for="requestName">
                            Loại dự án:
                         </label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
+                        <div class="col-md-4 mt-2">
+                           <p>{{project.projectType}}</p>
                         </div>
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                            Trạng thái:
                         </label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
+                        <div class="col-md-4 mt-2">
+                            <p>{{project.status}}</p>
+
                         </div>
                     </div>
                     <div class="form-group row detail ">
@@ -53,45 +50,38 @@
                             Khách hàng:
                         </label>
                         <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
-                
+                            <div class="col-md-4 mt-2">
+                                <p>{{project.clientName}}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Vẫn Charge Khách hàng:
                         </label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
+                        <div class="col-md-4 mt-2">
+                            <p>{{project.isCharge}}</p>
                         </div>
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Thời gian bắt đầu:
                         </label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
+                        <div class="col-md-4 mt-2">
+                           <p>{{project.startTime}}</p>
                         </div>
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Thời gian kết thúc:
                         </label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control " name="requestName" [readonly]="readMode"
-                            [ngClass]="readMode==true?'read-mode':''" maxlength="1024" minlength="2"
-                             />
+                        <div class="col-md-4 mt-2">
+                            <p>{{project.endTime}}</p>
                         </div>
                     </div>
                     <div class="form-group row" [hidden]="readMode">
                         <div class="form-group row d-flex justify-content-between">
-                            <button class="btn btn-default mx-2">
+                            <button class="btn btn-default mx-2" (click)="readMode = true"> 
                                 Cancel
                             </button>
                             <button class="btn btn-primary" [disabled]="!requestDetail.valid ">
