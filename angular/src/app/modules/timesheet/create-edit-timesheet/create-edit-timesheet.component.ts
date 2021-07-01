@@ -36,7 +36,7 @@ export class CreateEditTimesheetComponent implements OnInit {
   SaveAndClose(){
     this.isDisable = true
     if (this.data.command == "create") {
-      // this.timesheet.value = 0
+      this.timesheet.isActive=true;
       this.timesheetService.create(this.timesheet).pipe(catchError(this.timesheetService.handleError)).subscribe((res) => {
         abp.notify.success("created outcomeRequest ");
         this.dialogRef.close(this.timesheet);

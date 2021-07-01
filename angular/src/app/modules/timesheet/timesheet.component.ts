@@ -68,6 +68,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
         month : Timesheet.month,
         year : Timesheet.year,
         status : Timesheet.status,
+        isActive:Timesheet.isActive,
         id: Timesheet.id
       }
     }
