@@ -5,8 +5,8 @@ export class TimesheetDto{
      year : Date;
      totalProject?:number;
      totalTimesheet?:number;
-     hasInvoice?:boolean;
      status : number;
+     isActive:boolean;
      id?:number;
 }
 export class TimesheetDetailDto{
