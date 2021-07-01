@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace ProjectManagement.Constants.Enum
 {
     public class ProjectEnum
@@ -99,6 +96,12 @@ namespace ProjectManagement.Constants.Enum
             TESTER = 2,
             BA = 3,
             Artist = 4,
+        }
+        public enum AuditResultStatus
+        {
+            New = 0,
+            InProcess = 1,
+            Done = 2
         }
     }
 }
