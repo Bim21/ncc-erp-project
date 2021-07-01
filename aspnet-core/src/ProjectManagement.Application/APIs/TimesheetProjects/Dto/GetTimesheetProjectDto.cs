@@ -14,5 +14,6 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
         public long TimesheetId { get; set; }
         public string TimeSheetName { get; set; }
         public string Note { get; set; }
+        public string ProjectBillInfomation { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,9 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
 {
-    public class PMReport : FullAuditedEntity<long>
+    public class PMReport : FullAuditedEntity<long>, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         [MaxLength(255)]
         public string Name { get; set; }
         

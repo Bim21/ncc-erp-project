@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,9 @@ using System.Text;
 
 namespace ProjectManagement.Entities
 {
-    public class AuditResult : FullAuditedEntity<long>
+    public class AuditResult : FullAuditedEntity<long>, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         [ForeignKey(nameof(AuditSessionId))]
         public AuditSession AuditSession { get; set; }
         public long AuditSessionId { get; set; }

@@ -21,6 +21,7 @@ using ProjectManagement.Roles.Dto;
 using ProjectManagement.Users.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagement.Constants.Enum;
 
 namespace ProjectManagement.Users
 {

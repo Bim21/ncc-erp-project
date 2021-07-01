@@ -16,7 +16,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long ClientId { get; set; }
         public string ClientName { get; set; }
         public string File { get; set; }
-        public List<GetProjectUserBillDto> ProjectUserBill { get; set; }
+        public string ProjectBillInfomation { get; set; }
         public string Note { get; set; }
     }
 }

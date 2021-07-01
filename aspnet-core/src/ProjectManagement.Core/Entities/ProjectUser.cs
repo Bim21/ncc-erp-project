@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using System;
@@ -9,8 +10,9 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
 {
-    public class ProjectUser : FullAuditedEntity<long>
+    public class ProjectUser : FullAuditedEntity<long>, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
         public long UserId { get; set; }

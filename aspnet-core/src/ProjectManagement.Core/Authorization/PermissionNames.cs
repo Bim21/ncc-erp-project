@@ -116,10 +116,11 @@ namespace ProjectManagement.Authorization
             public const string DeliveryManagement_PMReport_Create = "DeliveryManagement.PMReport.Create";
             public const string DeliveryManagement_PMReport_Update = "DeliveryManagement.PMReport.Update";
             public const string DeliveryManagement_PMReport_Delete = "DeliveryManagement.PMReport.Delete";
+            public const string DeliveryManagement_PMReport_CloseReport = "DeliveryManagement.PMReport.CloseReport";
 
             //PmReportProject
             public const string DeliveryManagement_PMReportProject = "DeliveryManagement.PMReportProject";
-            public const string DeliveryManagement_PMReportProject_GetAll = "DeliveryManagement.PMReportProject.GetAll";
+            public const string DeliveryManagement_PMReportProject_GetAllByPmReport = "DeliveryManagement.PMReportProject.GetAllByPmProject";
             public const string DeliveryManagement_PMReportProject_Create = "DeliveryManagement.PMReportProject.Create";
             public const string DeliveryManagement_PMReportProject_Update = "DeliveryManagement.PMReportProject.Update";
             public const string DeliveryManagement_PMReportProject_Delete = "DeliveryManagement.PMReportProject.Delete";
@@ -240,10 +241,11 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_PMReport_Create,
                     PermissionNames.DeliveryManagement_PMReport_Update,
                     PermissionNames.DeliveryManagement_PMReport_Delete,
+                    PermissionNames.DeliveryManagement_PMReport_CloseReport,
 
                     //PMReportProject
                     PermissionNames.DeliveryManagement_PMReportProject,
-                    PermissionNames.DeliveryManagement_PMReportProject_GetAll,
+                    PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport,
                     PermissionNames.DeliveryManagement_PMReportProject_Create,
                     PermissionNames.DeliveryManagement_PMReportProject_Update,
                     PermissionNames.DeliveryManagement_PMReportProject_Delete,
@@ -368,10 +370,11 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PMReport" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PMReport" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PMReport" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_CloseReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close PMReport" },
 
                  //PmReportProject
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Report Project" },
-                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_GetAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All PMReport Project" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By PmReport" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PMReport Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PMReport Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PMReport Project" },
@@ -494,6 +497,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PM Report" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PM Report" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PM Report" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_CloseReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close PMReport" },
                             }
                         },
 
@@ -501,7 +505,7 @@ namespace ProjectManagement.Authorization
                         new SystemPermission { Name =  PermissionNames.DeliveryManagement_PMReportProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Report Project",
                             Childrens = new List<SystemPermission>()
                             {
-                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_GetAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All PM Report Project" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By PmReport" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PM Report Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PM Report Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PM Report Project" },

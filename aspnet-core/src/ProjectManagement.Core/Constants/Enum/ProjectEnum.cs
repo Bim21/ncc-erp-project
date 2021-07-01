@@ -64,7 +64,7 @@ namespace ProjectManagement.Constants.Enum
         public enum ProjectType
         {
             ODC = 0,
-            TandM = 1,
+            TimeAndMaterials = 1,
             FIXPRICE = 2,
             PRODUCT = 3,
             NoBill = 4

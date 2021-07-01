@@ -103,13 +103,32 @@ namespace ProjectManagement.APIs.TimeSheets
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
 
-            var project = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && x.IsCharge == true).ToListAsync();
+            
+
+            var project = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && x.IsCharge).ToListAsync();
             foreach (var item in project)
             {
+                var billInfomation = new StringBuilder();
+                var projectUserBill = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == item.Id)
+                                      join pub in WorkScope.GetAll<ProjectUserBill>().Where(x => x.isActive) on pu.Id equals pub.ProjectId into pp
+                                      from p in pp.DefaultIfEmpty()
+                                      select new
+                                      {
+                                          UserName = p.User.FullName,
+                                          BillRole = p.BillRole,
+                                          BillRate = p.BillRate
+                                      };
+
+                foreach (var b in projectUserBill)
+                {
+                    billInfomation.Append($"{b.UserName} - {b.BillRole} - {b.BillRate}<br>");
+                }
+
                 var timesheetProject = new TimesheetProject
                 {
                     ProjectId = item.Id,
                     TimesheetId = input.Id,
+                    ProjectBillInfomation = $"{billInfomation}"
                 };
                 await WorkScope.InsertAndGetIdAsync(timesheetProject);
             }
