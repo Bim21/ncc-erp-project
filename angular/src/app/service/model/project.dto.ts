@@ -1,12 +1,12 @@
-export class ProjectDto{
-    pmId : number; 
-    clientId : number; 
-    id :number; 
-    isCharge: boolean; 
-    status: number; 
-    name: string; 
-    code: string; 
-    projectType: number; 
-    startTime: Date; 
-    endTime: Date; 
+export class ProjectDto {
+    name: string;
+    code: string;
+    projectType: 0;
+    startTime: string;
+    endTime: string;
+    status: number;
+    clientId: number;
+    isCharge: boolean;
+    pmId: number;
+    id?: number;
 }

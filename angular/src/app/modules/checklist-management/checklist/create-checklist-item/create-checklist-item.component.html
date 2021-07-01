@@ -7,9 +7,9 @@
                 {{ 'Name' | localize }}:
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="checklistName" id="accountTypeName" required
-                    [(ngModel)]="checklist.name" #accountTypeNameModel="ngModel" #accountTypeNameEl />
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                <input type="text" class="form-control" name="checklistName" id="checklistName" required
+                    [(ngModel)]="checklist.name" #checklistName="ngModel" #checklistNameEl />
+                <abp-validation-summary [control]="checklistName" [controlEl]="checklistNameEl">
                 </abp-validation-summary>
             </div>
         </div>
@@ -19,17 +19,17 @@
             </label>
             <div class="col-md-9">
                 <input type="text" class="form-control" name="checkListCode" id="checkListCode" required
-                    [(ngModel)]="checklist.code" #accountTypeNameModel="ngModel" #accountTypeNameEl />
-                <abp-validation-summary [control]="accountTypeNameModel" [controlEl]="accountTypeNameEl">
+                    [(ngModel)]="checklist.code" #checkListCode="ngModel" #checkListCodeEl />
+                <abp-validation-summary [control]="checkListCode" [controlEl]="checkListCodeEl">
                 </abp-validation-summary>
             </div>
         </div>
 
-        <div class="form-group row ">
-            <label class="col-md-3 col-form-label" for="title">Checklist title:</label>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="title">Checklist category:</label>
             <div class="col-md-9 ">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="checklist.categoryId" name="checklisttitle"
+                    <mat-select [(ngModel)]="checklist.categoryId" name="checklisttitle" required
                         placeholder="select a checklsit title" #checklistTitle="ngModel" >
                         <!-- <mat-form-field class="w-100 px-3"
                             style="position: sticky; top: 0;; z-index: 2; background-color: white;">
@@ -42,6 +42,10 @@
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
+                <mat-error class="mt-1" *ngIf="checklistTitle.hasError('required') && checklistTitle.touched"
+                style="font-size: 13px;">
+                This field is required
+            </mat-error>
              
             </div>
 
@@ -52,7 +56,7 @@
                 {{ 'Description' | localize }}:
             </label>
             <div class="col-md-9">
-                <textarea type="text" class="form-control" name="checklistDescription" id="checklistDescription"
+                <textarea rows="3" type="text" class="form-control" name="checklistDescription" id="checklistDescription"
                     required [(ngModel)]="checklist.description" #checklistDescription="ngModel"
                     #checklistDescriptionEl></textarea>
                 <abp-validation-summary [control]="checklistDescription" [controlEl]="checklistDescriptionEl">
@@ -114,7 +118,7 @@
             </div>
         </div>
     </div>
-    <div  align="end" class="form-group row d-flex justify-content-between mt-2">
+    <div  class="d-flex justify-content-between mt-2">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button class="btn btn-primary" (click)="saveAndClose()"
             [disabled]="!checkListForm.valid || isLoading">Save</button>
