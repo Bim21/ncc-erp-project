@@ -62,6 +62,7 @@
                         <tr>
                             <th>{{'Tên dự án' | localize}}</th>
                             <th>{{'Loại dự án' | localize}}</th>
+                            <th>khách hàng</th>
                             <th>{{'Tên PM' | localize}}</th>
                             <th>{{'Trạng thái' | localize}}</th>
                             <th>{{'Charge khách hàng' | localize}}</th>
@@ -81,6 +82,7 @@
                   <td ><span
                     class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
                             <td>{{setValueProjectType(project.projectType,APP_ENUM.ProjectType)}}</td>
+                            <td>{{project.clientName}}</td>
                             <td>{{project.pmName}}</td>
                             <td>{{setValueProjectType(project.status,APP_ENUM.ProjectStatus)}}</td>
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
