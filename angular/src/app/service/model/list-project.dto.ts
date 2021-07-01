@@ -6,9 +6,10 @@ export interface ProjectDto {
     endTime: string;
     status: number;
     clientId: number;
-    clientName: string;
+    clientName?: string;
     isCharge: boolean;
     pmId: number;
+    pmName?:string;
     id: number;
 }
 

@@ -5,7 +5,7 @@
                 <h1>{{'List dự án' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button type="button" class="btn bg-blue" (click)="createListProject()">
+                <button type="button" class="btn bg-blue" (click)="createProject()" *ngIf="permission.isGranted(PmManager_Project_Create)">
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th>{{'Tên dự án' | localize}}</th>
@@ -65,9 +65,10 @@
                             <th>khách hàng</th>
                             <th>{{'Tên PM' | localize}}</th>
                             <th>{{'Trạng thái' | localize}}</th>
-                            <th>{{'Charge khách hàng' | localize}}</th>
                             <th>{{'Thời gian bắt đầu' | localize}}</th>
                             <th>{{'Thời gian kết thúc' | localize}}</th>
+                            <th>{{'Charge khách hàng' | localize}}</th>
+
                             <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
                         </tr>
                     </thead>
@@ -81,21 +82,21 @@
                   }; let i = index">
                   <td ><span
                     class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
-                            <td>{{setValueProjectType(project.projectType,APP_ENUM.ProjectType)}}</td>
+                            <td>{{project.projectType}}</td>
                             <td>{{project.clientName}}</td>
                             <td>{{project.pmName}}</td>
-                            <td>{{setValueProjectType(project.status,APP_ENUM.ProjectStatus)}}</td>
+                            <td>{{project.status}}</td>
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
                             <td>{{project.endTime | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center">
                                 <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge"></mat-checkbox>
                             </td>
                             <td class="d-flex justify-content-center" style="padding: 12px;">
-                                <button type="button" class="btn btn-sm bg-secondary mr-1">
+                                <button type="button" class="btn btn-sm bg-secondary mr-1" (click)="editProject(project)" *ngIf="permission.isGranted(PmManager_Project_Update)">
                                     <i class="fas fa-pencil-alt"></i>
                                     {{ 'edit' | translate }}
                                 </button>
-                                <button type="button" class="btn btn-sm bg-danger ml-1">
+                                <button type="button" class="btn btn-sm bg-danger ml-1" (click)="delete(project)" *ngIf="permission.isGranted(PmManager_Project_Delete)">
                                     <i class="fas fa-trash"></i>
                                     {{ 'delete' | translate }}
                                 </button>

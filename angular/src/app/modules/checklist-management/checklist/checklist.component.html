@@ -63,7 +63,7 @@
                             <th>STT</th>
                             <th>Name</th>
                             <th>Code</th>
-                            <th>Title</th>
+                            <th>Category</th>
                             <th>Description</th>
                             <th>Mandatory</th>
                             <th>Audit Target</th>
@@ -84,13 +84,13 @@
                             <td>{{i+1}}</td>
                             <td style="white-space: normal">{{checklist.name}}</td>
                             <td>{{checklist.code}}</td>
-                            <td>{{checklist.title}}</td>
+                            <td>{{checklist.categoryName}}</td>
                             <td style="white-space: normal; min-width: 300px;">{{checklist.description}}</td>
                             <td><span *ngFor="let item of checklist.mandatorys;
                                  let j=index">{{getProjectTypefromEnum(item,APP_ENUM.ProjectType)}}<span *ngIf="j < checklist.mandatorys.length-1">, </span></span></td>
                             <td>{{checklist.auditTarget}}</td>
                             <td>{{checklist.personInCharge}}</td>
-                            <td style="white-space: nowrap; min-width: 300px;">{{checklist.note}}</td>
+                            <td style="white-space: normal; min-width: 300px;">{{checklist.note}}</td>
                             <td  class="text-center">
                                 <button   *ngIf="permission.isGranted(CheckList_CheckListItem_Update)" 
                                 class="btn btn-sm bg-secondary mr-1" 
