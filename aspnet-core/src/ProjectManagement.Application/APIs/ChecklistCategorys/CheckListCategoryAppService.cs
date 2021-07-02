@@ -74,10 +74,10 @@ namespace ProjectManagement.APIs.ChecklistTitles
         [AbpAuthorize(PermissionNames.CheckList_CheckListCategory_Delete)]
         public async Task Delete(long id)
         {
-            var delItem = await WorkScope.GetAll<CheckListItem>().Where(x => x.CategoryId == id).Select(x => x.Id).ToListAsync();
-            foreach (var i in delItem)
+            var isExistItem = await WorkScope.GetAll<CheckListItem>().AnyAsync(x => x.CategoryId == id);
+            if (isExistItem)
             {
-                await _checkListItem.Delete(i);
+                throw new UserFriendlyException("Check List Category with '" + id + "' has Check List Item. Please delete them before deleting.");
             }
             await WorkScope.DeleteAsync<CheckListCategory>(id);
         }

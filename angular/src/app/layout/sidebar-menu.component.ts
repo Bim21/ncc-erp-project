@@ -45,7 +45,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
     return [
       new MenuItem(this.l("HomePage"), "/app/home", "fas fa-home"),
 
-      new MenuItem(this.l("Admin"), "", "fas fa-circle", "", [
+      new MenuItem(this.l("Admin"), "", "fas fa-user-cog", "", [
         new MenuItem(
           this.l("Tenants"),
           "/app/tenants",
@@ -58,14 +58,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       new MenuItem(
         this.l("PM Management"),
         "",
-        "fas fa-circle",
-        "", [
+        "fas fa-user-tie",
+        "PmManager", [
         new MenuItem(
           this.l("List Project"),
           "/app/list-project",
-          "fas fa-circle",
-
-          ""
+          "fas fa-project-diagram",
+          "PmManager.Project"
         )
 
       ]
@@ -73,24 +72,24 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       new MenuItem(
         this.l("Sao đỏ"),
         "/app/sao-do",
-        "far fa-calendar-alt",
+        "fas fa-user-shield",
         ""
       ),
       new MenuItem(
         this.l("CheckList"),
         "",
-        "fas fa-circle",
+        "fas fa-tasks",
         "CheckList", [
         new MenuItem(
-          this.l("Checklist Title"),
+          this.l("Checklist Category"),
           "/app/checklist-title",
-          "fas fa-building",
+          "fas fa-clipboard-list",
           "CheckList.CheckListCategory"
         ),
         new MenuItem(
-          this.l("Checklist"),
+          this.l("Checklist Item"),
           "/app/checklist",
-          "fas fa-building",
+          "fas fa-calendar-check",
           "CheckList.CheckListItem"
         )
 

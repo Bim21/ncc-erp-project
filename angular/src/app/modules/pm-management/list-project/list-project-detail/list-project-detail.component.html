@@ -4,7 +4,7 @@
             <div class="col-12">
                 <nav mat-tab-nav-bar>
                     <a [ngClass]="currentUrl.includes('list-project-general')?'active':''" mat-tab-link (click)="routingGeneralTab()">
-                        List Project General
+                        General
                     </a>
                     <a [ngClass]="currentUrl.includes('resourcemanagement')?'active':''" mat-tab-link (click)="routingResourceTab()">
                         Resource Management 
@@ -19,9 +19,7 @@
                         Project Checklist
                     </a>
                     
-                    
                 </nav>
-                
                 <router-outlet></router-outlet>
             </div>
             
