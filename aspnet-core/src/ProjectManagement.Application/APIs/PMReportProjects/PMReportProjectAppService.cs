@@ -41,8 +41,8 @@ namespace ProjectManagement.APIs.PMReportProjects
             return await query.GetGridResult(query, input);
         }
 
-        [HttpPost]
-        public async Task<GridResult<GetProjectUserDto>> ResourceChangesDuringTheWeek(GridParam input, long projectId)
+        [HttpGet]
+        public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId)
         {
             var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
                         join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Past) on p.Id equals pu.ProjectId into pp
@@ -66,11 +66,11 @@ namespace ProjectManagement.APIs.PMReportProjects
                             IsFutureActive = x.IsFutureActive
                         };
 
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
 
-        [HttpPost]
-        public async Task<GridResult<GetProjectUserDto>> ResourceChangesInTheFuture(GridParam input, long projectId)
+        [HttpGet]
+        public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId)
         {
             var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
                                      join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future) on p.Id equals pu.ProjectId into pp
@@ -94,7 +94,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                          IsFutureActive = x.IsFutureActive
                                      };
 
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
 
         [HttpPost]

@@ -22,10 +22,10 @@ namespace ProjectManagement.APIs.ProjectUsers
     {
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject)]
-        public async Task<GridResult<GetProjectUserDto>> GetAllByProject(GridParam input, long projectId, bool viewHistory)
+        public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId)
-                        .Where(x => viewHistory || x.Status == ProjectUserStatus.Present)
+                        .Where(x => viewHistory || x.Status != ProjectUserStatus.Past)
                         .Select(x => new GetProjectUserDto
                         {
                             Id = x.Id,
@@ -43,7 +43,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             IsFutureActive = x.IsFutureActive
                         });
 
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
 
         [HttpPost]
@@ -57,7 +57,15 @@ namespace ProjectManagement.APIs.ProjectUsers
             if(input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't add people to the past !");
 
-            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
+
+            var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
+            foreach(var item in projectUsers)
+            {
+                item.Status = ProjectUserStatus.Past;
+                await WorkScope.UpdateAsync(item);
+            }
+
             return input;
         }
 
@@ -66,6 +74,19 @@ namespace ProjectManagement.APIs.ProjectUsers
         public async Task<ProjectUserDto> Update(ProjectUserDto input)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
+
+            if (input.Status == ProjectUserStatus.Past)
+                throw new UserFriendlyException("Can't edit people to the past !");
+
+            if(projectUser.Status == ProjectUserStatus.Future && input.Status == ProjectUserStatus.Present)
+            {
+                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
+                foreach (var item in projectUsers)
+                {
+                    item.Status = ProjectUserStatus.Past;
+                    await WorkScope.UpdateAsync(item);
+                }
+            }
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserDto, ProjectUser>(input, projectUser));
 

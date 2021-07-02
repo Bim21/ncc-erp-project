@@ -39,6 +39,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             return await query.GetGridResult(query, input);
         }
 
+        [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_GetAllByproject)]
         public async Task<List<GetProjectUserBillDto>> GetAllByProject(long projectId)
         {
