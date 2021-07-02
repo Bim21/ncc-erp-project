@@ -1,5 +1,6 @@
 ﻿
 using Abp.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.ProjectMilestones.Dto;
@@ -12,19 +13,20 @@ namespace ProjectManagement.APIs.ProjectMilestones
 {
     public class ProjectMilestoneAppService : ProjectManagementAppServiceBase
     {
+        [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_ProjectMilestone_ViewAll)]
-        public async Task<GridResult<ProjectMilestoneDto>> GetAllPaging(GridParam input)
+        public async Task<GridResult<GetProjectMilestoneDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<ProjectMilestone>()
-                        .Select(x => new ProjectMilestoneDto
+                        .Select(x => new GetProjectMilestoneDto
                         {
                             Id = x.Id,
                             Description = x.Description,
-                            Flag = x.Flag,
+                            Flag = x.Flag.ToString(),
                             Name = x.Name,
                             Note = x.Note,
                             ProjectId = x.ProjectId,
-                            Status = x.Status,
+                            Status = x.Status.ToString(),
                             UATTimeEnd = x.UATTimeEnd,
                             UATTimeStart = x.UATTimeStart
                         });

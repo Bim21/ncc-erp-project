@@ -109,7 +109,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               EndTime = checkExist.EndTime,
                               PmName = ar.PM.Name,
                               ProjectName = ar.Project.Name,
-                              projectStatus = ar.Project.Status.ToString(),
+                              AuditResultStatus = ar.Status.ToString(),
                               CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && x.IsPass).Count(),
                           }).ToListAsync();
         }
