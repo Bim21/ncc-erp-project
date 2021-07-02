@@ -15,6 +15,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   }
 
   ngOnInit(): void {
+    this.router.events.subscribe(res => this.currentUrl = this.router.url)
     this.requestId = this.route.snapshot.queryParamMap.get("id");
     this.router.navigate(['list-project-general'],{
       relativeTo:this.route, queryParams:{
