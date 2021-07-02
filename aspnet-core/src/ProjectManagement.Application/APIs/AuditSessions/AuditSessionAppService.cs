@@ -1,8 +1,10 @@
 ﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.AuditResults.Dto;
 using ProjectManagement.APIs.AuditSessions.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
@@ -55,15 +57,15 @@ namespace ProjectManagement.APIs.AuditSessions
             return query;
         }
 
-        //    [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Update)]
-        //    public async Task<AuditSessionDto> Update(AuditSessionDto input)
-        //    {
-        //        var isExist = await WorkScope.GetAsync<AuditSession>(input.Id);
-        //        ObjectMapper.Map(input, isExist);
-        //        await WorkScope.UpdateAsync(isExist);
-        //        return input;
-        //    }
-
+        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Update)]
+        public async Task<AuditSessionDto> Update(AuditSessionDto input)
+        {
+            var isExist = await WorkScope.GetAsync<AuditSession>(input.Id);
+            ObjectMapper.Map(input, isExist);
+            await WorkScope.UpdateAsync(isExist);
+            return input;
+        }
+        
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_ViewAll)]
         [HttpPost]
         public async Task<GridResult<AuditSessionDetailDto>> GetAllPaging(GridParam input)
@@ -93,7 +95,7 @@ namespace ProjectManagement.APIs.AuditSessions
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_View)]
-        public async Task<AuditSessionDetailDto> Get(long Id)
+        public async Task<List<AuditSessionDetailDto>> Get(long Id)
         {
             var checkExist = await WorkScope.GetAsync<AuditSession>(Id);
             var listSessionPeople = WorkScope.GetAll<AuditResultPeople>()
@@ -107,28 +109,28 @@ namespace ProjectManagement.APIs.AuditSessions
                               EndTime = checkExist.EndTime,
                               PmName = ar.PM.Name,
                               ProjectName = ar.Project.Name,
-                              projectStatus = ar.Project.Status.ToString(),
+                              AuditResultStatus = ar.Status.ToString(),
                               CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && x.IsPass).Count(),
-                          }).FirstOrDefaultAsync();
+                          }).ToListAsync();
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Delete)]
         public async Task Delete(long id)
         {
             var delAuditResult = await WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == id).ToListAsync();
-            var delAuditResultPeople = await WorkScope.GetAll<AuditResultPeople>()
-                                        .Where(x => delAuditResult
-                                        .Select(y => y.Id)
-                                        .Contains(x.Id)).ToListAsync();
+            if (delAuditResult.Count > 0)
+            {
+                throw new UserFriendlyException("Audit Session with '" + id + "' has Audit result. Please delete them before deleting.");
+            }
 
-            foreach (var i in delAuditResultPeople)
+            var delAuditResultPeople = await WorkScope.GetAll<AuditResultPeople>()
+                                        .AnyAsync(x => delAuditResult.Select(y => y.Id).Contains(x.Id));
+            if (delAuditResultPeople)
             {
-                await WorkScope.DeleteAsync(i);
+                throw new UserFriendlyException("Audit Session with '" + id + "' has Audit Result People . Please delete them before deleting.");
+
             }
-            foreach (var i in delAuditResult)
-            {
-                await WorkScope.DeleteAsync(i);
-            }
+
             await WorkScope.DeleteAsync<AuditSession>(id);
         }
     }
