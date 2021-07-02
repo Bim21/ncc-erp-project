@@ -59,13 +59,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("PM Management"),
         "",
         "fas fa-circle",
-        "", [
+        "PmManager", [
         new MenuItem(
           this.l("List Project"),
           "/app/list-project",
           "fas fa-circle",
-
-          ""
+          "PmManager.Project"
         )
 
       ]
@@ -77,12 +76,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         ""
       ),
       new MenuItem(
-        this.l("CheckList"),
+        this.l("CheckList Item"),
         "",
         "fas fa-circle",
         "CheckList", [
         new MenuItem(
-          this.l("Checklist Title"),
+          this.l("Checklist Category"),
           "/app/checklist-title",
           "fas fa-building",
           "CheckList.CheckListCategory"

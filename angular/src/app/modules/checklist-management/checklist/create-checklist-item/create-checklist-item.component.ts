@@ -18,6 +18,7 @@ export class CreateChecklistItemComponent extends AppComponentBase implements On
   public checklistTitleList: ChecklistTitleComponent[] = []
   public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
   public searchTitle: string = "";
+  
   constructor(injector: Injector, private checkListService: ChecklistService, @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     private checklisttitleService: ChecklistCategoryService,
     public dialogRef: MatDialogRef<CreateChecklistItemComponent>) {
@@ -33,6 +34,9 @@ export class CreateChecklistItemComponent extends AppComponentBase implements On
   public saveAndClose(): void {
     this.isLoading = true;
     if (this.data.command == "create") {
+      if(!this.checklist.mandatorys){
+        this.checklist.mandatorys=[]
+      }
       this.checkListService.create(this.checklist).pipe(catchError(this.checkListService.handleError)).subscribe(res => {
         abp.notify.success(`create checklist ${this.checklist.name}`);
         this.dialogRef.close(this.checklist);
