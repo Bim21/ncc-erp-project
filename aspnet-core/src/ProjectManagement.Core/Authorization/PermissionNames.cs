@@ -128,6 +128,10 @@ namespace ProjectManagement.Authorization
             //Resource Request
             public const string DeliveryManagement_ResourceRequest = "DeliveryManagement.ResourceRequest";
             public const string DeliveryManagement_ResourceRequest_ViewAllByProject = "DeliveryManagement.ResourceRequest.ViewAllByProject";
+
+            //PMReportProjectIssues
+            public const string DeliveryManagement_PMReportProjectIssue = "DeliveryManagement.PMReportProjectIssue";
+            public const string DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek";
     }
 
     public class GrantPermissionRoles
@@ -253,6 +257,10 @@ namespace ProjectManagement.Authorization
                     //ResourceRequest
                     PermissionNames.DeliveryManagement_ResourceRequest,
                     PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject,
+
+                    //PMReportProjectIssues
+                    PermissionNames.DeliveryManagement_PMReportProjectIssue,
+                    PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek,
                 }
             }
         };
@@ -382,6 +390,10 @@ namespace ProjectManagement.Authorization
                  //Resource Request
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Resource Request By Project" },
+
+                 //PMReportProjectIssues
+                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Report Project Issues" },
+                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Problems Of The Week" },
             };
             public static List<SystemPermission> TreePermissions = new List<SystemPermission>()
             {
@@ -517,6 +529,13 @@ namespace ProjectManagement.Authorization
                             Childrens = new List<SystemPermission>()
                             {
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By Project" },
+                            }
+                        },
+                         // PMReport Project Issues
+                        new SystemPermission { Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PMReport Project Issues",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Problems Of The Week" },
                             }
                         },
                     }

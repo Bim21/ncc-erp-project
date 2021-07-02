@@ -23,17 +23,6 @@ namespace ProjectManagement.APIs.Projects
 {
     public class ProjectAppService : ProjectManagementAppServiceBase
     {
-        private readonly RoleManager _roleManager;
-        private readonly UserManager _userManager;
-        public ProjectAppService(                    
-                   UserManager userManager,
-                   RoleManager roleManager)
-        {            
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-
-
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)

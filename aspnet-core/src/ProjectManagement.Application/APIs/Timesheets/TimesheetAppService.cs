@@ -25,16 +25,6 @@ namespace ProjectManagement.APIs.TimeSheets
 {
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
-        private readonly RoleManager _roleManager;
-        private readonly UserManager _userManager;
-        public TimeSheetAppService(
-                   UserManager userManager,
-                   RoleManager roleManager)
-        {
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ViewAll)]
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
@@ -51,20 +41,6 @@ namespace ProjectManagement.APIs.TimeSheets
                     TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Select(x => x.ProjectId).Count(),
                     TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Select(x => x.TimesheetId).Count()
                 });
-            //var query1 = from ts in WorkScope.GetAll<Timesheet>()
-            //             join tsp in WorkScope.GetAll<TimesheetProject>() on ts.Id equals tsp.TimesheetId
-            //             /*group tsp by new { ts.Id, ts.Name, ts.Month, ts.Year, ts.IsActive }*/ into pp
-            //             from p in pp.DefaultIfEmpty()
-            //             select new GetTimesheetDto
-            //             {
-            //                 Id = ts.Id,
-            //                 Name = ts.Name,
-            //                 Month = ts.Month,
-            //                 Year = ts.Year,
-            //                 IsActive = ts.IsActive,
-            //                 TotalProject = pp.Count(),
-            //                 TotalTimesheet = pp.Where(x => x.FilePath != null).Count()
-            //             };
 
             return await query.GetGridResult(query, input);
         }
@@ -114,14 +90,14 @@ namespace ProjectManagement.APIs.TimeSheets
                                       from p in pp.DefaultIfEmpty()
                                       select new
                                       {
-                                          UserName = p.User.FullName,
+                                          FullName = p.User.FullName,
                                           BillRole = p.BillRole,
-                                          BillRate = p.BillRate
+                                          BillRate = p.BillRate,
                                       };
 
                 foreach (var b in projectUserBill)
                 {
-                    billInfomation.Append($"{b.UserName} - {b.BillRole} - {b.BillRate}<br>");
+                    billInfomation.Append($"{b.FullName} - {b.BillRole} - {b.BillRate}<br>");
                 }
 
                 var timesheetProject = new TimesheetProject
@@ -148,6 +124,12 @@ namespace ProjectManagement.APIs.TimeSheets
                 throw new UserFriendlyException("Name is already exist !");
             }
 
+            var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
+            if (alreadyCreated)
+            {
+                throw new UserFriendlyException($"Timesheet {input.Month}/{input.Year} already exist !");
+            }
+
             await WorkScope.UpdateAsync(ObjectMapper.Map<TimesheetDto, Timesheet>(input, timesheet));
             return input;
         }
@@ -158,9 +140,16 @@ namespace ProjectManagement.APIs.TimeSheets
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
 
-            var hasTimesheetproject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.TimesheetId == timesheetId);
+            var hasTimesheetproject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.TimesheetId == timesheetId && x.FilePath != null);
+
             if (hasTimesheetproject)
-                throw new UserFriendlyException("Timesheet has Timesheet Project");
+                throw new UserFriendlyException("Timesheet has attached file !");
+
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).ToListAsync();
+            foreach(var item in timesheetProject)
+            {
+                await WorkScope.DeleteAsync(item);
+            }
 
             await WorkScope.DeleteAsync(timesheet);
         }

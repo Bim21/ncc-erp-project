@@ -18,11 +18,13 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
 {
     public class PMReportProjectIssueAppService : ProjectManagementAppServiceBase
     {
-        [HttpPost]
-        public async Task<GridResult<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(GridParam input, long ProjectId)
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)]
+        public async Task<List<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(long ProjectId)
         {
             var query = from pr in WorkScope.GetAll<PMReport>().Where(x => x.IsActive == true)
-                        join prp in WorkScope.GetAll<PMReportProject>() on pr.Id equals prp.PMReportId into lstPrp
+                        join prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId)
+                        on pr.Id equals prp.PMReportId into lstPrp
                         from p in lstPrp.DefaultIfEmpty()
                         join prpi in WorkScope.GetAll<PMReportProjectIssue>() on p.Id equals prpi.PMReportProjectId into lstIssue
                         from rs in lstIssue.DefaultIfEmpty()
@@ -37,7 +39,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                             MeetingSolution = rs.MeetingSolution,
                             Status = rs.Status.ToString()
                         };
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
     }
 }
