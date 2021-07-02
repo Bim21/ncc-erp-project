@@ -40,7 +40,7 @@ namespace ProjectManagement.APIs.CheckListItems
         [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Create)]
         public async Task<CheckListItemDetailDto> Create(CheckListItemDetailDto input)
         {
-            var isExist = await WorkScope.GetAll<CheckListItem>().AnyAsync(x => x.Code.Contains(input.Code));
+            var isExist = await WorkScope.GetAll<CheckListItem>().AnyAsync(x => x.Code.ToLower() == input.Code.ToLower());
             if (isExist)
             {
                 throw new UserFriendlyException("Code '" + input.Code + "' of Checklist Item already existed.");
