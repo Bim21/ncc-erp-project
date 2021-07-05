@@ -62,24 +62,16 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   }
 
   public saveAndClose(): void {
-    if (this.project.startTime) {
-      this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");
-    }
     if (this.project.endTime) {
       this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
     }
-    if (new Date(this.project.startTime) < new Date(this.project.endTime)) {
       this.isLoading = true;
       this.project.status = 0;
       this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("edited branch successfully");
-        this.readMode=true;
+        abp.notify.success("updated: " + this.project.name);
+        this.readMode = true;
         this.getProjectDetail();
       }, () => this.isLoading = false);
-    }
-    else {
-      abp.notify.error("Project end time can't less than start time")
-    }
   }
 
 }
