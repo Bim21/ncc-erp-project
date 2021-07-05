@@ -128,11 +128,13 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     });
   }
   showDetail(id: any) {
+    if (this.permission.isGranted(this.PmManager_Project_ViewDetail)) {
+      this.router.navigate(['app/list-project-detail'], {
+        queryParams: {
+          id: id,
+        }
+      })
+    }
 
-    this.router.navigate(['app/list-project-detail'], {
-      queryParams: {
-        id: id,
-      }
-    })
   }
 }

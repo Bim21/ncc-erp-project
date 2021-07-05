@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { ClientService } from './../../../../../service/api/client.service';
 import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../../service/api/user.service';
@@ -22,7 +23,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public clientList: ClientDto[] = [];
   public pmList: UserDto[] = [];
   public project = {} as ProjectDto
-
+  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
   constructor(injector: Injector, private userService: UserService, private clientService: ClientService, private projectService: ListProjectService, private route: ActivatedRoute) {
     super(injector);
   }
