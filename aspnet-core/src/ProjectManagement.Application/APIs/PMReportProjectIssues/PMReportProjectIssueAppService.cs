@@ -22,22 +22,21 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)]
         public async Task<List<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(long ProjectId)
         {
-            var query = from pr in WorkScope.GetAll<PMReport>().Where(x => x.IsActive == true)
+            var query = from pr in WorkScope.GetAll<PMReport>().Where(x => x.IsActive)
                         join prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId)
                         on pr.Id equals prp.PMReportId into lstPrp
                         from p in lstPrp.DefaultIfEmpty()
-                        join prpi in WorkScope.GetAll<PMReportProjectIssue>() on p.Id equals prpi.PMReportProjectId into lstIssue
-                        from rs in lstIssue.DefaultIfEmpty()
+                        join prpi in WorkScope.GetAll<PMReportProjectIssue>() on p.Id equals prpi.PMReportProjectId
                         select new GetPMReportProjectIssueDto
                         {
-                            PMReportProjectId = rs.PMReportProjectId,
-                            Description = rs.Description,
-                            Impact = rs.Impact,
-                            Critical = rs.Critical.ToString(),
-                            Source = rs.Source.ToString(),
-                            Solution = rs.Solution,
-                            MeetingSolution = rs.MeetingSolution,
-                            Status = rs.Status.ToString()
+                            PMReportProjectId = prpi.PMReportProjectId,
+                            Description = prpi.Description,
+                            Impact = prpi.Impact,
+                            Critical = prpi.Critical.ToString(),
+                            Source = prpi.Source.ToString(),
+                            Solution = prpi.Solution,
+                            MeetingSolution = prpi.MeetingSolution,
+                            Status = prpi.Status.ToString()
                         };
             return await query.ToListAsync();
         }

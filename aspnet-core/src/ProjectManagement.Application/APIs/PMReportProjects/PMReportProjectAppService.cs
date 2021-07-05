@@ -44,27 +44,26 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId)
         {
-            var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
-                        join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Past) on p.Id equals pu.ProjectId into pp
-                        from x in pp.DefaultIfEmpty()
-                        select new GetProjectUserDto
-                        {
-                            Id = x.Id,
-                            UserId = x.UserId,
-                            UserName = x.User.FullName,
-                            ProjectId = x.ProjectId,
-                            ProjectName = x.Project.Name,
-                            ProjectRole = x.ProjectRole.ToString(),
-                            AllocatePercentage = x.AllocatePercentage,
-                            StartTime = x.StartTime.Date,
-                            Status = x.Status.ToString(),
-                            IsExpense = x.IsExpense,
-                            ResourceRequestId = x.ResourceRequestId,
-                            ResourceRequestName = x.ResourceRequest.Name,
-                            PMReportId = x.PMReportId,
-                            PMReportName = x.PMReport.Name,
-                            IsFutureActive = x.IsFutureActive
-                        };
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
+                            .Where(x => x.Status == ProjectUserStatus.Present)
+                            .Select(x => new GetProjectUserDto
+                            {
+                                Id = x.Id,
+                                UserId = x.UserId,
+                                UserName = x.User.FullName,
+                                ProjectId = x.ProjectId,
+                                ProjectName = x.Project.Name,
+                                ProjectRole = x.ProjectRole.ToString(),
+                                AllocatePercentage = x.AllocatePercentage,
+                                StartTime = x.StartTime.Date,
+                                Status = x.Status.ToString(),
+                                IsExpense = x.IsExpense,
+                                ResourceRequestId = x.ResourceRequestId,
+                                ResourceRequestName = x.ResourceRequest.Name,
+                                PMReportId = x.PMReportId,
+                                PMReportName = x.PMReport.Name,
+                                IsFutureActive = x.IsFutureActive
+                            });
 
             return await query.ToListAsync();
         }
@@ -72,27 +71,26 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId)
         {
-            var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
-                                     join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future) on p.Id equals pu.ProjectId into pp
-                                     from x in pp.DefaultIfEmpty()
-                                     select new GetProjectUserDto
-                                     {
-                                         Id = x.Id,
-                                         UserId = x.UserId,
-                                         UserName = x.User.FullName,
-                                         ProjectId = x.ProjectId,
-                                         ProjectName = x.Project.Name,
-                                         ProjectRole = x.ProjectRole.ToString(),
-                                         AllocatePercentage = x.AllocatePercentage,
-                                         StartTime = x.StartTime.Date,
-                                         Status = x.Status.ToString(),
-                                         IsExpense = x.IsExpense,
-                                         ResourceRequestId = x.ResourceRequestId,
-                                         ResourceRequestName = x.ResourceRequest.Name,
-                                         PMReportId = x.PMReportId,
-                                         PMReportName = x.PMReport.Name,
-                                         IsFutureActive = x.IsFutureActive
-                                     };
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
+                            .Where(x => x.Status == ProjectUserStatus.Future)
+                            .Select(x => new GetProjectUserDto
+                            {
+                                Id = x.Id,
+                                UserId = x.UserId,
+                                UserName = x.User.FullName,
+                                ProjectId = x.ProjectId,
+                                ProjectName = x.Project.Name,
+                                ProjectRole = x.ProjectRole.ToString(),
+                                AllocatePercentage = x.AllocatePercentage,
+                                StartTime = x.StartTime.Date,
+                                Status = x.Status.ToString(),
+                                IsExpense = x.IsExpense,
+                                ResourceRequestId = x.ResourceRequestId,
+                                ResourceRequestName = x.ResourceRequest.Name,
+                                PMReportId = x.PMReportId,
+                                PMReportName = x.PMReport.Name,
+                                IsFutureActive = x.IsFutureActive
+                            });
 
             return await query.ToListAsync();
         }

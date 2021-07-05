@@ -46,6 +46,31 @@ namespace ProjectManagement.APIs.ProjectUsers
             return await query.ToListAsync();
         }
 
+        [HttpGet]
+        public async Task<GetProjectUserDto> Get(long projectUserId)
+        {
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Id == projectUserId)
+                                .Select(x => new GetProjectUserDto
+                                {
+                                    Id = x.Id,
+                                    UserId = x.UserId,
+                                    UserName = x.User.FullName,
+                                    ProjectId = x.ProjectId,
+                                    ProjectName = x.Project.Name,
+                                    ProjectRole = x.ProjectRole.ToString(),
+                                    AllocatePercentage = x.AllocatePercentage,
+                                    StartTime = x.StartTime.Date,
+                                    Status = x.Status.ToString(),
+                                    IsExpense = x.IsExpense,
+                                    ResourceRequestId = x.ResourceRequestId,
+                                    ResourceRequestName = x.ResourceRequest.Name,
+                                    PMReportId = x.PMReportId,
+                                    PMReportName = x.PMReport.Name,
+                                    IsFutureActive = x.IsFutureActive
+                                });
+            return await query.FirstOrDefaultAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto input)
