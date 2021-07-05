@@ -29,7 +29,7 @@ namespace ProjectManagement.Entities
 
         [ForeignKey(nameof(ResourceRequestId))]
         public ResourceRequest ResourceRequest { get; set; }
-        public long ResourceRequestId { get; set; }
+        public long? ResourceRequestId { get; set; }
 
         [ForeignKey(nameof(PMReportId))]
         public PMReport PMReport { get; set; }
