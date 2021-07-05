@@ -74,7 +74,7 @@ namespace ProjectManagement.APIs.TimeSheets
             var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
             if (alreadyCreated)
             {
-                throw new UserFriendlyException($"Timesheet {input.Month}/{input.Year} already exist !");
+                throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
             }
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
@@ -124,10 +124,10 @@ namespace ProjectManagement.APIs.TimeSheets
                 throw new UserFriendlyException("Name is already exist !");
             }
 
-            var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
+            var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Id != input.Id && x.Year == input.Year && x.Month == input.Month);
             if (alreadyCreated)
             {
-                throw new UserFriendlyException($"Timesheet {input.Month}/{input.Year} already exist !");
+                throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
             }
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TimesheetDto, Timesheet>(input, timesheet));

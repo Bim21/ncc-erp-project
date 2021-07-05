@@ -57,6 +57,11 @@ namespace ProjectManagement.APIs.ProjectUsers
             if(input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't add people to the past !");
 
+            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            if (pmReportActive == null)
+                throw new UserFriendlyException("Can't find any active reports !");
+
+            input.PMReportId = pmReportActive.Id;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
 
             var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
@@ -88,6 +93,11 @@ namespace ProjectManagement.APIs.ProjectUsers
                 }
             }
 
+            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            if (pmReportActive == null)
+                throw new UserFriendlyException("Can't find any active reports !");
+
+            input.PMReportId = pmReportActive.Id;
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserDto, ProjectUser>(input, projectUser));
 
             return input;

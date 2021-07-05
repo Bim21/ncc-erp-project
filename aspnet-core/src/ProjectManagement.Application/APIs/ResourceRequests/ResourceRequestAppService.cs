@@ -7,6 +7,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.APIs.ResourceRequests.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ResourceRequests
 {
@@ -55,6 +57,50 @@ namespace ProjectManagement.APIs.ResourceRequests
                         };
                
             return await query.GetGridResult(query, input);
+        }
+
+        [HttpGet]
+        public async Task<List<GetProjectUserDto>> ProjectUserResourceRequestDetail(long resourceRequestId)
+        {
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ResourceRequestId == resourceRequestId)
+                                    .Select(x => new GetProjectUserDto
+                                    {
+                                        Id = x.Id,
+                                        UserId = x.UserId,
+                                        UserName = x.User.Name,
+                                        ProjectId = x.ProjectId,
+                                        ProjectName = x.Project.Name,
+                                        ProjectRole = x.ProjectRole.ToString(),
+                                        AllocatePercentage = x.AllocatePercentage,
+                                        StartTime = x.StartTime,
+                                        Status = x.Status.ToString(),
+                                        IsExpense = x.IsExpense,
+                                        ResourceRequestId = x.ResourceRequestId,
+                                        PMReportId = x.PMReportId,
+                                        IsFutureActive = x.IsFutureActive
+                                    });
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<ResourceRequestUserDto>> GetAvailableUser(DateTime startDate)
+        {
+            var users = await WorkScope.GetAll<User>().Where(x => x.IsActive).ToListAsync();
+
+            var query = (from u in users
+                         join pu in WorkScope.GetAll<ProjectUser>().Include(x => x.Project)
+                         .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
+                         .Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present)
+                         on u.Id equals pu.UserId 
+                         group pu by new { u.Id, u.FullName} into pp
+                         select new ResourceRequestUserDto
+                        {
+                            UserId = pp.Key.Id,
+                            UserName = pp.Key.FullName,
+                            Undisposed = (byte)(100 - pp.Sum(x => x.AllocatePercentage))
+                        }).Where(x => x.Undisposed > 0).AsQueryable();
+
+            return query.ToList();
         }
 
         [HttpPost]

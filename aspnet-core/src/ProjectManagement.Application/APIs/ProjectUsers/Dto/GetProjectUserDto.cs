@@ -17,7 +17,7 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public DateTime StartTime { get; set; }
         public string Status { get; set; }
         public bool IsExpense { get; set; }
-        public long ResourceRequestId { get; set; }
+        public long? ResourceRequestId { get; set; }
         public string ResourceRequestName { get; set; }
         public long PMReportId { get; set; }
         public string PMReportName { get; set; }

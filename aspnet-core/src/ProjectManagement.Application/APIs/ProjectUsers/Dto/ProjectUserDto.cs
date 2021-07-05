@@ -19,7 +19,7 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public DateTime StartTime { get; set; }
         public ProjectUserStatus Status { get; set; }
         public bool IsExpense { get; set; }
-        public long ResourceRequestId { get; set; }
+        public long? ResourceRequestId { get; set; }
         public long PMReportId { get; set; }
         public bool IsFutureActive { get; set; }
     }

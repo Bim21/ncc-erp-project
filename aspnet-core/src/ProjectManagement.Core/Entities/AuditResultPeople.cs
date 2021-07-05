@@ -28,5 +28,9 @@ namespace ProjectManagement.Entities
         public string Note { get; set; }
 
         public bool IsPass { get; set; }
+
+        [ForeignKey(nameof(CuratorId))]
+        public User Curator { get; set; }
+        public long CuratorId { get; set; }
     }
 }
