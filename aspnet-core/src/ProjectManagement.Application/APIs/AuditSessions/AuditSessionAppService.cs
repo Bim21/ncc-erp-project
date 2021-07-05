@@ -94,6 +94,7 @@ namespace ProjectManagement.APIs.AuditSessions
             return await query.GetGridResult(query, input);
         }
 
+
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_View)]
         public async Task<List<AuditSessionDetailDto>> Get(long Id)
         {
@@ -104,13 +105,14 @@ namespace ProjectManagement.APIs.AuditSessions
             return await (from ar in WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == Id)
                           select new AuditSessionDetailDto
                           {
-                              Id = checkExist.Id,
+                              Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
                               PmName = ar.PM.Name,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
                               CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && x.IsPass).Count(),
+                              Status = ar.Status.ToString()
                           }).ToListAsync();
         }
 

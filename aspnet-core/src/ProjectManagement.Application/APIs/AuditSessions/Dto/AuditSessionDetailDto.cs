@@ -19,5 +19,6 @@ namespace ProjectManagement.APIs.AuditSessions.Dto
         public long CountProjectCreate { get; set; }
         public long CountProjectCheck { get; set; }
         public long CountFail { get; set; }
+        public string Status { get; set; }
     }
 }
