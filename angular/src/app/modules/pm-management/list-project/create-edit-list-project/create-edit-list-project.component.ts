@@ -60,21 +60,27 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
 
     }
+    if(new Date(this.project.startTime) < new Date(this.project.endTime)){
+      this.isLoading = true
+      if (this.data.command == "create") {
+        this.project.status = 0;
+        this.projectService.create(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+          abp.notify.success("created branch successfully");
+          this.dialogRef.close(this.project);
+        }, () => this.isLoading = false);
+      }
+      else {
+        this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+          abp.notify.success("edited branch successfully");
+          this.dialogRef.close(this.project);
+        }, () => this.isLoading = false);
+      }
+    }
+    else{
+      abp.notify.error("Project end time can't less than start time")
+    }
 
-    this.isLoading = true
-    if (this.data.command == "create") {
-      this.project.status = 0;
-      this.projectService.create(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("created branch successfully");
-        this.dialogRef.close(this.project);
-      }, () => this.isLoading = false);
-    }
-    else {
-      this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("edited branch successfully");
-        this.dialogRef.close(this.project);
-      }, () => this.isLoading = false);
-    }
+ 
   }
   private getAllClient(): void {
     this.clientService.getAll().pipe(catchError(this.clientService.handleError)).subscribe(data => {
