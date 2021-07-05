@@ -48,7 +48,7 @@ namespace ProjectManagement.APIs.ChecklistTitles
         [AbpAuthorize(PermissionNames.CheckList_CheckListCategory_Create)]
         public async Task<CheckListCategoryDto> Create(CheckListCategoryDto input)
         {
-            var isExist = await WorkScope.GetAll<CheckListCategory>().AnyAsync(x => x.Name.ToLower().Contains(input.Name));
+            var isExist = await WorkScope.GetAll<CheckListCategory>().AnyAsync(x => x.Name.ToLower() == input.Name.ToLower()s));
             if (isExist)
             {
                 throw new UserFriendlyException("Name '" + input.Name + "' of Checklist Title already existed.");
