@@ -103,9 +103,11 @@ namespace ProjectManagement.APIs.Projects
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
 
-            if(input.StartTime.Date > input.EndTime.Value.Date)
+            if(input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
+            {
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
-
+            }
+               
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
 
             return input;

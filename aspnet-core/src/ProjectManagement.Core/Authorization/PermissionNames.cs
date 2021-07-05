@@ -277,6 +277,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_ResourceRequest,
                     PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject,
 
+                    //PMReportProjectIssues
+                    PermissionNames.DeliveryManagement_PMReportProjectIssue,
+                    PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek,
+
                     //Project Milestone
                     PermissionNames.PmManager_ProjectMilestone,
                     PermissionNames.PmManager_ProjectMilestone_Create,
@@ -418,6 +422,10 @@ namespace ProjectManagement.Authorization
                  //Resource Request
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Resource Request By Project" },
+
+                 //PMReportProjectIssues
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PMReport Project Issues" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Problems Of The Week" },
 
                  //Project Milestone
                  new SystemPermission{ Name =  PermissionNames.PmManager_ProjectMilestone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Milestone" },
