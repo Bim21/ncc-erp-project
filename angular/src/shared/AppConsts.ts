@@ -17,4 +17,17 @@ export class AppConsts {
     static readonly authorization = {
         encryptedAuthTokenName: 'enc_auth_token'
     };
+
+    static readonly statusStyle ={
+        START: "badge badge-pill badge-primary",
+        APPROVED:"badge badge-pill badge-success",
+        END:"badge badge-pill badge-secondary",
+        REJECT:"badge badge-pill badge-danger",
+        PENDINGCEO:"badge badge-pill badge-warning",
+        PENDINGCFO:"badge badge-pill badge-dark",
+        TRANSFERED:"badge badge-pill badge-info",
+        PENDINGIT:"badge badge-pill badge-light"
+    }
+
+
 }

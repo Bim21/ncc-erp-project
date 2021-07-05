@@ -1,32 +1,84 @@
-import { ProjectDto } from './../../../../../service/model/list-project.dto';
+import { ClientService } from './../../../../../service/api/client.service';
+import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
+import { UserService } from './../../../../../service/api/user.service';
+import { AppComponentBase } from '@shared/app-component-base';
+import { ProjectDto, ClientDto } from './../../../../../service/model/list-project.dto';
 import { catchError } from 'rxjs/operators';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-list-project-general',
   templateUrl: './list-project-general.component.html',
   styleUrls: ['./list-project-general.component.css']
 })
-export class ListProjectGeneralComponent implements OnInit {
+export class ListProjectGeneralComponent extends AppComponentBase implements OnInit {
   public readMode: boolean = true;
-  private projectId:number
-  constructor(private projectService:ListProjectService, private route:ActivatedRoute) { }
-  public project ={} as ProjectDto
+  private projectId: number;
+  public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
+  public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus)
+  public clientList: ClientDto[] = [];
+  public pmList: UserDto[] = [];
+  public project = {} as ProjectDto
+
+  constructor(injector: Injector, private userService: UserService, private clientService: ClientService, private projectService: ListProjectService, private route: ActivatedRoute) {
+    super(injector);
+  }
   ngOnInit(): void {
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
-    this.getProjectDetail()
-    
+    this.getProjectDetail();
+    this.getClient();
+    this.getPm();
   }
-  getProjectDetail(){
-    this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data=>{
-        this.project = data.result
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
+  }
+  public getProjectDetail(): void {
+    this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
+      this.project = data.result
+      this.project.projectType = this.APP_ENUM.ProjectType[this.project.projectType]
+      this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
     })
   }
-  editRequest() {
+  public editRequest(): void {
     this.readMode = false
   }
-  
+  public getClient(): void {
+    this.clientService.getAll().pipe(catchError(this.clientService.handleError)).subscribe(data => {
+      this.clientList = data.result;
+    })
+  }
+  public getPm(): void {
+    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.pmList = data.result.items;
+    })
+  }
+
+  public saveAndClose(): void {
+    if (this.project.startTime) {
+      this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");
+    }
+    if (this.project.endTime) {
+      this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
+    }
+    if (new Date(this.project.startTime) < new Date(this.project.endTime)) {
+      this.isLoading = true;
+      this.project.status = 0;
+      this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+        abp.notify.success("edited branch successfully");
+        this.readMode=true;
+        this.getProjectDetail();
+      }, () => this.isLoading = false);
+    }
+    else {
+      abp.notify.error("Project end time can't less than start time")
+    }
+  }
 
 }

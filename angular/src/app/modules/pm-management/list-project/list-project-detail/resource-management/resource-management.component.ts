@@ -1,3 +1,5 @@
+import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
+import { UserService } from './../../../../../service/api/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { projectUserDto, projectResourceRequestDto } from './../../../../../service/model/project.dto';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
@@ -23,20 +25,25 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public projectUserList: projectUserDto[] = [];
   public projectUserBill: projectUserDto[] = [];
   public projectResourceRequestList: projectResourceRequestDto[] = [];
+  public userStatusList = Object.keys(this.APP_ENUM.ProjectUserStatus);
+  public userList:UserDto[] =[];
 
-  constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService,
+  constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService:UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
   ];
   ngOnInit(): void {
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
-    // this.getProjectUser();
-    // this.getResourceRequestList();
+    this.getProjectUser();
+    this.getResourceRequestList();
     this.getUserBill();
+    this.getAllUser();
   }
   private getProjectUser() {
-    // this.projectUserService.getAll().subscribe(dat)
+    this.projectUserService.getAllProjectUser(this.projectId).pipe(catchError(this.projectUserService.handleError)).subscribe(data=>{
+      this.projectUserList =data.result;
+    })
   }
   private getResourceRequestList(): void {
     this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
@@ -47,6 +54,25 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
       this.projectUserBill = data.result
     })
+  }
+  private getAllUser(){
+    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data=>{
+      this.userList =data.result.items
+    })
+  }
+  
+  public addProjectUser(){
+    let newUser = {} as projectUserDto
+    newUser.createMode =true;
+    this.projectUserList.push(newUser)
+  }
+
+  private getValueByEnum(enumValue:number, enumObject) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
   }
 
 }

@@ -16,6 +16,7 @@ import { APP_ENUMS } from './AppEnums';
 export abstract class AppComponentBase {
 
     APP_ENUM = APP_ENUMS;
+    APP_CONST = AppConsts;
     localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
 
     localization: LocalizationService;
