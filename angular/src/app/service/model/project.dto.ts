@@ -26,6 +26,7 @@ export class projectUserDto {
     pmReportName: string;
     isFutureActive: boolean;
     id: number;
+    createMode?:boolean;
 }
 export class projectResourceRequestDto {
     name: string;

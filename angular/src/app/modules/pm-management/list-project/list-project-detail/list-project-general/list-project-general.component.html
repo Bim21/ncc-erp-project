@@ -68,7 +68,7 @@
                             Thời gian bắt đầu:
                         </label>
                         <div class="col-md-4 mt-2">
-                           <p>{{project.startTime}}</p>
+                           <p>{{project.startTime |date:"dd/MM/yyyy"}}</p>
                         </div>
                     </div>
                     <div class="form-group row detail ">
@@ -76,7 +76,7 @@
                             Thời gian kết thúc:
                         </label>
                         <div class="col-md-4 mt-2">
-                            <p>{{project.endTime}}</p>
+                            <p>{{project.endTime |date:"dd/MM/yyyy"}}</p>
                         </div>
                     </div>
                     <div class="form-group row" [hidden]="readMode">
