@@ -25,6 +25,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             var query = WorkScope.GetAll<ProjectUserBill>()
                         .Select(x => new GetProjectUserBillDto
                         {
+                            Id = x.Id,
                            UserId = x.UserId,
                            UserName = x.User.FullName,
                            ProjectId = x.ProjectId,
@@ -46,6 +47,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             var query = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId)
                         .Select(x => new GetProjectUserBillDto
                         {
+                            Id = x.Id,
                             UserId = x.UserId,
                             UserName = x.User.Name,
                             ProjectId = x.ProjectId,

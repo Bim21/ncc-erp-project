@@ -22,6 +22,13 @@ namespace ProjectManagement.APIs.ResourceRequests
 {
     public class ResourceRequestAppService : ProjectManagementAppServiceBase
     {
+        private readonly ProjectUserAppService _projectUserAppService;
+
+        public ResourceRequestAppService(ProjectUserAppService projectUserAppService)
+        {
+            _projectUserAppService = projectUserAppService;
+        }
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject)]
         public async Task<List<GetResourceRequestDto>> GetAllByProject(long projectId)
@@ -83,15 +90,30 @@ namespace ProjectManagement.APIs.ResourceRequests
             return await query.ToListAsync();
         }
 
-        //[HttpPost]
-        //public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
-        //{
-        //    var user = new ProjectUser
-        //    {
-        //        UserId = input.Id,
-        //        ProjectId
-        //    };
-        //}
+        [HttpPost]
+        public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
+        {
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
+
+            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            if (pmReportActive == null)
+                throw new UserFriendlyException("Can't find any active reports !");
+
+            var projectuser = new ProjectUser
+            {
+                UserId = input.Id,
+                ProjectId = resourceRequest.ProjectId,
+                ResourceRequestId = resourceRequest.Id,
+                ProjectRole = input.ProjectRole,
+                StartTime = input.StartTime,
+                Status = ProjectUserStatus.Future,
+                IsExpense = true,
+                IsFutureActive = false,
+                PMReportId = pmReportActive.Id
+            };
+            input.Id = await WorkScope.InsertAndGetIdAsync(projectuser);
+            return input;
+        }
 
         [HttpGet]
         public async Task<List<ResourceRequestUserDto>> SearchAvailableUser(DateTime startDate)
@@ -179,10 +201,29 @@ namespace ProjectManagement.APIs.ResourceRequests
             return projectUser;
         }
 
+        [HttpGet]
+        public async Task<ProjectUserDto> ApproveRequest(ProjectUserDto input)
+        {
+            input.IsFutureActive = true;
+            input.Status = ProjectUserStatus.Present;
+
+            await _projectUserAppService.Update(input);
+            return input;
+        }
+
+        [HttpGet]
+        public async Task RejectRequest(long projectUserId)
+        {
+            var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
+
+            await WorkScope.DeleteAsync(projectUser);
+        }
 
         [HttpPost]
         public async Task<ResourceRequestDto> Create(ResourceRequestDto input)
         {
+            var isExist = await WorkScope.GetAll<ResourceRequest>().AnyAsync(x => x.Name == input.Name && x.ProjectId == input.ProjectId && x.TimeNeed == input.TimeNeed);
+
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(input));
             return input;
         }

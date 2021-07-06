@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.PMReportProjects.Dto;
+using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Constants.Enum;
@@ -112,6 +113,8 @@ namespace ProjectManagement.APIs.PMReportProjects
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProject>(input));
             return input;
         }
+
+       
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Update)]
