@@ -1,17 +1,18 @@
-﻿using Abp.AutoMapper;
+﻿
 using Abp.Domain.Entities;
-using ProjectManagement.Entities;
+using ProjectManagement.APIs.AuditResultPeoples.Dto;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProjectManagement.APIs.CheckListItems.Dto
+namespace ProjectManagement.APIs.ProjectCheckLists.Dto
 {
-    [AutoMapTo(typeof(CheckListItem))]
-    public class CheckListItemDto : Entity<long>
+    public class CheckListItemByProjectDto : Entity<long>
     {
         [MaxLength(255)]
         public string Name { get; set; }
         public string Code { get; set; }
-        public long CategoryId { get; set; }
+        public string CategoryName { get; set; }
         [MaxLength(10000)]
         public string Description { get; set; }
         [MaxLength(255)]
@@ -20,5 +21,7 @@ namespace ProjectManagement.APIs.CheckListItems.Dto
         public string PersonInCharge { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
+        public DateTime RegistrationDate { get; set; }
+        public List<GetAuditResultPeopleDto> people { get; set; }
     }
 }
