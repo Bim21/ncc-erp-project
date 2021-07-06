@@ -51,6 +51,31 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
+        public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
+        {
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId).ToListAsync();
+
+            var query = WorkScope.GetAll<Project>().Where(x => !timesheetProject.Contains(x.Id))
+                .Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+                .Select(x => new GetProjectDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Code = x.Code,
+                    ProjectType = x.ProjectType.ToString(),
+                    StartTime = x.StartTime.Date,
+                    EndTime = x.EndTime.Value.Date,
+                    Status = x.Status.ToString(),
+                    ClientId = x.ClientId,
+                    ClientName = x.Client.Name,
+                    IsCharge = x.IsCharge,
+                    PmId = x.PMId,
+                    PmName = x.PM.Name,
+                });
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllProjectTimesheetByTimesheet, PermissionNames.PmManager_TimesheetProject_ViewOnlyme, PermissionNames.PmManager_TimesheetProject_ViewOnlyActiveProject)]
         public async Task<List<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(long timesheetId)
         {
