@@ -64,7 +64,7 @@ namespace ProjectManagement.APIs.CheckListItems
         public async Task<CheckListItemDetailDto> Update(CheckListItemDetailDto input)
         {
             var checkExist = await WorkScope.GetAll<CheckListItem>()
-                                .AnyAsync(x => x.Code.ToLower().Contains(input.Code.ToLower()) && x.Id != input.Id);
+                                .AnyAsync(x => x.Code.ToLower() == input.Code.ToLower() && x.Id != input.Id);
             if (checkExist)
             {
                 throw new UserFriendlyException(string.Format("Code '{0}' of Checklist Item already existed.", input.Code));

@@ -77,7 +77,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               select new
                               {
                                   ar.AuditSessionId,
-                                  status = ar.Project.Status
+                                  status = ar.Status
                               };
             //trong 1 auditsession => list
             var query = from a in WorkScope.GetAll<AuditSession>()
@@ -88,12 +88,11 @@ namespace ProjectManagement.APIs.AuditSessions
                             EndTime = a.EndTime,
                             StartTime = a.StartTime,
                             CountFail = listSessionPeople.Where(x => x.AuditSessionId == a.Id && x.IsPass).Count(),
-                            CountProjectCheck = countStatus.Where(x => x.AuditSessionId == a.Id).Count(x => x.status == ProjectStatus.Closed),
-                            CountProjectCreate = countStatus.Where(x => x.AuditSessionId == a.Id).Count(x => x.status == ProjectStatus.InProgress)
+                            CountProjectCheck = countStatus.Where(x => x.AuditSessionId == a.Id).Count(x => x.status == AuditResultStatus.Done),
+                            CountProjectCreate = countStatus.Where(x => x.AuditSessionId == a.Id).Count(x => x.status == AuditResultStatus.New)
                         };
             return await query.GetGridResult(query, input);
         }
-
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_View)]
         public async Task<List<AuditSessionDetailDto>> Get(long Id)
@@ -109,6 +108,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
                               PmName = ar.PM.Name,
+                              ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
                               CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && x.IsPass).Count(),

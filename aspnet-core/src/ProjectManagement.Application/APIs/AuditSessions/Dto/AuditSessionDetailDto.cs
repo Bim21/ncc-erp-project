@@ -11,6 +11,7 @@ namespace ProjectManagement.APIs.AuditSessions.Dto
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public long ProjectId { get; set; }
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
         [ApplySearchAttribute]
