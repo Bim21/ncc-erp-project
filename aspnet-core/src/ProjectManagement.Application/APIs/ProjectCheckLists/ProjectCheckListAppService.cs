@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.AuditResultPeoples.Dto;
 using ProjectManagement.APIs.ProjectCheckLists.Dto;
@@ -70,6 +71,8 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             }
             return projectChecklists;
         }
+
+        [HttpGet]
 
         public async Task<List<CheckListItemByProjectDto>> GetCheckListItemByProject(long projectId, long auditSessionId)
         {// lấy về checklist item thuộc project thuộc đợt

@@ -22,6 +22,13 @@ using ProjectManagement.Users.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Constants.Enum;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
+using OfficeOpenXml;
+using Newtonsoft.Json;
+using NccCore.IoC;
+using Abp.Authorization.Users;
 
 namespace ProjectManagement.Users
 {
@@ -34,6 +41,7 @@ namespace ProjectManagement.Users
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IAbpSession _abpSession;
         private readonly LogInManager _logInManager;
+        private readonly IWorkScope _workScope;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -42,7 +50,8 @@ namespace ProjectManagement.Users
             IRepository<Role> roleRepository,
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
-            LogInManager logInManager)
+            LogInManager logInManager,
+            IWorkScope workScope)
             : base(repository)
         {
             _userManager = userManager;
@@ -51,6 +60,7 @@ namespace ProjectManagement.Users
             _passwordHasher = passwordHasher;
             _abpSession = abpSession;
             _logInManager = logInManager;
+            _workScope = workScope;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -222,6 +232,106 @@ namespace ProjectManagement.Users
             }
 
             return true;
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Pages_Users_ImportUserFromFile)]
+        public async Task<Object> ImportUserFromFile([FromForm] FileInputDto input)
+        {
+            if (input == null)
+            {
+                throw new UserFriendlyException(String.Format("No file upload!"));
+            }
+
+            var path = new String[] { ".xlsx", ".xltx" };
+            if (!path.Contains(Path.GetExtension(input.File.FileName)))
+            {
+                throw new UserFriendlyException(String.Format("Invalid file upload, only acept extension .xlsx, .xltx"));
+            }
+
+            List<User> listUser = new List<User>();
+            var failedList = new List<string>();
+            var successList = new List<User>();
+
+            var roleEmployee = _roleManager.GetRoleByName(RoleConstants.ROLE_EMPLOYEE);
+
+            using (var stream = new MemoryStream())
+            {
+                await input.File.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var rowCount = worksheet.Dimension.Rows;
+
+                    for(int row = 2; row <= rowCount; row++)
+                    {
+                        var fullName = worksheet.Cells[row, 3].Value.ToString().Trim();
+                        var name = SplitUsername(fullName);
+
+                        listUser.Add(new User
+                        {
+                            UserName = $"{name.Name.Trim().ToLower()}.{name.SurName.Replace(" ", "").ToLower()}",
+                            Name = name.Name,
+                            Surname = name.SurName,
+                            EmailAddress = worksheet.Cells[row, 8].Value.ToString().Trim().ToLower(),
+                            NormalizedEmailAddress = worksheet.Cells[row, 8].Value.ToString().Trim().ToUpper(),
+                            NormalizedUserName = "DEFAULT",
+                            IsActive = true,
+                            Password = "123qwe",
+                            UserCode = worksheet.Cells[row, 2].Value.ToString().Trim()
+                        });
+                    }
+                }
+            }
+
+            int index = 1;
+            foreach (var user in listUser)
+            {
+                try
+                {
+                    user.Id = await _workScope.InsertAndGetIdAsync(user);
+
+                    var userRole = new UserRole
+                    {
+                        UserId = user.Id,
+                        RoleId = roleEmployee.Id
+                    };
+                    await _workScope.InsertAndGetIdAsync(userRole);
+
+                    successList.Add(user);
+                }
+                catch (Exception e)
+                {
+                    failedList.Add("Error: Row: " + index + ". " + e.Message);
+                }
+                index++;
+            }
+
+            if (successList.Count() < 1)
+            {
+                throw new UserFriendlyException(String.Format("Invalid excel data."));
+            }
+            return new { successList, failedList };
+        }
+
+        private NameSplitDto SplitUsername(string fullName)
+        {
+            var name = "";
+            var surName = "";
+            for (int i = 0; i < fullName.Length; i++)
+            {
+                if (fullName[i] == ' ')
+                {
+                    name = fullName.Substring(0, i);
+                    surName = fullName.Substring(i + 1, fullName.Length - i - 1);
+                    break;
+                }
+            }
+            return new NameSplitDto
+            {
+                Name = name,
+                SurName = surName
+            };
         }
     }
 }

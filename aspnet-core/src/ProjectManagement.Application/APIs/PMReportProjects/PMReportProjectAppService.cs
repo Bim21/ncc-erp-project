@@ -43,6 +43,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
@@ -70,6 +71,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
         public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
