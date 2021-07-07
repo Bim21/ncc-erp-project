@@ -85,10 +85,10 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                     .Select(x => new GetAuditResultPeopleDto
                                     {
                                         Id = x.Id,
-                                        CuratorName = x.Curator.Name,
+                                        CuratorId = x.CuratorId,
                                         IsPass = x.IsPass,
                                         Note = x.Note,
-                                        UserName = x.User.UserName,
+                                        UserId = x.UserId,
                                         CheckListItemId = x.CheckListItemId
                                     });
             return await WorkScope.GetAll<CheckListItem>()
