@@ -111,9 +111,11 @@ namespace ProjectManagement.Authorization
             public const string SaoDo_AuditResult_Create = "SaoDo.AuditResult.Create";
             public const string SaoDo_AuditResult_Delete = "SaoDo.AuditResult.Delete";
             public const string SaoDo_AuditResult_Update = "SaoDo.AuditResult.Update";
+            public const string SaoDo_AuditResult_GetNote = "SaoDo.AuditResult.GetNote";
+            public const string SaoDo_AuditResult_UpdateNote = "SaoDo.AuditResult.UpdateNote";
 
-            // Audit Session
-            public const string SaoDo_AuditSession = "SaoDo.AuditSession";
+        // Audit Session
+        public const string SaoDo_AuditSession = "SaoDo.AuditSession";
             public const string SaoDo_AuditSession_Create = "SaoDo.AuditSession.Create";
             public const string SaoDo_AuditSession_Delete = "SaoDo.AuditSession.Delete";
             public const string SaoDo_AuditSession_Update = "SaoDo.AuditSession.Update";
@@ -241,6 +243,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.SaoDo_AuditResult_Create,
                     PermissionNames.SaoDo_AuditResult_Delete,
                     PermissionNames.SaoDo_AuditResult_Update,
+                    PermissionNames.SaoDo_AuditResult_GetNote,
+                    PermissionNames.SaoDo_AuditResult_UpdateNote,
 
                     // Audit Session
                     PermissionNames.SaoDo_AuditSession,
@@ -387,6 +391,8 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Audit Result " },
                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Audit Result " },
                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Audit Result " },
+                 new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update note Audit Result " },
+                 new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_GetNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get note Audit Result " },
 
                  //Audit Session
                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditSession, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Audit Session" },
@@ -539,6 +545,8 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Audit Result " },
                                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Audit Result " },
                                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Audit Result " },
+                                 new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update note Audit Result " },
+                                 new SystemPermission{ Name =  PermissionNames.SaoDo_AuditResult_GetNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get note Audit Result " },
                             }
                         },
                         

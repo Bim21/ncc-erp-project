@@ -40,5 +40,19 @@ namespace ProjectManagement.APIs.AuditResults
         {
             await WorkScope.DeleteAsync<AuditResult>(id);
         }
+        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_GetNote)]
+        public async Task<string> GetNote(long id)
+        {
+            var isExist = await WorkScope.GetAsync<AuditResult>(id);
+            return isExist.Note;
+        }
+        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_UpdateNote)]
+        public async Task<string> UpdateNote(long id, string note)
+        {
+            var isExist = await WorkScope.GetAsync<AuditResult>(id);
+            isExist.Note = note;
+            await WorkScope.UpdateAsync(isExist);
+            return isExist.Note;
+        }
     }
 }
