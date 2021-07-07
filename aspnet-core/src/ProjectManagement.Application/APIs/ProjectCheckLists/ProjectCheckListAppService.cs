@@ -72,14 +72,15 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             return projectChecklists;
         }
 
-        [HttpGet]
-
-        public async Task<List<CheckListItemByProjectDto>> GetCheckListItemByProject(long projectId, long auditSessionId)
+        public async Task<List<CheckListItemByProjectDto>> GetCheckListItemByProject(long projectId, long? auditSessionId)
         {// lấy về checklist item thuộc project thuộc đợt
             var isExistProject = await WorkScope.GetAsync<Project>(projectId);
-            var isExistAuditSession = await WorkScope.GetAsync<AuditSession>(auditSessionId);
+            if (auditSessionId.HasValue)
+            {
+                var isExistAuditSession = await WorkScope.GetAsync<AuditSession>(auditSessionId.Value);
+            }
             var auditResultIds = await WorkScope.GetAll<AuditResult>()
-                                .Where(x => x.AuditSessionId == auditSessionId && x.ProjectId == projectId)
+                                .Where(x =>(!auditSessionId.HasValue || x.AuditSessionId == auditSessionId) && x.ProjectId == projectId)
                                 .Select(x => x.Id).ToListAsync();
             var checkListItemIds = await WorkScope.GetAll<ProjectCheckList>().Where(x => x.ProjectId == projectId)
                                     .Select(x => x.CheckListItemId).ToListAsync();
