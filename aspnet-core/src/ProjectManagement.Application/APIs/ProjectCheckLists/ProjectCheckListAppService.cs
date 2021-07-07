@@ -86,9 +86,11 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                     {
                                         Id = x.Id,
                                         CuratorId = x.CuratorId,
+                                        CuratorName = x.Curator.FullName,
                                         IsPass = x.IsPass,
                                         Note = x.Note,
                                         UserId = x.UserId,
+                                        UserName = x.User.FullName,
                                         CheckListItemId = x.CheckListItemId
                                     });
             return await WorkScope.GetAll<CheckListItem>()

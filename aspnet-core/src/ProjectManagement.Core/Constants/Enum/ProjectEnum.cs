@@ -49,8 +49,10 @@ namespace ProjectManagement.Constants.Enum
         }
         public enum ProjectMilestoneStatus
         {
-            Paid = 0,
-            UAT = 1
+            Upcoming = 0,
+            UAT = 1,
+            Paid = 2,
+            Fail = 3
         }
         public enum ProjectStatus
         {
