@@ -35,4 +35,10 @@ export class DeliveryComponent extends AppComponentBase implements OnInit {
 
     })
   }
+  routingWeeklyReportTab(){
+    this.router.navigate(['weekly-report-tab'],{
+      relativeTo:this.route
+    })
+    
+  }
 }

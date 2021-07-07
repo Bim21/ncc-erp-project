@@ -50,6 +50,18 @@ export class projectUserBillDto {
     endTime: string;
     currency: number;
     isActive: boolean;
+    createMode?:boolean;
     id: number;
+}
+export class MilestoneDto{
+    projectId : number;
+    name :string;
+    description :string;
+    flag :string  ;
+    status :string  ;
+    uatTimeStart :  string;
+    uatTimeEnd :  string;
+    note :string;
+    id?: number
     createMode?:boolean;
 }

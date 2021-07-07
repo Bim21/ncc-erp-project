@@ -112,6 +112,12 @@ export const APP_ENUMS = {
         TESTER: 2,
         BA: 3,
         Artist: 4,
+    },
+    SaodoStatus:
+    {
+        New:0,
+        InProcess:1,
+        Done:2
     }
 
 }

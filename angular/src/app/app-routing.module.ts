@@ -1,3 +1,8 @@
+import { WeeklyReportTabDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
+import { WeeklyReportTabComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab.component';
+import { SaoDoProjectDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-project-detail/sao-do-project-detail.component';
+import { InvoiceComponent } from './modules/timesheet/invoice/invoice.component';
+import { SaoDoDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-detail.component';
 import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
 import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
 import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
@@ -61,6 +66,12 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
           {
             path: "timesheet",
             component: TimesheetComponent,
+            data: { permission: "" },
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "invoice",
+            component: InvoiceComponent,
             data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
@@ -137,8 +148,28 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
                 component: ProjectMilestoneTabComponent,
                 canActivate: [AppRouteGuard],
               },
+              {
+                path: "weekly-report-tab",
+                component: WeeklyReportTabComponent,
+                canActivate: [AppRouteGuard],
+              },
             ]
           },
+          {
+            path: "weeklyReportTabDetail",
+            component: WeeklyReportTabDetailComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "saodoDetail",
+                component: SaoDoDetailComponent,
+                canActivate: [AppRouteGuard],
+          },
+          {
+            path: "saodoProjectDetail",
+                component: SaoDoProjectDetailComponent,
+                canActivate: [AppRouteGuard],
+          }
         ]
       }
     ])

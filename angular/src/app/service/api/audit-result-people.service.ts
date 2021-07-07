@@ -6,14 +6,14 @@ import { BaseApiService } from './base-api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SaodoService extends BaseApiService {
+export class AuditResultPeopleService extends BaseApiService {
 
   changeUrl() {
-    return 'AuditSession'
+    return 'AuditResultPeople'
   }
   constructor(http: HttpClient) {
     super(http);
   }
-
+  
 
 }

@@ -5,7 +5,7 @@
                 <h1>{{'Sao do' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button type="button" class="btn bg-blue" (click)="createChecklistTitle()">
+                <button *ngIf="permission.isGranted(SaoDo_AuditSessiont_Create)" type="button" class="btn bg-blue" (click)="createSaodo()">
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -61,12 +61,15 @@
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>    
-                            <th>Name</th>
-                            <th>action</th>
+                            <th>Đợt</th>
+                            <th>Số project đã tạo</th>
+                            <th>Số project đã kiểm tra</th>
+                            <th>Tổng số sai phạm</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let checkList of checkListTitleList  |paginate
+                        <tr *ngFor="let saodo of listSaoDo  |paginate
                 : {
                     id: 'server',
                     itemsPerPage: pageSize,
@@ -74,18 +77,23 @@
                     totalItems: totalItems
                   }; let i = index">
                             <td>{{i+1}}</td>
-                            <td>{{checkList.name}}</td>
+                            <td><span
+                                class="hyperlink" (click)="showDetail(saodo)">{{saodo.name}}</span></td>
+                            <td>{{saodo.countProjectCreate}}</td>
+                            <td>{{saodo.countProjectCheck}}</td>
+                            <td>{{saodo.countFail}}</td>
                             <td  class="text-center">
-                                <button  
-                                class="btn btn-sm bg-secondary mr-1" 
-                                (click)="editchecklistTitle(checkList)" >
-                                <i class="fas fa-pencil-alt"></i>
-
-                                Edit
+                                <button
+                                    *ngIf="permission.isGranted(SaoDo_AuditSessiont_Update)" 
+                                    class="btn btn-sm bg-secondary mr-1" 
+                                    (click)="editSaodo(saodo)" >
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
                             </button>
-                            <button 
+                            <button
+                                *ngIf="permission.isGranted(SaoDo_AuditSessiont_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
-                                (click)="delete(checkList)"
+                                (click)="delete(saodo)"
                                  #deleteBtn>
                                 <i class="fas fa-trash"></i>
                                 Delete

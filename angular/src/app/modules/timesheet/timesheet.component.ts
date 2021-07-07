@@ -1,4 +1,5 @@
-import { ActivatedRoute } from '@angular/router';
+import { PERMISSIONS_CONSTANT } from './../../constant/permission.constant';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TimesheetDto } from './../../service/model/timesheet.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
@@ -13,6 +14,11 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./timesheet.component.css']
 })
 export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> implements OnInit {
+  Timesheet_Timesheet = PERMISSIONS_CONSTANT.Timesheet_Timesheet;
+  Timesheet_Timesheet_Create = PERMISSIONS_CONSTANT. Timesheet_Timesheet_Create;
+  Timesheet_Timesheet_Delete = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Delete;
+  Timesheet_Timesheet_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
+  Timesheet_Timesheet_ViewAll = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewAll;
   public timesheetList:TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -51,7 +57,8 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     private timesheetService :TimesheetService,
     private dialog: MatDialog,
     injector:Injector,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+   
     ) {
     super(injector)
    }
@@ -101,6 +108,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
           id: id,
         }
       })
+      
     }
   
   

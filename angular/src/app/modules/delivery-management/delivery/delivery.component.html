@@ -9,6 +9,9 @@
                     <a [ngClass]="currentUrl.includes('milestone-tab')?'active':''"  mat-tab-link (click)="routingMileStoneTab()">
                         Project MileStone
                     </a>
+                    <a [ngClass]="currentUrl.includes('weekly-report-tab')?'active':''"  mat-tab-link (click)="routingWeeklyReportTab()">
+                        Weekly Report
+                    </a>
                 </nav>
                 <router-outlet></router-outlet>
             </div>
