@@ -5,7 +5,7 @@
                 <h1>Timesheet</h1>
             </div>
             <div class="col-6 text-right">
-                <button  (click)="createTimeSheet()"
+                <button  *ngIf="permission.isGranted(Timesheet_Timesheet_Create)"  (click)="createTimeSheet()"
                     class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                    Create
@@ -83,14 +83,15 @@
                             <td>{{item.totalProject}}</td>
                             <td>{{item.totalTimesheet}}</td>
                             <td  class="text-center">
-                                <button  *ngIf="item.isActive==true"
+                                <button  *ngIf="item.isActive==true && permission.isGranted(Timesheet_Timesheet_Update)"
+                                
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editTimesheet(item);$event.stopPropagation()" >
                                 <i class="fas fa-pencil-alt"></i>
 
                                 Edit
                             </button>
-                            <button *ngIf="item.isActive==true"
+                            <button *ngIf="item.isActive==true && permission.isGranted(Timesheet_Timesheet_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(item);$event.stopPropagation()"
                                  #deleteBtn>

@@ -20,37 +20,166 @@
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
                     <thead class="bg-light">
                         <tr>
-                            <th>STT</th>
                             <th>Milestone</th>
                             <th>Các chức năng cần tạo</th>
                             <th>Flag</th>
                             <th>Trạng thái</th>
                             <th>Mốc UAT</th>
                             <th>Thời điểm thanh toán</th>
-                            <th>Note</th>
+                            <th style="min-width: 100px;">Note</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span ></span></td>
+                        <tr *ngFor="let item of milestoneList |paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }; let i = index" >
+                            <td ><p class="mt-2">{{ i +1 }}</p></td>
                             <td>
-                                <!-- <input [ngModel]="item.name" #inputName="ngModel" #inputNameEl required
+                                <p class="mt-2"  *ngIf="!item.createMode">{{item.description}}</p>
+                                <textarea *ngIf="item.createMode"  [(ngModel)]="item.description" #inputDes="ngModel" #inputNameEl required
                                 [readonly]="item.createMode ==null" class="form-control" type="text"
-                                name="inputName" [value]=" item?.createMode ==null?item.name:newDetail.name "
-                                [placeholder]="item.createMode !=null?'name':''" #name minlength="2"> -->
+                                name="inputDescripton" 
+                                [placeholder]="item.createMode !=null?'LDescription':''" #note minlength="2">
+                            </textarea>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                                <p *ngIf="!item.createMode" class="mt-2">{{item.flag}}</p>
+                                <mat-form-field style="margin-top: -5px;"  *ngIf="item.createMode"
+                                    appearance="outline">
+                                    <mat-select name="flag"
+                                        placeholder="Flag"required [(ngModel)]="item.flag">
+                                        <ng-container *ngFor="let flag of flagList">
+                                            <mat-option [value]="APP_ENUM.MilestoneFlag[flag]"
+                                                >
+                                                {{
+                                                flag
+                                                }}</mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <p *ngIf="!item.createMode" class="mt-2" >{{item.status}}</p>
+
+
+                                <mat-form-field style="margin-top: -5px;"  *ngIf="item.createMode"
+                                    appearance="outline">
+                                    <mat-select name="status"
+                                        placeholder="Select Status"required [(ngModel)]="item.status">
+                                        <ng-container *ngFor="let status of statusList">
+                                            <mat-option [value]="APP_ENUM.ProjectMilestoneStatus[status]"
+                                                >
+                                                {{
+                                                status
+                                                }}</mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+                            <td>
+                                <p *ngIf="!item.createMode" class="mt-2">{{item.uatTimeStart |date:"dd/MM/yyyy"}}</p>
+                                <mat-form-field appearance="outline" *ngIf="item.createMode"  >
+                                    <input matInput [matDatepicker]="picker"   [(ngModel)]="item.uatTimeStart" 
+                                    name="inputUatStartTime" 
+                                    [placeholder]="item.createMode !=null?'Mốc UAT':''" #uatStartTime>
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                  </mat-form-field>
+                            </td>
+                            <td>
+                                <p *ngIf="!item.createMode" class="mt-2">{{item.uatTimeEnd |date:"dd/MM/yyyy"}}</p>
+                                <mat-form-field appearance="outline" *ngIf="item.createMode"  >
+                                    <input matInput [matDatepicker]="pickerEndTime" [(ngModel)]="item.uatTimeEnd" 
+                                    name="inputUatStartTime" 
+                                    [placeholder]="item.createMode !=null?'Thời điểm thanh toán':''" #uatTimeEnd>
+                                    <mat-datepicker-toggle matSuffix [for]="pickerEndTime"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerEndTime></mat-datepicker>
+                                  </mat-form-field>
+                            </td>
+                            <td>
+                                <p *ngIf="!item.createMode" class="mt-2">{{item.note}}</p>
+                                <textarea *ngIf="item.createMode"  [(ngModel)]="item.note" #inputNote="ngModel" #inputNameEl required
+                                    [readonly]="item.createMode ==null" class="form-control" type="text"
+                                    name="inputNote" 
+                                    [placeholder]="item.createMode !=null?'Note':''" #note minlength="2">
+                                </textarea>
+                            </td>
+                            <td *ngIf="item.createMode ==null" >
+                                <button  [disabled]="isEditing"
+                                class="btn btn-sm bg-secondary mr-1 mt-2" 
+                                (click)="item.createMode=true;edit(item);$event.stopPropagation()"
+                                 >
+                                <i class="fas fa-pencil-alt"></i>
+
+                                Edit
+                            </button>
+                            <button 
+                             
+                                class="btn btn-sm bg-danger ml-1 mt-2"
+                                (click)="delete(item);$event.stopPropagation()"
+                                 #deleteBtn>
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
+                            </td>
+                            <td *ngIf="item.createMode !=null" class="d-flex text-center" style="border: none;">
+                                <button  (click)="saveMilestoneRequest(item);"
+                                    type="submit" class="btn btn-primary mr-1 ml-3"
+                                    >Save</button>
+                                <button  (click)="refresh(); isAllowed =true; isEditing=false" class="btn btn-default">Cancel</button>
+
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <button style="border: none;" [hidden]="!isAllowed" (click)="addMore()" class=" bg-blue mt-2">
+                <button  [disabled]="isEditing" style="border: none;" [hidden]="!isAllowed" (click)="addMore()" class=" bg-blue mt-2">
                     <i class="fa fa-plus-square"></i>
                 </button>
+            </div>
+            <div class="card-footer bg-light border-top">
+                <div class="row">
+                    <div class="col-sm-4 col-12 text-sm-left text-center">
+                        <button class="btn btn-secondary" (click)="refresh()">
+                            <i class="fas fa-redo-alt"></i>
+                        </button>
+                        <mat-form-field style="margin-top: 10px; width: 20%;margin-left: 30px;">
+                            <mat-label>Number items</mat-label>
+                            <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">
+                                <mat-option [value]="5">
+                                    5
+                                </mat-option>
+                                <mat-option [value]="10">
+                                    10
+                                </mat-option>
+                                <mat-option [value]="20">
+                                    20
+                                </mat-option>
+                                <mat-option [value]="50">
+                                    50
+                                </mat-option>
+                                <mat-option [value]="100">
+                                    100
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-4 col-12 text-center">
+                        <p class="mb-0 my-2">
+                            {{ "TotalRecordsCount" | localize: totalItems }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4 col-12">
+                        <div class="float-sm-right m-auto">
+                            <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
+                            </abp-pagination-controls>
+                        </div>
+                    </div>
+                </div>
             </div>
            
         </div>

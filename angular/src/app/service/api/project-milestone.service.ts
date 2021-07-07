@@ -1,19 +1,17 @@
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api.service';
-
 @Injectable({
   providedIn: 'root'
 })
-export class SaodoService extends BaseApiService {
-
+export class ProjectMilestoneService extends BaseApiService {
   changeUrl() {
-    return 'AuditSession'
+    return 'ProjectMilestone'
   }
   constructor(http: HttpClient) {
     super(http);
+ 
   }
-
 
 }

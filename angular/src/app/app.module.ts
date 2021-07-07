@@ -1,3 +1,4 @@
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
 import { MilestoneComponent } from './modules/pm-management/list-project/list-project-detail/milestone/milestone.component';
@@ -66,7 +67,14 @@ import { DeliveryComponent } from './modules/delivery-management/delivery/delive
 import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
 import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
 import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { CreateEditSaodoComponent } from './modules/saodo-management/sao-do/create-edit-saodo/create-edit-saodo.component';
+import { SaoDoDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-detail.component';
+import { InvoiceComponent } from './modules/timesheet/invoice/invoice.component';
+import { CreateEditInvoiceComponent } from './modules/timesheet/invoice/create-edit-invoice/create-edit-invoice.component';
+import { CreateEditSaoDoProjectComponent } from './modules/saodo-management/sao-do/sao-do-detail/create-edit-sao-do-project/create-edit-sao-do-project.component';
+import { SaoDoProjectDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-project-detail/sao-do-project-detail.component';
+import { WeeklyReportTabComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab.component';
+import { WeeklyReportTabDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
 
 
 
@@ -129,6 +137,14 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProjectStatusTabComponent,
     ProjectMilestoneTabComponent,
     ListProjectGeneralComponent,
+    CreateEditSaodoComponent,
+    SaoDoDetailComponent,
+    InvoiceComponent,
+    CreateEditInvoiceComponent,
+    CreateEditSaoDoProjectComponent,
+    SaoDoProjectDetailComponent,
+    WeeklyReportTabComponent,
+    WeeklyReportTabDetailComponent,
     
   ],
   imports: [
