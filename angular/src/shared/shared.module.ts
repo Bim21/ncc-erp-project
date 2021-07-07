@@ -57,6 +57,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import { PercentageMaskDirective } from './directives/percentage-mask.directive';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -113,7 +114,8 @@ import {MatSelectModule} from '@angular/material/select';
         AbpModalFooterComponent,
         LocalizePipe,
         BusyDirective,
-        EqualValidator
+        EqualValidator,
+        PercentageMaskDirective
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -158,6 +160,7 @@ import {MatSelectModule} from '@angular/material/select';
         MatTooltipModule,
         MatTreeModule,
         MatFormFieldModule,
+        PercentageMaskDirective
     ]
 })
 export class SharedModule {

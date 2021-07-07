@@ -1,3 +1,13 @@
 th, td{
     text-align: center;
 }
+.disablePage ul li{
+    cursor: not-allowed;;
+}
+
+::ng-deep .mat-form-field-outline {
+    background: white;
+}
+::ng-deep .mat-checkbox-layout{
+    margin-top: 10px;
+}
