@@ -27,6 +27,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
+  
 
   // project user
   public projectUserList: projectUserDto[] = [];
@@ -34,15 +35,17 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userStatusList: string[] = Object.keys(this.APP_ENUM.ProjectUserStatus)
   public userForProjectUser: UserDto[] = [];
   public viewHistory: boolean = false;
-  public inProcess: boolean = false;
+  public projectUserProcess:boolean =false;
   // resource request
   public resourceRequestList: projectResourceRequestDto[] = [];
   public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public isEditRequest: boolean = false;
+  public requestProcess:boolean =false;
   // project user bill
   public userBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
   public isEditUserBill: boolean = false;
+  public userBillProcess:boolean=false;
 
 
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
@@ -86,7 +89,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     let newUser = {} as projectUserDto
     newUser.createMode = true;
     this.projectUserList.unshift(newUser)
-    this.inProcess = true;
+    this.projectUserProcess = true;
   }
 
   public getValueByEnum(enumValue: number, enumObject) {
@@ -109,7 +112,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       this.projectUserService.create(newUser).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         this.getProjectUser();
         abp.notify.success(`Added user to project`);
-        this.inProcess = false
+        this.projectUserProcess = false
       },
         () => {
           newUser.createMode = true
@@ -121,7 +124,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`updated user: ${user.userName}`);
         this.getProjectUser();
         this.isEditUserProject = false;
-        this.inProcess = false
+        this.projectUserProcess = false
       })
     }
   }
@@ -130,7 +133,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     user.createMode = true
     user.status = this.APP_ENUM.ProjectUserStatus[user.status]
     user.projectRole = this.APP_ENUM.ProjectUserRole[user.projectRole]
-    this.inProcess = true
+    this.projectUserProcess = true
   }
   removeUser(user: projectUserDto) {
     abp.message.confirm(
@@ -155,7 +158,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   cancelProjectUser() {
     this.getProjectUser();
     this.isEditUserProject = false;
-    this.inProcess = false
+    this.projectUserProcess = false
   }
   private filterProjectUserDropDown() {
    
@@ -167,7 +170,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public addResourcceRequest(): void {
     let newResource = {} as projectResourceRequestDto
     newResource.createMode = true;
-    this.inProcess = true;
+    this.requestProcess = true;
     this.resourceRequestList.unshift(newResource)
   }
 
@@ -180,7 +183,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       this.projectRequestService.create(request).pipe(catchError(this.projectRequestService.handleError)).subscribe(res => {
         abp.notify.success(`Created request: ${request.name}`)
         this.getResourceRequestList();
-        this.inProcess = false;
+        this.requestProcess = false;
       },
         () => { request.createMode = true })
     }
@@ -188,7 +191,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       this.projectRequestService.update(request).pipe(catchError(this.projectRequestService.handleError)).subscribe(res => {
         abp.notify.success(`Updated request: ${request.name}`)
         this.getResourceRequestList();
-        this.inProcess = false;
+        this.requestProcess = false;
       },
         () => { request.createMode = true })
     }
@@ -197,11 +200,11 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
 
   public cancelProjectRerequest(): void {
     this.getResourceRequestList();
-    this.inProcess = false
+    this.requestProcess = false
   }
   public editProjectRerequest(request: projectResourceRequestDto): void {
     request.createMode = true
-    this.inProcess = true
+    this.requestProcess = true
     this.isEditRequest = true
   }
   public removeProjectRerequest(request: projectResourceRequestDto): void {
@@ -224,7 +227,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public addUserBill(): void {
     let newUserBill = {} as projectUserBillDto
     newUserBill.createMode = true;
-    this.inProcess = true;
+    this.userBillProcess = true;
     this.userBillList.unshift(newUserBill)
     this.filterUserBill();
   }
@@ -238,7 +241,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
         abp.notify.success(`Created new user bill`)
         this.getUserBill();
-        this.inProcess = false;
+        this.userBillProcess = false;
       }, () => {
         userBill.createMode = true
       })
@@ -247,7 +250,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       this.projectUserBillService.update(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
         abp.notify.success(`Updated request user bill`)
         this.getUserBill();
-        this.inProcess = false;
+        this.userBillProcess = false;
       },
         () => {
           userBill.createMode = true;
@@ -257,11 +260,11 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   public cancelUserBill(): void {
     this.getUserBill();
-    this.inProcess = false;
+    this.userBillProcess = false;
   }
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;
-    this.inProcess = true;
+    this.userBillProcess = true;
     this.isEditUserBill = true;
     userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
