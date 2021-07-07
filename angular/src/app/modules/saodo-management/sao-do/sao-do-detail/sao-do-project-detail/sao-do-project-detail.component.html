@@ -14,7 +14,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-6">
-                        <p [hidden]="isEditingNote"><span>Đánh giá chung: </span><span *ngIf="!isEditingNote"  [(ngModel)]="note">{{note}}</span></p>
+                        <span ><span>Đánh giá chung: </span><span [hidden]="isEditingNote" *ngIf="!isEditingNote"  [(ngModel)]="note">{{note}}</span></span>
                         <textarea [(ngModel)]="note" [hidden]="!isEditingNote"  style="height: 50px;" type="text" class="form-control" name="keyword" placeholder="Đánh giá chung" 
                         ></textarea>
                         
@@ -24,9 +24,10 @@
                             <button *ngIf="!isEditingNote" (click)="isEditingNote=true"  type="button" class="btn bg-blue">
                                 <i class="fas fa-pencil-alt"></i> 
                             </button>
-                            <button *ngIf="isEditingNote" (click)="saveNote();isEditingNote=false"  type="button" class="btn bg-blue">
+                            <button *ngIf="isEditingNote" (click)="saveNote();isEditingNote=false"  type="button" style="margin-right: 20px;" class="btn bg-blue">
                                 Save
                             </button>
+                            <button *ngIf="isEditingNote" (click)="getAllCheckList();isEditingNote=false"  class="btn btn-default">Cancel</button>
     
                         </div>
                     </div>
@@ -34,7 +35,7 @@
             </div>
             
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                <table style="border-collapse: collapse;" class="table text-nowrap">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>    
@@ -53,7 +54,7 @@
                             <td style="white-space: normal;width: 200px;">{{item.categoryName}}</td>
                             <td style="white-space: normal;width: 200px;">{{item.name}}</td>
                             <td style="white-space: normal;min-width: 300px;">{{item.description}}</td>
-                            <td>{{item.registrationDate}}</td>
+                            <td>{{item.registrationDate | date:"dd/MM/yyyy"}}</td>
                             <td>{{item.auditTarget}}</td>
                             <td>{{item.personInCharge}}</td>
                             <td>
@@ -90,7 +91,7 @@
                                             <div *ngIf="form.createMode" class="form-group row required">
                                                 <button  (click)="save(item.id,form);isEditting=false;"type="submit" class="btn btn-primary mr-1 ml-3"
                                                     >Save</button>
-                                                <button  (click)="getAllCheckList();isEditting=false; "isAllowed =true;  class="btn btn-default">Cancel</button>
+                                                <button  (click)="getAllCheckList(); "isAllowed =true;  class="btn btn-default">Cancel</button>
 
                                             </div>
                                         </div>
