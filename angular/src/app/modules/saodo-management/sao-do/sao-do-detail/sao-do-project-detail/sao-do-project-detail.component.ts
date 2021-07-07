@@ -54,7 +54,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     })
   }
   getAllProjectUser(){
-    this.projectUserService.getAllProjectUser(this.projectId).subscribe(data=>{
+    this.projectUserService.getAllProjectUser(this.projectId,true).subscribe(data=>{
       this.projectUserList=data.result;
 
     })
