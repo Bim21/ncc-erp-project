@@ -62,11 +62,12 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   }
 
   public saveAndClose(): void {
+    this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");
     if (this.project.endTime) {
       this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
     }
       this.isLoading = true;
-      this.project.status = 0;
+      // this.project.status = 0;
       this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
         abp.notify.success("updated: " + this.project.name);
         this.readMode = true;

@@ -1,3 +1,4 @@
+import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
 import { MilestoneComponent } from './modules/pm-management/list-project/list-project-detail/milestone/milestone.component';
 import { WeeklyReportComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/weekly-report.component';
@@ -65,6 +66,7 @@ import { DeliveryComponent } from './modules/delivery-management/delivery/delive
 import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
 import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
 import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 
 
@@ -72,7 +74,7 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 @NgModule({
   declarations: [
     AppComponent,
@@ -144,6 +146,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     NgxPaginationModule,
     SocialLoginModule,
+    NgxMaskModule.forRoot(),
+    Ng2SearchPipeModule,
    
   
 

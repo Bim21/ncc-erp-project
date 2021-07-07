@@ -18,4 +18,7 @@ export class ProjectResourceRequestService extends BaseApiService {
   getAllResourceRequest(id:number):Observable<any>{
     return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${id}`);
   }
+  deleteProjectRequest(id: number): Observable<any> {
+    return this.http.delete<any>(this.rootUrl + `/Delete?resourceRequestId=${id}`)
+  }
 }

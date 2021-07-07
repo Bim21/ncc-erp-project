@@ -18,16 +18,25 @@ export class AppConsts {
         encryptedAuthTokenName: 'enc_auth_token'
     };
 
-    static readonly statusStyle ={
-        START: "badge badge-pill badge-primary",
-        APPROVED:"badge badge-pill badge-success",
-        END:"badge badge-pill badge-secondary",
-        REJECT:"badge badge-pill badge-danger",
-        PENDINGCEO:"badge badge-pill badge-warning",
-        PENDINGCFO:"badge badge-pill badge-dark",
-        TRANSFERED:"badge badge-pill badge-info",
-        PENDINGIT:"badge badge-pill badge-light"
+    static readonly statusStyle = {
+        PENDING: "badge badge-pill badge-primary",
+        DONE: "badge badge-pill badge-success",
+        Future: "badge badge-pill badge-secondary",
+        CANCELLED: "badge badge-pill badge-danger",
+        Present: "badge badge-pill badge-warning",
+        PENDINGCFO: "badge badge-pill badge-dark",
+        Past: "badge badge-pill badge-info",
+        Potential: "badge badge-pill badge-primary",
+        InProgress: "badge badge-pill badge-success",
+        Closed: "badge badge-pill badge-danger"
+        // Future:"badge badge-pill badge-light"
     }
-
+    static readonly ProjectTypeStyle = {
+        ODC:"badge badge-primary",
+        TimeAndMaterials : "badge badge-success",
+        FIXPRICE: "badge badge-danger",
+        PRODUCT: "badge badge-warning",
+        NoBill: "badge badge-info"
+    }
 
 }

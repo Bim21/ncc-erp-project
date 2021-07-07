@@ -79,9 +79,9 @@ th {
   transform: translateY(-1.1em) scale(0.75);
   width: 133.33333%;
 }
-.mat-form-field-flex {
-  background: white;
-}
+// .mat-form-field-flex {
+//   background: white;
+// }
 
 .mat-form-field-wrapper {
   padding-bottom: 0;
@@ -97,4 +97,35 @@ th {
 }
 i {
   cursor: pointer;
+}
+th{
+  border-top: none !important;
+  border-bottom: none !important;
+  background-color: #f8f9fa;
+}
+.fixTableHead {
+  overflow-y: auto;
+  max-height: 69vh;
+}
+
+.fixTableHead thead th {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  height: 5px;
+}
+
+div::-webkit-scrollbar {
+  height: 13px;
 }

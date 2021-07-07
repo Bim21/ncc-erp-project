@@ -14,7 +14,10 @@ export class ProjectUserService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
-  getAllProjectUser(id:number):Observable<any>{
-    return this.http.post<any>(this.rootUrl + `/GetAllByProject?projectId=${id}`,{});
+  getAllProjectUser(id: number, viewHistory?: boolean): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/GetAllByProject?projectId=${id}&viewHistory=${viewHistory}`, {});
+  }
+  removeProjectUser(userId: number): Observable<any> {
+    return this.http.delete<any>(this.rootUrl + `/Delete?projectUserId=${userId}`)
   }
 }

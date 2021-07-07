@@ -27,6 +27,7 @@ export class projectUserDto {
     isFutureActive: boolean;
     id: number;
     createMode?:boolean;
+    viewMode?:boolean;
 }
 export class projectResourceRequestDto {
     name: string;
@@ -36,7 +37,7 @@ export class projectResourceRequestDto {
     timeDone: string;
     note: string;
     id: number;
-
+    createMode?:boolean;
 }
 export class projectUserBillDto {
     userId: number;
@@ -50,4 +51,5 @@ export class projectUserBillDto {
     currency: number;
     isActive: boolean;
     id: number;
+    createMode?:boolean;
 }

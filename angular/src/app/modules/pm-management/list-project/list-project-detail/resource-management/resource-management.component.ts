@@ -1,7 +1,7 @@
 import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../../service/api/user.service';
 import { ActivatedRoute } from '@angular/router';
-import { projectUserDto, projectResourceRequestDto } from './../../../../../service/model/project.dto';
+import { projectUserDto, projectResourceRequestDto, projectUserBillDto } from './../../../../../service/model/project.dto';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { ProjectUserBillService } from './../../../../../service/api/project-user-bill.service';
 import { ProjectUserService } from './../../../../../service/api/project-user.service';
@@ -11,6 +11,7 @@ import { ClientDto } from '@app/service/model/list-project.dto';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { finalize, catchError } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-resource-management',
@@ -18,17 +19,33 @@ import { finalize, catchError } from 'rxjs/operators';
   styleUrls: ['./resource-management.component.css']
 })
 export class ResourceManagementComponent extends AppComponentBase implements OnInit {
-  private projectId:number;
+  private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
   public userListCurrentPage = 1;
-  public projectUserList: projectUserDto[] = [];
-  public projectUserBill: projectUserDto[] = [];
-  public projectResourceRequestList: projectResourceRequestDto[] = [];
-  public userStatusList = Object.keys(this.APP_ENUM.ProjectUserStatus);
-  public userList:UserDto[] =[];
+  public itemPerPage = 5;
+  public isEditUserProject: boolean = false;
+  public searchUser: string = "";
+  public searchUserBill: string = "";
 
-  constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService:UserService,
+  // project user
+  public projectUserList: projectUserDto[] = [];
+  public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole)
+  public userStatusList: string[] = Object.keys(this.APP_ENUM.ProjectUserStatus)
+  public userForProjectUser: UserDto[] = [];
+  public viewHistory: boolean = false;
+  public inProcess: boolean = false;
+  // resource request
+  public resourceRequestList: projectResourceRequestDto[] = [];
+  public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
+  public isEditRequest: boolean = false;
+  // project user bill
+  public userBillList: projectUserBillDto[] = [];
+  public userForUserBill: UserDto[] = [];
+  public isEditUserBill: boolean = false;
+
+
+  constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -40,39 +57,233 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getUserBill();
     this.getAllUser();
   }
+  // get data
   private getProjectUser() {
-    this.projectUserService.getAllProjectUser(this.projectId).pipe(catchError(this.projectUserService.handleError)).subscribe(data=>{
-      this.projectUserList =data.result;
+    this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+      this.projectUserList = data.result;
     })
   }
   private getResourceRequestList(): void {
     this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
-      this.projectResourceRequestList = data.result
+      this.resourceRequestList = data.result
     })
   }
   private getUserBill(): void {
     this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
-      this.projectUserBill = data.result
+      this.userBillList = data.result
     })
   }
-  private getAllUser(){
-    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data=>{
-      this.userList =data.result.items
+  private getAllUser() {
+    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.userForProjectUser = data.result.items;
+      this.userForUserBill = data.result.items;
     })
-  }
-  
-  public addProjectUser(){
-    let newUser = {} as projectUserDto
-    newUser.createMode =true;
-    this.projectUserList.push(newUser)
   }
 
-  private getValueByEnum(enumValue:number, enumObject) {
+  //  project user
+
+  public addProjectUser() {
+    let newUser = {} as projectUserDto
+    newUser.createMode = true;
+    this.projectUserList.unshift(newUser)
+    this.inProcess = true;
+  }
+
+  public getValueByEnum(enumValue: number, enumObject) {
     for (const key in enumObject) {
       if (enumObject[key] == enumValue) {
         return key;
       }
     }
+  }
+
+  saveProjectUser(user: projectUserDto) {
+    if (!this.isEditUserProject) {
+      let newUser: projectUserDto = this.projectUserList[0]
+      newUser.isFutureActive = false
+      newUser.projectId = this.projectId
+      newUser.isExpense = true;
+      newUser.status = "0";
+      newUser.startTime = moment(newUser.startTime).format("YYYY-MM-DD");
+      delete newUser["createMode"]
+      this.projectUserService.create(newUser).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        this.getProjectUser();
+        abp.notify.success(`Added user to project`);
+        this.inProcess = false
+      },
+        () => {
+          newUser.createMode = true
+        })
+    }
+    else {
+      user.startTime = moment(user.startTime).format("YYYY-MM-DD")
+      this.projectUserService.update(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        abp.notify.success(`updated user: ${user.userName}`);
+        this.getProjectUser();
+        this.isEditUserProject = false;
+        this.inProcess = false
+      })
+    }
+  }
+  editProjectUser(user: projectUserDto) {
+    this.isEditUserProject = true;
+    user.createMode = true
+    user.status = this.APP_ENUM.ProjectUserStatus[user.status]
+    user.projectRole = this.APP_ENUM.ProjectUserRole[user.projectRole]
+    this.inProcess = true
+  }
+  removeUser(user: projectUserDto) {
+    abp.message.confirm(
+      "Remove user: " + user.userName + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.removeProjectUser(user.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
+            abp.notify.success("Removed user " + user.userName + " from project " + user.projectName);
+            this.getProjectUser()
+          });
+        }
+      }
+    );
+  }
+  filterProjectUser(event) {
+    this.viewHistory = event.checked;
+    this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+      this.projectUserList = data.result;
+    })
+  }
+  cancelProjectUser() {
+    this.getProjectUser();
+    this.isEditUserProject = false;
+    this.inProcess = false
+  }
+  private filterProjectUserDropDown() {
+   
+    let userProjectList = this.projectUserList.map(item => item.userId)
+    this.userForProjectUser = this.userForUserBill.filter(user => userProjectList.indexOf(user.id) == -1)
+  }
+  // resource request
+
+  public addResourcceRequest(): void {
+    let newResource = {} as projectResourceRequestDto
+    newResource.createMode = true;
+    this.inProcess = true;
+    this.resourceRequestList.unshift(newResource)
+  }
+
+
+  public saveProjectRerequest(request: projectResourceRequestDto): void {
+    delete request["createMode"]
+    request.timeNeed = moment(request.timeNeed).format("YYYY-MM-DD");
+    if (!this.isEditRequest) {
+      request.projectId = this.projectId
+      this.projectRequestService.create(request).pipe(catchError(this.projectRequestService.handleError)).subscribe(res => {
+        abp.notify.success(`Created request: ${request.name}`)
+        this.getResourceRequestList();
+        this.inProcess = false;
+      },
+        () => { request.createMode = true })
+    }
+    else {
+      this.projectRequestService.update(request).pipe(catchError(this.projectRequestService.handleError)).subscribe(res => {
+        abp.notify.success(`Updated request: ${request.name}`)
+        this.getResourceRequestList();
+        this.inProcess = false;
+      },
+        () => { request.createMode = true })
+    }
+
+  }
+
+  public cancelProjectRerequest(): void {
+    this.getResourceRequestList();
+    this.inProcess = false
+  }
+  public editProjectRerequest(request: projectResourceRequestDto): void {
+    request.createMode = true
+    this.inProcess = true
+    this.isEditRequest = true
+  }
+  public removeProjectRerequest(request: projectResourceRequestDto): void {
+    abp.message.confirm(
+      `Delete request: ${request.name}`,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectRequestService.deleteProjectRequest(request.id).pipe(catchError(this.projectRequestService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted request: " + request.name);
+            this.getResourceRequestList();
+          });
+
+        }
+      }
+    );
+  }
+
+  // user bill
+  public addUserBill(): void {
+    let newUserBill = {} as projectUserBillDto
+    newUserBill.createMode = true;
+    this.inProcess = true;
+    this.userBillList.unshift(newUserBill)
+    this.filterUserBill();
+  }
+  public saveUserBill(userBill: projectUserBillDto): void {
+    delete userBill["createMode"]
+    userBill.isActive = true;
+    userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
+    userBill.endTime = moment(userBill.endTime).format("YYYY-DD-MM");
+    if (!this.isEditUserBill) {
+      userBill.projectId = this.projectId
+      this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
+        abp.notify.success(`Created new user bill`)
+        this.getUserBill();
+        this.inProcess = false;
+      }, () => {
+        userBill.createMode = true
+      })
+    }
+    else {
+      this.projectUserBillService.update(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
+        abp.notify.success(`Updated request user bill`)
+        this.getUserBill();
+        this.inProcess = false;
+      },
+        () => {
+          userBill.createMode = true;
+        })
+    }
+
+  }
+  public cancelUserBill(): void {
+    this.getUserBill();
+    this.inProcess = false;
+  }
+  public editUserBill(userBill: projectUserBillDto): void {
+    userBill.createMode = true;
+    this.inProcess = true;
+    this.isEditUserBill = true;
+    userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
+  }
+  public removeUserBill(userBill: projectUserBillDto): void {
+    abp.message.confirm(
+      "Delete user bill?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserBillService.deleteUserBill(userBill.id).pipe(catchError(this.projectUserBillService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted user bill");
+            this.getUserBill();
+          });
+        }
+      }
+    );
+  }
+  private filterUserBill() {
+    // userBillList
+    // userList
+    let usrBillIdList = this.userBillList.map(item => item.userId)
+    this.userForUserBill = this.userForUserBill.filter(user => usrBillIdList.indexOf(user.id) == -1)
   }
 
 }
