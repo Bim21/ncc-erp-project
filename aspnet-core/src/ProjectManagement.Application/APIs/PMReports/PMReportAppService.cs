@@ -39,7 +39,6 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<List<PMReportDto>> GetAll()
         {
             return await WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
