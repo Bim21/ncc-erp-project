@@ -23,9 +23,9 @@ export class AppConsts {
         DONE: "badge badge-pill badge-success",
         Future: "badge badge-pill badge-secondary",
         CANCELLED: "badge badge-pill badge-danger",
-        Present: "badge badge-pill badge-warning",
+        Present: "badge badge-pill badge-primary",
         PENDINGCFO: "badge badge-pill badge-dark",
-        Past: "badge badge-pill badge-info",
+        Past: "badge badge-pill badge-danger",
         Potential: "badge badge-pill badge-primary",
         InProgress: "badge badge-pill badge-success",
         Closed: "badge badge-pill badge-danger"

@@ -11,3 +11,6 @@ th, td{
 ::ng-deep .mat-checkbox-layout{
     margin-top: 10px;
 }
+.submit-btn:disabled i{
+    color: gray !important;
+}
