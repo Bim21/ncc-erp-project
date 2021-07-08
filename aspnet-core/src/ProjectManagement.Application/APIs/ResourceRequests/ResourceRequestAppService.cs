@@ -33,7 +33,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject)]
         public async Task<List<GetResourceRequestDto>> GetAllByProject(long projectId)
         {
-            var query = WorkScope.GetAll<ResourceRequest>().Where(x => x.ProjectId == projectId)
+            var query = WorkScope.GetAll<ResourceRequest>().Where(x => x.ProjectId == projectId).OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetResourceRequestDto
                         {
                             Id = x.Id,
@@ -50,6 +50,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(GridParam input)
         {
             var query = from rr in WorkScope.GetAll<ResourceRequest>()
@@ -68,6 +69,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)]
         public async Task<List<GetProjectUserDto>> ResourceRequestDetail(long resourceRequestId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ResourceRequestId == resourceRequestId)
@@ -91,6 +93,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest)]
         public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
@@ -116,7 +119,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpGet]
-        public async Task<List<ResourceRequestUserDto>> SearchAvailableUser(DateTime startDate)
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest)]
+        public async Task<List<ResourceRequestUserDto>> SearchAvailableUserForRequest(DateTime startDate)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
@@ -138,10 +142,11 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource)]
         public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed || (x.Status == ProjectUserStatus.Future && x.IsFutureActive))
+                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present)
                                .Select(x => new
                                {
                                    UserId = x.UserId,
@@ -161,6 +166,25 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture)]
+        public async Task<GridResult<AvailableResourceFutureDto>> AvailableResourceFuture(GridParam input)
+        {
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && !x.IsFutureActive)
+                        .Select(x => new AvailableResourceFutureDto
+                        {
+                            Id = x.Id,
+                            UserId = x.UserId,
+                            UserName = x.User.Name,
+                            Projectid = x.ProjectId,
+                            ProjectName = x.Project.Name,
+                            StartDate = x.StartTime.Date,
+                            Use = x.AllocatePercentage
+                        });
+            return await query.GetGridResult(query, input);
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_PlanUser)]
         public async Task<ProjectUser> PlanUser(PlanUserDto input)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
@@ -202,7 +226,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpGet]
-        public async Task<ProjectUserDto> ApproveRequest(ProjectUserDto input)
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser)]
+        public async Task<ProjectUserDto> ApproveUser(ProjectUserDto input)
         {
             input.IsFutureActive = true;
             input.Status = ProjectUserStatus.Present;
@@ -212,7 +237,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpGet]
-        public async Task RejectRequest(long projectUserId)
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_RejectUser)]
+        public async Task RejectUser(long projectUserId)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
 
@@ -220,6 +246,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Create)]
         public async Task<ResourceRequestDto> Create(ResourceRequestDto input)
         {
             var isExist = await WorkScope.GetAll<ResourceRequest>().AnyAsync(x => x.Name == input.Name && x.ProjectId == input.ProjectId && x.TimeNeed == input.TimeNeed);
@@ -229,6 +256,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPut]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Update)]
         public async Task<ResourceRequestDto> Update(ResourceRequestDto input)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.Id);
@@ -238,6 +266,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpDelete]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Delete)]
         public async Task Delete(long resourceRequestId)
         {
             var resourceRequest = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ResourceRequestId == resourceRequestId);

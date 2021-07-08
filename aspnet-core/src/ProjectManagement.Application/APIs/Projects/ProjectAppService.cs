@@ -141,6 +141,18 @@ namespace ProjectManagement.APIs.Projects
             if (project == null)
                 throw new UserFriendlyException($"Project with id = {projectID} not exist !");
 
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.ProjectId == projectID);
+            if (timesheetProject)
+                throw new UserFriendlyException($"Project has Timesheet Project !");
+
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().AnyAsync(x => x.ProjectId == projectID);
+            if (pmReportProject)
+                throw new UserFriendlyException($"Project has Weekly Report !");
+
+            var projectUser = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == projectID);
+            if (projectUser)
+                throw new UserFriendlyException($"Project has Project User !");
+
             await WorkScope.DeleteAsync(project);
         }
     }
