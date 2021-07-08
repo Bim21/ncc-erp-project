@@ -77,11 +77,12 @@ namespace ProjectManagement.APIs.ProjectUsers
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto input)
         {
-            var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.AllocatePercentage == input.AllocatePercentage);
+            var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId
+                                    && x.Status == input.Status && x.StartTime.Date == input.StartTime.Date);
             if (isExist)
                 throw new UserFriendlyException("User already exist in project !");
 
-            if(input.Status == ProjectUserStatus.Past)
+            if (input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't add people to the past !");
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
@@ -89,10 +90,11 @@ namespace ProjectManagement.APIs.ProjectUsers
                 throw new UserFriendlyException("Can't find any active reports !");
 
             input.PMReportId = pmReportActive.Id;
+            input.Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
 
             var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
-            foreach(var item in projectUsers)
+            foreach (var item in projectUsers)
             {
                 item.Status = ProjectUserStatus.Past;
                 await WorkScope.UpdateAsync(item);
@@ -110,7 +112,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             if (input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people to the past !");
 
-            if(projectUser.Status == ProjectUserStatus.Future && input.Status == ProjectUserStatus.Present)
+            if (projectUser.Status == ProjectUserStatus.Future && input.Status == ProjectUserStatus.Present)
             {
                 var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
                 foreach (var item in projectUsers)
