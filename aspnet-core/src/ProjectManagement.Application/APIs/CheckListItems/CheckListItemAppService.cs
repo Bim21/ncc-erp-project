@@ -7,6 +7,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.CheckListItems.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -35,6 +36,21 @@ namespace ProjectManagement.APIs.CheckListItems
                             mandatorys = listMan.Where(x => x.CheckListItemId == i.Id).Select(x=>x.ProjectType).ToList()
                         };
             return await query.GetGridResult(query, input);
+        }
+
+        public async Task<List<CheckListItemDto>> GetAll()
+        {
+            return await WorkScope.GetAll<CheckListItem>().Select(x => new CheckListItemDto
+            {
+                Id = x.Id,
+                AuditTarget = x.AuditTarget,
+                CategoryId = x.CategoryId,
+                Code = x.Code,
+                Description = x.Description,
+                Name = x.Name,
+                Note = x.Note,
+                PersonInCharge = x.PersonInCharge
+            }).ToListAsync();
         }
 
         [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Create)]
