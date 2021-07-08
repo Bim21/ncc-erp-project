@@ -21,11 +21,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public searchUser:string ="";
   public weeklyCurrentPage:number=1;
   public futureCurrentPage:number=1;
-  
+  public processWeekly:boolean =false;
+  public processFuture:boolean=false;
+
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public userList:UserDto[]=[];
-  public inProcess:boolean=false;
   public projectRoleList:string[] = Object.keys( this.APP_ENUM.ProjectUserRole);
   public projectHeathList:string[]= Object.keys( this.APP_ENUM.ProjectHealth);
   private projectId: number;
@@ -60,7 +61,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     let newReport = {} as projectUserDto
     newReport.createMode = true;
     this.weeklyPeportList.unshift(newReport)
-    this.inProcess = true;
+    this.processWeekly = true;
   }
   public saveWeekReport(report:projectReportDto){
     report.isFutureActive = false
@@ -71,7 +72,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     delete report["createMode"]
     this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data=>{
       abp.notify.success("created new weekly report");
-      this.inProcess=false;
+      this.processWeekly=false;
       report.createMode =false;
       this.getWeeklyReport();
     },
@@ -81,7 +82,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
   }
   public cancelWeekReport(){
-    this.inProcess =false;
+    this.processWeekly =false;
     this.getWeeklyReport();
   }
 
@@ -90,7 +91,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     let newReport = {} as projectUserDto
     newReport.createMode = true;
     this.futureReportList.unshift(newReport)
-    this.inProcess = true;
+    this.processFuture = true;
   }
   public saveFutureReport(report:projectReportDto){
     report.isFutureActive = false
@@ -101,7 +102,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     delete report["createMode"]
     this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data=>{
       abp.notify.success("created new future report");
-      this.inProcess=false;
+      this.processFuture=false;
       report.createMode =false;
       this.getFuturereport();
     },
@@ -111,7 +112,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
   }
   public cancelFutureReport(){
-    this.inProcess =false;
+    this.processFuture =false;
     this.getFuturereport();
   }
 
