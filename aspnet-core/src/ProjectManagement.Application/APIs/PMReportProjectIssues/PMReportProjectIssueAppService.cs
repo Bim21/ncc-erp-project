@@ -26,7 +26,8 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                         join prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId)
                         on pr.Id equals prp.PMReportId into lstPrp
                         from p in lstPrp.DefaultIfEmpty()
-                        join prpi in WorkScope.GetAll<PMReportProjectIssue>() on p.Id equals prpi.PMReportProjectId
+                        join prpi in WorkScope.GetAll<PMReportProjectIssue>().OrderByDescending(x => x.CreationTime)
+                        on p.Id equals prpi.PMReportProjectId
                         select new GetPMReportProjectIssueDto
                         {
                             PMReportProjectId = prpi.PMReportProjectId,
@@ -39,6 +40,31 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                             Status = prpi.Status.ToString()
                         };
             return await query.ToListAsync();
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Create)]
+        public async Task<PMReportProjectIssueDto> Create(PMReportProjectIssueDto input)
+        {
+            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProjectIssue>(input));
+            return input;
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Update)]
+        public async Task<PMReportProjectIssueDto> Update(PMReportProjectIssueDto input)
+        {
+            var pmReportProjectIssue = await WorkScope.GetAsync<PMReportProjectIssue>(input.Id);
+
+            await WorkScope.UpdateAsync(ObjectMapper.Map<PMReportProjectIssueDto, PMReportProjectIssue>(input, pmReportProjectIssue));
+            return input;
+        } 
+
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Delete)]
+        public async Task Delete(long pmReportProjectIssueId)
+        {
+            await WorkScope.DeleteAsync<PMReportProjectIssue>(pmReportProjectIssueId);
         }
     }
 }

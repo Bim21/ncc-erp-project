@@ -44,7 +44,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_GetAllByproject)]
         public async Task<List<GetProjectUserBillDto>> GetAllByProject(long projectId)
         {
-            var query = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId)
+            var query = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId).OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetProjectUserBillDto
                         {
                             Id = x.Id,
@@ -66,10 +66,6 @@ namespace ProjectManagement.APIs.ProjectUserBills
         [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_Create)]
         public async Task<ProjectUserBillDto> Create(ProjectUserBillDto input)
         {
-            var isExist = await WorkScope.GetAll<ProjectUserBill>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId);
-            if (isExist)
-                throw new UserFriendlyException($"Project User Bill with ProjectId: {input.ProjectId}, UserId: {input.UserId} already exist !");
-
             if (input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
@@ -83,10 +79,6 @@ namespace ProjectManagement.APIs.ProjectUserBills
         public async Task<ProjectUserBillDto> Update(ProjectUserBillDto input)
         {
             var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(input.Id);
-
-            var isExist = await WorkScope.GetAll<ProjectUserBill>().AnyAsync(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId);
-            if (isExist)
-                throw new UserFriendlyException($"Project User Bill with ProjectId: {input.ProjectId}, UserId: {input.UserId} already exist !");
 
             if (input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");

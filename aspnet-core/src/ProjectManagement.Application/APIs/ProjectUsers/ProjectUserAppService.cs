@@ -26,6 +26,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId)
                         .Where(x => viewHistory || x.Status != ProjectUserStatus.Past)
+                        .OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetProjectUserDto
                         {
                             Id = x.Id,
@@ -47,6 +48,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewDetailProjectUser)]
         public async Task<GetProjectUserDto> Get(long projectUserId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Id == projectUserId)
@@ -75,7 +77,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto input)
         {
-            var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId);
+            var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.AllocatePercentage == input.AllocatePercentage);
             if (isExist)
                 throw new UserFriendlyException("User already exist in project !");
 
