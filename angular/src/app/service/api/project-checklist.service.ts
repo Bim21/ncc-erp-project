@@ -14,7 +14,13 @@ export class ProjectChecklistService extends BaseApiService{
   constructor(http: HttpClient) {
     super(http);
   }
-  public GetCheckListItemByProject(projectId:any,auditSessionId:any): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/GetCheckListItemByProject?projectId='+projectId+'&auditSessionId='+auditSessionId);
+  public GetCheckListItemByProject(projectId:any,auditSessionId?:any): Observable<any> {
+    if(auditSessionId){
+      return this.http.get<any>(this.rootUrl + '/GetCheckListItemByProject?projectId='+projectId+'&auditSessionId='+auditSessionId);
+    }
+    else{
+      return this.http.get<any>(this.rootUrl + '/GetCheckListItemByProject?projectId='+projectId);
+    }
+   
   }
 }
