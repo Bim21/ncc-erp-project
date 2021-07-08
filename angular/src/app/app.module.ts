@@ -75,6 +75,7 @@ import { CreateEditSaoDoProjectComponent } from './modules/saodo-management/sao-
 import { SaoDoProjectDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-project-detail/sao-do-project-detail.component';
 import { WeeklyReportTabComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab.component';
 import { WeeklyReportTabDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
+import { CreateEditProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/create-edit-project-checklist/create-edit-project-checklist.component';
 
 
 
@@ -145,6 +146,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     SaoDoProjectDetailComponent,
     WeeklyReportTabComponent,
     WeeklyReportTabDetailComponent,
+    CreateEditProjectChecklistComponent,
     
   ],
   imports: [
