@@ -5,7 +5,7 @@
                 <h1>{{'Sao do' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(SaoDo_AuditSessiont_Create)" type="button" class="btn bg-blue" (click)="createSaodo()">
+                <button *ngIf="permission.isGranted(SaoDo_AuditSession_Create)" type="button" class="btn bg-blue" (click)="createSaodo()">
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -84,14 +84,14 @@
                             <td>{{saodo.countFail}}</td>
                             <td  class="text-center">
                                 <button
-                                    *ngIf="permission.isGranted(SaoDo_AuditSessiont_Update)" 
+                                    *ngIf="permission.isGranted(SaoDo_AuditSession_Update)" 
                                     class="btn btn-sm bg-secondary mr-1" 
                                     (click)="editSaodo(saodo)" >
                                     <i class="fas fa-pencil-alt"></i>
                                     Edit
                             </button>
                             <button
-                                *ngIf="permission.isGranted(SaoDo_AuditSessiont_Delete)"
+                                *ngIf="permission.isGranted(SaoDo_AuditSession_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(saodo)"
                                  #deleteBtn>

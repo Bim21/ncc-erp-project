@@ -106,7 +106,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       newUser.isFutureActive = false
       newUser.projectId = this.projectId
       newUser.isExpense = true;
-      newUser.status = "0";
+      // newUser.status = "0";
       newUser.startTime = moment(newUser.startTime).format("YYYY-MM-DD");
       delete newUser["createMode"]
       this.projectUserService.create(newUser).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
@@ -229,13 +229,13 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     newUserBill.createMode = true;
     this.userBillProcess = true;
     this.userBillList.unshift(newUserBill)
-    this.filterUserBill();
   }
   public saveUserBill(userBill: projectUserBillDto): void {
     delete userBill["createMode"]
     userBill.isActive = true;
     userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
     userBill.endTime = moment(userBill.endTime).format("YYYY-DD-MM");
+   
     if (!this.isEditUserBill) {
       userBill.projectId = this.projectId
       this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
@@ -282,11 +282,6 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       }
     );
   }
-  private filterUserBill() {
-    // userBillList
-    // userList
-    let usrBillIdList = this.userBillList.map(item => item.userId)
-    this.userForUserBill = this.userForUserBill.filter(user => usrBillIdList.indexOf(user.id) == -1)
-  }
+
 
 }

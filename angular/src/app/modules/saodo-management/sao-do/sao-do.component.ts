@@ -16,9 +16,9 @@ import * as moment from 'moment';
   styleUrls: ['./sao-do.component.css']
 })
 export class SaoDoComponent extends PagedListingComponentBase<SaodoDto> implements OnInit {
-  SaoDo_AuditSessiont = PERMISSIONS_CONSTANT.SaoDo_AuditSession;
-  SaoDo_AuditSessiont_AddAuditResult = PERMISSIONS_CONSTANT.SaoDo_AuditSession_AddAuditResult;
-  SaoDo_AuditSessiont_Create = PERMISSIONS_CONSTANT. SaoDo_AuditSession_Create;
+  SaoDo_AuditSession = PERMISSIONS_CONSTANT.SaoDo_AuditSession;
+  SaoDo_AuditSession_AddAuditResult = PERMISSIONS_CONSTANT.SaoDo_AuditSession_AddAuditResult;
+  SaoDo_AuditSession_Create = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Create;
   SaoDo_AuditSession_Delete = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Delete;
   SaoDo_AuditSession_Update = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Update;
   SaoDo_AuditSession_View = PERMISSIONS_CONSTANT.SaoDo_AuditSession_View;
