@@ -38,8 +38,8 @@ namespace ProjectManagement.APIs.TimeSheets
                     Month = x.Month,
                     Year = x.Year,
                     IsActive = x.IsActive,
-                    TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Select(x => x.ProjectId).Distinct().Count(),
-                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Select(x => x.TimesheetId).Count()
+                    TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
+                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Count()
                 });
 
             return await query.GetGridResult(query, input);

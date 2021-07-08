@@ -93,11 +93,14 @@ namespace ProjectManagement.APIs.ProjectUsers
             input.Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
 
-            var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
-            foreach (var item in projectUsers)
+            if(input.Status == ProjectUserStatus.Present)
             {
-                item.Status = ProjectUserStatus.Past;
-                await WorkScope.UpdateAsync(item);
+                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
+                foreach (var item in projectUsers)
+                {
+                    item.Status = ProjectUserStatus.Past;
+                    await WorkScope.UpdateAsync(item);
+                }
             }
 
             return input;
@@ -108,6 +111,9 @@ namespace ProjectManagement.APIs.ProjectUsers
         public async Task<ProjectUserDto> Update(ProjectUserDto input)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
+
+            if (projectUser.Status == ProjectUserStatus.Past)
+                throw new UserFriendlyException("Can't edit people in the past !");
 
             if (input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people to the past !");
