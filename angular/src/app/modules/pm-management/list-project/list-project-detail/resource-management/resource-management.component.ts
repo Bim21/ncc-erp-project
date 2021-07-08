@@ -232,9 +232,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   public saveUserBill(userBill: projectUserBillDto): void {
     delete userBill["createMode"]
-    userBill.isActive = true;
+    // userBill.isActive = true;
     userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
-    userBill.endTime = moment(userBill.endTime).format("YYYY-DD-MM");
+    userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
    
     if (!this.isEditUserBill) {
       userBill.projectId = this.projectId

@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h4 class="d-inline">Danh sách nhân viên</h4>
-                        <button [hidden]="projectUserProcess" (click)="addProjectUser();userListCurrentPage=1"
+                        <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess" (click)="addProjectUser();userListCurrentPage=1"
                             class="btn bg-blue ml-3">
                             <i class="fa fa-plus-square mr-1"></i> Create
                         </button>
@@ -160,7 +160,7 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="d-inline">Request nhân sự</h4>
-                <button (click)="addResourcceRequest();resourceRequestCurrentPage=1" class="btn bg-blue ml-3">
+                <button *ngIf="!requestProcess" (click)="addResourcceRequest();resourceRequestCurrentPage=1" class="btn bg-blue ml-3">
                     <i class="fa fa-plus-square mr-1"></i>Create
                 </button>
             </div>
@@ -260,7 +260,7 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="d-inline">Danh sách Bill Dự án</h4>
-                <button style="border: none;" class="btn bg-blue ml-3" (click)="addUserBill();userBillCurrentPage=1">
+                <button *ngIf="!userBillProcess" style="border: none;" class="btn bg-blue ml-3" (click)="addUserBill();userBillCurrentPage=1">
                     <i class="fa fa-plus-square mr-1"></i>Create
                 </button>
             </div>
@@ -374,7 +374,7 @@
 
 
                                 </div>
-                                <div *ngIf="bill.createMode">
+                                <div *ngIf="bill.createMode" class="pt-1">
 
                                     <button [disabled]="!bill.userId || !bill.billRole || !bill.startTime || !bill.endTime || !bill.billRate" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveUserBill(bill)">
                                         <i style="color: green;" class="fas fa-check fa-2x "
