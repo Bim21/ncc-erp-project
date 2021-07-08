@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-6 row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                        <button [hidden]="inProcess" (click)="addWeekReport()" class=" btn btn-primary ml-3">
+                        <button [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
                     </div>
@@ -25,7 +25,7 @@
                             <th>Thời gian thay đổi</th>
                             <th>% Sử dụng nhân sự</th>
                             <!-- <th>note</th> -->
-                            <th *ngIf="inProcess">Action</th>
+                            <th *ngIf="processWeekly">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,31 +79,34 @@
                                     {{report.startTime | date:"dd/MM/yyyy"}}
                                 </span>
                                 <mat-form-field appearance="outline" *ngIf="report.createMode">
-                                    <input matInput [matDatepicker]="picker" placeholder="chose a date"
+                                    <input matInput [matDatepicker]="picker" placeholder="chose a date" required
                                         [(ngModel)]="report.startTime" name="usercreateDate">
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>
                             </td>
-
                             <td>
                                 <p *ngIf="!report.createMode"> {{report.allocatePercentage}}%</p>
-                                <input class="form-control mt-1" *ngIf="report.createMode" type="text" mask="percent"
-                                    suffix="%" [(ngModel)]="report.allocatePercentage" />
+                                <div *ngIf="report.createMode"> 
+                                        <input class="form-control mt-1"  type="text" mask="percent" required #Percentage="ngModel" #PercentageEl
+                                        suffix="%" [(ngModel)]="report.allocatePercentage" />
+                                        <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl"></abp-validation-summary>
+                                </div>
+                               
                             </td>
                             <td *ngIf="report.createMode">
                                 <div class="pt-2">
-                                    <i style="color: green;" class="fas fa-check fa-2x mr-3"
-                                        (click)="saveWeekReport(report)"></i>
+                                    <button [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage"
+                                    class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveWeekReport(report)">
+                                       <i  style="color: green; ;" class="fas fa-check fa-2x"
+                                      ></i>
+                                   </button>
                                     <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelWeekReport()"></i>
-
                                 </div>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
-
             </div>
             <pagination-controls id="projectUser" (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
         </div>
@@ -116,29 +119,24 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                        <button [hidden]="inProcess" (click)="addFutureReport()" class="btn btn-primary  ml-3">
+                        <button [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
                             <i class="fa fa-plus-square"></i>
                             Create
                         </button>
                     </div>
 
                 </div>
-
-
             </div>
-
             <div class="card-body table-responsive p-4">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
                             <th>Nhân viên</th>
-                            
                             <th>Project role</th>
                             <th>Thời gian thay đổi</th>
                             <th>%Sử dụng nhân sự</th>
-                            <th *ngIf="inProcess">Action</th>
-
+                            <th *ngIf="processFuture">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -214,19 +212,17 @@
                             </td>
                             <td *ngIf="report.createMode">
                                 <div class="pt-2">
-                                    <i style="color: green;" class="fas fa-check fa-2x mr-3"
-                                        (click)="saveFutureReport(report)"></i>
+                                    <button [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage"
+                                     class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveFutureReport(report)">
+                                        <i  style="color: green; ;" class="fas fa-check fa-2x"
+                                       ></i>
+                                    </button>
+   
                                     <i style="color: red;" class="fas fa-times fa-2x"
                                         (click)="cancelFutureReport()"></i>
 
                                 </div>
                             </td>
-
-
-
-
-
-
                         </tr>
                     </tbody>
                 </table>

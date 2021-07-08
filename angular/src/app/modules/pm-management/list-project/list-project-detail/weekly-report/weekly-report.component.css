@@ -2,3 +2,6 @@
   ::ng-deep .mat-form-field-outline {
     background: white;
 }
+.submit-btn:disabled i{
+  color: gray !important;
+}

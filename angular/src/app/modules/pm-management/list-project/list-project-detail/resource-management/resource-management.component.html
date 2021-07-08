@@ -133,7 +133,7 @@
 
                                 </div>
                                 <div *ngIf="user.createMode" class="pt-2">
-                                    <button [disabled]="!user.userId || !user.projectRole || !user.startTime || !user.allocatePercentage" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveProjectUser(user)">
+                                    <button [disabled]="!user.userId || !user.projectRole.toString() || !user.startTime || !user.allocatePercentage" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveProjectUser(user)">
                                         <i  style="color: green; ;" class="fas fa-check fa-2x"
                                        ></i>
                                     </button>
@@ -376,7 +376,7 @@
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1">
 
-                                    <button [disabled]="!bill.userId || !bill.billRole || !bill.startTime || !bill.endTime || !bill.billRate" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveUserBill(bill)">
+                                    <button [disabled]="!bill.userId || !bill.billRole.toString()  || !bill.startTime || !bill.endTime || !bill.billRate" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveUserBill(bill)">
                                         <i style="color: green;" class="fas fa-check fa-2x "
                                         ></i>
                                     </button>
