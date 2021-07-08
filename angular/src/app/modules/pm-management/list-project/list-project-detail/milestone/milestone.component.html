@@ -41,18 +41,22 @@
                             <td ><p class="mt-2">{{ i +1 }}</p></td>
                             <td>
                                 <p class="mt-2"  *ngIf="!item.createMode">{{item.description}}</p>
-                                <textarea *ngIf="item.createMode"  [(ngModel)]="item.description" #inputDes="ngModel" #inputNameEl required
+                                <div *ngIf="item.createMode">
+                                    <textarea class="mt-2"  [(ngModel)]="item.description" #inputDes="ngModel" #inputNameEl required
                                 [readonly]="item.createMode ==null" class="form-control" type="text"
                                 name="inputDescripton" 
                                 [placeholder]="item.createMode !=null?'LDescription':''" #note minlength="2">
-                            </textarea>
+                                
+                                </textarea>
+                                <abp-validation-summary [control]="inputDes" [controlEl]="inputNameEl"></abp-validation-summary>
+                                </div>
                             </td>
                             <td>
                                 <p *ngIf="!item.createMode" class="mt-2">{{item.flag}}</p>
-                                <mat-form-field style="margin-top: -5px;"  *ngIf="item.createMode"
+                                <mat-form-field   class="mt-2" *ngIf="item.createMode"
                                     appearance="outline">
                                     <mat-select name="flag"
-                                        placeholder="Flag"required [(ngModel)]="item.flag">
+                                        placeholder="Flag" [(ngModel)]="item.flag">
                                         <ng-container *ngFor="let flag of flagList">
                                             <mat-option [value]="APP_ENUM.MilestoneFlag[flag]"
                                                 >
@@ -65,11 +69,10 @@
                             </td>
                             <td>
                                 <p *ngIf="!item.createMode" class="mt-2" >{{item.status}}</p>
-
-
-                                <mat-form-field style="margin-top: -5px;"  *ngIf="item.createMode"
+                                <div  *ngIf="item.createMode">
+                                    <mat-form-field class="mt-2"
                                     appearance="outline">
-                                    <mat-select name="status"
+                                    <mat-select name="status" #statusValid="ngModel"
                                         placeholder="Select Status"required [(ngModel)]="item.status">
                                         <ng-container *ngFor="let status of statusList">
                                             <mat-option [value]="APP_ENUM.ProjectMilestoneStatus[status]"
@@ -80,10 +83,19 @@
                                         </ng-container>
                                     </mat-select>
                                 </mat-form-field>
+                                <mat-error class="mt-1"
+                                            *ngIf="statusValid.hasError('required') && statusValid.touched"
+                                            style="font-size: 13px;">
+                                            This field is required
+                                        </mat-error>
+                                </div>
+
+
+                                
                             </td>
                             <td>
                                 <p *ngIf="!item.createMode" class="mt-2">{{item.uatTimeStart |date:"dd/MM/yyyy"}}</p>
-                                <mat-form-field appearance="outline" *ngIf="item.createMode"  >
+                                <mat-form-field class="mt-2" appearance="outline" *ngIf="item.createMode"  >
                                     <input matInput [matDatepicker]="picker"   [(ngModel)]="item.uatTimeStart" 
                                     name="inputUatStartTime" 
                                     [placeholder]="item.createMode !=null?'Mốc UAT':''" #uatStartTime>
@@ -93,7 +105,7 @@
                             </td>
                             <td>
                                 <p *ngIf="!item.createMode" class="mt-2">{{item.uatTimeEnd |date:"dd/MM/yyyy"}}</p>
-                                <mat-form-field appearance="outline" *ngIf="item.createMode"  >
+                                <mat-form-field class="mt-2" appearance="outline" *ngIf="item.createMode"  >
                                     <input matInput [matDatepicker]="pickerEndTime" [(ngModel)]="item.uatTimeEnd" 
                                     name="inputUatStartTime" 
                                     [placeholder]="item.createMode !=null?'Thời điểm thanh toán':''" #uatTimeEnd>
@@ -101,13 +113,18 @@
                                     <mat-datepicker #pickerEndTime></mat-datepicker>
                                   </mat-form-field>
                             </td>
-                            <td>
+                            <td style="white-space: normal; min-width: 200px;">
                                 <p *ngIf="!item.createMode" class="mt-2">{{item.note}}</p>
-                                <textarea *ngIf="item.createMode"  [(ngModel)]="item.note" #inputNote="ngModel" #inputNameEl required
+
+                                <div *ngIf="item.createMode"> 
+                                    <textarea class="mt-2"  [(ngModel)]="item.note"  #Percentage="ngModel" #PercentageEl
                                     [readonly]="item.createMode ==null" class="form-control" type="text"
                                     name="inputNote" 
                                     [placeholder]="item.createMode !=null?'Note':''" #note minlength="2">
                                 </textarea>
+                                
+                                </div>
+                               
                             </td>
                             <td *ngIf="item.createMode ==null" >
                                 <button  [disabled]="isEditing"
@@ -128,7 +145,7 @@
                             </button>
                             </td>
                             <td *ngIf="item.createMode !=null" class="d-flex text-center" style="border: none;">
-                                <button  (click)="saveMilestoneRequest(item);"
+                                <button [disabled]="!item.description || !item.status.toString()" (click)="saveMilestoneRequest(item);"
                                     type="submit" class="btn btn-primary mr-1 ml-3"
                                     >Save</button>
                                 <button  (click)="refresh(); isAllowed =true; isEditing=false" class="btn btn-default">Cancel</button>
