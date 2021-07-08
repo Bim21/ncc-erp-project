@@ -38,28 +38,29 @@
                             <td  style="white-space: normal; min-width:100px;">{{item.categoryName}}</td>
                             <td  style="white-space: normal; min-width:100px;">{{item.name}}</td>
                             <td style="white-space: normal; min-width:200px;">{{item.description}}</td>
-                            <td>{{item.registrationDate}}</td>
+                            <td class="text-center">{{item.registrationDate |date:"dd/MM/yyyy"}}</td>
                             <td>{{item.auditTarget}}</td>
                             <td>{{item.personInCharge}}</td>
                             <td class="text-center" >
                                 <ng-container  *ngIf="item.createMode">
                                 
-                                <div *ngFor="let form of item.people;let i=index" class="form-horizontal">
-                                    <div  class="modal-body text-right" style="display: flex;flex-direction: column;align-items: center;">
-                                        <p>Vi phạm: <span>{{i+1}}</span></p>
-                                        <div class="form-group row required">
-                                            <p  class="mt-2"  ><span>Người vi phạm: </span>{{form.userName}}</p>
-                                        </div>
-                                        <div class="form-group row required">
-                                            <p  class="mt-2" ><span>Người liên đới: </span>{{form.curatorName}}</p>
-                                        </div>
-
+                                <div  *ngFor="let form of item.people;let i=index" class="w-100 p-2 mb-2" style="border: 2px solid black;">
+                                    <div  class="text-left" >
+                                            <!-- <strong>Vi phạm:</strong> <span>{{i+1}}</span> -->
+                                            <p  class="mt-2"  ><strong>Người vi phạm: </strong>{{form.userName}}</p>
+                                            <p  class="mt-2" ><strong>Người liên đới: </strong>{{form.curatorName}}</p>
                                     </div>
                                     
                                 </div>
                             </ng-container>
-                                <button *ngIf="item.createMode" class="btn btn-sm bg-secondary" style="text-align: center;" (click)="item.createMode=false">Cancel</button>
+                                <!-- <button *ngIf="item.createMode" class="btn btn-sm bg-secondary" style="text-align: center;" (click)="item.createMode=false">exit</button> -->
+                                <ng-container *ngIf="item.people.length>0">
+                                
                                 <button *ngIf="!item.createMode" class="btn btn-sm bg-danger"  (click)="item.createMode=true">View</button>
+                            </ng-container>
+                            <p *ngIf="item.people.length==0" class="mt-2">
+                                No audit history
+                            </p>
                                
                             </td>
                         </tr>

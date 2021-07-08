@@ -192,6 +192,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`Updated request: ${request.name}`)
         this.getResourceRequestList();
         this.requestProcess = false;
+        this.isEditRequest =false;
       },
         () => { request.createMode = true })
     }
@@ -251,6 +252,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`Updated request user bill`)
         this.getUserBill();
         this.userBillProcess = false;
+        this.isEditUserBill=false;
       },
         () => {
           userBill.createMode = true;

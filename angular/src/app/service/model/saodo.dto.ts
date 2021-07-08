@@ -1,7 +1,7 @@
 export class SaodoDto{
     name: string;
-    startTime: Date;
-    endTime: Date;
+    startTime: string;
+    endTime: string;
     projectName?: string;
     pmName?: string;
     projectStatus?: string;
