@@ -30,6 +30,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
   public isEditingNote:boolean=false;
   public projectUser={} as SaodoProjectUserDto;
   public note='';
+  public auditResultId='';
 
   public listCheckList:projectChecklistDto[]=[];
   constructor(private route: ActivatedRoute , injector:Injector,
@@ -41,7 +42,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     this.projectName=this.route.snapshot.queryParamMap.get('projectName');
     this.projectId=Number(this.route.snapshot.queryParamMap.get('projectId'));
     this.auditSessionId=this.route.snapshot.queryParamMap.get('saodoId');
-    this.projectUser.auditResultId=this.route.snapshot.queryParamMap.get('id');
+    this.auditResultId=this.route.snapshot.queryParamMap.get('id');
     this.getAllCheckList();
     this.getAllProjectUser();
     this.getNote();
@@ -50,8 +51,9 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
   getAllCheckList(){
     this.projectChecklistService.GetCheckListItemByProject(this.projectId,this.auditSessionId).subscribe(data=>{
       this.listCheckList=data.result;
-      console.log(this.listCheckList)
+      
     })
+    this.isEditing=false;
   }
   getAllProjectUser(){
     this.projectUserService.getAllProjectUser(this.projectId,true).subscribe(data=>{
@@ -64,11 +66,13 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
       checkListItemId: id,
       userId: this.projectUser.userId,
       curatorId: this.projectUser.curatorId,
-      auditResultId:this.projectUser.auditResultId
+      auditResultId:this.auditResultId
     } 
     this.auditProjectResultService.create(requestBody).pipe(catchError(this.auditProjectResultService.handleError)).subscribe((res) => {
       this.projectUser={};
+      
       abp.notify.success("Created successfully");
+      this.isEditing=false;
       this.getAllCheckList();
     });
   }
@@ -82,7 +86,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
       userId: form.userId,
       curatorId: form.curatorId,
       id: form.id,
-      auditResultId:this.projectUser.auditResultId
+      auditResultId:this.auditResultId
     } 
     delete form.createMode
     this.auditProjectResultService.update(requestBody).pipe(catchError(this.auditProjectResultService.handleError)).subscribe((res) => {
@@ -109,13 +113,14 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
 
   }
   getNote(){
-    this.auditResultService.getById(this.projectUser.auditResultId).subscribe(data=>{
+    this.auditResultService.getById(this.auditResultId).subscribe(data=>{
       this.note=data.result;
     })
   }
   saveNote(){
-    this.auditResultService.updateNote(this.projectUser.auditResultId,this.note).subscribe(data=>{
+    this.auditResultService.updateNote(this.auditResultId,this.note).subscribe(data=>{
       this.note=data.result;
+      abp.notify.success("Update Successfully!");
     })
   }
 
