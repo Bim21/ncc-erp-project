@@ -38,5 +38,12 @@ export class AppConsts {
         PRODUCT: "badge badge-warning",
         NoBill: "badge badge-info"
     }
+    static readonly ProjectMilestoneStatus = {
+        Paid: "badge badge-pill badge-secondary",
+        UAT: "badge badge-pill badge-primary",
+        Upcoming:"badge badge-pill badge-warning",
+        Fail: "badge badge-pill badge-danger"
+    }
+  
 
 }

@@ -80,7 +80,6 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
       item.uatTimeEnd=moment(item.uatTimeEnd).format("YYYY/MM/DD");
     }
     
-    
     if (this.command=="create") {
       item.projectId=this.projectId;
       this. milestoneService.create(item).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {

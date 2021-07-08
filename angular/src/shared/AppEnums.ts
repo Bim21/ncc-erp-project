@@ -65,9 +65,9 @@ export const APP_ENUMS = {
     },
     ProjectMilestoneStatus:
     {
-        Paid: 0,
+        Paid: 2,
         UAT: 1,
-        Upcomming:2,
+        Upcomming:0,
         Fail:3
     },
     ProjectStatus:

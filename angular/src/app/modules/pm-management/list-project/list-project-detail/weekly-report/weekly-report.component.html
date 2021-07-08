@@ -89,7 +89,7 @@
                                 <p *ngIf="!report.createMode"> {{report.allocatePercentage}}%</p>
                                 <div *ngIf="report.createMode"> 
                                         <input class="form-control mt-1"  type="text" mask="percent" required #Percentage="ngModel" #PercentageEl
-                                        suffix="%" [(ngModel)]="report.allocatePercentage" />
+                                        suffix="%" [(ngModel)]="report.allocatePercentage" placeholder="number" />
                                         <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl"></abp-validation-summary>
                                 </div>
                                
@@ -207,7 +207,7 @@
 
                             <td>
                                 <p *ngIf="!report.createMode"> {{report.allocatePercentage}}%</p>
-                                <input class="form-control mt-1" *ngIf="report.createMode" type="text" mask="percent"
+                                <input class="form-control mt-1" placeholder="number" *ngIf="report.createMode" type="text" mask="percent"
                                     suffix="%" [(ngModel)]="report.allocatePercentage" />
                             </td>
                             <td *ngIf="report.createMode">

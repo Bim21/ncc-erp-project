@@ -4,6 +4,7 @@ import { SaodoDto } from './../../../../service/model/saodo.dto';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
+import * as moment from 'moment';
 // import { FormControl } from '@angular/forms';
 // import * as moment from 'moment';
 // import { MatDatepicker } from '@angular/material/datepicker';
@@ -54,6 +55,8 @@ export class CreateEditSaodoComponent implements OnInit {
     }
   }
   SaveAndClose(){
+    this.saodo.startTime = moment(this.saodo.startTime).format("YYYY-MM-DD");
+    this.saodo.endTime = moment(this.saodo.endTime).format("YYYY-DD-MM");
     this.isDisable = true
     if (this.data.command == "create") {
       // this.timesheet.isActive=true;
