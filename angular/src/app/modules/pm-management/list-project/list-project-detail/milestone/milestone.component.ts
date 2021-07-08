@@ -74,12 +74,16 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
   }
   public saveMilestoneRequest( item:MilestoneDto): void {
     delete item["createMode"]
-    let newItem = this.milestoneList[this.milestoneList.length-1];
-    newItem.uatTimeStart=moment(newItem.uatTimeStart).format("YYYY/MM/DD");
-    newItem.uatTimeEnd=moment(newItem.uatTimeEnd).format("YYYY/MM/DD");
+    // let newItem = this.milestoneList[this.milestoneList.length-1];
+    if(item.uatTimeStart || item.uatTimeEnd ){
+      item.uatTimeStart=moment(item.uatTimeStart).format("YYYY/MM/DD");
+      item.uatTimeEnd=moment(item.uatTimeEnd).format("YYYY/MM/DD");
+    }
+    
+    
     if (this.command=="create") {
-      newItem.projectId=this.projectId;
-      this. milestoneService.create(newItem).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {
+      item.projectId=this.projectId;
+      this. milestoneService.create(item).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {
       this.isEditing=false;
       this.isAllowed=true;
       abp.notify.success("Create Milestone Successful!");
@@ -88,7 +92,7 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
       console.log(this.isEditing)
     }
     else {
-      this. milestoneService.update(newItem).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {    
+      this. milestoneService.update(item).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {    
       this.isEditing=false;
       this.isAllowed=true;
       abp.notify.success("Update Milestone Successful!");
