@@ -7,6 +7,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.AuditResults.Dto;
 using ProjectManagement.APIs.AuditSessions.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               select new
                               {
                                   ar.AuditSessionId,
+                                  ar.ProjectId,
                                   status = ar.Status
                               };
             //trong 1 auditsession => list
@@ -88,8 +90,8 @@ namespace ProjectManagement.APIs.AuditSessions
                             EndTime = a.EndTime,
                             StartTime = a.StartTime,
                             CountFail = listSessionPeople.Where(x => x.AuditSessionId == a.Id && x.IsPass).Count(),
-                            CountProjectCheck = countStatus.Where(x => x.AuditSessionId == a.Id).Count(x => x.status == AuditResultStatus.Done),
-                            CountProjectCreate = countStatus.Where(x => x.AuditSessionId == a.Id).Count(x => x.status == AuditResultStatus.New)
+                            CountProjectCheck = countStatus.Count(x => x.AuditSessionId == a.Id && x.status == AuditResultStatus.Done),
+                            CountProjectCreate = countStatus.Count(x=>x.AuditSessionId == a.Id)
                         };
             return await query.GetGridResult(query, input);
         }
@@ -100,6 +102,7 @@ namespace ProjectManagement.APIs.AuditSessions
             var checkExist = await WorkScope.GetAsync<AuditSession>(Id);
             var listSessionPeople = WorkScope.GetAll<AuditResultPeople>()
                                      .Select(x => new { x.AuditResult.AuditSessionId, x.IsPass });
+            var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
 
             return await (from ar in WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == Id)
                           select new AuditSessionDetailDto
@@ -107,7 +110,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
-                              PmName = ar.PM.Name,
+                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].Name : null,
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),

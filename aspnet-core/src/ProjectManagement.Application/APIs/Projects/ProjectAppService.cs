@@ -108,7 +108,18 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
                
-            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
+            var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
+                                .Where(x => x.ProjectType == input.ProjectType)
+                                .Select(x => new ProjectCheckList{ 
+                                    ProjectId = input.Id,
+                                        CheckListItemId = x.CheckListItemId,
+                                        IsActive = true,
+                                }).ToListAsync();
+            foreach(var i in projectCheckLists)
+            {
+                await WorkScope.InsertAsync(i);
+            }
 
             return input;
         }
