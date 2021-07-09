@@ -96,6 +96,11 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest)]
         public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
         {
+            if(input.StartTime.Date < DateTime.Now.Date)
+            {
+                throw new UserFriendlyException("Can't add user at past time !");
+            }
+
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
@@ -104,7 +109,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var projectuser = new ProjectUser
             {
-                UserId = input.Id,
+                UserId = input.UserId,
                 ProjectId = resourceRequest.ProjectId,
                 ResourceRequestId = resourceRequest.Id,
                 ProjectRole = input.ProjectRole,
