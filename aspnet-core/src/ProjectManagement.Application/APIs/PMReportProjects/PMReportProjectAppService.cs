@@ -43,6 +43,27 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
+        public async Task<List<GetPMReportProjectDto>> GetAllPmReportProjectForDropDown()
+        {
+            var query = WorkScope.GetAll<PMReportProject>().Include(x => x.PM)
+                              .Where(x => x.PMReport.IsActive)
+                              .Select(x => new GetPMReportProjectDto
+                              {
+                                  Id = x.Id,
+                                  PMReportId = x.PMReportId,
+                                  PMReportName = x.PMReport.Name,
+                                  ProjectId = x.ProjectId,
+                                  ProjectName = x.Project.Name,
+                                  Status = x.Status.ToString(),
+                                  ProjectHealth = x.ProjectHealth.ToString(),
+                                  PMId = x.PMId,
+                                  Note = x.Note
+                              });
+
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId)
         {

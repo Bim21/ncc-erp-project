@@ -122,12 +122,18 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest)]
         public async Task<List<ResourceRequestUserDto>> SearchAvailableUserForRequest(DateTime startDate)
         {
+            if(startDate.Date <= DateTime.Now.Date)
+            {
+                throw new UserFriendlyException("The start date must be greater than the current time !");
+            }
+
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
-                                .Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present)
+                                .Where(x => x.StartTime.Date >= startDate.Date && x.Status == ProjectUserStatus.Present)
                                 .Select(x => new
                                 {
                                     UserId = x.UserId,
+                                    StartTime = x.StartTime,
                                     AllocatePercentage = x.AllocatePercentage
                                 });
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive)
@@ -135,6 +141,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 {
                                     UserId = x.Id,
                                     UserName = x.FullName,
+                                    StartTime = projectUsers.Where(y => y.UserId == x.Id).Select(y => y.StartTime).FirstOrDefault(),
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (byte)(100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : (byte)100
                                 }).Where(x => x.Undisposed > 0);
 
