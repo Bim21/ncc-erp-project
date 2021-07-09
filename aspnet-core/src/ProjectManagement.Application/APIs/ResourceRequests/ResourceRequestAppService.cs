@@ -53,17 +53,17 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(GridParam input)
         {
-            var query = from rr in WorkScope.GetAll<ResourceRequest>()
-                        join pu in WorkScope.GetAll<ProjectUser>() on rr.Id equals pu.ResourceRequestId
-                        group pu by new { rr.Id, rr.Name, ProjectName = rr.Project.Name, rr.Status } into pp
-                        select new GetResourceRequestDto
-                        {
-                            Id = pp.Key.Id,
-                            Name = pp.Key.Name,
-                            ProjectName = pp.Key.ProjectName,
-                            Status = pp.Key.Status,
-                            PlannedNumberOfPersonnel = pp.Count()
-                        };
+            var projectUser = WorkScope.GetAll<ProjectUser>();
+            var query = WorkScope.GetAll<ResourceRequest>().Select(x => new GetResourceRequestDto
+            {
+
+                Id = x.Id,
+                Name = x.Name,
+                ProjectId = x.ProjectId,
+                ProjectName = x.Project.Name,
+                Status = x.Status,
+                PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
+            });
                
             return await query.GetGridResult(query, input);
         }
