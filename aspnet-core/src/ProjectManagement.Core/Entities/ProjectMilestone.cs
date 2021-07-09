@@ -22,8 +22,8 @@ namespace ProjectManagement.Entities
         public string Description { get; set; }
         public MilestoneFlag Flag { get; set; }
         public ProjectMilestoneStatus Status { get; set; }
-        public DateTime UATTimeStart { get; set; }
-        public DateTime UATTimeEnd { get; set; }
+        public DateTime? UATTimeStart { get; set; }
+        public DateTime? UATTimeEnd { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
     }
