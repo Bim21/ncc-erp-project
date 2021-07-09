@@ -38,18 +38,21 @@ namespace ProjectManagement.APIs.CheckListItems
             return await query.GetGridResult(query, input);
         }
 
-        public async Task<List<CheckListItemDto>> GetAll()
+        public async Task<List<CheckListItemDetailDto>> GetAll()
         {
-            return await WorkScope.GetAll<CheckListItem>().Select(x => new CheckListItemDto
+            var listMan = WorkScope.GetAll<CheckListItemMandatory>();
+            return await WorkScope.GetAll<CheckListItem>().Select(i => new CheckListItemDetailDto
             {
-                Id = x.Id,
-                AuditTarget = x.AuditTarget,
-                CategoryId = x.CategoryId,
-                Code = x.Code,
-                Description = x.Description,
-                Name = x.Name,
-                Note = x.Note,
-                PersonInCharge = x.PersonInCharge
+                Id = i.Id,
+                Name = i.Name,
+                Code = i.Code,
+                CategoryId = i.CategoryId,
+                CategoryName = i.CheckListCategory.Name,
+                Description = i.Description,
+                AuditTarget = i.AuditTarget,
+                PersonInCharge = i.PersonInCharge,
+                Note = i.Note,
+                mandatorys = listMan.Where(x => x.CheckListItemId == i.Id).Select(x => x.ProjectType).ToList()
             }).ToListAsync();
         }
 
