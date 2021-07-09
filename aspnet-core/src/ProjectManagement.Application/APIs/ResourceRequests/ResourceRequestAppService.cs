@@ -104,7 +104,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var projectuser = new ProjectUser
             {
-                UserId = input.Id,
+                UserId = input.UserId,
                 ProjectId = resourceRequest.ProjectId,
                 ResourceRequestId = resourceRequest.Id,
                 ProjectRole = input.ProjectRole,
