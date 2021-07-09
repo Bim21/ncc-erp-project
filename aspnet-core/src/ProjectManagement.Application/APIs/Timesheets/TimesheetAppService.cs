@@ -30,7 +30,7 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
             var timesheetProject = WorkScope.GetAll<TimesheetProject>();
-            var query = WorkScope.GetAll<Timesheet>()
+            var query = WorkScope.GetAll<Timesheet>().OrderBy(x => x.Year).OrderBy(x => x.Month)
                 .Select(x => new GetTimesheetDto
                 {
                     Id = x.Id,
