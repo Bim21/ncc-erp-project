@@ -4,3 +4,6 @@
 .Red{
     color: red;
 }
+::ng-deep .mat-form-field-outline {
+    background: white;
+}
