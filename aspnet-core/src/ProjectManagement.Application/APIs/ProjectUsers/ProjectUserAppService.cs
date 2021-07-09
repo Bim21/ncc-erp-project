@@ -7,8 +7,10 @@ using NccCore.Paging;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +46,23 @@ namespace ProjectManagement.APIs.ProjectUsers
                             IsFutureActive = x.IsFutureActive
                         });
 
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<UserDto>> GetAllProjectUserInProject(long projectId)
+        {
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId).Select(x => x.UserId);
+
+            var query = WorkScope.GetAll<User>().Where(x => x.IsActive && projectUser.Contains(x.Id))
+                        .Select(x => new UserDto
+                        {
+                            Id = x.Id,
+                            UserName = x.UserName,
+                            Name = x.Name,
+                            Surname = x.Surname,
+                            EmailAddress = x.EmailAddress
+                        });
             return await query.ToListAsync();
         }
 

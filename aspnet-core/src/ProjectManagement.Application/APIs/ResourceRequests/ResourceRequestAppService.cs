@@ -111,6 +111,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             {
                 UserId = input.UserId,
                 ProjectId = resourceRequest.ProjectId,
+                AllocatePercentage = input.AllocatePercentage,
                 ResourceRequestId = resourceRequest.Id,
                 ProjectRole = input.ProjectRole,
                 StartTime = input.StartTime,
@@ -127,7 +128,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest)]
         public async Task<List<ResourceRequestUserDto>> SearchAvailableUserForRequest(DateTime startDate)
         {
-            if(startDate.Date <= DateTime.Now.Date)
+            if(startDate.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("The start date must be greater than the current time !");
             }
