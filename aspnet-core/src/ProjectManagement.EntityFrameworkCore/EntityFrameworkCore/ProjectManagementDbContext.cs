@@ -29,6 +29,14 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<ResourceRequest> ResourceRequests { get; set; }
         public DbSet<Timesheet> Timesheets { get; set; }
         public DbSet<TimesheetProject> TimesheetProjects { get; set; }
+        public DbSet<CriteriaCategory> CriteriaCategories { get; set; }
+        public DbSet<Criteria> Criterias { get; set; }
+        public DbSet<Phase> Phases { get; set; }
+        public DbSet<CheckPointUser> CheckPointUsers { get; set; }
+        public DbSet<CheckPointUserDetail> CheckPointUserDetails { get; set; }
+        public DbSet<CheckPointUserResult> CheckPointUserResults { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<CheckPointUserResultTag> CheckPointUserResultTags { get; set; }
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)
         {
