@@ -9,7 +9,7 @@
                Item:
             </label>
             <div class="col-md-9">
-                <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
+                <!-- <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                     <mat-select required placeholder="Select Catelog"  name="catelog" [(ngModel)]="checklistItemId">
                         <ng-container *ngFor="let item of listItems">
                             <mat-option [value]="item.id">{{item.name}}</mat-option>
@@ -17,7 +17,23 @@
                         
                     </mat-select>
 
-                </mat-form-field>
+                </mat-form-field> -->
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>Catogory</th>
+                            <th>Item</th>
+                            <th>Man</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr >
+                            
+                        </tr>
+                    </tbody>
+                </table>
+
             </div>
         </div>
         

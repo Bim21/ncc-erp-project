@@ -1,0 +1,106 @@
+<form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
+    <div class="card-header">
+        <h3 *ngIf="data.command=='create'">Create</h3>
+        <h3 *ngIf="data.command!=='create'">Edit</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                Name
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="name" minlength="2" maxlength="1024"
+                    [(ngModel)]="resourceRequestDto.name" required #nameEl  #name="ngModel"/>
+                    <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                    </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                Project:
+            </label>
+            <div class="col-md-9">
+                <mat-form-field class="mt-2" appearance="outline">
+                    <mat-select name="projectId" #projectIdValid="ngModel" placeholder="Select project" required
+                        [(ngModel)]="resourceRequestDto.projectId">
+                        <ng-container *ngFor="let project of listProject">
+                            <mat-option [value]="project.id" >
+                                {{project.name}}
+                                </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error class="mt-1" *ngIf="projectIdValid.hasError('required') && projectIdValid.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                Status:
+            </label>
+            <div class="col-md-9">
+                <mat-form-field class="mt-2" appearance="outline">
+                    <mat-select name="status" #statusValid="ngModel" placeholder="Select Status" required
+                        [(ngModel)]="resourceRequestDto.status">
+                        <ng-container *ngFor="let status of statusList">
+                            <mat-option [value]="APP_ENUM.ResourceRequestStatus[status]">
+                                {{
+                                status
+                                }}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error class="mt-1" *ngIf="statusValid.hasError('required') && statusValid.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                Time Need:
+            </label>
+            <div class="col-md-9">
+                <mat-form-field appearance="outline">
+                    <input matInput [matDatepicker]="picker" name="startTime"  #timeNeed="ngModel" [(ngModel)]="resourceRequestDto.timeNeed" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-error class="mt-1" *ngIf="timeNeed.hasError('required') && timeNeed.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                Time Done:
+            </label>
+            <div class="col-md-9">
+                <mat-form-field appearance="outline">
+                    <input matInput [matDatepicker]="pickerEnd" name="endTime"
+                        [(ngModel)]="resourceRequestDto.timeDone" #timeDone="ngModel" required>
+                    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerEnd></mat-datepicker>
+                </mat-form-field>
+                <mat-error class="mt-1" *ngIf="timeDone.hasError('required') && timeDone.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+    <div align="end" class="row justify-content-between">
+        <button class="btn btn-default" mat-dialog-close>Cancel</button>
+        <button class="btn btn-primary"
+            [disabled]="!resourceRequestForm.valid || isDisable" (click)="SaveAndClose()">Save</button>
+    </div>
+</form>
+

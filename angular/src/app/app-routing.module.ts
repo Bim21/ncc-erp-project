@@ -1,3 +1,5 @@
+import { ResourceRequestDetailComponent } from './modules/delivery-management/delivery/request-resource-tab/resource-request-detail/resource-request-detail.component';
+import { RequestResourceTabComponent } from './modules/delivery-management/delivery/request-resource-tab/request-resource-tab.component';
 import { WeeklyReportTabDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
 import { WeeklyReportTabComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab.component';
 import { SaoDoProjectDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-project-detail/sao-do-project-detail.component';
@@ -153,7 +155,18 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
                 component: WeeklyReportTabComponent,
                 canActivate: [AppRouteGuard],
               },
+              {
+                path: "request-resource-tab",
+                component: RequestResourceTabComponent,
+                canActivate: [AppRouteGuard],
+              },
+              
             ]
+          },
+          {
+            path: "resourceRequestDetail",
+            component: ResourceRequestDetailComponent,
+            canActivate: [AppRouteGuard],
           },
           {
             path: "weeklyReportTabDetail",
