@@ -26,7 +26,7 @@
                             
                             <th>Mốc UAT</th>
                             <th>Thời điểm thanh toán</th>
-                            <th >Note</th>
+                            <th>Note</th>
                             <th>Trạng thái</th>
                             <th>Actions</th>
                         </tr>
@@ -150,7 +150,7 @@
                             </button>
                             </td>
                             <td *ngIf="item.createMode !=null" class="d-flex text-center" style="border: none;">
-                                <button [disabled]="!item.description || !item.status.toString()" (click)="saveMilestoneRequest(item);"
+                                <button [disabled]="!item.description || !item?.status?.toString()" (click)="saveMilestoneRequest(item);"
                                     type="submit" class="btn btn-primary mr-1 ml-3"
                                     >Save</button>
                                 <button  (click)="refresh(); isAllowed =true; isEditing=false" class="btn btn-default">Cancel</button>
