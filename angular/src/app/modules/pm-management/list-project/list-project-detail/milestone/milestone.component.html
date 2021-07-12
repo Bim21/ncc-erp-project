@@ -43,8 +43,7 @@
                             <td>
                                 <p class="mt-2"  *ngIf="!item.createMode">{{item.description}}</p>
                                 <div *ngIf="item.createMode">
-                                    <textarea      cdkTextareaAutosize
-                                    #autosize="cdkTextareaAutosize" rows="3" class="mt-2" placeholder="text" [(ngModel)]="item.description" #inputDes="ngModel" #inputNameEl required
+                                    <textarea  cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="3" class="mt-2" placeholder="text" [(ngModel)]="item.description" #inputDes="ngModel" #inputNameEl required
                                 [readonly]="item.createMode ==null" class="form-control" type="text"
                                 name="inputDescripton" 
                                  >
