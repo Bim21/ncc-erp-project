@@ -74,11 +74,7 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
   }
   public saveMilestoneRequest( item:MilestoneDto): void {
     delete item["createMode"]
-    // let newItem = this.milestoneList[this.milestoneList.length-1];
-    if(item.uatTimeStart || item.uatTimeEnd ){
-      item.uatTimeStart=moment(item.uatTimeStart).format("YYYY/MM/DD");
-      item.uatTimeEnd=moment(item.uatTimeEnd).format("YYYY/MM/DD");
-    }
+
     
     if (this.command=="create") {
       item.projectId=this.projectId;
@@ -86,6 +82,7 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
       this.isEditing=false;
       this.isAllowed=true;
       abp.notify.success("Create Milestone Successful!");
+      this.refresh();
       },
       () => {() =>this.isEditing=false;})
       console.log(this.isEditing)
@@ -94,7 +91,7 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
       this. milestoneService.update(item).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {    
       this.isEditing=false;
       this.isAllowed=true;
-      abp.notify.success("Update Milestone Successful!");
+      abp.notify.success("Update Milestone Successfully!");
       
       this.refresh();
     

@@ -76,6 +76,10 @@ import { SaoDoProjectDetailComponent } from './modules/saodo-management/sao-do/s
 import { WeeklyReportTabComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab.component';
 import { WeeklyReportTabDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
 import { CreateEditProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/create-edit-project-checklist/create-edit-project-checklist.component';
+import { RequestResourceTabComponent } from './modules/delivery-management/delivery/request-resource-tab/request-resource-tab.component';
+import { ResourceRequestDetailComponent } from './modules/delivery-management/delivery/request-resource-tab/resource-request-detail/resource-request-detail.component';
+import { AddUserToRequestComponent } from './modules/delivery-management/delivery/request-resource-tab/resource-request-detail/add-user-to-request/add-user-to-request.component';
+import { CreateUpdateResourceRequestComponent } from './modules/delivery-management/delivery/request-resource-tab/create-update-resource-request/create-update-resource-request.component';
 
 
 
@@ -147,6 +151,10 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     WeeklyReportTabComponent,
     WeeklyReportTabDetailComponent,
     CreateEditProjectChecklistComponent,
+    RequestResourceTabComponent,
+    ResourceRequestDetailComponent,
+    AddUserToRequestComponent,
+    CreateUpdateResourceRequestComponent,
     
   ],
   imports: [

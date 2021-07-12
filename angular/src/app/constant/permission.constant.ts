@@ -37,8 +37,23 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProject_Delete: "true",
     DeliveryManagement_PMReportProject_GetAll: "true",
     DeliveryManagement_PMReportProject_Update: "true",
-    DeliveryManagement_ResourceRequest: "true",
-    DeliveryManagement_ResourceRequest_ViewAllByProject: "true",
+    DeliveryManagement_ResourceRequest: "DeliveryManagement.ResourceRequest",
+    DeliveryManagement_ResourceRequest_AddUserToRequest:"DeliveryManagement.ResourceRequest.AddUserToRequest",
+    DeliveryManagement_ResourceRequest_ViewAllByProject: "DeliveryManagement.ResourceRequest.ViewAllByProject",
+    DeliveryManagement_ResourceRequest_ApproveUser: "DeliveryManagement.ResourceRequest.ApproveUser",
+    DeliveryManagement_ResourceRequest_AvailableResource: "DeliveryManagement.ResourceRequest.AvailableResource",
+    DeliveryManagement_ResourceRequest_AvailableResourceFuture: "DeliveryManagement.ResourceRequest.AvailableResourceFuture",
+    DeliveryManagement_ResourceRequest_Create: "DeliveryManagement.ResourceRequest.Create",
+    DeliveryManagement_ResourceRequest_Delete: "DeliveryManagement.ResourceRequest.Delete",
+    DeliveryManagement_ResourceRequest_PlanUser: "DeliveryManagement.ResourceRequest.PlanUser",
+    DeliveryManagement_ResourceRequest_RejectUser: "DeliveryManagement.ResourceRequest.RejectUser",
+    DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest: "DeliveryManagement.ResourceRequest.SearchAvailableUserForRequest",
+    DeliveryManagement_ResourceRequest_Update: "DeliveryManagement.ResourceRequest.Update",
+    DeliveryManagement_ResourceRequest_ViewAllResourceRequest: "DeliveryManagement.ResourceRequest.ViewAllResourceRequest",
+    DeliveryManagement_ResourceRequest_ViewDetailResourceRequest: "DeliveryManagement.ResourceRequest.ViewDetailResourceRequest",
+
+
+    
    
     PmManager: "PmManager",
     PmManager_Project: "PmManager.Project",
@@ -89,4 +104,5 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_Timesheet_Get: "Timesheet.Timesheet.Get",
     Timesheet_Timesheet_Update: "Timesheet.Timesheet.Update",
     Timesheet_Timesheet_ViewAll: "Timesheet.Timesheet.ViewAll",
+    
 }
