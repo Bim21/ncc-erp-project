@@ -34,9 +34,13 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
     this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => this.userList = data.result.items);
   }
   public saveAndClose(): void{
+    this.isLoading =true;
     this.pmReportService.approveRequest(this.resourcerequest).pipe(catchError(this.pmReportService.handleError)).subscribe(res=>{
       abp.notify.success(`Approved!`);
       this.dialogRef.close(this.resourcerequest);
+      this.isLoading =false;
+    },()=>{
+      this.isLoading =false;
     })
   }
 }

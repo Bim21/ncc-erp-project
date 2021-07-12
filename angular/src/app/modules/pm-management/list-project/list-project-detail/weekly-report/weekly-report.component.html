@@ -86,7 +86,7 @@
                                 </mat-form-field>
                             </td>
                             <td>
-                                <p *ngIf="!report.createMode"> {{report.allocatePercentage}}%</p>
+                                <p *ngIf="!report.createMode" class="text-center"> <strong> {{report.allocatePercentage}}%</strong></p>
                                 <div *ngIf="report.createMode">
                                     <input class="form-control mt-1" type="text" mask="percent" required
                                         #Percentage="ngModel" #PercentageEl suffix="%"
@@ -201,7 +201,7 @@
                             </td>
 
                             <td>
-                                <p *ngIf="!report.createMode"> {{report.allocatePercentage}}%</p>
+                                <p class="text-center" *ngIf="!report.createMode"><strong> {{report.allocatePercentage}}%</strong></p>
                                 <input class="form-control mt-1" placeholder="number" *ngIf="report.createMode"
                                     type="text" mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage" />
                             </td>
@@ -259,7 +259,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h3 class="d-inline">Các vấn đề trong tuần</h3>
-                        <button [hidden]="processFuture" (click)="addIssueReport()" class="btn btn-primary  ml-3">
+                        <button [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
                             <i class="fa fa-plus-square"></i>
                             Create
                         </button>
@@ -278,9 +278,10 @@
                             <th *ngIf="processProblem">PM Report</th>
                             <th>Vấn đề</th>
                             <th>Impact</th>
-                            <th>Trạng thái</th>
+                            
                             <th>Solution</th>
                             <th>meetingSolution</th>
+                            <th>Trạng thái</th>
                             <th>Action</th>
 
                         </tr>
@@ -329,27 +330,7 @@
                                 </div>
 
                             </td>
-                            <td class="text-center">
-                                <span [ngClass]="APP_CONST.PMReportProjectIssueStatus[problem.status]"
-                                    *ngIf="!problem.createMode">{{ problem.status }}</span>
-
-                                <div class="form-group row required" *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100 mx-auto" appearance="outline">
-                                        <mat-select [(ngModel)]="problem.status" name="issueStatus"
-                                            placeholder="select a status" required #issueStatus="ngModel">
-                                            <mat-option *ngFor="let status of isssueStatusList"
-                                                [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
-                                                {{status}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-error class="mt-1"
-                                        *ngIf="issueStatus.hasError('required') && issueStatus.touched"
-                                        style="font-size: 13px;">
-                                        This field is required
-                                    </mat-error>
-                                </div>
-
-                            </td>
+                         
                             <td>
                                 <p *ngIf="!problem.createMode">{{problem.solution}}</p>
                                 <div *ngIf="problem.createMode">
@@ -369,6 +350,27 @@
                                             [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                     </mat-form-field>
                                 </div>
+                            </td>
+                            <td class="text-center">
+                                <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
+                                    *ngIf="!problem.createMode">{{ problem.status }}</span>
+
+                                <div class="form-group row required" *ngIf="problem.createMode">
+                                    <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                        <mat-select [(ngModel)]="problem.status" name="issueStatus"
+                                            placeholder="select a status" required #issueStatus="ngModel">
+                                            <mat-option *ngFor="let status of isssueStatusList"
+                                                [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
+                                                {{status}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-error class="mt-1"
+                                        *ngIf="issueStatus.hasError('required') && issueStatus.touched"
+                                        style="font-size: 13px;">
+                                        This field is required
+                                    </mat-error>
+                                </div>
+
                             </td>
                             <td class="text-center">
                                 <button *ngIf="!problem.createMode"  mat-button [matMenuTriggerFor]="menu" [disabled] ="processProblem">

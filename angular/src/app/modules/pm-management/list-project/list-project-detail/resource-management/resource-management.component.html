@@ -92,7 +92,7 @@
                             </td>
 
                             <td>
-                                <p *ngIf="!user.createMode"> {{user.allocatePercentage}}%</p>
+                                <p *ngIf="!user.createMode"> <strong>{{user.allocatePercentage}}%</strong></p>
                                 <div *ngIf="user.createMode">
                                     <input class="form-control mt-1"  type="text" mask="percent" placeholder="number" required 
                                 name="allocatePercentage" #Percentage="ngModel" #PercentageEl

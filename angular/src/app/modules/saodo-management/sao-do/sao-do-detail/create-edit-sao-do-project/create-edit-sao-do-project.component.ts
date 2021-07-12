@@ -17,7 +17,6 @@ import { Component, OnInit, Inject, Injector } from '@angular/core';
 })
 export class CreateEditSaoDoProjectComponent extends AppComponentBase implements OnInit {
   public statusList: string[] = Object.keys(this.APP_ENUM.SaodoStatus);
-  public isDisable:boolean=false;
   public saodoProject= {} as ProjectSaodoDto;
   public projectList=[];
   public pmList=[];
@@ -38,20 +37,19 @@ export class CreateEditSaoDoProjectComponent extends AppComponentBase implements
     this.getAllUser();
   }
   SaveAndClose(){
-    this.isDisable = true;
-   
+    this.isLoading = true;
     if (this.data.command == "create") {
       this.auditResultService.create(this.saodoProject).pipe(catchError(this.auditResultService.handleError)).subscribe((res) => {
         abp.notify.success("Created timesheet detail successfully");
         this.dialogRef.close(this.saodoProject)
-      }, () => this.isDisable = false);
+      }, () => this.isLoading = false);
     }
     else {
       this.auditResultService.update(this.saodoProject).pipe(catchError(this.auditResultService.handleError)).subscribe((res) => {
         abp.notify.success("Edited timesheet detail successfully");
         this.dialogRef.close(this.saodoProject)
 
-      }, () => this.isDisable = false);
+      }, () => this.isLoading = false);
     }
   }
   getAllProject() {

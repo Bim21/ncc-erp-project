@@ -100,7 +100,7 @@
     <div align="end" class="row justify-content-between">
         <button class="btn btn-default" mat-dialog-close>Cancel</button>
         <button class="btn btn-primary"
-            [disabled]="!resourceRequestForm.valid || isDisable" (click)="SaveAndClose()">Save</button>
+            [disabled]="!resourceRequestForm.valid || isLoading" (click)="SaveAndClose()">Save</button>
     </div>
 </form>
 
