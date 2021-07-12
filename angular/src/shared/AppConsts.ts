@@ -44,6 +44,11 @@ export class AppConsts {
         Upcoming:"badge badge-pill badge-warning",
         Fail: "badge badge-pill badge-danger"
     }
+    static readonly   PMReportProjectIssueStatus =
+    {
+        InProgress: "badge badge-pill badge-primary",
+        Done: "badge badge-success",
+    }
   
 
 }

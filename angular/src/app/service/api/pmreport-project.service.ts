@@ -20,6 +20,11 @@ export class PMReportProjectService extends BaseApiService {
   }
   public getChangesInFuture(projectId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/ResourceChangesInTheFuture?projectId=' + projectId);
-
   }
+  public GetAllPmReportProjectForDropDown(): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/GetAllPmReportProjectForDropDown');
+  }
+
+
+
 }
