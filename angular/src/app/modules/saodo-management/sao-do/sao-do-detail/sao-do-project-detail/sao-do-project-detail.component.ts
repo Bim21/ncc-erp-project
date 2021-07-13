@@ -61,9 +61,14 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
 
     })
   }
-  submit(id:any){
+  public onChange(ngvipham, ngliendoi){
+    this.projectUser.userId = ngvipham
+    this.projectUser.curatorId = ngliendoi
+
+  }
+  submit(item:any){
     let requestBody = {
-      checkListItemId: id,
+      checkListItemId: item.id,
       userId: this.projectUser.userId,
       curatorId: this.projectUser.curatorId,
       auditResultId:this.auditResultId
@@ -76,8 +81,10 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
       this.getAllCheckList();
     });
   }
-  editPeople(){
+  editPeople(item){
+    item.createMode=true;
     this.isEditing=true;
+    
   }
 
   save(id,form){
@@ -92,8 +99,8 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     this.auditProjectResultService.update(requestBody).pipe(catchError(this.auditProjectResultService.handleError)).subscribe((res) => {
       abp.notify.success("Created successfully");
       this.getAllCheckList();
-      this.isEditing=false;
-    });
+      this.isEditing=false; 
+    },()=>{form.createMode=true});
   }
 
   deletePeople(form:any){
@@ -118,10 +125,16 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     })
   }
   saveNote(){
+    this.isEditingNote=true;
     this.auditResultService.updateNote(this.auditResultId,this.note).subscribe(data=>{
       this.note=data.result;
       abp.notify.success("Update Successfully!");
     })
+  }
+  cancel(){
+    this.getAllCheckList();
+    this.isEditing=false;
+
   }
 
 
