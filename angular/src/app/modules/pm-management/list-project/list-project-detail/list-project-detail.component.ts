@@ -24,7 +24,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
       replaceUrl:true
     })
   }
-  routingGeneralTab(){
+  public routingGeneralTab(){
     this.router.navigate(['list-project-general'],{
       relativeTo:this.route, queryParams:{
         id:this.requestId
@@ -32,7 +32,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     })
   }
 
-  routingResourceTab() {
+  public routingResourceTab() {
     this.router.navigate(['resourcemanagement'], {
       relativeTo: this.route, queryParams: {
         id: this.requestId
@@ -43,7 +43,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   }
 
  
-  routingMilestoneTab() {
+  public routingMilestoneTab() {
     this.router.navigate(['milestone'], {
       relativeTo: this.route, queryParams: {
         id: this.requestId
@@ -51,7 +51,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
       // replaceUrl: true
     })
   }
-  routingWeeklyReportTab(){
+  public routingWeeklyReportTab(){
     this.router.navigate(['weeklyreport'], {
       relativeTo: this.route, queryParams: {
         id: this.requestId
@@ -59,8 +59,16 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
       // replaceUrl: true
     })
   }
-  routingProjectChecklistTab(){
+  public routingProjectChecklistTab(){
     this.router.navigate(['projectchecklist'], {
+      relativeTo: this.route, queryParams: {
+        id: this.requestId
+      },
+      // replaceUrl: true
+    })
+  }
+  public routingTimesheetTab(){
+    this.router.navigate(['timesheet-tab'], {
       relativeTo: this.route, queryParams: {
         id: this.requestId
       },

@@ -133,7 +133,8 @@
 
                                 </div>
                                 <div *ngIf="user.createMode" class="pt-2">
-                                    <button [disabled]="!user?.userId || !user?.projectRole?.toString() || !user?.startTime || !user?.allocatePercentage" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveProjectUser(user)">
+                                    <button [disabled]="!user?.userId || !user?.projectRole?.toString() || !user?.startTime || !user.allocatePercentage && user.allocatePercentage !=0 " 
+                                    class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveProjectUser(user)">
                                         <i  style="color: green; ;" class="fas fa-check fa-2x"
                                        ></i>
                                     </button>

@@ -7,6 +7,7 @@ import { DialogDataDto } from './../../../../../../service/model/common-DTO';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@shared/app-component-base';
 import { Component, OnInit, Injector, Inject } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-approve-dialog',
@@ -34,6 +35,7 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
     this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => this.userList = data.result.items);
   }
   public saveAndClose(): void{
+    this.resourcerequest.startTime = moment(this.resourcerequest.startTime).format("YYYY-MM-DD")
     this.isLoading =true;
     this.pmReportService.approveRequest(this.resourcerequest).pipe(catchError(this.pmReportService.handleError)).subscribe(res=>{
       abp.notify.success(`Approved!`);

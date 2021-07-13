@@ -390,7 +390,7 @@
                                     </button>
                                 </mat-menu>
                                 <div *ngIf="problem.createMode" class="pt-2">
-                                    <button class=" mr-3 submit-btn" style="background: none; border: none;"
+                                    <button [disabled]="!problem.pmReportProjectId || !problem.description || !problem.impact" class=" mr-3 submit-btn" style="background: none; border: none;"
                                         (click)="saveProblemReport(problem)">
                                         <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                     </button>

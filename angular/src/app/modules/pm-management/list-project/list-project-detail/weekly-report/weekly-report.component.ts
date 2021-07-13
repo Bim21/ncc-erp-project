@@ -39,7 +39,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
 
   public isEditProblem: boolean = false;
-  public isEditFutureReport: boolean =false;
+  public isEditFutureReport: boolean = false;
 
 
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
@@ -119,38 +119,38 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   public saveFutureReport(report: projectReportDto) {
     delete report["createMode"]
-  if(this.isEditFutureReport){
-    this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+    if (this.isEditFutureReport) {
       this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-        abp.notify.success(`updated user: ${report.userName}`);
+        report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+        this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+          abp.notify.success(`updated user: ${report.userName}`);
+          this.getFuturereport();
+          this.isEditFutureReport = false;
+          this.processFuture = false
+        })
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+    else {
+      report.isFutureActive = false
+      report.projectId = this.projectId
+      report.isExpense = true;
+      report.status = "2";
+      report.startTime = moment(report.startTime).format("YYYY-MM-DD");
+
+      this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        abp.notify.success("created new future report");
+        this.processFuture = false;
+        report.createMode = false;
+        this.isEditFutureReport = false
         this.getFuturereport();
-        this.isEditFutureReport = false;
-        this.processFuture = false
-      })
-    },
-      () => {
-        report.createMode = true
-      })
-  }
-  else{
-    report.isFutureActive = false
-    report.projectId = this.projectId
-    report.isExpense = true;
-    report.status = "2";
-    report.startTime = moment(report.startTime).format("YYYY-MM-DD");
-   
-    this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      abp.notify.success("created new future report");
-      this.processFuture = false;
-      report.createMode = false;
-      this.isEditFutureReport = false
-      this.getFuturereport();
-    },
-      () => {
-        report.createMode = true
-      })
-  }
+      },
+        () => {
+          report.createMode = true
+        })
+    }
   }
   public cancelFutureReport() {
     this.processFuture = false;
@@ -188,10 +188,11 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.getFuturereport();
     })
   }
-  public updateRequest(report):void{
-    this.processFuture=true
+  public updateRequest(report): void {
+    this.processFuture = true
     this.isEditFutureReport = true;
-    report.createMode = true
+    report.createMode = true;
+    report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
   }
   // Project Issue
   public getAllPmReport() {
@@ -208,8 +209,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   public saveProblemReport(problem: projectProblemDto) {
     delete problem["createMode"]
-    if(!this.isEditProblem){
-      this.projectUserService.create(problem).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    if (!this.isEditProblem) {
+      this.reportIssueService.create(problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         abp.notify.success("created new Issue");
         this.processProblem = false;
         problem.createMode = false;
@@ -219,19 +220,19 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
           problem.createMode = true
         })
     }
-    else{
-      this.projectUserService.update(problem).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    else {
+      this.reportIssueService.update(problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         abp.notify.success("edited Issue");
         this.processProblem = false;
         problem.createMode = false;
         this.getProjectProblem();
-        this.isEditProblem= false;
+        this.isEditProblem = false;
       },
         () => {
           problem.createMode = true
         })
     }
-  
+
   }
   public cancelProblemReport() {
     this.processProblem = false;
@@ -244,23 +245,23 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     user.projectRole = this.APP_ENUM.ProjectUserRole[user.projectRole]
     // this.projectUserProcess = true
   }
-  
-  public deleteProblem(problem){
+
+  public deleteProblem(problem) {
     abp.message.confirm(
       "Delete Issue? ",
       "",
       (result: boolean) => {
         if (result) {
           this.reportIssueService.deleteReportIssue(problem.id).pipe(catchError(this.reportIssueService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted Issue " );
+            abp.notify.success("Deleted Issue ");
             this.getProjectProblem();
           });
         }
       }
     );
   }
-  public updateReportIssue(Issue):void{
-    this.processProblem=true
+  public updateReportIssue(Issue): void {
+    this.processProblem = true
     this.isEditProblem = true;
     Issue.createMode = true
   }

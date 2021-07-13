@@ -81,6 +81,7 @@ import { ResourceRequestDetailComponent } from './modules/delivery-management/de
 import { AddUserToRequestComponent } from './modules/delivery-management/delivery/request-resource-tab/resource-request-detail/add-user-to-request/add-user-to-request.component';
 import { CreateUpdateResourceRequestComponent } from './modules/delivery-management/delivery/request-resource-tab/create-update-resource-request/create-update-resource-request.component';
 import { ApproveDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
+import { ProjectTimesheetComponent } from './modules/pm-management/list-project/list-project-detail/project-timesheet/project-timesheet.component';
 
 
 
@@ -157,6 +158,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddUserToRequestComponent,
     CreateUpdateResourceRequestComponent,
     ApproveDialogComponent,
+    ProjectTimesheetComponent,
     
   ],
   imports: [
