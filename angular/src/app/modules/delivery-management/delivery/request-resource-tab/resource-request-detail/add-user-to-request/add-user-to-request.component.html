@@ -42,7 +42,7 @@
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button mat-raised-button color="primary" class="saving-btn"mat-button
-        [disabled]="!timesheetForm.form.valid ||isDisable" (click)="SaveAndClose()"  >Save</button>
+        [disabled]="!timesheetForm.form.valid || isLoading" (click)="SaveAndClose()"  >Save</button>
     </div>
 </form>
 

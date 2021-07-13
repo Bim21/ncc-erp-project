@@ -15,7 +15,7 @@ import { Component, OnInit, Inject, Injector } from '@angular/core';
   styleUrls: ['./create-update-resource-request.component.css']
 })
 export class CreateUpdateResourceRequestComponent extends AppComponentBase implements OnInit {
-  public isDisable:boolean=false;
+  public isLoading:boolean=false;
   public listProject:ProjectDto[]=[];
   public statusList:string[]=Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public resourceRequestDto={} as RequestResourceDto;
@@ -31,16 +31,17 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     this.resourceRequestDto=this.data.item;
   }
   SaveAndClose(){
+    this.isLoading =true;
     if(this.data.command=="create"){
       this.resourceRequestService.create(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res)=>{
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.resourceRequestDto);
-      },()=>this.isDisable=false)
+      },()=>this.isLoading=false)
     }else{
       this.resourceRequestService.update(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res)=>{
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.resourceRequestDto);
-      },()=>this.isDisable=false)
+      },()=>this.isLoading=false)
     }
 
   }

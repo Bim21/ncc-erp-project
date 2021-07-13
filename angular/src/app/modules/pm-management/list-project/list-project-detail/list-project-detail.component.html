@@ -18,6 +18,9 @@
                     <a [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
                         Project Checklist
                     </a>
+                    <a [ngClass]="currentUrl.includes('timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
+                        Timesheet
+                    </a>
                     
                 </nav>
                 <router-outlet></router-outlet>

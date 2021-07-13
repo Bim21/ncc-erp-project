@@ -62,6 +62,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   }
 
   public saveAndClose(): void {
+    this.isLoading=true;
     this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");
     if (this.project.endTime) {
       this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
