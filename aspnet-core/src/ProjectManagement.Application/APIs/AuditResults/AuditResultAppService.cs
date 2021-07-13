@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.AuditResults.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.AuditResults
@@ -20,6 +21,7 @@ namespace ProjectManagement.APIs.AuditResults
             {
                 throw new UserFriendlyException("Audit Result already exists.");
             }
+            input.PMId = WorkScope.GetAsync<Project>(input.ProjectId).Result.PMId;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditResult>(input));
             return input;
         }

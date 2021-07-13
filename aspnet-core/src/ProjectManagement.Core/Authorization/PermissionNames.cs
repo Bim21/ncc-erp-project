@@ -107,6 +107,8 @@ namespace ProjectManagement.Authorization
             public const string CheckList_ProjectChecklist_ReverseActive = "CheckList.ProjectChecklist.ReverseActive";
             public const string CheckList_ProjectChecklist_AddByProjectType = "CheckList.ProjectChecklist.AddByProjectType";
             public const string CheckList_ProjectChecklist_GetCheckListItemByProject = "CheckList.ProjectChecklist.GetCheckListItemByProject";
+            public const string CheckList_ProjectChecklist_AddCheckListItemByProject = "CheckList.ProjectChecklist.AddCheckListItemByProject";
+
         //Sao Do
         public const string SaoDo = "SaoDo";       
             // Audit Result People
@@ -295,6 +297,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.CheckList_ProjectChecklist,
                     PermissionNames.CheckList_ProjectChecklist_AddByProjectType,
                     PermissionNames.CheckList_ProjectChecklist_GetCheckListItemByProject,
+                    PermissionNames.CheckList_ProjectChecklist_AddCheckListItemByProject,
                     PermissionNames.CheckList_ProjectChecklist_Create,
                     PermissionNames.CheckList_ProjectChecklist_Delete,
                     PermissionNames.CheckList_ProjectChecklist_ReverseActive,
@@ -468,7 +471,8 @@ namespace ProjectManagement.Authorization
                  //Project Checklist
                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Checklist" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_AddByProjectType, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project Checklist by Project Type" },
-                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_GetCheckListItemByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Checklist Item By Project" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_GetCheckListItemByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Checklist Item By Project" },
+                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_AddCheckListItemByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Checklist Item By Project" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project Checklist" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project Checklist" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_ReverseActive, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reverse Active Project Checklist" },
@@ -750,6 +754,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_ReverseActive, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reverse Active Project Checklist" },
                                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_AddByProjectType, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project Checklist by Project Type" },
                                  new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_GetCheckListItemByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get CheckList Item By Project" },
+                                 new SystemPermission{ Name =  PermissionNames.CheckList_ProjectChecklist_AddCheckListItemByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add CheckList Item By Project" },
                             }
                         },
                     }
