@@ -30,6 +30,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                         on p.Id equals prpi.PMReportProjectId
                         select new GetPMReportProjectIssueDto
                         {
+                            Id = prpi.Id,
                             PMReportProjectId = prpi.PMReportProjectId,
                             Description = prpi.Description,
                             Impact = prpi.Impact,

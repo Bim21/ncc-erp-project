@@ -10,7 +10,7 @@ using ProjectManagement.EntityFrameworkCore;
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    [Migration("20210712073102_Create_Table_Checkpoint_ProjectDb")]
+    [Migration("20210712072350_Create_Table_Checkpoint_ProjectDb")]
     partial class Create_Table_Checkpoint_ProjectDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
