@@ -1,6 +1,8 @@
 ﻿using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NccCore.Extension;
+using NccCore.Paging;
 using ProjectManagement.APIs.Criterias.Dto;
 using ProjectManagement.Entities;
 using System;
@@ -14,10 +16,9 @@ namespace ProjectManagement.APIs.Criterias
     public class CriteriaAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
-        public async Task<List<CriteriaDto>> GetAll(string searchText)
+        public async Task<GridResult<CriteriaDto>> GetAll(GridParam input)
         {
             var query = from c in WorkScope.GetAll<Criteria>()
-                        where String.IsNullOrWhiteSpace(searchText) ? true : c.Name.ToLower().Contains(searchText.ToLower().Trim())
                         select new CriteriaDto
                         {
                             Id = c.Id,
@@ -26,7 +27,7 @@ namespace ProjectManagement.APIs.Criterias
                             CriteriaCategoryId = c.CriteriaCategoryId,
                             Note = c.Note
                         };
-            return await query.ToListAsync();
+            return await query.GetGridResult(query, input);
         }
         [HttpPost]
         public async Task<CriteriaDto> Create(CriteriaDto input)
@@ -60,6 +61,6 @@ namespace ProjectManagement.APIs.Criterias
 
             await WorkScope.DeleteAsync<Criteria>(criteriaId);
         }
-        
+
     }
 }

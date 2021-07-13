@@ -1,13 +1,12 @@
 ﻿using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.CriteriaCategories.Dto;
 using ProjectManagement.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.CriteriaCategories
@@ -15,16 +14,15 @@ namespace ProjectManagement.APIs.CriteriaCategories
     public class CriteriaCategoryAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
-        public async Task<List<CriteriaCategoryDto>> GetAll(string searchText)
+        public async Task<GridResult<CriteriaCategoryDto>> GetAll(GridParam input)
         {
             var query = from cc in WorkScope.GetAll<CriteriaCategory>()
-                        where String.IsNullOrWhiteSpace(searchText) ? true : cc.Name.ToLower().Contains(searchText.ToLower().Trim())
                         select new CriteriaCategoryDto
                         {
                             Id=cc.Id,
                             Name=cc.Name,
                         };
-            return await query.ToListAsync();
+            return await query.GetGridResult(query, input);
         }
         [HttpPost]
         public async Task<CriteriaCategoryDto> Create(CriteriaCategoryDto input)
