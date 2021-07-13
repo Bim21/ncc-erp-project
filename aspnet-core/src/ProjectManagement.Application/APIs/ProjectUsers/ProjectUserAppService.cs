@@ -97,7 +97,8 @@ namespace ProjectManagement.APIs.ProjectUsers
         public async Task<ProjectUserDto> Create(ProjectUserDto input)
         {
             var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId
-                                    && x.Status == input.Status && x.StartTime.Date == input.StartTime.Date);
+                                    && x.Status == input.Status && x.StartTime.Date == input.StartTime.Date && x.ProjectRole == x.ProjectRole
+                                    && x.AllocatePercentage == input.AllocatePercentage);
             if (isExist)
                 throw new UserFriendlyException("User already exist in project !");
 
