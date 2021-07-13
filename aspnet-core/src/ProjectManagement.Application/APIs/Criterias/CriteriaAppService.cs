@@ -15,7 +15,7 @@ namespace ProjectManagement.APIs.Criterias
 {
     public class CriteriaAppService : ProjectManagementAppServiceBase
     {
-        [HttpGet]
+        [HttpPost]
         public async Task<GridResult<CriteriaDto>> GetAll(GridParam input)
         {
             var query = from c in WorkScope.GetAll<Criteria>()

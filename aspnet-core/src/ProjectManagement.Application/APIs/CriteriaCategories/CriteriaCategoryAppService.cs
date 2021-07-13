@@ -13,7 +13,7 @@ namespace ProjectManagement.APIs.CriteriaCategories
 {
     public class CriteriaCategoryAppService : ProjectManagementAppServiceBase
     {
-        [HttpGet]
+        [HttpPost]
         public async Task<GridResult<CriteriaCategoryDto>> GetAll(GridParam input)
         {
             var query = from cc in WorkScope.GetAll<CriteriaCategory>()
