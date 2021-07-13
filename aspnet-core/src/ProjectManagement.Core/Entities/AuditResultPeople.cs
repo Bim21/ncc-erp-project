@@ -31,6 +31,6 @@ namespace ProjectManagement.Entities
 
         [ForeignKey(nameof(CuratorId))]
         public User Curator { get; set; }
-        public long CuratorId { get; set; }
+        public long? CuratorId { get; set; }
     }
 }

@@ -113,5 +113,31 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                         people = auditResultPeople.Where(y=>y.CheckListItemId == x.Id).ToList(),
                     }).ToListAsync();
         }
+
+        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_AddCheckListItemByProject)]
+        public async Task<List<ProjectCheckListDto>> AddCheckListItemByProject(long projectId, List<long> checkListItemIds)
+        {
+            var result = new List<ProjectCheckListDto>();
+
+            var isExist = await WorkScope.GetAll<ProjectCheckList>()
+            .AnyAsync(x => x.ProjectId == projectId && checkListItemIds.Contains(x.CheckListItemId));
+            if (isExist)
+            {
+                throw new UserFriendlyException("Project with Id '" + projectId + "' created with item in list Check List Item");
+            }
+
+            foreach (var i in checkListItemIds)
+            {
+                var temp = new ProjectCheckListDto
+                {
+                    CheckListItemId = i,
+                    IsActive = true,
+                    ProjectId = projectId
+                };
+                temp.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectCheckList>(temp));
+                result.Add(temp);
+            }
+            return result;
+        }
     }
 }

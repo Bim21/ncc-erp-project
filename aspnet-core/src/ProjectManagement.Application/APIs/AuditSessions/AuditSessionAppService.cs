@@ -22,6 +22,10 @@ namespace ProjectManagement.APIs.AuditSessions
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Create)]
         public async Task<AuditSessionDto> Create(AuditSessionDto input)
         {
+            if(input.StartTime > input.EndTime)
+            {
+                throw new UserFriendlyException("Start Time can't be greater than End Time.");
+            }
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditSession>(input));
             var activeProject = await WorkScope.GetAll<Project>()
                                 .Where(x => x.Status != ProjectStatus.Closed && x.Status != ProjectStatus.Potential)
