@@ -93,7 +93,7 @@ namespace ProjectManagement.APIs.AuditSessions
                             Name = a.Name,
                             EndTime = a.EndTime,
                             StartTime = a.StartTime,
-                            CountFail = listSessionPeople.Where(x => x.AuditSessionId == a.Id && x.IsPass).Count(),
+                            CountFail = listSessionPeople.Where(x => x.AuditSessionId == a.Id && !x.IsPass).Count(),
                             CountProjectCheck = countStatus.Count(x => x.AuditSessionId == a.Id && x.status == AuditResultStatus.Done),
                             CountProjectCreate = countStatus.Count(x=>x.AuditSessionId == a.Id)
                         };
