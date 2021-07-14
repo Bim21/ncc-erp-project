@@ -43,3 +43,19 @@ export class userToRequestDto{
   resourceRequestId?:number;
   projectId?:number;
 }
+export class availableResourceDto{
+  userId: number;
+  userName: string;
+  projects: [
+    
+  ];
+  used:number
+}
+export class planUserDto{
+  projectId: number;
+  userId: number;
+  percentUsage: number;
+  projectRole: number;
+  startTime: string;
+  isExpense?: true
+}

@@ -1,4 +1,5 @@
 import { ProjectTimesheetComponent } from './modules/pm-management/list-project/list-project-detail/project-timesheet/project-timesheet.component';
+import { AvailableResourceTabComponent } from './modules/delivery-management/delivery/available-resource-tab/available-resource-tab.component';
 import { ResourceRequestDetailComponent } from './modules/delivery-management/delivery/request-resource-tab/resource-request-detail/resource-request-detail.component';
 import { RequestResourceTabComponent } from './modules/delivery-management/delivery/request-resource-tab/request-resource-tab.component';
 import { WeeklyReportTabDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
@@ -164,6 +165,11 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
               {
                 path: "request-resource-tab",
                 component: RequestResourceTabComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "available-resource-tab",
+                component: AvailableResourceTabComponent,
                 canActivate: [AppRouteGuard],
               },
               
