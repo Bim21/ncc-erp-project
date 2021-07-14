@@ -90,7 +90,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                     {
                                         Id = x.Id,
                                         CuratorId = x.CuratorId,
-                                        CuratorName = x.Curator.FullName,
+                                        CuratorName = !x.CuratorId.HasValue ? default : x.Curator.FullName,
                                         IsPass = x.IsPass,
                                         Note = x.Note,
                                         UserId = x.UserId,
