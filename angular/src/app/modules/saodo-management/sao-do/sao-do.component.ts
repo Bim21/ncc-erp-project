@@ -39,7 +39,7 @@ export class SaoDoComponent extends PagedListingComponentBase<SaodoDto> implemen
       "",
       (result: boolean) => {
         if (result) {
-          this.saodoService.delete(item.id).pipe(catchError(this.saodoService.handleError)).subscribe(() => {
+          this.saodoService.deleteAuditSession(item.id).pipe(catchError(this.saodoService.handleError)).subscribe(() => {
             abp.notify.success("Deleted Audit " + item.name);
             this.refresh()
           });
@@ -61,12 +61,16 @@ export class SaoDoComponent extends PagedListingComponentBase<SaodoDto> implemen
   }
   showDialog(command: String, Saodo:any): void {
     let saodo = {} as SaodoDto
+    
     if (command == "edit") {
       saodo={
         name: Saodo.name,
         startTime: Saodo.startTime,
-        endTime: Saodo.endTime,
+        endTime: Saodo.endTime?Saodo.endTime:0,
         id:Saodo.id
+      }
+      if(!saodo.endTime){
+        delete saodo["endTime"]
       }
     }
 
