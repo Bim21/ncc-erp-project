@@ -58,7 +58,9 @@ export class CreateEditSaodoComponent extends AppComponentBase implements OnInit
   }
   SaveAndClose(){
     this.saodo.startTime = moment(this.saodo.startTime).format("YYYY-MM-DD");
-    this.saodo.endTime = moment(this.saodo.endTime).format("YYYY-DD-MM");
+    if(this.saodo.endTime){
+      this.saodo.endTime = moment(this.saodo.endTime).format("YYYY-MM-DD");
+    }
     this.isLoading = true
     if (this.data.command == "create") {
       // this.timesheet.isActive=true;

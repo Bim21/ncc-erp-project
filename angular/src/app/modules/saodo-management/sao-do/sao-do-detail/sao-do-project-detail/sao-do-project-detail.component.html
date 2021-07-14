@@ -24,7 +24,7 @@
 
 
                     </div>
-                    <div class="col-3    text-right">
+                    <div class="col-3 text-right">
                         <div class="text-right">
                             <button *ngIf="!isEditingNote" (click)="isEditingNote=true" type="button"
                                 class="btn bg-blue">
@@ -79,7 +79,7 @@
                                                     [(ngModel)]="form.userId">
                                                     <ng-container>
                                                         <mat-option *ngFor="let user of projectUserList"
-                                                            [value]="user.userId">{{user.userName}}</mat-option>
+                                                            [value]="user.id">{{user.userName}}</mat-option>
                                                     </ng-container>
 
                                                 </mat-select>
@@ -93,8 +93,8 @@
                                                         <mat-select [name]="form.id" placeholder="Tên người vi phạm"
                                                             [(ngModel)]="form.curatorId">
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.userId != ngvipham.value"
-                                                                    [value]="user.userId">{{user.userName}}</mat-option>
+                                                                <mat-option *ngIf="user.id != ngvipham.value"
+                                                                    [value]="user.id">{{user.userName}}</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -130,7 +130,7 @@
                                                             (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
                                                             name="ngsaipham" placeholder="Tên người vi phạm" #ngvipham>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option [value]="user.userId">{{user.userName}}
+                                                                <mat-option [value]="user.id">{{user.userName}}
                                                                 </mat-option>
                                                             </ng-container>
 
@@ -144,8 +144,8 @@
                                                             name="ngliendoi" placeholder="Tên người liên đới"
                                                             #ngliendoi>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.userId != ngvipham.value"
-                                                                    [value]="user.userId">{{user.userName}}</mat-option>
+                                                                <mat-option *ngIf="user.id != ngvipham.value"
+                                                                    [value]="user.id">{{user.userName}}</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -153,7 +153,7 @@
 
 
                                                 <div class="form-group row required">
-                                                    <button [disabled]="!projectUser.userId || !projectUser.curatorId "
+                                                    <button [disabled]="!projectUser.userId"
                                                         class="btn bg-blue" mat-raised-button
                                                         (click)="submit(item)">Submit</button>
                                                 </div>

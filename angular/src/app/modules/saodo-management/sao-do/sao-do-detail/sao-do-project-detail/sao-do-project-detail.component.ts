@@ -56,7 +56,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     this.isEditing=false;
   }
   getAllProjectUser(){
-    this.projectUserService.getAllProjectUser(this.projectId,true).subscribe(data=>{
+    this.projectUserService.getAllProjectUserInProject(this.projectId).subscribe(data=>{
       this.projectUserList=data.result;
 
     })
