@@ -9,7 +9,7 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
     public class GetProjectUserDto : EntityDto<long>
     {
         public long UserId { get; set; }
-        public string UserName { get; set; }
+        public string FullName { get; set; }
         public long ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string ProjectRole { get; set; }

@@ -149,15 +149,5 @@ namespace ProjectManagement.APIs.TimeSheets
 
             await WorkScope.DeleteAsync(timesheet);
         }
-
-        //[HttpPost]
-        //[AbpAuthorize(PermissionNames.Timesheet_Timesheet_DoneTimesheetById)]
-        //public async Task DoneTimesheetById(long timesheetId)
-        //{
-        //    var timeSheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
-
-        //    timeSheet.IsActive = TimesheetStatus.Done;
-        //    await WorkScope.UpdateAsync(timeSheet);
-        //}
     }
 }

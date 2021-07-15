@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Authorization.Users
 {
@@ -33,5 +34,10 @@ namespace ProjectManagement.Authorization.Users
         }
         [MaxLength(12)]
         public string UserCode { set; get; }
+        public string AvatarPath { get; set; }
+        public UserType UserType { get; set; }
+        public UserLevel UserLevel { get; set; }
+        public Branch Branch { get; set; }
+        public Gender Gender { get; set; }
     }
 }

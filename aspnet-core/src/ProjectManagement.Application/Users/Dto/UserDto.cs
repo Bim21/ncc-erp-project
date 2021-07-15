@@ -4,6 +4,7 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using ProjectManagement.Authorization.Users;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Users.Dto
 {
@@ -26,6 +27,12 @@ namespace ProjectManagement.Users.Dto
         [EmailAddress]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
         public string EmailAddress { get; set; }
+        public string UserCode { set; get; }
+        public string AvatarPath { get; set; }
+        public UserType UserType { get; set; }
+        public UserLevel UserLevel { get; set; }
+        public Branch Branch { get; set; }
+        public Gender Gender { get; set; }
 
         public bool IsActive { get; set; }
 

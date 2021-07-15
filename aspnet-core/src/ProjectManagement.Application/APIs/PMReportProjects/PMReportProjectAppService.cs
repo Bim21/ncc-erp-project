@@ -73,7 +73,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                             {
                                 Id = x.Id,
                                 UserId = x.UserId,
-                                UserName = x.User.FullName,
+                                FullName = x.User.FullName,
                                 ProjectId = x.ProjectId,
                                 ProjectName = x.Project.Name,
                                 ProjectRole = x.ProjectRole.ToString(),
@@ -101,7 +101,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                             {
                                 Id = x.Id,
                                 UserId = x.UserId,
-                                UserName = x.User.FullName,
+                                FullName = x.User.FullName,
                                 ProjectId = x.ProjectId,
                                 ProjectName = x.Project.Name,
                                 ProjectRole = x.ProjectRole.ToString(),
