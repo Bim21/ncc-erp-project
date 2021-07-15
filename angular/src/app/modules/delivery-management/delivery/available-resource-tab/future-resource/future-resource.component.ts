@@ -1,3 +1,7 @@
+import { ProjectUserService } from '@app/service/api/project-user.service';
+import { EditFutureResourceComponent } from './edit-future-resource/edit-future-resource.component';
+import { PlanUserComponent } from './../plan-resource/plan-user/plan-user.component';
+import { MatDialog } from '@angular/material/dialog';
 import { InputFilterDto } from './../../../../../../shared/filter/filter.component';
 import { result } from 'lodash-es';
 import { futureResourceDto } from './../../../../../service/model/delivery-management.dto';
@@ -20,13 +24,26 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
       this.showPaging(data.result,pageNumber);
     })
   }
-  protected delete(entity: FutureResourceComponent): void {
-    throw new Error('Method not implemented.');
+  protected delete(item: FutureResourceComponent): void {
+    abp.message.confirm(
+      "Delete TimeSheet " + item.userName + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.removeProjectUser(item.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted TimeSheet " + item.userName);
+            this.refresh();
+          });
+        }
+      }
+    );
   }
   
   public futureResourceList:futureResourceDto[]=[];
   constructor(public injector:Injector,
-    private availableRerourceService: DeliveryResourceRequestService) {super(injector)}
+    private availableRerourceService: DeliveryResourceRequestService,
+    private dialog:MatDialog,
+    private projectUserService: ProjectUserService) {super(injector)}
 
     public readonly FILTER_CONFIG: InputFilterDto[] = [
       { propertyName: 'userName', comparisions: [0, 6, 7, 8], displayName: "User Name",isDate:true },
@@ -37,5 +54,37 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
   ngOnInit(): void {
     this.refresh();
   }
+  showDialog(command:string,User:futureResourceDto){
+    let item={
+      userId:User.userId,
+      allocatePercentage:User.use,
+      startTime:User.startDate,
+      projectId:User.projectid,
+      id:User.id
+    }
+    const show=this.dialog.open(EditFutureResourceComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {
+        futureResource:item,
+        command:command
+      },
+    });
+    show.afterClosed().subscribe(result => {
+      if(result){
+        this.refresh()
+      }
+    });
+    
+  }
+
+  updateFutureResource(user){
+    console.log("aaaaaaaaa")
+    this.showDialog("update",user);
+  }
+
+
+  
+
 
 }

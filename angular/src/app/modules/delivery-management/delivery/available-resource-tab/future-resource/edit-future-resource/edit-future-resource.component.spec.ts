@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProjectStatusTabComponent } from './project-status-tab.component';
+import { EditFutureResourceComponent } from './edit-future-resource.component';
 
-describe('ProjectStatusTabComponent', () => {
-  let component: ProjectStatusTabComponent;
-  let fixture: ComponentFixture<ProjectStatusTabComponent>;
+describe('EditFutureResourceComponent', () => {
+  let component: EditFutureResourceComponent;
+  let fixture: ComponentFixture<EditFutureResourceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProjectStatusTabComponent ]
+      declarations: [ EditFutureResourceComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectStatusTabComponent);
+    fixture = TestBed.createComponent(EditFutureResourceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

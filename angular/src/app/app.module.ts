@@ -64,8 +64,6 @@ import { CreateEditTimesheetComponent } from './modules/timesheet/create-edit-ti
 import { ImportFileTimesheetDetailComponent } from './modules/timesheet/timesheet-detail/import-file-timesheet-detail/import-file-timesheet-detail.component';
 import { CreateEditTimesheetDetailComponent } from './modules/timesheet/timesheet-detail/create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
-import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
-import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
 import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
 import { CreateEditSaodoComponent } from './modules/saodo-management/sao-do/create-edit-saodo/create-edit-saodo.component';
 import { SaoDoDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-detail.component';
@@ -86,6 +84,9 @@ import { AvailableResourceTabComponent } from './modules/delivery-management/del
 import { PlanUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/plan-user.component';
 import { PlanResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-resource.component';
 import { FutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/future-resource.component';
+import { EditFutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/edit-future-resource/edit-future-resource.component';
+import { ClientComponent } from './modules/admin/client/client.component';
+import { CreateUpdateClientComponent } from './modules/admin/client/create-update-client/create-update-client.component';
 
 
 
@@ -145,8 +146,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ImportFileTimesheetDetailComponent,
     CreateEditTimesheetDetailComponent,
     DeliveryComponent,
-    ProjectStatusTabComponent,
-    ProjectMilestoneTabComponent,
     ListProjectGeneralComponent,
     CreateEditSaodoComponent,
     SaoDoDetailComponent,
@@ -167,6 +166,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     PlanUserComponent,
     PlanResourceComponent,
     FutureResourceComponent,
+    EditFutureResourceComponent,
+    ClientComponent,
+    CreateUpdateClientComponent,
     
   ],
   imports: [

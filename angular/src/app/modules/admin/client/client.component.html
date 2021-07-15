@@ -1,39 +1,24 @@
-<!-- <section class="content-header">
+<section class="content-header">
     <div class="container-fluid">
         <div class="row">
-
-            <div class="text-right ">
-                <button *ngIf="permission.isGranted(Finance_OutcomingEntry_OutcomingEntryDetail_AddTransaction)"
-                    class="btn bg-blue ml-2" (click)="createTransaction()">
+            <div class="col-6">
+                <h1>Client</h1>
+            </div>
+            <div class="col-6 text-right">
+                <button   (click)="createClient()"
+                    class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
-
-                    {{ "m5_child2.addNewTransaction" | translate }}
+                   Create
                 </button>
-                <button *ngIf="permission.isGranted(Finance_OutcomingEntry_OutcomingEntryDetail_LinkToTransaction)"
-                    class="btn bg-secondary ml-1" (click)="linkToTransaction()">
-                    <i class="fa fa-plus-square"></i>
-                    {{ "m5_child2.linkToTransaction" | translate }}
-                </button>
-                <ng-container *ngIf="expenditureRequest.outcomingEntryTypeCode=='SALARY' 
-                && expenditureRequest.workflowStatusCode=='END' &&detailList.length>0">
-
-                    <button *ngIf="permission.isGranted(Finance_OutcomingEntry_OutcomingEntryDetail_AddMultipleTransactions)
-                    " class="btn bg-danger ml-1" (click)="addMultipleTransaction()">
-                        <i class="fa fa-plus-square"></i>
-
-                        {{ "m5_child2.createMultiple" | translate }}
-
-                    </button>
-                </ng-container>
             </div>
         </div>
     </div>
 </section>
-
 <section class="content px-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
@@ -48,7 +33,6 @@
                                 [class.fa-angle-down]="!advancedFiltersVisible"></i>
                         </button>
                     </div>
-
                 </div>
             </div>
             <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
@@ -57,11 +41,10 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="mb-0">
-                                    <div>
+                                    <div> 
                                         <div *ngFor="let item of filterItems; let i = index">
                                             <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
-                                                (deleteDataFilter)="deleteFilterItem(i)"
-                                                [inputFilters]="BANK_FILTER_CONFIG">
+                                                (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
                                             </app-filter>
                                         </div>
                                         <i style="padding: 0;" class="fas fa-plus-circle ml-3"
@@ -78,54 +61,42 @@
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
-                            <th > {{ "m5_child3.name" | translate }} </th>
-                            <th>{{ "m5_child2.fromAccount" | translate }}</th>
-                            <th>{{ "m5_child2.toAccount" | translate }}</th>
-                            <th>{{ "m5_child3.fromValue" | translate }}</th>
-                            <th>{{ "m5_child3.toValue" | translate }}</th>
-                            <th>{{ "m5_child3.fee" | translate }}</th>
-                            <th>{{ "m5_child3.sentDate" | translate }}</th>
-                            <th class="text-center">{{ 'action.actions' | translate }}</th>
-
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let transaction of transactionDetailList  |paginate
-                : {
-                    id: 'server',
-                    itemsPerPage: pageSize,
-                    currentPage: pageNumber,
-                    totalItems: totalItems
-                  }; let i = index" style="cursor: pointer">
-                            <td>{{ i+1 }}</td>
-                            <td style="min-width: 250px; white-space: normal;">{{transaction.name}}</td>
-                            <td>{{ transaction.fromBank }}</td>
-                            <td>{{transaction.toBank}}</td>
-                            <td>{{ transaction.fromValue | number:'1.0':'en-US' }} {{transaction.fromBankCurrencyCode}}</td>
-                            <td>{{ transaction.toValue | number:'1.0':'en-US' }} {{transaction.toBankCurrencyCode}}</td>
-                            <td>{{ transaction.fee | number:'1.0':'en-US' }} {{transaction.toBankCurrencyCode}}</td>
-                            <td>{{ transaction.transactionDate |date:"dd/MM/yyyy"}}</td>
-                            <td class="text-center">
-                                <button
-                                    *ngIf="permission.isGranted(Finance_OutcomingEntry_OutcomingEntryDetail_DeleteLinkedTransaction)"
-                                    class="btn btn-sm bg-secondary mr-1"
-                                    (click)="deleteLinkedTransaction(transaction); $event.stopPropagation()">
-                                    <i class="fas fa-pencil-alt"></i>
+                        <tr *ngFor="let item of clientList |paginate
+                            : {
+                                id: 'server',
+                                itemsPerPage: pageSize,
+                                currentPage: pageNumber,
+                                totalItems: totalItems
+                              }; let i = index"  >
+                            <td class="text-center"><span>{{ i +1 }}</span></td>
+                            <td class="text-center">{{item.name}}</td>
+                            <td class="text-center">{{item.code}}</td>
+                            <td  class="text-center">
+                                <button 
+                                
+                                class="btn btn-sm bg-secondary mr-1" 
+                                (click)="editClient(item);$event.stopPropagation()" >
+                                <i class="fas fa-pencil-alt"></i>
 
-                                    {{ "m5_child2.deleteLink" | translate }}
-                                </button>
-                                <button *ngIf="permission.isGranted(Finance_BankTransaction_Delete)"
-                                    class="btn btn-sm bg-danger ml-1"
-                                    (click)="deleteTransaction(transaction); $event.stopPropagation()" #deleteBtn>
-                                    <i class="fas fa-trash"></i>
-                                    {{ "m5_child2.deleteTransaction" | translate }}
-
-                                </button>
+                                Edit
+                            </button>
+                            <button 
+                                class="btn btn-sm bg-danger ml-1"
+                                (click)="delete(item);$event.stopPropagation()"
+                                 #deleteBtn>
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">
@@ -156,7 +127,7 @@
                     </div>
                     <div class="col-sm-4 col-12 text-center">
                         <p class="mb-0 my-2">
-                            Total: {{ totalItems }}
+                            {{ "TotalRecordsCount" | localize: totalItems }}
                         </p>
                     </div>
                     <div class="col-sm-4 col-12">
@@ -167,7 +138,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-</section> -->
+</section>

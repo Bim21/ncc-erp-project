@@ -1,3 +1,4 @@
+import { ProjectUserService } from './../../../../../../service/api/project-user.service';
 import { catchError } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DeliveryResourceRequestService } from '../../../../../../service/api/delivery-request-resource.service';
@@ -15,6 +16,7 @@ import * as moment from 'moment';
 })
 export class PlanUserComponent extends AppComponentBase implements OnInit {
   public planUser={} as planUserDto;
+  public editUser={} as planUserDto;
   public listProject:ProjectDto[]=[];
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole);
 
@@ -22,20 +24,24 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
     private listProjectService:ListProjectService,
     private availableResourceService: DeliveryResourceRequestService,
     public injector:Injector,
-    public dialogRef:MatDialogRef<PlanUserComponent>) {super(injector) }
+    public dialogRef:MatDialogRef<PlanUserComponent>,
+    private projectUserService: ProjectUserService) {super(injector) }
 
   ngOnInit(): void {
     this.getAllProject();
     this.planUser.userId=this.data.item.userId;
-    console.log("userId", this.data.item.userId)
+    this.planUser=this.data.futureResource;
+    console.log("userId", this.data.futureResource)
   }
   public SaveAndClose(){
-    this.planUser.startTime=moment(this.planUser.startTime).format("YYYY/MM/DD");
-    this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res)=>{
+    if(this.data.command=="plan"){
+      this.planUser.startTime=moment(this.planUser.startTime).format("YYYY/MM/DD");
+      this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res)=>{
       abp.notify.success("Planed Successfully!");
       this.dialogRef.close(this.planUser);
 
     },()=>this.isLoading=false);
+  }
   }
 
   public getAllProject(){
