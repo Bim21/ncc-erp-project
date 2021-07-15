@@ -12,7 +12,8 @@ namespace ProjectManagement.Authorization
             public const string Pages_Roles = "Pages.Roles";
             //User
             public const string Pages_Users = "Pages.Users";
-            public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
+                public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
+                public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
 
             //Config
             public const string Admin_Configuration = "Configuration";
@@ -195,7 +196,8 @@ namespace ProjectManagement.Authorization
                     //Admin
                         //User
                         PermissionNames.Pages_Users,
-                        PermissionNames.Pages_Users_ImportUserFromFile,
+                            PermissionNames.Pages_Users_ImportUserFromFile,
+                            PermissionNames.Pages_Users_UpdateAvatar,
 
                     PermissionNames.Pages_Tenants,
                     PermissionNames.Pages_Roles,
@@ -372,6 +374,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Pages_Tenants, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tenants" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
 
                  //Configuration
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuration, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuration" },
@@ -536,6 +539,7 @@ namespace ProjectManagement.Authorization
                             Childrens = new List<SystemPermission>()
                             {
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
                             }
                         },
                         //Configuration

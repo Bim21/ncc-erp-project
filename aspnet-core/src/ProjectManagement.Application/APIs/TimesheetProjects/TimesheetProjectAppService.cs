@@ -3,6 +3,7 @@ using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
@@ -289,7 +290,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 string FileExtension = fileName.Substring(fileName.LastIndexOf('.') + 1).ToLower();
                 if (FileExtension == "xlsx" || FileExtension == "xltx" || FileExtension == "docx")
                 {
-                    var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
+                    var filePath = timesheetProject.Timesheet.Year + timesheetProject.Timesheet.Month + timesheetProject.Project.Code + "_" + fileName;
                     if (timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
                     {
                         File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
@@ -319,5 +320,20 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DownloadFileTimesheetProject([FromQuery] long timesheetProjectId)
+        {
+            var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath);
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(bytes, contentType, Path.GetFileName(filePath));
+        }
     }
 }

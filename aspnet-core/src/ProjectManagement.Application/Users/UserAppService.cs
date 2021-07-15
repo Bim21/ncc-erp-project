@@ -30,6 +30,7 @@ using Newtonsoft.Json;
 using NccCore.IoC;
 using Abp.Authorization.Users;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ProjectManagement.Users
 {
@@ -43,6 +44,7 @@ namespace ProjectManagement.Users
         private readonly IAbpSession _abpSession;
         private readonly LogInManager _logInManager;
         private readonly IWorkScope _workScope;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -52,7 +54,8 @@ namespace ProjectManagement.Users
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
             LogInManager logInManager,
-            IWorkScope workScope)
+            IWorkScope workScope,
+            IWebHostEnvironment webHostEnvironment)
             : base(repository)
         {
             _userManager = userManager;
@@ -62,6 +65,7 @@ namespace ProjectManagement.Users
             _abpSession = abpSession;
             _logInManager = logInManager;
             _workScope = workScope;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -255,6 +259,54 @@ namespace ProjectManagement.Users
                     Gender = u.Gender
                 });
             return await query.ToListAsync();
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Pages_Users_UpdateAvatar)]
+        public async Task<string> UpdateAvatar([FromForm] AvatarDto input)
+        {
+            String path = Path.Combine(_webHostEnvironment.WebRootPath, "avatars");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            if (input != null && input.File != null && input.File.Length > 0)
+            {
+                string FileExtension = Path.GetExtension(input.File.FileName).ToLower();
+
+                if (FileExtension == ".jpeg" || FileExtension == ".png" || FileExtension == ".jpg" || FileExtension == ".gif")
+                {
+                    if (input.File.Length > 1048576)
+                    {
+                        throw new UserFriendlyException(String.Format("File needs to be less than 1MB!"));
+                    }
+                    else
+                    {
+                        //get user to take name + code
+                        User user = await _userManager.GetUserByIdAsync(input.UserId);
+                        //set avatar name = milisecond + id + name + extension
+                        String avatarPath = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+                            + "_" + input.UserId
+                            + "_" + user.UserName
+                            + Path.GetExtension(input.File.FileName);
+                        using (var stream = System.IO.File.Create(Path.Combine(_webHostEnvironment.WebRootPath, "avatars", avatarPath)))
+                        {
+                            await input.File.CopyToAsync(stream);
+                            user.AvatarPath = "/avatars/" + avatarPath;
+                            await _userManager.UpdateAsync(user);
+                        }
+                        return "/avatars/" + avatarPath;
+                    }
+                }
+                else
+                {
+                    throw new UserFriendlyException(String.Format("File can not upload!"));
+                }
+            }
+            else
+            {
+                throw new UserFriendlyException(String.Format("No file upload!"));
+            }
         }
 
         [HttpPost]

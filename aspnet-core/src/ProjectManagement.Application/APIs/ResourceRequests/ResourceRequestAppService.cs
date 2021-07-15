@@ -115,7 +115,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 ResourceRequestId = resourceRequest.Id,
                 ProjectRole = input.ProjectRole,
                 StartTime = input.StartTime,
-                Status = ProjectUserStatus.Future,
+                Status = ProjectUserStatus.Present,
                 IsExpense = true,
                 IsFutureActive = false,
                 PMReportId = pmReportActive.Id
@@ -135,8 +135,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
-                                .Where(x => (x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present && x.Status == ProjectUserStatus.Present)
-                                || (x.Status == ProjectUserStatus.Future && x.IsFutureActive))
+                                .Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present)
                                 .Select(x => new
                                 {
                                     UserId = x.UserId,
@@ -148,7 +147,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.Id,
                                     UserName = x.FullName,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
-                                }).Where(x => x.Undisposed > 0);
+                                });
 
             return await users.ToListAsync();
         }
@@ -222,7 +221,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 StartTime = input.StartTime,
                 Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present,
                 IsExpense = input.IsExpense,
-                IsFutureActive = false,
+                IsFutureActive = input.StartTime.Date > DateTime.Now.Date ? true : false,
                 PMReportId = pmReportActive.Id
             };
             projectUser.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
