@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.Projects.Dto;
@@ -11,6 +12,8 @@ using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Finance;
+using ProjectManagement.Services.Finance.Dto;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,10 +27,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
     public class TimesheetProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly FinanceService _financeService;
 
-        public TimesheetProjectAppService(IWebHostEnvironment environment)
+        public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService)
         {
-             _hostingEnvironment = environment;
+            _hostingEnvironment = environment;
+            _financeService = financeService;
         }
 
         [HttpGet]
@@ -40,15 +45,114 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         from p in pp.DefaultIfEmpty()
                         select new GetTimesheetProjectDto
                         {
-                            Id = p.Id,
+                            Id = ts.Id,
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
-                            TimesheetId = p.TimesheetId,
                             ProjectId = p.ProjectId,
                             TimesheetFile = "/timesheets/" + p.FilePath,
                             Note = p.Note
                         };
             return await query.ToListAsync();
         }
+
+        [HttpGet]
+        public async Task<List<GetDetailInvoiceDto>> ViewInvoice(long timesheetId)
+        {
+            var query = from c in WorkScope.GetAll<Client>()
+                        join tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.Timesheet.IsActive)
+                        on c.Id equals tsp.Project.ClientId
+                        group tsp by new { c.Id, c.Name } into pp
+                        select new GetDetailInvoiceDto
+                        {
+                            ClientId = pp.Key.Id,
+                            ClientName = pp.Key.Name,
+                            TotalProject = pp.Count()
+                        };
+            return await query.ToListAsync();
+        }
+
+        //[HttpPost]
+        //public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
+        //{
+        //    var timesheetProject = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == input.TimesheetId && x.Timesheet.IsActive);
+        //    var query = WorkScope.GetAll<Client>().Where(x => timesheetProject.Select(p => p.Project.ClientId).Contains(x.Id))
+        //        .Select(x => new
+        //        {
+        //            ClientId = x.Id,
+        //            ClientName = x.Name,
+        //            ClientCode = x.Code,
+        //            Month = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(m => m.Timesheet.Month).FirstOrDefault(),
+        //            Year = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(m => m.Timesheet.Year).FirstOrDefault(),
+        //            TimesheetProject = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(p => new
+        //            {
+        //                ProjectName = p.Project.Name,
+        //                FilePath = "timesheets/" + p.FilePath
+        //            }).ToList()
+        //        });
+
+        //    var createInvoice = new List<CreateInvoiceDto>();
+        //    foreach (var isMerge in input.MergeInvoice)
+        //    {
+        //        if(isMerge.isMergeInvoice)
+        //        {
+        //            var client = query.Where(c => c.ClientId == isMerge.ClientId);
+        //            var projectName = new StringBuilder();
+        //            foreach (var item in client)
+        //            {
+        //                foreach (var p in item.TimesheetProject)
+        //                {
+        //                    projectName.Append($"{p.ProjectName}_");
+        //                }
+        //                var invoice = new CreateInvoiceDto
+        //                {
+        //                    Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{projectName}]",
+        //                    TimeAt = $"{DateTime.Now}",
+        //                    AccountCode = item.ClientCode,
+        //                    TotalPrice = 0,
+        //                    Status = InvoiceStatus.New,
+        //                    Note = null,
+        //                    Detail = item.TimesheetProject.Select(x => new InvoiceDetailDto
+        //                    {
+        //                        ProjectName = x.ProjectName,
+        //                        LinkFile = x.FilePath
+        //                    }).ToList()
+        //                };
+        //                createInvoice.Add(invoice);
+        //            }
+        //        } else
+        //        {
+        //            var client1 = query.Where(c => c.ClientId == isMerge.ClientId);
+
+        //            foreach (var item in client1)
+        //            {
+        //                foreach (var p in item.TimesheetProject)
+        //                {
+        //                    var invoice = new CreateInvoiceDto
+        //                    {
+        //                        Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{p.ProjectName}]",
+        //                        TimeAt = $"{DateTime.Now}",
+        //                        AccountCode = item.ClientCode,
+        //                        TotalPrice = 0,
+        //                        Status = InvoiceStatus.New,
+        //                        Note = null,
+        //                        Detail = new List<InvoiceDetailDto>
+        //                            {
+        //                                new InvoiceDetailDto
+        //                                {
+        //                                    ProjectName = p.ProjectName,
+        //                                    LinkFile = p.FilePath
+        //                                }
+        //                            }
+        //                    };
+        //                    createInvoice.Add(invoice);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    var rs = await _financeService.CreateInvoiceToFinance(createInvoice);
+        //    if (rs == null)
+        //        throw new UserFriendlyException("Error creating Invoice");
+        //    return input;
+        //}
 
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
@@ -85,23 +189,23 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var query = from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
-                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
-                         join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
-                         where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
-                         select new GetTimesheetDetailDto
-                         {
-                             Id = tsp.Id,
-                             ProjectId = tsp.ProjectId,
-                             TimesheetId = tsp.TimesheetId,
-                             ProjectName = p.Name,
-                             PmId = u.Id,
-                             PmName = u.FullName,
-                             ClientId = c.Id,
-                             ClientName = c.Name,
-                             File = "/timesheets/" + tsp.FilePath,
-                             ProjectBillInfomation = tsp.ProjectBillInfomation,
-                             Note = tsp.Note
-                         };
+                        join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
+                        join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
+                        where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
+                        select new GetTimesheetDetailDto
+                        {
+                            Id = tsp.Id,
+                            ProjectId = tsp.ProjectId,
+                            TimesheetId = tsp.TimesheetId,
+                            ProjectName = p.Name,
+                            PmId = u.Id,
+                            PmName = u.FullName,
+                            ClientId = c.Id,
+                            ClientName = c.Name,
+                            File = "/timesheets/" + tsp.FilePath,
+                            ProjectBillInfomation = tsp.ProjectBillInfomation,
+                            Note = tsp.Note
+                        };
 
             return await query.ToListAsync();
         }
@@ -160,7 +264,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
 
-            if(timeSheetProject.FilePath != null)
+            if (timeSheetProject.FilePath != null)
             {
                 throw new UserFriendlyException("Timesheet already has attachments, cannot be deleted !");
             }
@@ -186,7 +290,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 if (FileExtension == "xlsx" || FileExtension == "xltx" || FileExtension == "docx")
                 {
                     var filePath = DateTimeOffset.Now.ToUnixTimeMilliseconds() + "_" + fileName;
-                    if(timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
+                    if (timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
                     {
                         File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
 

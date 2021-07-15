@@ -33,7 +33,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                         {
                             Id = x.Id,
                             UserId = x.UserId,
-                            UserName = x.User.Name,
+                            FullName = x.User.FullName,
                             ProjectId = x.ProjectId,
                             ProjectName = x.Project.Name,
                             ProjectRole = x.ProjectRole.ToString(),
@@ -52,16 +52,18 @@ namespace ProjectManagement.APIs.ProjectUsers
         [HttpGet]
         public async Task<List<UserDto>> GetAllProjectUserInProject(long projectId)
         {
-            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId).Select(x => x.UserId);
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.Status != ProjectUserStatus.Past).Select(x => x.UserId);
 
             var query = WorkScope.GetAll<User>().Where(x => x.IsActive && projectUser.Contains(x.Id))
                         .Select(x => new UserDto
                         {
                             Id = x.Id,
-                            UserName = x.UserName,
-                            Name = x.Name,
-                            Surname = x.Surname,
-                            EmailAddress = x.EmailAddress
+                            FullName = x.FullName,
+                            AvatarPath = x.AvatarPath,
+                            UserType = x.UserType,
+                            UserLevel = x.UserLevel,
+                            Branch = x.Branch,
+                            Gender = x.Gender
                         });
             return await query.ToListAsync();
         }
@@ -75,7 +77,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                                 {
                                     Id = x.Id,
                                     UserId = x.UserId,
-                                    UserName = x.User.FullName,
+                                    FullName = x.User.FullName,
                                     ProjectId = x.ProjectId,
                                     ProjectName = x.Project.Name,
                                     ProjectRole = x.ProjectRole.ToString(),

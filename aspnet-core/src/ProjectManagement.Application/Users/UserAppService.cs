@@ -29,6 +29,7 @@ using OfficeOpenXml;
 using Newtonsoft.Json;
 using NccCore.IoC;
 using Abp.Authorization.Users;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Users
 {
@@ -232,6 +233,28 @@ namespace ProjectManagement.Users
             }
 
             return true;
+        }
+
+        [HttpGet]
+        public async Task<List<UserDto>> GetAllUserActive(bool onlyStaff)
+        {
+            var query = _workScope.GetAll<User>().Where(u => u.IsActive)
+                .Where(x => onlyStaff ? x.UserType != UserType.Internship : true)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Name = u.Name,
+                    Surname = u.Surname,
+                    EmailAddress = u.EmailAddress,
+                    FullName = u.FullName,
+                    AvatarPath = u.AvatarPath,
+                    UserType = u.UserType,
+                    UserLevel = u.UserLevel,
+                    Branch = u.Branch,
+                    Gender = u.Gender
+                });
+            return await query.ToListAsync();
         }
 
         [HttpPost]

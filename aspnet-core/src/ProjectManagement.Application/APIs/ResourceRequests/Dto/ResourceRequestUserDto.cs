@@ -8,6 +8,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
     {
         public long UserId { get; set; }
         public string UserName { get; set; }
-        public byte Undisposed { get; set; }
+        public int Undisposed { get; set; }
     }
 }
