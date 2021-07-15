@@ -2433,9 +2433,6 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
