@@ -17,24 +17,13 @@ export class DeliveryComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
 
-    this.router.navigate(['status-tab'], {
+    this.router.navigate(['weekly-report-tab'], {
       relativeTo: this.route ,
       replaceUrl: true
     })
   }
 
-  routingStatusTab() {
-    this.router.navigate(['status-tab'], {
-      relativeTo: this.route
-
-    })
-  }
-  routingMileStoneTab() {
-    this.router.navigate(['milestone-tab'], {
-      relativeTo: this.route
-
-    })
-  }
+  
   routingWeeklyReportTab(){
     this.router.navigate(['weekly-report-tab'],{
       relativeTo:this.route

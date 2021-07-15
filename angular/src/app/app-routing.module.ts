@@ -10,8 +10,6 @@ import { WeeklyReportTabComponent } from './modules/delivery-management/delivery
 import { SaoDoProjectDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-project-detail/sao-do-project-detail.component';
 import { InvoiceComponent } from './modules/timesheet/invoice/invoice.component';
 import { SaoDoDetailComponent } from './modules/saodo-management/sao-do/sao-do-detail/sao-do-detail.component';
-import { ProjectMilestoneTabComponent } from './modules/delivery-management/delivery/project-milestone-tab/project-milestone-tab.component';
-import { ProjectStatusTabComponent } from './modules/delivery-management/delivery/project-status-tab/project-status-tab.component';
 import { DeliveryComponent } from './modules/delivery-management/delivery/delivery.component';
 import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
 import { WeeklyReportComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/weekly-report.component';
@@ -156,16 +154,6 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
             component: DeliveryComponent,
             canActivate: [AppRouteGuard],
             children: [
-              {
-                path: "status-tab",
-                component: ProjectStatusTabComponent,
-                canActivate: [AppRouteGuard],
-              },
-              {
-                path: "milestone-tab",
-                component: ProjectMilestoneTabComponent,
-                canActivate: [AppRouteGuard],
-              },
               {
                 path: "weekly-report-tab",
                 component: WeeklyReportTabComponent,
