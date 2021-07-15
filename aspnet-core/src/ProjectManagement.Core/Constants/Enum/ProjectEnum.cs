@@ -19,7 +19,7 @@ namespace ProjectManagement.Constants.Enum
         {
             Green = 0,
             Red = 1
-            
+
         }
         public enum PMReportProjectIssueStatus
         {
@@ -77,7 +77,7 @@ namespace ProjectManagement.Constants.Enum
         public enum ResourceRequestStatus
         {
             PENDING = 0,
-            DONE = 1,            
+            DONE = 1,
             CANCELLED = 2
         }
         public enum ProjectIssueSource
@@ -105,6 +105,48 @@ namespace ProjectManagement.Constants.Enum
             InProcess = 1,
             Done = 2
         }
+        public enum PhaseType
+        {
+            Main = 0,
+            Sub = 1
+        }
+        public enum CheckPointUserType
+        {
+            PM = 0,
+            Team = 1,
+            Client = 2,
+            Self = 3,
+            Exam = 4
+        }
+        public enum CheckPointUserStatus
+        {
+            Draft = 0,
+            Reviewed = 1
+        }
+        public enum CheckPointUserResultStatus
+        {
+            Draft = 0,
+            Done = 1
+        }
+        public enum UserLevel : byte
+        {
+            Intern_0 = 0,
+            Intern_600K = 1,
+            Intern_2M = 2,
+            Intern_4M = 3,
+            FresherMinus = 4,
+            Fresher = 5,
+            FresherPlus = 6,
+            JuniorMinus = 7,
+            Junior = 8,
+            JuniorPlus = 9,
+            MiddleMinus = 10,
+            Middle = 11,
+            MiddlePlus = 12,
+            SeniorMinus = 13,
+            Senior = 14,
+            SeniorPlus = 15,
+        }
         public enum UserType
         {
             Internship = 0,
@@ -119,25 +161,6 @@ namespace ProjectManagement.Constants.Enum
             DaNang = 1,
             HCM = 2,
             Other = 4
-        }
-        public enum UserLevel
-        {
-            Intern_0 = 0,
-            Intern_600k = 1,
-            Intern_2M = 2,
-            Intern_4M = 3,
-            FresherMinus = 4,
-            Fresher = 5,
-            FresherPlus = 6,
-            JuniorMinus = 7,
-            Junior = 8,
-            JuniorPlus = 9,
-            MiddleMinus = 10,
-            Middle = 11,
-            MiddlePlus = 12,
-            SeniorMinus = 13,
-            Senior = 14,
-            SeniorPlus = 15
         }
         public enum Gender
         {
