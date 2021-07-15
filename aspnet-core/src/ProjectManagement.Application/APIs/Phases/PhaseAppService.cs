@@ -94,7 +94,7 @@ namespace ProjectManagement.APIs.Phases
             if (phase.Result.Type == PhaseType.Main)
             {
                 var phasechilds = WorkScope.GetAll<Phase>().Where(x => x.ParentId == phaseId);
-                var isExist = await WorkScope.GetAll<CheckPointUser>().AnyAsync(x => phasechilds.Select(x => x.Id).Contains(x.PhaseId));
+                var isExist = await WorkScope.GetAll<CheckPointUser>().AnyAsync(x => phasechilds.Select(x => x.Id).Contains(x.PhaseId) && x.Status == CheckPointUserStatus.Draft);
 
                 if (!isExist)
                     foreach (var item in phasechilds)
@@ -103,7 +103,24 @@ namespace ProjectManagement.APIs.Phases
                     }
             }
             else
+            {
                 await WorkScope.DeleteAsync<Phase>(phaseId);
+            }
+                
+        }
+        [HttpPut]
+        public async Task Active(long phaseId)
+        {
+            var phase = await WorkScope.GetAsync<Phase>(phaseId);
+            phase.IsActive = true;
+            await WorkScope.UpdateAsync<Phase>(phase);
+        }
+        [HttpPut]
+        public async Task UnActive(long phaseId)
+        {
+            var phase = await WorkScope.GetAsync<Phase>(phaseId);
+            phase.IsActive = false;
+            await WorkScope.UpdateAsync<Phase>(phase);
         }
     }
 }

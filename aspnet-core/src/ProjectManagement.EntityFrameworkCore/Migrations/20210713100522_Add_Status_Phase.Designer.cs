@@ -10,8 +10,8 @@ using ProjectManagement.EntityFrameworkCore;
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    [Migration("20210712072350_Create_Table_Checkpoint_ProjectDb")]
-    partial class Create_Table_Checkpoint_ProjectDb
+    [Migration("20210713100522_Add_Status_Phase")]
+    partial class Add_Status_Phase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -2419,6 +2419,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
