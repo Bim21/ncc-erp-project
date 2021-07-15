@@ -18,6 +18,7 @@ using Abp.Dependency;
 using Abp.Json;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using ProjectManagement.Services.Finance;
 
 namespace ProjectManagement.Web.Host.Startup
 {
@@ -74,7 +75,7 @@ namespace ProjectManagement.Web.Host.Startup
                         .AllowCredentials()
                 )
             );
-
+            services.AddHttpClient<FinanceService>();
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
             {

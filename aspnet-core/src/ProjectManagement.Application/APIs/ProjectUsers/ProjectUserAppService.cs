@@ -27,7 +27,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId)
-                        .Where(x => viewHistory || x.Status != ProjectUserStatus.Past)
+                        .Where(x => viewHistory || x.Status != ProjectUserStatus.Past && x.AllocatePercentage > 0)
                         .OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetProjectUserDto
                         {

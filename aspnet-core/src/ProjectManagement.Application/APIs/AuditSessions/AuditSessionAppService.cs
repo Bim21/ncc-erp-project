@@ -118,7 +118,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
-                              CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && x.IsPass).Count(),
+                              CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && !x.IsPass).Count(),
                               Status = ar.Status.ToString()
                           }).ToListAsync();
         }
