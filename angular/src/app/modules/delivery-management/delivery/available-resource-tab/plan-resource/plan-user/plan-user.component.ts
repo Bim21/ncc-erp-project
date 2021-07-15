@@ -1,10 +1,10 @@
 import { catchError } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
+import { DeliveryResourceRequestService } from '../../../../../../service/api/delivery-request-resource.service';
 import { AppComponentBase } from '@shared/app-component-base';
-import { ProjectDto } from './../../../../../service/model/project.dto';
-import { ListProjectService } from './../../../../../service/api/list-project.service';
-import { planUserDto } from './../../../../../service/model/delivery-management.dto';
+import { ProjectDto } from '../../../../../../service/model/project.dto';
+import { ListProjectService } from '../../../../../../service/api/list-project.service';
+import { planUserDto } from '../../../../../../service/model/delivery-management.dto';
 import { Component, OnInit, Injector, Inject } from '@angular/core';
 import * as moment from 'moment';
 

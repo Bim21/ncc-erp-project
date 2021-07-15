@@ -33,6 +33,9 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public planUser(item:any):Observable<any>{
     return this.http.post<any>(this.rootUrl+'/PlanUser',item);
   }
+  public availableResourceFuture(request:PagedRequestDto):Observable<any>{
+    return this.http.post<any>(this.rootUrl+'/AvailableResourceFuture',request);
+  }
   
 
   

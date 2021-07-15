@@ -47,7 +47,7 @@ export class availableResourceDto{
   userId: number;
   userName: string;
   projects: [
-    
+
   ];
   used:number
 }
@@ -58,4 +58,13 @@ export class planUserDto{
   projectRole: number;
   startTime: string;
   isExpense?: true
+}
+export class futureResourceDto{
+  userId: number;
+  userName: string;
+  projectid: number;
+  projectName: string;
+  startDate: string;
+  use: number;
+  id?: number
 }

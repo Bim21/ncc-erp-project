@@ -83,7 +83,9 @@ import { CreateUpdateResourceRequestComponent } from './modules/delivery-managem
 import { ApproveDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
 import { ProjectTimesheetComponent } from './modules/pm-management/list-project/list-project-detail/project-timesheet/project-timesheet.component';
 import { AvailableResourceTabComponent } from './modules/delivery-management/delivery/available-resource-tab/available-resource-tab.component';
-import { PlanUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-user/plan-user.component';
+import { PlanUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/plan-user.component';
+import { PlanResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-resource.component';
+import { FutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/future-resource.component';
 
 
 
@@ -163,6 +165,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProjectTimesheetComponent,
     AvailableResourceTabComponent,
     PlanUserComponent,
+    PlanResourceComponent,
+    FutureResourceComponent,
     
   ],
   imports: [

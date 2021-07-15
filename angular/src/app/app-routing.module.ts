@@ -1,3 +1,5 @@
+import { FutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/future-resource.component';
+import { PlanResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-resource.component';
 import { ProjectTimesheetComponent } from './modules/pm-management/list-project/list-project-detail/project-timesheet/project-timesheet.component';
 import { AvailableResourceTabComponent } from './modules/delivery-management/delivery/available-resource-tab/available-resource-tab.component';
 import { ResourceRequestDetailComponent } from './modules/delivery-management/delivery/request-resource-tab/resource-request-detail/resource-request-detail.component';
@@ -171,6 +173,18 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
                 path: "available-resource-tab",
                 component: AvailableResourceTabComponent,
                 canActivate: [AppRouteGuard],
+                children:[
+                  {
+                    path:"plan-resource",
+                    component:PlanResourceComponent,
+                    canActivate:[AppRouteGuard],
+                  },
+                  {
+                    path:"future-resource",
+                    component:FutureResourceComponent,
+                    canActivate:[AppRouteGuard],
+                  }
+                ]
               },
               
             ]
