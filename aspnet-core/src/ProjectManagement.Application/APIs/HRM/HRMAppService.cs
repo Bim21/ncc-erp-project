@@ -45,7 +45,6 @@ namespace ProjectManagement.APIs.HRM
                 EmailAddress = input.EmailAddress,
                 NormalizedEmailAddress = input.EmailAddress.ToUpper(),
                 NormalizedUserName = input.UserName.ToUpper(),
-                AvatarPath = "/avatars/default-avatar.png",
                 UserType = input.UserType,
                 UserLevel = input.UserLevel,
                 Branch = input.Branch,
