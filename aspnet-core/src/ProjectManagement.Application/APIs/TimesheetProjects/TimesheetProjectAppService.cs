@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -282,7 +284,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 Directory.CreateDirectory(path);
             }
-            var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(input.TimesheetProjectId);
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x => x.Timesheet)
+                                        .Where(x => x.Id == input.TimesheetProjectId).FirstOrDefaultAsync();
 
             if (input != null && input.File != null && input.File.Length > 0)
             {
@@ -320,20 +323,20 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> DownloadFileTimesheetProject([FromQuery] long timesheetProjectId)
-        {
-            var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath);
+        //[HttpGet]
+        //public async Task<IActionResult> DownloadFileTimesheetProject([FromQuery] long timesheetProjectId)
+        //{
+        //    var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
+        //    var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath);
 
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(filePath, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
+        //    var provider = new FileExtensionContentTypeProvider();
+        //    if (!provider.TryGetContentType(filePath, out var contentType))
+        //    {
+        //        contentType = "application/octet-stream";
+        //    }
 
-            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return File(bytes, contentType, Path.GetFileName(filePath));
-        }
+        //    var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+        //    return new FileContentResult(bytes, "application/octet-stream");
+        //}
     }
 }
