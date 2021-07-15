@@ -1,4 +1,5 @@
-import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApiService } from './base-api.service';
 
@@ -13,4 +14,10 @@ export class ClientService extends BaseApiService{
   constructor(http: HttpClient) {
     super(http);
   }
+  
+  public deleteClient(id: any): Observable<any> {
+    return this.http.delete<any>(this.rootUrl + '/Delete', {
+        params: new HttpParams().set('clientId', id)
+    })
+}
 }

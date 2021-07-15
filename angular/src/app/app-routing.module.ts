@@ -1,3 +1,4 @@
+import { ClientComponent } from './modules/admin/client/client.component';
 import { FutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/future-resource.component';
 import { PlanResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-resource.component';
 import { ProjectTimesheetComponent } from './modules/pm-management/list-project/list-project-detail/project-timesheet/project-timesheet.component';
@@ -64,6 +65,12 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
             path: "tenants",
             component: TenantsComponent,
             data: { permission: "Pages.Tenants" },
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "clients",
+            component: ClientComponent,
+            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
           { path: "about", component: AboutComponent },

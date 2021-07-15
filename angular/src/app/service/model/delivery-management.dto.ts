@@ -13,7 +13,7 @@ export class RequestResourceDto{
 export class ResourceRequestDetailDto{
   
   userId : number;
-  userName :  string ;
+  FullName :  string ;
   projectId : number;
   projectName :  string ;
   projectRole :  string ;
@@ -58,6 +58,13 @@ export class planUserDto{
   projectRole: number;
   startTime: string;
   isExpense?: true
+}
+export class editFutureResourceDto{
+  userId: number;
+  projectId: number;
+  allocatePercentage: number;
+  startTime: string;
+  id?: number
 }
 export class futureResourceDto{
   userId: number;

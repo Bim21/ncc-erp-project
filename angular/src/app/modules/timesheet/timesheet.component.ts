@@ -90,7 +90,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     });
     show.afterClosed().subscribe(result => {
       if(result){
-        this.refresh()
+        this.refresh();
       }
     });
 

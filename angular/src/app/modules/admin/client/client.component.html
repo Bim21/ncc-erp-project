@@ -1,7 +1,24 @@
-<section class="content px-2 mt-2">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h1>Client</h1>
+            </div>
+            <div class="col-6 text-right">
+                <button   (click)="createClient()"
+                    class="btn bg-blue">
+                    <i class="fa fa-plus-square"></i>
+                   Create
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content px-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
@@ -24,7 +41,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="mb-0">
-                                    <div>
+                                    <div> 
                                         <div *ngFor="let item of filterItems; let i = index">
                                             <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
                                                 (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
@@ -40,34 +57,43 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
-                            <th>Nhân viên</th>
-                            <th>Dự án</th>
-                            <th>Sử dụng</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of availableResourceList |paginate
+                        <tr *ngFor="let item of clientList |paginate
                             : {
                                 id: 'server',
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index">
+                              }; let i = index"  >
                             <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td class="text-center"><span class="hyperlink"
-                                    (click)="showUserDetail(item.userId)">{{item.userName}}</span></td>
-                            <td class="text-center">{{item.projects}}</td>
-                            <td class="text-center"><span class="mr-2">{{item.used}}%</span>
-                                <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
-                                    Plan
-                                </button>
+                            <td class="text-center">{{item.name}}</td>
+                            <td class="text-center">{{item.code}}</td>
+                            <td  class="text-center">
+                                <button 
+                                
+                                class="btn btn-sm bg-secondary mr-1" 
+                                (click)="editClient(item);$event.stopPropagation()" >
+                                <i class="fas fa-pencil-alt"></i>
 
+                                Edit
+                            </button>
+                            <button 
+                                class="btn btn-sm bg-danger ml-1"
+                                (click)="delete(item);$event.stopPropagation()"
+                                 #deleteBtn>
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </button>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>

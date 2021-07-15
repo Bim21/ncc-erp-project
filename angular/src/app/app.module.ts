@@ -86,6 +86,9 @@ import { AvailableResourceTabComponent } from './modules/delivery-management/del
 import { PlanUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/plan-user.component';
 import { PlanResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-resource.component';
 import { FutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/future-resource.component';
+import { EditFutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/edit-future-resource/edit-future-resource.component';
+import { ClientComponent } from './modules/admin/client/client.component';
+import { CreateUpdateClientComponent } from './modules/admin/client/create-update-client/create-update-client.component';
 
 
 
@@ -167,6 +170,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     PlanUserComponent,
     PlanResourceComponent,
     FutureResourceComponent,
+    EditFutureResourceComponent,
+    ClientComponent,
+    CreateUpdateClientComponent,
     
   ],
   imports: [

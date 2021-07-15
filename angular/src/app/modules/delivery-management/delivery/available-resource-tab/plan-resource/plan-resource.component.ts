@@ -30,7 +30,7 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
     
   }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
-    { propertyName: 'userName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
+    { propertyName: 'userName', comparisions: [0, 6, 7, 8], displayName: "User Name",isDate:true },
     { propertyName: 'used', comparisions:  [0, 1, 2, 3], displayName: "Used" },
     
   ];
@@ -43,7 +43,7 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   ngOnInit(): void {
     this.refresh();
   }
-  showDialogPlanUser(user:any){
+  showDialogPlanUser(command:string,user:any){
     let item={
       userId:user.userId
     }
@@ -52,7 +52,8 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
       width: '700px',
       disableClose: true,
       data: {
-        item:item
+        item:item,
+        command:command
       },
     });
     show.afterClosed().subscribe(result => {
@@ -64,7 +65,7 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
     
   }
   planUser(user:any){
-    this.showDialogPlanUser(user);
+    this.showDialogPlanUser("plan",user);
   }
   showUserDetail(userId:any){
     
