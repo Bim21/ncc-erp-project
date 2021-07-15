@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210712073102_Create_Table_Checkpoint_ProjectDb")]
+    partial class Create_Table_Checkpoint_ProjectDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1399,12 +1401,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
-                    b.Property<string>("AvatarPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Branch")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(128)")
@@ -1430,9 +1426,6 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("EmailConfirmationCode")
                         .HasColumnType("nvarchar(328)")
                         .HasMaxLength(328);
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -1505,16 +1498,10 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(12)")
                         .HasMaxLength(12);
 
-                    b.Property<byte>("UserLevel")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
-
-                    b.Property<int>("UserType")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -1608,7 +1595,7 @@ namespace ProjectManagement.Migrations
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CuratorId")
+                    b.Property<long>("CuratorId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("DeleterUserId")
@@ -1671,7 +1658,7 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EndTime")
+                    b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -2432,9 +2419,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -3270,7 +3254,9 @@ namespace ProjectManagement.Migrations
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "Curator")
                         .WithMany()
-                        .HasForeignKey("CuratorId");
+                        .HasForeignKey("CuratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
                         .WithMany()
