@@ -1,0 +1,12 @@
+.showText:hover::after{
+    content: "Charge vào timesheet tháng này!";
+    font-weight: 200;
+    background-color: rgba(66, 63, 63, 0.863);
+    color: white;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 6px;
+    text-align: center;
+    
+    
+}

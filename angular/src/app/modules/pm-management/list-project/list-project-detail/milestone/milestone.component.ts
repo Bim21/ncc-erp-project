@@ -14,6 +14,11 @@ import * as moment from 'moment';
 })
 export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    request.filterItems.push({
+      "propertyName": "projectId",
+      "value":this.projectId ,
+      "comparision": 0
+    })
     this.milestoneService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.milestoneService.handleError)).subscribe(data => {

@@ -23,7 +23,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
   public userListCurrentPage = 1;
-  public itemPerPage = 5;
+  public itemPerPage = 50;
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
@@ -46,6 +46,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userForUserBill: UserDto[] = [];
   public isEditUserBill: boolean = false;
   public userBillProcess:boolean=false;
+  public panelOpenState:boolean=false;
 
 
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,

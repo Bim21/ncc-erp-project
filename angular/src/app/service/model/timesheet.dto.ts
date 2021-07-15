@@ -26,6 +26,7 @@ export class ProjectTimesheetDto{
     note:string;
     id?:number;
     createMode?:boolean;
+    projectBillInfomation:string;
 }
 export class UploadFileDto{
     TimesheetProjectId: number;

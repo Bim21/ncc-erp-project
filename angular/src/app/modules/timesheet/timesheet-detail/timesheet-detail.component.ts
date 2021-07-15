@@ -81,7 +81,9 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
         projectId: Timesheet.projectId,
         timesheetId: Timesheet.timesheetId,
         note: Timesheet.note,
-        id: Timesheet.id
+        id: Timesheet.id,
+        projectBillInfomation:Timesheet.projectBillInfomation
+
       }
 
     }

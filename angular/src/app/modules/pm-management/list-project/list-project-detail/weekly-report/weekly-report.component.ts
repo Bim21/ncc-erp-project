@@ -157,7 +157,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.getFuturereport();
   }
   public approveRequest(resource: projectUserDto): void {
-    this.showDialog(resource)
+    this.showDialog(resource);
+
   }
   showDialog(resource: any): void {
     let dialogData = {}
@@ -178,6 +179,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getFuturereport();
+        this.getWeeklyReport();
       }
     });
 

@@ -1,26 +1,18 @@
-<section class="content px-2">
+<section class="content px-2 mt-2">
     <!-- <form #projectUserForm ="ngForm"   class="form-horizontal" autocomplete="off"> -->
     <div class="container-fluid">
         <div class="card mt-3">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 class="d-inline">Danh sách nhân viên</h4>
-                        <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess" (click)="addProjectUser();userListCurrentPage=1"
-                            class="btn bg-blue ml-3">
-                            <i class="fa fa-plus-square mr-1"></i> Create
-                        </button>
-                    </div>
-                    <div class="col-md-6">
-                        <section class="example-section">
-                            <mat-checkbox class="example-margin" [checked]="viewHistory" [disabled]="projectUserProcess"
-                                (change)="filterProjectUser(viewHistoryCheck)" #viewHistoryCheck>Hiển thị thông tin lịch
-                                sử</mat-checkbox>
-                        </section>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body table-responsive p-4">
+
+            <mat-expansion-panel hideToggle expanded=true>
+                <mat-expansion-panel-header class="mt-2 mb-2">
+
+                    <h4 class="d-inline">Danh sách nhân viên</h4>
+                    <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess"
+                        (click)="addProjectUser();userListCurrentPage=1" class="btnCreate" class="btn bg-blue ml-3">
+                        <i class="fa fa-plus-square mr-1"></i> Create
+                    </button>
+
+                </mat-expansion-panel-header>
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
@@ -28,28 +20,31 @@
                             <th>Nhân viên</th>
                             <th>Project Role</th>
                             <th>Thời gian bắt đầu</th>
-                            <th>Sử dụng nhân sự</th>
+                            <th>% Sử dụng</th>
                             <th>Trạng thái</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let user of projectUserList |paginate:{ 
-                            id: 'projectUser',
-                        itemsPerPage: itemPerPage,
-                        currentPage: userListCurrentPage
-                        }  ; let i = index">
+                                        id: 'projectUser',
+                                    itemsPerPage: itemPerPage,
+                                    currentPage: userListCurrentPage
+                                    }  ; let i = index">
                             <td><span>{{ i +1 }}</span></td>
                             <td><span *ngIf="!user.createMode">{{user.userName}}</span>
                                 <div *ngIf="user.createMode" class="form-group row required">
 
                                     <mat-form-field class="w-100" appearance="outline">
-                                        <mat-select [(ngModel)]="user.userId" name="projectEmployee" 
+                                        <mat-select [(ngModel)]="user.userId" name="projectEmployee"
                                             placeholder="select a role" required #projectEmployee="ngModel">
-                                            <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchUser" name="searchUser" placeholder="search">
+                                            <mat-form-field class="w-100 px-3 "
+                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                                <input matInput [(ngModel)]="searchUser" name="searchUser"
+                                                    placeholder="search">
                                             </mat-form-field>
-                                            <mat-option *ngFor="let user of userForProjectUser |filter:searchUser" [value]="user.id">
+                                            <mat-option *ngFor="let user of userForProjectUser |filter:searchUser"
+                                                [value]="user.id">
                                                 {{user.name}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -65,14 +60,15 @@
 
                                 <div class="form-group row required" *ngIf="user.createMode">
                                     <mat-form-field class="w-100 mx-auto" appearance="outline">
-                                        <mat-select [(ngModel)]="user.projectRole" name="projectrole" 
+                                        <mat-select [(ngModel)]="user.projectRole" name="projectrole"
                                             placeholder="select a role" required #projectRole="ngModel">
                                             <mat-option *ngFor="let role of projectRoleList"
                                                 [value]="APP_ENUM.ProjectUserRole[role]">
                                                 {{role}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <mat-error class="mt-1" *ngIf="projectRole.hasError('required') && projectRole.touched"
+                                    <mat-error class="mt-1"
+                                        *ngIf="projectRole.hasError('required') && projectRole.touched"
                                         style="font-size: 13px;">
                                         This field is required
                                     </mat-error>
@@ -83,7 +79,8 @@
                                 </span>
                                 <mat-form-field appearance="outline" *ngIf="user.createMode">
                                     <input matInput [matDatepicker]="picker" placeholder="chose a date" required
-                                        [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel" #projectDateEl>
+                                        [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel"
+                                        #projectDateEl>
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>
@@ -94,32 +91,35 @@
                             <td>
                                 <p *ngIf="!user.createMode"> <strong>{{user.allocatePercentage}}%</strong></p>
                                 <div *ngIf="user.createMode">
-                                    <input class="form-control mt-1"  type="text" mask="percent" placeholder="number" required 
-                                name="allocatePercentage" #Percentage="ngModel" #PercentageEl
-                                    suffix="%" [(ngModel)]="user.allocatePercentage" />
-                                    <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl"></abp-validation-summary>
+                                    <input class="form-control mt-1" type="text" mask="percent" placeholder="number"
+                                        required name="allocatePercentage" #Percentage="ngModel" #PercentageEl
+                                        suffix="%" [(ngModel)]="user.allocatePercentage" />
+                                    <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl">
+                                    </abp-validation-summary>
                                 </div>
-                                
+
                             </td>
                             <td>
 
-                                <p style="font-size: 13px;" *ngIf="!user.createMode" [ngClass]="APP_CONST.statusStyle[user.status]">
+                                <p style="font-size: 13px;" *ngIf="!user.createMode"
+                                    [ngClass]="APP_CONST.statusStyle[user.status]">
                                     {{user.status}}</p>
-                                <p style="font-size: 13px; margin-top: 10px;" *ngIf="user.createMode && !isEditUserProject" [ngClass]="APP_CONST.statusStyle['Present']">Present</p>
+                                <p style="font-size: 13px; margin-top: 10px;"
+                                    *ngIf="user.createMode && !isEditUserProject"
+                                    [ngClass]="APP_CONST.statusStyle['Present']">Present</p>
                                 <div class="form-group row required" *ngIf="user.createMode && isEditUserProject">
-                                        <mat-form-field class="w-100" appearance="outline">
-                                            <mat-select [(ngModel)]="user.status" name="userStatus"
-                                                placeholder="select a status" required #projectPM="ngModel">
-                                                <mat-option *ngFor="let status of userStatusList"
-                                                    [value]="APP_ENUM.ProjectUserStatus[status]">
-                                                    {{status}}</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <mat-error class="mt-1"
-                                            *ngIf="projectPM.hasError('required') && projectPM.touched"
-                                            style="font-size: 13px;">
-                                            This field is required
-                                        </mat-error>
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <mat-select [(ngModel)]="user.status" name="userStatus"
+                                            placeholder="select a status" required #projectPM="ngModel">
+                                            <mat-option *ngFor="let status of userStatusList"
+                                                [value]="APP_ENUM.ProjectUserStatus[status]">
+                                                {{status}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"
+                                        style="font-size: 13px;">
+                                        This field is required
+                                    </mat-error>
                                 </div>
 
                             </td>
@@ -133,10 +133,11 @@
 
                                 </div>
                                 <div *ngIf="user.createMode" class="pt-2">
-                                    <button [disabled]="!user?.userId || !user?.projectRole?.toString() || !user?.startTime || !user.allocatePercentage && user.allocatePercentage !=0 " 
-                                    class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveProjectUser(user)">
-                                        <i  style="color: green; ;" class="fas fa-check fa-2x"
-                                       ></i>
+                                    <button
+                                        [disabled]="!user?.userId || !user?.projectRole?.toString() || !user?.startTime || !user.allocatePercentage && user.allocatePercentage !=0 "
+                                        class=" mr-3 submit-btn" style="background: none; border: none;"
+                                        (click)="saveProjectUser(user)">
+                                        <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                     </button>
                                     <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelProjectUser()"></i>
 
@@ -146,27 +147,37 @@
                         </tr>
                     </tbody>
                 </table>
+                <pagination-controls id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+
+            </mat-expansion-panel>
 
 
-            </div>
-            <pagination-controls id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
+
+
+
+
+
+
         </div>
     </div>
-<!-- </form> -->
+    <!-- </form> -->
 </section>
-
-
-<section class="content px-2">
+<section class="content px-2 mt-2">
+    <!-- <form #projectUserForm ="ngForm"   class="form-horizontal" autocomplete="off"> -->
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="d-inline">Request nhân sự</h4>
-                <button *ngIf="!requestProcess" (click)="addResourcceRequest();resourceRequestCurrentPage=1" class="btn bg-blue ml-3">
-                    <i class="fa fa-plus-square mr-1"></i>Create
-                </button>
-            </div>
-            <div class="card-body table-responsive p-4">
+        <div class="card mt-3">
 
+            <mat-expansion-panel hideToggle expanded=true>
+                <mat-expansion-panel-header class="mt-2 mb-2">
+                    <h4 class="d-inline">Request nhân sự</h4>
+                    <button *ngIf="!requestProcess" (click)="addResourcceRequest();resourceRequestCurrentPage=1"
+                        class="btn bg-blue ml-3">
+                        <i class="fa fa-plus-square mr-1"></i>Create
+                    </button>
+
+                </mat-expansion-panel-header>
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
@@ -180,20 +191,22 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let request of resourceRequestList  |paginate:{
-                        id: 'projecRequest',
-                        itemsPerPage: itemPerPage,
-                        currentPage: resourceRequestCurrentPage
-                        } ; let i = index">
+                                    id: 'projecRequest',
+                                    itemsPerPage: itemPerPage,
+                                    currentPage: resourceRequestCurrentPage
+                                    } ; let i = index">
                             <td><span>{{ i +1 }}</span></td>
                             <td>
                                 <p *ngIf="!request.createMode">{{request.name}}</p>
                                 <div *ngIf="request.createMode">
-                                    <input required placeholder="text" class="form-control mt-2" type="text" [(ngModel)]="request.name" #requestName="ngModel" #requestNameEl>
-                                    <abp-validation-summary [control]="requestName" [controlEl]="requestNameEl"></abp-validation-summary>
+                                    <input required placeholder="text" class="form-control mt-2" type="text"
+                                        [(ngModel)]="request.name" #requestName="ngModel" #requestNameEl>
+                                    <abp-validation-summary [control]="requestName" [controlEl]="requestNameEl">
+                                    </abp-validation-summary>
                                 </div>
                             </td>
 
-                         
+
                             <td>
                                 <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
                                 <div *ngIf="request.createMode" class="mt-1">
@@ -210,12 +223,14 @@
                                 <p *ngIf="!request.createMode">{{request.note}}</p>
                                 <div *ngIf="request.createMode">
                                     <mat-form-field class="example-full-width" appearance="outline">
-                                        <textarea placeholder="leave a comment" [(ngModel)]="request.note" matInput></textarea>
+                                        <textarea placeholder="leave a comment" [(ngModel)]="request.note"
+                                            matInput></textarea>
                                     </mat-form-field>
                                 </div>
                             </td>
                             <td>
-                                <p style="font-size: 12px;" [ngClass]="APP_CONST.statusStyle[request.statusName]" *ngIf="!request.craeteMode">
+                                <p style="font-size: 12px;" [ngClass]="APP_CONST.statusStyle[request.statusName]"
+                                    *ngIf="!request.craeteMode">
                                     {{request.statusName}}</p>
                                 <div *ngIf="request.createMode && !isEditRequest">
                                     <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1">PENDING</p>
@@ -233,11 +248,11 @@
 
                                 </div>
                                 <div *ngIf="request.createMode" class="pt-2">
-                                    <button [disabled]="!request?.name || !request?.timeNeed " class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveProjectRerequest(request)">
-                                        <i style="color: green;" class="fas fa-check fa-2x "
-                                        ></i>
+                                    <button [disabled]="!request?.name || !request?.timeNeed " class=" mr-3 submit-btn"
+                                        style="background: none; border: none;" (click)="saveProjectRerequest(request)">
+                                        <i style="color: green;" class="fas fa-check fa-2x "></i>
                                     </button>
-                                    
+
                                     <i style="color: red;" class="fas fa-times fa-2x"
                                         (click)="cancelProjectRerequest()"></i>
 
@@ -248,25 +263,31 @@
                     </tbody>
                 </table>
 
+                <pagination-controls id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
+                </pagination-controls>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
 
-            </div>
-            <pagination-controls id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
-            </pagination-controls>
+            </mat-expansion-panel>
+
         </div>
     </div>
+    <!-- </form> -->
 </section>
-
-<section class="content px-2">
+<section class="content px-2 mt-2">
+    <!-- <form #projectUserForm ="ngForm"   class="form-horizontal" autocomplete="off"> -->
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="d-inline">Danh sách Bill Dự án</h4>
-                <button *ngIf="!userBillProcess" style="border: none;" class="btn bg-blue ml-3" (click)="addUserBill();userBillCurrentPage=1">
-                    <i class="fa fa-plus-square mr-1"></i>Create
-                </button>
-            </div>
-            <div class="card-body table-responsive p-4">
+        <div class="card mt-3">
 
+            <mat-expansion-panel hideToggle expanded=true>
+                <mat-expansion-panel-header class="mt-2 mb-2">
+                    <h4 class="d-inline">Danh sách Bill Dự án</h4>
+                    <button *ngIf="!userBillProcess" style="border: none;" class="btn bg-blue ml-3"
+                        (click)="addUserBill();userBillCurrentPage=1">
+                        <i class="fa fa-plus-square mr-1"></i>Create
+                    </button>
+
+                </mat-expansion-panel-header>
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
@@ -282,10 +303,10 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let bill of userBillList  |paginate:{ 
-                        id: 'userBill',
-                        itemsPerPage: itemPerPage,
-                        currentPage: userBillCurrentPage
-                        }  ; let i = index">
+                                    id: 'userBill',
+                                    itemsPerPage: itemPerPage,
+                                    currentPage: userBillCurrentPage
+                                    }  ; let i = index">
                             <td><span>{{ i +1 }}</span></td>
                             <td>
                                 <p *ngIf="!bill.createMode">{{bill.userName}}</p>
@@ -294,10 +315,13 @@
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="bill.userId" name="userBill"
                                             placeholder="select an user" required #userBill="ngModel">
-                                            <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchUserBill" name="searchBillUser" placeholder="search">
+                                            <mat-form-field class="w-100 px-3 "
+                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                                <input matInput [(ngModel)]="searchUserBill" name="searchBillUser"
+                                                    placeholder="search">
                                             </mat-form-field>
-                                            <mat-option *ngFor="let user of userForUserBill | filter: searchUserBill" [value]="user.id">
+                                            <mat-option *ngFor="let user of userForUserBill | filter: searchUserBill"
+                                                [value]="user.id">
                                                 {{user.name}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -329,11 +353,14 @@
                                 </div>
                             </td>
                             <td>
-                                <p *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}} {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</p>
+                                <p *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
+                                    {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</p>
                                 <div *ngIf="bill.createMode">
                                     <input required class="form-control mt-1" #billRate="ngModel" #billRateEl
-                                     type="text" mask="separator" thousandSeparator="." placeholder="number" [(ngModel)]="bill.billRate">
-                                    <abp-validation-summary [control]="billRate" [controlEl]="billRateEl"></abp-validation-summary>
+                                        type="text" mask="separator" thousandSeparator="." placeholder="number"
+                                        [(ngModel)]="bill.billRate">
+                                    <abp-validation-summary [control]="billRate" [controlEl]="billRateEl">
+                                    </abp-validation-summary>
 
                                 </div>
                             </td>
@@ -362,8 +389,7 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                <mat-checkbox [disabled]="!bill.createMode" class="mt-1"
-                                    [(ngModel)]="bill.isActive">
+                                <mat-checkbox [disabled]="!bill.createMode" class="mt-1" [(ngModel)]="bill.isActive">
                                 </mat-checkbox>
                             </td>
                             <td>
@@ -377,9 +403,11 @@
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1">
 
-                                    <button [disabled]="!bill?.userId || !bill?.billRole?.toString()  || !bill?.startTime || !bill?.endTime || !bill?.billRate" class=" mr-3 submit-btn" style="background: none; border: none;"  (click)="saveUserBill(bill)">
-                                        <i style="color: green;" class="fas fa-check fa-2x "
-                                        ></i>
+                                    <button
+                                        [disabled]="!bill?.userId || !bill?.billRole?.toString()  || !bill?.startTime || !bill?.endTime || !bill?.billRate"
+                                        class=" mr-3 submit-btn" style="background: none; border: none;"
+                                        (click)="saveUserBill(bill)">
+                                        <i style="color: green;" class="fas fa-check fa-2x "></i>
                                     </button>
 
 
@@ -390,9 +418,15 @@
                     </tbody>
                 </table>
 
-            </div>
-            <pagination-controls class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
-            </pagination-controls>
+
+                <pagination-controls class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
+                </pagination-controls>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+
+            </mat-expansion-panel>
+
         </div>
     </div>
+    <!-- </form> -->
 </section>

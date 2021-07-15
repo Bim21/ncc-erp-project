@@ -17,7 +17,7 @@
             </div>
 
             <div class="card-body table-responsive p-4">
-                <!-- <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
@@ -37,21 +37,20 @@
                                 </div>
                             </td>
                             <td>
-                                <span *ngIf="!timesheet.createMode">  {{timesheet.timesheetFile}} </span>
-                                <div *ngIf="timesheet.createMode">
-                                    <button
-                                    class="btn btn-sm bg-success ml-1"
-                                    (click)="importTimeSheet(timesheet.id)"
-                                     #importFileBtn>
-                                     <i class="fas fa-upload"></i>
-                                    Import File
-                                </button>
-                                </div>
+                                <span>  {{timesheet.timesheetFile}}</span>
+                                
                              
 
                             </td>
                             <td class="text-center">
                                 <div *ngIf="!timesheet.createMode">
+                                    <button
+                                class="btn btn-sm bg-success mr-2"
+                                (click)="importTimeSheet(timesheet.id)"
+                                 #importFileBtn>
+                                 <i class="fas fa-upload"></i>
+                                Import File
+                                </button>
                                 <button class="btn btn-sm bg-secondary mr-1">
                                     <i class="fas fa-pencil-alt"></i>
                                     Edit
@@ -76,7 +75,7 @@
                             </td>
                         </tr>
                     </tbody>
-                </table> -->
+                </table>
 
             </div>
             <button    style="border: none; width: 30px;" (click)="addTimesheet()" class=" bg-blue mt-2">
