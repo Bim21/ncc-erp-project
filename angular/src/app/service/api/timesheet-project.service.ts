@@ -45,4 +45,8 @@ export class TimesheetProjectService extends BaseApiService{
   public GetTimesheetDetail(id: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllProjectTimesheetByTimesheet?timesheetId=' + id);
   }
+  public getAllByProject(projectId:number){
+    return this.http.get<any>(this.rootUrl + '/GetAllByProject?projectId=' + projectId);
+
+  }
 }

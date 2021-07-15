@@ -1,6 +1,7 @@
 export class ChecklistTitleDto{
   id?:number;
   name: string;
+  createMode?:boolean;
 }
 export class ChecklistDto{
     name: string;

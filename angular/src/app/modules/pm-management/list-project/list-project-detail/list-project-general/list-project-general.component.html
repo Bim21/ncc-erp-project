@@ -71,7 +71,7 @@
                            Loại dự án:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
-                           <p>{{getByEnum(project.projectType , APP_ENUM.ProjectType)}}</p>
+                           <span [ngClass]="APP_CONST.ProjectTypeStyle[getByEnum(project.projectType , APP_ENUM.ProjectType)]"  >{{getByEnum(project.projectType , APP_ENUM.ProjectType)}}</span>
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 ">
                             <mat-form-field class="w-100" appearance="outline">
@@ -94,7 +94,7 @@
                            Trạng thái:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
-                            <p>{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p>
+                            <p [ngClass]="APP_CONST.statusStyle[getByEnum(project.status, APP_ENUM.ProjectStatus)]">{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p>
 
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 ">
@@ -187,7 +187,7 @@
                             <button class="btn btn-default mx-2" (click)="readMode = true; getProjectDetail()"> 
                                 Cancel
                             </button>
-                            <button class="btn btn-primary" [disabled]="!requestDetail.valid " (click)="saveAndClose()">
+                            <button class="btn btn-primary" [disabled]="!requestDetail.valid || isLoading " (click)="saveAndClose()">
                                 Save
                             </button>
                         </div>

@@ -16,3 +16,15 @@ export class projectReportDto{
     id: number;
     createMode?:boolean;
 }
+export class projectProblemDto{
+    pmReportProjectId: number;
+    description: string;
+    impact: string;
+    critical: string;
+    source: string;
+    solution: string;
+    meetingSolution: string;
+    status: string;
+    id: number;
+    createMode?:boolean;
+}

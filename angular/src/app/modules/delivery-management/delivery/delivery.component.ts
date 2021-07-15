@@ -41,4 +41,14 @@ export class DeliveryComponent extends AppComponentBase implements OnInit {
     })
     
   }
+  routingRequestResourceTab(){
+    this.router.navigate(['request-resource-tab'],{
+      relativeTo:this.route
+    })
+  }
+  routingAvailableResourceTab(){
+    this.router.navigate(['available-resource-tab'],{
+      relativeTo:this.route
+    })
+  }
 }

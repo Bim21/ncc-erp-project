@@ -7,5 +7,7 @@
         public const string SecurityCode = "App.SecurityCode";
         public const string SecretCode = "App.SecretCode";
         public const string ClientAppId = "App.ClientAppId";
+        public const string FinaceUri = "App.FinaceUri";
+        public const string FinanceSecretKey = "App.FinanceSecretKey";
     }
 }

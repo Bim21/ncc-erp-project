@@ -13,14 +13,18 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-6">
-                        <span><span>Đánh giá chung: </span><span [hidden]="isEditingNote" *ngIf="!isEditingNote"
-                                [(ngModel)]="note">{{note}}</span></span>
-                        <textarea [(ngModel)]="note" [hidden]="!isEditingNote" style="height: 50px;" type="text"
-                            class="form-control" name="notePM" placeholder="Đánh giá chung"></textarea>
+                    <div class="col-9 row">
+                        <div class="col-2"> <strong>Đánh giá chung: </strong></div>
+                        <div class="col-10">
+                            <span [hidden]="isEditingNote"
+                                *ngIf="!isEditingNote" [(ngModel)]="note">{{note}}</span><textarea [(ngModel)]="note" [hidden]="!isEditingNote" style="height: 50px;"
+                                type="text" class="form-control" name="notePM" placeholder="Đánh giá chung"></textarea>
+                        </div>
+
+
 
                     </div>
-                    <div class="col-6 text-right">
+                    <div class="col-3 text-right">
                         <div class="text-right">
                             <button *ngIf="!isEditingNote" (click)="isEditingNote=true" type="button"
                                 class="btn bg-blue">
@@ -67,50 +71,47 @@
                                         <div *ngFor="let form of item.people" class="form-horizontal mb-2 p-2"
                                             style="border: 1px solid black;">
 
-                                            <p class="mt-2" *ngIf="!isEditing"><strong>Người vi phạm:
+                                            <p class="mt-2" *ngIf="!form.createMode"><strong>Người vi phạm:
                                                 </strong>{{form.userName}}</p>
-                                            <mat-form-field *ngIf="isEditing" appearance="outline" class="d-block">
-                                                <mat-select placeholder="Tên người vi phạm" name="ngvipham"
+                                            <mat-form-field *ngIf="form.createMode" appearance="outline"
+                                                class="d-block">
+                                                <mat-select placeholder="Tên người vi phạm" [name]="form.id"
                                                     [(ngModel)]="form.userId">
                                                     <ng-container>
                                                         <mat-option *ngFor="let user of projectUserList"
-                                                            [value]="user.userId">{{user.userName}}</mat-option>
+                                                            [value]="user.id">{{user.userName}}</mat-option>
                                                     </ng-container>
 
                                                 </mat-select>
                                             </mat-form-field>
-                                            <p *ngIf="!isEditing" class="mt-2"><strong>Người liên đới:
+                                            <p *ngIf="!form.createMode" class="mt-2"><strong>Người liên đới:
                                                 </strong>{{form.curatorName}}</p>
+                                            <div *ngIf="form.createMode" class="form-group row">
 
-
-                                            <div *ngIf="isEditing" class="form-group row ">
-                                                <!-- <label class="col-md-3 " for="type">
-                                                    người vi phạm:
-                                                </label> -->
                                                 <div class="col-md-12">
                                                     <mat-form-field appearance="outline" class="d-block">
-                                                        <mat-select name="ngliendoi" placeholder="Tên người vi phạm"
+                                                        <mat-select [name]="form.id" placeholder="Tên người vi phạm"
                                                             [(ngModel)]="form.curatorId">
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.userId != ngvipham.value"
-                                                                    [value]="user.userId">{{user.userName}}</mat-option>
+                                                                <mat-option *ngIf="user.id != ngvipham.value"
+                                                                    [value]="user.id">{{user.userName}}</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
                                                 </div>
-                                              
+
                                             </div>
-                                            <div *ngIf="!isEditing" class="text-center">
-                                                <button class="btn btn-sm bg-secondary mr-1" mat-raised-button
-                                                    style="margin-right:20px ;"
-                                                    (click)="editPeople(form); form.createMode=true">Edit</button>
-                                                <button class="btn btn-sm bg-danger ml-1" mat-raised-button
-                                                    (click)="deletePeople(form)">Delete</button>
+                                            <div *ngIf="!form.createMode" class="text-center">
+                                                <button [disabled]="isEditing" class="btn btn-sm bg-secondary mr-1"
+                                                    mat-raised-button style="margin-right:20px ;"
+                                                    (click)="editPeople(form);">Edit</button>
+                                                <button [disabled]="isEditing" class="btn btn-sm bg-danger ml-1"
+                                                    mat-raised-button (click)="deletePeople(form)">Delete</button>
                                             </div>
                                             <div *ngIf="form.createMode" class=" text-center ">
-                                                <button (click)="save(item.id,form);isEditting=false;"
+                                                <button (click)="save(item.id,form);"
                                                     class="btn btn-primary mr-1 ml-3">Save</button>
-                                                <button (click)="getAllCheckList(); " isAllowed=true;
+                                                <button (click)="cancel();" isAllowed=true;
                                                     class="btn btn-default">Cancel</button>
 
                                             </div>
@@ -125,10 +126,11 @@
                                                 style="display: flex;flex-direction: column;align-items: center;">
                                                 <div class="form-group row required">
                                                     <mat-form-field appearance="outline">
-                                                        <mat-select name="ngsaipham" placeholder="Tên người vi phạm"
-                                                            [(ngModel)]="projectUser.userId" #ngvipham="ngModel">
+                                                        <mat-select [disabled]="isEditing"
+                                                            (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
+                                                            name="ngsaipham" placeholder="Tên người vi phạm" #ngvipham>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option [value]="user.userId">{{user.userName}}
+                                                                <mat-option [value]="user.id">{{user.userName}}
                                                                 </mat-option>
                                                             </ng-container>
 
@@ -137,11 +139,13 @@
                                                 </div>
                                                 <div class="form-group row required">
                                                     <mat-form-field appearance="outline">
-                                                        <mat-select name="ngliendoi" placeholder="Tên người liên đới"
-                                                            [(ngModel)]="projectUser.curatorId" #ngliendoi="ngModel">
+                                                        <mat-select [disabled]="isEditing"
+                                                            (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
+                                                            name="ngliendoi" placeholder="Tên người liên đới"
+                                                            #ngliendoi>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.userId != ngvipham.value"
-                                                                    [value]="user.userId">{{user.userName}}</mat-option>
+                                                                <mat-option *ngIf="user.id != ngvipham.value"
+                                                                    [value]="user.id">{{user.userName}}</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -149,8 +153,9 @@
 
 
                                                 <div class="form-group row required">
-                                                    <button class="btn bg-blue" mat-raised-button
-                                                        (click)="submit(item.id)">Submit</button>
+                                                    <button [disabled]="!projectUser.userId"
+                                                        class="btn bg-blue" mat-raised-button
+                                                        (click)="submit(item)">Submit</button>
                                                 </div>
                                             </div>
 

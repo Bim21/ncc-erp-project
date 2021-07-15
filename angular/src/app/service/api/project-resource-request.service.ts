@@ -21,4 +21,10 @@ export class ProjectResourceRequestService extends BaseApiService {
   deleteProjectRequest(id: number): Observable<any> {
     return this.http.delete<any>(this.rootUrl + `/Delete?resourceRequestId=${id}`)
   }
+  public rejectRequest(id:number):Observable<any>{
+    return this.http.get<any>(this.rootUrl + `/RejectUser?projectUserId=${id}`);
+  }
+  public approveRequest(projectUser:any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + `/ApproveUser`, projectUser);
+  }
 }

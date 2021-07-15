@@ -13,7 +13,7 @@ namespace ProjectManagement.APIs.AuditResultPeoples.Dto
         public long UserId { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
-        public long CuratorId { get; set; }
+        public long? CuratorId { get; set; }
         public bool IsPass { get; set; }
     }
 }

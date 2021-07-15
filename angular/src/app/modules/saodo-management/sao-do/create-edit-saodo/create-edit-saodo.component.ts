@@ -1,9 +1,10 @@
+import { AppComponentBase } from 'shared/app-component-base';
 import { catchError } from 'rxjs/operators';
 import { SaodoService } from './../../../../service/api/saodo.service';
 import { SaodoDto } from './../../../../service/model/saodo.dto';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Injector } from '@angular/core';
 import * as moment from 'moment';
 // import { FormControl } from '@angular/forms';
 // import * as moment from 'moment';
@@ -38,15 +39,16 @@ import * as moment from 'moment';
   //   {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   // ],
 })
-export class CreateEditSaodoComponent implements OnInit {
+export class CreateEditSaodoComponent extends AppComponentBase implements OnInit {
   public saodo={} as SaodoDto;
-  public isDisable=false;
   // public dateStart = new FormControl(moment());
   // public dateEnd = new FormControl(moment());
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, injector:Injector,
   public dialogRef: MatDialogRef<CreateEditSaodoComponent>,
   private router: Router,
-  private saodoService : SaodoService) { }
+  private saodoService : SaodoService) { 
+    super(injector);
+  }
  
   ngOnInit(): void {
     if (this.data.command == "edit") {
@@ -56,21 +58,23 @@ export class CreateEditSaodoComponent implements OnInit {
   }
   SaveAndClose(){
     this.saodo.startTime = moment(this.saodo.startTime).format("YYYY-MM-DD");
-    this.saodo.endTime = moment(this.saodo.endTime).format("YYYY-DD-MM");
-    this.isDisable = true
+    if(this.saodo.endTime){
+      this.saodo.endTime = moment(this.saodo.endTime).format("YYYY-MM-DD");
+    }
+    this.isLoading = true
     if (this.data.command == "create") {
       // this.timesheet.isActive=true;
       this.saodoService.create(this.saodo).pipe(catchError(this.saodoService.handleError)).subscribe((res) => {
         abp.notify.success("created outcomeRequest ");
         this.dialogRef.close(this.saodo);
-      }, () => this.isDisable = false);
+      }, () => this.isLoading = false);
       // 
     }
     else {
       this.saodoService.update(this.saodo).pipe(catchError(this.saodoService.handleError)).subscribe((res) => {
         abp.notify.success("edited outcomeRequest ");
         this.dialogRef.close(this.saodo);
-      }, () => this.isDisable = false);
+      }, () => this.isLoading = false);
     }
   }
   

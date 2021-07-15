@@ -5,3 +5,6 @@
 .submit-btn:disabled i{
   color: gray !important;
 }
+td{
+  text-align: center;
+}

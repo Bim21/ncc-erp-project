@@ -12,6 +12,12 @@
                     <a [ngClass]="currentUrl.includes('weekly-report-tab')?'active':''"  mat-tab-link (click)="routingWeeklyReportTab()">
                         Weekly Report
                     </a>
+                    <a [ngClass]="currentUrl.includes('request-resource-tab')?'active':''"  mat-tab-link (click)="routingRequestResourceTab()">
+                        Request Resource
+                    </a>
+                    <a [ngClass]="currentUrl.includes('available-resource-tab')?'active':''"  mat-tab-link (click)="routingAvailableResourceTab()">
+                        Available Resource
+                    </a>
                 </nav>
                 <router-outlet></router-outlet>
             </div>

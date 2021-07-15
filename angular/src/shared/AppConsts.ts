@@ -31,6 +31,13 @@ export class AppConsts {
         Closed: "badge badge-pill badge-danger"
         // Future:"badge badge-pill badge-light"
     }
+    static readonly projectRole = {
+        PM: "badge bg-secondary",
+        DEV: "badge bg-primary",
+        TESTER: "badge bg-info",
+        BA: "badge bg-warning",
+        Artist: "badge bg-success",
+    }
     static readonly ProjectTypeStyle = {
         ODC:"badge badge-primary",
         TimeAndMaterials : "badge badge-success",
@@ -43,6 +50,11 @@ export class AppConsts {
         UAT: "badge badge-pill badge-primary",
         Upcoming:"badge badge-pill badge-warning",
         Fail: "badge badge-pill badge-danger"
+    }
+    static readonly   PMReportProjectIssueStatusStyle =
+    {
+        InProgress: "badge badge-pill badge-primary",
+        Done: "badge badge-success",
     }
   
 
