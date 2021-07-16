@@ -48,7 +48,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     this.getAllClient()
   }
   public getAllPM(): void {
-    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result.items })
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
   }
 
   public saveAndClose(): void {
@@ -63,13 +63,13 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     if (this.data.command == "create") {
       this.project.status = 0;
       this.projectService.create(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("created branch successfully");
+        abp.notify.success("created new project");
         this.dialogRef.close(this.project);
       }, () => this.isLoading = false);
     }
     else {
       this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("edited branch successfully");
+        abp.notify.success("edited project: "+this.project.name);
         this.dialogRef.close(this.project);
       }, () => this.isLoading = false);
     }

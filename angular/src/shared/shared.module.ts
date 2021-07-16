@@ -58,6 +58,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import { PercentageMaskDirective } from './directives/percentage-mask.directive';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -115,7 +116,8 @@ import { PercentageMaskDirective } from './directives/percentage-mask.directive'
         LocalizePipe,
         BusyDirective,
         EqualValidator,
-        PercentageMaskDirective
+        PercentageMaskDirective,
+        UserInfoComponent
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -160,7 +162,8 @@ import { PercentageMaskDirective } from './directives/percentage-mask.directive'
         MatTooltipModule,
         MatTreeModule,
         MatFormFieldModule,
-        PercentageMaskDirective
+        PercentageMaskDirective,
+        UserInfoComponent
     ]
 })
 export class SharedModule {

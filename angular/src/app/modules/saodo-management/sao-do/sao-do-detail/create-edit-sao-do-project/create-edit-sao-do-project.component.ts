@@ -59,10 +59,9 @@ export class CreateEditSaoDoProjectComponent extends AppComponentBase implements
     })
   }
   getAllUser() {
-    this.userService.getAll().subscribe(data => {
-      this.pmList = data.result.items;
+    this.userService.GetAllUserActive(true).subscribe(data => {
+      this.pmList = data.result;
       this.saodoProject.pmId=this.pmList.filter(el=>el.name == this.saodoProject.pmName)[0].id;
-      console.log("hi",this.pmList.filter(el=>el.name == this.saodoProject.pmName)[0].id)
     })
   }
 

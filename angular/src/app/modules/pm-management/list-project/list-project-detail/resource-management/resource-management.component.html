@@ -3,16 +3,28 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel hideToggle expanded=true>
-                <mat-expansion-panel-header class="mt-2 mb-2">
-
-                    <h4 class="d-inline">Danh sách nhân viên</h4>
-                    <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess"
-                        (click)="addProjectUser();userListCurrentPage=1" class="btnCreate" class="btn bg-blue ml-3">
-                        <i class="fa fa-plus-square mr-1"></i> Create
-                    </button>
+            <mat-expansion-panel  [expanded] = "isShowProjectUser" >
+                <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
+                    <div class="col-md-6">
+                        <h4 class="d-inline">Danh sách nhân viên</h4>
+                        <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess || !isShowProjectUser"
+                            (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate" class="btn bg-blue ml-3">
+                            <i class="fa fa-plus-square mr-1"></i> Create
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="isShowProjectUser">
+                            <section class="example-section">
+                                <mat-checkbox class="example-margin" [checked]="viewHistory"
+                                    [disabled]="projectUserProcess" (change)="filterProjectUser(viewHistoryCheck); " (click)="$event.stopPropagation()"
+                                    #viewHistoryCheck>Hiển thị thông tin lịch
+                                    sử</mat-checkbox>
+                            </section>
+                        </div>
+                    </div>
 
                 </mat-expansion-panel-header>
+                <div class="table-responsive mb-1">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
@@ -32,7 +44,8 @@
                                     currentPage: userListCurrentPage
                                     }  ; let i = index">
                             <td><span>{{ i +1 }}</span></td>
-                            <td><span *ngIf="!user.createMode">{{user.userName}}</span>
+                            <td><span *ngIf="!user.createMode">
+                                {{user.fullName}}</span>
                                 <div *ngIf="user.createMode" class="form-group row required">
 
                                     <mat-form-field class="w-100" appearance="outline">
@@ -40,12 +53,11 @@
                                             placeholder="select a role" required #projectEmployee="ngModel">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchUser" name="searchUser"
-                                                    placeholder="search">
+                                                <input matInput [(ngModel)]="searchUser" name="searchUser" placeholder="search">
                                             </mat-form-field>
                                             <mat-option *ngFor="let user of userForProjectUser |filter:searchUser"
                                                 [value]="user.id">
-                                                {{user.name}}</mat-option>
+                                                {{user.fullName}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <mat-error class="mt-1"
@@ -101,10 +113,10 @@
                             </td>
                             <td>
 
-                                <p style="font-size: 13px;" *ngIf="!user.createMode"
+                                <p style="font-size: 12px;" *ngIf="!user.createMode"
                                     [ngClass]="APP_CONST.statusStyle[user.status]">
                                     {{user.status}}</p>
-                                <p style="font-size: 13px; margin-top: 10px;"
+                                <p style="font-size: 12px; margin-top: 10px;"
                                     *ngIf="user.createMode && !isEditUserProject"
                                     [ngClass]="APP_CONST.statusStyle['Present']">Present</p>
                                 <div class="form-group row required" *ngIf="user.createMode && isEditUserProject">
@@ -147,6 +159,7 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
                 <pagination-controls id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -169,15 +182,16 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel hideToggle expanded=true>
-                <mat-expansion-panel-header class="mt-2 mb-2">
+            <mat-expansion-panel  expanded=false>
+                <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <h4 class="d-inline">Request nhân sự</h4>
-                    <button *ngIf="!requestProcess" (click)="addResourcceRequest();resourceRequestCurrentPage=1"
+                    <button *ngIf="!requestProcess" [hidden]= "!isShowRequest"  (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                         class="btn bg-blue ml-3">
                         <i class="fa fa-plus-square mr-1"></i>Create
                     </button>
 
                 </mat-expansion-panel-header>
+                <div class="table-responsive mb-1">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
@@ -262,6 +276,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
                 <pagination-controls id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
                 </pagination-controls>
@@ -279,15 +294,16 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel hideToggle expanded=true>
-                <mat-expansion-panel-header class="mt-2 mb-2">
+            <mat-expansion-panel  expanded=false>
+                <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Danh sách Bill Dự án</h4>
-                    <button *ngIf="!userBillProcess" style="border: none;" class="btn bg-blue ml-3"
-                        (click)="addUserBill();userBillCurrentPage=1">
+                    <button *ngIf="!userBillProcess" [hidden]="!isShowUserBill" style="border: none;" class="btn bg-blue ml-3"
+                        (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
                         <i class="fa fa-plus-square mr-1"></i>Create
                     </button>
 
                 </mat-expansion-panel-header>
+                <div class="table-responsive mb-1">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
@@ -417,6 +433,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
 
                 <pagination-controls class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">

@@ -36,17 +36,20 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userForProjectUser: UserDto[] = [];
   public viewHistory: boolean = false;
   public projectUserProcess:boolean =false;
+  public isShowProjectUser:boolean =true;
   // resource request
   public resourceRequestList: projectResourceRequestDto[] = [];
   public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public isEditRequest: boolean = false;
   public requestProcess:boolean =false;
+  public isShowRequest:boolean=false;
   // project user bill
   public userBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
   public isEditUserBill: boolean = false;
   public userBillProcess:boolean=false;
   public panelOpenState:boolean=false;
+  public isShowUserBill:boolean =false;
 
 
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
@@ -78,9 +81,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     })
   }
   private getAllUser() {
-    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => {
-      this.userForProjectUser = data.result.items;
-      this.userForUserBill = data.result.items;
+    this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.userForProjectUser = data.result;
+      this.userForUserBill = data.result;
     })
   }
 
@@ -286,5 +289,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     );
   }
 
+  public filterUser(userId: number) {
+    return this.userForProjectUser.filter(item => item.id == userId)[0];
+  }
 
 }

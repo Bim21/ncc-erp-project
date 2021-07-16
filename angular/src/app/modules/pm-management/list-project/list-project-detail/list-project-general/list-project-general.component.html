@@ -57,7 +57,7 @@
                                 <mat-select [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required
                                     #projectPM="ngModel">
                                     <mat-option *ngFor="let pm of pmList" [value]="pm.id">
-                                        {{pm.name}}</mat-option>
+                                        {{pm.fullName}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"

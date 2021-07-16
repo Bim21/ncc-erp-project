@@ -49,4 +49,8 @@ export class TimesheetProjectService extends BaseApiService{
     return this.http.get<any>(this.rootUrl + '/GetAllByProject?projectId=' + projectId);
 
   }
+  public DownloadFileTimesheetProject(projectId:number){
+    return this.http.get<any>(this.rootUrl + '/DownloadFileTimesheetProject?timesheetProjectId=' + projectId);
+
+  }
 }

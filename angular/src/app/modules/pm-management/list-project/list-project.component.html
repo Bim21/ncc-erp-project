@@ -84,7 +84,7 @@
                     class="hyperlink" (click)="showDetail(project.id)" style="min-width: 200px;">{{ project.name }}</span></td>
                             <td>{{project.projectType}}</td>
                             <td>{{project.clientName}}</td>
-                            <td>{{project.pmName}}</td>
+                            <td><app-user-info [userData]="filterUser(project.pmId)"></app-user-info> </td>
                            
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
                             <td>{{project.endTime | date:"dd/MM/yyyy"}}</td>
