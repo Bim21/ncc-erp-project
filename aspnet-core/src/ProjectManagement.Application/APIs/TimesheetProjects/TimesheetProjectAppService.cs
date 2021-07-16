@@ -1,6 +1,5 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
-using Azure.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
