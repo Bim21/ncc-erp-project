@@ -17,17 +17,17 @@ namespace ProjectManagement.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<int>(
-                name: "Gender",
+            migrationBuilder.AddColumn<string>(
+                name: "UserCode",
                 table: "AbpUsers",
-                nullable: false,
-                defaultValue: 0);
+                maxLength: 12,
+                nullable: true);
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<byte>(
                 name: "UserLevel",
                 table: "AbpUsers",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: (byte)0);
 
             migrationBuilder.AddColumn<int>(
                 name: "UserType",
@@ -47,7 +47,7 @@ namespace ProjectManagement.Migrations
                 table: "AbpUsers");
 
             migrationBuilder.DropColumn(
-                name: "Gender",
+                name: "UserCode",
                 table: "AbpUsers");
 
             migrationBuilder.DropColumn(

@@ -31,6 +31,7 @@ using NccCore.IoC;
 using Abp.Authorization.Users;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Microsoft.AspNetCore.Hosting;
+using ProjectManagement.Entities;
 
 namespace ProjectManagement.Users
 {
@@ -111,6 +112,10 @@ namespace ProjectManagement.Users
 
         public override async Task DeleteAsync(EntityDto<long> input)
         {
+            var hasProject = await _workScope.GetAll<Project>().AnyAsync(x => x.PMId == input.Id);
+            if (hasProject)
+                throw new UserFriendlyException("User is a project manager !");
+
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
         }
@@ -255,8 +260,7 @@ namespace ProjectManagement.Users
                     AvatarPath = u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
-                    Branch = u.Branch,
-                    Gender = u.Gender
+                    Branch = u.Branch
                 });
             return await query.ToListAsync();
         }

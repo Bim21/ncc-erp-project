@@ -10,8 +10,8 @@ using ProjectManagement.EntityFrameworkCore;
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    [Migration("20210712072350_Create_Table_Checkpoint_ProjectDb")]
-    partial class Create_Table_Checkpoint_ProjectDb
+    [Migration("20210716071557_init_DB")]
+    partial class init_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1494,10 +1494,6 @@ namespace ProjectManagement.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserCode")
-                        .HasColumnType("nvarchar(12)")
-                        .HasMaxLength(12);
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
@@ -1595,7 +1591,7 @@ namespace ProjectManagement.Migrations
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CuratorId")
+                    b.Property<long?>("CuratorId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("DeleterUserId")
@@ -1658,7 +1654,7 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndTime")
+                    b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -2420,6 +2416,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
@@ -2813,6 +2812,45 @@ namespace ProjectManagement.Migrations
                     b.ToTable("ResourceRequests");
                 });
 
+            modelBuilder.Entity("ProjectManagement.Entities.Skill", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skills");
+                });
+
             modelBuilder.Entity("ProjectManagement.Entities.Tag", b =>
                 {
                     b.Property<long>("Id")
@@ -2956,6 +2994,52 @@ namespace ProjectManagement.Migrations
                     b.HasIndex("TimesheetId");
 
                     b.ToTable("TimesheetProjects");
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.UserSkill", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SkillId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkillId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSkills");
                 });
 
             modelBuilder.Entity("ProjectManagement.MultiTenancy.Tenant", b =>
@@ -3254,9 +3338,7 @@ namespace ProjectManagement.Migrations
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "Curator")
                         .WithMany()
-                        .HasForeignKey("CuratorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CuratorId");
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
                         .WithMany()
@@ -3483,6 +3565,21 @@ namespace ProjectManagement.Migrations
                     b.HasOne("ProjectManagement.Entities.Timesheet", "Timesheet")
                         .WithMany()
                         .HasForeignKey("TimesheetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.UserSkill", b =>
+                {
+                    b.HasOne("ProjectManagement.Entities.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

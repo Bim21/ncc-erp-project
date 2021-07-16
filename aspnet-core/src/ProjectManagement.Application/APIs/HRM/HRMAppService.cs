@@ -48,7 +48,6 @@ namespace ProjectManagement.APIs.HRM
                 UserType = input.UserType,
                 UserLevel = input.UserLevel,
                 Branch = input.Branch,
-                Gender = input.Gender,
                 IsActive = true,
                 Password = "123qwe",
                 UserCode = input.UserCode

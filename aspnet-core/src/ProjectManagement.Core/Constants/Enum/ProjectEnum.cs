@@ -162,11 +162,6 @@ namespace ProjectManagement.Constants.Enum
             HCM = 2,
             Other = 4
         }
-        public enum Gender
-        {
-            Male = 0,
-            Female = 1
-        }
         public enum InvoiceStatus
         {
             New = 0,
