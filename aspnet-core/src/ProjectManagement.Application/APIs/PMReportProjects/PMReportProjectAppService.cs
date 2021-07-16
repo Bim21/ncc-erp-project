@@ -23,7 +23,7 @@ namespace ProjectManagement.APIs.PMReportProjects
     {
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
-        public async Task<GridResult<GetPMReportProjectDto>> GetAllByPmReport(GridParam input, long pmReportId)
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
             var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
                 .Select(x => new GetPMReportProjectDto
@@ -39,7 +39,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmName = x.PM.Name,
                     Note = x.Note
                 });
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
 
         [HttpGet]
