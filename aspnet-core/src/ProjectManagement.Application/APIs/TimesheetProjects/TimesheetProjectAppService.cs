@@ -45,15 +45,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var query = from ts in WorkScope.GetAll<Timesheet>()
                         join tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.ProjectId == projectId)
-                        on ts.Id equals tsp.ProjectId into pp
-                        from p in pp.DefaultIfEmpty()
+                        on ts.Id equals tsp.TimesheetId
                         select new GetTimesheetProjectDto
                         {
-                            Id = ts.Id,
+                            Id = tsp.Id,
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
-                            ProjectId = p.ProjectId,
-                            TimesheetFile = "/timesheets/" + p.FilePath,
-                            Note = p.Note
+                            ProjectId = tsp.ProjectId,
+                            TimesheetFile = "/timesheets/" + tsp.FilePath,
+                            Note = tsp.Note
                         };
             return await query.ToListAsync();
         }

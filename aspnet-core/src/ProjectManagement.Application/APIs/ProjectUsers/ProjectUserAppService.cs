@@ -62,8 +62,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             AvatarPath = x.AvatarPath,
                             UserType = x.UserType,
                             UserLevel = x.UserLevel,
-                            Branch = x.Branch,
-                            Gender = x.Gender
+                            Branch = x.Branch
                         });
             return await query.ToListAsync();
         }

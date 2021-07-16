@@ -12,5 +12,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Core\ProjectManagement.Core.csproj" />
+    <ProjectReference Include="..\ProjectManagement.EntityFrameworkCore\ProjectManagement.EntityFrameworkCore.csproj" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ using ProjectManagement.MultiTenancy;
 using Abp.Dependency;
 using Abp.ObjectMapping;
 using NccCore.IoC;
+using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement
 {

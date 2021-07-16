@@ -32,7 +32,6 @@ namespace ProjectManagement.Users.Dto
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
-        public Gender Gender { get; set; }
 
         public bool IsActive { get; set; }
 

@@ -29,6 +29,7 @@ namespace ProjectManagement.APIs.Projects
         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
 
+            var qwerwq = WorkScope.GetAll<Project>();
             var query = from p in WorkScope.GetAll<Project>()
                         where isViewAll || p.PMId == AbpSession.UserId.Value
                         select new GetProjectDto
