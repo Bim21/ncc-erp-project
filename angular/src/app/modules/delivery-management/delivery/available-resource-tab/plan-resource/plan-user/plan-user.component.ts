@@ -30,8 +30,6 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getAllProject();
     this.planUser.userId=this.data.item.userId;
-    this.planUser=this.data.futureResource;
-    console.log("userId", this.data.futureResource)
   }
   public SaveAndClose(){
     if(this.data.command=="plan"){

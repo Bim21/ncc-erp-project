@@ -130,7 +130,7 @@
                                                             (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
                                                             name="ngsaipham" placeholder="Tên người vi phạm" #ngvipham>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option [value]="user.id">{{user.userName}}
+                                                                <mat-option [value]="user.id">{{user.fullName}}
                                                                 </mat-option>
                                                             </ng-container>
 
@@ -145,7 +145,7 @@
                                                             #ngliendoi>
                                                             <ng-container *ngFor="let user of projectUserList">
                                                                 <mat-option *ngIf="user.id != ngvipham.value"
-                                                                    [value]="user.id">{{user.userName}}</mat-option>
+                                                                    [value]="user.id">{{user.fullName}}</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>

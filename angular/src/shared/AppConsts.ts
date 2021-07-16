@@ -21,11 +21,11 @@ export class AppConsts {
     static readonly statusStyle = {
         PENDING: "badge badge-pill badge-primary",
         DONE: "badge badge-pill badge-success",
-        Future: "badge badge-pill badge-secondary",
+        Future: "badge badge-pill badge-danger",
         CANCELLED: "badge badge-pill badge-danger",
         Present: "badge badge-pill badge-primary",
         PENDINGCFO: "badge badge-pill badge-dark",
-        Past: "badge badge-pill badge-danger",
+        Past: "badge badge-pill badge-secondary",
         Potential: "badge badge-pill badge-primary",
         InProgress: "badge badge-pill badge-success",
         Closed: "badge badge-pill badge-danger"
@@ -54,7 +54,7 @@ export class AppConsts {
     static readonly   PMReportProjectIssueStatusStyle =
     {
         InProgress: "badge badge-pill badge-primary",
-        Done: "badge badge-success",
+        Done: "badge badge-pill badge-success",
     }
   
 

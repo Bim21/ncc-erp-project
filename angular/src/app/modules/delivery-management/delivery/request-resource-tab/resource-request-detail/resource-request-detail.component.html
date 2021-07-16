@@ -18,14 +18,13 @@
                             <td class="text-center">
                                 <span>{{ i + 1 }}</span>
                             </td>
-                            <td class="text-center">{{ item.userName }}</td>
+                            <td class="text-center">{{ item.fullName }}</td>
                             <td class="text-center">{{ item.startTime | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center">{{ item.allocatePercentage }}%</td>
                             <td class="text-center" style="width: 100px;">
                                 <button class="btn btn-sm bg-secondary mr-1"
                                     (click)="edit(item); $event.stopPropagation()">
                                     <i class="fas fa-pencil-alt"></i>
-
                                     Edit
                                 </button>
                                 <button class="btn btn-sm bg-danger ml-1"
@@ -76,7 +75,7 @@
                             <td class="text-center">
                                 <span>{{ i + 1 }}</span>
                             </td>
-                            <td class="text-center">{{ item.FullName }}</td>
+                            <td class="text-center">{{ item.userName }}</td>
                             <td class="text-center">{{ item.startTime | date:"dd/MM/yyyy" }}</td>
                             <td class="text-center">{{ item.undisposed }}%</td>
                             <td class="text-center">

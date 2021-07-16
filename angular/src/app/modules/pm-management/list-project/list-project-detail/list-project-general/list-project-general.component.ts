@@ -56,8 +56,8 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
     })
   }
   public getPm(): void {
-    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => {
-      this.pmList = data.result.items;
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.pmList = data.result;
     })
   }
 

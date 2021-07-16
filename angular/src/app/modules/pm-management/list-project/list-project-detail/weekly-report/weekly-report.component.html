@@ -35,7 +35,7 @@
                         currentPage: weeklyCurrentPage
                         } ; let i=index">
                             <td><span>{{ i +1 }}</span></td>
-                            <td><span *ngIf="!report.createMode">{{report.userName}}</span>
+                            <td><span *ngIf="!report.createMode">{{report.fullName}}</span>
                                 <div *ngIf="report.createMode" class="form-group row required">
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="report.userId" name="projectEmployee"
@@ -149,7 +149,7 @@
                         currentPage: futureCurrentPage
                         } ; let i=index">
                             <td><span>{{ i +1 }}</span></td>
-                            <td><span *ngIf="!report.createMode">{{report.userName}}</span>
+                            <td><span *ngIf="!report.createMode">{{report.fullName}}</span>
                                 <div *ngIf="report.createMode" class="form-group row required">
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="report.userId" name="projectEmployee"
@@ -275,7 +275,6 @@
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
-                            <th *ngIf="processProblem">PM Report</th>
                             <th>Vấn đề</th>
                             <th>Impact</th>
                             
@@ -293,21 +292,7 @@
                         currentPage: problemCurrentPage
                         }; let i =index">
                             <td>{{i+1}}</td>
-                            <td *ngIf="processProblem">
-                                <div class="form-group row required" *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100 mx-auto" appearance="outline">
-                                        <mat-select [(ngModel)]="problem.pmReportProjectId" name="pmReport"
-                                            placeholder="select a pm report" required #pmReport="ngModel">
-                                            <mat-option *ngFor="let report of pmReportList" [value]="report.id">
-                                                {{report.pmReportName}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-error class="mt-1" *ngIf="pmReport.hasError('required') && pmReport.touched"
-                                        style="font-size: 13px;">
-                                        This field is required
-                                    </mat-error>
-                                </div>
-                            </td>
+                        
                             <td>
 
                                 <p *ngIf="!problem.createMode">{{problem.description}}</p>
@@ -390,7 +375,7 @@
                                     </button>
                                 </mat-menu>
                                 <div *ngIf="problem.createMode" class="pt-2">
-                                    <button [disabled]="!problem.pmReportProjectId || !problem.description || !problem.impact" class=" mr-3 submit-btn" style="background: none; border: none;"
+                                    <button [disabled]=" !problem.description || !problem.impact" class=" mr-3 submit-btn" style="background: none; border: none;"
                                         (click)="saveProblemReport(problem)">
                                         <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                     </button>
