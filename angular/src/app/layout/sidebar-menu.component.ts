@@ -117,13 +117,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
           ""
         ),
-        new MenuItem(
-          this.l("Invoice"),
-          "/app/invoice",
-          "fas fa-circle",
+        // new MenuItem(
+        //   this.l("Invoice"),
+        //   "/app/invoice",
+        //   "fas fa-circle",
 
-          ""
-        ),
+        //   ""
+        // ),
 
 
       ]

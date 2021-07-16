@@ -25,6 +25,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
   public clientList: ClientDto[] = []
   public pmList: UserDto;
   public isEditStatus = false;
+  public searchPM: string = "";
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     injector: Injector,
