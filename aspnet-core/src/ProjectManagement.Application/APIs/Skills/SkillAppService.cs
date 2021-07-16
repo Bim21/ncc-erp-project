@@ -36,36 +36,33 @@ namespace ProjectManagement.APIs.Skills
             return input;
         }
 
-        //[HttpPut]
-        //public async Task<SkillDto> Update(SkillDto input)
-        //{
-        //    var skill = await dbContext.Skills.FirstOrDefaultAsync(x => x.Id == input.Id);
-        //    if(skill == null)
-        //        throw new UserFriendlyException("Skill not exist !");
+        [HttpPut]
+        public async Task<SkillDto> Update(SkillDto input)
+        {
+            var skill = await WorkScope.GetAsync<Skill>(input.Id);
+            if (skill == null)
+                throw new UserFriendlyException("Skill not exist !");
 
-        //    var isExist = await dbContext.Skills.AnyAsync(x => x.Id != input.Id && x.Name == input.Name);
-        //    if (isExist)
-        //        throw new UserFriendlyException("Skill already exist !");
+            var isExist = await WorkScope.GetAll<Skill>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name);
+            if (isExist)
+                throw new UserFriendlyException("Skill already exist !");
 
-        //    ObjectMapper.Map<SkillDto, Skill>(input, skill);
-        //    dbContext.Update(skill);
-        //    dbContext.SaveChanges();
-        //    return input;
-        //}
+            await WorkScope.UpdateAsync(ObjectMapper.Map<SkillDto, Skill>(input, skill));
+            return input;
+        }
 
-        //[HttpDelete]
-        //public async Task Delete(long skillId)
-        //{
-        //    var skill = await dbContext.Skills.FirstOrDefaultAsync(x => x.Id == skillId);
-        //    if (skill == null)
-        //        throw new UserFriendlyException("Skill not exist !");
+        [HttpDelete]
+        public async Task Delete(long skillId)
+        {
+            var skill = await WorkScope.GetAsync<Skill>(skillId);
+            if (skill == null)
+                throw new UserFriendlyException("Skill not exist !");
 
-        //    var hasUserSkill = await WorkScope.GetAll<UserSkill>().AnyAsync(x => x.SkillId == skillId);
-        //    if(hasUserSkill)
-        //        throw new UserFriendlyException("Skill has Userskill  !");
+            var hasUserSkill = await WorkScope.GetAll<UserSkill>().AnyAsync(x => x.SkillId == skillId);
+            if (hasUserSkill)
+                throw new UserFriendlyException("Skill has Userskill  !");
 
-        //    dbContext.Skills.Remove(skill);
-        //    dbContext.SaveChanges();
-        //}
+            await WorkScope.DeleteAsync(skill);
+        }
     }
 }

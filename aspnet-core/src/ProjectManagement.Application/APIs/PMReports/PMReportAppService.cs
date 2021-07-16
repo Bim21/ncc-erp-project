@@ -23,18 +23,16 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
-            var query = from pr in WorkScope.GetAll<PMReport>()
-                        join prp in WorkScope.GetAll<PMReportProject>() on pr.Id equals prp.PMReportId
-                        group prp by new { pr.Id, pr.Name, pr.Year, pr.Type, pr.IsActive } into pp
-                        select new GetPMReportDto
-                        {
-                            Id = pp.Key.Id,
-                            Name = pp.Key.Name,
-                            Year = pp.Key.Year,
-                            IsActive = pp.Key.IsActive,
-                            Type = pp.Key.Type,
-                            NumberOfProject = pp.Count()
-                        };
+            var pmRepoertProject = WorkScope.GetAll<PMReportProject>();
+            var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Year = x.Year,
+                IsActive = x.IsActive,
+                Type = x.Type,
+                NumberOfProject = pmRepoertProject.Where(y => y.PMReportId == x.Id).Count()
+            });
             return await query.GetGridResult(query, input);
         }
 
