@@ -80,11 +80,21 @@ namespace ProjectManagement.Users
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
-            CheckErrors(await _userManager.CreateAsync(user, input.Password));
+            CheckErrors( await _userManager.CreateAsync(user, input.Password));
 
             if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            }
+
+            foreach (var s in input.UserSkills)
+            {
+                var skill = new UserSkill
+                {
+                    UserId = user.Id,
+                    SkillId = s.SkillId
+                };
+                await _workScope.InsertAndGetIdAsync(skill);
             }
 
             CurrentUnitOfWork.SaveChanges();
@@ -107,6 +117,27 @@ namespace ProjectManagement.Users
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
 
+            var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.Id).ToListAsync();
+            var currenUserSkillId = userSkills.Select(x => x.SkillId);
+
+            var deleteSkillId = currenUserSkillId.Except(input.UserSkills.Select(x => x.SkillId));
+            var deleteSkill = userSkills.Where(x => deleteSkillId.Contains(x.SkillId));
+            var addSkill = input.UserSkills.Where(x => !currenUserSkillId.Contains(x.SkillId));
+
+            foreach(var item in deleteSkill)
+            {
+                await _workScope.DeleteAsync<UserSkill>(item);
+            }
+
+            foreach (var item in addSkill)
+            {
+                var userSkill = new UserSkill {
+                    UserId = item.UserId,
+                    SkillId = item.SkillId
+                };
+                await _workScope.InsertAndGetIdAsync(userSkill);
+            }
+
             return await GetAsync(input);
         }
 
@@ -115,6 +146,12 @@ namespace ProjectManagement.Users
             var hasProject = await _workScope.GetAll<Project>().AnyAsync(x => x.PMId == input.Id);
             if (hasProject)
                 throw new UserFriendlyException("User is a project manager !");
+
+            var useSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.Id).ToListAsync();
+            foreach(var item in useSkills)
+            {
+                await _workScope.DeleteAsync(item);
+            }
 
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);

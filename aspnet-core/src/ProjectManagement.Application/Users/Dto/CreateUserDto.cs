@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using Abp.Runtime.Validation;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Entities;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Users.Dto
@@ -34,7 +36,7 @@ namespace ProjectManagement.Users.Dto
         public Branch Branch { get; set; }
 
         public bool IsActive { get; set; }
-
+        public List<UserSkillDto> UserSkills { get; set; }
         public string[] RoleNames { get; set; }
 
         [Required]
