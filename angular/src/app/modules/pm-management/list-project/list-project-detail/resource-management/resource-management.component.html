@@ -7,14 +7,9 @@
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <h4 class="d-inline">Danh sách nhân viên</h4>
-<<<<<<< Updated upstream
                         <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess || !isShowProjectUser"
                             (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate"
                             class="btn bg-blue ml-3">
-=======
-                        <button *ngIf="!projectUserProcess && permission.isGranted(PmManager_ProjectUser_Create)" [hidden]="projectUserProcess || !isShowProjectUser"
-                            (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate" class="btn bg-blue ml-3">
->>>>>>> Stashed changes
                             <i class="fa fa-plus-square mr-1"></i> Create
                         </button>
                     </div>
@@ -102,7 +97,6 @@
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
-<<<<<<< Updated upstream
                                     <!-- <abp-validation-summary [control]="projectDate" [controlEl]="projectDateEl"></abp-validation-summary> -->
 
                                 </td>
@@ -170,40 +164,6 @@
                         </tbody>
                     </table>
                 </div>
-=======
-                                    <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"
-                                        style="font-size: 13px;">
-                                        This field is required
-                                    </mat-error>
-                                </div>
-
-                            </td>
-                            <td>
-                                <div *ngIf="!user.createMode">
-                                    <button [disabled]="projectUserProcess" *ngIf="permission.isGranted(PmManager_ProjectUser_Update)" ng class="btn btn-sm bg-secondary mr-1"
-                                        (click)="editProjectUser(user)"> <i class="fas fa-pencil-alt"></i>Edit</button>
-                                    <button [disabled]="projectUserProcess" class="btn btn-sm bg-danger ml-1" *ngIf="permission.isGranted(PmManager_ProjectUser_Delete)"
-                                        (click)="removeUser(user)"> <i class="fas fa-trash"></i>Remove</button>
-
-
-                                </div>
-                                <div *ngIf="user.createMode" class="pt-2">
-                                    <button
-                                        [disabled]="!user?.userId || !user?.projectRole?.toString() || !user?.startTime || !user.allocatePercentage && user.allocatePercentage !=0 "
-                                        class=" mr-3 submit-btn" style="background: none; border: none;"
-                                        (click)="saveProjectUser(user)">
-                                        <i style="color: green; ;" class="fas fa-check fa-2x"></i>
-                                    </button>
-                                    <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelProjectUser()"></i>
-
-                                </div>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
->>>>>>> Stashed changes
                 <pagination-controls id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -229,12 +189,8 @@
             <mat-expansion-panel expanded=false>
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <h4 class="d-inline">Request nhân sự</h4>
-<<<<<<< Updated upstream
                     <button *ngIf="!requestProcess" [hidden]="!isShowRequest"
                         (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
-=======
-                    <button *ngIf="!requestProcess && permission.isGranted(PmManager_ProjectUserBill_Create)" [hidden]= "!isShowRequest"  (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
->>>>>>> Stashed changes
                         class="btn bg-blue ml-3">
                         <i class="fa fa-plus-square mr-1"></i>Create
                     </button>
@@ -269,7 +225,6 @@
                                     </div>
                                 </td>
 
-<<<<<<< Updated upstream
 
                                 <td>
                                     <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
@@ -327,53 +282,6 @@
                             </tr>
                         </tbody>
                     </table>
-=======
-                                </div>
-                            </td>
-                            <td>
-                                <p *ngIf="!request.createMode">{{request.note}}</p>
-                                <div *ngIf="request.createMode">
-                                    <mat-form-field class="example-full-width" appearance="outline">
-                                        <textarea placeholder="leave a comment" [(ngModel)]="request.note"
-                                            matInput></textarea>
-                                    </mat-form-field>
-                                </div>
-                            </td>
-                            <td>
-                                <p style="font-size: 12px;" [ngClass]="APP_CONST.statusStyle[request.statusName]"
-                                    *ngIf="!request.craeteMode">
-                                    {{request.statusName}}</p>
-                                <div *ngIf="request.createMode && !isEditRequest">
-                                    <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1">PENDING</p>
-                                </div>
-                            </td>
-                            <td>
-                                <div *ngIf="!request.createMode">
-                                    <button [disabled]="requestProcess" *ngIf="permission.isGranted(PmManager_ProjectUserBill_Update)" class="btn btn-sm bg-secondary mr-1"
-                                        (click)="editProjectRerequest(request)"> <i
-                                            class="fas fa-pencil-alt"></i>Edit</button>
-                                    <button [disabled]="requestProcess" *ngIf="permission.isGranted(PmManager_ProjectUserBill_Delete)" class="btn btn-sm bg-danger ml-1"
-                                        (click)="removeProjectRerequest(request)"> <i
-                                            class="fas fa-trash"></i>delete</button>
-
-
-                                </div>
-                                <div *ngIf="request.createMode" class="pt-2">
-                                    <button [disabled]="!request?.name || !request?.timeNeed " class=" mr-3 submit-btn"
-                                        style="background: none; border: none;" (click)="saveProjectRerequest(request)">
-                                        <i style="color: green;" class="fas fa-check fa-2x "></i>
-                                    </button>
-
-                                    <i style="color: red;" class="fas fa-times fa-2x"
-                                        (click)="cancelProjectRerequest()"></i>
-
-                                </div>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
->>>>>>> Stashed changes
                 </div>
 
                 <pagination-controls id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
