@@ -20,9 +20,9 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
     {
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)]
-        public async Task<List<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(long ProjectId)
+        public async Task<List<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(long ProjectId, long pmReportId)
         {
-            var query = from pr in WorkScope.GetAll<PMReport>().Where(x => x.IsActive)
+            var query = from pr in WorkScope.GetAll<PMReport>().Where(x => x.Id == pmReportId)
                         join prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId)
                         on pr.Id equals prp.PMReportId into lstPrp
                         from p in lstPrp.DefaultIfEmpty()
@@ -45,8 +45,13 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Create)]
-        public async Task<PMReportProjectIssueDto> Create(PMReportProjectIssueDto input)
+        public async Task<PMReportProjectIssueDto> Create(PMReportProjectIssueDto input, long projectId)
         {
+            var pmReportProjectActive = await WorkScope.GetAll<PMReportProject>().FirstOrDefaultAsync(x => x.PMReport.IsActive && x.ProjectId == projectId);
+            if (pmReportProjectActive == null)
+                throw new UserFriendlyException("Can't find any active PMReportproject !");
+
+            input.PMReportProjectId = pmReportProjectActive.Id;
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProjectIssue>(input));
             return input;
         }

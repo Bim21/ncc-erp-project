@@ -62,6 +62,10 @@ namespace ProjectManagement.APIs.ResourceRequests
                 ProjectId = x.ProjectId,
                 ProjectName = x.Project.Name,
                 Status = x.Status,
+                StatusName = x.Status.ToString(),
+                TimeNeed = x.TimeNeed,
+                TimeDone = x.TimeDone.Value,
+                Note = x.Note,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
                
@@ -107,20 +111,13 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
-            var projectuser = new ProjectUser
-            {
-                UserId = input.UserId,
-                ProjectId = resourceRequest.ProjectId,
-                AllocatePercentage = input.AllocatePercentage,
-                ResourceRequestId = resourceRequest.Id,
-                ProjectRole = input.ProjectRole,
-                StartTime = input.StartTime,
-                Status = ProjectUserStatus.Present,
-                IsExpense = true,
-                IsFutureActive = false,
-                PMReportId = pmReportActive.Id
-            };
-            input.Id = await WorkScope.InsertAndGetIdAsync(projectuser);
+            input.ProjectId = resourceRequest.ProjectId;
+            input.ResourceRequestId = resourceRequest.Id;
+            input.Status = ProjectUserStatus.Present;
+            input.IsExpense = true;
+            input.IsFutureActive = false;
+            input.PMReportId = pmReportActive.Id;
+            await _projectUserAppService.Create(input);
             return input;
         }
 
@@ -147,7 +144,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.Id,
                                     UserName = x.FullName,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
-                                });
+                                }).Where(x => x.Undisposed > 0);
 
             return await users.ToListAsync();
         }
@@ -200,7 +197,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && 
-                               x.Status == ProjectUserStatus.Present || (x.Status == ProjectUserStatus.Future && x.IsFutureActive));
+                               x.Status == ProjectUserStatus.Present);
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
@@ -219,12 +216,22 @@ namespace ProjectManagement.APIs.ResourceRequests
                 ProjectRole = input.ProjectRole,
                 AllocatePercentage = input.PercentUsage,
                 StartTime = input.StartTime,
-                Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present,
+                Status = ProjectUserStatus.Future,
                 IsExpense = input.IsExpense,
-                IsFutureActive = input.StartTime.Date > DateTime.Now.Date ? true : false,
+                IsFutureActive = true,
                 PMReportId = pmReportActive.Id
             };
-            projectUser.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
+            input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
+
+            if (projectUser.Status == ProjectUserStatus.Present)
+            {
+                var pu = WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present);
+                foreach (var item in pu)
+                {
+                    item.Status = ProjectUserStatus.Past;
+                    await WorkScope.UpdateAsync(item);
+                }
+            }
             return projectUser;
         }
 
@@ -241,6 +248,14 @@ namespace ProjectManagement.APIs.ResourceRequests
             input.Status = ProjectUserStatus.Present;
 
             await _projectUserAppService.Update(input);
+
+            var pu = WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present);
+            foreach (var item in pu)
+            {
+                item.Status = ProjectUserStatus.Past;
+                await WorkScope.UpdateAsync(item);
+            }
+
             return input;
         }
 
