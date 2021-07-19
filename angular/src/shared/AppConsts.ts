@@ -39,8 +39,8 @@ export class AppConsts {
         Artist: "badge bg-success",
     }
     static readonly ProjectTypeStyle = {
-        ODC:"badge badge-primary",
-        TimeAndMaterials : "badge badge-success",
+        ODC: "badge badge-primary",
+        TimeAndMaterials: "badge badge-success",
         FIXPRICE: "badge badge-danger",
         PRODUCT: "badge badge-warning",
         NoBill: "badge badge-info"
@@ -48,14 +48,25 @@ export class AppConsts {
     static readonly ProjectMilestoneStatus = {
         Paid: "badge badge-pill badge-secondary",
         UAT: "badge badge-pill badge-primary",
-        Upcoming:"badge badge-pill badge-warning",
+        Upcoming: "badge badge-pill badge-warning",
         Fail: "badge badge-pill badge-danger"
     }
-    static readonly   PMReportProjectIssueStatusStyle =
-    {
-        InProgress: "badge badge-pill badge-primary",
-        Done: "badge badge-pill badge-success",
+    static readonly PMReportProjectIssueStatusStyle =
+        {
+            InProgress: "badge badge-pill badge-primary",
+            Done: "badge badge-pill badge-success",
+        }
+    static readonly userBranchStyle = {
+        0: "badge badge-pill badge-danger",
+        1: "badge badge-pill badge-success",
+        2: "badge badge-pill badge-primary"
     }
-  
+    static readonly userTypeStyle = {
+        0: "badge badge-success",
+        1: "badge badge-primary",
+        2: "badge badge-danger",
+        3: "badge badge-warning"
+    }
+
 
 }

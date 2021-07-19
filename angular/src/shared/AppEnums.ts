@@ -67,8 +67,8 @@ export const APP_ENUMS = {
     {
         Paid: 2,
         UAT: 1,
-        Upcoming:0,
-        Fail:3
+        Upcoming: 0,
+        Fail: 3
     },
     ProjectStatus:
     {
@@ -79,7 +79,7 @@ export const APP_ENUMS = {
     ProjectType:
     {
         ODC: 0,
-        TimeAndMaterials : 1,
+        TimeAndMaterials: 1,
         FIXPRICE: 2,
         PRODUCT: 3,
         NoBill: 4
@@ -117,9 +117,48 @@ export const APP_ENUMS = {
     },
     SaodoStatus:
     {
-        New:0,
-        InProcess:1,
-        Done:2
-    }
+        New: 0,
+        InProcess: 1,
+        Done: 2
+    },
+    Branch:
+    {
+        "Hà Nội": 0,
+        "Đà Nẵng": 1,
+        "Hồ chí Minh": 2,
+        Other: 4
+    },
+    UserLevel:
+    {
+        Intern_0: 0,
+        Intern_600K: 1,
+        Intern_2M: 2,
+        Intern_4M: 3,
+        FresherMinus: 4,
+        Fresher: 5,
+        FresherPlus: 6,
+        JuniorMinus: 7,
+        Junior: 8,
+        JuniorPlus: 9,
+        MiddleMinus: 10,
+        Middle: 11,
+        MiddlePlus: 12,
+        SeniorMinus: 13,
+        Senior: 14,
+        SeniorPlus: 15,
+    },
+    UserType: {
+        Internship: 0,
+        Collaborators: 1,
+        Staff: 2,
+        ProbationaryStaff: 3
+    },
+
+    // Branch: {
+    //     HaNoi : 0,
+    //     DaNang : 1,
+    //     HCM : 2,
+    //     Other : 4
+    // }
 
 }

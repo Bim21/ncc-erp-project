@@ -193,7 +193,7 @@
                                     {{report.startTime | date:"dd/MM/yyyy"}}
                                 </span>
                                 <mat-form-field appearance="outline" *ngIf="report.createMode">
-                                    <input matInput [matDatepicker]="picker" placeholder="chose a date"
+                                    <input [min]="minDate" matInput [matDatepicker]="picker" placeholder="chose a date"
                                         [(ngModel)]="report.startTime" name="usercreateDate">
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker #picker></mat-datepicker>

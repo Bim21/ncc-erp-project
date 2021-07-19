@@ -40,7 +40,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
   public isEditProblem: boolean = false;
   public isEditFutureReport: boolean = false;
-
+  public minDate = new Date();
 
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
@@ -59,6 +59,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.getProjectProblem();
     this.getAllPmReport();
     this.getUser();
+    this.minDate.setDate(this.minDate.getDate()+1)
   }
   public getWeeklyReport() {
     this.reportService.getChangesDuringWeek(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {

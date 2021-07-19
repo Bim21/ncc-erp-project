@@ -1,11 +1,17 @@
-<div style="max-width: 100%;">
-    <div class="row" >
-        <div class="col-2">
-            <img src="/assets/img/user.png" class="rounded-circle" width="50px" style="max-width: 100%;" alt="avatar">
+<div >
+    <div class="row w-100" style="overflow: hidden;" >
+        <div class="col-3">
+            <img src="/assets/img/user.png" class="rounded-circle ml-3 mt-1" width="45px" style="max-width: 100%;" alt="avatar">
         </div>
-        <div class="col-10" >
+        <div class="col-9" >
             <strong>{{user?.fullName}}</strong>
-            <p>{{user?.emailAddress}}</p>
+            <p class="m-0">  
+                <span class="mr-1" [ngClass]="APP_CONST.userBranchStyle[user.branch]">{{APP_ENUM.Branch[user.branch]}} {{getProjectTypefromEnum(user.branch,APP_ENUM.Branch)}}</span>
+                <span [ngClass]="APP_CONST.userTypeStyle[user.userType]">{{APP_ENUM.UserType[user.userType]}} {{getProjectTypefromEnum(user.userType,APP_ENUM.UserType)}}</span>
+
+                
+            </p>
+            <p >{{user?.emailAddress}}</p>
         </div>
     </div>
 

@@ -3312,7 +3312,11 @@ export class UserDto implements IUserDto {
     creationTime: moment.Moment;
     roleNames: string[] | undefined;
     komuUserName: string | undefined;
+    branch:number;
+    avatarPath:string;
     id: number;
+    gender:number;
+    userType:number;
 
     constructor(data?: IUserDto) {
         if (data) {
