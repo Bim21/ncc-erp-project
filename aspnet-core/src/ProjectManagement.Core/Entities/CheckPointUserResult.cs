@@ -15,6 +15,7 @@ namespace ProjectManagement.Entities
         public long UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
+        public long PMId { get; set; }
         public string UserNote { get; set; }
         public string PMNote { get; set; }
         public string FinalNote { get; set; }
@@ -24,6 +25,7 @@ namespace ProjectManagement.Entities
         public int? TeamScore { get; set; }
         public int? ClientScore { get; set; }
         public int? SelfScore { get; set; }
+        public int? ExamScore { get; set; }
         public int? FinalScore { get; set; }
         public CheckPointUserResultStatus Status { get; set; }
 
