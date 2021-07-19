@@ -38,6 +38,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                             Source = prpi.Source.ToString(),
                             Solution = prpi.Solution,
                             MeetingSolution = prpi.MeetingSolution,
+                            Flag = prpi.Flag.ToString(),
                             Status = prpi.Status.ToString()
                         };
             return await query.ToListAsync();
@@ -52,6 +53,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                 throw new UserFriendlyException("Can't find any active PMReportproject !");
 
             input.PMReportProjectId = pmReportProjectActive.Id;
+            input.Flag = PMReportProjectIssueFlag.Green;
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProjectIssue>(input));
             return input;
         }
