@@ -29,19 +29,19 @@ export class ProjectTimesheetComponent extends AppComponentBase implements OnIni
     })
   }
   
-  public addTimesheet(){
-    let newTimesheet ={} as ProjectTimesheetDto
-    newTimesheet.createMode = true;
-     this.listTimesheetByProject.push(newTimesheet)
-  }
+  // public addTimesheet(){
+  //   let newTimesheet ={} as ProjectTimesheetDto
+  //   newTimesheet.createMode = true;
+  //    this.listTimesheetByProject.push(newTimesheet)
+  // }
 
- public importTimeSheet(id: any) {
-    const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
-      data: { id: id, width: '500px' }
-    });
-    dialog.afterClosed().subscribe(result => {
-      this.getAllTimesheet();
-    });
-  }
+//  public importTimeSheet(id: any) {
+//     const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
+//       data: { id: id, width: '500px' }
+//     });
+//     dialog.afterClosed().subscribe(result => {
+//       this.getAllTimesheet();
+//     });
+//   }
 
 }

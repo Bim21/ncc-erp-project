@@ -35,7 +35,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
-  public problemList: projectProblemDto[] = []
+  public problemList: projectProblemDto[] = [];
 
 
   public isEditProblem: boolean = false;
