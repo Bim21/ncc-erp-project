@@ -205,6 +205,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.SaoDo_CanViewMenu,
                     PermissionNames.CheckList,
                     PermissionNames.CheckList_CanViewMenu,
+                    PermissionNames.DeliveryManagement,
+                    PermissionNames.DeliveryManagement_CanViewMenu,
                     PermissionNames.Timesheet,
                     PermissionNames.Timesheet_CanViewMenu,
 
@@ -390,6 +392,8 @@ namespace ProjectManagement.Authorization
                 new SystemPermission{ Name =  PermissionNames.SaoDo_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Sao Do Menu" },
                 new SystemPermission{ Name =  PermissionNames.CheckList, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List" },
                 new SystemPermission{ Name =  PermissionNames.CheckList_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Check List Menu" },
+                new SystemPermission{ Name =  PermissionNames.DeliveryManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delivery Management" },
+                new SystemPermission{ Name =  PermissionNames.DeliveryManagement_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Delivery Management Menu" },
                 new SystemPermission{ Name =  PermissionNames.Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
                 new SystemPermission{ Name =  PermissionNames.Timesheet_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Timesheet Menu" },
 
