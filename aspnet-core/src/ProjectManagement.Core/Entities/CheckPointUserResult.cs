@@ -16,6 +16,8 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
         public long PMId { get; set; }
+        [ForeignKey(nameof(PMId))]
+        public User PM { get; set; }
         public string UserNote { get; set; }
         public string PMNote { get; set; }
         public string FinalNote { get; set; }
