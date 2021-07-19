@@ -105,6 +105,12 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("Can't add user at past time !");
             }
 
+            var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId
+                                   && x.Status == input.Status && x.StartTime.Date == input.StartTime.Date && x.ProjectRole == x.ProjectRole
+                                   && x.AllocatePercentage == input.AllocatePercentage);
+            if (isExist)
+                throw new UserFriendlyException("User already exist in project !");
+
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
@@ -112,12 +118,19 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("Can't find any active reports !");
 
             input.ProjectId = resourceRequest.ProjectId;
-            input.ResourceRequestId = resourceRequest.Id;
-            input.Status = ProjectUserStatus.Present;
-            input.IsExpense = true;
-            input.IsFutureActive = false;
             input.PMReportId = pmReportActive.Id;
-            await _projectUserAppService.Create(input);
+            input.Status = ProjectUserStatus.Present;
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
+
+            if (input.Status == ProjectUserStatus.Present)
+            {
+                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
+                foreach (var item in projectUsers)
+                {
+                    item.Status = ProjectUserStatus.Past;
+                    await WorkScope.UpdateAsync(item);
+                }
+            }
             return input;
         }
 
