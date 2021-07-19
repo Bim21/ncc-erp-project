@@ -87,14 +87,17 @@ namespace ProjectManagement.Users
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
 
-            foreach (var s in input.UserSkills)
+            if(input.UserSkills != null)
             {
-                var skill = new UserSkill
+                foreach (var s in input.UserSkills)
                 {
-                    UserId = user.Id,
-                    SkillId = s.SkillId
-                };
-                await _workScope.InsertAndGetIdAsync(skill);
+                    var skill = new UserSkill
+                    {
+                        UserId = user.Id,
+                        SkillId = s.SkillId
+                    };
+                    await _workScope.InsertAndGetIdAsync(skill);
+                }
             }
 
             CurrentUnitOfWork.SaveChanges();

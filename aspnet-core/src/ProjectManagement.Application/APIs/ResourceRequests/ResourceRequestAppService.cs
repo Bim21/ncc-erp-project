@@ -100,7 +100,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest)]
         public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
         {
-            if(input.StartTime.Date < DateTime.Now.Date)
+            if(input.StartTime.Date <= DateTime.Now.Date)
             {
                 throw new UserFriendlyException("Can't add user at past time !");
             }
@@ -113,13 +113,17 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
 
+            if(input.StartTime.Date <= resourceRequest.TimeNeed.Date)
+                throw new UserFriendlyException("Start date must be greater than request date !");
+
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
             input.ProjectId = resourceRequest.ProjectId;
             input.PMReportId = pmReportActive.Id;
-            input.Status = ProjectUserStatus.Present;
+            input.Status = ProjectUserStatus.Future;
+            input.IsFutureActive = false;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
 
             if (input.Status == ProjectUserStatus.Present)
@@ -231,7 +235,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 StartTime = input.StartTime,
                 Status = ProjectUserStatus.Future,
                 IsExpense = input.IsExpense,
-                IsFutureActive = true,
+                IsFutureActive = false,
                 PMReportId = pmReportActive.Id
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
