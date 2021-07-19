@@ -35,7 +35,6 @@ using ProjectManagement.Entities;
 
 namespace ProjectManagement.Users
 {
-    [AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
         private readonly UserManager _userManager;
@@ -69,6 +68,7 @@ namespace ProjectManagement.Users
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users_Create)]
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             CheckCreatePermission();
@@ -102,6 +102,7 @@ namespace ProjectManagement.Users
             return MapToEntityDto(user);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
             CheckUpdatePermission();
@@ -141,6 +142,7 @@ namespace ProjectManagement.Users
             return await GetAsync(input);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
         public override async Task DeleteAsync(EntityDto<long> input)
         {
             var hasProject = await _workScope.GetAll<Project>().AnyAsync(x => x.PMId == input.Id);

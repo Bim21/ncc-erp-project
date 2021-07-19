@@ -65,9 +65,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)]
-        public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId)
+        public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
                             .Select(x => new GetProjectUserDto
                             {
@@ -93,9 +93,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
-        public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId)
+        public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
                             .Where(x => x.Status == ProjectUserStatus.Future).OrderByDescending(x => x.CreationTime)
                             .Select(x => new GetProjectUserDto
                             {
@@ -120,6 +120,18 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_SendReport)]
+        public async Task SendReport(long projectId, long pmReportId)
+        {
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
+            if (pmReportProject.Status == PMReportProjectStatus.Sent)
+                throw new UserFriendlyException("Report has been sent !");
+
+            pmReportProject.Status = PMReportProjectStatus.Sent;
+            await WorkScope.UpdateAsync(pmReportProject);
+        }
+
+        [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Create)]
         public async Task<PMReportProjectDto> Create(PMReportProjectDto input)
         {
@@ -133,6 +145,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             if (isExist)
                 throw new UserFriendlyException("PMReportProject already exist !");
 
+            input.Status = PMReportProjectStatus.Draft;
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProject>(input));
             return input;
         }

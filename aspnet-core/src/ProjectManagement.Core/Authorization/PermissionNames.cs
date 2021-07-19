@@ -8,10 +8,14 @@ namespace ProjectManagement.Authorization
     {     
         //Admin
         public const string Admin = "Admin";
+            public const string Admin_CanViewMenu = "Admin.CanViewMenu";
             public const string Pages_Tenants = "Pages.Tenants";
             public const string Pages_Roles = "Pages.Roles";
             //User
             public const string Pages_Users = "Pages.Users";
+                public const string Pages_Users_Create = "Pages.Users.Create";
+                public const string Pages_Users_Update = "Pages.Users.Update";
+                public const string Pages_Users_Delete = "Pages.Users.Delete";
                 public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
                 public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
 
@@ -29,6 +33,7 @@ namespace ProjectManagement.Authorization
 
         //Pm Manager
         public const string PmManager = "PmManager";
+            public const string PmManager_CanViewMenu = "PmManager.CanViewMenu";
             //Project
             public const string PmManager_Project = "PmManager.Project";
             public const string PmManager_Project_ViewAll = "PmManager.Project.ViewAll";
@@ -75,6 +80,7 @@ namespace ProjectManagement.Authorization
 
         //Timesheet
         public const string Timesheet = "Timesheet";
+            public const string Timesheet_CanViewMenu = "Timesheet.CanViewMenu";
             //Timesheet
             public const string Timesheet_Timesheet = "Timesheet.Timesheet";
             public const string Timesheet_Timesheet_ViewAll = "Timesheet.Timesheet.ViewAll";
@@ -87,6 +93,7 @@ namespace ProjectManagement.Authorization
 
         //Checklist
         public const string CheckList = "CheckList";
+            public const string CheckList_CanViewMenu = "CheckList.CanviewMenu";
             // Check List Category
             public const string CheckList_CheckListCategory = "CheckList.CheckListCategory";
             public const string CheckList_CheckListCategory_ViewAll = "CheckList.CheckListCategory.ViewAll";
@@ -111,7 +118,8 @@ namespace ProjectManagement.Authorization
             public const string CheckList_ProjectChecklist_AddCheckListItemByProject = "CheckList.ProjectChecklist.AddCheckListItemByProject";
 
         //Sao Do
-        public const string SaoDo = "SaoDo";       
+        public const string SaoDo = "SaoDo";   
+            public const string SaoDo_CanViewMenu = "SaoDo.CanViewMenu";
             // Audit Result People
             public const string SaoDo_AuditResultPeople = "SaoDo.AuditResultPeople";
             public const string SaoDo_AuditResultPeople_Create = "SaoDo.AuditResultPeople.Create";
@@ -137,6 +145,7 @@ namespace ProjectManagement.Authorization
 
         //Delivery Management
         public const string DeliveryManagement = "DeliveryManagement";
+            public const string DeliveryManagement_CanViewMenu = "DeliveryManagement.CanViewMenu";
             //PmReport
             public const string DeliveryManagement_PMReport = "DeliveryManagement.PMReport";
             public const string DeliveryManagement_PMReport_ViewAll = "DeliveryManagement.PMReport.ViewAll";
@@ -150,6 +159,7 @@ namespace ProjectManagement.Authorization
             public const string DeliveryManagement_PMReportProject_GetAllByPmReport = "DeliveryManagement.PMReportProject.GetAllByPmProject";
             public const string DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = "DeliveryManagement.PMReportProject.ResourceChangesDuringTheWeek";
             public const string DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = "DeliveryManagement.PMReportProject.ResourceChangesInTheFuture";
+            public const string DeliveryManagement_PMReportProject_SendReport = "DeliveryManagement.PMReportProject.SendReport";
             public const string DeliveryManagement_PMReportProject_Create = "DeliveryManagement.PMReportProject.Create";
             public const string DeliveryManagement_PMReportProject_Update = "DeliveryManagement.PMReportProject.Update";
             public const string DeliveryManagement_PMReportProject_Delete = "DeliveryManagement.PMReportProject.Delete";
@@ -188,14 +198,24 @@ namespace ProjectManagement.Authorization
                 {
                     // permission root
                     PermissionNames.Admin,
+                    PermissionNames.Admin_CanViewMenu,
                     PermissionNames.PmManager,
+                    PermissionNames.PmManager_CanViewMenu,
                     PermissionNames.SaoDo,
+                    PermissionNames.SaoDo_CanViewMenu,
                     PermissionNames.CheckList,
+                    PermissionNames.CheckList_CanViewMenu,
+                    PermissionNames.DeliveryManagement,
+                    PermissionNames.DeliveryManagement_CanViewMenu,
                     PermissionNames.Timesheet,
+                    PermissionNames.Timesheet_CanViewMenu,
 
                     //Admin
                         //User
                         PermissionNames.Pages_Users,
+                            PermissionNames.Pages_Users_Create,
+                            PermissionNames.Pages_Users_Update,
+                            PermissionNames.Pages_Users_Delete,
                             PermissionNames.Pages_Users_ImportUserFromFile,
                             PermissionNames.Pages_Users_UpdateAvatar,
 
@@ -317,6 +337,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport,
                     PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek,
                     PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture,
+                    PermissionNames.DeliveryManagement_PMReportProject_SendReport,
                     PermissionNames.DeliveryManagement_PMReportProject_Create,
                     PermissionNames.DeliveryManagement_PMReportProject_Update,
                     PermissionNames.DeliveryManagement_PMReportProject_Delete,
@@ -364,15 +385,25 @@ namespace ProjectManagement.Authorization
             {
                 // root
                 new SystemPermission{ Name =  PermissionNames.Admin, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Admin" },
+                new SystemPermission{ Name =  PermissionNames.Admin_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Admin Menu" },
                 new SystemPermission{ Name =  PermissionNames.PmManager, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Manager" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu" },
                 new SystemPermission{ Name =  PermissionNames.SaoDo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sao Do" },
+                new SystemPermission{ Name =  PermissionNames.SaoDo_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Sao Do Menu" },
                 new SystemPermission{ Name =  PermissionNames.CheckList, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List" },
+                new SystemPermission{ Name =  PermissionNames.CheckList_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Check List Menu" },
+                new SystemPermission{ Name =  PermissionNames.DeliveryManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delivery Management" },
+                new SystemPermission{ Name =  PermissionNames.DeliveryManagement_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Delivery Management Menu" },
                 new SystemPermission{ Name =  PermissionNames.Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
+                new SystemPermission{ Name =  PermissionNames.Timesheet_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Timesheet Menu" },
 
                  //Admin
                  new SystemPermission{ Name =  PermissionNames.Pages_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Tenants, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tenants" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new User" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
 
@@ -493,6 +524,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By PmReport" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Changes During The Week" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Changes In The Future" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_SendReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Report" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PMReport Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PMReport Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PMReport Project" },
@@ -532,12 +564,16 @@ namespace ProjectManagement.Authorization
                 //Admin
                 new SystemPermission { Name =  PermissionNames.Admin, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Admin",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission{ Name =  PermissionNames.Admin_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Admin Menu" },
                         new SystemPermission { Name = PermissionNames.Pages_Tenants, MultiTenancySides = MultiTenancySides.Host, DisplayName = "Tenants" },
                         new SystemPermission { Name = PermissionNames.Pages_Roles, MultiTenancySides = MultiTenancySides.Host, DisplayName = "Roles" },
                          //User
                          new SystemPermission { Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "User",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new User" },
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User" },
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
                             }
@@ -565,6 +601,7 @@ namespace ProjectManagement.Authorization
                 //PM Manager
                 new SystemPermission { Name =  PermissionNames.PmManager, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Manager",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu" },
                     //Project
                        new SystemPermission { Name =  PermissionNames.PmManager_Project, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project",
                             Childrens = new List<SystemPermission>()
@@ -630,6 +667,7 @@ namespace ProjectManagement.Authorization
                 //Sao Do
                 new SystemPermission { Name =  PermissionNames.SaoDo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sao Do",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission{ Name =  PermissionNames.SaoDo_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Sao Do Menu" },
                         //Audit Result People
                         new SystemPermission { Name =  PermissionNames.SaoDo_AuditResultPeople, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Audit Result People",
                             Childrens = new List<SystemPermission>()
@@ -670,6 +708,7 @@ namespace ProjectManagement.Authorization
                 //Delivery Management
                  new SystemPermission { Name =  PermissionNames.DeliveryManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delivery Management",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission{ Name =  PermissionNames.DeliveryManagement_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Delivery Management Menu" },
                         //Pm Report
                         new SystemPermission { Name =  PermissionNames.DeliveryManagement_PMReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Report",
                             Childrens = new List<SystemPermission>()
@@ -689,6 +728,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By PmReport" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Changes During The Week" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Changes In The Future" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_SendReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Report" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PM Report Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PM Report Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PM Report Project" },
@@ -729,6 +769,7 @@ namespace ProjectManagement.Authorization
                 //Check List
                 new SystemPermission { Name =  PermissionNames.CheckList, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission{ Name =  PermissionNames.CheckList_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Check List Menu" },
                         //Check List Category
                         new SystemPermission { Name =  PermissionNames.CheckList_CheckListCategory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Category",
                             Childrens = new List<SystemPermission>()
@@ -766,6 +807,7 @@ namespace ProjectManagement.Authorization
                 //Timesheet
                 new SystemPermission { Name =  PermissionNames.Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission{ Name =  PermissionNames.Timesheet_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Timesheet Menu" },
                        //Timesheet
                        new SystemPermission { Name =  PermissionNames.Timesheet_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet",
                             Childrens = new List<SystemPermission>()
