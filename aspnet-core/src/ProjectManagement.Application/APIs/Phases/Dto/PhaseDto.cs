@@ -17,8 +17,9 @@ namespace ProjectManagement.APIs.Phases.Dto
         public long ParentId { get; set; }
         public PhaseType Type { get; set; }
         [DefaultValue("false")]
-        public bool IsActive { get; set; }
+        public PhaseStatus Status { get; set; }
         [DefaultValue("false")]
-        public bool Status { get; set; }
+        public bool IsCriteria { get; set; }
+        public int Index { get; set; }
     }
 }

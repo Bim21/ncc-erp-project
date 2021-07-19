@@ -27,8 +27,9 @@ namespace ProjectManagement.APIs.Phases
                             Year = p.Year,
                             Type = p.Type.ToString(),
                             ParentName = pt.Name,
-                            IsActive = p.IsActive,
                             Status = p.Status,
+                            IsCriteria = p.IsCriteria,
+                            Index=p.Index,
                         };
             return await query.GetGridResult(query, input);
         }
@@ -112,14 +113,14 @@ namespace ProjectManagement.APIs.Phases
         public async Task Active(long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
-            phase.IsActive = true;
+            phase.Status = PhaseStatus.Active;
             await WorkScope.UpdateAsync<Phase>(phase);
         }
         [HttpPut]
-        public async Task UnActive(long phaseId)
+        public async Task DeActive(long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
-            phase.IsActive = false;
+            phase.Status = PhaseStatus.DeActive;
             await WorkScope.UpdateAsync<Phase>(phase);
         }
     }

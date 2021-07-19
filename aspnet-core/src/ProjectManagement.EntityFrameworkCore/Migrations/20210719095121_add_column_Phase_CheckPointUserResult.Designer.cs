@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210719095121_add_column_Phase_CheckPointUserResult")]
+    partial class add_column_Phase_CheckPointUserResult
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2038,8 +2040,6 @@ namespace ProjectManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PMId");
-
                     b.HasIndex("PhaseId");
 
                     b.HasIndex("UserId");
@@ -3427,12 +3427,6 @@ namespace ProjectManagement.Migrations
 
             modelBuilder.Entity("ProjectManagement.Entities.CheckPointUserResult", b =>
                 {
-                    b.HasOne("ProjectManagement.Authorization.Users.User", "PM")
-                        .WithMany()
-                        .HasForeignKey("PMId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ProjectManagement.Entities.Phase", "Phase")
                         .WithMany()
                         .HasForeignKey("PhaseId")
