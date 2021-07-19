@@ -79,7 +79,7 @@
                                                     [(ngModel)]="form.userId">
                                                     <ng-container>
                                                         <mat-option *ngFor="let user of projectUserList"
-                                                            [value]="user.id">{{user.userName}}</mat-option>
+                                                            [value]="user.id">{{user.fullName}}</mat-option>
                                                     </ng-container>
 
                                                 </mat-select>
@@ -94,7 +94,7 @@
                                                             [(ngModel)]="form.curatorId">
                                                             <ng-container *ngFor="let user of projectUserList">
                                                                 <mat-option *ngIf="user.id != ngvipham.value"
-                                                                    [value]="user.id">{{user.userName}}</mat-option>
+                                                                    [value]="user.id">{{user.fullName}}</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>

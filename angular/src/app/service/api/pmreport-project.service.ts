@@ -24,6 +24,9 @@ export class PMReportProjectService extends BaseApiService {
   public GetAllPmReportProjectForDropDown(): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllPmReportProjectForDropDown');
   }
+  public GetAllByPmReport(pmReportId: number,item:any):Observable<any>{
+    return this.http.post<any>(this.rootUrl +'/GetAllByPmReport?pmReportId='+pmReportId,item);
+  }
 
 
 
