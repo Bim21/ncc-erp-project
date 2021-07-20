@@ -57,7 +57,14 @@ namespace ProjectManagement.APIs.PMReportProjects
                                   Status = x.Status.ToString(),
                                   ProjectHealth = x.ProjectHealth.ToString(),
                                   PMId = x.PMId,
-                                  Note = x.Note
+                                  Note = x.Note,
+                                  PmName = x.PM.Name,
+                                  PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                  PmEmailAddress = x.PM.EmailAddress,
+                                  PmFullName = x.PM.FullName,
+                                  PmUserName = x.PM.UserName,
+                                  PmBranch = x.PM.Branch,
+                                  PmUserType = x.PM.UserType
                               });
 
             return await query.ToListAsync();
@@ -85,7 +92,12 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 ResourceRequestName = x.ResourceRequest.Name,
                                 PMReportId = x.PMReportId,
                                 PMReportName = x.PMReport.Name,
-                                IsFutureActive = x.IsFutureActive
+                                IsFutureActive = x.IsFutureActive,
+                                AvatarPath = "/avatars/" + x.User.AvatarPath,
+                                EmailAddress = x.User.EmailAddress,
+                                UserName = x.User.UserName,
+                                Branch = x.User.Branch,
+                                UserType = x.User.UserType
                             });
 
             return await query.ToListAsync();
@@ -113,7 +125,12 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 ResourceRequestName = x.ResourceRequest.Name,
                                 PMReportId = x.PMReportId,
                                 PMReportName = x.PMReport.Name,
-                                IsFutureActive = x.IsFutureActive
+                                IsFutureActive = x.IsFutureActive,
+                                UserName = x.User.UserName,
+                                AvatarPath = "/avatars/" + x.User.AvatarPath,
+                                EmailAddress = x.User.EmailAddress,
+                                UserType = x.User.UserType,
+                                Branch = x.User.Branch
                             });
 
             return await query.ToListAsync();

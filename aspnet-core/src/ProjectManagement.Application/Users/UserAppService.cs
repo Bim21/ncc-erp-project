@@ -299,10 +299,10 @@ namespace ProjectManagement.Users
                     Surname = u.Surname,
                     EmailAddress = u.EmailAddress,
                     FullName = u.FullName,
-                    AvatarPath = u.AvatarPath,
+                    AvatarPath = "/avatars/" + u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
-                    Branch = u.Branch
+                    Branch = u.Branch,
                 });
             return await query.ToListAsync();
         }
