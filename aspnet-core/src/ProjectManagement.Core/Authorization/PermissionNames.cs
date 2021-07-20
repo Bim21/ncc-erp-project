@@ -97,6 +97,7 @@ namespace ProjectManagement.Authorization
             public const string Timesheet_TimesheetProject_Update = "Timesheet.TimesheetProject.Update";
             public const string Timesheet_TimesheetProject_Delete = "Timesheet.TimesheetProject.Delete";
             public const string Timesheet_TimesheetProject_UploadFileTimesheetProject = "Timesheet.TimesheetProject.UploadFileTimesheetProject";
+            public const string Timesheet_TimesheetProject_DownloadFileTimesheetProject = "Timesheet.TimesheetProject.DownloadFileTimesheetProject";
 
         //Checklist
         public const string CheckList = "CheckList";
@@ -276,6 +277,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheet_TimesheetProject_Update,
                     PermissionNames.Timesheet_TimesheetProject_Delete,
                     PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject,
+                    PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject,
 
                     //Project User Bill
                     PermissionNames.PmManager_ProjectUserBill,
@@ -472,6 +474,7 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File TimeSheet Project" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
 
                   //Project User Bill
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project User Bill" },
@@ -854,6 +857,7 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File TimeSheet Project" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
                             }
                         }
                     }

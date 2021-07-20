@@ -289,12 +289,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject)]
         public async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
         {
-            String path = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets");
+            String path = Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x =>x.Timesheet)
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x => x.Timesheet)
                                         .Where(x => x.Id == input.TimesheetProjectId).FirstOrDefaultAsync();
 
             if (input != null && input.File != null && input.File.Length > 0)
@@ -306,13 +306,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     var filePath = timesheetProject.Timesheet.Year + "-" + timesheetProject.Timesheet.Month + "_" + timesheetProject.Project.Code + "_" + fileName;
                     if (timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
                     {
-                        File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
+                        File.Delete(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath));
 
                         timesheetProject.FilePath = null;
                         await WorkScope.UpdateAsync(timesheetProject);
                     }
 
-                    using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", filePath)))
+                    using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", filePath)))
                     {
                         await input.File.CopyToAsync(stream);
                         timesheetProject.FilePath = filePath;
@@ -326,22 +326,27 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             else
             {
-                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
-                
+                File.Delete(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath));
+
                 timesheetProject.FilePath = null;
                 await WorkScope.UpdateAsync(timesheetProject);
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> DownloadFileTimesheetProject([FromQuery] long timesheetProjectId)
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject)]
+        public async Task<object> DownloadFileTimesheetProject(long timesheetProjectId)
         {
             var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath);
 
-            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return new FileContentResult(bytes, "application/octet-stream") {
-                FileDownloadName = timesheetProject.FilePath
+            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath);
+
+            var data = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            return new
+            {
+                FileName = timesheetProject.FilePath,
+                Data = data
             };
         }
     }
