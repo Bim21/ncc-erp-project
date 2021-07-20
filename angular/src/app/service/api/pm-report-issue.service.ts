@@ -14,13 +14,16 @@ export class PmReportIssueService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
-  public getProblemsOfTheWeek(projectId:number):Observable<any>{
-    return this.http.get<any>(this.rootUrl + '/ProblemsOfTheWeek?projectId=' + projectId);
+  public getProblemsOfTheWeek(projectId: number,pmReportId:number): Observable<any> {
+    return this.http.get<any>(this.rootUrl + `/ProblemsOfTheWeek?projectId=${projectId}&pmReportId=${pmReportId}`);
 
   }
-  public deleteReportIssue(reportId:any){
+  public deleteReportIssue(reportId: any) {
     return this.http.delete<any>(this.rootUrl + '/Delete', {
       params: new HttpParams().set('pmReportProjectIssueId', reportId)
-  })
+    })
+  }
+  public createReportIssue(projectId: number, reportIssue:any): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/Create?projectId=${projectId}`, reportIssue);
   }
 }

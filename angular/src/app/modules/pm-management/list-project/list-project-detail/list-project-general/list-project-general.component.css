@@ -11,3 +11,14 @@
 } */
 
 
+.showText:hover::after{
+    content: "Charge vào timesheet tháng này!";
+    background-color: rgba(66, 63, 63, 0.863);
+    color: white;
+    margin: 10px;
+    padding: 7px;
+    border-radius: 3px;
+    text-align: center;
+    
+    
+}

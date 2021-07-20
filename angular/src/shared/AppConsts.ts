@@ -28,7 +28,7 @@ export class AppConsts {
         Past: "badge badge-pill badge-secondary",
         Potential: "badge badge-pill badge-primary",
         InProgress: "badge badge-pill badge-success",
-        Closed: "badge badge-pill badge-danger"
+        Closed: "badge badge-pill badge-secondary"
         // Future:"badge badge-pill badge-light"
     }
     static readonly projectRole = {
@@ -66,6 +66,11 @@ export class AppConsts {
         1: "badge badge-primary",
         2: "badge badge-danger",
         3: "badge badge-warning"
+    }
+    static readonly SaodoStatusStyle = {
+        New: "badge badge-pill  badge-primary",
+        InProcess: "badge badge-pill badge-success",
+        Done: "badge badge-pill badge-primary"
     }
 
 

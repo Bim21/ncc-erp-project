@@ -21,7 +21,7 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole)
   constructor(@Inject(MAT_DIALOG_DATA) public data: DialogDataDto, injector: Injector,
    private userService: UserService, private pmReportService:ProjectResourceRequestService,
-   private dialogRef:MatDialogRef<ApproveDialogComponent>) {
+   public dialogRef:MatDialogRef<ApproveDialogComponent>) {
     super(injector);
   
   }

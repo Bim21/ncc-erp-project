@@ -33,11 +33,11 @@
                         </button>
                     </div>
                     <div class="col-6 text-right" style="margin-bottom:20px">
-                        <button
+                        <!-- <button
                             class="btn bg-blue">
                             <i class="fa fa-plus-square"></i>
                            Create Invoice
-                        </button>
+                        </button> -->
                     </div>
                 </div>
                 <div class="col-12 text-right">
@@ -58,7 +58,8 @@
                             <tr *ngFor="let item of TimesheetDetaiList let i = index"  >
                                 <td  class="text-center"><span >{{ i +1 }}</span></td>
                                 <td  class="text-center">{{item.projectName}}</td>
-                                <td  class="text-center">{{item.pmName}}</td>
+                                <td class="text-left"><app-user-info [userData]="{fullName:item.pmFullName,branch:item.pmBranch,
+                                    userType:item.pmUserType,emailAddress:item.pmEmailAddress}"></app-user-info></td>
                                 <td  class="text-center">{{item.clientName}}</td>
                                 <td  style="white-space: normal; width: 250px;">{{item.note}}</td>
                                 <td class="text-left"  ><div [innerHtml]="item.projectBillInfomation"></div></td>

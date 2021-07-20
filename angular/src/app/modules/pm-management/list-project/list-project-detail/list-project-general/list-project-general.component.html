@@ -138,12 +138,15 @@
                             Vẫn Charge Khách hàng:
                         </label>
                         <div *ngIf="readMode" class="col-md-5 pt-2">
-                            <mat-checkbox disabled="true" [(ngModel)]="project.isCharge" name="ischarge">is Charge
-                            </mat-checkbox>
+                          
+                            <p *ngIf="project.isCharge">Yes</p>
+                            <p *ngIf="!project.isCharge">No</p>
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 pt-2">
-                            <mat-checkbox [(ngModel)]="project.isCharge" name="ischarge">is Charge
+                            <mat-checkbox [(ngModel)]="project.isCharge" name="ischarge" class="mt-1">is Charge
                             </mat-checkbox>
+                    <span><i class="fas fa-question-circle showText ml-1 mb-1"></i></span>
+
                         </div>
                     </div>
                     <div class="form-group row detail ">

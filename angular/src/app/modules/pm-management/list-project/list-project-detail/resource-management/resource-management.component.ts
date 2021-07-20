@@ -148,12 +148,12 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   removeUser(user: projectUserDto) {
     abp.message.confirm(
-      "Remove user: " + user.userName + "?",
+      "Remove user: " + user.fullName + "?",
       "",
       (result: boolean) => {
         if (result) {
           this.projectUserService.removeProjectUser(user.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
-            abp.notify.success("Removed user " + user.userName + " from project " + user.projectName);
+            abp.notify.success("Removed user " + user.fullName + " from project " + user.projectName);
             this.getProjectUser()
           });
         }
