@@ -22,5 +22,10 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public long PMReportId { get; set; }
         public string PMReportName { get; set; }
         public bool IsFutureActive { get; set; }
+        public string EmailAddress { get; set; }
+        public string UserName { get; set; }
+        public string AvatarPath { get; set; }
+        public UserType UserType { get; set; }
+        public Branch Branch { get; set; }
     }
 }

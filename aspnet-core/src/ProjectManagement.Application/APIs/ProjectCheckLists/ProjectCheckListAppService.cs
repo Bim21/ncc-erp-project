@@ -95,7 +95,12 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                         Note = x.Note,
                                         UserId = x.UserId,
                                         UserName = x.User.FullName,
-                                        CheckListItemId = x.CheckListItemId
+                                        CheckListItemId = x.CheckListItemId,
+                                        AvatarPath = "/avatars/" + x.User.AvatarPath,
+                                        Branch = x.User.Branch,
+                                        EmailAddress = x.User.EmailAddress,
+                                        FullName = x.User.FullName,
+                                        UserType = x.User.UserType
                                     });
             return await WorkScope.GetAll<CheckListItem>()
                     .Where(x => checkListItemIds.Contains(x.Id))

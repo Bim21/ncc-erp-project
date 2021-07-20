@@ -183,6 +183,11 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 {
                                     UserId = x.Id,
                                     UserName = x.FullName,
+                                    UserType = x.UserType,
+                                    FullName = x.FullName,
+                                    EmailAddress = x.EmailAddress,
+                                    Branch = x.Branch,
+                                    AvatarPath = "/avatars/" + x.AvatarPath,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id).Select(x => x.ProjectName).ToList(),
                                     Used = (byte)projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)
                                 });
@@ -200,6 +205,11 @@ namespace ProjectManagement.APIs.ResourceRequests
                             Id = x.Id,
                             UserId = x.UserId,
                             UserName = x.User.Name,
+                            AvatarPath = "/avatars/" + x.User.AvatarPath,
+                            Branch = x.User.Branch,
+                            EmailAddress = x.User.EmailAddress,
+                            FullName = x.User.FullName,
+                            UserType = x.User.UserType,
                             Projectid = x.ProjectId,
                             ProjectName = x.Project.Name,
                             StartDate = x.StartTime.Date,
