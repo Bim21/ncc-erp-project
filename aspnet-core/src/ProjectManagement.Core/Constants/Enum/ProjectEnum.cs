@@ -110,6 +110,12 @@ namespace ProjectManagement.Constants.Enum
             Main = 0,
             Sub = 1
         }
+        public enum PhaseStatus
+        {
+            Active=0,
+            DeActive=1,
+            Done=2
+        }
         public enum CheckPointUserType
         {
             PM = 0,
