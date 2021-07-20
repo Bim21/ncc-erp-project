@@ -1,6 +1,6 @@
 {
   "remoteServiceBaseUrl": "http://project-api.nccsoft.vn",
-  "appBaseUrl": "https://project.nccsoft.vn",
+  "appBaseUrl": "http://project.nccsoft.vn",
   "localeMappings": [
     {
       "from": "pt-BR",
