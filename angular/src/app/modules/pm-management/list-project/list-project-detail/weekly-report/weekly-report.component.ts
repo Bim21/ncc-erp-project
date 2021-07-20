@@ -279,6 +279,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public onReportchange(){
     this.getWeeklyReport();
     this.getFuturereport();
+    this.getProjectProblem();
   }
   public sendWeeklyreport(){
     abp.message.confirm(

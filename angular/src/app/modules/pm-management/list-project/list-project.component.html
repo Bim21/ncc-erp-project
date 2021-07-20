@@ -84,8 +84,8 @@
                     class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
                             <td>{{project.projectType}}</td>
                             <td>{{project.clientName}}</td>
-                            <td style="min-width: 200px; "><app-user-info [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
-                                userType:project.pmUserType,emailAddress:project.pmEmailAddress}"></app-user-info> </td>
+                            <td><div style="width: 300px;"><app-user-info [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                                userType:project.pmUserType,emailAddress:project.pmEmailAddress}"></app-user-info></div> </td>
                            
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
                             <td>{{project.endTime | date:"dd/MM/yyyy"}}</td>

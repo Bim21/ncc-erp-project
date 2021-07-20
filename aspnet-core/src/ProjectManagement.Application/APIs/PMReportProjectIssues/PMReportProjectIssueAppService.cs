@@ -36,7 +36,6 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                             Source = p.Source.ToString(),
                             Solution = p.Solution,
                             MeetingSolution = p.MeetingSolution,
-                            Flag = p.Flag.ToString(),
                             Status = p.Status.ToString()
                         };
             return await query.ToListAsync();
@@ -51,7 +50,6 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                 throw new UserFriendlyException("Can't find any PMReportproject !");
 
             input.PMReportProjectId = pmReportProjectActive.Id;
-            input.Flag = PMReportProjectIssueFlag.Green;
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProjectIssue>(input));
             return input;
         }

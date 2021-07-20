@@ -8,7 +8,6 @@ namespace ProjectManagement.Services.Finance.Dto
     public class CreateInvoiceDto
     {
         public string Name { get; set; }
-        public string TimeAt { get; set; }
         public string AccountCode { get; set; }
         public double TotalPrice { get; set; }
         public InvoiceStatus Status { get; set; }
@@ -19,6 +18,7 @@ namespace ProjectManagement.Services.Finance.Dto
     public class InvoiceDetailDto
     {
         public string ProjectName { get; set; }
+        public long FileId { get; set; }
         public string LinkFile { get; set; }
     }
 }

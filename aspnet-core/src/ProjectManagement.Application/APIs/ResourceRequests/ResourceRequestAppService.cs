@@ -91,7 +91,12 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         IsExpense = x.IsExpense,
                                         ResourceRequestId = x.ResourceRequestId,
                                         PMReportId = x.PMReportId,
-                                        IsFutureActive = x.IsFutureActive
+                                        IsFutureActive = x.IsFutureActive,
+                                        AvatarPath = "/avatars/" + x.User.AvatarPath,
+                                        Branch = x.User.Branch,
+                                        EmailAddress = x.User.EmailAddress,
+                                        UserName = x.User.UserName,
+                                        UserType = x.User.UserType
                                     });
             return await query.ToListAsync();
         }
@@ -113,7 +118,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
 
-            if(input.StartTime.Date <= resourceRequest.TimeNeed.Date)
+            if(input.StartTime.Date < resourceRequest.TimeNeed.Date)
                 throw new UserFriendlyException("Start date must be greater than request date !");
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
@@ -160,6 +165,11 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 {
                                     UserId = x.Id,
                                     UserName = x.FullName,
+                                    UserType = x.UserType,
+                                    EmailAddress = x.EmailAddress,
+                                    Branch = x.Branch,
+                                    FullName = x.FullName,
+                                    AvatarPath = "/avatars/" + x.AvatarPath,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
                                 }).Where(x => x.Undisposed > 0);
 
