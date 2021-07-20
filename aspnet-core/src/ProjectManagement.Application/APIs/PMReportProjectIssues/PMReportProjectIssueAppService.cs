@@ -22,24 +22,22 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)]
         public async Task<List<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(long ProjectId, long pmReportId)
         {
-            var query = from pr in WorkScope.GetAll<PMReport>().Where(x => x.Id == pmReportId)
-                        join prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId)
-                        on pr.Id equals prp.PMReportId into lstPrp
-                        from p in lstPrp.DefaultIfEmpty()
+            var query = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId)
                         join prpi in WorkScope.GetAll<PMReportProjectIssue>().OrderByDescending(x => x.CreationTime)
-                        on p.Id equals prpi.PMReportProjectId
+                        on prp.Id equals prpi.PMReportProjectId into lst
+                        from p in lst.DefaultIfEmpty()
                         select new GetPMReportProjectIssueDto
                         {
-                            Id = prpi.Id,
-                            PMReportProjectId = prpi.PMReportProjectId,
-                            Description = prpi.Description,
-                            Impact = prpi.Impact,
-                            Critical = prpi.Critical.ToString(),
-                            Source = prpi.Source.ToString(),
-                            Solution = prpi.Solution,
-                            MeetingSolution = prpi.MeetingSolution,
-                            Flag = prpi.Flag.ToString(),
-                            Status = prpi.Status.ToString()
+                            Id = p.Id,
+                            PMReportProjectId = p.PMReportProjectId,
+                            Description = p.Description,
+                            Impact = p.Impact,
+                            Critical = p.Critical.ToString(),
+                            Source = p.Source.ToString(),
+                            Solution = p.Solution,
+                            MeetingSolution = p.MeetingSolution,
+                            Flag = p.Flag.ToString(),
+                            Status = p.Status.ToString()
                         };
             return await query.ToListAsync();
         }
@@ -48,9 +46,9 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Create)]
         public async Task<PMReportProjectIssueDto> Create(PMReportProjectIssueDto input, long projectId)
         {
-            var pmReportProjectActive = await WorkScope.GetAll<PMReportProject>().FirstOrDefaultAsync(x => x.PMReport.IsActive && x.ProjectId == projectId);
+            var pmReportProjectActive = await WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive && x.ProjectId == projectId).FirstOrDefaultAsync();
             if (pmReportProjectActive == null)
-                throw new UserFriendlyException("Can't find any active PMReportproject !");
+                throw new UserFriendlyException("Can't find any PMReportproject !");
 
             input.PMReportProjectId = pmReportProjectActive.Id;
             input.Flag = PMReportProjectIssueFlag.Green;
