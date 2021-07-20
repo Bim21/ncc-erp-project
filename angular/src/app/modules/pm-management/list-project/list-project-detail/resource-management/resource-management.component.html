@@ -334,8 +334,9 @@
                                     currentPage: userBillCurrentPage
                                     }  ; let i = index">
                                 <td><span>{{ i +1 }}</span></td>
-                                <td>
-                                    <p *ngIf="!bill.createMode">{{bill.userName}}</p>
+                                <td class="text-left">
+                                    <p *ngIf="!bill.createMode"> <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
+                                        userType:bill.userType,emailAddress:bill.emailAddress}"></app-user-info></p>
                                     <div *ngIf="bill.createMode">
 
                                         <mat-form-field class="w-100" appearance="outline">
