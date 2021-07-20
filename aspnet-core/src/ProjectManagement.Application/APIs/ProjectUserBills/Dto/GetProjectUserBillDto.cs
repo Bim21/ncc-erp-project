@@ -1,8 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
-using ProjectManagement.Constants.Enum;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectUserBills.Dto
@@ -19,5 +16,10 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public DateTime? EndTime { get; set; }
         public Currency Currency { get; set; }
         public bool isActive { get; set; }
+        public string EmailAddress { get; set; }
+        public string FullName { get; set; }
+        public string AvatarPath { get; set; }
+        public UserType UserType { get; set; }
+        public Branch Branch { get; set; }
     }
 }

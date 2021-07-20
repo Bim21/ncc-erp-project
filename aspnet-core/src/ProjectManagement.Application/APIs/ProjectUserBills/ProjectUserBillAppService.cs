@@ -57,7 +57,12 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             StartTime = x.StartTime.Date,
                             EndTime = x.EndTime.Value.Date,
                             Currency = x.Currency,
-                            isActive = x.isActive
+                            isActive = x.isActive,
+                            AvatarPath = "/avatars/" + x.User.AvatarPath,
+                            FullName = x.User.FullName,
+                            Branch = x.User.Branch,
+                            EmailAddress = x.User.EmailAddress,
+                            UserType = x.User.UserType
                         });
             return await query.ToListAsync();
         }
