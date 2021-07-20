@@ -183,12 +183,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet, PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet, 
+            PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, 
+            PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject,
+            PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
         public async Task<List<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(long timesheetId)
         {
             var viewAll = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet);
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
+            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
 
             var query = from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
@@ -212,7 +216,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             ClientId = c.Id,
                             ClientName = c.Name,
                             File = "/timesheets/" + tsp.FilePath,
-                            ProjectBillInfomation = tsp.ProjectBillInfomation,
+                            ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
                             Note = tsp.Note
                         };
 

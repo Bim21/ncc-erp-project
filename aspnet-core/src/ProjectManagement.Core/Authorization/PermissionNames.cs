@@ -92,6 +92,7 @@ namespace ProjectManagement.Authorization
             public const string Timesheet_TimesheetProject_ViewOnlyme = "Timesheet.Timesheet.ViewOnlyMe";
             public const string Timesheet_TimesheetProject_ViewOnlyActiveProject = "Timesheet.Timesheet.ViewOnlyActiveProject";
             public const string Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = "Timesheet.TimesheetProject.GetAllRemainProjectInTimesheet";
+            public const string Timesheet_TimesheetProject_ViewProjectBillInfomation = "Timesheet.Timesheet.ViewProjectBillInfomation";
             public const string Timesheet_TimesheetProject_Create = "Timesheet.TimesheetProject.Create";
             public const string Timesheet_TimesheetProject_Update = "Timesheet.TimesheetProject.Update";
             public const string Timesheet_TimesheetProject_Delete = "Timesheet.TimesheetProject.Delete";
@@ -270,6 +271,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheet_TimesheetProject_GetAllByproject,
                     PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet,
                     PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet,
+                    PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation,
                     PermissionNames.Timesheet_TimesheetProject_Create,
                     PermissionNames.Timesheet_TimesheetProject_Update,
                     PermissionNames.Timesheet_TimesheetProject_Delete,
@@ -465,6 +467,7 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Me" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Active Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All Remain Project In Timesheet" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Bill Infomation" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet Project" },
@@ -846,6 +849,7 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Me" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Active Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All Remain Project In Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Bill Infomation" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet Project" },
