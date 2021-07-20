@@ -105,7 +105,7 @@ namespace ProjectManagement.APIs.AuditSessions
         {
             var checkExist = await WorkScope.GetAsync<AuditSession>(Id);
             var listSessionPeople = WorkScope.GetAll<AuditResultPeople>()
-                                     .Select(x => new { x.AuditResult.AuditSessionId, x.IsPass });
+                                     .Select(x => new { x.AuditResultId, x.IsPass });
             var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
 
             return await (from ar in WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == Id)
@@ -118,7 +118,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
-                              CountFail = listSessionPeople.Where(x => x.AuditSessionId == Id && !x.IsPass).Count(),
+                              CountFail = listSessionPeople.Where(x => x.AuditResultId == ar.Id && !x.IsPass).Count(),
                               Status = ar.Status.ToString()
                           }).ToListAsync();
         }

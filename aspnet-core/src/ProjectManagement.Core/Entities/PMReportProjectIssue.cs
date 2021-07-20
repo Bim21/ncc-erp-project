@@ -25,6 +25,7 @@ namespace ProjectManagement.Entities
         [MaxLength(10000)]
         public string Solution { get; set; }
         public string MeetingSolution { get; set; }// consider
+        public PMReportProjectIssueFlag Flag { get; set; }
         public PMReportProjectIssueStatus Status { get; set; }
 
     }

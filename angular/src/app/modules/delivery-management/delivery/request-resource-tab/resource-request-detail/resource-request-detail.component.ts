@@ -61,9 +61,6 @@ export class ResourceRequestDetailComponent extends AppComponentBase implements 
         startTime: userRequest.startTime,
         id: userRequest.id,
         projectId:userRequest.projectId
-        
-
-
       }
     }
     const show=this.dialog.open(AddUserToRequestComponent, {

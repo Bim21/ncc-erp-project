@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Entities;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Users.Dto
@@ -32,8 +34,7 @@ namespace ProjectManagement.Users.Dto
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
-        public Gender Gender { get; set; }
-
+        public List<UserSkillDto> UserSkills { get; set; }
         public bool IsActive { get; set; }
 
         public string FullName { get; set; }

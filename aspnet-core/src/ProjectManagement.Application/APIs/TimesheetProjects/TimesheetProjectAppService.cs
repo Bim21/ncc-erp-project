@@ -40,20 +40,19 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllByproject)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllByproject)]
         public async Task<List<GetTimesheetProjectDto>> GetAllByProject(long projectId)
         {
             var query = from ts in WorkScope.GetAll<Timesheet>()
                         join tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.ProjectId == projectId)
-                        on ts.Id equals tsp.ProjectId into pp
-                        from p in pp.DefaultIfEmpty()
+                        on ts.Id equals tsp.TimesheetId
                         select new GetTimesheetProjectDto
                         {
-                            Id = ts.Id,
+                            Id = tsp.Id,
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
-                            ProjectId = p.ProjectId,
-                            TimesheetFile = "/timesheets/" + p.FilePath,
-                            Note = p.Note
+                            ProjectId = tsp.ProjectId,
+                            TimesheetFile = "/timesheets/" + tsp.FilePath,
+                            Note = tsp.Note
                         };
             return await query.ToListAsync();
         }
@@ -184,12 +183,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllProjectTimesheetByTimesheet, PermissionNames.PmManager_TimesheetProject_ViewOnlyme, PermissionNames.PmManager_TimesheetProject_ViewOnlyActiveProject)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet, 
+            PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, 
+            PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject,
+            PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
         public async Task<List<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(long timesheetId)
         {
-            var viewAll = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_GetAllProjectTimesheetByTimesheet);
-            var viewonlyme = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_ViewOnlyme);
-            var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.PmManager_TimesheetProject_ViewOnlyActiveProject);
+            var viewAll = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet);
+            var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
+            var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
+            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
 
             var query = from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
@@ -204,10 +207,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             ProjectName = p.Name,
                             PmId = u.Id,
                             PmName = u.FullName,
+                            PmUserType = u.UserType,
+                            PmAvatarPath = "/avatars/" + u.AvatarPath,
+                            PmBranch = u.Branch,
+                            PmEmailAddress = u.EmailAddress,
+                            PmFullName = u.FullName,
+                            PmUserName = u.UserName,
                             ClientId = c.Id,
                             ClientName = c.Name,
                             File = "/timesheets/" + tsp.FilePath,
-                            ProjectBillInfomation = tsp.ProjectBillInfomation,
+                            ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
                             Note = tsp.Note
                         };
 
@@ -215,7 +224,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Create)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Create)]
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
         {
             var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId);
@@ -228,7 +237,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_GetAllRemainProjectInTimesheet)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet)]
         public async Task<List<ProjectDto>> GetAllRemainProjectInTimesheet(long timesheetId)
         {
             var timesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId);
@@ -248,7 +257,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Update)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Update)]
         public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
         {
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(input.Id);
@@ -263,7 +272,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_Delete)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Delete)]
         public async Task Delete(long timesheetProjectId)
         {
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
@@ -277,15 +286,15 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_TimesheetProject_UploadFileTimesheetProject)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject)]
         public async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
         {
-            String path = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets");
+            String path = Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x =>x.Timesheet)
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x => x.Timesheet)
                                         .Where(x => x.Id == input.TimesheetProjectId).FirstOrDefaultAsync();
 
             if (input != null && input.File != null && input.File.Length > 0)
@@ -297,13 +306,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     var filePath = timesheetProject.Timesheet.Year + "-" + timesheetProject.Timesheet.Month + "_" + timesheetProject.Project.Code + "_" + fileName;
                     if (timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
                     {
-                        File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
+                        File.Delete(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath));
 
                         timesheetProject.FilePath = null;
                         await WorkScope.UpdateAsync(timesheetProject);
                     }
 
-                    using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", filePath)))
+                    using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", filePath)))
                     {
                         await input.File.CopyToAsync(stream);
                         timesheetProject.FilePath = filePath;
@@ -317,22 +326,27 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             else
             {
-                File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath));
-                
+                File.Delete(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath));
+
                 timesheetProject.FilePath = null;
                 await WorkScope.UpdateAsync(timesheetProject);
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> DownloadFileTimesheetProject([FromQuery] long timesheetProjectId)
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject)]
+        public async Task<object> DownloadFileTimesheetProject(long timesheetProjectId)
         {
             var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "timesheets", timesheetProject.FilePath);
 
-            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return new FileContentResult(bytes, "application/octet-stream") {
-                FileDownloadName = timesheetProject.FilePath
+            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath);
+
+            var data = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            return new
+            {
+                FileName = timesheetProject.FilePath,
+                Data = data
             };
         }
     }

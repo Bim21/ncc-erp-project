@@ -146,8 +146,10 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
 
   }
 
-
-
+importFile(id:number){
+  this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data=>{
+  })
+}
 
 
 

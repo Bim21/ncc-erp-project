@@ -6,6 +6,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.Phases.Dto;
 using ProjectManagement.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -14,8 +15,8 @@ namespace ProjectManagement.APIs.Phases
 {
     public class PhaseAppService : ProjectManagementAppServiceBase
     {
-        [HttpPost]
-        public async Task<GridResult<SelectPhaseDto>> GetAll(GridParam input)
+        [HttpGet]
+        public async Task<List<SelectPhaseDto>> GetAll()
         {
             var query = from p in WorkScope.GetAll<Phase>()
                         join pt in WorkScope.GetAll<Phase>()
@@ -27,10 +28,11 @@ namespace ProjectManagement.APIs.Phases
                             Year = p.Year,
                             Type = p.Type.ToString(),
                             ParentName = pt.Name,
-                            IsActive = p.IsActive,
                             Status = p.Status,
+                            IsCriteria = p.IsCriteria,
+                            Index = p.Index,
                         };
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
         [HttpPost]
         public async Task<PhaseDto> Create(PhaseDto input)
@@ -39,7 +41,7 @@ namespace ProjectManagement.APIs.Phases
 
             if (isExist)
                 throw new UserFriendlyException(String.Format("Phase already exist"));
-            
+
             if (input.Type == PhaseType.Sub)
             {
                 var isParentExist = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == input.ParentId && x.Type == PhaseType.Main);
@@ -106,21 +108,36 @@ namespace ProjectManagement.APIs.Phases
             {
                 await WorkScope.DeleteAsync<Phase>(phaseId);
             }
-                
+
         }
         [HttpPut]
         public async Task Active(long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
-            phase.IsActive = true;
+            phase.Status = PhaseStatus.Active;
             await WorkScope.UpdateAsync<Phase>(phase);
         }
         [HttpPut]
-        public async Task UnActive(long phaseId)
+        public async Task DeActive(long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
-            phase.IsActive = false;
+            phase.Status = PhaseStatus.DeActive;
             await WorkScope.UpdateAsync<Phase>(phase);
+        }
+        [HttpPut]
+        public async Task Done(long phaseId)
+        {
+            var phase = await WorkScope.GetAsync<Phase>(phaseId);
+
+            if (phase.Status != PhaseStatus.Done)
+            {
+                phase.Status = PhaseStatus.Done;
+
+                var maxIndex = WorkScope.GetAll<Phase>().Where(x => x.ParentId == phase.ParentId).Max(x => x.Index);
+                phase.Index = maxIndex + 1;
+
+                await WorkScope.UpdateAsync<Phase>(phase);
+            }
         }
     }
 }

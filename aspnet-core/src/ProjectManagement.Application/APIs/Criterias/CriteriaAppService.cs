@@ -16,15 +16,16 @@ namespace ProjectManagement.APIs.Criterias
     public class CriteriaAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        public async Task<GridResult<CriteriaDto>> GetAll(GridParam input)
+        public async Task<GridResult<SelectCriteriaDto>> GetAllPaging(GridParam input)
         {
             var query = from c in WorkScope.GetAll<Criteria>()
-                        select new CriteriaDto
+                        join ct in WorkScope.GetAll<CriteriaCategory>() on c.CriteriaCategoryId equals ct.Id
+                        select new SelectCriteriaDto
                         {
                             Id = c.Id,
                             Name = c.Name,
                             Weight = c.Weight,
-                            CriteriaCategoryId = c.CriteriaCategoryId,
+                            CriteriaCatagoryName = ct.Name,
                             Note = c.Note
                         };
             return await query.GetGridResult(query, input);

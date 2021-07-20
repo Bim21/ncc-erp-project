@@ -23,7 +23,7 @@ namespace ProjectManagement.APIs.PMReportProjects
     {
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
-        public async Task<GridResult<GetPMReportProjectDto>> GetAllByPmReport(GridParam input, long pmReportId)
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
             var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
                 .Select(x => new GetPMReportProjectDto
@@ -39,7 +39,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmName = x.PM.Name,
                     Note = x.Note
                 });
-            return await query.GetGridResult(query, input);
+            return await query.ToListAsync();
         }
 
         [HttpGet]
@@ -57,7 +57,14 @@ namespace ProjectManagement.APIs.PMReportProjects
                                   Status = x.Status.ToString(),
                                   ProjectHealth = x.ProjectHealth.ToString(),
                                   PMId = x.PMId,
-                                  Note = x.Note
+                                  Note = x.Note,
+                                  PmName = x.PM.Name,
+                                  PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                  PmEmailAddress = x.PM.EmailAddress,
+                                  PmFullName = x.PM.FullName,
+                                  PmUserName = x.PM.UserName,
+                                  PmBranch = x.PM.Branch,
+                                  PmUserType = x.PM.UserType
                               });
 
             return await query.ToListAsync();
@@ -65,9 +72,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)]
-        public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId)
+        public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
                             .Select(x => new GetProjectUserDto
                             {
@@ -85,7 +92,12 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 ResourceRequestName = x.ResourceRequest.Name,
                                 PMReportId = x.PMReportId,
                                 PMReportName = x.PMReport.Name,
-                                IsFutureActive = x.IsFutureActive
+                                IsFutureActive = x.IsFutureActive,
+                                AvatarPath = "/avatars/" + x.User.AvatarPath,
+                                EmailAddress = x.User.EmailAddress,
+                                UserName = x.User.UserName,
+                                Branch = x.User.Branch,
+                                UserType = x.User.UserType
                             });
 
             return await query.ToListAsync();
@@ -93,9 +105,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
-        public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId)
+        public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReport.IsActive)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
                             .Where(x => x.Status == ProjectUserStatus.Future).OrderByDescending(x => x.CreationTime)
                             .Select(x => new GetProjectUserDto
                             {
@@ -113,10 +125,27 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 ResourceRequestName = x.ResourceRequest.Name,
                                 PMReportId = x.PMReportId,
                                 PMReportName = x.PMReport.Name,
-                                IsFutureActive = x.IsFutureActive
+                                IsFutureActive = x.IsFutureActive,
+                                UserName = x.User.UserName,
+                                AvatarPath = "/avatars/" + x.User.AvatarPath,
+                                EmailAddress = x.User.EmailAddress,
+                                UserType = x.User.UserType,
+                                Branch = x.User.Branch
                             });
 
             return await query.ToListAsync();
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_SendReport)]
+        public async Task SendReport(long projectId, long pmReportId)
+        {
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
+            if (pmReportProject.Status == PMReportProjectStatus.Sent)
+                throw new UserFriendlyException("Report has been sent !");
+
+            pmReportProject.Status = PMReportProjectStatus.Sent;
+            await WorkScope.UpdateAsync(pmReportProject);
         }
 
         [HttpPost]
@@ -133,6 +162,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             if (isExist)
                 throw new UserFriendlyException("PMReportProject already exist !");
 
+            input.Status = PMReportProjectStatus.Draft;
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReportProject>(input));
             return input;
         }

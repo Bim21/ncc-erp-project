@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../../service/api/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -36,19 +37,28 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userForProjectUser: UserDto[] = [];
   public viewHistory: boolean = false;
   public projectUserProcess:boolean =false;
+  public isShowProjectUser:boolean =true;
   // resource request
   public resourceRequestList: projectResourceRequestDto[] = [];
   public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public isEditRequest: boolean = false;
   public requestProcess:boolean =false;
+  public isShowRequest:boolean=false;
   // project user bill
   public userBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
   public isEditUserBill: boolean = false;
   public userBillProcess:boolean=false;
   public panelOpenState:boolean=false;
-
-
+  public isShowUserBill:boolean =false;
+  PmManager_ProjectUser= PERMISSIONS_CONSTANT.PmManager_ProjectUser;
+  PmManager_ProjectUser_Create= PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
+  PmManager_ProjectUser_Delete= PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
+  PmManager_ProjectUser_Update= PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
+  PmManager_ProjectUserBill= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
+  PmManager_ProjectUserBill_Create= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
+  PmManager_ProjectUserBill_Delete= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
+  PmManager_ProjectUserBill_Update= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
@@ -78,9 +88,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     })
   }
   private getAllUser() {
-    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => {
-      this.userForProjectUser = data.result.items;
-      this.userForUserBill = data.result.items;
+    this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.userForProjectUser = data.result;
+      this.userForUserBill = data.result;
     })
   }
 
@@ -286,5 +296,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     );
   }
 
+  public filterUser(userId: number) {
+    return this.userForProjectUser.filter(item => item.id == userId)[0];
+  }
 
 }

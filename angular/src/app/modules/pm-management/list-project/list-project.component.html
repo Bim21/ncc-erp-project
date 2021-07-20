@@ -60,10 +60,10 @@
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
-                            <th>{{'Tên dự án' | localize}}</th>
+                            <th  style="width: 200px;">{{'Tên dự án' | localize}}</th>
                             <th>{{'Loại dự án' | localize}}</th>
                             <th>khách hàng</th>
-                            <th>{{'Tên PM' | localize}}</th>
+                            <th>{{'PM' | localize}}</th>
                            
                             <th>{{'Thời gian bắt đầu' | localize}}</th>
                             <th>{{'Thời gian kết thúc' | localize}}</th>
@@ -80,11 +80,11 @@
                     currentPage: pageNumber,
                     totalItems: totalItems
                   }; let i = index">
-                  <td ><span
-                    class="hyperlink" (click)="showDetail(project.id)" style="min-width: 200px;">{{ project.name }}</span></td>
+                  <td  style="min-width: 200px; font-size: 1.1rem; white-space: normal;"><span
+                    class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
                             <td>{{project.projectType}}</td>
                             <td>{{project.clientName}}</td>
-                            <td>{{project.pmName}}</td>
+                            <td style="min-width: 200px; "><app-user-info [userData]="filterUser(project.pmId)"></app-user-info> </td>
                            
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
                             <td>{{project.endTime | date:"dd/MM/yyyy"}}</td>
@@ -92,7 +92,7 @@
                                 <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge"></mat-checkbox>
                             </td>
                             <td class="text-center"> <span  [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
-                            <td class="d-flex justify-content-center" style="padding: 12px;">
+                            <td class="text-center" style="padding: 12px;">
                                 <button type="button" class="btn btn-sm bg-secondary mr-1" (click)="editProject(project)" *ngIf="permission.isGranted(PmManager_Project_Update)">
                                     <i class="fas fa-pencil-alt"></i>
                                     {{ 'edit' | translate }}

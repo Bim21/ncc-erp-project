@@ -17,7 +17,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class CreateEditProjectChecklistComponent extends AppComponentBase implements OnInit {
 
   public listItems: ChecklistTitleDto[] = [];
-public listProjectType: string[] = Object.keys(this.APP_ENUM.ProjectType);
+  public listProjectType: string[] = Object.keys(this.APP_ENUM.ProjectType);
 
   public projectChecklist = {} as projectChecklistDto;
   public projectId: any;
@@ -55,10 +55,10 @@ public listProjectType: string[] = Object.keys(this.APP_ENUM.ProjectType);
       checkListItemId: this.checklistItemId,
       isActive: false,
     }
-    this.arrCheckLists=this.arrCheckLists.map(element => {
+    this.arrCheckLists = this.arrCheckLists.map(element => {
       return element.id
     });
-    this.projectChecklistService.addCheckListItemByProject(this.projectId,this.arrCheckLists).pipe(catchError(this.projectChecklistService.handleError)).subscribe((res) => {
+    this.projectChecklistService.addCheckListItemByProject(this.projectId, this.arrCheckLists).pipe(catchError(this.projectChecklistService.handleError)).subscribe((res) => {
       abp.notify.success("created outcomeRequest ");
       this.dialogRef.close(this.arrCheckLists);
       this.isLoading = false;
@@ -67,7 +67,7 @@ public listProjectType: string[] = Object.keys(this.APP_ENUM.ProjectType);
 
 
   }
-  
+
 
   public getByEnum(enumValue: number, enumObject: any) {
     for (const key in enumObject) {
@@ -76,9 +76,9 @@ public listProjectType: string[] = Object.keys(this.APP_ENUM.ProjectType);
       }
     }
   }
-  public checkAllItems:number;
-  public arrCheckLists:any=[];
- 
+  public checkAllItems: number;
+  public arrCheckLists: any = [];
+
 
   checkAllTask($e: MatCheckboxChange) {
     this.listItems.forEach(el => {
@@ -89,18 +89,24 @@ public listProjectType: string[] = Object.keys(this.APP_ENUM.ProjectType);
     })
     this.checkAllItems = $e.source.checked ? 1 : 0;
   }
-  updateCheckAllStatus(item) {
-    if (this.listItems.every(el =>{ el.createMode == false;})) {
+  updateCheckAllStatus(item, event) {
+    if (this.listItems.every(el =>  el.createMode == false )) {
       this.checkAllItems = 0;
-      this.arrCheckLists.splice(item)
     }
-    else if (this.listItems.every(el => {el.createMode == true;})) {
+    else if (this.listItems.every(el =>  el.createMode == true)) {
       this.checkAllItems = 1;
       this.arrCheckLists.push(item)
+
     }
     else {
       this.checkAllItems = 2;
-      this.arrCheckLists.push(item)
+      if (event.checked) {
+        this.arrCheckLists.push(item)
+      }
+      else if(!event.checked){
+        let index = this.arrCheckLists.indexOf(item)
+        this.arrCheckLists.splice(index,1)
+      }
     }
   }
 

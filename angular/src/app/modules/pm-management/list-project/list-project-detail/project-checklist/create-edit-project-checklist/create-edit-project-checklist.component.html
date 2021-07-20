@@ -4,21 +4,9 @@
         <h3 *ngIf="data.command!=='create'">Edit</h3>
     </div>
     <div class="modal-body">
-        <!-- <div class="form-group row required"> -->
-        <!-- <label class="col-md-3 col-form-label" for="tenancyName">
-               Item:
-            </label> -->
         <div class="col-md-12">
-            <!-- <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
-                    <mat-select required placeholder="Select Catelog"  name="catelog" [(ngModel)]="checklistItemId">
-                        <ng-container *ngFor="let item of listItems">
-                            <mat-option [value]="item.id">{{item.name}}</mat-option>
-                        </ng-container>
-                        
-                    </mat-select>
-
-                </mat-form-field> -->
-            <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+            <p *ngIf="listItems.length==0">Danh sách project checklist rỗng!</p>
+            <table *ngIf="listItems.length !==0" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                 <thead class="bg-light">
                     <tr>
                         <th>
@@ -28,7 +16,7 @@
                                    class="m-l-11i"></mat-checkbox>
                               </span>
                         </th>
-                        <th>Catogory</th>
+                        <th>Category</th>
                         <th>Item</th>
                         <th>Man</th>
                     </tr>
@@ -36,15 +24,12 @@
                 <tbody>
                     <tr *ngFor="let item of listItems;let i=index">
                         <td class="text-center">
-                            <!-- <mat-checkbox [checked]="item.createMode"  (change)="selectAll(item)">
-                            </mat-checkbox>
-                             -->
-                             <mat-checkbox [(ngModel)]="item.createMode" (change)="updateCheckAllStatus(item)"
+                             <mat-checkbox #checkItem [(ngModel)]="item.createMode" (change)="updateCheckAllStatus(item, checkItem)"
                   [ngModelOptions]="{standalone: true}" style="padding-left: 8px;" class="m-l-11i"></mat-checkbox>
                         </td>
                         <td class="text-center">{{item.categoryName}}</td>
                         <td class="text-center">{{item.name}}</td>
-                        <td class="text-center">{{getByEnum(item.mandatorys,APP_ENUM.ProjectType)}}</td>
+                        <td class="text-center" style="white-space: normal; width: 300px;"><span  [ngClass]="APP_CONST.ProjectTypeStyle[getByEnum(i,APP_ENUM.ProjectType)]" *ngFor="let i of item.mandatorys" class="mr-2">{{getByEnum(i,APP_ENUM.ProjectType)}} </span></td>
                     </tr>
                 </tbody>
             </table>

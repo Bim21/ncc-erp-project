@@ -1431,9 +1431,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(328)")
                         .HasMaxLength(328);
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1985,6 +1982,9 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ExamScore")
+                        .HasColumnType("int");
+
                     b.Property<string>("FinalNote")
                         .HasColumnType("nvarchar(max)");
 
@@ -2005,6 +2005,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<byte>("OldLevel")
                         .HasColumnType("tinyint");
+
+                    b.Property<long>("PMId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("PMNote")
                         .HasColumnType("nvarchar(max)");
@@ -2034,6 +2037,8 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PMId");
 
                     b.HasIndex("PhaseId");
 
@@ -2357,6 +2362,9 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
 
+                    b.Property<int>("Flag")
+                        .HasColumnType("int");
+
                     b.Property<string>("Impact")
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
@@ -2415,7 +2423,10 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCriteria")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
@@ -2432,6 +2443,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -2826,6 +2840,45 @@ namespace ProjectManagement.Migrations
                     b.ToTable("ResourceRequests");
                 });
 
+            modelBuilder.Entity("ProjectManagement.Entities.Skill", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Skills");
+                });
+
             modelBuilder.Entity("ProjectManagement.Entities.Tag", b =>
                 {
                     b.Property<long>("Id")
@@ -2969,6 +3022,52 @@ namespace ProjectManagement.Migrations
                     b.HasIndex("TimesheetId");
 
                     b.ToTable("TimesheetProjects");
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.UserSkill", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SkillId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SkillId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSkills");
                 });
 
             modelBuilder.Entity("ProjectManagement.MultiTenancy.Tenant", b =>
@@ -3328,6 +3427,12 @@ namespace ProjectManagement.Migrations
 
             modelBuilder.Entity("ProjectManagement.Entities.CheckPointUserResult", b =>
                 {
+                    b.HasOne("ProjectManagement.Authorization.Users.User", "PM")
+                        .WithMany()
+                        .HasForeignKey("PMId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjectManagement.Entities.Phase", "Phase")
                         .WithMany()
                         .HasForeignKey("PhaseId")
@@ -3494,6 +3599,21 @@ namespace ProjectManagement.Migrations
                     b.HasOne("ProjectManagement.Entities.Timesheet", "Timesheet")
                         .WithMany()
                         .HasForeignKey("TimesheetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.UserSkill", b =>
+                {
+                    b.HasOne("ProjectManagement.Entities.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

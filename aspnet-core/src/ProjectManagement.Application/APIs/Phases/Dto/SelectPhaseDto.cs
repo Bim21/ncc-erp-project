@@ -17,7 +17,8 @@ namespace ProjectManagement.APIs.Phases.Dto
         public int Year { get; set; }
         public string ParentName { get; set; }
         public string Type { get; set; }
-        public bool IsActive { get; set; }
-        public bool Status { get; set; }
+        public PhaseStatus Status { get; set; }
+        public bool IsCriteria { get; set; }
+        public int Index { get; set; }
     }
 }

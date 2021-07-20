@@ -23,18 +23,16 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
-            var query = from pr in WorkScope.GetAll<PMReport>()
-                        join prp in WorkScope.GetAll<PMReportProject>() on pr.Id equals prp.PMReportId
-                        group prp by new { pr.Id, pr.Name, pr.Year, pr.Type, pr.IsActive } into pp
-                        select new GetPMReportDto
-                        {
-                            Id = pp.Key.Id,
-                            Name = pp.Key.Name,
-                            Year = pp.Key.Year,
-                            IsActive = pp.Key.IsActive,
-                            Type = pp.Key.Type,
-                            NumberOfProject = pp.Count()
-                        };
+            var pmRepoertProject = WorkScope.GetAll<PMReportProject>();
+            var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Year = x.Year,
+                IsActive = x.IsActive,
+                Type = x.Type,
+                NumberOfProject = pmRepoertProject.Where(y => y.PMReportId == x.Id).Count()
+            });
             return await query.GetGridResult(query, input);
         }
 
@@ -55,9 +53,16 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Create)]
         public async Task<PMReportDto> Create(PMReportDto input)
         {
-            var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Name == input.Name && x.Type == input.Type);
+            var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
             if (isExist)
                 throw new UserFriendlyException("PM Report already exist !");
+
+            var activeReport = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).ToListAsync();
+            foreach(var item in activeReport)
+            {
+                item.IsActive = false;
+                await WorkScope.UpdateAsync(item);
+            }
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReport>(input));
 
@@ -85,9 +90,14 @@ namespace ProjectManagement.APIs.PMReports
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(input.Id);
 
-            var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name && x.Type == input.Type);
+            var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
             if (isExist)
                 throw new UserFriendlyException("PM Report already exist !");
+
+            if(input.IsActive != pmReport.IsActive)
+            {
+                throw new UserFriendlyException("Report status cannot be edited !");
+            }
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<PMReportDto, PMReport>(input, pmReport));
             return input;
@@ -111,25 +121,18 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<string> CloseReport(long pmReportId)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
-            var oldPmReport = await WorkScope.GetAll<PMReport>().Where(x => x.Id != pmReportId && x.IsActive).ToListAsync();
 
             pmReport.IsActive = false;
             await WorkScope.UpdateAsync(pmReport);
 
-            foreach(var item in oldPmReport)
-            {
-                item.IsActive = false;
-                await WorkScope.UpdateAsync(item);
-            }
-
-            var newPmReport = new PMReport
+            var newPmReport = new PMReportDto
             {
                 Name = pmReport.Name + " (1)",
                 Year = DateTime.Now.Year,
                 IsActive = true,
                 Type = PMReportType.Weekly
             };
-            await WorkScope.InsertAndGetIdAsync(newPmReport);
+            await Create(newPmReport);
 
             return $"{pmReport.Name} locked, new PmReport with name {pmReport.Name} (1) created";
         }

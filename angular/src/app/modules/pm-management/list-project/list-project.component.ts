@@ -1,3 +1,5 @@
+import { UserDto } from './../../../../shared/service-proxies/service-proxies';
+import { UserService } from './../../../service/api/user.service';
 import { InputFilterDto } from './../../../../shared/filter/filter.component';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { ListProjectService } from './../../../service/api/list-project.service';
@@ -36,7 +38,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ];
 
 
-
+  private userList: UserDto[] = [];
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
 
   setValueProjectType(projectType, enumObject) {
@@ -64,12 +66,13 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     );
   }
 
-  constructor(injector: Injector, public dialog: MatDialog,
+  constructor(injector: Injector, public dialog: MatDialog, private userService: UserService,
     public listProjectService: ListProjectService) {
     super(injector);
   }
 
   ngOnInit(): void {
+    this.getAllUser();
     this.refresh();
   }
 
@@ -129,12 +132,20 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
   showDetail(id: any) {
     if (this.permission.isGranted(this.PmManager_Project_ViewDetail)) {
-      this.router.navigate(['app/list-project-detail'], {
+      this.router.navigate(['app/list-project-detail/list-project-general'], {
         queryParams: {
           id: id,
         }
       })
     }
 
+  }
+  getAllUser() {
+    this.userService.GetAllUserActive(true).subscribe(data => {
+      this.userList = data.result
+    })
+  }
+  public filterUser(userId: number) {
+    return this.userList.filter(item => item.id == userId)[0];
   }
 }

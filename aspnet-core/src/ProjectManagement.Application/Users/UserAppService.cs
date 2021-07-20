@@ -31,10 +31,10 @@ using NccCore.IoC;
 using Abp.Authorization.Users;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Microsoft.AspNetCore.Hosting;
+using ProjectManagement.Entities;
 
 namespace ProjectManagement.Users
 {
-    [AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
         private readonly UserManager _userManager;
@@ -68,6 +68,7 @@ namespace ProjectManagement.Users
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users_Create)]
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             CheckCreatePermission();
@@ -79,11 +80,24 @@ namespace ProjectManagement.Users
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
-            CheckErrors(await _userManager.CreateAsync(user, input.Password));
+            CheckErrors( await _userManager.CreateAsync(user, input.Password));
 
             if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            }
+
+            if(input.UserSkills != null)
+            {
+                foreach (var s in input.UserSkills)
+                {
+                    var skill = new UserSkill
+                    {
+                        UserId = user.Id,
+                        SkillId = s.SkillId
+                    };
+                    await _workScope.InsertAndGetIdAsync(skill);
+                }
             }
 
             CurrentUnitOfWork.SaveChanges();
@@ -91,6 +105,7 @@ namespace ProjectManagement.Users
             return MapToEntityDto(user);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
             CheckUpdatePermission();
@@ -106,11 +121,43 @@ namespace ProjectManagement.Users
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
 
+            var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.Id).ToListAsync();
+            var currenUserSkillId = userSkills.Select(x => x.SkillId);
+
+            var deleteSkillId = currenUserSkillId.Except(input.UserSkills.Select(x => x.SkillId));
+            var deleteSkill = userSkills.Where(x => deleteSkillId.Contains(x.SkillId));
+            var addSkill = input.UserSkills.Where(x => !currenUserSkillId.Contains(x.SkillId));
+
+            foreach(var item in deleteSkill)
+            {
+                await _workScope.DeleteAsync<UserSkill>(item);
+            }
+
+            foreach (var item in addSkill)
+            {
+                var userSkill = new UserSkill {
+                    UserId = item.UserId,
+                    SkillId = item.SkillId
+                };
+                await _workScope.InsertAndGetIdAsync(userSkill);
+            }
+
             return await GetAsync(input);
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
         public override async Task DeleteAsync(EntityDto<long> input)
         {
+            var hasProject = await _workScope.GetAll<Project>().AnyAsync(x => x.PMId == input.Id);
+            if (hasProject)
+                throw new UserFriendlyException("User is a project manager !");
+
+            var useSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.Id).ToListAsync();
+            foreach(var item in useSkills)
+            {
+                await _workScope.DeleteAsync(item);
+            }
+
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
         }
@@ -252,11 +299,10 @@ namespace ProjectManagement.Users
                     Surname = u.Surname,
                     EmailAddress = u.EmailAddress,
                     FullName = u.FullName,
-                    AvatarPath = u.AvatarPath,
+                    AvatarPath = "/avatars/" + u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
                     Branch = u.Branch,
-                    Gender = u.Gender
                 });
             return await query.ToListAsync();
         }

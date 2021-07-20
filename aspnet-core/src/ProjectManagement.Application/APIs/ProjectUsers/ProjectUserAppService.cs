@@ -43,7 +43,12 @@ namespace ProjectManagement.APIs.ProjectUsers
                             IsExpense = x.IsExpense,
                             ResourceRequestId = x.ResourceRequestId,
                             PMReportId = x.PMReportId,
-                            IsFutureActive = x.IsFutureActive
+                            IsFutureActive = x.IsFutureActive,
+                            AvatarPath = "/avatars/" + x.User.AvatarPath,
+                            Branch = x.User.Branch,
+                            EmailAddress = x.User.EmailAddress,
+                            UserName = x.User.UserName,
+                            UserType = x.User.UserType
                         });
 
             return await query.ToListAsync();
@@ -59,11 +64,12 @@ namespace ProjectManagement.APIs.ProjectUsers
                         {
                             Id = x.Id,
                             FullName = x.FullName,
-                            AvatarPath = x.AvatarPath,
+                            AvatarPath = "/avatars/" + x.AvatarPath,
                             UserType = x.UserType,
                             UserLevel = x.UserLevel,
                             Branch = x.Branch,
-                            Gender = x.Gender
+                            EmailAddress = x.EmailAddress,
+                            UserName = x.UserName,
                         });
             return await query.ToListAsync();
         }

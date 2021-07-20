@@ -35,12 +35,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
-  public problemList: projectProblemDto[] = []
+  public problemList: projectProblemDto[] = [];
 
 
   public isEditProblem: boolean = false;
   public isEditFutureReport: boolean = false;
-
+  public minDate = new Date();
 
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
@@ -59,6 +59,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.getProjectProblem();
     this.getAllPmReport();
     this.getUser();
+    this.minDate.setDate(this.minDate.getDate()+1)
   }
   public getWeeklyReport() {
     this.reportService.getChangesDuringWeek(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
@@ -71,8 +72,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
   }
   public getUser(): void {
-    this.userService.getAll().pipe(catchError(this.userService.handleError)).subscribe(data => {
-      this.userList = data.result.items;
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.userList = data.result;
     })
   }
   private getProjectProblem(): void {

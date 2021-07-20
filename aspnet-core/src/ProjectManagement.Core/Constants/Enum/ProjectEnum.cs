@@ -110,6 +110,12 @@ namespace ProjectManagement.Constants.Enum
             Main = 0,
             Sub = 1
         }
+        public enum PhaseStatus
+        {
+            Active=0,
+            DeActive=1,
+            Done=2
+        }
         public enum CheckPointUserType
         {
             PM = 0,
@@ -162,11 +168,6 @@ namespace ProjectManagement.Constants.Enum
             HCM = 2,
             Other = 4
         }
-        public enum Gender
-        {
-            Male = 0,
-            Female = 1
-        }
         public enum InvoiceStatus
         {
             New = 0,
@@ -174,6 +175,12 @@ namespace ProjectManagement.Constants.Enum
             PartialPayment = 2,
             Paid = 3,
             CantPay = 4
+        }
+        public enum PMReportProjectIssueFlag
+        {
+            Green = 0,
+            Yellow = 1,
+            Red = 2
         }
     }
 }

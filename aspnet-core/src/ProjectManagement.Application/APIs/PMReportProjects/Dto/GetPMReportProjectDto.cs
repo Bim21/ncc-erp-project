@@ -18,5 +18,11 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public long PMId { get; set; }
         public string PmName { get; set; }
         public string Note { get; set; }
+        public string PmEmailAddress { get; set; }
+        public string PmUserName { get; set; }
+        public string PmFullName { get; set; }
+        public string PmAvatarPath { get; set; }
+        public UserType PmUserType { get; set; }
+        public Branch PmBranch { get; set; }
     }
 }

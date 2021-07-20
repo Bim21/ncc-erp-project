@@ -12,7 +12,8 @@ namespace ProjectManagement.Entities
         public int Year { get; set; }
         public long ParentId { get; set; }
         public PhaseType Type { get; set; }
-        public bool IsActive { get; set; }
-        public bool Status { get; set; }
+        public PhaseStatus Status { get; set; }
+        public bool IsCriteria { get; set; }
+        public int Index { get; set; }
     }
 }
