@@ -53,4 +53,7 @@ export class TimesheetProjectService extends BaseApiService{
     return this.http.get<any>(this.rootUrl + '/DownloadFileTimesheetProject?timesheetProjectId=' + projectId);
 
   }
+  public GetTimesheetFile(id: any): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/DownloadFileTimesheetProject?timesheetProjectId=' + id);
+  }
 }
