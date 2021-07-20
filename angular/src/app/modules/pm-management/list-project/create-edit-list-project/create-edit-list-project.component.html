@@ -53,7 +53,7 @@
                         <input matInput [(ngModel)]="searchPM" name="searchPM" placeholder="Search">
                     </mat-form-field>
                         <mat-option *ngFor="let pm of pmList | filter: searchPM" [value]="pm.id">
-                            {{pm.fullName}}</mat-option>
+                            {{pm.fullName}} - ({{pm.emailAddress}})</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"

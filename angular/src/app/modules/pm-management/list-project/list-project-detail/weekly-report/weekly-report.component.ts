@@ -198,6 +198,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.isEditFutureReport = true;
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
+    console.log("aaaaaaaaaaaa",report);
   }
   // Project Issue
   public getAllPmReport() {

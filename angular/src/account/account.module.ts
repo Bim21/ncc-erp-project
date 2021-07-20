@@ -1,3 +1,4 @@
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +18,6 @@ import { AccountFooterComponent } from './layout/account-footer.component';
 // tenants
 import { TenantChangeComponent } from './tenant/tenant-change.component';
 import { TenantChangeDialogComponent } from './tenant/tenant-change-dialog.component';
-import { GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 
 @NgModule({
     imports: [
@@ -28,6 +28,7 @@ import { GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-lo
         SharedModule,
         ServiceProxyModule,
         AccountRoutingModule,
+        SocialLoginModule,
         ModalModule.forChild()
     ],
     declarations: [
@@ -43,19 +44,19 @@ import { GoogleLoginProvider, SocialAuthServiceConfig } from 'angularx-social-lo
     ],
     providers: [
         {
-            provide: 'SocialAuthServiceConfig',
-            useValue: {
-                autoLogin: true,
-                providers: [
-                    {
-                        id: GoogleLoginProvider.PROVIDER_ID,
-                        provider: new GoogleLoginProvider('879411761479-bgjd9vk52gsrs937ve5vumnmcd7v64oe.apps.googleusercontent.com'
-                        ),
-                    },
-                ],
-            } as SocialAuthServiceConfig,
+          provide: 'SocialAuthServiceConfig',
+          useValue: {
+            autoLogin: true,
+            providers: [
+              {
+                id: GoogleLoginProvider.PROVIDER_ID,
+                provider: new GoogleLoginProvider('879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com' 
+                ),
+              },
+            ],
+          } as SocialAuthServiceConfig,
         }
-    ],
+      ],
     entryComponents: [
         // tenant
         TenantChangeDialogComponent

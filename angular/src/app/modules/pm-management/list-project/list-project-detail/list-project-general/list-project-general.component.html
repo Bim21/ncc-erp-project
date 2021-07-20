@@ -139,8 +139,9 @@
                         </label>
                         <div *ngIf="readMode" class="col-md-5 pt-2">
                           
-                            <p *ngIf="project.isCharge">Yes</p>
-                            <p *ngIf="!project.isCharge">No</p>
+                            <mat-checkbox disabled="true" [(ngModel)]="project.isCharge" name="ischarge">
+                            </mat-checkbox>
+
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 pt-2">
                             <mat-checkbox [(ngModel)]="project.isCharge" name="ischarge" class="mt-1">is Charge

@@ -100,7 +100,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       ),
       new MenuItem(
         this.l("Delivery Management"),
-        "/app/delivery",
+        "/app/delivery/weekly-report-tab",
         "fas fa-chalkboard-teacher",
         "",
       ),
