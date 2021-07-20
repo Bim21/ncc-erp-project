@@ -39,8 +39,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
-  public flagList: string[] = Object.keys(this.APP_ENUM.MilestoneFlag);
-  public activeReportId: number
+  public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
+  public activeReportId: number;
+  public flagProblem=0;
 
 
 
@@ -56,25 +57,37 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.getPmReportProject();
     this.getActiveReport();
+   
   }
-  private getActiveReport() {
-    this.pmReportService.getAll().subscribe(data => {
-      this.activeReportId = data.result.filter(item=>item.isActive==true)[0].id
-    })
-  }
-
   public getPmReportProject(): void {
     this.pmReportProjectService.GetAllByPmReport(this.pmReportId, {}).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
+      this.getActiveReport()
       if (localStorage.getItem('read') && JSON.parse(localStorage.getItem('read')).reportId == this.pmReportId) {
         this.pmReportProjectList = JSON.parse(localStorage.getItem('read')).pmProjectList;
       }
 
     }))
   }
+  private getActiveReport() {
+    this.pmReportService.getAll().subscribe(data => {
+      this.activeReportId = data.result.filter(item=>item.isActive==true)[0].id;
+      this.view(this.pmReportProjectList[0].projectId);
+    })
+    
+  }
+
+  
  
   view(item) {
+    this.pmReportProjectList.forEach(element => {
+      if(element.projectId==item){
+        element.setBackground=true;
+      }else{
+        element.setBackground=false;
+      }
+    });
 
     this.pmReportProjectService.getChangesDuringWeek(item,this.activeReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
@@ -83,8 +96,20 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.getChangesInFuture(item,this.activeReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.futureReportList = data.result;
     })
-    this.reportIssueService.getProblemsOfTheWeek(item,this.activeReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-      this.problemList = data.result;
+    this.pmReportProjectService.problemsOfTheWeekForReport(item,this.activeReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      
+      
+      if(data.result.listGreen.length !=0){
+        this.problemList = data.result.listGreen;
+        this.flagProblem=this.APP_ENUM.ProjectHealth["Green"];
+      }else if(data.result.listRed.length !=0){
+        this.problemList = data.result.listRed;
+        this.flagProblem=this.APP_ENUM.ProjectHealth["Red"];
+      }else{
+        this.problemList = data.result.listYellow;
+        this.flagProblem=this.APP_ENUM.ProjectHealth["Yellow"];
+      }
+      
     })
   }
   search() {
@@ -94,15 +119,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
 
   }
-  tick() {
-    let item = {
-      pmProjectList: this.pmReportProjectList,
-      reportId: this.pmReportId
-    }
-    localStorage.setItem("read", JSON.stringify(item))
-
-
+  tick(project){
+    project.createMode=true;
+    let item= {pmProjectList: this.pmReportProjectList,
+    reportId: this.pmReportId}
+    localStorage.setItem("read",JSON.stringify(item))
   }
+  
 
 
 }

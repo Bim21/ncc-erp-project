@@ -1,8 +1,10 @@
+import { AppComponentBase } from '@shared/app-component-base';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { CreateEditProjectChecklistComponent } from './create-edit-project-checklist/create-edit-project-checklist.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectChecklistService } from './../../../../../service/api/project-checklist.service';
 import { projectChecklistDto } from './../../../../../service/model/checklist.dto';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { result } from 'lodash-es';
 
@@ -11,14 +13,16 @@ import { result } from 'lodash-es';
   templateUrl: './project-checklist.component.html',
   styleUrls: ['./project-checklist.component.css']
 })
-export class ProjectChecklistComponent implements OnInit {
+export class ProjectChecklistComponent extends AppComponentBase implements OnInit {
   public listCheckList: projectChecklistDto[]= [];
   public projectId:any;
   public listChecklistItem=[];
+  CheckList_ProjectChecklist_AddCheckListItemByProject=PERMISSIONS_CONSTANT.CheckList_ProjectChecklist_AddCheckListItemByProject;
 
   constructor(private projectChecklistService:ProjectChecklistService, 
     public route: ActivatedRoute,
-    private dialog:MatDialog) { }
+    private dialog:MatDialog,
+    injector:Injector) {super(injector) }
   ngOnInit(): void {
     this.projectId= this.route.snapshot.queryParamMap.get('id');
     this.getAllCheckList();

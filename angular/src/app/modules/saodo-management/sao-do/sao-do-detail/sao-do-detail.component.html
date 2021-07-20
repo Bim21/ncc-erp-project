@@ -6,7 +6,7 @@
             </div>
             
             <div class="col-6 text-right">
-                <button type="button" class="btn bg-blue" (click)="createSaodoDetail()" >
+                <button *ngIf="permission.isGranted(SaoDo_AuditResultPeople_Create)" type="button" class="btn bg-blue" (click)="createSaodoDetail()" >
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -55,7 +55,7 @@
                             <!-- <td>{{saodo.startTime}}</td>
                             <td>{{saodo.endTime}}</td> -->
                             <td  class="text-center">
-                                <button  
+                                <button  *ngIf="permission.isGranted(SaoDo_AuditResultPeople_Update)"
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editSaodoDetail(saodo)" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -63,6 +63,7 @@
                                 Edit
                             </button>
                             <button 
+                            *ngIf="permission.isGranted(SaoDo_AuditResultPeople_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(saodo)"
                                  #deleteBtn>

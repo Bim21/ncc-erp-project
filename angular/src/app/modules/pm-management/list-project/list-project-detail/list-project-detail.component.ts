@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppComponentBase } from 'shared/app-component-base';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, Injector } from '@angular/core';
@@ -8,8 +9,15 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./list-project-detail.component.css']
 })
 export class ListProjectDetailComponent extends AppComponentBase implements OnInit {
-  requestId: any
-  currentUrl: string = ""
+  requestId: any;
+  currentUrl: string = "";
+  PmManager_CanViewMenu_Milestone=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Milestone;
+  PmManager_CanViewMenu_ProjectChecklist=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectChecklist;
+  PmManager_CanViewMenu_ResourceManagement=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ResourceManagement;
+  PmManager_CanViewMenu_Timesheet=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Timesheet;
+  PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
+
+
   constructor(private route: ActivatedRoute, private router: Router, injector:Injector) {
     super(injector)
   }

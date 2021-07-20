@@ -3,22 +3,22 @@
         <div class="row mb-4 card">
             <div class="col-12">
                 <nav mat-tab-nav-bar>
-                    <a [ngClass]="currentUrl.includes('list-project-general')?'active':''" mat-tab-link (click)="routingGeneralTab()">
+                    <a  [ngClass]="currentUrl.includes('list-project-general')?'active':''" mat-tab-link (click)="routingGeneralTab()">
                         General
                     </a>
-                    <a [ngClass]="currentUrl.includes('resourcemanagement')?'active':''" mat-tab-link (click)="routingResourceTab()">
+                    <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ResourceManagement)" [ngClass]="currentUrl.includes('resourcemanagement')?'active':''" mat-tab-link (click)="routingResourceTab()">
                         Resource Management 
                     </a>
-                    <a [ngClass]="currentUrl.includes('milestone')?'active':''" mat-tab-link (click)="routingMilestoneTab()">
+                    <a *ngIf="permission.isGranted(PmManager_CanViewMenu_Milestone)" [ngClass]="currentUrl.includes('milestone')?'active':''" mat-tab-link (click)="routingMilestoneTab()">
                         Milestone
                     </a>
-                    <a [ngClass]="currentUrl.includes('weeklyreport')?'active':''" mat-tab-link (click)="routingWeeklyReportTab()">
+                    <a *ngIf="permission.isGranted(PmManager_CanViewMenu_WeeklyReport)" [ngClass]="currentUrl.includes('weeklyreport')?'active':''" mat-tab-link (click)="routingWeeklyReportTab()">
                         Weekly Report
                     </a>
-                    <a [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
+                    <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ProjectChecklist)" [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
                         Project Checklist
                     </a>
-                    <a [ngClass]="currentUrl.includes('timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
+                    <a *ngIf="permission.isGranted(PmManager_CanViewMenu_Timesheet)" [ngClass]="currentUrl.includes('timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
                         Timesheet
                     </a>
                     

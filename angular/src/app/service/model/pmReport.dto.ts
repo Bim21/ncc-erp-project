@@ -18,4 +18,5 @@ export class pmReportProjectDto{
     note: string;
     id?: number;
     createMode?:boolean;
+    setBackground?:boolean;
 }
