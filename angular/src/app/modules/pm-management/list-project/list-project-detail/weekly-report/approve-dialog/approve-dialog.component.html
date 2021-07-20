@@ -1,7 +1,6 @@
 <form class="form-horizontal" autocomplete="off" #approveForm="ngForm" novalidate>
-    <div class="card-header">
-        <h3> Approve Request</h3>
-    </div>
+    <abp-modal-header title="Create/edit checklist title" (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">

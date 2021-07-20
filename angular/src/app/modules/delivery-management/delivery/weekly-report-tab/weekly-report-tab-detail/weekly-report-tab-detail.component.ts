@@ -1,3 +1,4 @@
+import { PmReportService } from './../../../../../service/api/pm-report.service';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { isNgTemplate } from '@angular/compiler';
 import { PmReportIssueService } from './../../../../../service/api/pm-report-issue.service';
@@ -29,62 +30,61 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   protected delete(entity: WeeklyReportTabDetailComponent): void {
     throw new Error('Method not implemented.');
   }
-  public searchText="";
-  public pmReportProjectList:pmReportProjectDto[]=[];
-  public tempPmReportProjectList:pmReportProjectDto[]=[];
-  public show:boolean=false;
-  public pmReportProject={} as pmReportProjectDto;
-  public pmReportId:any;
+  public searchText = "";
+  public pmReportProjectList: pmReportProjectDto[] = [];
+  public tempPmReportProjectList: pmReportProjectDto[] = [];
+  public show: boolean = false;
+  public pmReportProject = {} as pmReportProjectDto;
+  public pmReportId: any;
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
   public flagList: string[] = Object.keys(this.APP_ENUM.MilestoneFlag);
+  public activeReportId: number
 
 
 
-  constructor(private pmReportProjectService:PMReportProjectService,
-    private reportIssueService:PmReportIssueService,
-    
+  constructor(private pmReportProjectService: PMReportProjectService,
+    private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
-    injector:Injector,
-    ) {super(injector) 
+    injector: Injector,
+  ) {
+    super(injector)
   }
 
   ngOnInit(): void {
-    this.pmReportId=this.route.snapshot.queryParamMap.get('id');
+    this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.getPmReportProject();
-    
-    
-    
+    this.getActiveReport();
+  }
+  private getActiveReport() {
+    this.pmReportService.getAll().subscribe(data => {
+      this.activeReportId = data.result.filter(item=>item.isActive==true)[0].id
+    })
   }
 
-  public getPmReportProject():void{
-    this.pmReportProjectService.GetAllByPmReport(this.pmReportId,{}).subscribe((data=>{
-      this.pmReportProjectList=data.result;
-      this.tempPmReportProjectList=data.result;
-      if(localStorage.getItem('read') && JSON.parse(localStorage.getItem('read')).reportId==this.pmReportId){
-        this.pmReportProjectList=JSON.parse(localStorage.getItem('read')).pmProjectList;
-       }
-      
+  public getPmReportProject(): void {
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, {}).subscribe((data => {
+      this.pmReportProjectList = data.result;
+      this.tempPmReportProjectList = data.result;
+      if (localStorage.getItem('read') && JSON.parse(localStorage.getItem('read')).reportId == this.pmReportId) {
+        this.pmReportProjectList = JSON.parse(localStorage.getItem('read')).pmProjectList;
+      }
+
     }))
   }
-  public getWeeklyReport(item) {
-    this.pmReportProjectService.getChangesDuringWeek(item).pipe(catchError(this.reportService.handleError)).subscribe(data => {
-      this.weeklyPeportList = data.result;
-    })
-  }
  
-  view(item){ 
-    
-    this.pmReportProjectService.getChangesDuringWeek(item).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+  view(item) {
+
+    this.pmReportProjectService.getChangesDuringWeek(item,this.activeReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
-    
-    this.pmReportProjectService.getChangesInFuture(item).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-          this.futureReportList = data.result;
+
+    this.pmReportProjectService.getChangesInFuture(item,this.activeReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+      this.futureReportList = data.result;
     })
-    this.reportIssueService.getProblemsOfTheWeek(item).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-        this.problemList = data.result;
+    this.reportIssueService.getProblemsOfTheWeek(item,this.activeReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.problemList = data.result;
     })
   }
   search() {
@@ -94,13 +94,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
 
   }
-  tick(){
-    let item= {pmProjectList: this.pmReportProjectList,
-    reportId: this.pmReportId}
-    localStorage.setItem("read",JSON.stringify(item))
-     
-    
+  tick() {
+    let item = {
+      pmProjectList: this.pmReportProjectList,
+      reportId: this.pmReportId
+    }
+    localStorage.setItem("read", JSON.stringify(item))
+
+
   }
-  
+
 
 }

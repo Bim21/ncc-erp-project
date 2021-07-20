@@ -87,7 +87,7 @@
                                 
                             </td>
                             <td class="text-center">
-                                <button *ngIf="DeliveryManagement_PMReport_CloseReport(DeliveryManagement_ResourceRequest_Update)"
+                                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
                                 
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editRequest(item);$event.stopPropagation()">

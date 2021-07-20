@@ -1,11 +1,43 @@
 <section class="content px-2">
+
     <div class="container-fluid">
-        <div class="card mt-3">
+        <div class="d-flex mt-2" style="justify-content: flex-end;">
+            <div class="col-6 ">
+                <div class="form-group row" style="justify-content: flex-end;">
+                    <div class="col-3 text-right">
+                        <label class="col-form-label mt-1" for="">PM report:</label>
+                    </div>
+                    <mat-form-field class="w-100 col-4" appearance="outline">
+                        <mat-select [(ngModel)]="activeReportId" name="pmReport" (selectionChange)="onReportchange()"
+                            placeholder="select a role" required #projectEmployee="ngModel">
+                            <mat-form-field class="w-100 px-3 "
+                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReport" placeholder="search">
+                            </mat-form-field>
+                            <mat-option *ngFor="let report of pmReportList |filter:searchPmReport" [value]="report">
+                                {{report.name}}<i class="fas fa-circle float-right mt-3"
+                                    [ngClass]="report.isActive==true?'active':'inActive'"></i></mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="col-3 mt-1">
+                <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" *ngIf="activeReportId.isActive">
+                    <i class="fas fa-paper-plane"></i> Send weekly report
+                </button>
+
+
+
+            </div>
+        </div>
+        <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6 row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                        <button [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
+                        <button [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3"
+                            *ngIf="activeReportId.isActive">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
                     </div>
@@ -35,7 +67,11 @@
                         currentPage: weeklyCurrentPage
                         } ; let i=index">
                             <td><span>{{ i +1 }}</span></td>
-                            <td><span *ngIf="!report.createMode">{{report.fullName}}</span>
+                            <td>
+                                <div *ngIf="!report.createMode">
+                                    <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
+                                    userType:report.userType,emailAddress:report.emailAddress}"></app-user-info>
+                                </div>
                                 <div *ngIf="report.createMode" class="form-group row required">
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="report.userId" name="projectEmployee"
@@ -75,7 +111,7 @@
                                     </mat-error>
                                 </div>
                             </td>
-                            <td> <span *ngIf="!report.createMode">
+                            <td class="text-center"> <span *ngIf="!report.createMode">
                                     {{report.startTime | date:"dd/MM/yyyy"}}
                                 </span>
                                 <mat-form-field appearance="outline" *ngIf="report.createMode">
@@ -86,7 +122,8 @@
                                 </mat-form-field>
                             </td>
                             <td>
-                                <p *ngIf="!report.createMode" class="text-center"> <strong> {{report.allocatePercentage}}%</strong></p>
+                                <p *ngIf="!report.createMode" class="text-center"> <strong>
+                                        {{report.allocatePercentage}}%</strong></p>
                                 <div *ngIf="report.createMode">
                                     <input class="form-control mt-1" type="text" mask="percent" required
                                         #Percentage="ngModel" #PercentageEl suffix="%"
@@ -122,7 +159,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                        <button [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
+                        <button [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3"
+                            *ngIf="activeReportId.isActive">
                             <i class="fa fa-plus-square"></i>
                             Create
                         </button>
@@ -139,7 +177,7 @@
                             <th>Project role</th>
                             <th>Thời gian thay đổi</th>
                             <th>%Sử dụng nhân sự</th>
-                            <th>Action</th>
+                            <th *ngIf="activeReportId.isActive">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,7 +187,11 @@
                         currentPage: futureCurrentPage
                         } ; let i=index">
                             <td><span>{{ i +1 }}</span></td>
-                            <td><span *ngIf="!report.createMode">{{report.fullName}}</span>
+                            <td>
+                                <div *ngIf="!report.createMode">
+                                    <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
+                                userType:report.userType,emailAddress:report.emailAddress}"></app-user-info>
+                                </div>
                                 <div *ngIf="report.createMode" class="form-group row required">
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="report.userId" name="projectEmployee"
@@ -201,30 +243,29 @@
                             </td>
 
                             <td>
-                                <p class="text-center" *ngIf="!report.createMode"><strong> {{report.allocatePercentage}}%</strong></p>
+                                <p class="text-center" *ngIf="!report.createMode"><strong>
+                                        {{report.allocatePercentage}}%</strong></p>
                                 <input class="form-control mt-1" placeholder="number" *ngIf="report.createMode"
                                     type="text" mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage" />
                             </td>
-                            <td class="text-center">
-                                <button *ngIf="!report.createMode" [disabled]="processFuture"  mat-button [matMenuTriggerFor]="menu">
+                            <td class="text-center" *ngIf="activeReportId.isActive">
+                                <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
+                                    [matMenuTriggerFor]="menu">
                                     <i class="fas fa-bars fa-lg"></i>
 
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
 
-                                    <button (click)="approveRequest(report)"
-                                        class="mat-menu-item  w-100">
+                                    <button (click)="approveRequest(report)" class="mat-menu-item  w-100">
                                         <i class="fas fa-check mr-2 fa-lg "></i>
                                         Xác nhận thay đổi
                                     </button>
-                                    <button     (click)="rejectRequest(report)"
-                                        class="mat-menu-item  w-100">
+                                    <button (click)="rejectRequest(report)" class="mat-menu-item  w-100">
                                         <i class="fas fa-times mr-2 fa-lg"></i>
-                                    
+
                                         Từ chối
                                     </button>
-                                    <button  (click)="updateRequest(report)"
-                                        class="mat-menu-item  w-100">
+                                    <button (click)="updateRequest(report)" class="mat-menu-item  w-100">
                                         <i class="fas fa-edit mr-2 fa-lg"></i>
 
                                         Update
@@ -259,7 +300,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h3 class="d-inline">Các vấn đề trong tuần</h3>
-                        <button [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
+                        <button [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3"
+                            *ngIf="activeReportId.isActive">
                             <i class="fa fa-plus-square"></i>
                             Create
                         </button>
@@ -277,11 +319,11 @@
                             <th>STT</th>
                             <th>Vấn đề</th>
                             <th>Impact</th>
-                            
+
                             <th>Solution</th>
                             <th>meetingSolution</th>
                             <th>Trạng thái</th>
-                            <th>Action</th>
+                            <th *ngIf="activeReportId.isActive">Action</th>
 
                         </tr>
                     </thead>
@@ -292,13 +334,14 @@
                         currentPage: problemCurrentPage
                         }; let i =index">
                             <td>{{i+1}}</td>
-                        
+
                             <td>
 
                                 <p *ngIf="!problem.createMode">{{problem.description}}</p>
                                 <div *ngIf="problem.createMode">
                                     <mat-form-field class="example-full-width" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1" placeholder="leave a comment" name="description"
+                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            placeholder="leave a comment" name="description"
                                             [(ngModel)]="problem.description" matInput></textarea>
                                     </mat-form-field>
                                 </div>
@@ -309,19 +352,21 @@
                                 <p *ngIf="!problem.createMode">{{problem.impact}}</p>
                                 <div *ngIf="problem.createMode">
                                     <mat-form-field class="example-full-width" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1" placeholder="leave a comment" name="impact"
-                                            [(ngModel)]="problem.impact" matInput></textarea>
+                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
+                                            matInput></textarea>
                                     </mat-form-field>
                                 </div>
 
                             </td>
-                         
+
                             <td>
                                 <p *ngIf="!problem.createMode">{{problem.solution}}</p>
                                 <div *ngIf="problem.createMode">
                                     <mat-form-field class="example-full-width" appearance="outline">
-                                        <textarea  cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"  placeholder="leave a comment" name="solution"
-                                            [(ngModel)]="problem.solution" matInput></textarea>
+                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            placeholder="leave a comment" name="solution" [(ngModel)]="problem.solution"
+                                            matInput></textarea>
                                     </mat-form-field>
                                 </div>
 
@@ -331,7 +376,8 @@
                                 <p *ngIf="!problem.createMode">{{problem.meetingSolution}}</p>
                                 <div *ngIf="problem.createMode">
                                     <mat-form-field class="example-full-width" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1" placeholder="leave a comment" name="meetingSolution"
+                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            placeholder="leave a comment" name="meetingSolution"
                                             [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                     </mat-form-field>
                                 </div>
@@ -357,25 +403,25 @@
                                 </div>
 
                             </td>
-                            <td class="text-center">
-                                <button *ngIf="!problem.createMode"  mat-button [matMenuTriggerFor]="menu" [disabled] ="processProblem">
+                            <td class="text-center" *ngIf="activeReportId.isActive">
+                                <button *ngIf="!problem.createMode" mat-button [matMenuTriggerFor]="menu"
+                                    [disabled]="processProblem">
                                     <i class="fas fa-bars fa-lg"></i>
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
-                                    <button (click)="updateReportIssue(problem)"
-                                        class="mat-menu-item  w-100">
+                                    <button (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
                                         <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                         Edit
                                     </button>
-                                  
-                                    <button  (click)="deleteProblem(problem)"
-                                        class="mat-menu-item  w-100">
+
+                                    <button (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                         <i class="fas fa-trash mr-2 fa-lg"></i>
                                         Delete
                                     </button>
                                 </mat-menu>
                                 <div *ngIf="problem.createMode" class="pt-2">
-                                    <button [disabled]=" !problem.description || !problem.impact" class=" mr-3 submit-btn" style="background: none; border: none;"
+                                    <button [disabled]=" !problem.description || !problem.impact"
+                                        class=" mr-3 submit-btn" style="background: none; border: none;"
                                         (click)="saveProblemReport(problem)">
                                         <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                     </button>

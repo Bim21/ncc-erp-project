@@ -13,6 +13,7 @@ export class ProjectDto {
 export class projectUserDto {
     userId: number
     userName: string;
+    fullName:string;
     projectId: number;
     projectName: string;
     projectRole: string;

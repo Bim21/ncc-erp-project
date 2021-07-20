@@ -5,6 +5,10 @@
 .submit-btn:disabled i{
   color: gray !important;
 }
-td{
-  text-align: center;
+
+.active{
+  color: green;
+}
+.inActive{
+  color: darkgrey;
 }
