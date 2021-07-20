@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
@@ -40,6 +41,37 @@ namespace ProjectManagement.APIs.PMReportProjects
                     Note = x.Note
                 });
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
+        public async Task<GetResultpmReportProjectIssue> ProblemsOfTheWeekForReport(long ProjectId, long pmReportId)
+        {
+            var query = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId)
+                        join prpi in WorkScope.GetAll<PMReportProjectIssue>().OrderByDescending(x => x.CreationTime)
+                        on prp.Id equals prpi.PMReportProjectId into lst
+                        from p in lst.DefaultIfEmpty()
+                        select new GetPMReportProjectIssueDto
+                        {
+                            Id = p.Id,
+                            PMReportProjectId = p.PMReportProjectId,
+                            Description = p.Description,
+                            Impact = p.Impact,
+                            Critical = p.Critical.ToString(),
+                            Source = p.Source.ToString(),
+                            Solution = p.Solution,
+                            MeetingSolution = p.MeetingSolution,
+                            ProjectHealth = prp.ProjectHealth,
+                            Status = p.Status.ToString()
+                        };
+            var result = query.Select(x => new GetResultpmReportProjectIssue
+            {
+                ListGreen = query.Where(q => q.ProjectHealth == ProjectHealth.Green).ToList(),
+                ListYellow = query.Where(q => q.ProjectHealth == ProjectHealth.Yellow).ToList(),
+                ListRed = query.Where(q => q.ProjectHealth == ProjectHealth.Red).ToList()
+            });
+
+            return await result.FirstOrDefaultAsync();
         }
 
         [HttpGet]

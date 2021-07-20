@@ -118,7 +118,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
 
-            if(input.StartTime.Date <= resourceRequest.TimeNeed.Date)
+            if(input.StartTime.Date < resourceRequest.TimeNeed.Date)
                 throw new UserFriendlyException("Start date must be greater than request date !");
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();

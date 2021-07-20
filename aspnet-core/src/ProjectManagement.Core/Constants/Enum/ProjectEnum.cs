@@ -176,11 +176,5 @@ namespace ProjectManagement.Constants.Enum
             Paid = 3,
             CantPay = 4
         }
-        public enum PMReportProjectIssueFlag
-        {
-            Green = 0,
-            Yellow = 1,
-            Red = 2
-        }
     }
 }
