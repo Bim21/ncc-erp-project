@@ -46,6 +46,12 @@ namespace ProjectManagement.APIs.Projects
                             IsCharge = p.IsCharge,
                             PmId = p.PMId,
                             PmName = p.PM.Name,
+                            PmFullName = p.PM.FullName,
+                            PmAvatarPath = "/avatars/" + p.PM.AvatarPath,
+                            PmEmailAddress = p.PM.EmailAddress,
+                            PmUserName = p.PM.UserName,
+                            PmUserType = p.PM.UserType,
+                            PmBranch = p.PM.Branch
                         };
             return await query.GetGridResult(query, input);
         }
@@ -90,7 +96,13 @@ namespace ProjectManagement.APIs.Projects
                                     ClientName = x.Client.Name,
                                     IsCharge = x.IsCharge,
                                     PmId = x.PMId,
-                                    PmName = x.PM.Name
+                                    PmName = x.PM.Name,
+                                    PmFullName = x.PM.FullName,
+                                    PmUserName = x.PM.UserName,
+                                    PmEmailAddress = x.PM.EmailAddress,
+                                    PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                    PmBranch = x.PM.Branch,
+                                    PmUserType = x.PM.UserType
                                 });
             return await query.FirstOrDefaultAsync();
         }

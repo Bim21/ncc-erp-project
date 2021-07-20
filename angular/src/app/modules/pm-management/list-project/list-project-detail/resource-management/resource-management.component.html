@@ -45,8 +45,11 @@
                                     currentPage: userListCurrentPage
                                     }  ; let i = index">
                                 <td><span>{{ i +1 }}</span></td>
-                                <td><span *ngIf="!user.createMode">
-                                        {{user.fullName}}</span>
+                                <td class="text-left">
+                                    <div *ngIf="!user.createMode">
+                                        <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                        userType:user.userType,emailAddress:user.emailAddress}"></app-user-info>
+                                    </div>
                                     <div *ngIf="user.createMode" class="form-group row required">
 
                                         <mat-form-field class="w-100" appearance="outline">

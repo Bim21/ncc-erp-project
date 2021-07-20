@@ -58,10 +58,14 @@
                                 totalItems: totalItems
                               }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td class="text-center"><span class="hyperlink"
-                                    (click)="showUserDetail(item.userId)">{{item.userName}}</span></td>
-                            <td class="text-center">{{item.projects}}</td>
-                            <td class="text-center"><span class="mr-2">{{item.used}}%</span>
+                            <td class="">
+                                <div>
+                                    <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
+                                    userType:item.userType,emailAddress:item.emailAddress}"></app-user-info>
+                                </div>
+                            </td>
+                            <td >{{item.projects}}</td>
+                            <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
                                 <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
                                     Plan
                                 </button>

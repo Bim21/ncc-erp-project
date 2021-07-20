@@ -33,7 +33,14 @@ namespace ProjectManagement.Authorization
 
         //Pm Manager
         public const string PmManager = "PmManager";
+            // view menu
             public const string PmManager_CanViewMenu = "PmManager.CanViewMenu";
+            public const string PmManager_CanViewMenu_ResourceManagement = "PmManager.CanViewMenu.ResourceManagement";
+            public const string PmManager_CanViewMenu_Milestone = "PmManager.CanViewMenu.Milestone";
+            public const string PmManager_CanViewMenu_WeeklyReport = "PmManager.CanViewMenu.WeeklyReport";
+            public const string PmManager_CanViewMenu_ProjectChecklist = "PmManager.CanViewMenu.ProjectChecklist";
+            public const string PmManager_CanViewMenu_Timesheet = "PmManager.CanViewMenu.Timesheet";
+
             //Project
             public const string PmManager_Project = "PmManager.Project";
             public const string PmManager_Project_ViewAll = "PmManager.Project.ViewAll";
@@ -85,10 +92,12 @@ namespace ProjectManagement.Authorization
             public const string Timesheet_TimesheetProject_ViewOnlyme = "Timesheet.Timesheet.ViewOnlyMe";
             public const string Timesheet_TimesheetProject_ViewOnlyActiveProject = "Timesheet.Timesheet.ViewOnlyActiveProject";
             public const string Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = "Timesheet.TimesheetProject.GetAllRemainProjectInTimesheet";
+            public const string Timesheet_TimesheetProject_ViewProjectBillInfomation = "Timesheet.Timesheet.ViewProjectBillInfomation";
             public const string Timesheet_TimesheetProject_Create = "Timesheet.TimesheetProject.Create";
             public const string Timesheet_TimesheetProject_Update = "Timesheet.TimesheetProject.Update";
             public const string Timesheet_TimesheetProject_Delete = "Timesheet.TimesheetProject.Delete";
             public const string Timesheet_TimesheetProject_UploadFileTimesheetProject = "Timesheet.TimesheetProject.UploadFileTimesheetProject";
+            public const string Timesheet_TimesheetProject_DownloadFileTimesheetProject = "Timesheet.TimesheetProject.DownloadFileTimesheetProject";
 
         //Checklist
         public const string CheckList = "CheckList";
@@ -133,8 +142,8 @@ namespace ProjectManagement.Authorization
             public const string SaoDo_AuditResult_GetNote = "SaoDo.AuditResult.GetNote";
             public const string SaoDo_AuditResult_UpdateNote = "SaoDo.AuditResult.UpdateNote";
 
-        // Audit Session
-        public const string SaoDo_AuditSession = "SaoDo.AuditSession";
+            // Audit Session
+            public const string SaoDo_AuditSession = "SaoDo.AuditSession";
             public const string SaoDo_AuditSession_Create = "SaoDo.AuditSession.Create";
             public const string SaoDo_AuditSession_Delete = "SaoDo.AuditSession.Delete";
             public const string SaoDo_AuditSession_Update = "SaoDo.AuditSession.Update";
@@ -197,17 +206,24 @@ namespace ProjectManagement.Authorization
                 {
                     // permission root
                     PermissionNames.Admin,
-                    PermissionNames.Admin_CanViewMenu,
                     PermissionNames.PmManager,
-                    PermissionNames.PmManager_CanViewMenu,
                     PermissionNames.SaoDo,
-                    PermissionNames.SaoDo_CanViewMenu,
                     PermissionNames.CheckList,
-                    PermissionNames.CheckList_CanViewMenu,
                     PermissionNames.DeliveryManagement,
-                    PermissionNames.DeliveryManagement_CanViewMenu,
                     PermissionNames.Timesheet,
+
+                    PermissionNames.Admin_CanViewMenu,
+                    PermissionNames.SaoDo_CanViewMenu,
+                    PermissionNames.CheckList_CanViewMenu,
+                    PermissionNames.DeliveryManagement_CanViewMenu,
                     PermissionNames.Timesheet_CanViewMenu,
+
+                    PermissionNames.PmManager_CanViewMenu,
+                    PermissionNames.PmManager_CanViewMenu_Milestone,
+                    PermissionNames.PmManager_CanViewMenu_ProjectChecklist,
+                    PermissionNames.PmManager_CanViewMenu_ResourceManagement,
+                    PermissionNames.PmManager_CanViewMenu_Timesheet,
+                    PermissionNames.PmManager_CanViewMenu_WeeklyReport,
 
                     //Admin
                         //User
@@ -256,10 +272,12 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheet_TimesheetProject_GetAllByproject,
                     PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet,
                     PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet,
+                    PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation,
                     PermissionNames.Timesheet_TimesheetProject_Create,
                     PermissionNames.Timesheet_TimesheetProject_Update,
                     PermissionNames.Timesheet_TimesheetProject_Delete,
                     PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject,
+                    PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject,
 
                     //Project User Bill
                     PermissionNames.PmManager_ProjectUserBill,
@@ -384,17 +402,25 @@ namespace ProjectManagement.Authorization
             {
                 // root
                 new SystemPermission{ Name =  PermissionNames.Admin, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Admin" },
-                new SystemPermission{ Name =  PermissionNames.Admin_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Admin Menu" },
                 new SystemPermission{ Name =  PermissionNames.PmManager, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Manager" },
-                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu" },
                 new SystemPermission{ Name =  PermissionNames.SaoDo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sao Do" },
-                new SystemPermission{ Name =  PermissionNames.SaoDo_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Sao Do Menu" },
                 new SystemPermission{ Name =  PermissionNames.CheckList, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List" },
-                new SystemPermission{ Name =  PermissionNames.CheckList_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Check List Menu" },
                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delivery Management" },
-                new SystemPermission{ Name =  PermissionNames.DeliveryManagement_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Delivery Management Menu" },
                 new SystemPermission{ Name =  PermissionNames.Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
+
+                new SystemPermission{ Name =  PermissionNames.Admin_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Admin Menu" },
+                new SystemPermission{ Name =  PermissionNames.SaoDo_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Sao Do Menu" },
+                new SystemPermission{ Name =  PermissionNames.CheckList_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Check List Menu" },
+                new SystemPermission{ Name =  PermissionNames.DeliveryManagement_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Delivery Management Menu" },
                 new SystemPermission{ Name =  PermissionNames.Timesheet_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Timesheet Menu" },
+
+                // pm manager can view
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_WeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Weekly Report" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Timesheet" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Resource Management" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Project Checklist" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Milestone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Milstone" },
 
                  //Admin
                  new SystemPermission{ Name =  PermissionNames.Pages_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles" },
@@ -443,10 +469,12 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Me" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Active Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All Remain Project In Timesheet" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Bill Infomation" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File TimeSheet Project" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
 
                   //Project User Bill
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project User Bill" },
@@ -600,8 +628,18 @@ namespace ProjectManagement.Authorization
                 //PM Manager
                 new SystemPermission { Name =  PermissionNames.PmManager, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Manager",
                     Childrens = new List<SystemPermission>() {
-                        new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu" },
-                    //Project
+                        // pm manager can view menu
+                        new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu",
+                        Childrens = new List<SystemPermission>()
+                            {
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Milestone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Milestone" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Project Checklist" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Resource Management" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_WeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Weekly Report" },
+                            }
+                        },
+                        //Project
                        new SystemPermission { Name =  PermissionNames.PmManager_Project, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project",
                             Childrens = new List<SystemPermission>()
                             {
@@ -814,10 +852,12 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Me" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Active Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All Remain Project In Timesheet" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Bill Infomation" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Timesheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File TimeSheet Project" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
                             }
                         }
                     }

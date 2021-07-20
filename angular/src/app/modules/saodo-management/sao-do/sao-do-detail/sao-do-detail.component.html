@@ -50,8 +50,8 @@
                             <td><span
                                 class="hyperlink" (click)="showDetail(saodo)">{{saodo.projectName}}</span></td>
                             <td>{{saodo.pmName}}</td>
-                            <td>{{saodo.auditResultStatus}}</td>
-                            <td>{{saodo.countFail}}</td>
+                            <td class="text-center"><span [ngClass]="APP_CONST.SaodoStatusStyle[saodo.auditResultStatus]">{{saodo.auditResultStatus}}</span></td>
+                            <td class="text-center"><strong>{{saodo.countFail}}</strong></td>
                             <!-- <td>{{saodo.startTime}}</td>
                             <td>{{saodo.endTime}}</td> -->
                             <td  class="text-center">

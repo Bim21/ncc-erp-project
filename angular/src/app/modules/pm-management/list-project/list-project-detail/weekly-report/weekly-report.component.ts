@@ -1,3 +1,4 @@
+import { pmReportDto } from './../../../../../service/model/pmReport.dto';
 import { ApproveDialogComponent } from './approve-dialog/approve-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
@@ -14,6 +15,7 @@ import { projectReportDto, projectProblemDto } from './../../../../../service/mo
 import { Component, OnInit, Injector } from '@angular/core';
 import { ProjectUserService } from '@app/service/api/project-user.service';
 import * as moment from 'moment';
+import { PmReportService } from '@app/service/api/pm-report.service';
 
 @Component({
   selector: 'app-weekly-report',
@@ -30,7 +32,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public processWeekly: boolean = false;
   public processFuture: boolean = false;
   public processProblem: boolean = false;
-
+  public searchPmReport:string="";
+  public activeReportId= {} as pmReportDto;
 
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
@@ -48,26 +51,25 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public projectHeathList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   private projectId: number;
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
-    private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog) {
+    private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
+    private pmreportService:PmReportService) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
   }
 
   ngOnInit(): void {
-    this.getWeeklyReport();
-    this.getFuturereport();
-    this.getProjectProblem();
+   
     this.getAllPmReport();
     this.getUser();
     this.minDate.setDate(this.minDate.getDate()+1)
   }
   public getWeeklyReport() {
-    this.reportService.getChangesDuringWeek(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.reportService.getChangesDuringWeek(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
   }
   public getFuturereport(): void {
-    this.reportService.getChangesInFuture(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.reportService.getChangesInFuture(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.futureReportList = data.result
     })
   }
@@ -77,7 +79,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
   }
   private getProjectProblem(): void {
-    this.reportIssueService.getProblemsOfTheWeek(this.projectId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+    this.reportIssueService.getProblemsOfTheWeek(this.projectId,this.activeReportId.id).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
       this.problemList = data.result;
     })
   }
@@ -199,8 +201,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   // Project Issue
   public getAllPmReport() {
-    this.reportService.GetAllPmReportProjectForDropDown().pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.pmreportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
+      this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem();
     })
   }
 
@@ -213,7 +219,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public saveProblemReport(problem: projectProblemDto) {
     delete problem["createMode"]
     if (!this.isEditProblem) {
-      this.reportIssueService.create(problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.reportIssueService.createReportIssue(this.projectId,problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         abp.notify.success("created new Issue");
         this.processProblem = false;
         problem.createMode = false;
@@ -267,6 +273,28 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.processProblem = true
     this.isEditProblem = true;
     Issue.createMode = true
+    Issue.status= this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
+    
   }
+  public onReportchange(){
+    this.getWeeklyReport();
+    this.getFuturereport();
+  }
+  public sendWeeklyreport(){
+    abp.message.confirm(
+      `send report ${this.activeReportId.name}? `,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.reportService.sendReport(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
+              abp.notify.success("Send report successful");
+          })
+        }
+      }
+    );
 
+
+
+    
+  }
 }

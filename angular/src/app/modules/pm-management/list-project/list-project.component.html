@@ -84,12 +84,16 @@
                     class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
                             <td>{{project.projectType}}</td>
                             <td>{{project.clientName}}</td>
-                            <td style="min-width: 200px; "><app-user-info [userData]="filterUser(project.pmId)"></app-user-info> </td>
+                            <td style="min-width: 200px; "><app-user-info [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                                userType:project.pmUserType,emailAddress:project.pmEmailAddress}"></app-user-info> </td>
                            
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
                             <td>{{project.endTime | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center">
-                                <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge"></mat-checkbox>
+                                <i style="cursor: default; color: green;;" class="fas fa-check fa-lg " *ngIf="project.isCharge"></i>
+                                <i style="cursor: default; " class="fas fa-times fa-lg text-danger" *ngIf="!project.isCharge"></i>
+
+                                <!-- <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge"></mat-checkbox> -->
                             </td>
                             <td class="text-center"> <span  [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
                             <td class="text-center" style="padding: 12px;">
