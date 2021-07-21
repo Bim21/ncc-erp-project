@@ -1,7 +1,7 @@
 <form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
     <div class="card-header">
-        <h3 *ngIf="data.command=='create'">Create</h3>
-        <h3 *ngIf="data.command!=='create'">Edit</h3>
+        <abp-modal-header title="Create/edit Timesheet" (onCloseClick)="dialogRef.close()">
+        </abp-modal-header>
     </div>
     <div class="modal-body">
         <div class="form-group row required">

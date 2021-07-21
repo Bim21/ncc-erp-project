@@ -211,7 +211,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('879411761479-bgjd9vk52gsrs937ve5vumnmcd7v64oe.apps.googleusercontent.com'
+            provider: new GoogleLoginProvider('879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com'
             ),
           },
         ],
