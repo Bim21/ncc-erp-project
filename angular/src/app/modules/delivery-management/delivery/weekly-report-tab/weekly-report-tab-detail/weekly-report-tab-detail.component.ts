@@ -1,3 +1,9 @@
+import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ApproveDialogComponent } from './../../../../pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
+import { UserService } from './../../../../../service/api/user.service';
+import { ProjectUserService } from './../../../../../service/api/project-user.service';
+import { projectUserDto } from './../../../../../service/model/project.dto';
 import { PmReportService } from './../../../../../service/api/pm-report.service';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { isNgTemplate } from '@angular/compiler';
@@ -12,6 +18,7 @@ import { PMReportProjectService } from './../../../../../service/api/pmreport-pr
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { JsonHubProtocol } from '@aspnet/signalr';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -36,12 +43,20 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public show: boolean = false;
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
+  public isActive="";
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
+  public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
+  public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public activeReportId: number;
-  public flagProblem=0;
+  public projectHealth;
+  public pmReportProjectId;
+  public isEditWeeklyReport:boolean=false;
+  public isEditFutureReport:boolean=false;
+  public isEditProblem:boolean=false;
+
 
 
 
@@ -49,14 +64,22 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
     injector: Injector,
+    private projectUserService: ProjectUserService,
+    private userService: UserService,
+    private dialog: MatDialog,
+    private requestservice: ProjectResourceRequestService,
   ) {
     super(injector)
   }
 
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
+    this.isActive=this.route.snapshot.queryParamMap.get('isActive');
+    console.log(this.isActive)
+   
     this.getPmReportProject();
     this.getActiveReport();
+    this.getUser();
    
   }
   public getPmReportProject(): void {
@@ -79,8 +102,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   
- 
-  view(item) {
+ public projectId;
+  view(item?) {
+    this.projectId=item;
     this.pmReportProjectList.forEach(element => {
       if(element.projectId==item){
         element.setBackground=true;
@@ -89,27 +113,29 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
     });
 
-    this.pmReportProjectService.getChangesDuringWeek(item,this.activeReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+    
+    this.getWeeklyReport();
+    this.getFuturereport();
+    this.getProjectProblem()
+    
+    
+  }
+  getWeeklyReport(){
+    this.pmReportProjectService.getChangesDuringWeek(this.projectId,this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
-
-    this.pmReportProjectService.getChangesInFuture(item,this.activeReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+  }
+  getFuturereport(){
+    this.pmReportProjectService.getChangesInFuture(this.projectId,this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.futureReportList = data.result;
     })
-    this.pmReportProjectService.problemsOfTheWeekForReport(item,this.activeReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-      
-      
-      if(data.result.listGreen.length !=0){
-        this.problemList = data.result.listGreen;
-        this.flagProblem=this.APP_ENUM.ProjectHealth["Green"];
-      }else if(data.result.listRed.length !=0){
-        this.problemList = data.result.listRed;
-        this.flagProblem=this.APP_ENUM.ProjectHealth["Red"];
-      }else{
-        this.problemList = data.result.listYellow;
-        this.flagProblem=this.APP_ENUM.ProjectHealth["Yellow"];
-      }
-      
+  }
+  getProjectProblem(){
+    this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId,this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.problemList = data.result.result;
+      this.pmReportProjectId=data.result.pmReportProjectId;
+      this.projectHealth= data.result.projectHealth;
+
     })
   }
   search() {
@@ -124,6 +150,243 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let item= {pmProjectList: this.pmReportProjectList,
     reportId: this.pmReportId}
     localStorage.setItem("read",JSON.stringify(item))
+  }
+  updateHealth(projectHealth){
+    this.pmReportProjectService.updateHealth(this.pmReportProjectId,projectHealth).subscribe((data)=>{
+      this.view(this.projectId);
+    })
+
+  }
+  //weekly
+  public addWeekReport() {
+    let newReport = {} as projectUserDto
+    newReport.createMode = true;
+    this.weeklyPeportList.unshift(newReport)
+    this.processWeekly = true;
+  }
+  public saveWeekReport(report: projectReportDto) {
+    report.isFutureActive = false
+    report.projectId = this.projectId
+    report.isExpense = true;
+    report.status = "0";
+    report.startTime = moment(report.startTime).format("YYYY-MM-DD");
+    delete report["createMode"]
+    if(this.isEditWeeklyReport){
+      this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+        this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+          abp.notify.success(`updated user: ${report.userName}`);
+          this.getWeeklyReport();
+          this.isEditFutureReport = false;
+          this.processWeekly = false;
+        })
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+      else{
+        this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+          abp.notify.success("created new weekly report");
+          this.processWeekly = false;
+          report.createMode = false;
+          this.getWeeklyReport();
+        },
+          () => {
+            report.createMode = true
+          })
+      }
+    
+
+  }
+  public cancelWeekReport() {
+    this.processWeekly = false;
+    this.getWeeklyReport();
+  }
+  updateWeekReport(report){
+    this.processWeekly = true
+    this.isEditWeeklyReport = true;
+    report.createMode = true;
+    report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
+    console.log("aaaaaaaaaaaa",report);
+  }
+  deleteWeekReport(report){
+    
+    abp.message.confirm(
+      "Delete Issue? ",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.removeProjectUser(report.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted Report");
+            this.getWeeklyReport();
+          });
+        }
+      }
+    );
+  }
+  
+
+  //Future
+  public getUser(): void {
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.userList = data.result;
+    })
+  }
+  public addFutureReport() {
+    let newReport = {} as projectUserDto
+    newReport.createMode = true;
+    this.futureReportList.unshift(newReport)
+    this.processFuture = true;
+  }
+  public saveFutureReport(report: projectReportDto) {
+    delete report["createMode"]
+    if (this.isEditFutureReport) {
+      this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+        this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+          abp.notify.success(`updated user: ${report.userName}`);
+          this.getFuturereport();
+          this.isEditFutureReport = false;
+          this.processFuture = false
+        })
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+    else {
+      report.isFutureActive = false
+      report.projectId = this.projectId
+      report.isExpense = true;
+      report.status = "2";
+      report.startTime = moment(report.startTime).format("YYYY-MM-DD");
+
+      this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        abp.notify.success("created new future report");
+        this.processFuture = false;
+        report.createMode = false;
+        this.isEditFutureReport = false
+        this.getFuturereport();
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+  }
+  public cancelFutureReport() {
+    this.processFuture = false;
+    this.getFuturereport();
+  }
+  public approveRequest(resource: projectUserDto): void {
+    this.showDialog(resource);
+
+  }
+  showDialog(resource: any): void {
+    let dialogData = {}
+    dialogData = {
+      id: resource.id,
+      userId: resource.userId,
+      projectRole: resource.projectRole,
+      startTime: resource.startTime,
+      allocatePercentage: resource.allocatePercentage
+    }
+    const dialogRef = this.dialog.open(ApproveDialogComponent, {
+      data: {
+        dialogData: resource,
+      },
+      width: "700px",
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getFuturereport();
+        this.getWeeklyReport();
+      }
+    });
+
+  }
+  
+  public rejectRequest(report): void {
+    this.requestservice.rejectRequest(report.id).pipe(catchError(this.requestservice.handleError)).subscribe(data => {
+      abp.notify.success("Rejected request")
+      this.getFuturereport();
+    })
+  }
+  public updateRequest(report): void {
+    this.processFuture = true
+    this.isEditFutureReport = true;
+    report.createMode = true;
+    report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
+    console.log("aaaaaaaaaaaa",report);
+  }
+  //
+  public addIssueReport() {
+    let newIssue = {} as projectProblemDto
+    newIssue.createMode = true;
+    this.problemList.unshift(newIssue)
+    this.processProblem = true;
+  }
+  public saveProblemReport(problem: projectProblemDto) {
+    problem.createdAt = moment(problem.createdAt).format("YYYY-MM-DD");
+    delete problem["createMode"]
+    if (!this.isEditProblem) {
+      this.reportIssueService.createReportIssue(this.projectId,problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+        abp.notify.success("created new Issue");
+        this.processProblem = false;
+        problem.createMode = false;
+        this.getProjectProblem();
+      },
+        () => {
+          problem.createMode = true
+        })
+    }
+    else {
+      this.reportIssueService.update(problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+        abp.notify.success("edited Issue");
+        this.processProblem = false;
+        problem.createMode = false;
+        this.getProjectProblem();
+        this.isEditProblem = false;
+      },
+        () => {
+          problem.createMode = true
+        })
+    }
+
+  }
+  public cancelProblemReport() {
+    this.processProblem = false;
+    this.getProjectProblem();
+  }
+  public editProblemReport(user: projectUserDto) {
+    this.isEditProblem = true;
+    user.createMode = true
+    user.status = this.APP_ENUM.ProjectUserStatus[user.status]
+    user.projectRole = this.APP_ENUM.ProjectUserRole[user.projectRole]
+    // this.projectUserProcess = true
+  }
+
+  public deleteProblem(problem) {
+    abp.message.confirm(
+      "Delete Issue? ",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.reportIssueService.deleteReportIssue(problem.id).pipe(catchError(this.reportIssueService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted Issue ");
+            this.getProjectProblem();
+          });
+        }
+      }
+    );
+  }
+  public updateReportIssue(Issue): void {
+    this.processProblem = true
+    this.isEditProblem = true;
+    Issue.createMode = true
+    Issue.status= this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
+    
   }
   
 

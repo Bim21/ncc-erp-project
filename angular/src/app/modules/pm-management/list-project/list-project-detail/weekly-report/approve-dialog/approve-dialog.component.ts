@@ -31,8 +31,13 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
     this.resourcerequest = this.data.dialogData
     this.resourcerequest.projectRole = this.APP_ENUM.ProjectUserRole[this.resourcerequest.projectRole]
   }
+  // public getAllUser(): void {
+  //   this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => this.userList = data.result);
+  // }
   public getAllUser(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => this.userList = data.result);
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      this.userList = data.result;
+    })
   }
   public saveAndClose(): void{
     this.resourcerequest.startTime = moment(this.resourcerequest.startTime).format("YYYY-MM-DD")
