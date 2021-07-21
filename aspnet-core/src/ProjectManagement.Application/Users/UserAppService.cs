@@ -195,9 +195,15 @@ namespace ProjectManagement.Users
             var roleIds = user.Roles.Select(x => x.RoleId).ToArray();
 
             var roles = _roleManager.Roles.Where(r => roleIds.Contains(r.Id)).Select(r => r.NormalizedName);
-
+            var userSkill = _workScope.GetAll<UserSkill>().Where(x => x.UserId == user.Id).Select(x => new UserSkillDto
+            {
+                UserId = x.UserId,
+                SkillId = x.SkillId,
+                SkillName = x.Skill.Name
+            });
             var userDto = base.MapToEntityDto(user);
             userDto.RoleNames = roles.ToArray();
+            userDto.UserSkills = userSkill.ToList();
 
             return userDto;
         }

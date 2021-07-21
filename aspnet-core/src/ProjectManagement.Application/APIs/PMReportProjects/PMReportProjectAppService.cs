@@ -47,6 +47,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
         public async Task<GetResultpmReportProjectIssue> ProblemsOfTheWeekForReport(long ProjectId, long pmReportId)
         {
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
             var query = from prpi in WorkScope.GetAll<PMReportProjectIssue>()
                          .Where(x => x.PMReportProject.ProjectId == ProjectId && x.PMReportProject.PMReportId == pmReportId)
                          .OrderByDescending(x => x.CreationTime)
@@ -66,8 +67,8 @@ namespace ProjectManagement.APIs.PMReportProjects
 
             var result = query.Select(x => new GetResultpmReportProjectIssue
             {
-                PmReportProjectId = query.Select(x => x.PMReportProjectId).FirstOrDefault(),
-                ProjectHealth = query.Select(x => x.ProjectHealth).FirstOrDefault(),
+                PmReportProjectId = pmReportProject.Id,
+                ProjectHealth = pmReportProject.ProjectHealth,
                 Result = query.ToList()
             });
 
@@ -78,7 +79,8 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth)]
         public async Task UpdateHealth(long pmReportProjectId, ProjectHealth projectHealth)
         {
-            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
+                                        .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
 
             if(!pmReportProject.PMReport.IsActive || pmReportProject.Status == PMReportProjectStatus.Sent)
             {
