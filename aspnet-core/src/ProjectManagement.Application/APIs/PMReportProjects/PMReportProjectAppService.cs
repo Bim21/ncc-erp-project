@@ -47,31 +47,45 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
         public async Task<GetResultpmReportProjectIssue> ProblemsOfTheWeekForReport(long ProjectId, long pmReportId)
         {
-            var query = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId)
-                        join prpi in WorkScope.GetAll<PMReportProjectIssue>().OrderByDescending(x => x.CreationTime)
-                        on prp.Id equals prpi.PMReportProjectId into lst
-                        from p in lst.DefaultIfEmpty()
+            var query = from prpi in WorkScope.GetAll<PMReportProjectIssue>()
+                         .Where(x => x.PMReportProject.ProjectId == ProjectId && x.PMReportProject.PMReportId == pmReportId)
+                         .OrderByDescending(x => x.CreationTime)
                         select new GetPMReportProjectIssueDto
                         {
-                            Id = p.Id,
-                            PMReportProjectId = p.PMReportProjectId,
-                            Description = p.Description,
-                            Impact = p.Impact,
-                            Critical = p.Critical.ToString(),
-                            Source = p.Source.ToString(),
-                            Solution = p.Solution,
-                            MeetingSolution = p.MeetingSolution,
-                            ProjectHealth = prp.ProjectHealth,
-                            Status = p.Status.ToString()
+                            Id = prpi.Id,
+                            PMReportProjectId = prpi.PMReportProjectId,
+                            Description = prpi.Description,
+                            Impact = prpi.Impact,
+                            Critical = prpi.Critical.ToString(),
+                            Source = prpi.Source.ToString(),
+                            Solution = prpi.Solution,
+                            MeetingSolution = prpi.MeetingSolution,
+                            Status = prpi.Status.ToString()
                         };
+
             var result = query.Select(x => new GetResultpmReportProjectIssue
             {
-                ListGreen = query.Where(q => q.ProjectHealth == ProjectHealth.Green).ToList(),
-                ListYellow = query.Where(q => q.ProjectHealth == ProjectHealth.Yellow).ToList(),
-                ListRed = query.Where(q => q.ProjectHealth == ProjectHealth.Red).ToList()
+                PmReportProjectId = query.Select(x => x.PMReportProjectId).FirstOrDefault(),
+                ProjectHealth = query.Select(x => x.ProjectHealth).FirstOrDefault(),
+                Result = query.ToList()
             });
 
             return await result.FirstOrDefaultAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth)]
+        public async Task UpdateHealth(long pmReportProjectId, ProjectHealth projectHealth)
+        {
+            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+
+            if(!pmReportProject.PMReport.IsActive || pmReportProject.Status == PMReportProjectStatus.Sent)
+            {
+                throw new UserFriendlyException("Report has been sent or closed !");
+            }
+
+            pmReportProject.ProjectHealth = projectHealth;
+            await WorkScope.UpdateAsync(pmReportProject);
         }
 
         [HttpGet]
