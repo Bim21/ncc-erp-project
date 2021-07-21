@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AuditResultService } from './../../../../service/api/auditresult.service';
 import { CreateEditSaoDoProjectComponent } from './create-edit-sao-do-project/create-edit-sao-do-project.component';
 import { SaodoDetailDto } from './../../../../service/model/saodo.dto';
@@ -23,6 +24,10 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
   public saodoId:any;
   public saodoName='';
   public projectName:any;
+  SaoDo_AuditResultPeople = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople;
+  SaoDo_AuditResultPeople_Create = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Create;
+  SaoDo_AuditResultPeople_Update = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Update;
+  SaoDo_AuditResultPeople_Delete = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Delete;
   
   
   

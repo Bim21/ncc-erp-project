@@ -1,0 +1,13 @@
+/* mat-list-item:hover{
+    background-color: aliceblue;
+} */
+.active{
+    background-color:#dce1e6;
+    border-radius: 3px;
+}
+.list-project:hover{
+    background-color:#eaebec;
+}
+::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin{
+    margin-top: 80%;
+}

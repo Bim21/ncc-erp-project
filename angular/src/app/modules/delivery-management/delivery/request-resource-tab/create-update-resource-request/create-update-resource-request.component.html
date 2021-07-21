@@ -74,22 +74,17 @@
                 </mat-error>
             </div>
         </div>
-        <div class="form-group row required">
+        <div class="form-group row">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Time Done:
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline">
                     <input matInput [matDatepicker]="pickerEnd" name="endTime"
-                        [(ngModel)]="resourceRequestDto.timeDone" #timeDone="ngModel" required>
+                        [(ngModel)]="resourceRequestDto.timeDone" #timeDone="ngModel">
                     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEnd></mat-datepicker>
                 </mat-form-field>
-                <mat-error class="mt-1" *ngIf="timeDone.hasError('required') && timeDone.touched"
-                    style="font-size: 13px;">
-                    This field is required
-                </mat-error>
-
             </div>
         </div>
 
