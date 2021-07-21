@@ -60,4 +60,11 @@ export abstract class AppComponentBase {
     isGranted(permissionName: string): boolean {
         return this.permission.isGranted(permissionName);
     }
+    public getByEnum(enumValue: number, enumObject: any) {
+        for (const key in enumObject) {
+          if (enumObject[key] == enumValue) {
+            return key;
+          }
+        }
+      }
 }

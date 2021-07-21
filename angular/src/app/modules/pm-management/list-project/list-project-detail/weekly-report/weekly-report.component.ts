@@ -195,7 +195,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     }
     const dialogRef = this.dialog.open(ApproveDialogComponent, {
       data: {
-        dialogData: resource,
+        dialogData: dialogData,
       },
       width: "700px",
       disableClose: true,

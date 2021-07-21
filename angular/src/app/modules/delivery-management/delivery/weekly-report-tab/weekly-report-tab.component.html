@@ -55,7 +55,7 @@
                             <td class="text-center">{{i+1}}</td>
                             <td class="text-center"><span
                                 class="hyperlink" (click)="showDetail(item.id)">{{item.name}}</span></td>
-                            <td class="text-center">{{item.numberOfProject}}</td>
+                            <td class="text-center"><strong>{{item.numberOfProject}}</strong></td>
                             <td class="text-center">
                                 <p *ngIf="!item.isActive">Đã khóa</p>
                                 <button *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)" class="btn bg-blue" (click)="closeReport(item)">

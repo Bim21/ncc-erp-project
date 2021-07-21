@@ -20,33 +20,16 @@
         <div class="card-header">
           <div class="input-group">
             <div class="input-group-prepend">
-              <button
-                type="button"
-                class="btn bg-blue"
-                (click)="getDataPage(1)"
-              >
+              <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
                 <i class="fas fa-search"></i>
               </button>
             </div>
-            <input
-              type="text"
-              class="form-control"
-              name="keyword"
-              [placeholder]="'SearchWithThreeDot' | localize"
-              [(ngModel)]="keyword"
-              (keyup.enter)="getDataPage(1)"
-            />
+            <input type="text" class="form-control" name="keyword" [placeholder]="'SearchWithThreeDot' | localize"
+              [(ngModel)]="keyword" (keyup.enter)="getDataPage(1)" />
             <div class="input-group-append">
-              <button
-                type="button"
-                class="btn btn-default"
-                (click)="advancedFiltersVisible = !advancedFiltersVisible"
-              >
-                <i
-                  class="fas"
-                  [class.fa-angle-up]="advancedFiltersVisible"
-                  [class.fa-angle-down]="!advancedFiltersVisible"
-                ></i>
+              <button type="button" class="btn btn-default" (click)="advancedFiltersVisible = !advancedFiltersVisible">
+                <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                  [class.fa-angle-down]="!advancedFiltersVisible"></i>
               </button>
             </div>
           </div>
@@ -61,48 +44,23 @@
                       </label>
                       <div class="col-md-9 pt-2">
                         <div class="custom-control custom-radio d-inline">
-                          <input
-                            type="radio"
-                            class="custom-control-input"
-                            id="isActiveAll"
-                            name="isActive"
-                            [(ngModel)]="isActive"
-                            [value]="undefined"
-                            checked
-                          />
+                          <input type="radio" class="custom-control-input" id="isActiveAll" name="isActive"
+                            [(ngModel)]="isActive" [value]="undefined" checked />
                           <label class="custom-control-label" for="isActiveAll">
                             {{ "All" | localize }}
                           </label>
                         </div>
                         <div class="custom-control custom-radio d-inline mx-3">
-                          <input
-                            type="radio"
-                            class="custom-control-input"
-                            id="isActiveActive"
-                            name="isActive"
-                            [(ngModel)]="isActive"
-                            [value]="true"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="isActiveActive"
-                          >
+                          <input type="radio" class="custom-control-input" id="isActiveActive" name="isActive"
+                            [(ngModel)]="isActive" [value]="true" />
+                          <label class="custom-control-label" for="isActiveActive">
                             {{ "Yes" | localize }}
                           </label>
                         </div>
                         <div class="custom-control custom-radio d-inline">
-                          <input
-                            type="radio"
-                            class="custom-control-input"
-                            id="isActivePassive"
-                            name="isActive"
-                            [(ngModel)]="isActive"
-                            [value]="false"
-                          />
-                          <label
-                            class="custom-control-label"
-                            for="isActivePassive"
-                          >
+                          <input type="radio" class="custom-control-input" id="isActivePassive" name="isActive"
+                            [(ngModel)]="isActive" [value]="false" />
+                          <label class="custom-control-label" for="isActivePassive">
                             {{ "No" | localize }}
                           </label>
                         </div>
@@ -113,18 +71,10 @@
               </form>
             </div>
             <div class="card-footer">
-              <button
-                type="button"
-                class="btn bg-blue"
-                (click)="getDataPage(1)"
-              >
+              <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
                 {{ "Search" | localize }}
               </button>
-              <button
-                type="button"
-                class="btn btn-default float-right"
-                (click)="clearFilters()"
-              >
+              <button type="button" class="btn btn-default float-right" (click)="clearFilters()">
                 {{ "Clear" | localize }}
               </button>
             </div>
@@ -134,16 +84,17 @@
           <table class="table table-hover text-nowrap" [busy]="isLoading">
             <thead class="bg-light">
               <tr>
+                <th>{{ "User" | localize }}</th>
                 <th>{{ "UserName" | localize }}</th>
-                <th>{{ "FullName" | localize }}</th>
-                <th>{{ "EmailAddress" | localize }}</th>
+                <th>userCode</th>
+                <th>userLevel</th>
+                <th>userSkills</th>
                 <th>{{ "IsActive" | localize }}</th>
                 <th style="width: 310px;">{{ "Actions" | localize }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
+              <tr *ngFor="
                   let user of users
                     | paginate
                       : {
@@ -152,19 +103,18 @@
                           currentPage: pageNumber,
                           totalItems: totalItems
                         }
-                "
-              >
-                <td>{{ user.userName }}</td>
-                <td>{{ user.fullName }}</td>
-                <td>{{ user.emailAddress }}</td>
+                ">
                 <td>
+                  <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                  userType:user.userType,emailAddress:user.emailAddress}"></app-user-info>
+                </td>
+                <td class="text-center">{{ user.userName }}</td>
+                <td class="text-center">{{user.userCode}}</td>
+                <td class="text-center">{{getByEnum(user.userLevel, APP_ENUM.UserLevel)}}</td>
+                <td class="text-center"><span *ngFor="let skill of user.userSkills; let i=index">{{skill.skillName}}<span *ngIf="i < user.userSkills.length-1">, </span> </span></td>
+                <td class="text-center">
                   <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      disabled
-                      [checked]="user.isActive"
-                    />
+                    <input type="checkbox" class="custom-control-input" disabled [checked]="user.isActive" />
                     <label class="custom-control-label"></label>
                   </div>
                 </td>
@@ -185,11 +135,7 @@
                     <i class="fas fa-trash"></i>
                     {{ "Delete" | localize }}
                   </button>
-                  <button
-                    type="button"
-                    class="btn btn-sm bg-secondary"
-                    (click)="resetPassword(user)"
-                  >
+                  <button type="button" class="btn btn-sm bg-secondary" (click)="resetPassword(user)">
                     <i class="fas fa-lock"></i>
                     {{ "ResetPassword" | localize }}
                   </button>
@@ -212,10 +158,7 @@
             </div>
             <div class="col-sm-4 col-12">
               <div class="float-sm-right m-auto">
-                <abp-pagination-controls
-                  id="server"
-                  (pageChange)="getDataPage($event)"
-                >
+                <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
                 </abp-pagination-controls>
               </div>
             </div>

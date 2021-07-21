@@ -1,3 +1,5 @@
+import { SkillService } from './../../service/api/skill.service';
+import { UserSkillDto } from './../../service/model/skill.dto';
 import {
   Component,
   Injector,
@@ -25,11 +27,16 @@ export class EditUserDialogComponent extends AppComponentBase
   roles: RoleDto[] = [];
   checkedRolesMap: { [key: string]: boolean } = {};
   id: number;
+  skillList:UserSkillDto[] = [];
+  userLevelList = Object.keys(this.APP_ENUM.UserLevel);
+  userBranchList = Object.keys(this.APP_ENUM.Branch);
+  userTypeList = Object.keys(this.APP_ENUM.UserType);
 
   @Output() onSave = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
+    private skillService:SkillService,
     public _userService: UserServiceProxy,
     public bsModalRef: BsModalRef
   ) {
@@ -37,14 +44,22 @@ export class EditUserDialogComponent extends AppComponentBase
   }
 
   ngOnInit(): void {
+    this.getAllSkill();
     this._userService.get(this.id).subscribe((result) => {
       this.user = result;
+      console.log(this.user);
+      this.user.userSkills = this.user.userSkills.map(item=>item.skillId)
 
       this._userService.getRoles().subscribe((result2) => {
         this.roles = result2.items;
         this.setInitialRolesStatus();
       });
     });
+  }
+  getAllSkill(){
+    this.skillService.getAll().subscribe(data =>{
+      this.skillList =data.result
+    })
   }
 
   setInitialRolesStatus(): void {
@@ -74,6 +89,12 @@ export class EditUserDialogComponent extends AppComponentBase
   }
 
   save(): void {
+   this.user.userSkills =  this.user.userSkills.map(item=>{
+      return  {
+        userId: this.user.id,
+        skillId: item
+      };
+    })
     this.saving = true;
 
     this.user.roleNames = this.getCheckedRoles();
