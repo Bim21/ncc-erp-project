@@ -39,13 +39,11 @@ export class CreateEditProjectChecklistComponent extends AppComponentBase implem
   ngOnInit(): void {
     this.projectId = this.route.snapshot.queryParamMap.get('id');
     this.listChecklistItemId = this.data.listChecklistItem;
-    console.log(this.listChecklistItemId);
     this.getChecklistCategory();
   }
   public getChecklistCategory() {
     this.checklistItemService.getAll().subscribe(data => {
       this.listItems = data.result.filter(item => !this.listChecklistItemId.includes(item.id))
-      console.log(this.listItems);
     })
   }
   SaveAndClose() {

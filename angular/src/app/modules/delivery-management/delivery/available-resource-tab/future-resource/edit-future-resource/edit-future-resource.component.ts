@@ -30,9 +30,7 @@ export class EditFutureResourceComponent extends AppComponentBase implements OnI
 
   ngOnInit(): void {
     this.getAllProject();
-    
     this.editUser=this.data.futureResource;
-    console.log("userId", this.data.futureResource)
   }
   public SaveAndClose(){
     if(this.data.command=="update"){

@@ -53,7 +53,6 @@ export class CreateEditSaodoComponent extends AppComponentBase implements OnInit
   ngOnInit(): void {
     if (this.data.command == "edit") {
       this.saodo = this.data.item;
-      console.log(this.data.item)
     }
   }
   SaveAndClose(){

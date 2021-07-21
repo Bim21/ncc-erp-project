@@ -93,10 +93,10 @@
                                 </div>
                             </td>
 
-                            <td> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
+                            <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
 
                                 <div class="form-group row required" *ngIf="report.createMode">
-                                    <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="report.projectRole" name="projectrole"
                                             placeholder="select a role" required #projectPM="ngModel">
                                             <mat-option *ngFor="let role of projectRoleList"
@@ -113,17 +113,19 @@
                             <td class="text-center"> <span *ngIf="!report.createMode">
                                     {{report.startTime | date:"dd/MM/yyyy"}}
                                 </span>
-                                <mat-form-field appearance="outline" *ngIf="report.createMode">
-                                    <input matInput [matDatepicker]="picker" placeholder="chose a date" required
-                                        [(ngModel)]="report.startTime" name="usercreateDate">
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
+                                <div class="form-group row required" *ngIf="report.createMode">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <input matInput [matDatepicker]="picker" placeholder="chose a date" required
+                                            [(ngModel)]="report.startTime" name="usercreateDate">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
                             </td>
-                            <td>
-                                <p *ngIf="!report.createMode" class="text-center"> <strong>
-                                        {{report.allocatePercentage}}%</strong></p>
-                                <div *ngIf="report.createMode">
+                            <td class="text-center">
+                                <span *ngIf="!report.createMode" > <strong>
+                                        {{report.allocatePercentage}}%</strong></span>
+                                <div *ngIf="report.createMode" class="form-group row required">
                                     <input class="form-control mt-1" type="text" mask="percent" required
                                         #Percentage="ngModel" #PercentageEl suffix="%"
                                         [(ngModel)]="report.allocatePercentage" placeholder="number" />
@@ -212,10 +214,11 @@
                                 </div>
                             </td>
 
-                            <td> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
+                            <td class="text-center">
+                                 <p *ngIf="!report.createMode">{{ report.projectRole }}</p>
 
                                 <div class="form-group row required" *ngIf="report.createMode">
-                                    <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="report.projectRole" name="projectrole"
                                             placeholder="select a role" required #projectPM="ngModel">
                                             <mat-option *ngFor="let role of projectRoleList"
@@ -232,19 +235,24 @@
                             <td class="text-center"> <span *ngIf="!report.createMode">
                                     {{report.startTime | date:"dd/MM/yyyy"}}
                                 </span>
-                                <mat-form-field appearance="outline" *ngIf="report.createMode">
-                                    <input [min]="minDate" matInput [matDatepicker]="picker" placeholder="chose a date"
-                                        [(ngModel)]="report.startTime" name="usercreateDate">
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
+                                <div class="form-group row required">
+                                    <mat-form-field class="w-100" appearance="outline" *ngIf="report.createMode">
+                                        <input [min]="minDate" matInput [matDatepicker]="picker"
+                                            placeholder="chose a date" [(ngModel)]="report.startTime"
+                                            name="usercreateDate">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
                             </td>
 
-                            <td>
-                                <p class="text-center" *ngIf="!report.createMode"><strong>
-                                        {{report.allocatePercentage}}%</strong></p>
-                                <input class="form-control mt-1" placeholder="number" *ngIf="report.createMode"
-                                    type="text" mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage" />
+                            <td  class="text-center">
+                                <span *ngIf="!report.createMode"><strong>
+                                        {{report.allocatePercentage}}%</strong></span>
+                                <div class="form-group row required">
+                                    <input class="form-control" placeholder="number" *ngIf="report.createMode"
+                                        type="text" mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage" />
+                                </div>
                             </td>
                             <td class="text-center" *ngIf="activeReportId.isActive">
                                 <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
@@ -332,8 +340,8 @@
                             <td>
 
                                 <p *ngIf="!problem.createMode">{{problem.description}}</p>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="example-full-width" appearance="outline">
+                                <div class="form-group row required" *ngIf="problem.createMode" >
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
                                             placeholder="leave a comment" name="description"
                                             [(ngModel)]="problem.description" matInput></textarea>
@@ -344,8 +352,8 @@
                             </td>
                             <td>
                                 <p *ngIf="!problem.createMode">{{problem.impact}}</p>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="example-full-width" appearance="outline">
+                                <div *ngIf="problem.createMode" class="form-group row required">
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
                                             placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
                                             matInput></textarea>
@@ -356,8 +364,8 @@
 
                             <td>
                                 <p *ngIf="!problem.createMode">{{problem.solution}}</p>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="example-full-width" appearance="outline">
+                                <div *ngIf="problem.createMode" class="form-group row required">
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
                                             placeholder="leave a comment" name="solution" [(ngModel)]="problem.solution"
                                             matInput></textarea>
@@ -368,8 +376,8 @@
                             <td>
 
                                 <p *ngIf="!problem.createMode">{{problem.meetingSolution}}</p>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="example-full-width" appearance="outline">
+                                <div *ngIf="problem.createMode" class="form-group row required">
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
                                             placeholder="leave a comment" name="meetingSolution"
                                             [(ngModel)]="problem.meetingSolution" matInput></textarea>
@@ -381,7 +389,7 @@
                                     *ngIf="!problem.createMode">{{ problem.status }}</span>
 
                                 <div class="form-group row required" *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                    <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="problem.status" name="issueStatus"
                                             placeholder="select a status" required #issueStatus="ngModel">
                                             <mat-option *ngFor="let status of isssueStatusList"

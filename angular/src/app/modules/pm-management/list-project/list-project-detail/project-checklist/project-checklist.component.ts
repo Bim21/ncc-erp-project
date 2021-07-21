@@ -31,7 +31,6 @@ export class ProjectChecklistComponent extends AppComponentBase implements OnIni
     this.projectChecklistService.GetCheckListItemByProject(this.projectId).subscribe(data=>{
       this.listCheckList=data.result;
       this.listChecklistItem=this.listCheckList.map(el=>el.id);
-      console.log(this.listCheckList)
     })
   }
   showDialog(command:string,projectChecklist:any){

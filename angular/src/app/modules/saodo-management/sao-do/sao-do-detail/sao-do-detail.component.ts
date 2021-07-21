@@ -46,7 +46,6 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
     this.saodoService.getById(this.saodoId).subscribe(data=>{
       this.listSaoDoDetail= data.result;
       this.projectName=data.result.map(el=>el.projectName)
-      console.log(this.listSaoDoDetail)
     })
   }
   protected delete(item: SaodoDetailDto): void {
