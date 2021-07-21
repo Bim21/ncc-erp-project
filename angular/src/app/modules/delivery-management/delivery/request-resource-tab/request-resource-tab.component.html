@@ -87,7 +87,7 @@
                             <td>{{item.timeNeed}}</td>
                             <td>{{item.description}}</td>
                             <td class="text-center">
-                                <p>{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</p>
+                                <span [ngClass]="APP_CONST.statusStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
                                 
                             </td>
                             <td class="text-center">

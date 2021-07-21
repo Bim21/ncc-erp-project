@@ -61,7 +61,7 @@
                                                 </mat-form-field>
                                                 <mat-option *ngFor="let user of userForProjectUser |filter:searchUser"
                                                     [value]="user.id">
-                                                    {{user.fullName}}</mat-option>
+                                                    {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="mt-1"
@@ -335,8 +335,8 @@
                                     }  ; let i = index">
                                 <td><span>{{ i +1 }}</span></td>
                                 <td class="text-left">
-                                    <p *ngIf="!bill.createMode"> <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
-                                        userType:bill.userType,emailAddress:bill.emailAddress}"></app-user-info></p>
+                                    <span *ngIf="!bill.createMode"> <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
+                                        userType:bill.userType,emailAddress:bill.emailAddress}"></app-user-info></span>
                                     <div *ngIf="bill.createMode">
 
                                         <mat-form-field class="w-100" appearance="outline">
@@ -349,7 +349,7 @@
                                                 <mat-option
                                                     *ngFor="let user of userForUserBill | filter: searchUserBill"
                                                     [value]="user.id">
-                                                    {{user.name}}</mat-option>
+                                                    {{user.name}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="mt-1"
@@ -361,7 +361,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.billRole}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.billRole}}</span>
                                     <div *ngIf="bill.createMode">
                                         <div class="form-group row required" *ngIf="bill.createMode">
                                             <mat-form-field class="w-100" appearance="outline">
@@ -381,8 +381,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
-                                        {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
+                                        {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</span>
                                     <div *ngIf="bill.createMode">
                                         <input required class="form-control mt-1" #billRate="ngModel" #billRateEl
                                             type="text" mask="separator" thousandSeparator="." placeholder="number"
@@ -393,7 +393,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                     <div *ngIf="bill.createMode">
                                         <mat-form-field appearance="outline">
                                             <input matInput [matDatepicker]="billStarttimePicker"
@@ -406,7 +406,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
                                     <div *ngIf="bill.createMode">
                                         <mat-form-field appearance="outline">
                                             <input matInput [matDatepicker]="billEndtimepicker"

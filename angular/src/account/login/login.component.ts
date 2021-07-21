@@ -18,20 +18,20 @@ export class LoginComponent extends AppComponentBase {
     injector: Injector,
     public authService: AppAuthService,
     private _sessionService: AbpSessionService,
-    // private googleAuthService: SocialAuthService,
+    private googleAuthService: SocialAuthService,
     private loginService: LoginService
   ) {
     super(injector);
   }
-  // ngOnInit(): void {
-  //   this.googleAuthService.authState.subscribe((user) => {
-  //     this.user = user;
-  //     this.loggedIn = (user != null);
-  //     if (this.loggedIn) {
-  //       this.loginService.authenticateGoogle(this.user.idToken);
-  //    }
-  //   });
-  // }
+  ngOnInit(): void {
+    this.googleAuthService.authState.subscribe((user) => {
+      this.user = user;
+      this.loggedIn = (user != null);
+      if (this.loggedIn) {
+        this.loginService.authenticateGoogle(this.user.idToken);
+     }
+    });
+  }
   get multiTenancySideIsTeanant(): boolean {
     return this._sessionService.tenantId > 0;
   }
@@ -47,7 +47,7 @@ export class LoginComponent extends AppComponentBase {
     this.submitting = true;
     this.authService.authenticate(() => (this.submitting = false));
   }
-  // signInWithGoogle() {
-  //   this.googleAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
-  // }
+  signInWithGoogle() {
+    this.googleAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
 }

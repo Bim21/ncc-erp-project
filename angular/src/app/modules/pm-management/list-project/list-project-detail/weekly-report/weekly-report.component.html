@@ -82,7 +82,7 @@
                                             </mat-form-field>
                                             <mat-option *ngFor="let user of userList |filter:searchUser"
                                                 [value]="user.id">
-                                                {{user.name}}</mat-option>
+                                                {{user.name}} - ({{user.emailAddress}})</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <mat-error class="mt-1"
@@ -192,8 +192,8 @@
                                 </div>
                                 <div *ngIf="report.createMode" class="form-group row required">
                                     <mat-form-field class="w-100" appearance="outline">
-                                        <mat-select [(ngModel)]="report.userId" name="projectEmployee"
-                                            placeholder="select a role" required #projectEmployee="ngModel">
+                                        <mat-select [(ngModel)]="report.userId" name="reportUser"
+                                            placeholder="select a role" required #reportUser="ngModel">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                 <input matInput [(ngModel)]="searchUser" name="searchUser"
@@ -201,11 +201,11 @@
                                             </mat-form-field>
                                             <mat-option *ngFor="let user of userList |filter:searchUser"
                                                 [value]="user.id">
-                                                {{user.name}}</mat-option>
+                                                {{user.name}} - ({{user.emailAddress}})</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <mat-error class="mt-1"
-                                        *ngIf="projectEmployee.hasError('required') && projectEmployee.touched"
+                                        *ngIf="reportUser.hasError('required') && reportUser.touched"
                                         style="font-size: 13px;">
                                         This field is required
                                     </mat-error>
@@ -314,7 +314,6 @@
                             <th>STT</th>
                             <th>Vấn đề</th>
                             <th>Impact</th>
-
                             <th>Solution</th>
                             <th>meetingSolution</th>
                             <th>Trạng thái</th>

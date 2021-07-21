@@ -67,8 +67,8 @@
                                     <td><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                         userType:item.userType,emailAddress:item.emailAddress}"></app-user-info></td>
                                     <td class="text-center">{{item.projectRole}}</td>
-                                    <td class="text-center">{{item.startTime |  date:"dd/MM/yyyy"}}</td>
-                                    <td class="text-center">{{item.allocatePercentage}}</td>
+                                    <td class="text-center">{{item.startTime |date:"dd/MM/yyyy"}}</td>
+                                    <td class="text-center"><strong>{{item.allocatePercentage}}%</strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -108,7 +108,7 @@
                                     <td><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                         userType:item.userType,emailAddress:item.emailAddress}"></app-user-info> </td>
                                     <td class="text-center">{{item.startTime |date:"dd/MM/yyyy"}}</td>
-                                    <td class="text-center">{{item.allocatePercentage}}</td>                                 
+                                    <td class="text-center"><strong>{{item.allocatePercentage}}%</strong></td>                                 
                                 </tr>
                             </tbody>
                         </table>
@@ -152,8 +152,8 @@
                                         <th>STT</th>
                                         <th>Vấn đề</th>
                                         <th>Impact</th>
-                                        <th>Trạng thái</th>
-                                        <th>Solution</th>            
+                                        <th>Solution</th>    
+                                        <th>Trạng thái</th>        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -161,8 +161,8 @@
                                         <td>{{i+1}}</td>
                                         <td>{{item.description}}</td>
                                         <td>{{item.impact}}</td>
-                                        <td class="text-center"> <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[item.status]">{{item.status}}</span></td>
                                         <td>{{item.solution}}</td>
+                                        <td class="text-center"> <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[item.status]">{{item.status}}</span></td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -8,9 +8,9 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
 {
     public class GetResultpmReportProjectIssue
     {
-        public List<GetPMReportProjectIssueDto> ListGreen { get; set; }
-        public List<GetPMReportProjectIssueDto> ListYellow { get; set; }
-        public List<GetPMReportProjectIssueDto> ListRed { get; set; }
+        public long PmReportProjectId { get; set; }
+        public ProjectHealth ProjectHealth { get; set; }
+        public List<GetPMReportProjectIssueDto> Result { get; set; }
     }
 
     public class GetPMReportProjectIssueDto : EntityDto<long>

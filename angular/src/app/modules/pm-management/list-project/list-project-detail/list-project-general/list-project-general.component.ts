@@ -72,6 +72,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
       this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
         abp.notify.success("updated: " + this.project.name);
         this.readMode = true;
+        this.isLoading=false;
         this.getProjectDetail();
       }, () => this.isLoading = false);
   }
