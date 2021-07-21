@@ -24,5 +24,6 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
         public string MeetingSolution { get; set; }
         public ProjectHealth ProjectHealth { get; set; }
         public string Status { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

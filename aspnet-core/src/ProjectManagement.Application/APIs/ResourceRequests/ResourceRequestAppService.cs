@@ -199,7 +199,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id).Select(x => x.ProjectName).ToList(),
-                                    Used = (byte)projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)
+                                    Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)
                                 });
 
             return await users.GetGridResult(users, input);

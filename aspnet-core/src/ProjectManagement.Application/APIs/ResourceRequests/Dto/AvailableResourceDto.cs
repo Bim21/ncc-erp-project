@@ -13,6 +13,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public List<string> Projects { get; set; }
-        public byte Used { get; set; }
+        public int Used { get; set; }
     }
 }

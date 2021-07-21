@@ -35,7 +35,8 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                             Source = prpi.Source.ToString(),
                             Solution = prpi.Solution,
                             MeetingSolution = prpi.MeetingSolution,
-                            Status = prpi.Status.ToString()
+                            Status = prpi.Status.ToString(),
+                            CreatedAt = prpi.CreationTime
                         };
             return await query.ToListAsync();
         }

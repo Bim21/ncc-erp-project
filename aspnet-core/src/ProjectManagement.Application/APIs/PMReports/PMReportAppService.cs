@@ -23,7 +23,7 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
-            var pmRepoertProject = WorkScope.GetAll<PMReportProject>();
+            var pmReportProject = WorkScope.GetAll<PMReportProject>();
             var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
             {
                 Id = x.Id,
@@ -31,22 +31,26 @@ namespace ProjectManagement.APIs.PMReports
                 Year = x.Year,
                 IsActive = x.IsActive,
                 Type = x.Type,
-                NumberOfProject = pmRepoertProject.Where(y => y.PMReportId == x.Id).Count()
+                NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count()
             });
             return await query.GetGridResult(query, input);
         }
 
         [HttpGet]
-        public async Task<List<PMReportDto>> GetAll()
+        public async Task<List<GetPMReportDto>> GetAll(long projectId)
         {
-            return await WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
+            var pmReportProject = WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId); 
+            var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
             {
                 Id = x.Id,
                 Name = x.Name,
                 IsActive = x.IsActive,
                 Year = x.Year,
-                Type = x.Type
-            }).ToListAsync();
+                Type = x.Type,
+                PMReportProjectStatus = pmReportProject.FirstOrDefault(p => p.PMReportId == x.Id).Status.ToString()
+            });
+
+            return await query.ToListAsync();
         }
 
         [HttpPost]
@@ -73,7 +77,7 @@ namespace ProjectManagement.APIs.PMReports
                                                Issue = prpi
                                            };
 
-            var projectActive = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed).ToListAsync();
+            var projectActive = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Closed).ToListAsync();
             foreach (var item in projectActive)
             {
                 
