@@ -51,7 +51,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             Id = tsp.Id,
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
                             ProjectId = tsp.ProjectId,
-                            TimesheetFile = "/timesheets/" + tsp.FilePath,
+                            TimesheetFile = tsp.FilePath,
                             Note = tsp.Note
                         };
             return await query.ToListAsync();
