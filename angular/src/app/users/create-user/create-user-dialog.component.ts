@@ -1,3 +1,5 @@
+import { UserSkillDto } from './../../service/model/skill.dto';
+import { SkillService } from './../../service/api/skill.service';
 import {
   Component,
   Injector,
@@ -24,8 +26,12 @@ export class CreateUserDialogComponent extends AppComponentBase
   saving = false;
   user = new CreateUserDto();
   roles: RoleDto[] = [];
+  skillList:UserSkillDto[] = [];
   checkedRolesMap: { [key: string]: boolean } = {};
   defaultRoleCheckedStatus = false;
+  userLevelList = Object.keys(this.APP_ENUM.UserLevel);
+  userBranchList = Object.keys(this.APP_ENUM.Branch);
+  userTypeList = Object.keys(this.APP_ENUM.UserType);
   passwordValidationErrors: Partial<AbpValidationError>[] = [
     {
       name: 'pattern',
@@ -45,20 +51,25 @@ export class CreateUserDialogComponent extends AppComponentBase
   constructor(
     injector: Injector,
     public _userService: UserServiceProxy,
-    public bsModalRef: BsModalRef
+    public bsModalRef: BsModalRef,
+    private skillService:SkillService
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.user.isActive = true;
-
+    this.getAllSkill();
     this._userService.getRoles().subscribe((result) => {
       this.roles = result.items;
       this.setInitialRolesStatus();
     });
   }
-
+  getAllSkill(){
+    this.skillService.getAll().subscribe(data =>{
+      this.skillList =data.result
+    })
+  }
   setInitialRolesStatus(): void {
     _map(this.roles, (item) => {
       this.checkedRolesMap[item.normalizedName] = this.isRoleChecked(
@@ -104,5 +115,13 @@ export class CreateUserDialogComponent extends AppComponentBase
         this.bsModalRef.hide();
         this.onSave.emit();
       });
+      console.log(this.user);
+  }
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
   }
 }

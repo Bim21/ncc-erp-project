@@ -154,11 +154,6 @@ export const APP_ENUMS = {
         ProbationaryStaff: 3
     },
 
-    // Branch: {
-    //     HaNoi : 0,
-    //     DaNang : 1,
-    //     HCM : 2,
-    //     Other : 4
-    // }
+   
 
 }

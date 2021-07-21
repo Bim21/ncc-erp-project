@@ -15,9 +15,12 @@
                     <div class=" table-responsive p-4" style="overflow: auto;">
                           <mat-list *ngFor="let item of pmReportProjectList" >
                               <div class="row list-project" [ngClass]="item.setBackground==true?'active':''">
-                                  <div class="col-9">
-                                    <mat-list-item style="cursor:pointer" role="item.projectId" (click)="view(item.projectId);">
-                                        {{item.projectName}}
+                                  <div class="col-9" >
+                                    <mat-list-item style="cursor:pointer," role="item.projectId" (click)="view(item.projectId);">
+                                        <p style="position: absolute;
+                                        top: 0; max-width: 90%;">   
+                                            {{item.projectName}}
+                                        </p>
                                     </mat-list-item>
                                   </div>
                                   <div class="col-3">

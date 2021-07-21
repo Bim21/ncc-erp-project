@@ -63,27 +63,9 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProjectIssue_Create: "DeliveryManagement.PMReportProjectIssue.Create",
     DeliveryManagement_PMReportProjectIssue_Delete: "DeliveryManagement.PMReportProjectIssue.Delete",
     DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek: "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek",
-    DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue_.Update",
-
-   
+    DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue.Update",
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
     Pages_Users_Create: "Pages.Users.Create",
     Pages_Users_Delete: "Pages.Users.Delete",
     Pages_Users_ImportUserFromFile: "Pages.Users.ImportUserFromFile",

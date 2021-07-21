@@ -7,7 +7,7 @@
                 {{ 'Name' | localize }}:
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="projectName" id="projectName" minlength="2" maxlength="64"
+                <input type="text" class="form-control" name="projectName" id="projectName" 
                     required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl />
                 <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
                 </abp-validation-summary>
