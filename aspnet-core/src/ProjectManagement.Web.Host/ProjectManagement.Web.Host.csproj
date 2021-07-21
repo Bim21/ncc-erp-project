@@ -49,7 +49,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="timesheets\" />
     <Folder Include="wwwroot\avatars\" />
   </ItemGroup>
 </Project>
