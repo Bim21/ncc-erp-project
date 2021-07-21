@@ -60,7 +60,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                             Source = prpi.Source.ToString(),
                             Solution = prpi.Solution,
                             MeetingSolution = prpi.MeetingSolution,
-                            Status = prpi.Status.ToString()
+                            Status = prpi.Status.ToString(),
+                            CreatedAt = prpi.CreationTime
                         };
 
             var result = query.Select(x => new GetResultpmReportProjectIssue
