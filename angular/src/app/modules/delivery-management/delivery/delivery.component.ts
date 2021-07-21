@@ -15,8 +15,8 @@ export class DeliveryComponent extends AppComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentUrl =this.router.url
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
-
     this.router.navigate(['weekly-report-tab'], {
       relativeTo: this.route ,
       replaceUrl: true
@@ -36,7 +36,7 @@ export class DeliveryComponent extends AppComponentBase implements OnInit {
     })
   }
   routingAvailableResourceTab(){
-    this.router.navigate(['available-resource-tab'],{
+    this.router.navigate(['available-resource-tab/plan-resource'],{
       relativeTo:this.route
     })
   }

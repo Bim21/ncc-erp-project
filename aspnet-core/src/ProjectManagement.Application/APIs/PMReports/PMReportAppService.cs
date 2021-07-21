@@ -23,7 +23,7 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
-            var pmRepoertProject = WorkScope.GetAll<PMReportProject>();
+            var pmReportProject = WorkScope.GetAll<PMReportProject>();
             var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
             {
                 Id = x.Id,
@@ -31,22 +31,26 @@ namespace ProjectManagement.APIs.PMReports
                 Year = x.Year,
                 IsActive = x.IsActive,
                 Type = x.Type,
-                NumberOfProject = pmRepoertProject.Where(y => y.PMReportId == x.Id).Count()
+                NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count()
             });
             return await query.GetGridResult(query, input);
         }
 
         [HttpGet]
-        public async Task<List<PMReportDto>> GetAll()
+        public async Task<List<GetPMReportDto>> GetAll(long projectId)
         {
-            return await WorkScope.GetAll<PMReport>().Select(x => new PMReportDto
+            var pmReportProject = WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId); 
+            var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
             {
                 Id = x.Id,
                 Name = x.Name,
                 IsActive = x.IsActive,
                 Year = x.Year,
-                Type = x.Type
-            }).ToListAsync();
+                Type = x.Type,
+                PMReportProjectStatus = pmReportProject.FirstOrDefault(p => p.PMReportId == x.Id).Status.ToString()
+            });
+
+            return await query.ToListAsync();
         }
 
         [HttpPost]
@@ -57,18 +61,26 @@ namespace ProjectManagement.APIs.PMReports
             if (isExist)
                 throw new UserFriendlyException("PM Report already exist !");
 
-            var activeReport = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).ToListAsync();
-            foreach(var item in activeReport)
-            {
-                item.IsActive = false;
-                await WorkScope.UpdateAsync(item);
-            }
+            var activeReport = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            activeReport.IsActive = false;
+            await WorkScope.UpdateAsync(activeReport);
 
+            input.Year = DateTime.Now.Year;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReport>(input));
 
-            var projectActive = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed).ToListAsync();
+            var pmReportProjectInProcess = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == activeReport.Id)
+                                           join prpi in WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.Status == PMReportProjectIssueStatus.InProgress)
+                                           on prp.Id equals prpi.PMReportProjectId
+                                           select new
+                                           {
+                                               ProjectId = prp.ProjectId,
+                                               Issue = prpi
+                                           };
+
+            var projectActive = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Closed).ToListAsync();
             foreach (var item in projectActive)
             {
+                
                 var pmReportProject = new PMReportProject
                 {
                     PMReportId = input.Id,
@@ -78,7 +90,25 @@ namespace ProjectManagement.APIs.PMReports
                     PMId = item.PMId,
                     Note = null
                 };
-                await WorkScope.InsertAndGetIdAsync(pmReportProject);
+                pmReportProject.Id = await WorkScope.InsertAndGetIdAsync(pmReportProject);
+
+                var listInProcess = pmReportProjectInProcess.Where(x => x.ProjectId == item.Id).Select(x => x.Issue);
+                foreach(var issue in listInProcess)
+                {
+                    var pmReportProjectIssue = new PMReportProjectIssue
+                    {
+                       PMReportProjectId = pmReportProject.Id,
+                       CreationTime = issue.CreationTime,
+                       Description = issue.Description,
+                       Impact = issue.Impact,
+                       Critical = issue.Critical,
+                       Source = issue.Source,
+                       Solution = issue.Solution,
+                       MeetingSolution = issue.MeetingSolution,
+                       Status = issue.Status
+                    };
+                    await WorkScope.InsertAsync(pmReportProjectIssue);
+                }
             }
 
             return input;
@@ -121,9 +151,6 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<string> CloseReport(long pmReportId)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
-
-            pmReport.IsActive = false;
-            await WorkScope.UpdateAsync(pmReport);
 
             var newPmReport = new PMReportDto
             {

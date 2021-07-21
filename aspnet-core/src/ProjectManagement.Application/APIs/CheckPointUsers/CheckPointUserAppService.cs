@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Abp.UI;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.Authorization.Users;
 
 namespace ProjectManagement.APIs.CheckPointUsers
 {
@@ -58,21 +59,40 @@ namespace ProjectManagement.APIs.CheckPointUsers
                          }).FirstOrDefaultAsync();
         }
         [HttpPost]
-        public async Task<CheckPointUserInputDto> Create(CheckPointUserInputDto input)
+        //Set up ai đánh giá ai
+        public async Task<CheckPointUserInputDto> Create(CheckPointUserInputDto input, bool isAdmin)
         {
             var isExist = await WorkScope.GetAll<CheckPointUser>().AnyAsync(x => x.ReviewerId == input.ReviewerId && x.UserId == input.UserId);
             if(isExist)
             {
                 throw new UserFriendlyException("This user has been evaluated by this reviewer!");
             }
-            var map = ObjectMapper.Map<CheckPointUser>(input);
-            input.Id = await WorkScope.InsertAndGetIdAsync(map);
-            //Tạo tiêu chí đánh giá 
+            if(!isAdmin)
+            {
+                var checkPointUser = new CheckPointUser
+                {
+                    UserId = AbpSession.UserId.Value,
+                    ReviewerId = input.ReviewerId,
+                    Type = CheckPointUserType.Team,
+                    Status = CheckPointUserStatus.Draft,
+                    PhaseId = input.PhaseId
+                };
+                await WorkScope.InsertAndGetIdAsync(checkPointUser);
+                await GenerateDetail(checkPointUser.Id, input.PhaseId);
+            }
+            else
+            {
+                var map = ObjectMapper.Map<CheckPointUser>(input);
+                input.Id = await WorkScope.InsertAndGetIdAsync(map);
+                //Tạo tiêu chí đánh giá 
 
-            await GenerateDetail(input.Id, input.PhaseId);
-            
+                await GenerateDetail(input.Id, input.PhaseId);
+            }
+
             return input;
         }
+        [HttpPost]
+        //Setup mình đánh giá ai
         [HttpPut]
         public async Task<CheckPointUserInputDto> Update(CheckPointUserInputDto input)
         {
@@ -140,36 +160,6 @@ namespace ProjectManagement.APIs.CheckPointUsers
             }
         }
 
-        //public async Task<object> GetUnReview(long reviewerId, long userId)
-        //{
-        //    var userProjects = await (from p in WorkScope.GetAll<ProjectUser>()
-        //                              .Include(x => x.Project)
-        //                              .Where(x => x.Status == ProjectUserStatus.Present)
-        //                              group p by new { p.UserId, p.ProjectId } into g
-        //                              select new
-        //                              {
-        //                                  UserId = g.Key.UserId,
-        //                                  ProjectId = g.Key.ProjectId
-        //                              }).ToListAsync();
-        //    var userPMs =  (from u in userProjects
-        //                  join p in WorkScope.GetAll<Project>()
-        //                  on u.ProjectId equals p.Id
-        //                  select new
-        //                  {
-        //                      UserId = u.UserId,
-        //                      ReviewerId = p.PMId
-        //                  }).ToList();
-
-        //    var reviewed = WorkScope.GetAll<CheckPointUser>()
-        //                            .Where(x => x.ReviewerId == reviewerId && x.UserId == userId)
-        //                            .Select(x=> new
-        //                            {
-        //                                UserId = x.UserId,
-        //                                reviewerId = x.ReviewerId
-        //                            }).ToList();
-        //    return await userPMs.Except(reviewed);
-        //}
-
         private async Task GenerateDetail(long checkpointUserId, long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
@@ -187,6 +177,72 @@ namespace ProjectManagement.APIs.CheckPointUsers
                     await WorkScope.InsertAsync(detail);
                 }
             }
+        }
+        public async Task<object> GetUserUnreview(long phaseId)
+        {
+            var userCheckPointIds = await WorkScope.GetAll<CheckPointUser>()
+                                        .Include(x=>x.User)
+                                        .Where(x => x.PhaseId == phaseId)
+                                        .Select(x => x.UserId).ToListAsync();
+            var userCurrent = await WorkScope.GetAll<User>()
+                                        .Where(x=>x.IsActive)
+                                        .Select(x => new 
+                                        {
+                                            UserId = x.Id,
+                                            UserName = x.FullName,
+
+                                        }).ToListAsync();
+
+            var userUnrevieweds = userCurrent.Where(x => !userCheckPointIds.Contains(x.UserId)).ToList();
+
+            return userUnrevieweds;
+        }
+
+        public async Task<object> GetAllPhase()
+        {
+            return await WorkScope.GetAll<Phase>()
+                        .Select(x => new
+                        {
+                            x.Id, x.Name
+                        }).ToListAsync();
+        }
+        [HttpPost]
+        public async Task<GridResult<CheckPointUserDto>> GetAllReviewForSelf(GridParam input)
+        {
+            var result =  WorkScope.GetAll<CheckPointUser>()
+                                .Where(x => x.UserId == AbpSession.UserId.Value)
+                                .Select(x => new CheckPointUserDto
+                                {
+                                    ReviewerId = x.ReviewerId,
+                                    ReviewerName = x.Reviewer.FullName,
+                                    ReviewerEmail = x.Reviewer.EmailAddress,
+                                    ReviewerAvatar =  x.Reviewer.AvatarPath,
+                                    Status = x.Status,
+                                    Type = x.Type,
+                                    Score = x.Score,
+                                    Note = x.Note
+                                });
+                       
+            return await result.GetGridResult(result, input);
+        }
+        [HttpPost]
+        public async Task<GridResult<CheckPointUserDto>> GetAllReviewBySelf(GridParam input)
+        {
+            var result = WorkScope.GetAll<CheckPointUser>()
+                                .Where(x => x.ReviewerId == AbpSession.UserId.Value)
+                                .Select(x => new CheckPointUserDto
+                                {
+                                    UserId = x.UserId,
+                                    UserName = x.User.FullName,
+                                    UserEmail = x.User.EmailAddress,
+                                    UserAvatar = x.User.AvatarPath,
+                                    Status = x.Status,
+                                    Type = x.Type,
+                                    Score = x.Score,
+                                    Note = x.Note
+                                });
+
+            return await result.GetGridResult(result, input);
         }
     }
 }

@@ -6,6 +6,13 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
 {
+    public class GetResultpmReportProjectIssue
+    {
+        public long PmReportProjectId { get; set; }
+        public ProjectHealth ProjectHealth { get; set; }
+        public List<GetPMReportProjectIssueDto> Result { get; set; }
+    }
+
     public class GetPMReportProjectIssueDto : EntityDto<long>
     {
         public long PMReportProjectId { get; set; }
@@ -15,7 +22,8 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
         public string Source { get; set; }
         public string Solution { get; set; }
         public string MeetingSolution { get; set; }
-        public string Flag { get; set; }
+        public ProjectHealth ProjectHealth { get; set; }
         public string Status { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

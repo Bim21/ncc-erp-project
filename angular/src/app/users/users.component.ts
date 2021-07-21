@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { Component, Injector } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -29,7 +30,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   keyword = '';
   isActive: boolean | null;
   advancedFiltersVisible = false;
-
+  Pages_Users_Create=PERMISSIONS_CONSTANT.Pages_Users_Create;
+  Pages_Users_Delete=PERMISSIONS_CONSTANT.Pages_Users_Delete;
+  Pages_Users_ImportUserFromFile=PERMISSIONS_CONSTANT.Pages_Users_ImportUserFromFile;
+  Pages_Users_Update=PERMISSIONS_CONSTANT.Pages_Users_Update;
+  Pages_Users_UpdateAvatar=PERMISSIONS_CONSTANT.Pages_Users_UpdateAvatar;
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,

@@ -10,6 +10,7 @@ import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
+import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -149,6 +150,22 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
 importFile(id:number){
   this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data=>{
   })
+}
+
+downloadFile(projectTimesheet:any){
+  this.timesheetProjectService.GetTimesheetFile(projectTimesheet.id).subscribe(data=>{
+    const file = new Blob([this.s2ab(atob(data.result.data))], {
+      type: "application/vnd.ms-excel;charset=utf-8"
+    });
+    FileSaver.saveAs(file, data.result.fileName);
+  })
+ 
+}
+s2ab(s) {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+  return buf;
 }
 
 

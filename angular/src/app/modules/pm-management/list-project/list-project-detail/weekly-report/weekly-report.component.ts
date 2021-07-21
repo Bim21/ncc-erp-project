@@ -1,3 +1,5 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
+import { pmReportDto } from './../../../../../service/model/pmReport.dto';
 import { ApproveDialogComponent } from './approve-dialog/approve-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
@@ -14,6 +16,7 @@ import { projectReportDto, projectProblemDto } from './../../../../../service/mo
 import { Component, OnInit, Injector } from '@angular/core';
 import { ProjectUserService } from '@app/service/api/project-user.service';
 import * as moment from 'moment';
+import { PmReportService } from '@app/service/api/pm-report.service';
 
 @Component({
   selector: 'app-weekly-report',
@@ -30,17 +33,30 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public processWeekly: boolean = false;
   public processFuture: boolean = false;
   public processProblem: boolean = false;
-
+  public searchPmReport:string="";
+  public activeReportId= {} as pmReportDto;
 
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
-
-
   public isEditProblem: boolean = false;
   public isEditFutureReport: boolean = false;
   public minDate = new Date();
+  DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
+  DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
+  DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
+  DeliveryManagement_PMReportProject_GetAll=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
+  DeliveryManagement_PMReportProject_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
+  DeliveryManagement_PMReportProject_GetAllByPmProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
+  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
+  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
+  DeliveryManagement_PMReportProject_SendReport=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
+  DeliveryManagement_PMReportProjectIssue=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
+  DeliveryManagement_PMReportProjectIssue_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
+  DeliveryManagement_PMReportProjectIssue_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
+  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
+  DeliveryManagement_PMReportProjectIssue_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
 
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
@@ -48,28 +64,32 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public projectHeathList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   private projectId: number;
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
-    private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog) {
+    private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
+    private pmreportService:PmReportService) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
   }
 
   ngOnInit(): void {
-    this.getWeeklyReport();
-    this.getFuturereport();
-    this.getProjectProblem();
+   
     this.getAllPmReport();
     this.getUser();
     this.minDate.setDate(this.minDate.getDate()+1)
   }
   public getWeeklyReport() {
-    this.reportService.getChangesDuringWeek(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.reportService.getChangesDuringWeek(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
   }
+  
   public getFuturereport(): void {
-    this.reportService.getChangesInFuture(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
-      this.futureReportList = data.result
-    })
+    if(this.permission.isGranted(this.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)){
+      this.reportService.getChangesInFuture(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+        this.futureReportList = data.result
+      })
+    }
+
+    
   }
   public getUser(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
@@ -77,9 +97,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
   }
   private getProjectProblem(): void {
-    this.reportIssueService.getProblemsOfTheWeek(this.projectId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-      this.problemList = data.result;
-    })
+    if(this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)){
+      this.reportIssueService.getProblemsOfTheWeek(this.projectId,this.activeReportId.id).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+        this.problemList = data.result;
+      })
+    }
+    
   }
   // Weekly report
   public addWeekReport() {
@@ -199,8 +222,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   // Project Issue
   public getAllPmReport() {
-    this.reportService.GetAllPmReportProjectForDropDown().pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.pmreportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
+      this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem();
     })
   }
 
@@ -213,7 +240,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public saveProblemReport(problem: projectProblemDto) {
     delete problem["createMode"]
     if (!this.isEditProblem) {
-      this.reportIssueService.create(problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.reportIssueService.createReportIssue(this.projectId,problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         abp.notify.success("created new Issue");
         this.processProblem = false;
         problem.createMode = false;
@@ -267,6 +294,29 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.processProblem = true
     this.isEditProblem = true;
     Issue.createMode = true
+    Issue.status= this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
+    
   }
+  public onReportchange(){
+    this.getWeeklyReport();
+    this.getFuturereport();
+    this.getProjectProblem();
+  }
+  public sendWeeklyreport(){
+    abp.message.confirm(
+      `send report ${this.activeReportId.name}? `,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.reportService.sendReport(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
+              abp.notify.success("Send report successful");
+          })
+        }
+      }
+    );
 
+
+
+    
+  }
 }

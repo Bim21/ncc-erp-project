@@ -65,6 +65,8 @@
                             <th>Request</th>
                             <th>Project</th>
                             <th>Số nhân sự đã plan</th>
+                            <th>Time Need</th>
+                            <th>Description</th>
                             <th>Trạng thái</th>
                             <th>Actions</th>
                         </tr>
@@ -82,12 +84,14 @@
                                 class="hyperlink" (click)="showDetail(item.id)">{{ item.name }}</span></td>
                             <td class="text-center">{{item.projectName}}</td>
                             <td class="text-center">{{item.plannedNumberOfPersonnel}}</td>
+                            <td>{{item.timeNeed}}</td>
+                            <td>{{item.description}}</td>
                             <td class="text-center">
-                                <p>{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</p>
+                                <span [ngClass]="APP_CONST.statusStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
                                 
                             </td>
                             <td class="text-center">
-                                <button *ngIf="DeliveryManagement_PMReport_CloseReport(DeliveryManagement_ResourceRequest_Update)"
+                                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
                                 
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editRequest(item);$event.stopPropagation()">

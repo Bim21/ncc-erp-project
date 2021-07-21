@@ -6,7 +6,7 @@
             </div>
             
             <div class="col-6 text-right">
-                <button type="button" class="btn bg-blue" (click)="createSaodoDetail()" >
+                <button *ngIf="permission.isGranted(SaoDo_AuditResultPeople_Create)" type="button" class="btn bg-blue" (click)="createSaodoDetail()" >
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -50,12 +50,12 @@
                             <td><span
                                 class="hyperlink" (click)="showDetail(saodo)">{{saodo.projectName}}</span></td>
                             <td>{{saodo.pmName}}</td>
-                            <td>{{saodo.auditResultStatus}}</td>
-                            <td>{{saodo.countFail}}</td>
+                            <td class="text-center"><span [ngClass]="APP_CONST.SaodoStatusStyle[saodo.auditResultStatus]">{{saodo.auditResultStatus}}</span></td>
+                            <td class="text-center"><strong>{{saodo.countFail}}</strong></td>
                             <!-- <td>{{saodo.startTime}}</td>
                             <td>{{saodo.endTime}}</td> -->
                             <td  class="text-center">
-                                <button  
+                                <button  *ngIf="permission.isGranted(SaoDo_AuditResultPeople_Update)"
                                 class="btn btn-sm bg-secondary mr-1" 
                                 (click)="editSaodoDetail(saodo)" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -63,6 +63,7 @@
                                 Edit
                             </button>
                             <button 
+                            *ngIf="permission.isGranted(SaoDo_AuditResultPeople_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(saodo)"
                                  #deleteBtn>

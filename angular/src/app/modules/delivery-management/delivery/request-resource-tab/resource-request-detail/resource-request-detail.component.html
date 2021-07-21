@@ -18,7 +18,8 @@
                             <td class="text-center">
                                 <span>{{ i + 1 }}</span>
                             </td>
-                            <td class="text-center">{{ item.fullName }}</td>
+                            <td class="text-center"><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
+                                userType:item.userType,emailAddress:item.emailAddress}"></app-user-info></td>
                             <td class="text-center">{{ item.startTime | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center">{{ item.allocatePercentage }}%</td>
                             <td class="text-center" style="width: 100px;">
@@ -75,7 +76,8 @@
                             <td class="text-center">
                                 <span>{{ i + 1 }}</span>
                             </td>
-                            <td class="text-center">{{ item.userName }}</td>
+                            <td class="text-center"><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
+                                userType:item.userType,emailAddress:item.emailAddress}"></app-user-info></td>
                             <td class="text-center">{{ item.startTime | date:"dd/MM/yyyy" }}</td>
                             <td class="text-center">{{ item.undisposed }}%</td>
                             <td class="text-center">

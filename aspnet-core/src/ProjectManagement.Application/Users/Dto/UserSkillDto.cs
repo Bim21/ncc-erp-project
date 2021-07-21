@@ -9,5 +9,6 @@ namespace ProjectManagement.Users.Dto
     {
         public long UserId { get; set; }
         public long SkillId { get; set; }
+        public string SkillName { get; set; }
     }
 }

@@ -79,7 +79,6 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
   }
 
   updateFutureResource(user){
-    console.log("aaaaaaaaa")
     this.showDialog("update",user);
   }
 

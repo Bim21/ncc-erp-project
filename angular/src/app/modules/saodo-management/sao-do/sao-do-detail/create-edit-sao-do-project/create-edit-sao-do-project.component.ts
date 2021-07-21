@@ -30,7 +30,6 @@ export class CreateEditSaoDoProjectComponent extends AppComponentBase implements
   ngOnInit(): void {
     this.projectName = this.data.projectSaodoName;
     this.saodoProject=this.data.item;
-    console.log(this.saodoProject)
     this.saodoProject.auditSessionId=this.route.snapshot.queryParamMap.get('id');
     
     this.getAllProject();
@@ -55,7 +54,6 @@ export class CreateEditSaoDoProjectComponent extends AppComponentBase implements
   getAllProject() {
     this.projectService.getAll().subscribe(data => {
       this.projectList = data.result.filter(item =>!this.projectName.includes(item.name) && item.status=="InProgress");
-      console.log(this.projectList)
     })
   }
   getAllUser() {

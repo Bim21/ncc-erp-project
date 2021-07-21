@@ -4,7 +4,7 @@
             <div class="col-6">
                 <h1>Timesheet Detail</h1>
             </div>
-            
+
         </div>
     </div>
 </section>
@@ -19,28 +19,21 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
-                    <input (keyup.enter)="search()" type="text" matInput class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-                         />
+                    <input (keyup.enter)="search()" type="text" matInput class="form-control" name="keyword"
+                        placeholder="Search" [(ngModel)]="searchText" />
                 </div>
             </div>
-            <div class="card-body table-responsive p-4">
-                <div class="row">
-                    <div class="col-6 text-left">
-                        <button  (click)="createTimeSheet()"
-                            class="btn bg-blue">
+    
+                
+                    <div class="col-6 text-left ml-3 mt-3">
+                        <button (click)="createTimeSheet()" class="btn bg-blue">
                             <i class="fa fa-plus-square"></i>
-                           Create
+                            Create
                         </button>
                     </div>
-                    <div class="col-6 text-right" style="margin-bottom:20px">
-                        <button
-                            class="btn bg-blue">
-                            <i class="fa fa-plus-square"></i>
-                           Create Invoice
-                        </button>
-                    </div>
-                </div>
-                <div class="col-12 text-right">
+                
+                <div class="col-12 ">
+                    <div class="card-body table-responsive p-4">
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
@@ -55,51 +48,52 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of TimesheetDetaiList let i = index"  >
-                                <td  class="text-center"><span >{{ i +1 }}</span></td>
-                                <td  class="text-center">{{item.projectName}}</td>
-                                <td  class="text-center">{{item.pmName}}</td>
-                                <td  class="text-center">{{item.clientName}}</td>
-                                <td  style="white-space: normal; width: 250px;">{{item.note}}</td>
-                                <td class="text-left"  ><div [innerHtml]="item.projectBillInfomation"></div></td>
-                                <td style="text-align: center;"> 
-                                    <a [href]="timesheetProjectService.baseUrl+'/timesheets/'+item.file">
-
-                                        <span>{{item.file}}</span>
-
-                                    </a>
+                            <tr *ngFor="let item of TimesheetDetaiList let i = index">
+                                <td class="text-center"><span>{{ i +1 }}</span></td>
+                                <td class="text-center">{{item.projectName}}</td>
+                                <td class="text-left"  >
+                                    <div style="width: 300px;">
+                                        <app-user-info [userData]="{fullName:item.pmFullName,branch:item.pmBranch,
+                                            userType:item.pmUserType,emailAddress:item.pmEmailAddress}"></app-user-info>
+                                    </div>
+                                   
+                                </td>
+                                <td class="text-center">{{item.clientName}}</td>
+                                <td style="white-space: normal; width: 250px;">{{item.note}}</td>
+                                <td class="text-left">
+                                    <div [innerHtml]="item.projectBillInfomation"></div>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span class="file-download">
+                                        <span (click)="downloadFile(item)">{{item.file}}</span>
+                                    </span>
                                     <span *ngIf="item.file !==null" style="margin-left: 5px;">
-                                        <i class="fas fa-times" (click)="DeleteFile(item)"></i>
+                                        <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(item)"></i>
                                     </span>
                                 </td>
-                                <td  class="text-center">
-                                    <button 
-                                    class="btn btn-sm bg-secondary mr-1" 
-                                    (click)="editTimesheet(item);$event.stopPropagation()" >
-                                    <i class="fas fa-pencil-alt"></i>
-    
-                                    Edit
-                                </button>
-                                <button
-                                    class="btn btn-sm bg-success ml-1"
-                                    (click)="importExcel(item.id)"
-                                     #importFileBtn>
-                                     <i class="fas fa-upload"></i>
-                                    Import File
-                                </button>
-                                <button
-                                    class="btn btn-sm bg-danger ml-1"
-                                    (click)="delete(item);$event.stopPropagation()"
-                                     #deleteBtn>
-                                    <i class="fas fa-trash"></i>
-                                    Delete
-                                </button>
+                                <td class="text-center">
+                                    <button class="btn btn-sm bg-success mr-1" (click)="importExcel(item.id)"
+                                        #importFileBtn>
+                                        <i class="fas fa-upload"></i>
+                                        Import File
+                                    </button>
+                                    <button class="btn btn-sm bg-secondary mr-1"
+                                        (click)="editTimesheet(item);$event.stopPropagation()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-sm bg-danger ml-1"
+                                        (click)="delete(item);$event.stopPropagation()" #deleteBtn>
+                                        <i class="fas fa-trash"></i>
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+                </div>
+            
         </div>
     </div>
 </section>

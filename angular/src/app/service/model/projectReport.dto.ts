@@ -27,4 +27,5 @@ export class projectProblemDto{
     status: string;
     id: number;
     createMode?:boolean;
+    flag:string;
 }

@@ -51,13 +51,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             Id = tsp.Id,
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
                             ProjectId = tsp.ProjectId,
-                            TimesheetFile = "/timesheets/" + tsp.FilePath,
+                            TimesheetFile = tsp.FilePath,
                             Note = tsp.Note
                         };
             return await query.ToListAsync();
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_ViewInvoice)]
         public async Task<List<GetDetailInvoiceDto>> ViewInvoice(long timesheetId)
         {
             var query = from c in WorkScope.GetAll<Client>()
@@ -73,89 +74,92 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return await query.ToListAsync();
         }
 
-        //[HttpPost]
-        //public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
-        //{
-        //    var timesheetProject = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == input.TimesheetId && x.Timesheet.IsActive);
-        //    var query = WorkScope.GetAll<Client>().Where(x => timesheetProject.Select(p => p.Project.ClientId).Contains(x.Id))
-        //        .Select(x => new
-        //        {
-        //            ClientId = x.Id,
-        //            ClientName = x.Name,
-        //            ClientCode = x.Code,
-        //            Month = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(m => m.Timesheet.Month).FirstOrDefault(),
-        //            Year = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(m => m.Timesheet.Year).FirstOrDefault(),
-        //            TimesheetProject = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(p => new
-        //            {
-        //                ProjectName = p.Project.Name,
-        //                FilePath = "timesheets/" + p.FilePath
-        //            }).ToList()
-        //        });
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_CreateInvoice)]
+        public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
+        {
+            var timesheetProject = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == input.TimesheetId && x.Timesheet.IsActive);
+            var query = WorkScope.GetAll<Client>().Where(x => timesheetProject.Select(p => p.Project.ClientId).Contains(x.Id))
+                .Select(x => new
+                {
+                    ClientId = x.Id,
+                    ClientName = x.Name,
+                    ClientCode = x.Code,
+                    Month = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(m => m.Timesheet.Month).FirstOrDefault(),
+                    Year = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(m => m.Timesheet.Year).FirstOrDefault(),
+                    TimesheetProject = timesheetProject.Where(p => p.Project.ClientId == x.Id).Select(p => new
+                    {
+                        ProjectName = p.Project.Name,
+                        FileId = p.Id,
+                        FilePath = p.FilePath
+                    }).ToList()
+                });
 
-        //    var createInvoice = new List<CreateInvoiceDto>();
-        //    foreach (var isMerge in input.MergeInvoice)
-        //    {
-        //        if(isMerge.isMergeInvoice)
-        //        {
-        //            var client = query.Where(c => c.ClientId == isMerge.ClientId);
-        //            var projectName = new StringBuilder();
-        //            foreach (var item in client)
-        //            {
-        //                foreach (var p in item.TimesheetProject)
-        //                {
-        //                    projectName.Append($"{p.ProjectName}_");
-        //                }
-        //                var invoice = new CreateInvoiceDto
-        //                {
-        //                    Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{projectName}]",
-        //                    TimeAt = $"{DateTime.Now}",
-        //                    AccountCode = item.ClientCode,
-        //                    TotalPrice = 0,
-        //                    Status = InvoiceStatus.New,
-        //                    Note = null,
-        //                    Detail = item.TimesheetProject.Select(x => new InvoiceDetailDto
-        //                    {
-        //                        ProjectName = x.ProjectName,
-        //                        LinkFile = x.FilePath
-        //                    }).ToList()
-        //                };
-        //                createInvoice.Add(invoice);
-        //            }
-        //        } else
-        //        {
-        //            var client1 = query.Where(c => c.ClientId == isMerge.ClientId);
+            var createInvoice = new List<CreateInvoiceDto>();
+            foreach (var isMerge in input.MergeInvoice)
+            {
+                if (isMerge.isMergeInvoice)
+                {
+                    var client = query.Where(c => c.ClientId == isMerge.ClientId);
+                    var projectName = new StringBuilder();
+                    foreach (var item in client)
+                    {
+                        foreach (var p in item.TimesheetProject)
+                        {
+                            projectName.Append($"{p.ProjectName}_");
+                        }
+                        var invoice = new CreateInvoiceDto
+                        {
+                            Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{projectName}]",
+                            AccountCode = item.ClientCode,
+                            TotalPrice = 0,
+                            Status = InvoiceStatus.New,
+                            Note = null,
+                            Detail = item.TimesheetProject.Select(x => new InvoiceDetailDto
+                            {
+                                ProjectName = x.ProjectName,
+                                FileId = x.FileId,
+                                LinkFile = x.FilePath
+                            }).ToList()
+                        };
+                        createInvoice.Add(invoice);
+                    }
+                }
+                else
+                {
+                    var client = query.Where(c => c.ClientId == isMerge.ClientId);
 
-        //            foreach (var item in client1)
-        //            {
-        //                foreach (var p in item.TimesheetProject)
-        //                {
-        //                    var invoice = new CreateInvoiceDto
-        //                    {
-        //                        Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{p.ProjectName}]",
-        //                        TimeAt = $"{DateTime.Now}",
-        //                        AccountCode = item.ClientCode,
-        //                        TotalPrice = 0,
-        //                        Status = InvoiceStatus.New,
-        //                        Note = null,
-        //                        Detail = new List<InvoiceDetailDto>
-        //                            {
-        //                                new InvoiceDetailDto
-        //                                {
-        //                                    ProjectName = p.ProjectName,
-        //                                    LinkFile = p.FilePath
-        //                                }
-        //                            }
-        //                    };
-        //                    createInvoice.Add(invoice);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    var rs = await _financeService.CreateInvoiceToFinance(createInvoice);
-        //    if (rs == null)
-        //        throw new UserFriendlyException("Error creating Invoice");
-        //    return input;
-        //}
+                    foreach (var item in client)
+                    {
+                        foreach (var p in item.TimesheetProject)
+                        {
+                            var invoice = new CreateInvoiceDto
+                            {
+                                Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{p.ProjectName}]",
+                                AccountCode = item.ClientCode,
+                                TotalPrice = 0,
+                                Status = InvoiceStatus.New,
+                                Note = null,
+                                Detail = new List<InvoiceDetailDto>
+                                    {
+                                        new InvoiceDetailDto
+                                        {
+                                            ProjectName = p.ProjectName,
+                                            FileId = p.FileId,
+                                            LinkFile = p.FilePath
+                                        }
+                                    }
+                            };
+                            createInvoice.Add(invoice);
+                        }
+                    }
+                }
+            }
+            var rs = await _financeService.CreateInvoiceToFinance(createInvoice);
+            if (rs == null)
+                throw new UserFriendlyException("Error creating Invoice");
+            return input;
+        }
 
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)

@@ -1,0 +1,7 @@
+.file-download {
+  color: #007bff;
+  cursor: pointer;
+}
+.file-download:hover {
+  color: blue;
+}

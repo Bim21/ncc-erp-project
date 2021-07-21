@@ -30,7 +30,7 @@
                                 class="btn bg-blue">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button *ngIf="isEditingNote" (click)="saveNote();isEditingNote=false" type="button"
+                            <button *ngIf="isEditingNote && permission.isGranted(SaoDo_AuditResult_UpdateNote)" (click)="saveNote();isEditingNote=false" type="button"
                                 style="margin-right: 20px;" class="btn bg-blue">
                                 Save
                             </button>
@@ -79,7 +79,7 @@
                                                     [(ngModel)]="form.userId">
                                                     <ng-container>
                                                         <mat-option *ngFor="let user of projectUserList"
-                                                            [value]="user.id">{{user.fullName}}</mat-option>
+                                                            [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                     </ng-container>
 
                                                 </mat-select>
@@ -94,7 +94,7 @@
                                                             [(ngModel)]="form.curatorId">
                                                             <ng-container *ngFor="let user of projectUserList">
                                                                 <mat-option *ngIf="user.id != ngvipham.value"
-                                                                    [value]="user.id">{{user.fullName}}</mat-option>
+                                                                    [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -102,16 +102,16 @@
 
                                             </div>
                                             <div *ngIf="!form.createMode" class="text-center">
-                                                <button [disabled]="isEditing" class="btn btn-sm bg-secondary mr-1"
+                                                <button *ngIf="permission.isGranted(SaoDo_AuditResult_Update)" [disabled]="isEditing" class="btn btn-sm bg-secondary mr-1"
                                                     mat-raised-button style="margin-right:20px ;"
                                                     (click)="editPeople(form);">Edit</button>
-                                                <button [disabled]="isEditing" class="btn btn-sm bg-danger ml-1"
+                                                <button *ngIf="permission.isGranted(SaoDo_AuditResult_Delete)" [disabled]="isEditing" class="btn btn-sm bg-danger ml-1"
                                                     mat-raised-button (click)="deletePeople(form)">Delete</button>
                                             </div>
                                             <div *ngIf="form.createMode" class=" text-center ">
                                                 <button (click)="save(item.id,form);"
                                                     class="btn btn-primary mr-1 ml-3">Save</button>
-                                                <button (click)="cancel();" isAllowed=true;
+                                                <button  (click)="cancel();" isAllowed=true;
                                                     class="btn btn-default">Cancel</button>
 
                                             </div>
@@ -130,7 +130,7 @@
                                                             (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
                                                             name="ngsaipham" placeholder="Tên người vi phạm" #ngvipham>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option [value]="user.id">{{user.fullName}}
+                                                                <mat-option [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})
                                                                 </mat-option>
                                                             </ng-container>
 
@@ -145,7 +145,7 @@
                                                             #ngliendoi>
                                                             <ng-container *ngFor="let user of projectUserList">
                                                                 <mat-option *ngIf="user.id != ngvipham.value"
-                                                                    [value]="user.id">{{user.fullName}}</mat-option>
+                                                                    [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -153,7 +153,7 @@
 
 
                                                 <div class="form-group row required">
-                                                    <button [disabled]="!projectUser.userId"
+                                                    <button *ngIf="permission.isGranted(SaoDo_AuditResult_Create)" [disabled]="!projectUser.userId"
                                                         class="btn bg-blue" mat-raised-button
                                                         (click)="submit(item)">Submit</button>
                                                 </div>

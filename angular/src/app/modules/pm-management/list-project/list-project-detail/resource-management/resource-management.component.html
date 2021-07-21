@@ -7,7 +7,7 @@
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <h4 class="d-inline">Danh sách nhân viên</h4>
-                        <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess || !isShowProjectUser"
+                        <button *ngIf="!projectUserProcess && permission.isGranted(PmManager_ProjectUser_Create)" [hidden]="projectUserProcess || !isShowProjectUser"
                             (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate"
                             class="btn bg-blue ml-3">
                             <i class="fa fa-plus-square mr-1"></i> Create
@@ -45,8 +45,11 @@
                                     currentPage: userListCurrentPage
                                     }  ; let i = index">
                                 <td><span>{{ i +1 }}</span></td>
-                                <td><span *ngIf="!user.createMode">
-                                        {{user.fullName}}</span>
+                                <td class="text-left">
+                                    <div *ngIf="!user.createMode">
+                                        <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                        userType:user.userType,emailAddress:user.emailAddress}"></app-user-info>
+                                    </div>
                                     <div *ngIf="user.createMode" class="form-group row required">
 
                                         <mat-form-field class="w-100" appearance="outline">
@@ -58,7 +61,7 @@
                                                 </mat-form-field>
                                                 <mat-option *ngFor="let user of userForProjectUser |filter:searchUser"
                                                     [value]="user.id">
-                                                    {{user.fullName}}</mat-option>
+                                                    {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="mt-1"
@@ -72,7 +75,7 @@
                                 <td> <span *ngIf="!user.createMode">{{ user.projectRole }}</span>
 
                                     <div class="form-group row required" *ngIf="user.createMode">
-                                        <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                        <mat-form-field class="w-100" appearance="outline">
                                             <mat-select [(ngModel)]="user.projectRole" name="projectrole"
                                                 placeholder="select a role" required #projectRole="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
@@ -90,20 +93,22 @@
                                 <td> <span *ngIf="!user.createMode">
                                         {{user.startTime | date:"dd/MM/yyyy"}}
                                     </span>
-                                    <mat-form-field appearance="outline" *ngIf="user.createMode">
+                                    <div class="form-group row required" *ngIf="user.createMode">
+                                    <mat-form-field appearance="outline" class="w-100" >
                                         <input matInput [matDatepicker]="picker" placeholder="chose a date" required
                                             [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel"
                                             #projectDateEl>
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
+                                    </div>
                                     <!-- <abp-validation-summary [control]="projectDate" [controlEl]="projectDateEl"></abp-validation-summary> -->
 
                                 </td>
 
                                 <td>
-                                    <p *ngIf="!user.createMode"> <strong>{{user.allocatePercentage}}%</strong></p>
-                                    <div *ngIf="user.createMode">
+                                    <span *ngIf="!user.createMode"> <strong>{{user.allocatePercentage}}%</strong></span>
+                                    <div  class="form-group row required" *ngIf="user.createMode">
                                         <input class="form-control mt-1" type="text" mask="percent" placeholder="number"
                                             required name="allocatePercentage" #Percentage="ngModel" #PercentageEl
                                             suffix="%" [(ngModel)]="user.allocatePercentage" />
@@ -114,12 +119,12 @@
                                 </td>
                                 <td>
 
-                                    <p style="font-size: 12px;" *ngIf="!user.createMode"
+                                    <span style="font-size: 12px;" *ngIf="!user.createMode"
                                         [ngClass]="APP_CONST.statusStyle[user.status]">
-                                        {{user.status}}</p>
-                                    <p style="font-size: 12px; margin-top: 10px;"
+                                        {{user.status}}</span>
+                                    <span style="font-size: 12px; margin-top: 10px;"
                                         *ngIf="user.createMode && !isEditUserProject"
-                                        [ngClass]="APP_CONST.statusStyle['Present']">Present</p>
+                                        [ngClass]="APP_CONST.statusStyle['Present']">Present</span>
                                     <div class="form-group row required" *ngIf="user.createMode && isEditUserProject">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select [(ngModel)]="user.status" name="userStatus"
@@ -139,10 +144,10 @@
                                 </td>
                                 <td>
                                     <div *ngIf="!user.createMode">
-                                        <button [disabled]="projectUserProcess" class="btn btn-sm bg-secondary mr-1"
+                                        <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)" [disabled]="projectUserProcess" class="btn btn-sm bg-secondary mr-1"
                                             (click)="editProjectUser(user)"> <i
                                                 class="fas fa-pencil-alt"></i>Edit</button>
-                                        <button [disabled]="projectUserProcess" class="btn btn-sm bg-danger ml-1"
+                                        <button *ngIf="permission.isGranted(PmManager_ProjectUser_Delete)" [disabled]="projectUserProcess" class="btn btn-sm bg-danger ml-1"
                                             (click)="removeUser(user)"> <i class="fas fa-trash"></i>delete</button>
 
 
@@ -189,7 +194,7 @@
             <mat-expansion-panel expanded=false>
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <h4 class="d-inline">Request nhân sự</h4>
-                    <button *ngIf="!requestProcess" [hidden]="!isShowRequest"
+                    <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ProjectUser_Create)" [hidden]="!isShowRequest"
                         (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                         class="btn bg-blue ml-3">
                         <i class="fa fa-plus-square mr-1"></i>Create
@@ -217,7 +222,7 @@
                                 <td><span>{{ i +1 }}</span></td>
                                 <td>
                                     <p *ngIf="!request.createMode">{{request.name}}</p>
-                                    <div *ngIf="request.createMode">
+                                    <div *ngIf="request.createMode" class="form-group row required">
                                         <input required placeholder="text" class="form-control mt-2" type="text"
                                             [(ngModel)]="request.name" #requestName="ngModel" #requestNameEl>
                                         <abp-validation-summary [control]="requestName" [controlEl]="requestNameEl">
@@ -228,8 +233,8 @@
 
                                 <td>
                                     <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
-                                    <div *ngIf="request.createMode" class="mt-1">
-                                        <mat-form-field appearance="outline">
+                                    <div *ngIf="request.createMode" class="form-group row required">
+                                        <mat-form-field appearance="outline" class="w-100">
                                             <input matInput [matDatepicker]="picker" placeholder="chose a date"
                                                 [(ngModel)]="request.timeNeed" name="requestTimeNeed" required>
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -240,7 +245,7 @@
                                 </td>
                                 <td>
                                     <p *ngIf="!request.createMode">{{request.note}}</p>
-                                    <div *ngIf="request.createMode">
+                                    <div *ngIf="request.createMode" class="form-group row required">
                                         <mat-form-field class="example-full-width" appearance="outline">
                                             <textarea placeholder="leave a comment" [(ngModel)]="request.note"
                                                 matInput></textarea>
@@ -251,22 +256,22 @@
                                     <p style="font-size: 12px;" [ngClass]="APP_CONST.statusStyle[request.statusName]"
                                         *ngIf="!request.craeteMode">
                                         {{request.statusName}}</p>
-                                    <div *ngIf="request.createMode && !isEditRequest">
+                                    <div *ngIf="request.createMode && !isEditRequest" class="form-group row required">
                                         <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1">PENDING</p>
                                     </div>
                                 </td>
                                 <td>
                                     <div *ngIf="!request.createMode">
-                                        <button [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
+                                        <button *ngIf="permission.isGranted(permission.isGranted(PmManager_ProjectUser_Update))" [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
                                             (click)="editProjectRerequest(request)"> <i
                                                 class="fas fa-pencil-alt"></i>Edit</button>
-                                        <button [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
+                                        <button *ngIf="permission.isGranted(permission.isGranted(PmManager_ProjectUser_Delete))" [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
                                             (click)="removeProjectRerequest(request)"> <i
                                                 class="fas fa-trash"></i>delete</button>
 
 
                                     </div>
-                                    <div *ngIf="request.createMode" class="pt-2">
+                                    <div *ngIf="request.createMode" class="pt-2" >
                                         <button [disabled]="!request?.name || !request?.timeNeed "
                                             class=" mr-3 submit-btn" style="background: none; border: none;"
                                             (click)="saveProjectRerequest(request)">
@@ -303,7 +308,7 @@
             <mat-expansion-panel expanded=false>
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Danh sách Bill Dự án</h4>
-                    <button *ngIf="!userBillProcess" [hidden]="!isShowUserBill" style="border: none;"
+                    <button *ngIf="!userBillProcess && permission.isGranted(PmManager_ProjectUserBill_Create)" [hidden]="!isShowUserBill" style="border: none;"
                         class="btn bg-blue ml-3"
                         (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
                         <i class="fa fa-plus-square mr-1"></i>Create
@@ -331,8 +336,9 @@
                                     currentPage: userBillCurrentPage
                                     }  ; let i = index">
                                 <td><span>{{ i +1 }}</span></td>
-                                <td>
-                                    <p *ngIf="!bill.createMode">{{bill.userName}}</p>
+                                <td class="text-left">
+                                    <span *ngIf="!bill.createMode"> <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
+                                        userType:bill.userType,emailAddress:bill.emailAddress}"></app-user-info></span>
                                     <div *ngIf="bill.createMode">
 
                                         <mat-form-field class="w-100" appearance="outline">
@@ -345,7 +351,7 @@
                                                 <mat-option
                                                     *ngFor="let user of userForUserBill | filter: searchUserBill"
                                                     [value]="user.id">
-                                                    {{user.name}}</mat-option>
+                                                    {{user.name}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="mt-1"
@@ -357,9 +363,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.billRole}}</p>
-                                    <div *ngIf="bill.createMode">
-                                        <div class="form-group row required" *ngIf="bill.createMode">
+                                    <span *ngIf="!bill.createMode">{{bill.billRole}}</span>
+                                    <div *ngIf="bill.createMode"  class="form-group row required mt-3"   >
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="bill.billRole" name="billRole"
                                                     placeholder="select a role" required #billRole="ngModel">
@@ -373,12 +378,11 @@
                                                 style="font-size: 13px;">
                                                 This field is required
                                             </mat-error>
-                                        </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
-                                        {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
+                                        {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</span>
                                     <div *ngIf="bill.createMode">
                                         <input required class="form-control mt-1" #billRate="ngModel" #billRateEl
                                             type="text" mask="separator" thousandSeparator="." placeholder="number"
@@ -389,7 +393,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                     <div *ngIf="bill.createMode">
                                         <mat-form-field appearance="outline">
                                             <input matInput [matDatepicker]="billStarttimePicker"
@@ -402,7 +406,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <p *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</p>
+                                    <span *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
                                     <div *ngIf="bill.createMode">
                                         <mat-form-field appearance="outline">
                                             <input matInput [matDatepicker]="billEndtimepicker"
@@ -421,9 +425,9 @@
                                 </td>
                                 <td>
                                     <div *ngIf="!bill.createMode">
-                                        <button [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
+                                        <button *ngIf="permission.isGranted(PmManager_ProjectUserBill_Update)" [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
                                             (click)="editUserBill(bill)"><i class="fas fa-pencil-alt"></i>Edit</button>
-                                        <button [disabled]="userBillProcess" class="btn btn-sm bg-danger ml-1"
+                                        <button *ngIf="permission.isGranted(PmManager_ProjectUserBill_Delete)" [disabled]="userBillProcess" class="btn btn-sm bg-danger ml-1"
                                             (click)="removeUserBill(bill)"><i class="fas fa-trash"></i>delete</button>
 
 

@@ -19,7 +19,6 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
-
       this.listRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
 

@@ -25,7 +25,6 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
     }), catchError(this.milestoneService.handleError)).subscribe(data => {
       this.milestoneList = data.result.items
       this.showPaging(data.result, pageNumber);
-      console.log(this.milestoneList)
     })
   }
   protected delete(item: MilestoneDto): void {
@@ -80,7 +79,6 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
     this.isAllowed = false;
     this.command = "edit";
     this.isEditing=true;
-    console.log("heelo",item)
   }
   public saveMilestoneRequest( item:MilestoneDto): void {
     delete item["createMode"]
@@ -95,7 +93,6 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
       this.refresh();
       },
       () => {() =>this.isEditing=false;})
-      console.log(this.isEditing)
     }
     else {
       this. milestoneService.update(item).pipe(catchError(this. milestoneService.handleError)).subscribe(res => {    

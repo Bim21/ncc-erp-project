@@ -24,9 +24,12 @@ export const PERMISSIONS_CONSTANT = {
     CheckList_CheckListItem_ViewAll: "CheckList.CheckListItem.ViewAll",
     CheckList_ProjectChecklist: "true",
     CheckList_ProjectChecklist_AddByProjectType: "true",
+    CheckList_ProjectChecklist_AddCheckListItemByProject: "CheckList.ProjectChecklist.AddCheckListItemByProject",
     CheckList_ProjectChecklist_Create: "true",
     CheckList_ProjectChecklist_Delete: "true",
     CheckList_ProjectChecklist_ReverseActive: "true",
+    DeliveryManagement: "DeliveryManagement",
+    DeliveryManagement_CanViewMenu: "DeliveryManagement.CanViewMenu",
     DeliveryManagement_PMReport: "DeliveryManagement.PMReport",
     DeliveryManagement_PMReport_CloseReport: "DeliveryManagement.PMReport.CloseReport",
     DeliveryManagement_PMReport_Create: "DeliveryManagement.PMReport.Create",
@@ -52,8 +55,40 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_ResourceRequest_Update: "DeliveryManagement.ResourceRequest.Update",
     DeliveryManagement_ResourceRequest_ViewAllResourceRequest: "DeliveryManagement.ResourceRequest.ViewAllResourceRequest",
     DeliveryManagement_ResourceRequest_ViewDetailResourceRequest: "DeliveryManagement.ResourceRequest.ViewDetailResourceRequest",
+    DeliveryManagement_PMReportProject_GetAllByPmProject: "DeliveryManagement.PMReportProject.GetAllByPmProject",
+    DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek: "DeliveryManagement.PMReportProject.ResourceChangesDuringTheWeek",
+    DeliveryManagement_PMReportProject_ResourceChangesInTheFuture: "DeliveryManagement.PMReportProject.ResourceChangesInTheFuture",
+    DeliveryManagement_PMReportProject_SendReport: "DeliveryManagement.PMReportProject.SendReport",
+    DeliveryManagement_PMReportProjectIssue: "DeliveryManagement.PMReportProjectIssue",
+    DeliveryManagement_PMReportProjectIssue_Create: "DeliveryManagement.PMReportProjectIssue.Create",
+    DeliveryManagement_PMReportProjectIssue_Delete: "DeliveryManagement.PMReportProjectIssue.Delete",
+    DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek: "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek",
+    DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue_.Update",
+
+   
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+    Pages_Users_Create: "Pages.Users.Create",
+    Pages_Users_Delete: "Pages.Users.Delete",
+    Pages_Users_ImportUserFromFile: "Pages.Users.ImportUserFromFile",
+    Pages_Users_Update: "Pages.Users.Update",
+    Pages_Users_UpdateAvatar: "Pages.Users.UpdateAvatar",
     
    
     PmManager: "PmManager",
@@ -91,10 +126,23 @@ export const PERMISSIONS_CONSTANT = {
     PmManager_TimesheetProject_GetAllRemainProjectInTimesheet: "true",
     PmManager_TimesheetProject_Update: "true",
     PmManager_TimesheetProject_UploadFileTimesheetProject: "true",
+    PmManager_CanViewMenu: "PmManager.CanViewMenu",
+    PmManager_CanViewMenu_Milestone: "PmManager.CanViewMenu.Milestone",
+    PmManager_CanViewMenu_ProjectChecklist: "PmManager.CanViewMenu.ProjectChecklist",
+    PmManager_CanViewMenu_ResourceManagement: "PmManager.CanViewMenu.ResourceManagement",
+    PmManager_CanViewMenu_Timesheet: "PmManager.CanViewMenu.Timesheet",
+    PmManager_CanViewMenu_WeeklyReport: "PmManager.CanViewMenu.WeeklyReport",
+    
     SaoDo: "SaoDo",
+    SaoDo_AuditResult: "true",
+    SaoDo_AuditResult_Create: "SaoDo.AuditResult.Create",
+    SaoDo_AuditResult_Delete: "SaoDo.AuditResult.Delete",
+    SaoDo_AuditResult_GetNote: "SaoDo.AuditResult.GetNote",
+    SaoDo_AuditResult_Update: "SaoDo.AuditResult.Update",
+    SaoDo_AuditResult_UpdateNote: "SaoDo.AuditResult.UpdateNote",
     SaoDo_AuditResultPeople: "SaoDo.AuditResultPeople",
     SaoDo_AuditResultPeople_Create: "SaoDo.AuditResultPeople.Create",
-    SaoDo_AuditResultPeople_Delete: "SaoDo.AuditResultPeople.Deletee",
+    SaoDo_AuditResultPeople_Delete: "SaoDo.AuditResultPeople.Delete",
     SaoDo_AuditResultPeople_Update: "SaoDo.AuditResultPeople.Update",
     SaoDo_AuditSession: "SaoDo.AuditSession",
     SaoDo_AuditSession_AddAuditResult: "SaoDo.AuditSession.AddAuditResult",

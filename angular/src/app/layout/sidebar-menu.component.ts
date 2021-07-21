@@ -100,14 +100,14 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       ),
       new MenuItem(
         this.l("Delivery Management"),
-        "/app/delivery",
-        "fas fa-circle",
+        "/app/delivery/weekly-report-tab",
+        "fas fa-chalkboard-teacher",
         "",
       ),
       new MenuItem(
         this.l("Timesheet"),
         "",
-        "fas fa-circle",
+        "fas fa-calendar-alt",
         "", [
         new MenuItem(
           this.l("Timesheet"),
