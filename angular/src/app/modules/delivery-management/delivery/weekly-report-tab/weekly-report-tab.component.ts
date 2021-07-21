@@ -41,10 +41,11 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
     this.refresh();
    
   }
-  showDetail(id:any){
+  showDetail(item:any){
     this.router.navigate(['app/weeklyReportTabDetail'], {
       queryParams: {
-        id:id
+        id:item.id,
+        isActive:item.isActive
         
       }
     })

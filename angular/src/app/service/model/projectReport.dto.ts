@@ -17,6 +17,7 @@ export class projectReportDto{
     createMode?:boolean;
 }
 export class projectProblemDto{
+    createdAt:string;
     pmReportProjectId: number;
     description: string;
     impact: string;
