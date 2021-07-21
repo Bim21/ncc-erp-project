@@ -293,7 +293,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject)]
         public async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
         {
-            String path = Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets");
+            String path = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "timesheets");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -310,13 +310,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     var filePath = timesheetProject.Timesheet.Year + "-" + timesheetProject.Timesheet.Month + "_" + timesheetProject.Project.Code + "_" + fileName;
                     if (timesheetProject.FilePath != null && timesheetProject.FilePath != fileName)
                     {
-                        File.Delete(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath));
+                        File.Delete(Path.Combine(path, timesheetProject.FilePath));
 
                         timesheetProject.FilePath = null;
                         await WorkScope.UpdateAsync(timesheetProject);
                     }
 
-                    using (var stream = System.IO.File.Create(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", filePath)))
+                    using (var stream = System.IO.File.Create(Path.Combine(path, filePath)))
                     {
                         await input.File.CopyToAsync(stream);
                         timesheetProject.FilePath = filePath;
@@ -330,7 +330,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             else
             {
-                File.Delete(Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath));
+                File.Delete(Path.Combine(path, timesheetProject.FilePath));
 
                 timesheetProject.FilePath = null;
                 await WorkScope.UpdateAsync(timesheetProject);
@@ -343,7 +343,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
 
-            var filePath = Path.Combine(_hostingEnvironment.ContentRootPath, "timesheets", timesheetProject.FilePath);
+            String path = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "timesheets");
+
+            var filePath = Path.Combine(path, timesheetProject.FilePath);
 
             var data = await System.IO.File.ReadAllBytesAsync(filePath);
 
