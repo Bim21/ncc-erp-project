@@ -265,7 +265,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
         {
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(input.Id);
-
             var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.Id != input.Id && (x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId));
             if (isExist)
                 throw new UserFriendlyException($"TimesheetProject with ProjectId {input.ProjectId} already exist in Timesheet !");
