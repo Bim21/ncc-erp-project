@@ -50,7 +50,6 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
     // formData.append('file', this.currentFileUpload);
     // this.uploadFile.File= formData;
   
-    console.log(this.uploadFile)
     this.timesheetProjectService.UpdateFileTimeSheetProject(this.selectedFiles, this.uploadFile.TimesheetProjectId )
     .pipe(catchError(this.timesheetProjectService.handleError)).subscribe((res) => {
       abp.notify.success("Upload File Successful!");

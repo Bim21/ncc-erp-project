@@ -1,25 +1,29 @@
-th, td{
-    text-align: center;
+th,
+td {
+  text-align: center;
 }
-.disablePage ul li{
-    cursor: not-allowed;;
+.disablePage ul li {
+  cursor: not-allowed;
 }
 
 ::ng-deep .mat-form-field-outline {
-    background: white;
+  background: white;
 }
-::ng-deep .mat-checkbox-layout{
-    margin-top: 10px;
+::ng-deep .mat-checkbox-layout {
+  margin-top: 10px;
 }
-.submit-btn:disabled i{
-    color: gray !important;
+.submit-btn:disabled i {
+  color: gray !important;
 }
-.btnCreate{
-    margin-bottom: 10px;
+.btnCreate {
+  margin-bottom: 10px;
 }
-i{
-    margin-right: 5px;
+i {
+  margin-right: 5px;
 }
-tr, th, td{
-    vertical-align: middle ;
-   }
+tr,
+th,
+td {
+  vertical-align: text-top;
+}
+

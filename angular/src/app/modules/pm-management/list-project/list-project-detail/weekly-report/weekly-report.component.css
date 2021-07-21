@@ -12,3 +12,6 @@
 .inActive{
   color: darkgrey;
 }
+tr, th, td{
+  vertical-align: text-top ;
+ }

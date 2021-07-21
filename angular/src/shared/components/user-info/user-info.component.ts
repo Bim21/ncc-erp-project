@@ -19,7 +19,6 @@ public user:UserDto
 
   ngOnChanges(): void {
     this.user = this.userData
-    console.log(this.user);
   }
   public getProjectTypefromEnum(projectType: number, enumObject: any) {
     for (const key in enumObject) {
