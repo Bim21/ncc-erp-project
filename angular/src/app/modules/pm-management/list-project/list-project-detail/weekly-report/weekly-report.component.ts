@@ -352,6 +352,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
         if (result) {
           this.reportService.sendReport(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
               abp.notify.success("Send report successful");
+              this.getAllPmReport();
           })
         }
       }

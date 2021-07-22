@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ApproveDialogComponent } from './../../../../pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
@@ -26,6 +27,22 @@ import * as moment from 'moment';
   styleUrls: ['./weekly-report-tab-detail.component.css']
 })
 export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<WeeklyReportTabDetailComponent> implements OnInit {
+  DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
+  DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
+  DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
+  DeliveryManagement_PMReportProject_GetAll=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
+  DeliveryManagement_PMReportProject_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
+  DeliveryManagement_PMReportProject_GetAllByPmProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
+  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
+  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
+  DeliveryManagement_PMReportProject_SendReport=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
+  DeliveryManagement_PMReportProjectIssue=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
+  DeliveryManagement_PMReportProjectIssue_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
+  DeliveryManagement_PMReportProjectIssue_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
+  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
+  DeliveryManagement_PMReportProjectIssue_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
+  DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
+  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // this.pmReportProjectService.GetAllByPmReport(this.pmReportId, request).pipe(finalize(()=>{
     //   finishedCallback();
@@ -37,6 +54,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   protected delete(entity: WeeklyReportTabDetailComponent): void {
     throw new Error('Method not implemented.');
   }
+  public itemPerPage:number =5;
+  public weeklyCurrentPage:number = 1;
+  public futureCurrentPage:number=1;
+  public problemCurrentPage:number=1;
   public searchText = "";
   public pmReportProjectList: pmReportProjectDto[] = [];
   public tempPmReportProjectList: pmReportProjectDto[] = [];
