@@ -285,13 +285,15 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser)]
         public async Task<ProjectUserDto> ApproveUser(ProjectUserDto input)
         {
-            if(input.Status != ProjectUserStatus.Future)
+            var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
+            if(projectUser.Status != ProjectUserStatus.Future)
             {
                 throw new UserFriendlyException("Can't approve request not in the future !");
             }
 
             input.IsFutureActive = true;
             input.Status = ProjectUserStatus.Present;
+            input.ProjectId = projectUser.ProjectId;
 
             await _projectUserAppService.Update(input);
 
