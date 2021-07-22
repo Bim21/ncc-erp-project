@@ -61,7 +61,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("PM Management"),
         "",
         "fas fa-user-tie",
-        "PmManager", [
+        "PmManager.CanViewMenu", [
         new MenuItem(
           this.l("List Project"),
           "/app/list-project",
@@ -76,7 +76,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("Sao đỏ"),
         "/app/sao-do",
         "fas fa-user-shield",
-        ""
+        "SaoDo.CanViewMenu"
       ),
       new MenuItem(
         this.l("CheckList"),

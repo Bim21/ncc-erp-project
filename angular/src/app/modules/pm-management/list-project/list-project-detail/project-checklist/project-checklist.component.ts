@@ -16,6 +16,7 @@ import { result } from 'lodash-es';
 export class ProjectChecklistComponent extends AppComponentBase implements OnInit {
   public listCheckList: projectChecklistDto[]= [];
   public projectId:any;
+  
   public listChecklistItem=[];
   CheckList_ProjectChecklist_AddCheckListItemByProject=PERMISSIONS_CONSTANT.CheckList_ProjectChecklist_AddCheckListItemByProject;
 

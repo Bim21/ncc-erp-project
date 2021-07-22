@@ -1,4 +1,5 @@
-import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+
 import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../../service/api/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -20,6 +21,17 @@ import * as moment from 'moment';
   styleUrls: ['./resource-management.component.css']
 })
 export class ResourceManagementComponent extends AppComponentBase implements OnInit {
+  PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
+  PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
+  PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
+  PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
+  PmManager_ProjectUserBill = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
+  PmManager_ProjectUserBill_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
+  PmManager_ProjectUserBill_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
+  PmManager_ProjectUserBill_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
+  DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create
+  DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete
+  DeliveryManagement_ResourceRequest_Update = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -28,7 +40,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
-  
+
 
   // project user
   public projectUserList: projectUserDto[] = [];
@@ -36,29 +48,24 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userStatusList: string[] = Object.keys(this.APP_ENUM.ProjectUserStatus)
   public userForProjectUser: UserDto[] = [];
   public viewHistory: boolean = false;
-  public projectUserProcess:boolean =false;
-  public isShowProjectUser:boolean =true;
+  public projectUserProcess: boolean = false;
+  public isShowProjectUser: boolean = true;
   // resource request
   public resourceRequestList: projectResourceRequestDto[] = [];
   public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public isEditRequest: boolean = false;
-  public requestProcess:boolean =false;
-  public isShowRequest:boolean=false;
+  public requestProcess: boolean = false;
+  public isShowRequest: boolean = false;
   // project user bill
   public userBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
   public isEditUserBill: boolean = false;
-  public userBillProcess:boolean=false;
-  public panelOpenState:boolean=false;
-  public isShowUserBill:boolean =false;
-  PmManager_ProjectUser= PERMISSIONS_CONSTANT.PmManager_ProjectUser;
-  PmManager_ProjectUser_Create= PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
-  PmManager_ProjectUser_Delete= PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
-  PmManager_ProjectUser_Update= PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
-  PmManager_ProjectUserBill= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
-  PmManager_ProjectUserBill_Create= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
-  PmManager_ProjectUserBill_Delete= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
-  PmManager_ProjectUserBill_Update= PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
+  public userBillProcess: boolean = false;
+  public panelOpenState: boolean = false;
+  public isShowUserBill: boolean = false;
+
+
+  DeliveryManagement_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
@@ -73,19 +80,27 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   // get data
   private getProjectUser() {
-    this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      this.projectUserList = data.result;
-    })
+    if (this.permission.isGranted(this.PmManager_ProjectUser)) {
+      this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        this.projectUserList = data.result;
+      })
+    }
+
   }
   private getResourceRequestList(): void {
-    this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
-      this.resourceRequestList = data.result
-    })
+    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewAllByProject)) {
+      this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
+        this.resourceRequestList = data.result
+      })
+    }
   }
   private getUserBill(): void {
-    this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
-      this.userBillList = data.result
-    })
+    if (this.permission.isGranted(this.PmManager_ProjectUserBill)) {
+      this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
+        this.userBillList = data.result
+      })
+    }
+
   }
   private getAllUser() {
     this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
@@ -172,7 +187,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.projectUserProcess = false
   }
   private filterProjectUserDropDown() {
-   
+
     let userProjectList = this.projectUserList.map(item => item.userId)
     this.userForProjectUser = this.userForUserBill.filter(user => userProjectList.indexOf(user.id) == -1)
   }
@@ -203,7 +218,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`Updated request: ${request.name}`)
         this.getResourceRequestList();
         this.requestProcess = false;
-        this.isEditRequest =false;
+        this.isEditRequest = false;
       },
         () => { request.createMode = true })
     }
@@ -247,7 +262,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     // userBill.isActive = true;
     userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
     userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
-   
+
     if (!this.isEditUserBill) {
       userBill.projectId = this.projectId
       this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
@@ -263,7 +278,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`Updated request user bill`)
         this.getUserBill();
         this.userBillProcess = false;
-        this.isEditUserBill=false;
+        this.isEditUserBill = false;
       },
         () => {
           userBill.createMode = true;
