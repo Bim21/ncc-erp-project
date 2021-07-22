@@ -129,7 +129,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   saveProjectUser(user: projectUserDto) {
     if (!this.isEditUserProject) {
       let newUser: projectUserDto = this.projectUserList[0]
-      newUser.isFutureActive = false
+      // newUser.isFutureActive = false
       newUser.projectId = this.projectId
       newUser.isExpense = true;
       // newUser.status = "0";

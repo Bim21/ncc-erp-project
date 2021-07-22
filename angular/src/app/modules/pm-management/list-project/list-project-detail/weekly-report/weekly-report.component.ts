@@ -115,7 +115,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.processWeekly = true;
   }
   public saveWeekReport(report: projectReportDto) {
-    report.isFutureActive = false
+    // report.isFutureActive = false
     report.projectId = this.projectId
     report.isExpense = true;
     report.status = "0";
@@ -200,7 +200,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
         })
     }
     else {
-      report.isFutureActive = false
+      // report.isFutureActive = false
       report.projectId = this.projectId
       report.isExpense = true;
       report.status = "2";
