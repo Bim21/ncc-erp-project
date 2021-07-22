@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ImportFileTimesheetDetailComponent } from './../../../../timesheet/timesheet-detail/import-file-timesheet-detail/import-file-timesheet-detail.component';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError } from 'rxjs/operators';
@@ -13,6 +14,17 @@ import { Component, OnInit, Injector, inject } from '@angular/core';
   styleUrls: ['./project-timesheet.component.css']
 })
 export class ProjectTimesheetComponent extends AppComponentBase implements OnInit {
+  
+  Timesheet_TimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject;
+  Timesheet_TimesheetProject_Create= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
+  Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
+  Timesheet_TimesheetProject_Delete = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
+  Timesheet_TimesheetProject_DownloadFileTimesheetProject =PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
+  Timesheet_TimesheetProject_GetAllByProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_GetAllByProject;
+  Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet;
+  Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Update;
+  Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
+  Timesheet_TimesheetProject_ViewInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewInvoice;
   public listTimesheetByProject: ProjectTimesheetDto[] = [];
   private projectId:number;
   constructor(injector:Injector, private timesheetSerivce:TimesheetProjectService, private route:ActivatedRoute, private dialog:MatDialog) {
@@ -24,24 +36,12 @@ export class ProjectTimesheetComponent extends AppComponentBase implements OnIni
     this.getAllTimesheet();
   }
   private getAllTimesheet(){
-    this.timesheetSerivce.getAllByProject(this.projectId).pipe(catchError(this.timesheetSerivce.handleError)).subscribe(data=>{
-      this.listTimesheetByProject =data.result;
-    })
+    if(this.permission.isGranted(this.Timesheet_TimesheetProject)){
+      this.timesheetSerivce.getAllByProject(this.projectId).pipe(catchError(this.timesheetSerivce.handleError)).subscribe(data=>{
+        this.listTimesheetByProject =data.result;
+      })
+    }
   }
-  
-  // public addTimesheet(){
-  //   let newTimesheet ={} as ProjectTimesheetDto
-  //   newTimesheet.createMode = true;
-  //    this.listTimesheetByProject.push(newTimesheet)
-  // }
 
-//  public importTimeSheet(id: any) {
-//     const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
-//       data: { id: id, width: '500px' }
-//     });
-//     dialog.afterClosed().subscribe(result => {
-//       this.getAllTimesheet();
-//     });
-//   }
 
 }

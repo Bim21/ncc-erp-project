@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-3 mt-1">
-                <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" *ngIf="activeReportId.isActive">
+                <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport)" >
                     <i class="fas fa-paper-plane"></i> Send weekly report
                 </button>
 
@@ -255,20 +255,20 @@
                                 </div>
                             </td>
                             <td class="text-center" *ngIf="activeReportId.isActive">
-                                <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
+                                <button *ngIf="!report.createMode && (permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser) || permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser) || permission.isGranted(DeliveryManagement_PMReportProject_Update))" 
+                                [disabled]="processFuture" mat-button 
                                     [matMenuTriggerFor]="menu">
                                     <i class="fas fa-bars fa-lg"></i>
 
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
 
-                                    <button (click)="approveRequest(report)" class="mat-menu-item  w-100">
+                                    <button (click)="approveRequest(report)" class="mat-menu-item  w-100" *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser)">
                                         <i class="fas fa-check mr-2 fa-lg "></i>
                                         Xác nhận thay đổi
                                     </button>
-                                    <button (click)="rejectRequest(report)" class="mat-menu-item  w-100">
+                                    <button (click)="rejectRequest(report)" class="mat-menu-item  w-100" *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser)">
                                         <i class="fas fa-times mr-2 fa-lg"></i>
-
                                         Từ chối
                                     </button>
                                     <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)" (click)="updateRequest(report)"
@@ -406,7 +406,7 @@
 
                             </td>
                             <td class="text-center" *ngIf="activeReportId.isActive">
-                                <button *ngIf="!problem.createMode" mat-button [matMenuTriggerFor]="menu"
+                                <button *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)|| permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete))" mat-button [matMenuTriggerFor]="menu"
                                     [disabled]="processProblem">
                                     <i class="fas fa-bars fa-lg"></i>
                                 </button>

@@ -57,6 +57,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   DeliveryManagement_PMReportProjectIssue_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
   DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
   DeliveryManagement_PMReportProjectIssue_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
+  DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
+  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
 
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];

@@ -130,8 +130,8 @@
 
                                 
                             </td>
-                            <td *ngIf="item.createMode ==null && permission.isGranted(PmManager_ProjectMilestone_Update)"  class="text-center">
-                                <button  [disabled]="isEditing"
+                            <td   class="text-center">
+                                <button  [disabled]="isEditing" *ngIf="permission.isGranted(PmManager_ProjectMilestone_Update)"
                                 class="btn btn-sm bg-secondary mr-1 mt-2" 
                                 (click)="item.createMode=true;edit(item);$event.stopPropagation()"
                                  >
@@ -149,10 +149,10 @@
                             </button>
                             </td>
                             <td *ngIf="item.createMode !=null" class="d-flex text-center" style="border: none;">
-                                <button [disabled]="!item.description || !item?.status?.toString()" *ngIf="permission.isGranted(PmManager_ProjectMilestone_Update)" (click)="saveMilestoneRequest(item);"
+                                <button [disabled]="!item.description || !item?.status?.toString()"  (click)="saveMilestoneRequest(item);"
                                     type="submit" class="btn btn-primary mr-1 ml-3 mt-2"
                                     >Save</button>
-                                <button  (click)="refresh();  isAllowed =true; isEditing=false" *ngIf="permission.isGranted(PmManager_ProjectMilestone_Delete)" class="btn btn-default mt-2">Cancel</button>
+                                <button  (click)="refresh();  isAllowed =true; isEditing=false" class="btn btn-default mt-2">Cancel</button>
 
                             </td>
                         </tr>

@@ -20,12 +20,15 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
       "value":this.projectId ,
       "comparision": 0
     })
-    this.milestoneService.getAllPaging(request).pipe(finalize(() => {
-      finishedCallback();
-    }), catchError(this.milestoneService.handleError)).subscribe(data => {
-      this.milestoneList = data.result.items
-      this.showPaging(data.result, pageNumber);
-    })
+    if(this.permission.isGranted(this.PmManager_ProjectMilestone)){
+      this.milestoneService.getAllPaging(request).pipe(finalize(() => {
+        finishedCallback();
+      }), catchError(this.milestoneService.handleError)).subscribe(data => {
+        this.milestoneList = data.result.items
+        this.showPaging(data.result, pageNumber);
+      })
+    }
+  
   }
   protected delete(item: MilestoneDto): void {
     abp.message.confirm(
