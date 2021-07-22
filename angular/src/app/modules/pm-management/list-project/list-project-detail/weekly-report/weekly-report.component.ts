@@ -35,6 +35,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public processProblem: boolean = false;
   public searchPmReport:string="";
   public activeReportId= {} as pmReportDto;
+  public isSentReport:boolean;
 
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
@@ -264,9 +265,10 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   // Project Issue
   public getAllPmReport() {
-    this.pmreportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.pmreportService.getPmReport(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
+      this.isSentReport = this.activeReportId.pmReportProjectStatus =='Draft'?true:false
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
