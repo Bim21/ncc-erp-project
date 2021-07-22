@@ -24,6 +24,7 @@
                             <th>Timesheet</th>
                             <th>File</th>
                             <th>Note</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,10 +38,22 @@
                                 </div>
                             </td>
                             <td>
-                                <span>{{timesheet.timesheetFile}}</span>
+                                <span class="file-download">
+                                    <span (click)="downloadFile(timesheet)"class="fileName">{{timesheet.timesheetFile}}</span>
+                                </span>
+                                <span *ngIf="timesheet.timesheetFile !==null" style="margin-left: 5px;">
+                                    <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(timesheet)"></i>
+                                </span>
 
                             </td>
                             <td><span>{{timesheet.note}}</span></td>
+                            <td>
+                                <button class="btn btn-sm bg-danger" (click)="importExcel(timesheet.id)"
+                                        #importFileBtn>
+                                        <i class="fas fa-upload"></i>
+                                        Import File
+                                    </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
