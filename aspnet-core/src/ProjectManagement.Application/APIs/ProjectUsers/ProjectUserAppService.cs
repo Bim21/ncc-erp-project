@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Collections.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId)
-                        .Where(x => viewHistory || x.Status != ProjectUserStatus.Past && x.AllocatePercentage > 0)
+                        .Where(x => viewHistory || x.Status != ProjectUserStatus.Past && (x.Status == ProjectUserStatus.Present ? x.AllocatePercentage > 0 : true))
                         .OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetProjectUserDto
                         {

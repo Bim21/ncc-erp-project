@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using NccCore.Anotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +9,10 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
     public class GetResourceRequestDto : EntityDto<long>
     {
+        [ApplySearchAttribute]
         public string Name { get; set; }
         public long ProjectId { get; set; }
+        [ApplySearchAttribute]
         public string ProjectName { get; set; }
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }
