@@ -54,7 +54,7 @@
                         <tr *ngFor="let item of pmReportList; let i=index">
                             <td class="text-center">{{i+1}}</td>
                             <td class="text-center"><span
-                                class="hyperlink" (click)="showDetail(item.id)">{{item.name}}</span></td>
+                                class="hyperlink" (click)="showDetail(item)">{{item.name}}</span></td>
                             <td class="text-center"><strong>{{item.numberOfProject}}</strong></td>
                             <td class="text-center">
                                 <p *ngIf="!item.isActive">Đã khóa</p>

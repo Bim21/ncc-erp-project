@@ -56,6 +56,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditWeeklyReport:boolean=false;
   public isEditFutureReport:boolean=false;
   public isEditProblem:boolean=false;
+  public minDate=new Date();
 
 
 
@@ -74,8 +75,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
+    console.log(this.pmReportId)
     this.isActive=this.route.snapshot.queryParamMap.get('isActive');
     console.log(this.isActive)
+    this.minDate.setDate(this.minDate.getDate())
    
     this.getPmReportProject();
     this.getActiveReport();
