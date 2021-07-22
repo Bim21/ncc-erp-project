@@ -45,14 +45,14 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
     return [
       new MenuItem(this.l("HomePage"), "/app/home", "fas fa-home"),
 
-      new MenuItem(this.l("Admin"), "", "fas fa-user-cog", "", [
+      new MenuItem(this.l("Admin"), "", "fas fa-user-cog", "Admin.CanViewMenu", [
         new MenuItem(
           this.l("Tenants"),
           "/app/tenants",
           "fas fa-building",
           "Pages.Tenants"
         ),
-        new MenuItem(this.l("Clients"), "/app/clients", "fas fa-users", ""),
+        new MenuItem(this.l("Clients"), "/app/clients", "fas fa-users", "Admin.Client"),
         new MenuItem(this.l("Users"), "/app/users", "fas fa-users", "Pages.Users"),
         new MenuItem(this.l("Roles"), "/app/roles", "fas fa-theater-masks", "Pages.Roles"),
         
@@ -82,7 +82,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("CheckList"),
         "",
         "fas fa-tasks",
-        "CheckList", [
+        "CheckList.CanviewMenu", [
         new MenuItem(
           this.l("Checklist Category"),
           "/app/checklist-title",
@@ -102,19 +102,17 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l("Delivery Management"),
         "/app/delivery/weekly-report-tab",
         "fas fa-chalkboard-teacher",
-        "",
+        "DeliveryManagement.CanViewMenu",
       ),
       new MenuItem(
         this.l("Timesheet"),
         "",
         "fas fa-calendar-alt",
-        "", [
+        "Timesheet.CanViewMenu", [
         new MenuItem(
           this.l("Timesheet"),
           "/app/timesheet",
           "fas fa-circle",
-          
-
           ""
         ),
         

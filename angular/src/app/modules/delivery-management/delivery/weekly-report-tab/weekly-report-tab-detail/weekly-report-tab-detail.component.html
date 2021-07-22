@@ -44,7 +44,7 @@
                         <div class="row">
                             <div class="col-md-6 row">
                                 <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                                <butto *ngIf="isActive=='true'"  [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
+                                <butto *ngIf="isActive=='true' &&permission.isGranted(DeliveryManagement_PMReportProject_Create)"   [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                                     <i class="fa fa-plus-square"></i> Create
                                 </butto>
                             </div>
@@ -146,13 +146,13 @@
                                             <i class="fas fa-bars fa-lg"></i>
                                         </button>
                                         <mat-menu #menu="matMenu" class="p-2">
-                                            <button  (click)="updateWeekReport(report)"
+                                            <button  (click)="updateWeekReport(report)" *ngIf="permission.isGrandted(DeliveryManagement_PMReportProject_Update)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                                 Edit
                                             </button>
                                           
-                                            <button  (click)="deleteWeekReport(report)"
+                                            <button  (click)="deleteWeekReport(report)" *ngIf="permission.isGrandted(DeliveryManagement_PMReportProject_Delete)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-trash mr-2 fa-lg"></i>
                                                 Delete
@@ -184,7 +184,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                                <button  *ngIf="isActive=='true'" [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
+                                <button  *ngIf="isActive=='true' && permission.isGranted(DeliveryManagement_PMReportProject_Create)" [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3"
+                                >
                                     <i class="fa fa-plus-square"></i>
                                     Create
                                 </button>
@@ -279,16 +280,16 @@
                                         </button>
                                         <mat-menu [disabled]="processFuture" #menu="matMenu" class="p-2">
         
-                                            <button (click)="approveRequest(report)" class="mat-menu-item  w-100">
+                                            <button (click)="approveRequest(report)" class="mat-menu-item  w-100" *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser)">
                                                 <i class="fas fa-check mr-2 fa-lg "></i>
                                                 Xác nhận thay đổi
                                             </button>
-                                            <button (click)="rejectRequest(report)" class="mat-menu-item  w-100">
+                                            <button (click)="rejectRequest(report)" class="mat-menu-item  w-100" *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser)">
                                                 <i class="fas fa-times mr-2 fa-lg"></i>
         
                                                 Từ chối
                                             </button>
-                                            <button  (click)="updateRequest(report)"
+                                            <button  (click)="updateRequest(report)" *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-edit mr-2 fa-lg"></i>
         
@@ -383,7 +384,8 @@
                                 
                             </div>
                             <div class="col-3">
-                                <button *ngIf="isActive=='true'" [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
+                                <button *ngIf="isActive=='true' && permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)" [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3"
+                                >
                                     <i class="fa fa-plus-square"></i>
                                     Create
                                 </button>
@@ -498,13 +500,13 @@
                                             <i class="fas fa-bars fa-lg"></i>
                                         </button>
                                         <mat-menu #menu="matMenu" class="p-2">
-                                            <button  (click)="updateReportIssue(problem)"
+                                            <button  (click)="updateReportIssue(problem)" *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                                 Edit
                                             </button>
                                           
-                                            <button  (click)="deleteProblem(problem)"
+                                            <button  (click)="deleteProblem(problem)" *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-trash mr-2 fa-lg"></i>
                                                 Delete
