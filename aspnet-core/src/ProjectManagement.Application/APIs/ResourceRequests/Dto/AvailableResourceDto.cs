@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ResourceRequests.Dto
@@ -14,5 +15,13 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public Branch Branch { get; set; }
         public List<string> Projects { get; set; }
         public int Used { get; set; }
+        public List<ProjectUserPlan> ProjectUserPlans { get; set; }
+    }
+
+    public class ProjectUserPlan
+    {
+        public string ProjectName { get; set; }
+        public DateTime StartTime { get; set; }
+        public int AllocatePercentage { get; set; }
     }
 }

@@ -188,6 +188,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                                    ProjectName = x.Project.Name,
                                    AllocatePercentage = x.AllocatePercentage
                                });
+            var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && !x.IsFutureActive)
+                       .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
+
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive)
                                 .Select(x => new AvailableResourceDto
                                 {
@@ -199,7 +202,12 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id).Select(x => x.ProjectName).ToList(),
-                                    Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)
+                                    Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage),
+                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan { 
+                                        ProjectName = p.Project.Name,
+                                        StartTime = p.StartTime.Date,
+                                        AllocatePercentage = p.AllocatePercentage
+                                    }).ToList()
                                 });
 
             return await users.GetGridResult(users, input);
@@ -210,6 +218,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<GridResult<AvailableResourceFutureDto>> AvailableResourceFuture(GridParam input)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && !x.IsFutureActive)
+                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
                         .Select(x => new AvailableResourceFutureDto
                         {
                             Id = x.Id,

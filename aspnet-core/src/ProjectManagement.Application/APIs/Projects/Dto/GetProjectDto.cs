@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using NccCore.Anotations;
 using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
@@ -9,13 +10,16 @@ namespace ProjectManagement.APIs.Projects.Dto
 {
     public class GetProjectDto : EntityDto<long>
     {
+        [ApplySearchAttribute]
         public string Name { get; set; }
+        [ApplySearchAttribute]
         public string Code { get; set; }
         public string ProjectType { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public string Status { get; set; }
         public long ClientId { get; set; }
+        [ApplySearchAttribute]
         public string ClientName { get; set; }
         public bool IsCharge { get; set; }
         public long PmId { get; set; }
