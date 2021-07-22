@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-3 mt-1">
-                <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport)" >
+                <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && activeReportId.pmReportProjectStatus=='Draft'" >
                     <i class="fas fa-paper-plane"></i> Send weekly report
                 </button>
 

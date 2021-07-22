@@ -169,7 +169,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processWeekly = true;
   }
   public saveWeekReport(report: projectReportDto) {
-    report.isFutureActive = false
+    // report.isFutureActive = false
     report.projectId = this.projectId
     report.isExpense = true;
     report.status = "0";
@@ -259,7 +259,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         })
     }
     else {
-      report.isFutureActive = false
+      // report.isFutureActive = false
       report.projectId = this.projectId
       report.isExpense = true;
       report.status = "2";
