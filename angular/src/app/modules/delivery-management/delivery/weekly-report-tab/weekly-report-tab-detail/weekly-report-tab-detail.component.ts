@@ -75,11 +75,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
-    console.log(this.pmReportId)
     this.isActive=this.route.snapshot.queryParamMap.get('isActive');
-    console.log(this.isActive)
-    this.minDate.setDate(this.minDate.getDate())
-   
+    this.minDate.setDate(this.minDate.getDate()+1)
     this.getPmReportProject();
     this.getActiveReport();
     this.getUser();
@@ -135,7 +132,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   getProjectProblem(){
     this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId,this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-      this.problemList = data.result.result;
+      if(data.result){
+        this.problemList = data.result.result;
+      }else{
+        this.problemList =[];
+      }
       this.pmReportProjectId=data.result.pmReportProjectId;
       this.projectHealth= data.result.projectHealth;
 
@@ -174,7 +175,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     report.status = "0";
     report.startTime = moment(report.startTime).format("YYYY-MM-DD");
     delete report["createMode"]
-    if(this.isEditWeeklyReport){
+    if(this.isEditWeeklyReport==true){
       this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         report.startTime = moment(report.startTime).format("YYYY-MM-DD")
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
@@ -211,7 +212,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isEditWeeklyReport = true;
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
-    console.log("aaaaaaaaaaaa",report);
   }
   deleteWeekReport(report){
     
@@ -296,7 +296,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
     const dialogRef = this.dialog.open(ApproveDialogComponent, {
       data: {
-        dialogData: resource,
+        dialogData: dialogData,
       },
       width: "700px",
       disableClose: true,
@@ -321,9 +321,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isEditFutureReport = true;
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
-    console.log("aaaaaaaaaaaa",report);
   }
-  //
+  //Problem
   public addIssueReport() {
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;

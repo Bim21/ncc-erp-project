@@ -46,6 +46,7 @@
                             <th>STT</th>
                             <th>Nhân viên</th>
                             <th>Dự án</th>
+                            <th>Plan sử dụng</th>
                             <th>Sử dụng hiện tại</th>
                         </tr>
                     </thead>
@@ -58,18 +59,30 @@
                                 totalItems: totalItems
                               }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td class="">
+                            <td  style="white-space: normal; max-width: 200px;"class="">
                                 <div>
                                     <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                     userType:item.userType,emailAddress:item.emailAddress}"></app-user-info>
                                 </div>
                             </td>
-                            <td >{{item.projects}}</td>
+                            <td style="white-space: normal; max-width: 200px;">
+                                <!-- <div *ngFor="let projectName of item.projects; let i = index">
+                                    <span><strong>{{projectName}} <span *ngIf="i  < item.projects.length-1">, </span></strong></span><br>
+                                    
+                                </div> -->
+                                <strong>{{item.projects}}</strong>
+                            </td>
+                            <td style="white-space: normal; max-width: 200px;">
+                                <div *ngFor="let i of item.projectUserPlans">
+                                    <span><strong>Tham gia dự án:</strong>  {{i.projectName}}</span><br>
+                                    <span><strong>Từ ngày :</strong> {{i.startTime | date: "MM/dd/yyyy"}}</span><br>
+                                    <span><strong>Sử dụng:</strong> {{i.allocatePercentage}}%</span><br><br>
+                                </div>
+                            </td>
                             <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
                                 <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
                                     Plan
                                 </button>
-
                             </td>
 
                         </tr>

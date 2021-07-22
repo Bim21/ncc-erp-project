@@ -49,7 +49,6 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
         
       }
     })
-    console.log(item)
   }
   
   closeReport(report:any){
