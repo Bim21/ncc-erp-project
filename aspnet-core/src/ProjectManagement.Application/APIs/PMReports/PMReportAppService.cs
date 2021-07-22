@@ -62,13 +62,38 @@ namespace ProjectManagement.APIs.PMReports
                 throw new UserFriendlyException("PM Report already exist !");
 
             var activeReport = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
-            activeReport.IsActive = false;
-            await WorkScope.UpdateAsync(activeReport);
+            if (activeReport != null)
+            {
+                activeReport.IsActive = false;
+                await WorkScope.UpdateAsync(activeReport);
+            }
 
             input.Year = DateTime.Now.Year;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReport>(input));
 
-            var pmReportProjectInProcess = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == activeReport.Id)
+            var userInFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.PMReportId == (activeReport != null ? activeReport.Id : 0) && x.Status == ProjectUserStatus.Future && x.IsFutureActive);
+            foreach (var item in userInFuture)
+            {
+                item.IsFutureActive = false;
+                await WorkScope.UpdateAsync(item);
+
+                var projectUser = new ProjectUser
+                {
+                    UserId = item.UserId,
+                    ProjectId = item.ProjectId,
+                    ProjectRole = item.ProjectRole,
+                    AllocatePercentage = item.AllocatePercentage,
+                    StartTime = item.StartTime,
+                    Status = item.Status,
+                    IsExpense = item.IsExpense,
+                    ResourceRequestId = item.ResourceRequestId,
+                    PMReportId = input.Id,
+                    IsFutureActive = true
+                };
+                await WorkScope.InsertAsync(projectUser);
+            }
+
+            var pmReportProjectInProcess = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == (activeReport != null ? activeReport.Id : 0))
                                            join prpi in WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.Status == PMReportProjectIssueStatus.InProgress)
                                            on prp.Id equals prpi.PMReportProjectId
                                            select new
@@ -93,21 +118,24 @@ namespace ProjectManagement.APIs.PMReports
                 pmReportProject.Id = await WorkScope.InsertAndGetIdAsync(pmReportProject);
 
                 var listInProcess = pmReportProjectInProcess.Where(x => x.ProjectId == item.Id).Select(x => x.Issue);
-                foreach(var issue in listInProcess)
+                if(listInProcess.Count() > 0)
                 {
-                    var pmReportProjectIssue = new PMReportProjectIssue
+                    foreach (var issue in listInProcess)
                     {
-                       PMReportProjectId = pmReportProject.Id,
-                       CreationTime = issue.CreationTime,
-                       Description = issue.Description,
-                       Impact = issue.Impact,
-                       Critical = issue.Critical,
-                       Source = issue.Source,
-                       Solution = issue.Solution,
-                       MeetingSolution = issue.MeetingSolution,
-                       Status = issue.Status
-                    };
-                    await WorkScope.InsertAsync(pmReportProjectIssue);
+                        var pmReportProjectIssue = new PMReportProjectIssue
+                        {
+                            PMReportProjectId = pmReportProject.Id,
+                            CreationTime = issue.CreationTime,
+                            Description = issue.Description,
+                            Impact = issue.Impact,
+                            Critical = issue.Critical,
+                            Source = issue.Source,
+                            Solution = issue.Solution,
+                            MeetingSolution = issue.MeetingSolution,
+                            Status = issue.Status
+                        };
+                        await WorkScope.InsertAsync(pmReportProjectIssue);
+                    }
                 }
             }
 
