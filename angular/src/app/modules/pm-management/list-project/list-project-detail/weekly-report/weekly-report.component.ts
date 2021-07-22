@@ -43,6 +43,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public isEditProblem: boolean = false;
   public isEditFutureReport: boolean = false;
   public minDate = new Date();
+  public isEditWeeklyReport:boolean=false;
   DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
   DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
   DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
@@ -120,20 +121,59 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     report.status = "0";
     report.startTime = moment(report.startTime).format("YYYY-MM-DD");
     delete report["createMode"]
-    this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      abp.notify.success("created new weekly report");
-      this.processWeekly = false;
-      report.createMode = false;
-      this.getWeeklyReport();
-    },
-      () => {
-        report.createMode = true
-      })
+    if(this.isEditWeeklyReport==true){
+      this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+        this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+          abp.notify.success(`updated user: ${report.userName}`);
+          this.getWeeklyReport();
+          this.isEditFutureReport = false;
+          this.processWeekly = false;
+        })
+      },
+        () => {
+          report.createMode = true
+        })
+    }else{
+      this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        abp.notify.success("created new weekly report");
+        this.processWeekly = false;
+        report.createMode = false;
+        this.getWeeklyReport();
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+    
 
   }
   public cancelWeekReport() {
     this.processWeekly = false;
     this.getWeeklyReport();
+  }
+  updateWeekReport(report){
+    this.processWeekly = true
+    this.isEditWeeklyReport = true;
+    report.createMode = true;
+    report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
+    console.log("aaaaaaaaaaaa",report);
+  }
+
+  deleteWeekReport(report){
+    
+    abp.message.confirm(
+      "Delete Issue? ",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.removeProjectUser(report.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted Report");
+            this.getWeeklyReport();
+          });
+        }
+      }
+    );
   }
 
   // Future Report

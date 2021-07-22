@@ -12,7 +12,6 @@
     margin-top: 80%;
 }
 ::ng-deep .mat-list-item {
-    min-height: 100px  ;
     max-height: 150px;
     overflow: hidden;
     cursor: pointer;

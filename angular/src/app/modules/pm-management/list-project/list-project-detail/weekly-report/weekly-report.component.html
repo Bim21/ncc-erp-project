@@ -36,7 +36,7 @@
                 <div class="row">
                     <div class="col-md-6 row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)" [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
+                        <button  *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)" [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
                     </div>
@@ -56,7 +56,7 @@
                             <th>Thời gian thay đổi</th>
                             <th>% Sử dụng nhân sự</th>
                             <!-- <th>note</th> -->
-                            <th *ngIf="processWeekly">Action</th>
+                            <th >Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -123,6 +123,7 @@
                                 </div>
                             </td>
                             <td class="text-center">
+
                                 <span *ngIf="!report.createMode" > <strong>
                                         {{report.allocatePercentage}}%</strong></span>
                                 <div *ngIf="report.createMode" class="form-group row required">
@@ -134,8 +135,25 @@
                                 </div>
 
                             </td>
-                            <td *ngIf="report.createMode">
-                                <div class="pt-2">
+                            <td >
+                                <button [disabled]="processWeekly" *ngIf="!report.createMode" mat-button [matMenuTriggerFor]="menu"
+                                            >
+                                            <i class="fas fa-bars fa-lg"></i>
+                                        </button>
+                                        <mat-menu #menu="matMenu" class="p-2">
+                                            <button  (click)="updateWeekReport(report)"
+                                                class="mat-menu-item  w-100">
+                                                <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
+                                                Edit
+                                            </button>
+                                          
+                                            <button  (click)="deleteWeekReport(report)"
+                                                class="mat-menu-item  w-100">
+                                                <i class="fas fa-trash mr-2 fa-lg"></i>
+                                                Delete
+                                            </button>
+                                        </mat-menu>
+                                <div *ngIf="report.createMode" class="pt-2">
                                     <button 
                                         [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage"
                                         class=" mr-3 submit-btn" style="background: none; border: none;"
