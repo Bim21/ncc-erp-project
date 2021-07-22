@@ -39,7 +39,7 @@ namespace ProjectManagement.APIs.PMReports
         [HttpGet]
         public async Task<List<GetPMReportDto>> GetAll(long projectId)
         {
-            var pmReportProject = WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId); 
+            var pmReportProject = WorkScope.GetAll<PMReportProject>(); 
             var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
             {
                 Id = x.Id,
@@ -47,7 +47,7 @@ namespace ProjectManagement.APIs.PMReports
                 IsActive = x.IsActive,
                 Year = x.Year,
                 Type = x.Type,
-                PMReportProjectStatus = pmReportProject.FirstOrDefault(p => p.PMReportId == x.Id).Status.ToString()
+                PMReportProjectStatus = pmReportProject.FirstOrDefault(p => p.PMReportId == x.Id && p.ProjectId == projectId).Status.ToString()
             });
 
             return await query.ToListAsync();
