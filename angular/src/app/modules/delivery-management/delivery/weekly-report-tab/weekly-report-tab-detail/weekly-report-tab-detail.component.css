@@ -1,18 +1,32 @@
 /* mat-list-item:hover{
     background-color: aliceblue;
 } */
-.active{
-    background-color:#dce1e6;
-    border-radius: 3px;
+
+.list-project:hover {
+  background-color: #eaebec;
 }
-.list-project:hover{
-    background-color:#eaebec;
+::ng-deep
+  .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin {
+  margin-top: 80%;
 }
-::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin{
-    margin-top: 80%;
+/* .project-list {
+  height: 150px;
+  padding-top: 20px;
+} */
+.project-list {
+    /* width: 100%; */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  overflow: hidden;
 }
-::ng-deep .mat-list-item {
-    max-height: 150px;
-    overflow: hidden;
-    cursor: pointer;
+::ng-deep .mat-list{
+padding: 10px;
 }
+::ng-deep .mat-list-item{
+    padding: 10px;
+}
+.projectActive{
+    background-color: #dce1e6;
+}
+

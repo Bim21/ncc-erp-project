@@ -87,6 +87,10 @@ import { FutureResourceComponent } from './modules/delivery-management/delivery/
 import { EditFutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/edit-future-resource/edit-future-resource.component';
 import { ClientComponent } from './modules/admin/client/client.component';
 import { CreateUpdateClientComponent } from './modules/admin/client/create-update-client/create-update-client.component';
+import { CategoryCriteriaComponent } from './modules/checkpoint/category/category-criteria/category-criteria.component';
+import { CreateEditCriteriaCategoryComponent } from './modules/checkpoint/category/category-criteria/create-edit-criteria-category/create-edit-criteria-category.component';
+import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
+import { CreateEditCriteriaComponent } from './modules/checkpoint/category/criteria/create-edit-criteria/create-edit-criteria.component';
 
 
 
@@ -169,6 +173,11 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditFutureResourceComponent,
     ClientComponent,
     CreateUpdateClientComponent,
+    CategoryCriteriaComponent,
+    CreateEditCriteriaCategoryComponent,
+    CriteriaComponent,
+    CreateEditCriteriaComponent,
+
     
   ],
   imports: [

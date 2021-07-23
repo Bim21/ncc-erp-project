@@ -23,4 +23,5 @@ export class ProjectUserService extends BaseApiService {
   removeProjectUser(userId: number): Observable<any> {
     return this.http.delete<any>(this.rootUrl + `/Delete?projectUserId=${userId}`)
   }
+  
 }
