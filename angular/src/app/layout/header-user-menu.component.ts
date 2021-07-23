@@ -1,3 +1,4 @@
+import { SocialAuthService } from 'angularx-social-login';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppAuthService } from '@shared/auth/app-auth.service';
 
@@ -7,9 +8,10 @@ import { AppAuthService } from '@shared/auth/app-auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderUserMenuComponent {
-  constructor(private _authService: AppAuthService) {}
+  constructor(private _authService: AppAuthService, private googleAuthService: SocialAuthService) {}
 
   logout(): void {
     this._authService.logout();
+    this.googleAuthService.signOut()
   }
 }
