@@ -27,7 +27,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject)]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.IsFutureActive)
                         .Where(x => viewHistory || x.Status != ProjectUserStatus.Past && (x.Status == ProjectUserStatus.Present ? x.AllocatePercentage > 0 : true))
                         .OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetProjectUserDto
@@ -118,6 +118,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
+            input.IsFutureActive = true;
             input.PMReportId = pmReportActive.Id;
             input.Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
