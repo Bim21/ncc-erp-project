@@ -30,17 +30,6 @@ namespace ProjectManagement.APIs.Criterias
                         };
             return await query.GetGridResult(query, input);
         }
-        [HttpGet]
-        public async Task<object> GetAll()
-        {
-            var query = from c in WorkScope.GetAll<Criteria>()
-                        select new 
-                        {
-                            Id = c.Id,
-                            Name = c.Name,
-                        };
-            return await query.ToListAsync();
-        }
         [HttpPost]
         public async Task<CriteriaDto> Create(CriteriaDto input)
         {

@@ -26,7 +26,7 @@ namespace ProjectManagement.APIs.CriteriaCategories
             return await query.GetGridResult(query, input);
         }
         [HttpGet]
-        public async Task<List<CriteriaCategoryDto>> GetAll()
+        public async Task<List<CriteriaCategoryDto>> GetAllNoPagging()
         {
             var query = from cc in WorkScope.GetAll<CriteriaCategory>()
                         select new CriteriaCategoryDto
