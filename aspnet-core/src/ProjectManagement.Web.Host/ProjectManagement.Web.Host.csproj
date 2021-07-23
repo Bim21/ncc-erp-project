@@ -51,4 +51,9 @@
   <ItemGroup>
     <Folder Include="wwwroot\avatars\" />
   </ItemGroup>
+  <ItemGroup> 
+      <Content Include="Uploads\**"> 
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+      </Content> 
+  </ItemGroup>
 </Project>
