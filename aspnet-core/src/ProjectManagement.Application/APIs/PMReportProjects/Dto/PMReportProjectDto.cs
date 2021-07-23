@@ -18,5 +18,6 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public ProjectHealth ProjectHealth { get; set; }
         public long PMId { get; set; }
         public string Note { get; set; }
+        public bool Seen { get; set; }
     }
 }
