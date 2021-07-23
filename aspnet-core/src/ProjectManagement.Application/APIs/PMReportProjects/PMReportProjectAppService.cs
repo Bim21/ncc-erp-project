@@ -38,7 +38,14 @@ namespace ProjectManagement.APIs.PMReportProjects
                     ProjectHealth = x.ProjectHealth.ToString(),
                     PMId = x.PMId,
                     PmName = x.PM.Name,
-                    Note = x.Note
+                    Note = x.Note,
+                    PmBranch = x.PM.Branch,
+                    PmEmailAddress = x.PM.EmailAddress,
+                    PmAvatarPath = x.PM.AvatarPath,
+                    PmFullName = x.PM.FullName,
+                    PmUserName = x.PM.UserName,
+                    PmUserType = x.PM.UserType,
+                    Seen = x.Seen
                 });
             return await query.ToListAsync();
         }
@@ -246,6 +253,13 @@ namespace ProjectManagement.APIs.PMReportProjects
             }
 
             await WorkScope.DeleteAsync(pmReportProject);
+        }
+
+        public async Task ReverseSeen(long pmReportProjectId)
+        {
+            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            pmReportProject.Seen = !pmReportProject.Seen;
+            await WorkScope.UpdateAsync(pmReportProject);
         }
     }
 }
