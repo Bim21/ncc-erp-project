@@ -6,6 +6,7 @@ export class pmReportDto{
     numberOfProject: number;
     id?: number;
     isClose?:boolean;
+    pmReportProjectStatus:any;
 }
 export class pmReportProjectDto{
     pmReportId: number;
