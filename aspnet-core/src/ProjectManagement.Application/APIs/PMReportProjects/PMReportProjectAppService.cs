@@ -6,6 +6,7 @@ using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
+using ProjectManagement.APIs.PMReports.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
@@ -266,15 +267,20 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         public async Task<List<GetAllByProjectDto>> GetAllByProject(long projectId)
         {
-            return await WorkScope.GetAll<PMReportProject>()
-                .Where(x => x.ProjectId == projectId)
-                .Select(x => new GetAllByProjectDto
-                {
-                    Id = x.Id,
-                    ReportId = x.PMReportId,
-                    PMReportName = x.PMReport.Name,
-                    Note = x.Note
-                }).ToListAsync();
+            var query = from p in WorkScope.GetAll<PMReport>()
+                        join pp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId)
+                        on p.Id equals pp.PMReportId into lst
+                        from l in lst.DefaultIfEmpty()
+                        select new GetAllByProjectDto
+                        {
+                            ReportId = p.Id,
+                            PMReportName = p.Name,
+                            Status = l.Status.ToString(),
+                            IsActive = p.IsActive,
+                            Note = l.Note
+                        };
+
+            return await query.ToListAsync();
         }
 
         public async Task<string> UpdateNote(string note, long pmReportProjectId)
