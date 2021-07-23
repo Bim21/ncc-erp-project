@@ -36,6 +36,9 @@ export class PMReportProjectService extends BaseApiService {
   public updateHealth(pmReportProjectId: number, projectHealth:number) :Observable<any>{
     return this.http.get<any>(this.rootUrl+ '/UpdateHealth?pmReportProjectId='+pmReportProjectId+'&projectHealth='+projectHealth)
   }
+  public reverseDelete(pmReportProjectId:number,{}):Observable<any>{
+    return this.http.post<any>(this.rootUrl+`/ReverseSeen?pmReportProjectId=${pmReportProjectId}`,{});
+  }
 
 
 }

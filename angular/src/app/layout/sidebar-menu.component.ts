@@ -115,33 +115,29 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           "fas fa-circle",
           ""
         ),
-        
-        // new MenuItem(
-        //   this.l("Invoice"),
-        //   "/app/invoice",
-        //   "fas fa-circle",
-
-        //   ""
-        // ),
-
-
       ]
       ),
       new MenuItem(
         this.l("CheckPoint"),
         "",
         "fas fa-tasks",
-        "Checkpoint", [
+        "", [
         new MenuItem(
           this.l("Category"),
-          "/app/category",
+          "",
           "fas fa-clipboard-list",
-          "Checkpoint.Category",[
+          "",[
             new MenuItem(
               this.l("Category Criteria"),
               "/app/category-criteria",
               "fas fa-clipboard-list",
-              "Checkpoint.Category.CategoryCriteria"
+              ""
+            ),
+            new MenuItem(
+              this.l("Criteria"),
+              "/app/category-criteria",
+              "fas fa-clipboard-list",
+              ""
             )
           ]
         ),
@@ -149,6 +145,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
       ]
       ),
+      
     ];
   }
 
