@@ -235,6 +235,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             StartDate = x.StartTime.Date,
                             Use = x.AllocatePercentage
                         });
+
             return await query.GetGridResult(query, input);
         }
 
