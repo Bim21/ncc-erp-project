@@ -1,7 +1,9 @@
-﻿using Abp.UI;
+﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.Skills.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,7 @@ namespace ProjectManagement.APIs.Skills
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.Admin_Skill_Create)]
         public async Task<SkillDto> Create(SkillDto input)
         {
             var isExist = await WorkScope.GetAll<Skill>().AnyAsync(x => x.Name == input.Name);
@@ -37,6 +40,7 @@ namespace ProjectManagement.APIs.Skills
         }
 
         [HttpPut]
+        [AbpAuthorize(PermissionNames.Admin_Skill_Update)]
         public async Task<SkillDto> Update(SkillDto input)
         {
             var skill = await WorkScope.GetAsync<Skill>(input.Id);
@@ -52,6 +56,7 @@ namespace ProjectManagement.APIs.Skills
         }
 
         [HttpDelete]
+        [AbpAuthorize(PermissionNames.Admin_Skill_Delete)]
         public async Task Delete(long skillId)
         {
             var skill = await WorkScope.GetAsync<Skill>(skillId);

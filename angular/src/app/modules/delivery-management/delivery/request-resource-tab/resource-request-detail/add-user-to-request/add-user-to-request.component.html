@@ -9,7 +9,7 @@
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline">
-                    <input placeholder="Choose date" matInput [matDatepicker]="picker" name="startDate"
+                    <input placeholder="Choose date" [min]="minDate" matInput [matDatepicker]="picker" name="startDate"
                     [(ngModel)]="userToRequest.startTime" #timeStart="ngModel" required
                         />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

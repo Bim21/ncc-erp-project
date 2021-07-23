@@ -15,6 +15,7 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
   styleUrls: ['./weekly-report-tab.component.css']
 })
 export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyReportTabComponent> implements OnInit {
+
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.pmReportService.getAllPaging(request).pipe(finalize(()=>{
       finishedCallback();
@@ -41,10 +42,11 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
     this.refresh();
    
   }
-  showDetail(id:any){
+  showDetail(item:any){
     this.router.navigate(['app/weeklyReportTabDetail'], {
       queryParams: {
-        id:id
+        id:item.id,
+        isActive:item.isActive
         
       }
     })

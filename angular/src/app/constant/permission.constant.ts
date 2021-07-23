@@ -4,7 +4,7 @@ export const PERMISSIONS_CONSTANT = {
     Pages_Roles: "Pages.Roles",
     Pages_Home: "Pages.Home",
 
-    
+
     Admin: "true",
     Admin_Client: "true",
     Admin_Client_Create: "true",
@@ -42,7 +42,7 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProject_GetAll: "DeliveryManagement.PMReportProject.GetAll",
     DeliveryManagement_PMReportProject_Update: "DeliveryManagement.PMReportProject.Update",
     DeliveryManagement_ResourceRequest: "DeliveryManagement.ResourceRequest",
-    DeliveryManagement_ResourceRequest_AddUserToRequest:"DeliveryManagement.ResourceRequest.AddUserToRequest",
+    DeliveryManagement_ResourceRequest_AddUserToRequest: "DeliveryManagement.ResourceRequest.AddUserToRequest",
     DeliveryManagement_ResourceRequest_ViewAllByProject: "DeliveryManagement.ResourceRequest.ViewAllByProject",
     DeliveryManagement_ResourceRequest_ApproveUser: "DeliveryManagement.ResourceRequest.ApproveUser",
     DeliveryManagement_ResourceRequest_AvailableResource: "DeliveryManagement.ResourceRequest.AvailableResource",
@@ -63,34 +63,16 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProjectIssue_Create: "DeliveryManagement.PMReportProjectIssue.Create",
     DeliveryManagement_PMReportProjectIssue_Delete: "DeliveryManagement.PMReportProjectIssue.Delete",
     DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek: "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek",
-    DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue_.Update",
-
-   
+    DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue.Update",
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
     Pages_Users_Create: "Pages.Users.Create",
     Pages_Users_Delete: "Pages.Users.Delete",
     Pages_Users_ImportUserFromFile: "Pages.Users.ImportUserFromFile",
     Pages_Users_Update: "Pages.Users.Update",
     Pages_Users_UpdateAvatar: "Pages.Users.UpdateAvatar",
-    
-   
+
+
     PmManager: "PmManager",
     PmManager_Project: "PmManager.Project",
     PmManager_Project_Create: "PmManager.Project.Create",
@@ -110,11 +92,11 @@ export const PERMISSIONS_CONSTANT = {
     PmManager_ProjectUserBill_GetAllPaging: "PmManager.ProjectUserBill.GetAllPaging",
     PmManager_ProjectUserBill_GetAllbyProject: "PmManager.ProjectUserBill.GetAllbyProject",
     PmManager_ProjectUserBill_Update: "PmManager.ProjectUserBill.Update",
-    PmManager_ProjectMilestone:"PmManager.ProjectMilestone",
-    PmManager_ProjectMilestone_Create:"PmManager.ProjectMilestone.Create",
-    PmManager_ProjectMilestone_Delete:"PmManager.ProjectMilestone.Delete",
-    PmManager_ProjectMilestone_Update:"PmManager.ProjectMilestone.Update",
-    PmManager_ProjectMilestone_ViewAll:"PmManager.ProjectMilestone.ViewAll",
+    PmManager_ProjectMilestone: "PmManager.ProjectMilestone",
+    PmManager_ProjectMilestone_Create: "PmManager.ProjectMilestone.Create",
+    PmManager_ProjectMilestone_Delete: "PmManager.ProjectMilestone.Delete",
+    PmManager_ProjectMilestone_Update: "PmManager.ProjectMilestone.Update",
+    PmManager_ProjectMilestone_ViewAll: "PmManager.ProjectMilestone.ViewAll",
 
     PmManager_Timesheet_GetAllProjectTimesheetByTimesheet: "true",
     PmManager_Timesheet_ViewOnlyActiveProject: "true",
@@ -132,9 +114,10 @@ export const PERMISSIONS_CONSTANT = {
     PmManager_CanViewMenu_ResourceManagement: "PmManager.CanViewMenu.ResourceManagement",
     PmManager_CanViewMenu_Timesheet: "PmManager.CanViewMenu.Timesheet",
     PmManager_CanViewMenu_WeeklyReport: "PmManager.CanViewMenu.WeeklyReport",
-    
+
     SaoDo: "SaoDo",
-    SaoDo_AuditResult: "true",
+    SaoDo_AuditResult: "SaoDo.AuditResult",
+    SaoDo_CanViewMenu: "SaoDo.CanViewMenu",
     SaoDo_AuditResult_Create: "SaoDo.AuditResult.Create",
     SaoDo_AuditResult_Delete: "SaoDo.AuditResult.Delete",
     SaoDo_AuditResult_GetNote: "SaoDo.AuditResult.GetNote",
@@ -148,7 +131,7 @@ export const PERMISSIONS_CONSTANT = {
     SaoDo_AuditSession_AddAuditResult: "SaoDo.AuditSession.AddAuditResult",
     SaoDo_AuditSession_Create: "SaoDo.AuditSession.Create",
     SaoDo_AuditSession_Delete: "SaoDo.AuditSession.Delete",
-    SaoDo_AuditSession_Update: "SaoDo.AuditSession.Update", 
+    SaoDo_AuditSession_Update: "SaoDo.AuditSession.Update",
     SaoDo_AuditSession_View: "SaoDo.AuditSession.View",
     SaoDo_AuditSession_ViewAll: "SaoDo.AuditSession.ViewAll",
     Timesheet: "Timesheet",
@@ -159,6 +142,18 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_Timesheet_Get: "Timesheet.Timesheet.Get",
     Timesheet_Timesheet_Update: "Timesheet.Timesheet.Update",
     Timesheet_Timesheet_ViewAll: "Timesheet.Timesheet.ViewAll",
-    
-    
+
+
+    Timesheet_TimesheetProject: "Timesheet.TimesheetProject",
+    Timesheet_TimesheetProject_Create: "Timesheet.TimesheetProject.Create",
+    Timesheet_TimesheetProject_CreateInvoice: "Timesheet.TimesheetProject.CreateInvoice",
+    Timesheet_TimesheetProject_Delete: "Timesheet.TimesheetProject.Delete",
+    Timesheet_TimesheetProject_DownloadFileTimesheetProject: "Timesheet.TimesheetProject.DownloadFileTimesheetProject",
+    Timesheet_TimesheetProject_GetAllByProject: "Timesheet.TimesheetProject.GetAllByProject",
+    Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet: "Timesheet.TimesheetProject.GetAllRemainProjectInTimeshee",
+    Timesheet_TimesheetProject_Update: "Timesheet.TimesheetProject.Update",
+    Timesheet_TimesheetProject_UploadFileTimesheetProject: "Timesheet.TimesheetProject.UploadFileTimesheetProject",
+    Timesheet_TimesheetProject_ViewInvoice: "Timesheet.TimesheetProject.ViewInvoice",
+
+
 }

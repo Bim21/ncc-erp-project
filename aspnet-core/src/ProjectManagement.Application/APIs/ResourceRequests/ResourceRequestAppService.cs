@@ -128,7 +128,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             input.ProjectId = resourceRequest.ProjectId;
             input.PMReportId = pmReportActive.Id;
             input.Status = ProjectUserStatus.Future;
-            input.IsFutureActive = false;
+            input.IsFutureActive = true;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
 
             if (input.Status == ProjectUserStatus.Present)
@@ -154,7 +154,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
-                                .Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present)
+                                .Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                 .Select(x => new
                                 {
                                     UserId = x.UserId,
@@ -181,13 +181,17 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present)
+                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                .Select(x => new
                                {
                                    UserId = x.UserId,
                                    ProjectName = x.Project.Name,
                                    AllocatePercentage = x.AllocatePercentage
                                });
+
+            var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
+                       .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
+
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive)
                                 .Select(x => new AvailableResourceDto
                                 {
@@ -199,7 +203,12 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id).Select(x => x.ProjectName).ToList(),
-                                    Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)
+                                    Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage),
+                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan { 
+                                        ProjectName = p.Project.Name,
+                                        StartTime = p.StartTime.Date,
+                                        AllocatePercentage = p.AllocatePercentage
+                                    }).ToList()
                                 });
 
             return await users.GetGridResult(users, input);
@@ -209,7 +218,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture)]
         public async Task<GridResult<AvailableResourceFutureDto>> AvailableResourceFuture(GridParam input)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && !x.IsFutureActive)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
+                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
                         .Select(x => new AvailableResourceFutureDto
                         {
                             Id = x.Id,
@@ -234,7 +244,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && 
-                               x.Status == ProjectUserStatus.Present);
+                               x.Status == ProjectUserStatus.Present && x.IsFutureActive);
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
@@ -255,7 +265,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 StartTime = input.StartTime,
                 Status = ProjectUserStatus.Future,
                 IsExpense = input.IsExpense,
-                IsFutureActive = false,
+                IsFutureActive = true,
                 PMReportId = pmReportActive.Id
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
@@ -276,14 +286,15 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser)]
         public async Task<ProjectUserDto> ApproveUser(ProjectUserDto input)
         {
-            if(input.Status != ProjectUserStatus.Future)
+            var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
+            if(projectUser.Status != ProjectUserStatus.Future)
             {
                 throw new UserFriendlyException("Can't approve request not in the future !");
             }
 
-            input.IsFutureActive = true;
             input.Status = ProjectUserStatus.Present;
-
+            input.ProjectId = projectUser.ProjectId;
+            input.IsFutureActive = true;
             await _projectUserAppService.Update(input);
 
             var pu = WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present);

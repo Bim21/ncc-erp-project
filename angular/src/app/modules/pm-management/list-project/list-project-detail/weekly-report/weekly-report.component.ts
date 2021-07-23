@@ -35,6 +35,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public processProblem: boolean = false;
   public searchPmReport:string="";
   public activeReportId= {} as pmReportDto;
+  public isSentReport:boolean;
 
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
@@ -43,6 +44,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public isEditProblem: boolean = false;
   public isEditFutureReport: boolean = false;
   public minDate = new Date();
+  public isEditWeeklyReport:boolean=false;
   DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
   DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
   DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
@@ -57,6 +59,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   DeliveryManagement_PMReportProjectIssue_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
   DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
   DeliveryManagement_PMReportProjectIssue_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
+  DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
+  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
 
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
@@ -112,26 +116,65 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.processWeekly = true;
   }
   public saveWeekReport(report: projectReportDto) {
-    report.isFutureActive = false
+    // report.isFutureActive = false
     report.projectId = this.projectId
     report.isExpense = true;
     report.status = "0";
     report.startTime = moment(report.startTime).format("YYYY-MM-DD");
     delete report["createMode"]
-    this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      abp.notify.success("created new weekly report");
-      this.processWeekly = false;
-      report.createMode = false;
-      this.getWeeklyReport();
-    },
-      () => {
-        report.createMode = true
-      })
+    if(this.isEditWeeklyReport==true){
+      this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+        this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+          abp.notify.success(`updated user: ${report.userName}`);
+          this.getWeeklyReport();
+          this.isEditFutureReport = false;
+          this.processWeekly = false;
+        })
+      },
+        () => {
+          report.createMode = true
+        })
+    }else{
+      this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        abp.notify.success("created new weekly report");
+        this.processWeekly = false;
+        report.createMode = false;
+        this.getWeeklyReport();
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+    
 
   }
   public cancelWeekReport() {
     this.processWeekly = false;
     this.getWeeklyReport();
+  }
+  updateWeekReport(report){
+    this.processWeekly = true
+    this.isEditWeeklyReport = true;
+    report.createMode = true;
+    report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
+    console.log("aaaaaaaaaaaa",report);
+  }
+
+  deleteWeekReport(report){
+    
+    abp.message.confirm(
+      "Delete Issue? ",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.removeProjectUser(report.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted Report");
+            this.getWeeklyReport();
+          });
+        }
+      }
+    );
   }
 
   // Future Report
@@ -158,7 +201,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
         })
     }
     else {
-      report.isFutureActive = false
+      // report.isFutureActive = false
       report.projectId = this.projectId
       report.isExpense = true;
       report.status = "2";
@@ -195,7 +238,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     }
     const dialogRef = this.dialog.open(ApproveDialogComponent, {
       data: {
-        dialogData: resource,
+        dialogData: dialogData,
       },
       width: "700px",
       disableClose: true,
@@ -222,9 +265,10 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   // Project Issue
   public getAllPmReport() {
-    this.pmreportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.pmreportService.getPmReport(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
+      this.isSentReport = this.activeReportId.pmReportProjectStatus =='Draft'?true:false
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -310,6 +354,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
         if (result) {
           this.reportService.sendReport(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
               abp.notify.success("Send report successful");
+              this.getAllPmReport();
           })
         }
       }

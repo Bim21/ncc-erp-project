@@ -136,4 +136,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       this.refresh();
     });
   }
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
+  }
 }

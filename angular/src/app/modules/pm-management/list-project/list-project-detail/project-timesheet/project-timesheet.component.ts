@@ -1,3 +1,5 @@
+import { TimesheetService } from '@app/service/api/timesheet.service';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ImportFileTimesheetDetailComponent } from './../../../../timesheet/timesheet-detail/import-file-timesheet-detail/import-file-timesheet-detail.component';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError } from 'rxjs/operators';
@@ -6,6 +8,7 @@ import { ProjectTimesheetDto } from './../../../../../service/model/timesheet.dt
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { AppComponentBase } from '@shared/app-component-base';
 import { Component, OnInit, Injector, inject } from '@angular/core';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-project-timesheet',
@@ -13,9 +16,23 @@ import { Component, OnInit, Injector, inject } from '@angular/core';
   styleUrls: ['./project-timesheet.component.css']
 })
 export class ProjectTimesheetComponent extends AppComponentBase implements OnInit {
+  
+  Timesheet_TimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject;
+  Timesheet_TimesheetProject_Create= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
+  Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
+  Timesheet_TimesheetProject_Delete = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
+  Timesheet_TimesheetProject_DownloadFileTimesheetProject =PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
+  Timesheet_TimesheetProject_GetAllByProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_GetAllByProject;
+  Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet;
+  Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Update;
+  Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
+  Timesheet_TimesheetProject_ViewInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewInvoice;
   public listTimesheetByProject: ProjectTimesheetDto[] = [];
   private projectId:number;
-  constructor(injector:Injector, private timesheetSerivce:TimesheetProjectService, private route:ActivatedRoute, private dialog:MatDialog) {
+  constructor(injector:Injector, 
+    public timesheetProjectService: TimesheetProjectService,
+    private timesheetService: TimesheetService,
+    private timesheetSerivce:TimesheetProjectService, private route:ActivatedRoute, private dialog:MatDialog) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
    }
@@ -24,24 +41,56 @@ export class ProjectTimesheetComponent extends AppComponentBase implements OnIni
     this.getAllTimesheet();
   }
   private getAllTimesheet(){
-    this.timesheetSerivce.getAllByProject(this.projectId).pipe(catchError(this.timesheetSerivce.handleError)).subscribe(data=>{
-      this.listTimesheetByProject =data.result;
+    if(this.permission.isGranted(this.Timesheet_TimesheetProject)){
+      this.timesheetSerivce.getAllByProject(this.projectId).pipe(catchError(this.timesheetSerivce.handleError)).subscribe(data=>{
+        this.listTimesheetByProject =data.result;
+      })
+    }
+  }
+  importExcel(id: any) {
+    const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
+      data: { id: id, width: '500px' }
+    });
+    dialog.afterClosed().subscribe(result => {
+      this.getAllTimesheet();
+    });
+  }
+  importFile(id:number){
+    this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data=>{
     })
   }
-  
-  // public addTimesheet(){
-  //   let newTimesheet ={} as ProjectTimesheetDto
-  //   newTimesheet.createMode = true;
-  //    this.listTimesheetByProject.push(newTimesheet)
-  // }
+  DeleteFile(item: any) {
+    abp.message.confirm(
+      "Delete File " + item.timesheetFile + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted File  " + item.timesheetFile);
+            this.getAllTimesheet();
+          });
+        }
+      }
+    );
 
-//  public importTimeSheet(id: any) {
-//     const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
-//       data: { id: id, width: '500px' }
-//     });
-//     dialog.afterClosed().subscribe(result => {
-//       this.getAllTimesheet();
-//     });
-//   }
+  }
+  
+  downloadFile(projectTimesheet:any){
+    this.timesheetProjectService.GetTimesheetFile(projectTimesheet.id).subscribe(data=>{
+      const file = new Blob([this.s2ab(atob(data.result.data))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      FileSaver.saveAs(file, data.result.fileName);
+    })
+   
+  }
+  s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
+  
+
 
 }

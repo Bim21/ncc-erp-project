@@ -26,11 +26,11 @@
                     </div>
                     <div class="col-3 text-right">
                         <div class="text-right">
-                            <button *ngIf="!isEditingNote" (click)="isEditingNote=true" type="button"
+                            <button *ngIf="!isEditingNote && permission.isGranted(SaoDo_AuditResult_UpdateNote)" (click)="isEditingNote=true" type="button"
                                 class="btn bg-blue">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button *ngIf="isEditingNote && permission.isGranted(SaoDo_AuditResult_UpdateNote)" (click)="saveNote();isEditingNote=false" type="button"
+                            <button *ngIf="isEditingNote" (click)="saveNote();isEditingNote=false" type="button"
                                 style="margin-right: 20px;" class="btn bg-blue">
                                 Save
                             </button>
@@ -120,7 +120,7 @@
 
                                         </div>
                                     </div>
-                                    <div>
+                                    <div *ngIf="permission.isGranted(SaoDo_AuditResult_Create)">
                                         <form class="form-horizontal">
                                             <div class="modal-body"
                                                 style="display: flex;flex-direction: column;align-items: center;">
@@ -137,7 +137,7 @@
                                                         </mat-select>
                                                     </mat-form-field>
                                                 </div>
-                                                <div class="form-group row required">
+                                                <div  class="form-group row required">
                                                     <mat-form-field appearance="outline">
                                                         <mat-select [disabled]="isEditing"
                                                             (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
@@ -153,7 +153,7 @@
 
 
                                                 <div class="form-group row required">
-                                                    <button *ngIf="permission.isGranted(SaoDo_AuditResult_Create)" [disabled]="!projectUser.userId"
+                                                    <button  [disabled]="!projectUser.userId"
                                                         class="btn bg-blue" mat-raised-button
                                                         (click)="submit(item)">Submit</button>
                                                 </div>

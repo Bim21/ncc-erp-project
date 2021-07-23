@@ -12,6 +12,12 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="wwwroot\timesheets\**" />
+    <Content Remove="wwwroot\timesheets\**" />
+    <EmbeddedResource Remove="wwwroot\timesheets\**" />
+    <None Remove="wwwroot\timesheets\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="wwwroot\swagger\ui\index.html" />
   </ItemGroup>
   <ItemGroup>
@@ -41,5 +47,13 @@
     <EmbeddedResource Include="wwwroot\swagger\ui\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\avatars\" />
+  </ItemGroup>
+  <ItemGroup> 
+      <Content Include="Uploads\**"> 
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+      </Content> 
   </ItemGroup>
 </Project>

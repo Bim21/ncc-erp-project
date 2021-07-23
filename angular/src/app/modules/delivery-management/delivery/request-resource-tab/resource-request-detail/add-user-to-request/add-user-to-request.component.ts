@@ -8,6 +8,7 @@ import { DeliveryResourceRequestService } from './../../../../../../service/api/
 import { Component, Inject, OnInit, Injector } from '@angular/core';
 import { userToRequestDto } from '@app/service/model/delivery-management.dto';
 import * as moment from 'moment';
+import { sortedUniq } from 'lodash-es';
 
 @Component({
   selector: 'app-add-user-to-request',
@@ -18,6 +19,8 @@ export class AddUserToRequestComponent extends AppComponentBase implements OnIni
 
   public userToRequest = {} as userToRequestDto;
   public editToRequest = {} as userToRequestDto;
+  public minDate=new Date();
+  public timeNeed;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, injector: Injector
     , private resourceRequestService: DeliveryResourceRequestService,
@@ -28,9 +31,18 @@ export class AddUserToRequestComponent extends AppComponentBase implements OnIni
   }
 
   ngOnInit(): void {
+    this.timeNeed= this.route.snapshot.queryParamMap.get('timeNeed');
+    
+    
+    console.log(this.route.snapshot.queryParamMap.get('timeNeed'))
+    this.minDate= new Date(moment(this.timeNeed).format("YYYY/MM/DD"));
+    console.log(this.minDate)
     this.userToRequest = this.data.item;
     this.userToRequest.userId = this.data.userId;
     this.userToRequest.resourceRequestId = Number(this.route.snapshot.queryParamMap.get('id'));
+    
+      
+  
 
   }
   SaveAndClose() {

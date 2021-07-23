@@ -8,6 +8,7 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit, Inject, Injector } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-update-resource-request',
@@ -32,6 +33,8 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   }
   SaveAndClose(){
     this.isLoading =true;
+    this.resourceRequestDto.timeNeed=moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
+    this.resourceRequestDto.timeDone=moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
     if(this.data.command=="create"){
       this.resourceRequestService.create(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res)=>{
         abp.notify.success("Create Successfully!");

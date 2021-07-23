@@ -27,5 +27,6 @@ namespace ProjectManagement.Entities
         public User PM { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }
+        public bool Seen { get; set; }
     }
 }

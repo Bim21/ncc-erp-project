@@ -15,7 +15,7 @@
                             <input matInput [(ngModel)]="searchUser" name="searchUser" placeholder="search">
                         </mat-form-field>
                         <mat-option *ngFor="let user of userList |filter:searchUser" [value]="user.id">
-                            {{user.name}}</mat-option>
+                            {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-error class="mt-1" *ngIf="projectEmployee.hasError('required') && projectEmployee.touched"

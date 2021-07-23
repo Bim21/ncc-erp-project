@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel [expanded]="isShowProjectUser">
+            <mat-expansion-panel [expanded]="isShowProjectUser" *ngIf="permission.isGranted(PmManager_ProjectUser)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <h4 class="d-inline">Danh sách nhân viên</h4>
@@ -191,10 +191,10 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel expanded=false>
+            <mat-expansion-panel expanded=false  *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ViewAllByProject)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <h4 class="d-inline">Request nhân sự</h4>
-                    <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ProjectUser_Create)" [hidden]="!isShowRequest"
+                    <button *ngIf="!requestProcess  &&  permission.isGranted(DeliveryManagement_ResourceRequest_Create)" [hidden]="!isShowRequest"
                         (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                         class="btn bg-blue ml-3">
                         <i class="fa fa-plus-square mr-1"></i>Create
@@ -220,8 +220,8 @@
                                     currentPage: resourceRequestCurrentPage
                                     } ; let i = index">
                                 <td><span>{{ i +1 }}</span></td>
-                                <td>
-                                    <p *ngIf="!request.createMode">{{request.name}}</p>
+                                <td  class="text-left">
+                                    <p style="white-space: normal; max-width: 300px;" *ngIf="!request.createMode">{{request.name}}</p>
                                     <div *ngIf="request.createMode" class="form-group row required">
                                         <input required placeholder="text" class="form-control mt-2" type="text"
                                             [(ngModel)]="request.name" #requestName="ngModel" #requestNameEl>
@@ -243,8 +243,8 @@
 
                                     </div>
                                 </td>
-                                <td>
-                                    <p *ngIf="!request.createMode">{{request.note}}</p>
+                                <td style="white-space: normal; max-width: 300px; " class="text-left">
+                                    <p  *ngIf="!request.createMode">{{request.note}}</p>
                                     <div *ngIf="request.createMode" class="form-group row required">
                                         <mat-form-field class="example-full-width" appearance="outline">
                                             <textarea placeholder="leave a comment" [(ngModel)]="request.note"
@@ -252,20 +252,20 @@
                                         </mat-form-field>
                                     </div>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <p style="font-size: 12px;" [ngClass]="APP_CONST.statusStyle[request.statusName]"
                                         *ngIf="!request.craeteMode">
                                         {{request.statusName}}</p>
-                                    <div *ngIf="request.createMode && !isEditRequest" class="form-group row required">
+                                    <div *ngIf="request.createMode && !isEditRequest" class="form-group ">
                                         <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1">PENDING</p>
                                     </div>
                                 </td>
                                 <td>
                                     <div *ngIf="!request.createMode">
-                                        <button *ngIf="permission.isGranted(permission.isGranted(PmManager_ProjectUser_Update))" [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
+                                        <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)" [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
                                             (click)="editProjectRerequest(request)"> <i
                                                 class="fas fa-pencil-alt"></i>Edit</button>
-                                        <button *ngIf="permission.isGranted(permission.isGranted(PmManager_ProjectUser_Delete))" [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
+                                        <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)" [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
                                             (click)="removeProjectRerequest(request)"> <i
                                                 class="fas fa-trash"></i>delete</button>
 
@@ -305,7 +305,7 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel expanded=false>
+            <mat-expansion-panel expanded=false *ngIf="permission.isGranted(PmManager_ProjectUserBill)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Danh sách Bill Dự án</h4>
                     <button *ngIf="!userBillProcess && permission.isGranted(PmManager_ProjectUserBill_Create)" [hidden]="!isShowUserBill" style="border: none;"

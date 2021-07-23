@@ -24,5 +24,6 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public string PmAvatarPath { get; set; }
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
+        public bool Seen { get; set; }
     }
 }

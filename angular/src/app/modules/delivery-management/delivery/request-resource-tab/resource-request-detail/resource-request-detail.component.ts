@@ -25,6 +25,8 @@ export class ResourceRequestDetailComponent extends AppComponentBase implements 
   public userAvailable={} as userAvailableDto;
   DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest;
   DeliveryManagement_ResourceRequest_AddUserToRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_AddUserToRequest;
+ 
+
   constructor(private route:ActivatedRoute,
     private resourceRequestService:DeliveryResourceRequestService,
     private dialog:MatDialog,
@@ -36,6 +38,7 @@ export class ResourceRequestDetailComponent extends AppComponentBase implements 
     this.getAllResourceRequestDetail();
     this.userAvailable.startDate=new Date();
     this.search();
+    
     
   }
   public getAllResourceRequestDetail(){

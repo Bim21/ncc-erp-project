@@ -6,6 +6,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.CriteriaCategories.Dto;
 using ProjectManagement.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace ProjectManagement.APIs.CriteriaCategories
     public class CriteriaCategoryAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        public async Task<GridResult<CriteriaCategoryDto>> GetAll(GridParam input)
+        public async Task<GridResult<CriteriaCategoryDto>> GetAllPaging(GridParam input)
         {
             var query = from cc in WorkScope.GetAll<CriteriaCategory>()
                         select new CriteriaCategoryDto
@@ -23,6 +24,17 @@ namespace ProjectManagement.APIs.CriteriaCategories
                             Name=cc.Name,
                         };
             return await query.GetGridResult(query, input);
+        }
+        [HttpGet]
+        public async Task<List<CriteriaCategoryDto>> GetAllNoPagging()
+        {
+            var query = from cc in WorkScope.GetAll<CriteriaCategory>()
+                        select new CriteriaCategoryDto
+                        {
+                            Id = cc.Id,
+                            Name = cc.Name,
+                        };
+            return await query.ToListAsync();
         }
         [HttpPost]
         public async Task<CriteriaCategoryDto> Create(CriteriaCategoryDto input)

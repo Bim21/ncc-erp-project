@@ -11,3 +11,8 @@
 ::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin{
     margin-top: 80%;
 }
+::ng-deep .mat-list-item {
+    max-height: 150px;
+    overflow: hidden;
+    cursor: pointer;
+}

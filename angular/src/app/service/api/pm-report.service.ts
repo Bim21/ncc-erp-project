@@ -15,6 +15,9 @@ export class PmReportService extends BaseApiService{
   public closeReport(id: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/CloseReport?pmReportId=' + id);
 }
+public getPmReport(projectId: number): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetAll?projectId=' + projectId);
+}
   
 
 }

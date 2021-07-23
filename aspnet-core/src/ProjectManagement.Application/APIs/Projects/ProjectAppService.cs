@@ -29,7 +29,6 @@ namespace ProjectManagement.APIs.Projects
         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
 
-            var qwerwq = WorkScope.GetAll<Project>();
             var query = from p in WorkScope.GetAll<Project>()
                         where isViewAll || p.PMId == AbpSession.UserId.Value
                         select new GetProjectDto
@@ -120,19 +119,36 @@ namespace ProjectManagement.APIs.Projects
             {
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
-               
+
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
+
             var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
                                 .Where(x => x.ProjectType == input.ProjectType)
-                                .Select(x => new ProjectCheckList{ 
+                                .Select(x => new ProjectCheckList{
                                     ProjectId = input.Id,
-                                        CheckListItemId = x.CheckListItemId,
-                                        IsActive = true,
+                                    CheckListItemId = x.CheckListItemId,
+                                    IsActive = true,
                                 }).ToListAsync();
+
             foreach(var i in projectCheckLists)
             {
                 await WorkScope.InsertAsync(i);
             }
+
+            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            if (pmReportActive == null)
+                throw new UserFriendlyException("Can't find any active reports !");
+
+            var pmReportProject = new PMReportProject
+            {
+                PMReportId = pmReportActive.Id,
+                ProjectId = input.Id,
+                Status = PMReportProjectStatus.Draft,
+                ProjectHealth = ProjectHealth.Green,
+                PMId = input.PmId,
+                Note = null
+            };
+            await WorkScope.InsertAsync(pmReportProject);
 
             return input;
         }
@@ -162,8 +178,6 @@ namespace ProjectManagement.APIs.Projects
         public async Task Delete(long projectID)
         {
             var project = await WorkScope.GetAsync<Project>(projectID);
-            if (project == null)
-                throw new UserFriendlyException($"Project with id = {projectID} not exist !");
 
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.ProjectId == projectID);
             if (timesheetProject)

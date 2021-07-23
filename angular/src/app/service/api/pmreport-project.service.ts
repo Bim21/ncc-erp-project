@@ -33,6 +33,9 @@ export class PMReportProjectService extends BaseApiService {
   public problemsOfTheWeekForReport(projectId: number, pmReportId:number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/ProblemsOfTheWeekForReport?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
+  public updateHealth(pmReportProjectId: number, projectHealth:number) :Observable<any>{
+    return this.http.get<any>(this.rootUrl+ '/UpdateHealth?pmReportProjectId='+pmReportProjectId+'&projectHealth='+projectHealth)
+  }
 
 
 }

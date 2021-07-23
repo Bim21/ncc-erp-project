@@ -31,6 +31,12 @@ namespace ProjectManagement.Authorization
             public const string Admin_Client_Edit = "Admin.Client.Edit";
             public const string Admin_Client_Delete = "Admin.Client.Delete";
 
+            //Skill
+            public const string Admin_Skill = "Admin.Skill";
+            public const string Admin_Skill_Create = "Admin.Skill.Create";
+            public const string Admin_Skill_Update = "Admin.Skill.Update";
+            public const string Admin_Skill_Delete = "Admin.Skill.Delete";
+
         //Pm Manager
         public const string PmManager = "PmManager";
             // view menu
@@ -252,6 +258,12 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Client_Edit,
                     PermissionNames.Admin_Client_Delete,
 
+                    //Skill
+                    PermissionNames.Admin_Skill,
+                    PermissionNames.Admin_Skill_Create,
+                    PermissionNames.Admin_Skill_Update,
+                    PermissionNames.Admin_Skill_Delete,
+
                     // Project
                     PermissionNames.PmManager_Project,
                     PermissionNames.PmManager_Project_ViewAll,
@@ -450,6 +462,12 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Client" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Client" },
 
+                 //Skill
+                 new SystemPermission{ Name =  PermissionNames.Admin_Skill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Skill" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Skill" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill" },
+
                  //Project
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project" },
@@ -630,6 +648,15 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Client" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Client" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Client" },
+                            }
+                        },
+                        //Skill
+                        new SystemPermission { Name =  PermissionNames.Admin_Skill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Skill",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Skill" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill" },
                             }
                         },
                     }

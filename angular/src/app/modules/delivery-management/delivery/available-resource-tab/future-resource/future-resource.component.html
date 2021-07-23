@@ -45,7 +45,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Nhân viên</th>
-                            <!-- <th>Vào dự án</th> -->
+                            <th>Project</th>
                             <th>Sử dụng</th>
                             <th>Actions</th>
                         </tr>
@@ -61,7 +61,7 @@
                             <td class="text-center"><span>{{ i +1 }}</span></td>
                             <td ><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                 userType:item.userType,emailAddress:item.emailAddress}"></app-user-info></td>
-                            <!-- <td class="text-center"></td> -->
+                            <td class="text-center">{{item.projectName}}</td>
                             <td class="text-center"><strong class="mr-2">{{item.use}}%</strong></td>
                             <td class="text-center">
                                 <button class="btn btn-secondary mr-2" (click)="updateFutureResource(item)">

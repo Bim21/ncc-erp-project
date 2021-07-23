@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -8,6 +9,9 @@ import { AppComponentBase } from '@shared/app-component-base';
   styleUrls: ['./delivery.component.css']
 })
 export class DeliveryComponent extends AppComponentBase implements OnInit {
+  PmManager_CanViewMenu_ResourceManagement=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ResourceManagement;
+  PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
+  DeliveryManagement_ResourceRequest_AvailableResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_AvailableResource
   currentUrl: string = ""
 
   constructor(injector: Injector, private router: Router, private route: ActivatedRoute) {

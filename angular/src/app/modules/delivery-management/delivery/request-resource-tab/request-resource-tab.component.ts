@@ -51,6 +51,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   DeliveryManagement_ResourceRequest_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
   DeliveryManagement_ResourceRequest_Update=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update;
   DeliveryManagement_ResourceRequest_ViewDetailResourceRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest;
+  
+  
   constructor(private injector:Injector,
   private resourceRequestService:DeliveryResourceRequestService,
   private dialog: MatDialog) {super(injector) }
@@ -58,11 +60,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   ngOnInit(): void {
     this.refresh();
   }
-  showDetail(id:any){
+  showDetail(item:any){
     if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)){
       this.router.navigate(['app/resourceRequestDetail'], {
         queryParams: {
-          id: id,
+          id: item.id,
+          timeNeed:item.timeNeed
         }
       })
     }

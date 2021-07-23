@@ -3,13 +3,13 @@
         <div class="row mb-4 card">
             <div class="col-12">
                 <nav mat-tab-nav-bar>
-                    <a [ngClass]="currentUrl.includes('weekly-report-tab')?'active':''"  mat-tab-link (click)="routingWeeklyReportTab()">
+                    <a [ngClass]="currentUrl.includes('weekly-report-tab')?'active':''"  mat-tab-link (click)="routingWeeklyReportTab()" >
                         Weekly Report
                     </a>
-                    <a [ngClass]="currentUrl.includes('request-resource-tab')?'active':''"  mat-tab-link (click)="routingRequestResourceTab()">
+                    <a [ngClass]="currentUrl.includes('request-resource-tab')?'active':''"  mat-tab-link (click)="routingRequestResourceTab()" *ngIf="permission.isGranted(PmManager_CanViewMenu_ResourceManagement)">
                         Request Resource
                     </a>
-                    <a [ngClass]="currentUrl.includes('available-resource-tab')?'active':''"  mat-tab-link (click)="routingAvailableResourceTab()">
+                    <a [ngClass]="currentUrl.includes('available-resource-tab')?'active':''"  mat-tab-link (click)="routingAvailableResourceTab()" *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_AvailableResource)">
                         Available Resource
                     </a>
                 </nav>
