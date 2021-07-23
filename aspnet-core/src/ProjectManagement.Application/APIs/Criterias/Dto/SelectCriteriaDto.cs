@@ -14,7 +14,8 @@ namespace ProjectManagement.APIs.Criterias.Dto
         [ApplySearchAttribute]
         public string Name { get; set; }
         public int Weight { get; set; }
-        public string CriteriaCatagoryName { get; set; }
+        public long CriteriaCategoryId { get; set; }
+        public string CriteriaCategoryName { get; set; }
         public string Note { get; set; }
     }
 }
