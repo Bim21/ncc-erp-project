@@ -25,7 +25,8 @@ namespace ProjectManagement.APIs.Criterias
                             Id = c.Id,
                             Name = c.Name,
                             Weight = c.Weight,
-                            CriteriaCatagoryName = ct.Name,
+                            CriteriaCategoryId = ct.Id,
+                            CriteriaCategoryName = ct.Name,
                             Note = c.Note
                         };
             return await query.GetGridResult(query, input);
