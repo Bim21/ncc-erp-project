@@ -188,6 +188,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                    ProjectName = x.Project.Name,
                                    AllocatePercentage = x.AllocatePercentage
                                });
+
             var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
 
