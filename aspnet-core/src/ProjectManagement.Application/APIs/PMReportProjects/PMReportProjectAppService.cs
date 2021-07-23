@@ -130,7 +130,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId && x.IsFutureActive)
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
                             .Select(x => new GetProjectUserDto
                             {
@@ -260,6 +260,29 @@ namespace ProjectManagement.APIs.PMReportProjects
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
             pmReportProject.Seen = !pmReportProject.Seen;
             await WorkScope.UpdateAsync(pmReportProject);
+        }
+
+
+        [HttpGet]
+        public async Task<List<GetAllByProjectDto>> GetAllByProject(long projectId)
+        {
+            return await WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.ProjectId == projectId)
+                .Select(x => new GetAllByProjectDto
+                {
+                    Id = x.Id,
+                    ReportId = x.PMReportId,
+                    PMReportName = x.PMReport.Name,
+                    Note = x.Note
+                }).ToListAsync();
+        }
+
+        public async Task<string> UpdateNote(string note, long pmReportProjectId)
+        {
+            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            pmReportProject.Note = note;
+            await WorkScope.UpdateAsync(pmReportProject);
+            return note;
         }
     }
 }
