@@ -25,7 +25,8 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService:ListProjectService,
     private resourceRequestService:DeliveryResourceRequestService,
-    public  dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>) { super(injector)}
+    public  dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>) { super(injector);
+    }
 
   ngOnInit(): void {
     this.getAllProject();

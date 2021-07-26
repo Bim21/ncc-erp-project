@@ -27,20 +27,20 @@ import * as moment from 'moment';
   styleUrls: ['./weekly-report-tab-detail.component.css']
 })
 export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<WeeklyReportTabDetailComponent> implements OnInit {
-  DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
-  DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
-  DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
-  DeliveryManagement_PMReportProject_GetAll=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
-  DeliveryManagement_PMReportProject_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
-  DeliveryManagement_PMReportProject_GetAllByPmProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
-  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
-  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
-  DeliveryManagement_PMReportProject_SendReport=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
-  DeliveryManagement_PMReportProjectIssue=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
-  DeliveryManagement_PMReportProjectIssue_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
-  DeliveryManagement_PMReportProjectIssue_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
-  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
-  DeliveryManagement_PMReportProjectIssue_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
+  DeliveryManagement_PMReportProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
+  DeliveryManagement_PMReportProject_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
+  DeliveryManagement_PMReportProject_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
+  DeliveryManagement_PMReportProject_GetAll = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
+  DeliveryManagement_PMReportProject_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
+  DeliveryManagement_PMReportProject_GetAllByPmProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
+  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
+  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
+  DeliveryManagement_PMReportProject_SendReport = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
+  DeliveryManagement_PMReportProjectIssue = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
+  DeliveryManagement_PMReportProjectIssue_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
+  DeliveryManagement_PMReportProjectIssue_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
+  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
+  DeliveryManagement_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
   DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
   DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
@@ -54,17 +54,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   protected delete(entity: WeeklyReportTabDetailComponent): void {
     throw new Error('Method not implemented.');
   }
-  public itemPerPage:number =5;
-  public weeklyCurrentPage:number = 1;
-  public futureCurrentPage:number=1;
-  public problemCurrentPage:number=1;
+  public itemPerPage: number = 5;
+  public weeklyCurrentPage: number = 1;
+  public futureCurrentPage: number = 1;
+  public problemCurrentPage: number = 1;
   public searchText = "";
   public pmReportProjectList: pmReportProjectDto[] = [];
   public tempPmReportProjectList: pmReportProjectDto[] = [];
   public show: boolean = false;
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
-  public isActive="";
+  public isActive = "";
   public weeklyPeportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
@@ -74,11 +74,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public activeReportId: number;
   public projectHealth;
   public pmReportProjectId;
-  public isEditWeeklyReport:boolean=false;
-  public isEditFutureReport:boolean=false;
-  public isEditProblem:boolean=false;
-  public minDate=new Date();
-  public projectId;
+  public isEditWeeklyReport: boolean = false;
+  public isEditFutureReport: boolean = false;
+  public isEditProblem: boolean = false;
+  public minDate = new Date();
+  public projectId: number;
+  public isEditingNote: boolean = false;
+  public generalNote: string = "";
 
 
 
@@ -97,72 +99,81 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
-    this.isActive=this.route.snapshot.queryParamMap.get('isActive');
-    this.minDate.setDate(this.minDate.getDate()+1)
+    this.isActive = this.route.snapshot.queryParamMap.get('isActive');
+    this.minDate.setDate(this.minDate.getDate() + 1)
     this.getPmReportProject();
-    this.getActiveReport();
+    // this.getActiveReport();
     this.getUser();
-   
+
   }
   public getPmReportProject(): void {
     this.pmReportProjectService.GetAllByPmReport(this.pmReportId, {}).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
+      this.projectId = this.pmReportProjectList[0].id
       this.getActiveReport()
 
     }))
   }
   private getActiveReport() {
-    this.pmReportService.getAll().subscribe(data => {
-      this.activeReportId = data.result.filter(item=>item.isActive==true)[0].id;
-      if(this.pmReportProjectList){
+    this.pmReportProjectService.GetAllByProject(this.projectId).subscribe(data => {
+      this.activeReportId = data.result.filter(item => item.isActive == true)[0].id;
+      this.generalNote = data.result.filter(item => item.isActive == true)[0].note
+      if (this.pmReportProjectList) {
         this.view(this.pmReportProjectList[0].projectId);
       }
-      
+
     })
-    
+
   }
 
-  
- 
+
+
   public view(item?) {
-    this.projectId=item;
+    this.projectId = item;
     this.pmReportProjectList.forEach(element => {
-      if(element.projectId==item){
-        element.setBackground=true;
-      }else{
-        element.setBackground=false;
+      if (element.projectId == item) {
+        element.setBackground = true;
+      } else {
+        element.setBackground = false;
       }
     });
 
-    
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem()
+    // this.getActiveReport();
+    this.pmReportProjectService.GetAllByProject(this.projectId).subscribe(data => {
+      this.activeReportId = data.result.filter(item => item.isActive == true)[0].id;
+      this.generalNote = data.result.filter(item => item.isActive == true)[0].note
     
-    
+
+    })
+
+
+
   }
-  public getWeeklyReport(){
-    this.pmReportProjectService.getChangesDuringWeek(this.projectId,this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+  public getWeeklyReport() {
+    this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
   }
-  public getFuturereport(){
-    this.pmReportProjectService.getChangesInFuture(this.projectId,this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+  public getFuturereport() {
+    this.pmReportProjectService.getChangesInFuture(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.futureReportList = data.result;
     })
   }
-  public getProjectProblem(){
-    this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId,this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-      if(data.result){
+  public getProjectProblem() {
+    this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      if (data.result) {
         this.problemList = data.result.result;
-        this.pmReportProjectId=data.result.pmReportProjectId;
-        this.projectHealth= data.result.projectHealth;
-      }else{
-        this.problemList =[];
+        this.pmReportProjectId = data.result.pmReportProjectId;
+        this.projectHealth = data.result.projectHealth;
+      } else {
+        this.problemList = [];
       }
-      
-      
+
+
 
     })
   }
@@ -173,23 +184,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
 
   }
-  
-  public markRead(project){
-    this.pmReportProjectService.reverseDelete(project.id,{}).subscribe((res)=>{
-      
-      if(project.seen==false){
+
+  public markRead(project) {
+    this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
+
+      if (project.seen == false) {
         abp.notify.success("Mark Read!");
         this.getPmReportProject();
-      }else{
+      } else {
         abp.notify.success("Mark Unread!");
         this.getPmReportProject();
       }
-    
+
     })
 
   }
-  updateHealth(projectHealth){
-    this.pmReportProjectService.updateHealth(this.pmReportProjectId,projectHealth).subscribe((data)=>{
+  updateHealth(projectHealth) {
+    this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).subscribe((data) => {
       this.view(this.projectId);
     })
 
@@ -208,7 +219,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     report.status = "0";
     report.startTime = moment(report.startTime).format("YYYY-MM-DD");
     delete report["createMode"]
-    if(this.isEditWeeklyReport==true){
+    if (this.isEditWeeklyReport == true) {
       this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         report.startTime = moment(report.startTime).format("YYYY-MM-DD")
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
@@ -222,32 +233,32 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           report.createMode = true
         })
     }
-      else{
-        this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-          abp.notify.success("created new weekly report");
-          this.processWeekly = false;
-          report.createMode = false;
-          this.getWeeklyReport();
-        },
-          () => {
-            report.createMode = true
-          })
-      }
-    
+    else {
+      this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+        abp.notify.success("created new weekly report");
+        this.processWeekly = false;
+        report.createMode = false;
+        this.getWeeklyReport();
+      },
+        () => {
+          report.createMode = true
+        })
+    }
+
 
   }
   public cancelWeekReport() {
     this.processWeekly = false;
     this.getWeeklyReport();
   }
-  updateWeekReport(report){
+  updateWeekReport(report) {
     this.processWeekly = true
     this.isEditWeeklyReport = true;
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
   }
-  deleteWeekReport(report){
-    
+  deleteWeekReport(report) {
+
     abp.message.confirm(
       "Delete Issue? ",
       "",
@@ -261,7 +272,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
     );
   }
-  
+
 
   //Future
   public getUser(): void {
@@ -342,7 +353,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
 
   }
-  
+
   public rejectRequest(report): void {
     this.requestservice.rejectRequest(report.id).pipe(catchError(this.requestservice.handleError)).subscribe(data => {
       abp.notify.success("Rejected request")
@@ -366,7 +377,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     problem.createdAt = moment(problem.createdAt).format("YYYY-MM-DD");
     delete problem["createMode"]
     if (!this.isEditProblem) {
-      this.reportIssueService.createReportIssue(this.projectId,problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.reportIssueService.createReportIssue(this.projectId, problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         abp.notify.success("created new Issue");
         this.processProblem = false;
         problem.createMode = false;
@@ -420,10 +431,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processProblem = true
     this.isEditProblem = true;
     Issue.createMode = true
-    Issue.status= this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
-    
+    Issue.status = this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
+
   }
-  
+
+  public updateNote(){
+    this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs=>{
+      abp.notify.success("Update successful!")
+      this.isEditingNote =false;
+    })
+  }
+
 
 
 }

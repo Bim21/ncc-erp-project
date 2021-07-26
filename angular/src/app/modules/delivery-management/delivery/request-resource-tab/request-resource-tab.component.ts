@@ -89,7 +89,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         timeNeed:request.timeNeed,
         status:request.status,
         timeDone:request.timeDone,
-        id:request.id
+        id:request.id,
+        note:request.note
       }
     }
     const show=this.dialog.open(CreateUpdateResourceRequestComponent,{

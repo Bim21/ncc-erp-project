@@ -4,9 +4,13 @@ export class pmReportDto{
     year: string;
     type: number;
     numberOfProject: number;
-    id?: number;
+    reportId?: number;
     isClose?:boolean;
-    pmReportProjectStatus:any;
+    status:any;
+    note:string;
+    pmReportName:string;
+    pmReportProjectId:number;
+    
 }
 export class pmReportProjectDto{
     pmReportId: number;

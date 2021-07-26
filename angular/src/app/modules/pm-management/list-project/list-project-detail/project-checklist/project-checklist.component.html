@@ -1,4 +1,4 @@
-<section class="content px-2">
+<section class="content px-2 mt-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
@@ -46,17 +46,15 @@
                                 
                                 <div  *ngFor="let form of item.people;let i=index" class="w-100 p-2 mb-2" style="border: 2px solid black;">
                                     <div  class="text-left" >
-                                            <!-- <strong>Vi phạm:</strong> <span>{{i+1}}</span> -->
                                             <p  class="mt-2"  ><strong>Người vi phạm: </strong>{{form.userName}}</p>
                                             <p  class="mt-2" ><strong>Người liên đới: </strong>{{form.curatorName}}</p>
                                     </div>
-                                    
                                 </div>
+                                <button  class="btn btn-sm bg-danger"  (click)="item.createMode=false">Close</button>
                             </ng-container>
-                                <!-- <button *ngIf="item.createMode" class="btn btn-sm bg-secondary" style="text-align: center;" (click)="item.createMode=false">exit</button> -->
                                 <ng-container *ngIf="item.people.length>0">
                                 
-                                <button *ngIf="!item.createMode" class="btn btn-sm bg-danger"  (click)="item.createMode=true">View</button>
+                                <button *ngIf="!item.createMode" class="btn btn-sm bg-success"  (click)="item.createMode=true">View</button>
                             </ng-container>
                             <p *ngIf="item.people.length==0" class="mt-2">
                                 No audit history
