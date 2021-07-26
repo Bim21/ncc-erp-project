@@ -73,5 +73,6 @@ export class futureResourceDto{
   projectName: string;
   startDate: string;
   use: number;
+  status:number;
   id?: number
 }
