@@ -17,6 +17,7 @@
                     </abp-validation-summary>
             </div>
         </div>
+     
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Project:
@@ -76,22 +77,21 @@
                 </mat-error>
             </div>
         </div>
+        
         <div class="form-group row">
             <label class="col-md-3 col-form-label" for="tenancyName">
-                Time Done:
+               Time done:
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline">
-                    <input matInput [matDatepicker]="pickerEnd" name="endTime"
-                        [(ngModel)]="resourceRequestDto.timeDone" #timeDone="ngModel">
+                    <input  matInput [matDatepicker]="pickerEnd" name="endTime" [(ngModel)]="resourceRequestDto.timeDone">
                     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEnd></mat-datepicker>
-                </mat-form-field>
+                  </mat-form-field>
+                
             </div>
         </div>
-
-
-
+    
 
     </div>
     <div align="end" class="row justify-content-between">

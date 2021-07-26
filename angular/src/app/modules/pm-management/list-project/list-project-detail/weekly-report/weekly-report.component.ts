@@ -24,27 +24,6 @@ import { PmReportService } from '@app/service/api/pm-report.service';
   styleUrls: ['./weekly-report.component.css']
 })
 export class WeeklyReportComponent extends AppComponentBase implements OnInit {
-  // Paging
-  public itemPerPage: number = 5;
-  public searchUser: string = "";
-  public weeklyCurrentPage: number = 1;
-  public futureCurrentPage: number = 1;
-  public problemCurrentPage: number = 1;
-  public processWeekly: boolean = false;
-  public processFuture: boolean = false;
-  public processProblem: boolean = false;
-  public searchPmReport:string="";
-  public activeReportId= {} as pmReportDto;
-  public isSentReport:boolean;
-
-  public pmReportList: any = [];
-  public weeklyPeportList: projectReportDto[] = [];
-  public futureReportList: projectReportDto[] = [];
-  public problemList: projectProblemDto[] = [];
-  public isEditProblem: boolean = false;
-  public isEditFutureReport: boolean = false;
-  public minDate = new Date();
-  public isEditWeeklyReport:boolean=false;
   DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
   DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
   DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
@@ -62,11 +41,35 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
   DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
 
+  // Paging
+  public itemPerPage: number = 5;
+  public searchUser: string = "";
+  public weeklyCurrentPage: number = 1;
+  public futureCurrentPage: number = 1;
+  public problemCurrentPage: number = 1;
+  public processWeekly: boolean = false;
+  public processFuture: boolean = false;
+  public processProblem: boolean = false;
+  public searchPmReport:string="";
+  public activeReportId= {} as pmReportDto;
+  public isSentReport:boolean;
+  public isEditingNote:boolean = false;
+
+  public pmReportList: any = [];
+  public weeklyPeportList: projectReportDto[] = [];
+  public futureReportList: projectReportDto[] = [];
+  public problemList: projectProblemDto[] = [];
+  public isEditProblem: boolean = false;
+  public isEditFutureReport: boolean = false;
+  public minDate = new Date();
+  public isEditWeeklyReport:boolean=false;
+
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public projectHeathList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   private projectId: number;
+  generalNote:string =""
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
     private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
     private pmreportService:PmReportService) {
@@ -81,14 +84,14 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.minDate.setDate(this.minDate.getDate()+1)
   }
   public getWeeklyReport() {
-    this.reportService.getChangesDuringWeek(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.reportService.getChangesDuringWeek(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
   }
   
   public getFuturereport(): void {
     if(this.permission.isGranted(this.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)){
-      this.reportService.getChangesInFuture(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+      this.reportService.getChangesInFuture(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
         this.futureReportList = data.result
       })
     }
@@ -102,7 +105,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   private getProjectProblem(): void {
     if(this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)){
-      this.reportIssueService.getProblemsOfTheWeek(this.projectId,this.activeReportId.id).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.reportIssueService.getProblemsOfTheWeek(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         this.problemList = data.result;
       })
     }
@@ -265,10 +268,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   // Project Issue
   public getAllPmReport() {
-    this.pmreportService.getPmReport(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.reportService.GetAllByProject(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
-      this.isSentReport = this.activeReportId.pmReportProjectStatus =='Draft'?true:false
+      this.isSentReport = this.activeReportId.status =='Draft'?true:false
+      this.generalNote = this.activeReportId.note
+
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -345,14 +350,16 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
+    this.generalNote = this.activeReportId.note
+    this.isEditingNote =false;
   }
   public sendWeeklyreport(){
     abp.message.confirm(
-      `send report ${this.activeReportId.name}? `,
+      `send report ${this.activeReportId.pmReportName}? `,
       "",
       (result: boolean) => {
         if (result) {
-          this.reportService.sendReport(this.projectId,this.activeReportId.id).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
+          this.reportService.sendReport(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
               abp.notify.success("Send report successful");
               this.getAllPmReport();
           })
@@ -363,5 +370,11 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
 
     
+  }
+  public updateNote(){
+    this.reportService.updateNote(this.generalNote, this.activeReportId.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs=>{
+      abp.notify.success("Update successful!")
+      this.isEditingNote =false;
+    })
   }
 }

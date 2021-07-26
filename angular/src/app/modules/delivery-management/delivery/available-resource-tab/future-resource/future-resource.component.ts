@@ -56,11 +56,14 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
   }
   showDialog(command:string,User:futureResourceDto){
     let item={
+
+      status:2,
       userId:User.userId,
       allocatePercentage:User.use,
       startTime:User.startDate,
       projectId:User.projectid,
-      id:User.id
+      id:User.id,
+     
     }
     const show=this.dialog.open(EditFutureResourceComponent, {
       width: '700px',

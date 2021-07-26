@@ -25,7 +25,8 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService:ListProjectService,
     private resourceRequestService:DeliveryResourceRequestService,
-    public  dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>) { super(injector)}
+    public  dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>) { super(injector);
+    }
 
   ngOnInit(): void {
     this.getAllProject();
@@ -34,7 +35,9 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   SaveAndClose(){
     this.isLoading =true;
     this.resourceRequestDto.timeNeed=moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
-    this.resourceRequestDto.timeDone=moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
+    if(this.resourceRequestDto.timeDone){
+      this.resourceRequestDto.timeDone=moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
+    }
     if(this.data.command=="create"){
       this.resourceRequestService.create(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res)=>{
         abp.notify.success("Create Successfully!");

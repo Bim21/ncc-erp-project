@@ -130,7 +130,7 @@
 
                                 
                             </td>
-                            <td   class="text-center">
+                            <td *ngIf="item.createMode ==null"   class="text-center">
                                 <button  [disabled]="isEditing" *ngIf="permission.isGranted(PmManager_ProjectMilestone_Update)"
                                 class="btn btn-sm bg-secondary mr-1 mt-2" 
                                 (click)="item.createMode=true;edit(item);$event.stopPropagation()"

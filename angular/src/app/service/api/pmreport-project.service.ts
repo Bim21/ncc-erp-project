@@ -39,6 +39,12 @@ export class PMReportProjectService extends BaseApiService {
   public reverseDelete(pmReportProjectId:number,{}):Observable<any>{
     return this.http.post<any>(this.rootUrl+`/ReverseSeen?pmReportProjectId=${pmReportProjectId}`,{});
   }
+  public GetAllByProject(projectId:number):Observable<any>{
+    return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${projectId}` );
+  }
+  public updateNote(note: string,pmReportProjectId:number): Observable<any> {
+    return this.http.put<any>(this.rootUrl + `/UpdateNote?note=${note}&pmReportProjectId=${pmReportProjectId}`, {});
+}
 
 
 }

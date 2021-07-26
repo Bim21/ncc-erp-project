@@ -6,9 +6,10 @@ export class RequestResourceDto{
   status : number;
   statusName? :  string ;
   timeDone :  string;
-  note ?:  string ;
+  note?: string ;
   plannedNumberOfPersonnel? : number;
-  id?: number
+  id?: number;
+  
 }
 export class ResourceRequestDetailDto{
   
@@ -65,6 +66,7 @@ export class editFutureResourceDto{
   allocatePercentage: number;
   startTime: string;
   id?: number
+  status:number;
 }
 export class futureResourceDto{
   userId: number;
@@ -73,5 +75,6 @@ export class futureResourceDto{
   projectName: string;
   startDate: string;
   use: number;
+  status:number;
   id?: number
 }
