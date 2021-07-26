@@ -1,37 +1,12 @@
 <section class="content px-2">
     <div class="container-fluid">
-        <div class="d-flex mt-2" style="justify-content: flex-end;">
-            <div class="col-6">
-                <div class="row">
-                    <strong class="mt-2 mr-2">Đánh giá chung: </strong>
-                    <p class="mr-2 mt-2" style="max-width: 400px; vertical-align: middle;" *ngIf="!isEditingNote" > {{generalNote}}
-                    </p>
-                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
-                        *ngIf="isEditingNote" style="height: 50px;" type="text" class="form-control w-50 mr-2"
-                        name="notePM" placeholder="Đánh giá chung">
-                            </textarea>
-                    <div class="d-inline pt-1">
-                        <button *ngIf="!isEditingNote" class="btn bg-secondary " (click)="isEditingNote = true">
-                            <i class="fas fa-pencil-alt"></i>
-                            Edit
-
-                        </button>
-                        <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
-                            Save
-                        </button>
-                        <button *ngIf="isEditingNote" (click)="isEditingNote = false; note=''"
-                            class="btn btn-default">Cancel
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-3 ">
+        <div class="d-flex mt-2 text-right" style="justify-content: flex-end;">
+            <div class="">
                 <div class="form-group row" style="justify-content: flex-end;">
-                    <div class="col-3 text-right">
-                        <label class="col-form-label mt-1" for="">PM report:</label>
+                    <div class="col-4 text-right">
+                        <label class=" mt-1" for="" style="padding-top: 8px;">PM report:</label>
                     </div>
-                    <mat-form-field class="w-100 col-9" appearance="outline">
+                    <mat-form-field class="w-100 col-8" appearance="outline">
                         <mat-select [(ngModel)]="activeReportId" name="pmReport" (selectionChange)="onReportchange()"
                             placeholder="select a role" required #projectEmployee="ngModel">
                             <mat-form-field class="w-100 px-3 "
@@ -46,7 +21,7 @@
 
                 </div>
             </div>
-            <div class="col-3 mt-1">
+            <div class="mt-1">
                 <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3"
                     *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) ">
                     <i class="fas fa-paper-plane"></i> Send weekly report
@@ -56,6 +31,37 @@
 
             </div>
         </div>
+        <div class="ml-2 mt-1 mb-2" >
+            
+                <div class="row">
+                    
+                        <strong class="mt-2 mr-2">Đánh giá chung: </strong>
+                        <p class="mr-2 mt-2" style="max-width: 400px; vertical-align: middle;" *ngIf="!isEditingNote" > {{generalNote}}
+                        </p>
+                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
+                            *ngIf="isEditingNote" style="height: 50px;max-width: 400px;" type="text" class="form-control w-50 mr-2"
+                            name="notePM" placeholder="Đánh giá chung">
+                                </textarea>
+          
+                        <div class="d-inline pt-1">
+                            <button *ngIf="!isEditingNote" class="btn bg-secondary " (click)="isEditingNote = true">
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit
+        
+                            </button>
+                            <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
+                                Save
+                            </button>
+                            <button *ngIf="isEditingNote" (click)="isEditingNote = false; note=''"
+                                class="btn btn-default">Cancel
+                            </button>
+                        </div>
+                    
+                </div>
+    
+            
+        </div>
+        
 
             <div  *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)">
                 <div class="card">
