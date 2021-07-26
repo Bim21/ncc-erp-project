@@ -26,17 +26,24 @@ namespace ProjectManagement.Constants.Enum
             InProgress = 0,
             Done = 1
         }
-        public enum PMReportProjectStatus
+        public enum PMReportProjectStatus : byte
         {
             Draft = 0,
             Sent = 1
         }
-        public enum PMReportStatus
+        public enum PunishStatus : byte
         {
-            Active = 0,
-            Done = 1
+            None = 0,
+            Low = 1,
+            High = 2
         }
-        public enum PMReportType
+        public enum PMReportStatus : byte
+        {
+            New = 0,
+            CanSend = 1,
+            Expired = 2,
+        }
+        public enum PMReportType : byte
         {
             Weekly = 0,
             Monthly = 1

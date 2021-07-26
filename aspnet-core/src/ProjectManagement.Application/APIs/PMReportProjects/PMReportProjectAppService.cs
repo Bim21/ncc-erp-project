@@ -274,6 +274,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                         select new GetAllByProjectDto
                         {
                             ReportId = p.Id,
+                            PmReportProjectId = l.Id,
                             PMReportName = p.Name,
                             Status = l.Status.ToString(),
                             IsActive = p.IsActive,

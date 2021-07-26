@@ -17,6 +17,7 @@
                     </abp-validation-summary>
             </div>
         </div>
+     
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Project:
@@ -87,6 +88,16 @@
                     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEnd></mat-datepicker>
                 </mat-form-field>
+            </div>
+        </div>
+        <div class="form-group row ">
+            <label class="col-md-3 col-form-label" for="note">
+                Note:
+            </label>
+            <div class="col-md-9">
+                <textarea  class="form-control" name="note" cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                    [(ngModel)]="resourceRequestDto.note"  #noteEl  #note="ngModel"> </textarea>
+                  
             </div>
         </div>
 

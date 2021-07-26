@@ -20,6 +20,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ResourceRequests
 {
+    [AbpAuthorize]
     public class ResourceRequestAppService : ProjectManagementAppServiceBase
     {
         private readonly ProjectUserAppService _projectUserAppService;

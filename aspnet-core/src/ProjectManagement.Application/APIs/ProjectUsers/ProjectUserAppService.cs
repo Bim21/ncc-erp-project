@@ -162,6 +162,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
+            input.IsFutureActive = true;
             input.PMReportId = pmReportActive.Id;
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserDto, ProjectUser>(input, projectUser));
 

@@ -246,7 +246,7 @@
                                 <td style="white-space: normal; max-width: 300px; " class="text-left">
                                     <p  *ngIf="!request.createMode">{{request.note}}</p>
                                     <div *ngIf="request.createMode" class="form-group row required">
-                                        <mat-form-field class="example-full-width" appearance="outline">
+                                        <mat-form-field class="w-100" appearance="outline">
                                             <textarea placeholder="leave a comment" [(ngModel)]="request.note"
                                                 matInput></textarea>
                                         </mat-form-field>
