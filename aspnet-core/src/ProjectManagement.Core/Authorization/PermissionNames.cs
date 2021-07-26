@@ -180,6 +180,7 @@ namespace ProjectManagement.Authorization
             public const string DeliveryManagement_PMReportProject_Create = "DeliveryManagement.PMReportProject.Create";
             public const string DeliveryManagement_PMReportProject_Update = "DeliveryManagement.PMReportProject.Update";
             public const string DeliveryManagement_PMReportProject_Delete = "DeliveryManagement.PMReportProject.Delete";
+            public const string DeliveryManagement_PMReportProject_UpdateNote = "DeliveryManagement.PMReportProject.UpdateNote";
 
             //Resource Request
             public const string DeliveryManagement_ResourceRequest = "DeliveryManagement.ResourceRequest";
@@ -376,6 +377,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_PMReportProject_Create,
                     PermissionNames.DeliveryManagement_PMReportProject_Update,
                     PermissionNames.DeliveryManagement_PMReportProject_Delete,
+                    PermissionNames.DeliveryManagement_PMReportProject_UpdateNote,
 
                     //ResourceRequest
                     PermissionNames.DeliveryManagement_ResourceRequest,
@@ -582,6 +584,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PMReport Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PMReport Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PMReport Project" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update note PM Report Project" },
 
                  //Resource Request
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
@@ -792,6 +795,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New PM Report Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PM Report Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PM Report Project" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note PM Report Project" },
                             }
                         },
 

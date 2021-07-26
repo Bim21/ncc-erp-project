@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-2" >
+    <div class="col-3" >
                 <div class="card h-100">
                     <div class="card-header">
                         <div class="input-group">
@@ -12,22 +12,30 @@
                                  />
                         </div>
                     </div>
-                    <div class=" table-responsive p-4" style="overflow: auto;">
+                    <div  >
                           <mat-list *ngFor="let item of pmReportProjectList" >
-                              <div class="row list-project" [ngClass]="item.setBackground==true?'active':''">
-                                  <div class="col-9" >
+                              <div class="row" [ngClass]="item.setBackground==true?'projectActive':''">
+                                  <div class="col-10" >
                                     <mat-list-item style="cursor:pointer," role="item.projectId" (click)="view(item.projectId);">
-                                        <p style="position: absolute;
-                                        top: 0; max-width: 90%;">   
-                                            {{item.projectName}}
-                                        </p>
+                                        <div style="overflow: hidden; overflow-x: hidden;" >
+                                        <div  class="project-list" >   
+                                            <strong>{{item.projectName}}</strong>
+                                        </div>
+                                        <div class="project-list">
+                                            {{item.pmEmailAddress}}
+                                        </div>
+                                        <!-- <p> overflow: hidden;
+                                            
+                                        </p> -->
+                                    </div>
                                     </mat-list-item>
                                   </div>
-                                  <div class="col-3">
-                                      <mat-checkbox class="mt-2" [checked]="item.createMode == true" (change)="tick(item)"> </mat-checkbox>
-                                    <!-- <span><i class="fas fa-check mt-3"*ngIf="item.createMode==true"></i></span> -->
-                                  </div>
+                                  <div   class="col-2">
+                                    <mat-checkbox  class="mt-2" [checked]="item.seen == true" (change)="markRead(item)"> </mat-checkbox>
+                                </div>
+                                  
                               </div>
+                              
                             
                         
                             
@@ -36,7 +44,7 @@
                     </div>     
                 </div>
     </div>
-    <div class="col-10">
+    <div class="col-9">
         <section  class="content px-2">
             <div class="container-fluid">
                 <div class="card">
@@ -44,9 +52,9 @@
                         <div class="row">
                             <div class="col-md-6 row">
                                 <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                                <butto *ngIf="isActive=='true' &&permission.isGranted(DeliveryManagement_PMReportProject_Create)"   [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
+                                <button *ngIf="isActive=='true' &&permission.isGranted(DeliveryManagement_PMReportProject_Create)"   [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                                     <i class="fa fa-plus-square"></i> Create
-                                </butto>
+                                </button>
                             </div>
         
                         </div>
@@ -146,13 +154,13 @@
                                             <i class="fas fa-bars fa-lg"></i>
                                         </button>
                                         <mat-menu #menu="matMenu" class="p-2">
-                                            <button  (click)="updateWeekReport(report)" *ngIf="permission.isGrandted(DeliveryManagement_PMReportProject_Update)"
+                                            <button  (click)="updateWeekReport(report)" *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                                 Edit
                                             </button>
                                           
-                                            <button  (click)="deleteWeekReport(report)" *ngIf="permission.isGrandted(DeliveryManagement_PMReportProject_Delete)"
+                                            <button  (click)="deleteWeekReport(report)" *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Delete)"
                                                 class="mat-menu-item  w-100">
                                                 <i class="fas fa-trash mr-2 fa-lg"></i>
                                                 Delete
@@ -318,55 +326,19 @@
                 </div>
             </div>
         </section>
-        <!-- <section class="content px-2">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Resource dự kiến thay đổi trong tương lai</h3>
-                            </div>
-                            
-                        </div>
-                        
-                        
-                    </div>
-                    
-                    <div class="card-body table-responsive p-4">
-                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Nhân viên</th>
-                                    <th>Thời gian thay đổi</th>
-                                    <th>%Sử dụng nhân sự</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of futureReportList;let i=index">
-                                    <td>{{i+1}}</td>
-                                    <td><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                        userType:item.userType,emailAddress:item.emailAddress}"></app-user-info> </td>
-                                    <td class="text-center">{{item.startTime |date:"dd/MM/yyyy"}}</td>
-                                    <td class="text-center"><strong>{{item.allocatePercentage}}%</strong></td>                                 
-                                </tr>
-                            </tbody>
-                        </table>
-                       
-                    </div>
-                   
-                </div>
-            </div>
-        </section> -->
         <section   class="content px-2">
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <h3>Các vấn đề trong tuần</h3>
+                                <h4 style="display: inline;">Các vấn đề trong tuần</h4>
+                                <button  *ngIf="isActive=='true'" [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
+                                    <i class="fa fa-plus-square"></i>
+                                    Create
+                                </button>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6 row">
         
                                 <mat-form-field class="myFilter"  appearance="outline">
                                     <mat-select name="flag" placeholder="Flag" [(ngModel)]="projectHealth">
@@ -537,61 +509,6 @@
             </div>
         
         </section>
-        <!-- <section class="content px-2">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Các vấn đề trong tuần</h3>
-                            </div>
-                            <div class="col-md-6">
-        
-                                <mat-form-field class="myFilter"  appearance="outline">
-                                    <mat-select name="flag" placeholder="Flag" [(ngModel)]="flagProblem">
-                                        <ng-container *ngFor="let flag of problemIssueList">
-                                            <mat-option [value]="APP_ENUM.ProjectHealth[flag]" (click)="updateHealth(APP_ENUM.ProjectHealth[flag])"
-                                                >
-                                                {{
-                                                flag
-                                                }}
-                                                
-                                            </mat-option>
-                                        </ng-container>
-                                    </mat-select>
-                                </mat-form-field>
-                                
-                            </div>
-                        </div>
-                    </div>  
-                        <div class="card-body table-responsive p-4">
-                            <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Vấn đề</th>
-                                        <th>Impact</th>
-                                        <th>Solution</th>    
-                                        <th>Trạng thái</th>        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of problemList;let i=index">
-                                        <td>{{i+1}}</td>
-                                        <td>{{item.description}}</td>
-                                        <td>{{item.impact}}</td>
-                                        <td>{{item.solution}}</td>
-                                        <td class="text-center"> <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[item.status]">{{item.status}}</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                    </div>
-                   
-                </div>
-          
-        </section> -->
     </div>
 </div>
 

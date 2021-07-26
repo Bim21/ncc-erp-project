@@ -1,17 +1,17 @@
-﻿using Abp.Authorization;
+﻿
+using Abp.Authorization;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.PMReports.Dto;
 using ProjectManagement.Authorization;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -34,23 +34,6 @@ namespace ProjectManagement.APIs.PMReports
                 NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count()
             });
             return await query.GetGridResult(query, input);
-        }
-
-        [HttpGet]
-        public async Task<List<GetPMReportDto>> GetAll(long projectId)
-        {
-            var pmReportProject = WorkScope.GetAll<PMReportProject>(); 
-            var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                IsActive = x.IsActive,
-                Year = x.Year,
-                Type = x.Type,
-                PMReportProjectStatus = pmReportProject.FirstOrDefault(p => p.PMReportId == x.Id && p.ProjectId == projectId).Status.ToString()
-            });
-
-            return await query.ToListAsync();
         }
 
         [HttpPost]

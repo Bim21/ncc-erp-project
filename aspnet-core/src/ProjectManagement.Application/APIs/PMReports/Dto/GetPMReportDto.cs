@@ -16,6 +16,5 @@ namespace ProjectManagement.APIs.PMReports.Dto
         public int Year { get; set; }
         public PMReportType Type { get; set; }
         public int NumberOfProject { get; set; }
-        public string PMReportProjectStatus { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 <form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
     <div class="card-header">
-        <abp-modal-header title="Create/edit request resource" (onCloseClick)="dialogRef.close()">
+        <abp-modal-header *ngIf="data.command=='create'" title="Create" (onCloseClick)="dialogRef.close()">
+        </abp-modal-header>
+        <abp-modal-header *ngIf="data.command=='edit'" title="Edit" (onCloseClick)="dialogRef.close()">
         </abp-modal-header>
     </div>
     <div class="modal-body">

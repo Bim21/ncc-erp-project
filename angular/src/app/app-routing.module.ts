@@ -1,3 +1,5 @@
+import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
+import { CategoryCriteriaComponent } from './modules/checkpoint/category/category-criteria/category-criteria.component';
 import { ClientComponent } from './modules/admin/client/client.component';
 import { FutureResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/future-resource/future-resource.component';
 import { PlanResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-resource.component';
@@ -183,6 +185,16 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
               },
               
             ]
+          },
+          {
+            path:"category-criteria",
+            component: CategoryCriteriaComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"criteria",
+            component: CriteriaComponent,
+            canActivate:[AppRouteGuard]
           },
           {
             path: "resourceRequestDetail",

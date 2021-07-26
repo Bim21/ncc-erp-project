@@ -1,0 +1,70 @@
+<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
+    <abp-modal-header *ngIf="data.command=='create'" title="Create" (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
+    <abp-modal-header *ngIf="data.command=='edit'" title="Edit" (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="criteriaName">
+                {{ 'Name' | localize }}:
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="criteriaName" id="criteriaName" 
+                    required [(ngModel)]="criteria.name" #criteriaNameModel="ngModel" #criteriaNameEl />
+                <abp-validation-summary [control]="criteriaNameModel" [controlEl]="criteriaNameEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="criteriaWeight">
+                {{ 'Weight' | localize }}:
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="criteriaWeight" id="criteriaWeight" 
+                    required [(ngModel)]="criteria.weight" #criteriaWeightModel="ngModel" #criteriaWeightEl />
+                <abp-validation-summary [control]="criteriaWeightModel" [controlEl]="criteriaWeightEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="criteriaName">
+                {{ 'Description' | localize }}:
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="criteriaNote" id="criteriaNote" 
+                    required [(ngModel)]="criteria.note" #criteriaNoteModel="ngModel" #criteriaNoteEl />
+                <abp-validation-summary [control]="criteriaNoteModel" [controlEl]="criteriaNoteEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label for="category" class="col-md-3 col-form-label">
+                Category
+            </label>
+            <div class="col-md-9">
+                <mat-form-field class="mt-2" appearance="outline">
+                    <mat-select name="category" placeholder="Select category" #categoryValid="ngModel" [(ngModel)]="criteria.criteriaCategoryId" required>
+                        <ng-container *ngFor="let item of criteriaCategoryList">
+                            <mat-option [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error class="mt-1" style="font-size: 13px;" *ngIf="categoryValid.hasError('required') && categoryValid.touched">
+                    This field is required
+                </mat-error>
+               
+            </div>
+
+        </div>
+    </div>
+    <!--         
+    </div> -->
+    <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
+        <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button color="primary" class="saving-btn"mat-button
+        [disabled]="!timesheetForm.form.valid ||isLoading" (click)="SaveAndClose()"  >Save</button>
+    </div>
+</form>
+
