@@ -18,5 +18,6 @@ namespace ProjectManagement.Entities
         public bool IsActive { get; set; }
         public int Year { get; set; }
         public PMReportType Type { get; set; }
+        public PMReportStatus PMReportStatus { get; set; }
     }
 }
