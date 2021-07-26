@@ -6,6 +6,7 @@ using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
+using ProjectManagement.APIs.PMReports.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
@@ -130,7 +131,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId && x.IsFutureActive)
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
                             .Select(x => new GetProjectUserDto
                             {
@@ -260,6 +261,34 @@ namespace ProjectManagement.APIs.PMReportProjects
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
             pmReportProject.Seen = !pmReportProject.Seen;
             await WorkScope.UpdateAsync(pmReportProject);
+        }
+
+
+        [HttpGet]
+        public async Task<List<GetAllByProjectDto>> GetAllByProject(long projectId)
+        {
+            var query = from p in WorkScope.GetAll<PMReport>()
+                        join pp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId)
+                        on p.Id equals pp.PMReportId into lst
+                        from l in lst.DefaultIfEmpty()
+                        select new GetAllByProjectDto
+                        {
+                            ReportId = p.Id,
+                            PMReportName = p.Name,
+                            Status = l.Status.ToString(),
+                            IsActive = p.IsActive,
+                            Note = l.Note
+                        };
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<string> UpdateNote(string note, long pmReportProjectId)
+        {
+            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            pmReportProject.Note = note;
+            await WorkScope.UpdateAsync(pmReportProject);
+            return note;
         }
     }
 }

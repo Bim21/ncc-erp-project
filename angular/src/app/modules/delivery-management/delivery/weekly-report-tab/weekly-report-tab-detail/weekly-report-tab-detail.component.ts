@@ -78,6 +78,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditFutureReport:boolean=false;
   public isEditProblem:boolean=false;
   public minDate=new Date();
+  public projectId;
 
 
 
@@ -108,23 +109,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
       this.getActiveReport()
-      if (localStorage.getItem('read') && JSON.parse(localStorage.getItem('read')).reportId == this.pmReportId) {
-        this.pmReportProjectList = JSON.parse(localStorage.getItem('read')).pmProjectList;
-      }
 
     }))
   }
   private getActiveReport() {
     this.pmReportService.getAll().subscribe(data => {
       this.activeReportId = data.result.filter(item=>item.isActive==true)[0].id;
-      this.view(this.pmReportProjectList[0].projectId);
+      if(this.pmReportProjectList){
+        this.view(this.pmReportProjectList[0].projectId);
+      }
+      
     })
     
   }
 
   
- public projectId;
-  view(item?) {
+ 
+  public view(item?) {
     this.projectId=item;
     this.pmReportProjectList.forEach(element => {
       if(element.projectId==item){
@@ -141,40 +142,51 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     
     
   }
-  getWeeklyReport(){
+  public getWeeklyReport(){
     this.pmReportProjectService.getChangesDuringWeek(this.projectId,this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
   }
-  getFuturereport(){
+  public getFuturereport(){
     this.pmReportProjectService.getChangesInFuture(this.projectId,this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.futureReportList = data.result;
     })
   }
-  getProjectProblem(){
+  public getProjectProblem(){
     this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId,this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
       if(data.result){
         this.problemList = data.result.result;
+        this.pmReportProjectId=data.result.pmReportProjectId;
+        this.projectHealth= data.result.projectHealth;
       }else{
         this.problemList =[];
       }
-      this.pmReportProjectId=data.result.pmReportProjectId;
-      this.projectHealth= data.result.projectHealth;
+      
+      
 
     })
   }
-  search() {
+  public search() {
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.projectName?.toLowerCase().includes(this.searchText.toLowerCase());
     });
 
   }
-  tick(project){
-    project.createMode=true;
-    let item= {pmProjectList: this.pmReportProjectList,
-    reportId: this.pmReportId}
-    localStorage.setItem("read",JSON.stringify(item))
+  
+  public markRead(project){
+    this.pmReportProjectService.reverseDelete(project.id,{}).subscribe((res)=>{
+      
+      if(project.seen==false){
+        abp.notify.success("Mark Read!");
+        this.getPmReportProject();
+      }else{
+        abp.notify.success("Mark Unread!");
+        this.getPmReportProject();
+      }
+    
+    })
+
   }
   updateHealth(projectHealth){
     this.pmReportProjectService.updateHealth(this.pmReportProjectId,projectHealth).subscribe((data)=>{

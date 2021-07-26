@@ -78,25 +78,46 @@ export class CreateEditProjectChecklistComponent extends AppComponentBase implem
   public arrCheckLists: any = [];
 
 
-  checkAllTask($e: MatCheckboxChange) {
-    this.listItems.forEach(el => {
-      el.createMode = $e.source.checked;
-      this.arrCheckLists.push(el);
+  checkAllTask(event: MatCheckboxChange) {
+   
+    
 
-
-    })
-    this.checkAllItems = $e.source.checked ? 1 : 0;
+      this.listItems.forEach(el => {
+        el.createMode = event.source.checked;
+        this.arrCheckLists.push(el);
+  
+      })
+      if(event.source.checked==false){
+       
+        
+              this.arrCheckLists=[]
+            console.log("hihiiiiiiiiiiiiiiii")
+  
+      }
+  
+    // else{
+    //   this.listItems.forEach(item=>{
+    //     this.arrCheckLists.splice(this.arrCheckLists.indexOf(item),1);
+    //   })
+    // }
+    this.checkAllItems = event.source.checked ? 1 : 0;
+    console.log(event.checked)
   }
   updateCheckAllStatus(item, event) {
     if (this.listItems.every(el =>  el.createMode == false )) {
       this.checkAllItems = 0;
+      alert("hihi")
+      
     }
     else if (this.listItems.every(el =>  el.createMode == true)) {
       this.checkAllItems = 1;
       this.arrCheckLists.push(item)
+      alert("huhu")
 
     }
     else {
+      alert("hfdfdfuhu")
+
       this.checkAllItems = 2;
       if (event.checked) {
         this.arrCheckLists.push(item)

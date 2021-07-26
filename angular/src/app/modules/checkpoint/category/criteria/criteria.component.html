@@ -1,7 +1,24 @@
-<section class="content px-2 mt-2">
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h1>Criteria</h1>
+            </div>
+            <div class="col-6 text-right">
+                <button   (click)="create()"
+                    class="btn bg-blue">
+                    <i class="fa fa-plus-square"></i>
+                   Create
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content px-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
@@ -24,7 +41,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="mb-0">
-                                    <div>
+                                    <div> 
                                         <div *ngFor="let item of filterItems; let i = index">
                                             <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
                                                 (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
@@ -44,47 +61,28 @@
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
-                            <th>Nhân viên</th>
-                            <th>Dự án</th>
-                            <th>Plan sử dụng</th>
-                            <th>Sử dụng hiện tại</th>
+                            <th>Name</th>
+                            <th>Weight</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of availableResourceList |paginate
-                            : {
-                                id: 'server',
-                                itemsPerPage: pageSize,
-                                currentPage: pageNumber,
-                                totalItems: totalItems
-                              }; let i = index">
-                            <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td  style="white-space: normal; max-width: 200px;"class="">
-                                <div>
-                                    <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                    userType:item.userType,emailAddress:item.emailAddress}"></app-user-info>
-                                </div>
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
-                                <!-- <div *ngFor="let projectName of item.projects; let i = index">
-                                    <span><strong>{{projectName}} <span *ngIf="i  < item.projects.length-1">, </span></strong></span><br>
-                                    
-                                </div> -->
-                                <strong>{{item.projects}}</strong>
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
-                                <div *ngFor="let i of item.projectUserPlans">
-                                    <span><strong>Tham gia dự án:</strong>  {{i.projectName}}</span><br>
-                                    <span><strong>Từ ngày :</strong> {{i.startTime | date: "dd/MM/yyyy"}}</span><br>
-                                    <span><strong>Sử dụng:</strong> {{i.allocatePercentage}}%</span><br><br>
-                                </div>
-                            </td>
-                            <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
-                                <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
-                                    Plan
+                        <tr *ngFor="let item of criteriaList; let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.weight}}</td>
+                            <td>{{item.note}}</td>
+                            <td>{{item.criteriaCategoryName}}</td>
+                            <td class="text-center">
+                                <button class="btn btn-secondary mr-2" (click)="edit(item)">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger" (click)="delete(item)">
+                                    Delete
                                 </button>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -132,3 +130,4 @@
         </div>
     </div>
 </section>
+
