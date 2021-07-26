@@ -180,7 +180,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public search() {
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        item.projectName?.toLowerCase().includes(this.searchText.toLowerCase());
+        item.pmName?.toLowerCase().includes(this.searchText.toLowerCase());
     });
 
   }
