@@ -28,6 +28,6 @@ namespace ProjectManagement.Entities
         [MaxLength(10000)]
         public string Note { get; set; }
         public bool Seen { get; set; }
-        public bool IsPunish { get; set; }
+        public PunishStatus IsPunish { get; set; }
     }
 }
