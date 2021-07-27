@@ -19,8 +19,9 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
-                    <input (keyup.enter)="search()" type="text" matInput class="form-control" name="keyword"
-                        placeholder="Search" [(ngModel)]="searchText" />
+             
+                        <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
+                        (keyup.enter)="search()"/>
                 </div>
             </div>
     
