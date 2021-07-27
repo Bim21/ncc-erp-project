@@ -85,7 +85,11 @@
                             <td class="text-center">{{item.projectName}}</td>
                             <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
                             <td>{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
+<<<<<<< Updated upstream
                             <td style="white-space: normal; max-width: 300px;">{{item.note}}</td>
+=======
+                            <td>{{item.note}}</td>
+>>>>>>> Stashed changes
                             <td style="white-space: normal; max-width: 300px;" class="text-center">
                                 <span [ngClass]="APP_CONST.statusStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
                                 
