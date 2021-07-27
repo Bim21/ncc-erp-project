@@ -150,7 +150,7 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_TimesheetProject_Delete: "Timesheet.TimesheetProject.Delete",
     Timesheet_TimesheetProject_DownloadFileTimesheetProject: "Timesheet.TimesheetProject.DownloadFileTimesheetProject",
     Timesheet_TimesheetProject_GetAllByProject: "Timesheet.TimesheetProject.GetAllByProject",
-    Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet: "Timesheet.TimesheetProject.GetAllRemainProjectInTimeshee",
+    Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet: "Timesheet.TimesheetProject.GetAllRemainProjectInTimesheet",
     Timesheet_TimesheetProject_Update: "Timesheet.TimesheetProject.Update",
     Timesheet_TimesheetProject_UploadFileTimesheetProject: "Timesheet.TimesheetProject.UploadFileTimesheetProject",
     Timesheet_TimesheetProject_ViewInvoice: "Timesheet.TimesheetProject.ViewInvoice",

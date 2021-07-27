@@ -246,7 +246,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && 
-                               x.Status == ProjectUserStatus.Present && x.IsFutureActive);
+                               x.Status == ProjectUserStatus.Future && x.IsFutureActive);
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
@@ -255,8 +255,11 @@ namespace ProjectManagement.APIs.ResourceRequests
             if(input.StartTime.Date <= DateTime.Now.Date)
                 throw new UserFriendlyException("The start date must be greater than the current time !");
 
-            if(projectUsers.Any(x => x.UserId == input.UserId && x.ProjectId == input.ProjectId && x.StartTime.Date == input.StartTime.Date && x.AllocatePercentage == input.PercentUsage))
+            var isExist = projectUsers.Any(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.StartTime == input.StartTime);
+            if(isExist)
+            {
                 throw new UserFriendlyException($"Project User already exist in {input.StartTime.Date} !");
+            }
 
             var projectUser = new ProjectUser
             {
@@ -272,15 +275,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 
-            if (projectUser.Status == ProjectUserStatus.Present)
-            {
-                var pu = WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present);
-                foreach (var item in pu)
-                {
-                    item.Status = ProjectUserStatus.Past;
-                    await WorkScope.UpdateAsync(item);
-                }
-            }
             return projectUser;
         }
 

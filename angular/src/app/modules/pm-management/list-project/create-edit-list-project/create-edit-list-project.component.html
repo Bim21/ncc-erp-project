@@ -50,7 +50,7 @@
                         #projectPM="ngModel">
                         <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                        <input matInput [(ngModel)]="searchPM" name="searchPM" placeholder="Search">
+                        <input matInput [(ngModel)]="searchPM" name="searchPM" placeholder="Search" #search>{{search.focus()}}
                     </mat-form-field>
                         <mat-option *ngFor="let pm of pmList | filter: searchPM" [value]="pm.id">
                             {{pm.fullName}} - ({{pm.emailAddress}})</mat-option>

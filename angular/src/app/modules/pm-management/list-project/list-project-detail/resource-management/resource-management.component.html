@@ -57,7 +57,7 @@
                                                 placeholder="select a role" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                    <input matInput [(ngModel)]="searchUser" name="searchUser">
+                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #search>{{search.focus()}}
                                                 </mat-form-field>
                                                 <mat-option *ngFor="let user of userForProjectUser |filter:searchUser"
                                                     [value]="user.id">
@@ -346,7 +346,7 @@
                                                 placeholder="select an user" required #userBill="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                    <input matInput [(ngModel)]="searchUserBill" name="searchBillUser">
+                                                    <input matInput [(ngModel)]="searchUserBill" name="searchBillUser" #search>{{search.focus()}}
                                                 </mat-form-field>
                                                 <mat-option
                                                     *ngFor="let user of userForUserBill | filter: searchUserBill"

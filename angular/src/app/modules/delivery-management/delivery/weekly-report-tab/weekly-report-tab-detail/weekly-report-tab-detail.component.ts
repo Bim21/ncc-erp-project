@@ -81,6 +81,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public projectId: number;
   public isEditingNote: boolean = false;
   public generalNote: string = "";
+  public isShowProblemList: boolean = false;
+  public isShowWeeklyList: boolean = false;
+  public isShowFutureList: boolean = false;
 
 
 
@@ -180,7 +183,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public search() {
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        item.pmName?.toLowerCase().includes(this.searchText.toLowerCase());
+        item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
     });
 
   }
