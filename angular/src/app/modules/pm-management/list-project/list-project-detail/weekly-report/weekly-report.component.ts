@@ -1,3 +1,4 @@
+import { ListProjectService } from '@app/service/api/list-project.service';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { pmReportDto } from './../../../../../service/model/pmReport.dto';
 import { ApproveDialogComponent } from './approve-dialog/approve-dialog.component';
@@ -69,19 +70,20 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public projectHeathList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   private projectId: number;
-  generalNote:string =""
+  generalNote:string ="";
+  public projectName="";
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
     private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
-    private pmreportService:PmReportService) {
+    private pmreportService:PmReportService, private projectService:ListProjectService) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
   }
 
   ngOnInit(): void {
-   
     this.getAllPmReport();
     this.getUser();
     this.minDate.setDate(this.minDate.getDate()+1)
+    this.getProjectById()
   }
   public getWeeklyReport() {
     this.reportService.getChangesDuringWeek(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
@@ -97,6 +99,11 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     }
 
     
+  }
+  getProjectById(){
+    this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(rs=>{
+      this.projectName = rs.result.name
+    })
   }
   public getUser(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
