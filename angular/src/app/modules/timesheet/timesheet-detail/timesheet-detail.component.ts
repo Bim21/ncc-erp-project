@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppComponentBase } from '@shared/app-component-base';
 import { BaseApiService } from '@app/service/api/base-api.service';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
@@ -55,6 +56,11 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
     );
 
   }
+    Timesheet_TimesheetProject_Create= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
+    Timesheet_TimesheetProject_Delete= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
+    Timesheet_TimesheetProject_DownloadFileTimesheetProject= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
+    Timesheet_TimesheetProject_Update= PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
+    Timesheet_TimesheetProject_UploadFileTimesheetProject= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
 
 
   constructor(
