@@ -85,8 +85,12 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
   }
   public saveMilestoneRequest( item:MilestoneDto): void {
     delete item["createMode"]
-    item.uatTimeStart = moment(item.uatTimeStart).format("YYYY/MM/DD");
-    item.uatTimeEnd = moment(item.uatTimeEnd).format("YYYY/MM/DD");
+    if(item.uatTimeStart){
+      item.uatTimeStart = moment(item.uatTimeStart).format("YYYY/MM/DD");
+    }
+    if(item.uatTimeEnd){
+      item.uatTimeEnd = moment(item.uatTimeEnd).format("YYYY/MM/DD");
+    }
     
     if (this.command=="create") {
       item.projectId=this.projectId;
