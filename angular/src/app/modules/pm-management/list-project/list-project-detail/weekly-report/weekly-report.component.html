@@ -45,7 +45,7 @@
                                 </textarea> -->
                 <mat-form-field class="w-75" appearance="outline" *ngIf="isEditingNote">
                     <textarea matInput [(ngModel)]="generalNote" type="text" name="notePM" placeholder="Đánh giá chung">
-                                                </textarea>
+                    </textarea>
                 </mat-form-field>
                 <div class="d-inline pt-1 text-right ml-2">
                     <button class="text-right" *ngIf="!isEditingNote" class="btn bg-secondary "
@@ -271,12 +271,12 @@
                                     </div>
                                     <div *ngIf="report.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <mat-select [(ngModel)]="report.userId" name="projectEmployee"
+                                            <mat-select autofocus [(ngModel)]="report.userId" name="projectEmployee"
                                                 placeholder="select a role" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                    <input matInput [(ngModel)]="searchUser" name="searchUser"
-                                                        placeholder="search">
+                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput 
+                                                        placeholder="search">{{myInput.focus()}}
                                                 </mat-form-field>
                                                 <mat-option *ngFor="let user of userList |filter:searchUser"
                                                     [value]="user.id">
@@ -420,8 +420,8 @@
                                                     placeholder="select a role" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                        <input matInput [(ngModel)]="searchUser" name="searchUser"
-                                                            placeholder="search">
+                                                        <input matInput [(ngModel)]="searchUser" name="searchUser" #inputSearch
+                                                            placeholder="search">{{inputSearch.focus()}}
                                                     </mat-form-field>
                                                     <mat-option *ngFor="let user of userList |filter:searchUser"
                                                         [value]="user.id">
