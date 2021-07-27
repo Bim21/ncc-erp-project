@@ -139,7 +139,9 @@ namespace ProjectManagement.Constants.Enum
         public enum CheckPointUserResultStatus
         {
             Draft = 0,
-            Done = 1
+            UserDone = 1,
+            PMDone = 2,
+            FinalDone =3,
         }
         public enum UserLevel : byte
         {
