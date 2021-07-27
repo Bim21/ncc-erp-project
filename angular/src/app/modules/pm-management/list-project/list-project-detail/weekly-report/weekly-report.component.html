@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="mt-1">
-                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3"
+                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" [disabled]="!allowSendReport"
                         *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && isSentReport  ">
                         <i class="fas fa-paper-plane"></i> Send weekly report
                     </button>
@@ -40,10 +40,10 @@
         </div>
         <div class="ml-2 mt-1 mb-2">
 
-            <div class="row" style="justify-content: space-between;" >
+            <div class="row"  >
 
                 <strong class="mt-3">Đánh giá chung: </strong>
-                <pre class="notee" style="width: 70%; font-size: 1.3em; font-family: sans-serif; white-space: pre-line" *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
+                <pre class="notee" style=" font-size: 1.3em; font-family: sans-serif; white-space: pre-line" *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
                     {{generalNote}}
                 </pre>
                 <mat-form-field    class="w-75" appearance="outline" *ngIf="isEditingNote">
