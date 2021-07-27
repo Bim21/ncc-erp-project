@@ -47,6 +47,10 @@ namespace ProjectManagement.Authorization
             public const string PmManager_CanViewMenu_ProjectChecklist = "PmManager.CanViewMenu.ProjectChecklist";
             public const string PmManager_CanViewMenu_Timesheet = "PmManager.CanViewMenu.Timesheet";
 
+            public const string PmManager_CanViewMenu_PMCanCreate = "PmManager.CanViewMenu.PMCanCreateProjectUser";
+            public const string PmManager_CanViewMenu_PMCanUpdate = "PmManager.CanViewMenu.PMCanUpdateProjectUser";
+            public const string PmManager_CanViewMenu_PMCanDelete = "PmManager.CanViewMenu.PMCanDeleteProjectUser";
+
             //Project
             public const string PmManager_Project = "PmManager.Project";
             public const string PmManager_Project_ViewAll = "PmManager.Project.ViewAll";
@@ -234,6 +238,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_CanViewMenu_ResourceManagement,
                     PermissionNames.PmManager_CanViewMenu_Timesheet,
                     PermissionNames.PmManager_CanViewMenu_WeeklyReport,
+
+                    PermissionNames.PmManager_CanViewMenu_PMCanCreate,
+                    PermissionNames.PmManager_CanViewMenu_PMCanUpdate,
+                    PermissionNames.PmManager_CanViewMenu_PMCanDelete,
 
                     //Admin
                         //User
@@ -440,7 +448,9 @@ namespace ProjectManagement.Authorization
                 new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Timesheet" },
                 new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Resource Management" },
                 new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ProjectChecklist, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Project Checklist" },
-                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Milestone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Milstone" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_PMCanCreate, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Can Create ProjectUser" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_PMCanUpdate, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Can Update ProjectUser" },
+                new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_PMCanDelete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Can Delete ProjectUser" },
 
                  //Admin
                  new SystemPermission{ Name =  PermissionNames.Pages_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles" },
@@ -676,6 +686,9 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_ResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Resource Management" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Timesheet" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_WeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View PM Manager Menu Weekly Report" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_PMCanCreate, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Can Create ProjectUser" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_PMCanUpdate, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Can Update ProjectUser" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_CanViewMenu_PMCanDelete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Can Delete ProjectUser" },
                             }
                         },
                         //Project

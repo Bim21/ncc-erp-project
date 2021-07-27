@@ -29,8 +29,9 @@ namespace ProjectManagement.APIs.Projects
         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
 
-            var query = from p in WorkScope.GetAll<Project>()
-                        where isViewAll || p.PMId == AbpSession.UserId.Value
+            var query = from p in WorkScope.GetAll<Project>().Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
+                        join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
+                        from l in lst.DefaultIfEmpty()
                         select new GetProjectDto
                         {
                             Id = p.Id,
@@ -50,7 +51,8 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
-                            PmBranch = p.PM.Branch
+                            PmBranch = p.PM.Branch,
+                            IsSent = l.Status
                         };
             return await query.GetGridResult(query, input);
         }
