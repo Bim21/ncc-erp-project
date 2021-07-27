@@ -1,231 +1,244 @@
 <section class="content px-2">
     <div class="container-fluid">
-        <div class="d-flex mt-2 text-right" style="justify-content: flex-end;">
-            <div class="">
-                <div class="form-group row" style="justify-content: flex-end;">
-                    <div class="col-4 text-right">
-                        <label class=" mt-1" for="" style="padding-top: 8px;">PM report:</label>
-                    </div>
-                    <mat-form-field class="w-100 col-8" appearance="outline">
-                        <mat-select [(ngModel)]="activeReportId" name="pmReport" (selectionChange)="onReportchange()"
-                            placeholder="select a role" required #projectEmployee="ngModel">
-                            <mat-form-field class="w-100 px-3 "
-                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReport" placeholder="search">
-                            </mat-form-field>
-                            <mat-option *ngFor="let report of pmReportList |filter:searchPmReport" [value]="report">
-                                {{report.pmReportName}}<i class="fas fa-circle float-right mt-3"
-                                    [ngClass]="report.isActive==true?'active':'inActive'"></i></mat-option>
-                        </mat-select>
-                    </mat-form-field>
+        <div class="row">
 
+
+            <div class="col-6">
+                <h3>{{projectName}}</h3>
+            </div>
+            <div class="d-flex mt-2 text-left col-6" style="justify-content: flex-end;">
+
+                <div class="mr-3">
+                    <div class=" row" style="justify-content: flex-end;">
+                        <div class=" text-right">
+                            <label class=" mt-1" for="" style="padding-top: 8px;">PM report:</label>
+                        </div>
+                        <mat-form-field class="w-100 col-8" style="min-width: 300px;" appearance="outline">
+                            <mat-select [(ngModel)]="activeReportId" name="pmReport"
+                                (selectionChange)="onReportchange()" placeholder="select a role" required
+                                #projectEmployee="ngModel">
+                                <mat-form-field class="w-100 px-3 "
+                                    style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                    <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
+                                        placeholder="search">
+                                </mat-form-field>
+                                <mat-option *ngFor="let report of pmReportList |filter:searchPmReport" [value]="report">
+                                    {{report.pmReportName}}<i class="fas fa-circle float-right mt-3"
+                                        [ngClass]="report.isActive==true?'active':'inActive'"></i></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div class="mt-1">
+                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3"
+                        *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && isSentReport  ">
+                        <i class="fas fa-paper-plane"></i> Send weekly report
+                    </button>
                 </div>
             </div>
-            <div class="mt-1">
-                <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3"
-                    *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) ">
-                    <i class="fas fa-paper-plane"></i> Send weekly report
-                </button>
-
-
-
-            </div>
         </div>
-        <div class="ml-2 mt-1 mb-2" >
-            
-                <div class="row">
-                    
-                        <strong class="mt-2 mr-2">Đánh giá chung: </strong>
-                        <p class="mr-2 mt-2" style="max-width: 400px; vertical-align: middle;" *ngIf="!isEditingNote" > {{generalNote}}
-                        </p>
-                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
-                            *ngIf="isEditingNote" style="height: 50px;max-width: 400px;" type="text" class="form-control w-50 mr-2"
+        <div class="ml-2 mt-1 mb-2">
+
+            <div class="row">
+
+                <strong class="mt-2 mr-2">Đánh giá chung: </strong>
+                <p class="mr-2 mt-2" style="max-width: 75%; vertical-align: middle;" *ngIf="!isEditingNote">
+                    {{generalNote}}
+                </p>
+                <!-- <textarea  cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
+                            *ngIf="isEditingNote" style="min-width: 75%;height: 48px;line-height: 24px; padding: 0px;resize: both;" type="text" class="form-control w-50 mr-2"
                             name="notePM" placeholder="Đánh giá chung">
-                                </textarea>
-          
-                        <div class="d-inline pt-1">
-                            <button *ngIf="!isEditingNote" class="btn bg-secondary " (click)="isEditingNote = true">
-                                <i class="fas fa-pencil-alt"></i>
-                                Edit
-        
-                            </button>
-                            <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
-                                Save
-                            </button>
-                            <button *ngIf="isEditingNote" (click)="isEditingNote = false; note=''"
-                                class="btn btn-default">Cancel
-                            </button>
-                        </div>
-                    
-                </div>
-    
-            
-        </div>
-        
+                                </textarea> -->
+                <mat-form-field class="w-75" appearance="outline" *ngIf="isEditingNote">
+                    <textarea matInput [(ngModel)]="generalNote" type="text" name="notePM" placeholder="Đánh giá chung">
+                    </textarea>
+                </mat-form-field>
+                <div class="d-inline pt-1 text-right ml-2">
+                    <button class="text-right" *ngIf="!isEditingNote" class="btn bg-secondary "
+                        (click)="isEditingNote = true">
+                        <i class="fas fa-pencil-alt"></i>
+                        Edit
 
-            <div  *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="d-inline">Các vấn đề trong tuần</h4>
-                                <button
-                                    *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)  && activeReportId.isActive"
-                                    [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
-                                    <i class="fa fa-plus-square"></i>
-                                    Create
-                                </button>
-                            </div>
-        
+                    </button>
+                    <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
+                        Save
+                    </button>
+                    <button *ngIf="isEditingNote" (click)="isEditingNote = false; note='' ;getAllPmReport()"
+                        class="btn btn-default">Cancel
+                    </button>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="d-inline">Các vấn đề trong tuần</h4>
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)  "
+                                [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
+                                <i class="fa fa-plus-square"></i>
+                                Create
+                            </button>
                         </div>
+
                     </div>
-                    <div class="card-body table-responsive p-4">
-                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Vấn đề</th>
-                                    <th>Impact</th>
-                                    <th>Solution</th>
-                                    <th>meetingSolution</th>
-                                    <th>Trạng thái</th>
-                                    <th *ngIf="activeReportId.isActive && isSentReport">Action</th>
-        
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let problem of problemList |paginate:{ 
+                </div>
+                <div class="card-body table-responsive p-4">
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Vấn đề</th>
+                                <th>Impact</th>
+                                <th>Solution</th>
+                                <th>meetingSolution</th>
+                                <th>Trạng thái</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let problem of problemList |paginate:{ 
                                     id: 'problemPaging',
                                 itemsPerPage: itemPerPage,
                                 currentPage: problemCurrentPage
                                 }; let i =index">
-                                    <td>{{i+1}}</td>
-        
-                                    <td>
-        
-                                        <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                            {{problem.description}}</p>
-                                        <div class="form-group row required" *ngIf="problem.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
-                                                    placeholder="leave a comment" name="description"
-                                                    [(ngModel)]="problem.description" matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-        
-        
-                                    </td>
-                                    <td>
-                                        <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                            {{problem.impact}}</p>
-                                        <div *ngIf="problem.createMode" class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
-                                                    placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
-                                                    matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-        
-                                    </td>
-        
-                                    <td>
-                                        <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                            {{problem.solution}}</p>
-                                        <div *ngIf="problem.createMode" class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
-                                                    placeholder="leave a comment" name="solution" [(ngModel)]="problem.solution"
-                                                    matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-        
-                                    </td>
-                                    <td>
-        
-                                        <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                            {{problem.meetingSolution}}</p>
-                                        <div *ngIf="problem.createMode" class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
-                                                    placeholder="leave a comment" name="meetingSolution"
-                                                    [(ngModel)]="problem.meetingSolution" matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
-                                            *ngIf="!problem.createMode">{{ problem.status }}</span>
-        
-                                        <div class="form-group row required" *ngIf="problem.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select [(ngModel)]="problem.status" name="issueStatus"
-                                                    placeholder="select a status" required #issueStatus="ngModel">
-                                                    <mat-option *ngFor="let status of isssueStatusList"
-                                                        [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
-                                                        {{status}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                            <mat-error class="mt-1"
-                                                *ngIf="issueStatus.hasError('required') && issueStatus.touched"
-                                                style="font-size: 13px;">
-                                                This field is required
-                                            </mat-error>
-                                        </div>
-        
-                                    </td>
-                                    <td class="text-center" *ngIf="activeReportId.isActive && isSentReport">
-                                        <button
-                                            *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
-                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && activeReportId.isActive"
-                                            mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
-                                            <i class="fas fa-bars fa-lg"></i>
-                                        </button>
-                                        <mat-menu #menu="matMenu" class="p-2">
-                                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)"
-                                                (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
-                                                <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
-                                                Edit
-                                            </button>
-        
-                                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)"
-                                                (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
-                                                <i class="fas fa-trash mr-2 fa-lg"></i>
-                                                Delete
-                                            </button>
-                                        </mat-menu>
-                                        <div *ngIf="problem.createMode" class="pt-2">
-                                            <button [disabled]=" !problem.description || !problem.impact"
-                                                class=" mr-3 submit-btn" style="background: none; border: none;"
-                                                (click)="saveProblemReport(problem)">
-                                                <i style="color: green; ;" class="fas fa-check fa-2x"></i>
-                                            </button>
-        
-                                            <i style="color: red;" class="fas fa-times fa-2x"
-                                                (click)="cancelProblemReport()"></i>
-        
-                                        </div>
-                                    </td>
-        
-                                </tr>
-                            </tbody>
-                        </table>
-        
-                    </div>
-                    <pagination-controls id="problemPaging" (pageChange)="problemCurrentPage = $event"></pagination-controls>
-        
-                </div>
-        
-            </div>
-        
+                                <td>{{i+1}}</td>
 
-        <div  *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)">
+                                <td>
+
+                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
+                                        {{problem.description}}</p>
+                                    <div class="form-group row required" *ngIf="problem.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                                placeholder="leave a comment" name="description"
+                                                [(ngModel)]="problem.description" matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+
+
+                                </td>
+                                <td>
+                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
+                                        {{problem.impact}}</p>
+                                    <div *ngIf="problem.createMode" class="form-group row required">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                                placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
+                                                matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
+                                        {{problem.solution}}</p>
+                                    <div *ngIf="problem.createMode" class="form-group row required">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                                placeholder="leave a comment" name="solution"
+                                                [(ngModel)]="problem.solution" matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+
+                                </td>
+                                <td>
+
+                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
+                                        {{problem.meetingSolution}}</p>
+                                    <div *ngIf="problem.createMode" class="form-group row required">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                                placeholder="leave a comment" name="meetingSolution"
+                                                [(ngModel)]="problem.meetingSolution" matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
+                                        *ngIf="!problem.createMode">{{ problem.status }}</span>
+
+                                    <div class="form-group row required" *ngIf="problem.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <mat-select [(ngModel)]="problem.status" name="issueStatus"
+                                                placeholder="select a status" required #issueStatus="ngModel">
+                                                <mat-option *ngFor="let status of isssueStatusList"
+                                                    [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
+                                                    {{status}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error class="mt-1"
+                                            *ngIf="issueStatus.hasError('required') && issueStatus.touched"
+                                            style="font-size: 13px;">
+                                            This field is required
+                                        </mat-error>
+                                    </div>
+
+                                </td>
+                                <td class="text-center">
+                                    <button
+                                        *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
+                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && activeReportId.isActive"
+                                        mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
+                                        <i class="fas fa-bars fa-lg"></i>
+                                    </button>
+                                    <mat-menu #menu="matMenu" class="p-2">
+                                        <button
+                                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)"
+                                            (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
+                                            <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
+                                            Edit
+                                        </button>
+
+                                        <button
+                                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)"
+                                            (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
+                                            <i class="fas fa-trash mr-2 fa-lg"></i>
+                                            Delete
+                                        </button>
+                                    </mat-menu>
+                                    <div *ngIf="problem.createMode" class="pt-2">
+                                        <button [disabled]=" !problem.description || !problem.impact"
+                                            class=" mr-3 submit-btn" style="background: none; border: none;"
+                                            (click)="saveProblemReport(problem)">
+                                            <i style="color: green; ;" class="fas fa-check fa-2x"></i>
+                                        </button>
+
+                                        <i style="color: red;" class="fas fa-times fa-2x"
+                                            (click)="cancelProblemReport()"></i>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <pagination-controls id="problemPaging" (pageChange)="problemCurrentPage = $event">
+                </pagination-controls>
+
+            </div>
+
+        </div>
+
+
+        <div *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6 row">
                             <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                            <button
-                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && isSentReport && activeReportId.isActive"
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
                                 [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                                 <i class="fa fa-plus-square"></i> Create
                             </button>
@@ -246,7 +259,7 @@
                                 <th>Thời gian thay đổi</th>
                                 <th>% Sử dụng nhân sự</th>
                                 <!-- <th>note</th> -->
-                                <th *ngIf="activeReportId.isActive && isSentReport">Action</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -263,12 +276,12 @@
                                     </div>
                                     <div *ngIf="report.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <mat-select [(ngModel)]="report.userId" name="projectEmployee"
+                                            <mat-select autofocus [(ngModel)]="report.userId" name="projectEmployee"
                                                 placeholder="select a role" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                    <input matInput [(ngModel)]="searchUser" name="searchUser"
-                                                        placeholder="search">
+                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput
+                                                        placeholder="search">{{myInput.focus()}}
                                                 </mat-form-field>
                                                 <mat-option *ngFor="let user of userList |filter:searchUser"
                                                     [value]="user.id">
@@ -327,9 +340,8 @@
                                     </div>
 
                                 </td>
-                                <td class="text-center" *ngIf="activeReportId.isActive">
-                                    <button [disabled]="processWeekly"
-                                        *ngIf="!report.createMode && activeReportId.isActive && isSentReport" mat-button
+                                <td class="text-center">
+                                    <button [disabled]="processWeekly" *ngIf="!report.createMode " mat-button
                                         [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
@@ -350,7 +362,7 @@
                                     </mat-menu>
                                     <div *ngIf="report.createMode" class="pt-2">
                                         <button
-                                            [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage  && report.allocatePercentage !=0 "
+                                            [disabled]="!report.userId || !report?.projectRole?.toString() || !report.startTime || !report.allocatePercentage  && report.allocatePercentage !=0 "
                                             class=" mr-3 submit-btn" style="background: none; border: none;"
                                             (click)="saveWeekReport(report)">
                                             <i style="color: green; ;" class="fas fa-check fa-2x"></i>
@@ -365,20 +377,20 @@
                 </div>
                 <pagination-controls id="projectUser" (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
             </div>
-            <div  >
-                <div class="card" *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)">
+            <div>
+                <div class="card"
+                    *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
                                 <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                                <button
-                                    *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && isSentReport && activeReportId.isActive"
+                                <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) "
                                     [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
                                     <i class="fa fa-plus-square"></i>
                                     Create
                                 </button>
                             </div>
-        
+
                         </div>
                     </div>
                     <div class="card-body table-responsive p-4">
@@ -390,7 +402,7 @@
                                     <th>Project role</th>
                                     <th>Thời gian thay đổi</th>
                                     <th>%Sử dụng nhân sự</th>
-                                    <th *ngIf="activeReportId.isActive && isSentReport">Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -412,7 +424,7 @@
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUser"
-                                                            placeholder="search">
+                                                            #inputSearch placeholder="search">{{inputSearch.focus()}}
                                                     </mat-form-field>
                                                     <mat-option *ngFor="let user of userList |filter:searchUser"
                                                         [value]="user.id">
@@ -426,10 +438,10 @@
                                             </mat-error>
                                         </div>
                                     </td>
-        
+
                                     <td class="text-center">
                                         <p *ngIf="!report.createMode">{{ report.projectRole }}</p>
-        
+
                                         <div class="form-group row required" *ngIf="report.createMode">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="report.projectRole" name="projectrole"
@@ -439,7 +451,8 @@
                                                         {{role}}</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
-                                            <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"
+                                            <mat-error class="mt-1"
+                                                *ngIf="projectPM.hasError('required') && projectPM.touched"
                                                 style="font-size: 13px;">
                                                 This field is required
                                             </mat-error>
@@ -449,7 +462,8 @@
                                             {{report.startTime | date:"dd/MM/yyyy"}}
                                         </span>
                                         <div class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline" *ngIf="report.createMode">
+                                            <mat-form-field class="w-100" appearance="outline"
+                                                *ngIf="report.createMode">
                                                 <input [min]="minDate" matInput [matDatepicker]="picker"
                                                     placeholder="chose a date" [(ngModel)]="report.startTime"
                                                     name="usercreateDate">
@@ -458,24 +472,25 @@
                                             </mat-form-field>
                                         </div>
                                     </td>
-        
+
                                     <td class="text-center">
                                         <span *ngIf="!report.createMode"><strong>
                                                 {{report.allocatePercentage}}%</strong></span>
                                         <div class="form-group row required">
                                             <input class="form-control" placeholder="number" *ngIf="report.createMode"
-                                                type="text" mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage" />
+                                                type="text" mask="percent" suffix="%"
+                                                [(ngModel)]="report.allocatePercentage" />
                                         </div>
                                     </td>
-                                    <td class="text-center" *ngIf="activeReportId.isActive && isSentReport">
+                                    <td class="text-center">
                                         <button *ngIf="!report.createMode && activeReportId.isActive && (permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser) || permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser) 
                                         || permission.isGranted(DeliveryManagement_PMReportProject_Update))"
                                             [disabled]="processFuture" mat-button [matMenuTriggerFor]="menu">
                                             <i class="fas fa-bars fa-lg"></i>
-        
+
                                         </button>
                                         <mat-menu #menu="matMenu" class="p-2">
-        
+
                                             <button (click)="approveRequest(report)" class="mat-menu-item  w-100"
                                                 *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser)">
                                                 <i class="fas fa-check mr-2 fa-lg "></i>
@@ -486,35 +501,36 @@
                                                 <i class="fas fa-times mr-2 fa-lg"></i>
                                                 Từ chối
                                             </button>
-                                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
+                                            <button
+                                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
                                                 (click)="updateRequest(report)" class="mat-menu-item  w-100">
                                                 <i class="fas fa-edit mr-2 fa-lg"></i>
-        
+
                                                 Update
                                             </button>
                                         </mat-menu>
                                         <div class="pt-2" *ngIf="report.createMode">
                                             <button
-                                                [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage"
+                                                [disabled]="!report.userId || !report?.projectRole?.toString() || !report.startTime || !report.allocatePercentage"
                                                 class=" mr-3 submit-btn" style="background: none; border: none;"
                                                 (click)="saveFutureReport(report)">
                                                 <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                             </button>
-        
+
                                             <i style="color: red;" class="fas fa-times fa-2x"
                                                 (click)="cancelFutureReport()"></i>
-        
+
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-        
+
                     </div>
-                    <pagination-controls id="futurePaging" (pageChange)="futureCurrentPage = $event"></pagination-controls>
+                    <pagination-controls id="futurePaging" (pageChange)="futureCurrentPage = $event">
+                    </pagination-controls>
                 </div>
             </div>
         </div>
     </div>
 </section>
-

@@ -30,5 +30,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string PmAvatarPath { get; set; }
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
+        public PMReportProjectStatus IsSent { get; set; }
     }
 }

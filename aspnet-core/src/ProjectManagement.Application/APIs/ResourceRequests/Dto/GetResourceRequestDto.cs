@@ -17,7 +17,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }
         public string StatusName { get; set; }
-        public DateTime TimeDone { get; set; }
+        public DateTime? TimeDone { get; set; }
         public string Note { get; set; }
         public int PlannedNumberOfPersonnel { get; set; }
     }
