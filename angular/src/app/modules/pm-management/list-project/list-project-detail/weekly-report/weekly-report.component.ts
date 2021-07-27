@@ -384,4 +384,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.isEditingNote =false;
     })
   }
+  // public lineBreak(){
+  //   var txt;
+  //   txt = this.generalNote;
+  //   var text = txt.split(".");
+  //   var str = text.join('.</br>');
+    
+  // }
 }
+

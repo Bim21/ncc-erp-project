@@ -25,4 +25,5 @@ export class pmReportProjectDto{
     id?: number;
     createMode?:boolean;
     setBackground?:boolean;
+    pmEmailAddress:string;
 }
