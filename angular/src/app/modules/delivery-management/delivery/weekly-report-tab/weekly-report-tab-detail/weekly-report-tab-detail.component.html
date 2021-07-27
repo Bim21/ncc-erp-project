@@ -50,14 +50,39 @@
                 <div class="card ">
                     <div class="card-body py-2">
                         <div class="row">
+                    
                             <strong class="mt-2 mr-2">Đánh giá chung: </strong>
-                            <p class="mr-2 mt-2" style="max-width: 400px; vertical-align: middle;" *ngIf="!isEditingNote" > {{generalNote}}
+                            <p class="mr-2 mt-2" style="max-width: 70%; vertical-align: middle;" *ngIf="!isEditingNote" > {{generalNote}}
                             </p>
                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
-                                *ngIf="isEditingNote" style="height: 50px;" type="text" class="form-control w-50 mr-2"
+                                *ngIf="isEditingNote" style="height: 50px; min-width: 70%;" type="text" class="form-control w-50 mr-2"
                                 name="notePM" placeholder="Đánh giá chung">
                                     </textarea>
-                            <div class="d-inline pt-1">
+              
+                            <div class="d-inline pt-1 text-right ml-2 mr-2">
+                                <button class="text-right" *ngIf="!isEditingNote" class="btn bg-secondary " (click)="isEditingNote = true">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
+            
+                                </button>
+                                <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
+                                    Save
+                                </button>
+                                <button *ngIf="isEditingNote" (click)="isEditingNote = false; note=''"
+                                    class="btn btn-default">Cancel
+                                </button>
+                            </div>
+                        
+                    </div>
+                        <!-- <div class="row">
+                            <strong class="mt-2 mr-2">Đánh giá chung: </strong>
+                            <p class="mr-2 mt-2" style="max-width: 900px; vertical-align: middle;" *ngIf="!isEditingNote" > {{generalNote}}
+                            </p>
+                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
+                                *ngIf="isEditingNote" style="height: 50px;min-width: 900px;" type="text" class="form-control w-50 mr-2"
+                                name="notePM" placeholder="Đánh giá chung">
+                                    </textarea>
+                            <div class="d-inline pt-1 text-right ml-2">
                                 <button *ngIf="!isEditingNote" class="btn bg-secondary " (click)="isEditingNote = true">
                                     <i class="fas fa-pencil-alt"></i>
                                     Edit
@@ -70,7 +95,7 @@
                                     class="btn btn-default">Cancel
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                
                 </div>
