@@ -224,7 +224,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             Note = tsp.Note
                         };
 
-            return await query.ToListAsync();
+            return await query.OrderByDescending(x=>x.ClientId).ToListAsync();
         }
 
         [HttpPost]

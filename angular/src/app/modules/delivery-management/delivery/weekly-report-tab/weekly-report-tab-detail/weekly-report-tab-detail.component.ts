@@ -73,12 +73,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public activeReportId: number;
   public projectHealth;
-  public pmReportProjectId;
+  public pmReportProjectId : number;
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
   public minDate = new Date();
   public projectId: number;
+  public projectIdReport: number;
   public isEditingNote: boolean = false;
   public generalNote: string = "";
   public isShowProblemList: boolean = false;
@@ -114,6 +115,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
       this.projectId = this.pmReportProjectList[0].id
+      this.projectIdReport = this.projectId;
       this.getActiveReport()
 
     }))
@@ -149,7 +151,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.GetAllByProject(this.projectId).subscribe(data => {
       this.activeReportId = data.result.filter(item => item.isActive == true)[0].id;
       this.generalNote = data.result.filter(item => item.isActive == true)[0].note
-    
+
 
     })
 
@@ -439,7 +441,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public updateNote(){
-    this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs=>{
+    this.pmReportProjectService.updateNote(this.generalNote, this.projectIdReport).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs=>{
       abp.notify.success("Update successful!")
       this.isEditingNote =false;
     })
