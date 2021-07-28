@@ -32,7 +32,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             _timesheetService = timesheetService;
         }
 
-        [HttpPost]
+        [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
         public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, ProjectHealth? health)
         {
