@@ -64,7 +64,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public isEditFutureReport: boolean = false;
   public minDate = new Date();
   public isEditWeeklyReport:boolean=false;
-
+  public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
@@ -73,6 +73,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   generalNote:string ="";
   public projectName="";
   allowSendReport:boolean =true;
+  public projectHealth="";
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
     private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
     private pmreportService:PmReportService, private projectService:ListProjectService) {
@@ -115,6 +116,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     if(this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)){
       this.reportIssueService.getProblemsOfTheWeek(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         this.problemList = data.result;
+        this.projectHealth= data.result.projectHealth;
       })
     }
     
@@ -389,6 +391,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.getAllPmReport();
     })
     // this.lineBreak();
+  }
+
+  updateHealth(projectHealth) {
+    this.reportService.updateHealth(this.activeReportId.pmReportProjectId, projectHealth).subscribe((data) => {
+    })
+
   }
   // public lineBreak(){
   //   var txt;
