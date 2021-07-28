@@ -9,6 +9,8 @@
         public const string ClientAppId = "App.ClientAppId";
         public const string FinaceUri = "App.FinaceUri";
         public const string FinanceSecretKey = "App.FinanceSecretKey";
+        public const string TimesheetUri = "App.TimesheetUri";
+        public const string TimesheetSecretKey = "App.TimesheetSecretKey";
         public const string CanSendDay= "App.CanSendDay";
         public const string CanSendHour = "App.CanSendHour";
         public const string ExpiredDay = "App.ExpiredDay";

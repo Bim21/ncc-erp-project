@@ -25,5 +25,7 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
         public bool Seen { get; set; }
+        public int TotalNormalWorkingTime { get; set; }
+        public int TotalOverTime { get; set; }
     }
 }
