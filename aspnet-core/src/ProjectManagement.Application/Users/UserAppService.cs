@@ -313,6 +313,28 @@ namespace ProjectManagement.Users
             return await query.ToListAsync();
         }
 
+        [HttpGet]
+        public async Task<List<UserDto>> GetAllWithDeactiveUser()
+        {
+            var query = _workScope.GetAll<User>()
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Name = u.Name,
+                    Surname = u.Surname,
+                    EmailAddress = u.EmailAddress,
+                    FullName = u.FullName,
+                    AvatarPath = "/avatars/" + u.AvatarPath,
+                    UserType = u.UserType,
+                    UserLevel = u.UserLevel,
+                    Branch = u.Branch,
+                    IsActive = u.IsActive,
+                    UserCode = u.UserCode
+                });
+            return await query.ToListAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Pages_Users_UpdateAvatar)]
         public async Task<string> UpdateAvatar([FromForm] AvatarDto input)
