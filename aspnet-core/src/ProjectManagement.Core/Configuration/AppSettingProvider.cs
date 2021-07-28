@@ -15,7 +15,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.SecretCode, "Uqhfwwg%fyef@HUSAA744fiegyeR", scopes:SettingScopes.Application| SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.FinaceUri,"http://finance-api.dev.nccsoft.vn/",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.FinanceSecretKey,"Uqhfwwg%fyef@HUSAA744fiegyeR",scopes:SettingScopes.Application|SettingScopes.Tenant),
-                new SettingDefinition(AppSettingNames.TimesheetUri,"http://localhost:21025/",scopes:SettingScopes.Application|SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.TimesheetUri,"http://dev.timesheetapi.nccsoft.vn/",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.TimesheetSecretKey,"9sdfgdfgdfgqKUaGGF9vLvcCj",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.CanSendDay,"2",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.CanSendHour,"15",scopes:SettingScopes.Application|SettingScopes.Tenant),
