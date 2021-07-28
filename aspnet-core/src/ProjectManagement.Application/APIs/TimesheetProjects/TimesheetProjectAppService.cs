@@ -200,7 +200,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
 
-            var query = from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+            var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
                         join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
@@ -226,7 +226,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
                             Note = tsp.Note,
                             IsSendReport = pr.Status
-                        };
+                        }).OrderByDescending(x => x.ClientId);
 
             return await query.GetGridResult(query, input);
         }

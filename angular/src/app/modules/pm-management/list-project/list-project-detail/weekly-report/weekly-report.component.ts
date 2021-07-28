@@ -274,13 +274,14 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
   }
+  
   // Project Issue
   public getAllPmReport() {
     this.reportService.GetAllByProject(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
       this.isSentReport = this.activeReportId.status =='Draft'?true:false
-      this.generalNote = this.activeReportId.note
+      this.generalNote =  this.activeReportId.note
       this.allowSendReport = this.activeReportId.note?true:false
       this.getWeeklyReport();
       this.getFuturereport();

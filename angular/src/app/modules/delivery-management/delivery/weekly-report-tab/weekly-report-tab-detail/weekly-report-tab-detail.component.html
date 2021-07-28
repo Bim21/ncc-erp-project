@@ -82,7 +82,7 @@
 
                 </div>
 
-                
+
                         <div class="card">
                             <mat-expansion-panel expanded=true>
                                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProblemList=!isShowProblemList">
@@ -136,7 +136,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let problem of problemList |paginate:{ 
+                                            <tr *ngFor="let problem of problemList |paginate:{
                                                 id: 'problemPaging',
                                             itemsPerPage: itemPerPage,
                                             currentPage: problemCurrentPage
@@ -282,7 +282,7 @@
 
                         </div>
 
-                    
+
 
                 <div class="card">
                     <mat-expansion-panel expanded=true>
@@ -313,7 +313,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let report of weeklyPeportList  |paginate:{ 
+                                    <tr *ngFor="let report of weeklyPeportList  |paginate:{
                                     id: 'projectUser',
                                 itemsPerPage: itemPerPage,
                                 currentPage: weeklyCurrentPage
@@ -429,7 +429,7 @@
                     </mat-expansion-panel>
 
                 </div>
-                
+
                         <div class="card">
                             <mat-expansion-panel expanded=true >
                                 <mat-expansion-panel-header (click)="isShowFutureList=!isShowFutureList">
@@ -454,7 +454,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let report of futureReportList |paginate:{ 
+                                            <tr *ngFor="let report of futureReportList |paginate:{
                                                 id: 'futurePaging',
                                             itemsPerPage: itemPerPage,
                                             currentPage: futureCurrentPage
@@ -486,9 +486,9 @@
                                                         </mat-error>
                                                     </div>
                                                 </td>
-            
+
                                                 <td> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
-            
+
                                                     <div class="form-group row required" *ngIf="report.createMode">
                                                         <mat-form-field class="w-100 mx-auto" appearance="outline">
                                                             <mat-select [(ngModel)]="report.projectRole" name="projectrole"
@@ -527,10 +527,10 @@
                                                     <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
                                                         [matMenuTriggerFor]="menu">
                                                         <i class="fas fa-bars fa-lg"></i>
-            
+
                                                     </button>
                                                     <mat-menu [disabled]="processFuture" #menu="matMenu" class="p-2">
-            
+
                                                         <button (click)="approveRequest(report)" class="mat-menu-item  w-100"
                                                             *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser)">
                                                             <i class="fas fa-check mr-2 fa-lg "></i>
@@ -539,14 +539,14 @@
                                                         <button (click)="rejectRequest(report)" class="mat-menu-item  w-100"
                                                             *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser)">
                                                             <i class="fas fa-times mr-2 fa-lg"></i>
-            
+
                                                             Từ chối
                                                         </button>
                                                         <button (click)="updateRequest(report)"
                                                             *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
                                                             class="mat-menu-item  w-100">
                                                             <i class="fas fa-edit mr-2 fa-lg"></i>
-            
+
                                                             Update
                                                         </button>
                                                     </mat-menu>
@@ -557,27 +557,27 @@
                                                             (click)="saveFutureReport(report)">
                                                             <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                                         </button>
-            
+
                                                         <i style="color: red;" class="fas fa-times fa-2x"
                                                             (click)="cancelFutureReport()"></i>
-            
+
                                                     </div>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
-            
+
                                 </div>
                                 <pagination-controls *ngIf="futureCurrentPage>1" id="futurePaging"
                                     (pageChange)="futureCurrentPage = $event"></pagination-controls>
-            
+
                             </mat-expansion-panel>
-            
+
                         </div>
-                    
+
             </div>
         </section>
-        
+
 
     </div>
 </div>
