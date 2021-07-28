@@ -1,3 +1,5 @@
+import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
+import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppComponentBase } from '@shared/app-component-base';
 import { BaseApiService } from '@app/service/api/base-api.service';
@@ -12,12 +14,54 @@ import { catchError} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
+import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
   styleUrls: ['./timesheet-detail.component.css']
 })
-export class TimesheetDetailComponent extends AppComponentBase implements OnInit {
+export class TimesheetDetailComponent extends PagedListingComponentBase<TimesheetDetailDto> implements OnInit {
+  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+  // request.maxResultCount=100;
+    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId,request).pipe(catchError(this.timesheetProjectService.handleError))
+    .subscribe((data: PagedResultResultDto)=>{
+      this.TimesheetDetaiList= data.result.items;
+      this.showPaging(data.result,pageNumber);
+      this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
+    })
+  }
+  // protected list(
+  //   request: PagedRequestDto,
+  //   pageNumber: number,
+  //   finishedCallback: Function
+  // ): void {
+  //   this.listProjectService
+  //     .getAllPaging(request)
+  //     .pipe(finalize(() => {
+  //       finishedCallback();
+  //     }))
+  //     .subscribe((result: PagedResultResultDto) => {
+  //       this.listProjects = result.result.items;
+  //       this.showPaging(result.result, pageNumber);
+  //     });
+  // }
+  protected delete(item: TimesheetDetailDto): void {
+    abp.message.confirm(
+      "Delete TimeSheet " + item.projectName + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.timesheetProjectService.delete(item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted Project Timesheet " + item.projectName);
+            this.refresh();
+          });
+        }
+      }
+    );
+  }
+  
+ 
+
 
   public TimesheetDetaiList: TimesheetDetailDto[] = [];
   public tempTimesheetDetaiList: TimesheetDetailDto[] = [];
@@ -27,35 +71,11 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
   public timesheetId: any;
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
-    { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'pmName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
   ];
-  protected getAllTimesheetDetail(): void {
-    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId).subscribe(data => {
-      this.TimesheetDetaiList = data.result;
-      this.TimesheetDetaiList.forEach(el => {
-        if (el.file) {
-          el.file = el.file.substr(12,);
-        }
-      })
-      this.tempTimesheetDetaiList = data.result;
-      this.projectTimesheetDetailId = data.result.map(el => { return el.projectId })
-    })
-  }
-  protected delete(item: TimesheetDetailDto): void {
-    abp.message.confirm(
-      "Delete TimeSheet " + item.projectName + "?",
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.timesheetProjectService.delete(item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted Project Timesheet " + item.projectName);
-            this.getAllTimesheetDetail();
-          });
-        }
-      }
-    );
-
-  }
+  
+  
     Timesheet_TimesheetProject_Create= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
     Timesheet_TimesheetProject_Delete= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
     Timesheet_TimesheetProject_DownloadFileTimesheetProject= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
@@ -66,10 +86,10 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
   constructor(
     private timesheetService: TimesheetService,
     public timesheetProjectService: TimesheetProjectService,
-    private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector: Injector,
+    
 
   ) {
     super(injector)
@@ -78,15 +98,18 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
   }
   ngOnInit(): void {
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
-    this.getAllTimesheetDetail();
+
+    this.refresh();
 
   }
   showDialog(command: String, Timesheet: any): void {
-    let timesheetDetail = {} as ProjectTimesheetDto;
+    let timesheetDetail = {};
     if (command == "edit") {
       timesheetDetail = {
         projectId: Timesheet.projectId,
         timesheetId: Timesheet.timesheetId,
+        clientName:Timesheet.clientName,
+        projectName: Timesheet.projectName,
         note: Timesheet.note,
         id: Timesheet.id,
         projectBillInfomation:Timesheet.projectBillInfomation
@@ -106,7 +129,7 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
     });
     show.afterClosed().subscribe(res => {
       if (res) {
-        this.getAllTimesheetDetail()
+        this.refresh();
       }
     })
   }
@@ -126,7 +149,7 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
       data: { id: id, width: '500px' }
     });
     dialog.afterClosed().subscribe(result => {
-      this.getAllTimesheetDetail();
+      this.refresh();
     });
   }
   DeleteFile(item: any) {
@@ -137,7 +160,7 @@ export class TimesheetDetailComponent extends AppComponentBase implements OnInit
         if (result) {
           this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
             abp.notify.success("Deleted File  " + item.file);
-            this.getAllTimesheetDetail();
+            this.refresh();
           });
         }
       }
