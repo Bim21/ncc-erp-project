@@ -5,7 +5,8 @@
                 <h1>{{'List dự án' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button type="button" class="btn bg-blue" (click)="createProject()" *ngIf="permission.isGranted(PmManager_Project_Create)">
+                <button type="button" class="btn bg-blue" (click)="createProject()"
+                    *ngIf="permission.isGranted(PmManager_Project_Create)">
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -57,14 +58,15 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100" [busy]="isLoading">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
+                    [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
-                            <th  style="width: 200px;">{{'Tên dự án' | localize}}</th>
+                            <th style="width: 200px;">{{'Tên dự án' | localize}}</th>
                             <th>{{'Loại dự án' | localize}}</th>
                             <th>khách hàng</th>
                             <th>{{'PM' | localize}}</th>
-                           
+
                             <th>{{'Thời gian bắt đầu' | localize}}</th>
                             <th>{{'Thời gian kết thúc' | localize}}</th>
                             <th>{{'Charge khách hàng' | localize}}</th>
@@ -80,25 +82,34 @@
                     currentPage: pageNumber,
                     totalItems: totalItems
                   }; let i = index">
-                  <td  style="min-width: 200px;  white-space: normal;"><span
-                    class="hyperlink" (click)="showDetail(project.id)">{{ project.name }}</span></td>
+                            <td style="min-width: 200px;  white-space: normal;"><span class="hyperlink"
+                                    (click)="showDetail(project.id)">{{ project.name }}</span></td>
                             <td>{{project.projectType}}</td>
                             <td>{{project.clientName}}</td>
-                            <td><div style="width: 300px;"><app-user-info [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
-                                userType:project.pmUserType,emailAddress:project.pmEmailAddress}"></app-user-info></div> </td>
-                           
+                            <td>
+                                <div style="width: 300px;">
+                                    <app-user-info [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                                userType:project.pmUserType,emailAddress:project.pmEmailAddress}"></app-user-info>
+                                </div>
+                            </td>
+
                             <td>{{project.startTime | date:"dd/MM/yyyy"}}</td>
                             <td>{{project.endTime | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center">
-                                <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge"></mat-checkbox>
+                                <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge">
+                                </mat-checkbox>
                             </td>
-                            <td class="text-center"> <span  [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
+                            <td class="text-center"> <span
+                                    [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
                             <td class="text-center" style="padding: 12px;">
-                                <button type="button" class="btn btn-sm bg-secondary mr-1" (click)="editProject(project)" *ngIf="permission.isGranted(PmManager_Project_Update)">
+                                <button type="button" class="btn btn-sm bg-secondary mr-1"
+                                    (click)="editProject(project)"
+                                    *ngIf="permission.isGranted(PmManager_Project_Update)">
                                     <i class="fas fa-pencil-alt"></i>
                                     {{ 'edit' | translate }}
                                 </button>
-                                <button type="button" class="btn btn-sm bg-danger ml-1" (click)="delete(project)" *ngIf="permission.isGranted(PmManager_Project_Delete)">
+                                <button type="button" class="btn btn-sm bg-danger ml-1" (click)="delete(project)"
+                                    *ngIf="permission.isGranted(PmManager_Project_Delete)">
                                     <i class="fas fa-trash"></i>
                                     {{ 'delete' | translate }}
                                 </button>

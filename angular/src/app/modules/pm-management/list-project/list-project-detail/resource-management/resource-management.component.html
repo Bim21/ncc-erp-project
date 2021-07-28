@@ -26,6 +26,7 @@
 
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1">
+                    <div class="fixTableHead">
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
@@ -169,7 +170,8 @@
                         </tbody>
                     </table>
                 </div>
-                <pagination-controls id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
+                </div>
+                <pagination-controls *ngIf="userListCurrentPage>1" id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
 
@@ -202,9 +204,12 @@
 
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1">
-                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                    <div class="fixTableHead">
+
+                    
+                    <table style="border-collapse: collapse ; table-layout:fixed !important" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
-                            <tr>
+                            <tr style="border: none;">
                                 <th>STT</th>
                                 <th>Request name</th>
                                 <th>Thời gian cần</th>
@@ -288,8 +293,9 @@
                         </tbody>
                     </table>
                 </div>
+                </div>
 
-                <pagination-controls id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
+                <pagination-controls *ngIf="resourceRequestCurrentPage>1" id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -316,6 +322,9 @@
 
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1">
+                    <div class="fixTableHead">
+
+                    
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
@@ -450,9 +459,10 @@
                         </tbody>
                     </table>
                 </div>
+                </div>
 
 
-                <pagination-controls class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
+                <pagination-controls *ngIf="userBillCurrentPage>1" class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>

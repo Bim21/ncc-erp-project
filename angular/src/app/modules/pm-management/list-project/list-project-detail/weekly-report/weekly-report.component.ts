@@ -72,6 +72,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   private projectId: number;
   generalNote:string ="";
   public projectName="";
+  allowSendReport:boolean =true;
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
     private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
     private pmreportService:PmReportService, private projectService:ListProjectService) {
@@ -273,14 +274,15 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
   }
+  
   // Project Issue
   public getAllPmReport() {
     this.reportService.GetAllByProject(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
       this.isSentReport = this.activeReportId.status =='Draft'?true:false
-      this.generalNote = this.activeReportId.note
-
+      this.generalNote =  this.activeReportId.note
+      this.allowSendReport = this.activeReportId.note?true:false
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -375,13 +377,23 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     );
 
 
-
+  
     
   }
+
   public updateNote(){
     this.reportService.updateNote(this.generalNote, this.activeReportId.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs=>{
       abp.notify.success("Update successful!")
       this.isEditingNote =false;
+      this.getAllPmReport();
     })
   }
+  // public lineBreak(){
+  //   var txt;
+  //   txt = this.generalNote;
+  //   var text = txt.split(".");
+  //   var str = text.join('.</br>');
+    
+  // }
 }
+

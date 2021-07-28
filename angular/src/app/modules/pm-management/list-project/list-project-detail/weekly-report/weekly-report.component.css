@@ -15,3 +15,33 @@
 tr, th, td{
   vertical-align: text-top ;
  }
+/* .message{
+  white-space: pre-wrap;
+} */
+.table {
+  table-layout: fixed;
+}
+
+button{
+  height: fit-content;
+}
+@media only screen and (min-width: 1921px) and (max-width: 2250px) {
+  .res-btn {
+    display: flex;
+    max-width: 15%;
+  
+  }
+  .res-area{
+    max-width: 90% !important ;
+  }
+}
+@media only screen and (max-width: 1920px) {
+  .res-area{
+    max-width: 85% !important ;
+  }
+  .res-btn{
+    margin-top: 5px;
+    display: flex;
+  }
+}
+

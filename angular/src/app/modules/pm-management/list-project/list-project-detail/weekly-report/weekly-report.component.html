@@ -3,13 +3,13 @@
         <div class="row">
 
 
-            <div class="col-6">
-                <h3>{{projectName}}</h3>
+            <div class="col-3">
+                <h3 class="mt-3">{{projectName}}</h3>
             </div>
-            <div class="d-flex mt-2 text-left col-6" style="justify-content: flex-end;">
+            <div class="d-flex mt-2 text-left col-9" style="justify-content: flex-end;">
 
                 <div class="mr-3">
-                    <div class=" row" style="justify-content: flex-end;">
+                    <div class=" row">
                         <div class=" text-right">
                             <label class=" mt-1" for="" style="padding-top: 8px;">PM report:</label>
                         </div>
@@ -23,15 +23,19 @@
                                         placeholder="search">
                                 </mat-form-field>
                                 <mat-option *ngFor="let report of pmReportList |filter:searchPmReport" [value]="report">
-                                    {{report.pmReportName}}<i class="fas fa-circle float-right mt-3"
-                                        [ngClass]="report.isActive==true?'active':'inActive'"></i></mat-option>
+                                    <div class="row">
+                                        <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
+                                        <div class="col-2"> <i class="fas fa-circle float-right mt-3"
+                                                [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
+                                    </div>
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
 
                     </div>
                 </div>
-                <div class="mt-1">
-                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3"
+                <div class="mt-2">
+                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" [disabled]="!allowSendReport"
                         *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && isSentReport  ">
                         <i class="fas fa-paper-plane"></i> Send weekly report
                     </button>
@@ -41,33 +45,49 @@
         <div class="ml-2 mt-1 mb-2">
 
             <div class="row">
+                <div class="col-lg-1 col-md-3 col-sm-3 pt-2"> <strong >Đánh giá chung: </strong></div>
+                <div class="col-lg-11 col-md-9 col-sm-9">
+                    <div *ngIf="!isEditingNote" class="w-100 row">
+                        
+                            <pre style=" font-size: 1.3em; font-family: sans-serif; white-space: pre-line; max-width: 91%;"
+                                *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
+                                {{generalNote}}
+                            </pre>
+                            <!-- <div [innerHTML]="generalNote"></div> -->
 
-                <strong class="mt-2 mr-2">Đánh giá chung: </strong>
-                <p class="mr-2 mt-2" style="max-width: 75%; vertical-align: middle;" *ngIf="!isEditingNote">
-                    {{generalNote}}
-                </p>
-                <!-- <textarea  cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" [(ngModel)]="generalNote"
-                            *ngIf="isEditingNote" style="min-width: 75%;height: 48px;line-height: 24px; padding: 0px;resize: both;" type="text" class="form-control w-50 mr-2"
-                            name="notePM" placeholder="Đánh giá chung">
-                                </textarea> -->
-                <mat-form-field class="w-75" appearance="outline" *ngIf="isEditingNote">
-                    <textarea matInput [(ngModel)]="generalNote" type="text" name="notePM" placeholder="Đánh giá chung">
-                    </textarea>
-                </mat-form-field>
-                <div class="d-inline pt-1 text-right ml-2">
-                    <button class="text-right" *ngIf="!isEditingNote" class="btn bg-secondary "
-                        (click)="isEditingNote = true">
-                        <i class="fas fa-pencil-alt"></i>
-                        Edit
+                        <div class="text-left pt-2" style="max-width: 9%;">
+                            <button class="btn bg-secondary mt-2" (click)="isEditingNote = true">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </div>
 
-                    </button>
-                    <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
-                        Save
-                    </button>
-                    <button *ngIf="isEditingNote" (click)="isEditingNote = false; note='' ;getAllPmReport()"
-                        class="btn btn-default">Cancel
-                    </button>
+                    </div>
+
+                    <div *ngIf="isEditingNote" class="row ">
+                        <div class="col-lg-11 col-md-10 res-area">
+                            <mat-form-field class="w-100" appearance="outline">
+                                <textarea style="padding-bottom: 20px;" id="message" matInput [(ngModel)]="generalNote"
+                                    type="text" name="notePM" placeholder="Đánh giá chung">
+                                </textarea>
+                            </mat-form-field>
+
+                        </div>
+
+                        <div class="col-lg-1 col-md-2 text-right mt-3 res-btn">
+                            <button class="btn bg-blue mr-1 " (click)="updateNote()">
+                                Save
+                            </button>
+                            <button (click)="isEditingNote = false; note='' ;getAllPmReport()"
+                                class="btn btn-default ">Cancel
+                            </button>
+                        </div>
+
+
+                    </div>
                 </div>
+
+
+
 
             </div>
 
@@ -94,7 +114,7 @@
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                         <thead class="bg-light">
                             <tr>
-                                <th>STT</th>
+                                <th class="stt text-center">STT</th>
                                 <th>Vấn đề</th>
                                 <th>Impact</th>
                                 <th>Solution</th>
@@ -224,7 +244,8 @@
                     </table>
 
                 </div>
-                <pagination-controls id="problemPaging" (pageChange)="problemCurrentPage = $event">
+                <pagination-controls *ngIf="problemCurrentPage>1" id="problemPaging"
+                    (pageChange)="problemCurrentPage = $event">
                 </pagination-controls>
 
             </div>
@@ -236,13 +257,11 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-6 row">
-                            <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
-                                [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
-                                <i class="fa fa-plus-square"></i> Create
-                            </button>
-                        </div>
+                        <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
+                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                            [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
+                            <i class="fa fa-plus-square"></i> Create
+                        </button>
 
                     </div>
 
@@ -253,12 +272,11 @@
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                         <thead class="bg-light">
                             <tr>
-                                <th>STT</th>
-                                <th>Nhân viên</th>
+                                <th class="stt">STT</th>
+                                <th class="account-info">Nhân viên</th>
                                 <th>Project Role</th>
                                 <th>Thời gian thay đổi</th>
                                 <th>% Sử dụng nhân sự</th>
-                                <!-- <th>note</th> -->
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -375,21 +393,20 @@
                         </tbody>
                     </table>
                 </div>
-                <pagination-controls id="projectUser" (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
+                <pagination-controls *ngIf="weeklyCurrentPage>1" id="projectUser"
+                    (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
             </div>
             <div>
                 <div class="card"
                     *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-6">
-                                <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                                <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) "
-                                    [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
-                                    <i class="fa fa-plus-square"></i>
-                                    Create
-                                </button>
-                            </div>
+                            <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) "
+                                [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
+                                <i class="fa fa-plus-square"></i>
+                                Create
+                            </button>
 
                         </div>
                     </div>
@@ -397,8 +414,8 @@
                         <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                             <thead class="bg-light">
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Nhân viên</th>
+                                    <th class="stt">STT</th>
+                                    <th class="account-info">Nhân viên</th>
                                     <th>Project role</th>
                                     <th>Thời gian thay đổi</th>
                                     <th>%Sử dụng nhân sự</th>
@@ -527,7 +544,8 @@
                         </table>
 
                     </div>
-                    <pagination-controls id="futurePaging" (pageChange)="futureCurrentPage = $event">
+                    <pagination-controls *ngIf="futureCurrentPage>1" id="futurePaging"
+                        (pageChange)="futureCurrentPage = $event">
                     </pagination-controls>
                 </div>
             </div>
