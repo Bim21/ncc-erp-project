@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -78,6 +79,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
   public minDate = new Date();
+  public maxDate= new Date();
   public projectId: number;
   public projectIdReport: number;
   public isEditingNote: boolean = false;
@@ -85,6 +87,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
+  public projectName="";
 
 
 
@@ -104,7 +107,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.isActive = this.route.snapshot.queryParamMap.get('isActive');
-    this.minDate.setDate(this.minDate.getDate() + 1)
+    this.minDate.setDate(this.minDate.getDate() + 1);
+    this.maxDate.setDate(this.maxDate.getDate()-1)
     this.getPmReportProject();
     // this.getActiveReport();
     this.getUser();
@@ -132,9 +136,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
 
-
-
   public view(item?) {
+    this.tempPmReportProjectList.forEach((project)=>{
+      if(item==project.projectId){
+        this.projectName=project.projectName
+
+      }
+    })
     this.projectId = item;
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == item) {
@@ -186,7 +194,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
+        
     });
+    this.getActiveReport()
 
   }
 
@@ -195,10 +205,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
       if (project.seen == false) {
         abp.notify.success("Mark Read!");
-        this.getPmReportProject();
+        // this.getPmReportProject();
       } else {
         abp.notify.success("Mark Unread!");
-        this.getPmReportProject();
+        // this.getPmReportProject();
       }
 
     })

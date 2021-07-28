@@ -373,7 +373,19 @@
                                 </td>
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.billRole}}</span>
-                                    <div *ngIf="bill.createMode"  class="form-group row required mt-3"   >
+                                       
+                                    <div *ngIf="bill.createMode">
+
+                                        <input required class="form-control mt-1" #billRole="ngModel" #billRoteEl
+                                            type="text" placeholder="Charge role" name="billRole" [(ngModel)]="bill.billRole"
+                                           />
+                                        
+                                        <abp-validation-summary [control]="billRole" [controlEl]="billRoleEl">
+                                        </abp-validation-summary>
+
+                                    </div>
+                                    
+                                    <!-- <div *ngIf="bill.createMode"  class="form-group row required mt-3"   >
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="bill.billRole" name="billRole"
                                                     placeholder="select a role" required #billRole="ngModel">
@@ -387,7 +399,8 @@
                                                 style="font-size: 13px;">
                                                 This field is required
                                             </mat-error>
-                                    </div>
+
+                                    </div> -->
                                 </td>
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}

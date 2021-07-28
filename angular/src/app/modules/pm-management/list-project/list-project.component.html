@@ -71,6 +71,7 @@
                             <th>{{'Thời gian kết thúc' | localize}}</th>
                             <th>{{'Charge khách hàng' | localize}}</th>
                             <th>{{'Trạng thái' | localize}}</th>
+                            <th>{{'Weekly Report' | localize}}</th>
                             <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
                         </tr>
                     </thead>
@@ -101,6 +102,10 @@
                             </td>
                             <td class="text-center"> <span
                                     [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
+                            <td class="text-center">
+                                <span [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]"
+                                  >{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}} </span>
+                            </td>
                             <td class="text-center" style="padding: 12px;">
                                 <button type="button" class="btn btn-sm bg-secondary mr-1"
                                     (click)="editProject(project)"

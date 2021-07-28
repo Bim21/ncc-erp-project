@@ -44,4 +44,14 @@ button{
     display: flex;
   }
 }
+.label{
+  color: white;
+  padding: 12px;
+  font-family: Arial;
+  border-radius: 2px;
+  margin-bottom: -5px !important;
+}
+.info{
+  background-color: #2196F3;
+}
 
