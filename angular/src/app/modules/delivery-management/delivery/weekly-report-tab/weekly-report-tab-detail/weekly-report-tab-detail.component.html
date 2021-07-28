@@ -8,14 +8,14 @@
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
-                    <input (input)="search()" type="text" class="form-control" name="keyword" placeholder="Search"
+                    <input (keyup.enter)="search()" type="text"   class="form-control" name="keyword" placeholder="Search"
                         [(ngModel)]="searchText" />
                 </div>
             </div>
             <div>
                 <mat-list *ngFor="let item of pmReportProjectList">
                     <div class="row" [ngClass]="item.setBackground==true?'projectActive':''">
-                        <div class="col-10">
+                        <div class="col-10" [ngClass]="item.projectHealth ==='Green'?'green':item.projectHealth ==='Red'?'red':'yellow'">
                             <mat-list-item style="cursor:pointer," role="item.projectId"
                                 (click)="view(item.projectId);">
                                 <div style="overflow: hidden; overflow-x: hidden;">
@@ -48,20 +48,20 @@
             <div class="container-fluid">
                 <div class="card ">
                     <div class="card-body py-2">
-                        <!-- <h3>{{projectName}}</h3> -->
+                        <h3>{{projectName}}</h3>
                         <div class="row " style="justify-content: space-between;">
 
                             <strong class="mt-3">Đánh giá chung: </strong>
-                            <pre style=" white-space: pre-line; max-width: 70%; font-size: 1.3em; font-family: sans-serif;"
-                                *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
-                                {{generalNote}}
+                            <pre style=" white-space: pre-line; width: 70%; font-size: 1.3em; font-family: sans-serif; float: left;align-self:flex-start;"
+                                *ngIf="!isEditingNote" >
+                                <span>{{generalNote}}</span>
                             </pre>
                             <mat-form-field style="width:70%" appearance="outline" *ngIf="isEditingNote">
                                 <textarea style="padding-bottom: 20px;"  id="message" matInput [(ngModel)]="generalNote"
                                     type="text" name="notePM" placeholder="Đánh giá chung">
                                 </textarea>
                             </mat-form-field>
-                            <div class="d-inline float-right pt-1 text-right ml-2 mt-1">
+                            <div class="d-inline float-right pt-1 text-right  mt-1">
                                 <button class="text-right" *ngIf="!isEditingNote" class="btn bg-secondary "
                                     (click)="isEditingNote = true">
                                     <i class="fas fa-pencil-alt"></i>
@@ -96,10 +96,10 @@
                                         Create
                                     </button>
                                     <mat-form-field class="myFilter ml-5" appearance="outline" [hidden]="isShowProblemList">
-                                        <mat-select name="flag" placeholder="Flag" [(ngModel)]="projectHealth">
+                                        <mat-select name="flag" placeholder="Flag" [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
                                             <ng-container *ngFor="let flag of problemIssueList">
                                                 <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
-                                                    (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);$event.stopPropagation()">
+                                                    (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
                                                     {{
                                                     flag
                                                     }}
@@ -204,7 +204,7 @@
                                                         {{problem.createdAt | date:"dd/MM/yyyy"}}
                                                     </span>
                                                     <mat-form-field appearance="outline" *ngIf="problem.createMode">
-                                                        <input [min]="minDate" matInput [matDatepicker]="pickerCreateAt"
+                                                        <input [min]="minDate" [max]="maxDate" matInput [matDatepicker]="pickerCreateAt"
                                                             placeholder="chose a date" [(ngModel)]="problem.createdAt"
                                                             name="usercreateDate">
                                                         <mat-datepicker-toggle matSuffix [for]="pickerCreateAt">

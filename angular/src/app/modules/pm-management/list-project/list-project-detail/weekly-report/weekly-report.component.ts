@@ -382,11 +382,13 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
 
   public updateNote(){
+    
     this.reportService.updateNote(this.generalNote, this.activeReportId.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs=>{
       abp.notify.success("Update successful!")
       this.isEditingNote =false;
       this.getAllPmReport();
     })
+    // this.lineBreak();
   }
   // public lineBreak(){
   //   var txt;
@@ -395,5 +397,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   //   var str = text.join('.</br>');
     
   // }
+  // public lineBreak(){
+  //   if(document.getElementById('bindNote')){
+  //     document.getElementById('bindNote').innerHTML=(<HTMLInputElement>document.getElementById('message')).value.replace(/\n/g,'<br />');
+  //   }
+    
+  // }
+  
 }
 

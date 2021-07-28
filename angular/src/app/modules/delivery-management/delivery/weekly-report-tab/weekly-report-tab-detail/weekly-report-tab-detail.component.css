@@ -28,5 +28,15 @@ padding: 10px;
 }
 .projectActive{
     background-color: #dce1e6;
+    
+}
+.green{
+  border-left: 7px solid #28a745;
+}
+.red{
+  border-left: 7px solid #dc3545;
+}
+.yellow{
+  border-left: 7px solid #ffc107;
 }
 
