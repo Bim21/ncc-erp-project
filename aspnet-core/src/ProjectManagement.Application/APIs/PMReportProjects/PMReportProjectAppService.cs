@@ -197,11 +197,18 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_SendReport)]
         public async Task SendReport(long projectId, long pmReportId)
         {
-            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
+                .Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
             if (pmReportProject.Status == PMReportProjectStatus.Sent)
                 throw new UserFriendlyException("Report has been sent !");
 
             pmReportProject.Status = PMReportProjectStatus.Sent;
+            // phạt nhẹ nếu quá hạn
+            if (pmReportProject.PMReport.PMReportStatus == PMReportStatus.Expired && pmReportProject.PMReport.Type == PMReportType.Weekly)
+            {
+                pmReportProject.IsPunish = PunishStatus.Low;
+            }
+
             await WorkScope.UpdateAsync(pmReportProject);
         }
 
@@ -248,12 +255,13 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task Delete(long pmPeportProjectId)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmPeportProjectId);
-            if (!pmReportProject.PMReport.IsActive)
+            var pmReport = await WorkScope.GetAsync<PMReport>(pmReportProject.PMReportId);
+            if (!pmReport.IsActive)
             {
                 throw new UserFriendlyException("PMReport is locked !");
             }
 
-            await WorkScope.DeleteAsync(pmReportProject);
+            await WorkScope.DeleteAsync<PMReportProject>(pmPeportProjectId);
         }
 
         public async Task ReverseSeen(long pmReportProjectId)
