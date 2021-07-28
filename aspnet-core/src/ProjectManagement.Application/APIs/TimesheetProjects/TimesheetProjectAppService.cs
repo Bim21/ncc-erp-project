@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using NccCore.Extension;
+using NccCore.Paging;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
@@ -191,15 +193,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
             PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, 
             PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject,
             PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
-        public async Task<List<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(long timesheetId)
+        public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
             var viewAll = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet);
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
 
-            var query = from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+            var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
+                        join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
                         join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
                         where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
@@ -221,10 +224,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             ClientName = c.Name,
                             File = "/timesheets/" + tsp.FilePath,
                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
-                            Note = tsp.Note
-                        };
+                            Note = tsp.Note,
+                            IsSendReport = pr.Status
+                        }).OrderByDescending(x => x.ClientId);
 
-            return await query.OrderByDescending(x=>x.ClientId).ToListAsync();
+            return await query.GetGridResult(query, input);
         }
 
         [HttpPost]
