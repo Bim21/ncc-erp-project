@@ -32,7 +32,9 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
             var pmReportProject = WorkScope.GetAll<PMReportProject>();
-            var query = WorkScope.GetAll<PMReport>().Select(x => new GetPMReportDto
+            var query = WorkScope.GetAll<PMReport>()
+                .OrderByDescending(x => x.CreationTime)
+                .Select(x => new GetPMReportDto
             {
                 Id = x.Id,
                 Name = x.Name,
