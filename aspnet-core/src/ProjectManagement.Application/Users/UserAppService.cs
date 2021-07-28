@@ -314,7 +314,7 @@ namespace ProjectManagement.Users
         }
 
         [HttpGet]
-        public async Task<List<UserDto>> GetAllUser()
+        public async Task<List<UserDto>> GetAllWithDeactiveUser()
         {
             var query = _workScope.GetAll<User>()
                 .Select(u => new UserDto
