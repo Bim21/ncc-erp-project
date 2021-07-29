@@ -14,6 +14,7 @@ using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
 using ProjectManagement.NccCore.BackgroundJob;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -27,6 +28,7 @@ namespace ProjectManagement.APIs.PMReports
         {
             _backgroundJobManager = backgroundJobManager;
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
@@ -42,9 +44,51 @@ namespace ProjectManagement.APIs.PMReports
                 IsActive = x.IsActive,
                 Type = x.Type,
                 PMReportStatus = x.PMReportStatus,
-                NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count()
+                NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count(),
+                CountProjectHeath = new List<CountProjectHealth> { 
+                    new CountProjectHealth
+                    {
+                        ProjectHealth = ProjectHealth.Green,
+                        Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Green),
+                    },
+                    new CountProjectHealth
+                    {
+                        ProjectHealth = ProjectHealth.Red,
+                        Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Red),
+                    },
+                    new CountProjectHealth
+                    {
+                        ProjectHealth = ProjectHealth.Yellow,
+                        Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Yellow),
+                    },
+                },
+                Note = x.Note,
             });
             return await query.GetGridResult(query, input);
+        }
+
+        public async Task<List<PMReportDto>> GetAll()
+        {
+            var query = WorkScope.GetAll<PMReport>()
+                .Select(x => new PMReportDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+                    IsActive = x.IsActive,
+                    Type = x.Type,
+                    PMReportStatus = x.PMReportStatus,
+                    Note = x.Note,
+                });
+            return await query.ToListAsync();
+        }
+
+        public async Task<string> UpdateNote(long id, string note)
+        {
+            var pmReport = await WorkScope.GetAsync<PMReport>(id);
+            pmReport.Note = note;
+            await WorkScope.UpdateAsync(pmReport);
+            return note;
         }
 
         [HttpPost]

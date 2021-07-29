@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
@@ -12,6 +13,7 @@ using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Timesheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +25,18 @@ namespace ProjectManagement.APIs.PMReportProjects
 {
     public class PMReportProjectAppService : ProjectManagementAppServiceBase
     {
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
+        private readonly TimesheetService _timesheetService;
+
+        public PMReportProjectAppService(TimesheetService timesheetService)
         {
-            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
+            _timesheetService = timesheetService;
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, ProjectHealth? health)
+        {
+            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId && (health == null || x.ProjectHealth == health))
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -46,9 +55,43 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmFullName = x.PM.FullName,
                     PmUserName = x.PM.UserName,
                     PmUserType = x.PM.UserType,
-                    Seen = x.Seen
+                    Seen = x.Seen,
+                    TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                    TotalOverTime = x.TotalOverTime
                 });
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<object> GetInfoProject(long projectId)
+        {
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive);
+            var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId);
+
+            var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
+                        select new
+                        {
+                            ProjectName = p.Name,
+                            ClientName = p.Client.Name,
+                            PmName = p.PM.Name,
+                            TotalBill = projectUserBill.Count(),
+                            TotalResource = projectUser.Count()
+                        };
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet)]
+        public async Task GetWorkingTimeFromTimesheet(long pmReportProjectId, DateTime startTime, DateTime endTime)
+        {
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.Project).FirstOrDefaultAsync(x => x.Id == pmReportProjectId);
+
+            var result = await _timesheetService.GetWorkingHourFromTimesheet(pmReportProject.Project.Code, startTime, endTime);
+
+            pmReportProject.TotalNormalWorkingTime = result.NormalWorkingTime;
+            pmReportProject.TotalOverTime = result.OverTime;
+            await WorkScope.UpdateAsync(pmReportProject);
         }
 
         [HttpGet]

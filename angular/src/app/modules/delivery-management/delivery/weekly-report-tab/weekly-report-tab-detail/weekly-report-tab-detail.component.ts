@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -65,19 +66,21 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
   public isActive = "";
-  public weeklyPeportList: projectReportDto[] = [];
+  public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
-  public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
+  public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public activeReportId: number;
   public projectHealth;
   public pmReportProjectId : number;
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
-  public minDate = new Date();
+  // public minDate = new Date();
+  // public maxDate= new Date();
+  public createdDate= new Date();
   public projectId: number;
   public projectIdReport: number;
   public isEditingNote: boolean = false;
@@ -85,6 +88,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
+  public projectName="";
 
 
 
@@ -104,14 +108,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.isActive = this.route.snapshot.queryParamMap.get('isActive');
-    this.minDate.setDate(this.minDate.getDate() + 1)
+    // this.minDate.setDate(this.minDate.getDate() + 1);
+    // this.maxDate.setDate(this.maxDate.getDate()-1)
     this.getPmReportProject();
     // this.getActiveReport();
     this.getUser();
-
+   
   }
   public getPmReportProject(): void {
-    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, {}).subscribe((data => {
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
       this.projectId = this.pmReportProjectList[0].id
@@ -132,9 +137,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
 
-
-
   public view(item?) {
+    this.tempPmReportProjectList.forEach((project)=>{
+      if(item==project.projectId){
+        this.projectName=project.projectName
+
+      }
+    })
     this.projectId = item;
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == item) {
@@ -154,24 +163,31 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
 
     })
+    // this.isShowProblemList=false
+ 
 
 
 
   }
   public getWeeklyReport() {
     this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-      this.weeklyPeportList = data.result;
+      this.weeklyReportList = data.result;
+      this.isShowWeeklyList=this.weeklyReportList.length==0?false:true;
     })
   }
   public getFuturereport() {
     this.pmReportProjectService.getChangesInFuture(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.futureReportList = data.result;
+       this.isShowFutureList=this.futureReportList.length==0?false:true;
     })
   }
   public getProjectProblem() {
     this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
       if (data.result) {
         this.problemList = data.result.result;
+        this.isShowProblemList = this.problemList.length==0?false:true;
+       
+        
         this.pmReportProjectId = data.result.pmReportProjectId;
         this.projectHealth = data.result.projectHealth;
       } else {
@@ -186,7 +202,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
+        
     });
+    this.getActiveReport()
 
   }
 
@@ -195,10 +213,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
       if (project.seen == false) {
         abp.notify.success("Mark Read!");
-        this.getPmReportProject();
+        // this.getPmReportProject();
       } else {
         abp.notify.success("Mark Unread!");
-        this.getPmReportProject();
+        // this.getPmReportProject();
       }
 
     })
@@ -208,16 +226,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).subscribe((data) => {
       this.view(this.projectId);
     })
-
   }
   //weekly
   public addWeekReport() {
     let newReport = {} as projectUserDto
     newReport.createMode = true;
-    this.weeklyPeportList.unshift(newReport)
+    this.weeklyReportList.unshift(newReport)
     this.processWeekly = true;
   }
   public saveWeekReport(report: projectReportDto) {
+  
     // report.isFutureActive = false
     report.projectId = this.projectId
     report.isExpense = true;
@@ -379,7 +397,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processProblem = true;
   }
   public saveProblemReport(problem: projectProblemDto) {
-    problem.createdAt = moment(problem.createdAt).format("YYYY-MM-DD");
+    problem.createdAt = moment(this.createdDate).format("YYYY-MM-DD");
     delete problem["createMode"]
     if (!this.isEditProblem) {
       this.reportIssueService.createReportIssue(this.projectId, problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {

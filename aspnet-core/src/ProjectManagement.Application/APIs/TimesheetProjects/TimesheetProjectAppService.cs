@@ -188,7 +188,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return await query.ToListAsync();
         }
 
-        [HttpGet]
+        [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet, 
             PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, 
             PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject,
