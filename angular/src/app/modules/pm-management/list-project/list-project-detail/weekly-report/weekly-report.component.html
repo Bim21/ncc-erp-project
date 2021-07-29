@@ -44,18 +44,18 @@
         </div>
         <div class="ml-2 mt-1 mb-2">
 
-            <div class="row">
-                <div class="col-lg-1 col-md-3 col-sm-3 pt-2"> <strong >Đánh giá chung: </strong></div>
+            <div class="row" >
+                <div class="col-lg-1 col-md-3 col-sm-3 pt-3"> <strong >Đánh giá chung: </strong></div>
                 <div class="col-lg-11 col-md-9 col-sm-9">
                     <div *ngIf="!isEditingNote" class="w-100 row">
                         
-                            <pre style=" font-size: 1.3em; font-family: sans-serif; white-space: pre-line; max-width: 91%;"
+                            <pre style=" font-size: 1.3em; font-family: sans-serif; white-space: pre-line; max-width: 91%;" class="mb-0 p-0 mt-3"
                                 *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
                                 {{generalNote}}
                             </pre>
                             <!-- <div [innerHTML]="generalNote"></div> -->
 
-                        <div class="text-left pt-2" style="max-width: 9%;">
+                        <div class="text-left pt-2 ml-2" style="max-width: 9%;">
                             <button class="btn bg-secondary mt-2" (click)="isEditingNote = true">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>

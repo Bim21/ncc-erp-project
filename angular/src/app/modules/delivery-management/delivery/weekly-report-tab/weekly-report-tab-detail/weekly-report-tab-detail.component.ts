@@ -122,8 +122,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
       this.pmReportProjectId = this.pmReportProjectList[0].id
       this.pmReportProjectList[0].setBackground =true
+      this.projectName = this.pmReportProjectList[0].projectName
 
-
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem()
     }))
   }
   // private getActiveReport() {
@@ -225,7 +228,14 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).subscribe((data) => {
-      this.view(this.projectId);
+        this.pmReportProjectList.forEach(item=> {
+        if(item.id == this.pmReportProjectId){
+          item.projectHealth = this.getByEnum(projectHealth,this.APP_ENUM.ProjectHealth)
+        }
+      })
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem()
     })
   }
   //weekly
