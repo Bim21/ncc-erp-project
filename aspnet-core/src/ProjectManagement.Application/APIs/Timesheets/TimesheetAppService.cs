@@ -23,6 +23,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimeSheets
 {
+    [AbpAuthorize]
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]

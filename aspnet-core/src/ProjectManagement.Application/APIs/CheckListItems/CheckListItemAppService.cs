@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.CheckListItems
 {
+    [AbpAuthorize]
     public class CheckListItemAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]

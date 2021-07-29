@@ -16,6 +16,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReportProjectIssues
 {
+    [AbpAuthorize]
     public class PMReportProjectIssueAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
