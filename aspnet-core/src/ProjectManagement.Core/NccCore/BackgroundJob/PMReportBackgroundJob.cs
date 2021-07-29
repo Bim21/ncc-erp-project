@@ -21,9 +21,12 @@ namespace ProjectManagement.NccCore.BackgroundJob
             Logger.Info("PMReport background trigger!");
             try
             {
-                var pmReport = await _pmreport.GetAsync(args.PMReportId);
-                pmReport.PMReportStatus = args.PMReportStatus;
-                await _pmreport.UpdateAsync(pmReport);
+                using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MustHaveTenant))
+                {
+                    var pmReport = await _pmreport.GetAsync(args.PMReportId);
+                    pmReport.PMReportStatus = args.PMReportStatus;
+                    await _pmreport.UpdateAsync(pmReport);
+                }               
                 Logger.Info("PMReport background success!.");
             }
             catch (Exception e)
