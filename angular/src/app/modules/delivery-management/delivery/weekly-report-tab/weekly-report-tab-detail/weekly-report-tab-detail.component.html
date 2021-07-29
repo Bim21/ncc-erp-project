@@ -1,7 +1,6 @@
-<div class="row pt-2">
-    <div  style="min-width: 250px; width: 18%; ">
-        <!--  style="height: 88vh; overflow-y: auto; overflow-x: hidden;" -->
-        <div class="card ml-2">
+<div class="row pt-2" style="position: relative;">
+    <div  style="min-width: 200px; width: 18%; position: fixed;  top:auto ; left:auto; ">
+        <div class="card ml-2" style="height: 94vh; overflow-y: auto; overflow-x: hidden;">
             <div class="card-header" style="position: sticky; top: 0; z-index: 50; background-color: white;">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -13,9 +12,9 @@
                         [(ngModel)]="searchText" />
                 </div>
             </div>
-            <div>
+            <div style="margin-bottom: 20px;">
                 <mat-list *ngFor="let item of pmReportProjectList">
-                    <div class="row" [ngClass]="item.setBackground==true?'projectActive':''">
+                    <div class="row sidebar-item" [ngClass]="item.setBackground==true?'projectActive':''">
                         <div class="col-10"
                             [ngClass]="item.projectHealth ==='Green'?'green':item.projectHealth ==='Red'?'red':'yellow'">
                             <mat-list-item style="cursor:pointer," role="item.projectId"
@@ -40,7 +39,7 @@
             </div>
         </div>
     </div>
-    <div style="width: 77%;">
+    <div style="width: 77%; margin-left: 22%;">
         <section class="content ">
             <div class=" px-2">
                 <h3>{{projectName}}</h3>
@@ -86,14 +85,14 @@
                             <h4 style="display: inline;">Các vấn đề trong tuần</h4>
                             <button class="mr-2"
                                 *ngIf="isActive=='true' && permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)"
-                                [hidden]="processProblem || isShowProblemList==false "
+                                [hidden]="processProblem || !isShowProblemList"
                                 (click)="addIssueReport();$event.stopPropagation()" class="btn btn-primary  ml-3"
                                 style="height: 40px;">
                                 <i class="fa fa-plus-square"></i>
                                 Create
                             </button>
-                            <mat-form-field class="myFilter ml-5" appearance="outline"
-                                [hidden]="(!isShowProblemList && problemList.length==0)">
+                            <mat-form-field class="myFilter ml-5" appearance="outline" [hidden]="processProblem || !isShowProblemList"
+                               >
                                 <mat-select name="flag" placeholder="Flag" [(ngModel)]="projectHealth"
                                     (click)="$event.stopPropagation()">
                                     <ng-container *ngFor="let flag of problemIssueList">
@@ -260,13 +259,13 @@
 
 
                 <div class="card">
-                    <mat-expansion-panel [expanded]="weeklyReportList.length==0?false:true">
+                    <mat-expansion-panel [expanded]="isShowWeeklyList">
                         <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowWeeklyList=!isShowWeeklyList">
 
                             <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
                             <button
                                 *ngIf="isActive=='true' &&permission.isGranted(DeliveryManagement_PMReportProject_Create)"
-                                [hidden]="processWeekly || (!isShowWeeklyList && weeklyReportList.length==0)"
+                                [hidden]="processWeekly || !isShowWeeklyList "
                                 (click)="addWeekReport();$event.stopPropagation()" class=" btn btn-primary ml-3">
                                 <i class="fa fa-plus-square"></i> Create
                             </button>
@@ -407,12 +406,12 @@
                 </div>
 
                 <div class="card">
-                    <mat-expansion-panel [expanded]="futureReportList.length==0?false:true">
+                    <mat-expansion-panel [expanded]="isShowFutureList">
                         <mat-expansion-panel-header style="margin: 8px 0" (click)="isShowFutureList=!isShowFutureList">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
                             <button
                                 *ngIf="isActive=='true' && permission.isGranted(DeliveryManagement_PMReportProject_Create)"
-                                [hidden]="processFuture || (!isShowFutureList && futureReportList.length==0)"
+                                [hidden]="processFuture || !isShowFutureList "
                                 (click)="addFutureReport(); $event.stopPropagation()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
