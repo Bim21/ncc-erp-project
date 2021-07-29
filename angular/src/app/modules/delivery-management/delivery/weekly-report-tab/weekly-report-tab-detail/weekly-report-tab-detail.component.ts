@@ -17,10 +17,11 @@ import { finalize, catchError } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { JsonHubProtocol } from '@aspnet/signalr';
 import * as moment from 'moment';
+import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -55,6 +56,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   protected delete(entity: WeeklyReportTabDetailComponent): void {
     throw new Error('Method not implemented.');
   }
+  @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
   public itemPerPage: number = 5;
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
@@ -65,7 +67,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public show: boolean = false;
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
-  public isActive:boolean;
+  public isActive: boolean;
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
@@ -89,11 +91,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
   public projectInfo = {} as ProjectInfoDto
-  totalNormalWorkingTime:number= 0;
-  totalOverTime:number =0;
-
-
-
+  totalNormalWorkingTime: number = 0;
+  totalOverTime: number = 0;
   constructor(private pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
@@ -108,7 +107,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
-    this.isActive = this.route.snapshot.queryParamMap.get('isActive')=="true";
+    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
     this.getPmReportProject();
     this.getUser();
   }
@@ -119,7 +118,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.projectId = this.pmReportProjectList[0].projectId
       this.generalNote = this.pmReportProjectList[0].note
       this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
-    this.totalOverTime = this.pmReportProjectList[0].totalOverTime
+      this.totalOverTime = this.pmReportProjectList[0].totalOverTime
       if (!this.isJson(this.generalNote)) {
         this.generalNote = JSON.parse(this.generalNote)
       }
@@ -209,29 +208,29 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
 
     });
-  
-     
-      this.projectId = this.pmReportProjectList[0].projectId
-      this.generalNote = this.pmReportProjectList[0].note
-      this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
-      this.totalOverTime = this.pmReportProjectList[0].totalOverTime
-      if (!this.isJson(this.generalNote)) {
-        this.generalNote = JSON.parse(this.generalNote)
+
+
+    this.projectId = this.pmReportProjectList[0].projectId
+    this.generalNote = this.pmReportProjectList[0].note
+    this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
+    this.totalOverTime = this.pmReportProjectList[0].totalOverTime
+    if (!this.isJson(this.generalNote)) {
+      this.generalNote = JSON.parse(this.generalNote)
+    }
+    this.pmReportProjectId = this.pmReportProjectList[0].id
+    // this.pmReportProjectList[0].setBackground = true
+    this.pmReportProjectList.forEach(element => {
+      if (element.projectId == this.pmReportProjectList[0].projectId) {
+        element.setBackground = true;
+      } else {
+        element.setBackground = false;
       }
-      this.pmReportProjectId = this.pmReportProjectList[0].id
-      // this.pmReportProjectList[0].setBackground = true
-      this.pmReportProjectList.forEach(element => {
-        if (element.projectId == this.pmReportProjectList[0].projectId) {
-          element.setBackground = true;
-        } else {
-          element.setBackground = false;
-        }
-      });
-      this.getProjectInfo();
-      this.getWeeklyReport();
-      this.getFuturereport();
-      this.getProjectProblem()
-   
+    });
+    this.getProjectInfo();
+    this.getWeeklyReport();
+    this.getFuturereport();
+    this.getProjectProblem()
+
   }
 
   public markRead(project) {
@@ -248,17 +247,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
-    .subscribe((data) => {
-      this.pmReportProjectList.forEach(item => {
-        if (item.id == this.pmReportProjectId) {
-          item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
-        }
-        abp.notify.success("Update successfull")
+      .subscribe((data) => {
+        this.pmReportProjectList.forEach(item => {
+          if (item.id == this.pmReportProjectId) {
+            item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
+          }
+          abp.notify.success("Update successfull")
+        })
+        this.getWeeklyReport();
+        this.getFuturereport();
+        this.getProjectProblem()
       })
-      this.getWeeklyReport();
-      this.getFuturereport();
-      this.getProjectProblem()
-    })
   }
   //weekly
   public addWeekReport() {
@@ -268,8 +267,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processWeekly = true;
   }
   public saveWeekReport(report: projectReportDto) {
-
-    // report.isFutureActive = false
+    console.log("xxxx", report.allocatePercentage)
     report.projectId = this.projectId
     report.isExpense = true;
     report.status = "0";
@@ -512,6 +510,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     })
   }
 
+  getPercentage(report, data) {
+    report.allocatePercentage = data
+  }
 
 
 }
