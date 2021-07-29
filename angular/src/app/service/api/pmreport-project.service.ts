@@ -43,9 +43,15 @@ export class PMReportProjectService extends BaseApiService {
     return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${projectId}` );
   }
   public updateNote(note: string,pmReportProjectId:number): Observable<any> {
-    note = JSON.stringify(note)
+    if(note!=''){
+      note = JSON.stringify(note)
+    }
     return this.http.put<any>(this.rootUrl + `/UpdateNote?note=${note}&pmReportProjectId=${pmReportProjectId}`, {});
 }
+  public GetInfoProject(projectId:number):Observable<any>{
+    return this.http.get<any>(this.rootUrl + `/GetInfoProject?projectId=${projectId}` );
+
+  }
 
 
 }

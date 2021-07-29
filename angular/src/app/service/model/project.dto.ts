@@ -13,7 +13,7 @@ export class ProjectDto {
 export class projectUserDto {
     userId: number
     userName: string;
-    fullName:string;
+    fullName: string;
     projectId: number;
     projectName: string;
     projectRole: string;
@@ -27,8 +27,8 @@ export class projectUserDto {
     pmReportName: string;
     isFutureActive: boolean;
     id: number;
-    createMode?:boolean;
-    viewMode?:boolean;
+    createMode?: boolean;
+    viewMode?: boolean;
 }
 export class projectResourceRequestDto {
     name: string;
@@ -38,7 +38,7 @@ export class projectResourceRequestDto {
     timeDone: string;
     note: string;
     id: number;
-    createMode?:boolean;
+    createMode?: boolean;
 }
 export class projectUserBillDto {
     userId: number;
@@ -51,18 +51,26 @@ export class projectUserBillDto {
     endTime: string;
     currency: number;
     isActive: boolean;
-    createMode?:boolean;
+    createMode?: boolean;
     id: number;
 }
-export class MilestoneDto{
-    projectId : number;
-    name :string;
-    description :string;
-    flag :string  ;
-    status :string  ;
-    uatTimeStart :  string;
-    uatTimeEnd :  string;
-    note :string;
+export class MilestoneDto {
+    projectId: number;
+    name: string;
+    description: string;
+    flag: string;
+    status: string;
+    uatTimeStart: string;
+    uatTimeEnd: string;
+    note: string;
     id?: number
-    createMode?:boolean;
+    createMode?: boolean;
+}
+export class ProjectInfoDto {
+    projectName: string;
+    clientName: string;
+    pmName: string
+    totalBill: number
+    totalResource: number;
+    
 }

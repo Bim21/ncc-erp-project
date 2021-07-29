@@ -284,7 +284,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
       this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
       this.generalNote = JSON.parse(this.selectedReport.note)
-      this.allowSendReport = this.selectedReport.note ? true : false
+      this.allowSendReport = this.selectedReport.note != ""?true:false;
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -387,18 +387,40 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.reportService.updateNote(this.generalNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
-      this.selectedReport.note =this.generalNote
+      this.selectedReport.note = this.generalNote
+      this.allowSendReport = this.generalNote != ''?true:false
     })
   }
   public canCelUpdateNote() {
     this.isEditingNote = false;
-    this.generalNote = JSON.parse(this.selectedReport.note)
+    this.generalNote= this.selectedReport.note
+    if (!this.isJson(this.generalNote)) {
+      this.generalNote = JSON.parse(this.generalNote)
+    }
+    this.allowSendReport = this.generalNote != ''?true:false
   }
 
   updateHealth(projectHealth) {
     this.reportService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).subscribe((data) => {
     })
 
+  }
+  isJson(item) {
+    item = typeof item !== "string"
+      ? JSON.stringify(item)
+      : item;
+
+    try {
+      item = JSON.parse(item);
+    } catch (e) {
+      return false;
+    }
+
+    if (typeof item === "object" && item !== null) {
+      return true;
+    }
+
+    return false;
   }
 
 }
