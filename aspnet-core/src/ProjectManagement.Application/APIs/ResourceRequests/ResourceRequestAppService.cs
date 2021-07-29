@@ -106,7 +106,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest)]
         public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
         {
-            if(input.StartTime.Date <= DateTime.Now.Date)
+            if(input.StartTime.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("Can't add user at past time !");
             }
