@@ -59,6 +59,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import { PercentageMaskDirective } from './directives/percentage-mask.directive';
 import { UserInfoComponent } from './components/user-info/user-info.component';
+import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
+import { FormsModule } from '@angular/forms';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -107,6 +109,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
         MatTreeModule,
         MatFormFieldModule,
         MatSelectModule,
+        FormsModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -117,7 +120,8 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
         BusyDirective,
         EqualValidator,
         PercentageMaskDirective,
-        UserInfoComponent
+        UserInfoComponent,
+        RadioDropdownComponent
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -163,7 +167,8 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
         MatTreeModule,
         MatFormFieldModule,
         PercentageMaskDirective,
-        UserInfoComponent
+        UserInfoComponent,
+        RadioDropdownComponent
     ]
 })
 export class SharedModule {

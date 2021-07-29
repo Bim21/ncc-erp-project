@@ -1,5 +1,5 @@
 <div class="row pt-2" style="position: relative;">
-    <div  style="min-width: 200px; width: 16%; position: fixed;  top:auto ; left:auto; ">
+    <div style="min-width: 200px; width: 16%; position: fixed;  top:auto ; left:auto; ">
         <div class="card ml-2" style="height: 94vh; overflow-y: auto; overflow-x: hidden;">
             <div class="card-header" style="position: sticky; top: 0; z-index: 50; background-color: white;">
                 <div class="input-group">
@@ -17,8 +17,7 @@
                     <div class="row sidebar-item" [ngClass]="item.setBackground==true?'projectActive':''">
                         <div class="col-10"
                             [ngClass]="item.projectHealth ==='Green'?'green':item.projectHealth ==='Red'?'red':'yellow'">
-                            <mat-list-item style="cursor:pointer," role="item.projectId"
-                                (click)="view(item);">
+                            <mat-list-item style="cursor:pointer," role="item.projectId" (click)="view(item);">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
                                         <strong>{{item.projectName}}</strong>
@@ -40,73 +39,77 @@
         </div>
     </div>
     <div style="width: 80%; margin-left: 19%;">
+
         <section class="content ">
             <div class=" px-2">
-            
-                
-                <div class="card w-100 " >
+                <div class="card w-100 ">
                     <div class="card-body py-1">
                         <h4>{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
                         <table class="w-100 project-info">
-                        <tr> 
-                            <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
-                            <td>Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
-                        </tr>
-                        <tr>
-                            <td>Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal / <strong>{{totalOverTime}}h </strong>OT </td>
-                            <td>Status:  <mat-form-field class="myFilter ml-5" appearance="outline" 
-                                >
-                                 <mat-select [disabled]="!isActive" name="flag" placeholder="Flag" [(ngModel)]="projectHealth"
-                                     (click)="$event.stopPropagation()">
-                                     <ng-container *ngFor="let flag of problemIssueList">
-                                         <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
-                                             (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
-                                             {{
-                                             flag
-                                             }}
- 
-                                         </mat-option>
-                                     </ng-container>
-                                 </mat-select>
-                             </mat-form-field> </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="d-flex mt-1" >
-                                    <strong>Đánh giá chung: </strong>
-                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                            <tr>
+                                <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
+                                <td>Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
+                                    <strong>{{totalOverTime}}h </strong>OT
+                                </td>
+                                <td>Status: <mat-form-field class="myFilter ml-5" appearance="outline">
+                                        <mat-select [disabled]="!isActive" name="flag" placeholder="Flag"
+                                            [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
+                                            <ng-container *ngFor="let flag of problemIssueList">
+                                                <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
+                                                    (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
+                                                    {{
+                                                    flag
+                                                    }}
+
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="d-flex mt-1">
+                                        <strong>Đánh giá chung: </strong>
+                                        <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                      font-size: 1.1em; font-family: sans-serif; align-self:flex-start;"
-                                        *ngIf="!isEditingNote">
+                                            *ngIf="!isEditingNote">
                                         {{generalNote}}
                                     </pre>
-                                    <mat-form-field class="ml-1" style="width:68%" appearance="outline" *ngIf="isEditingNote">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-                                        style="padding-bottom: 20px;" rows="2" id="message" matInput [(ngModel)]="generalNote"
-                                            name="notePM" placeholder="Đánh giá chung">
+                                        <mat-form-field class="ml-1" style="width:68%" appearance="outline"
+                                            *ngIf="isEditingNote">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                style="padding-bottom: 20px;" rows="2" id="message" matInput
+                                                [(ngModel)]="generalNote" name="notePM" placeholder="Đánh giá chung">
                                         </textarea>
-                                    </mat-form-field>
-                                    <div class="d-inline float-right pt-1 text-right   ml-2">
-                                        <i [hidden]= "!isActive" *ngIf="!isEditingNote" class="fas fa-edit mb-2 fa-lg"  (click)="isEditingNote = true"></i>
-                                        <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
-                                            Save
-                                        </button>
-                                        <button *ngIf="isEditingNote" (click)="cancelUpdateNote(); ;"
-                                            class="btn btn-default">Cancel
-                                        </button>
+                                        </mat-form-field>
+                                        <div class="d-inline float-right pt-1 text-right   ml-2">
+                                            <i [hidden]="!isActive" *ngIf="!isEditingNote"
+                                                class="fas fa-edit mb-2 fa-lg" (click)="isEditingNote = true"></i>
+                                            <button *ngIf="isEditingNote" class="btn bg-blue mr-1"
+                                                (click)="updateNote()">
+                                                Save
+                                            </button>
+                                            <button *ngIf="isEditingNote" (click)="cancelUpdateNote(); ;"
+                                                class="btn btn-default">Cancel
+                                            </button>
+                                        </div>
+
                                     </div>
-        
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         </table>
-                      
+
 
                     </div>
 
                 </div>
 
 
-                <div class="card" >
+                <div class="card">
                     <mat-expansion-panel [expanded]="isShowProblemList">
                         <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProblemList=!isShowProblemList">
 
@@ -119,7 +122,7 @@
                                 <i class="fa fa-plus-square"></i>
                                 Create
                             </button>
-                           
+
                         </mat-expansion-panel-header>
                         <div class="card-body table-responsive p-4">
                             <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
@@ -151,8 +154,9 @@
                                             <div *ngIf="problem.createMode">
                                                 <mat-form-field class="example-full-width" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                                        rows="1" placeholder="leave a comment" name="description"
-                                                        [(ngModel)]="problem.description" matInput></textarea>
+                                                        required rows="2" placeholder="leave a comment"
+                                                        name="description" [(ngModel)]="problem.description"
+                                                        matInput></textarea>
                                                 </mat-form-field>
                                             </div>
 
@@ -164,7 +168,7 @@
                                             <div *ngIf="problem.createMode">
                                                 <mat-form-field class="example-full-width" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                                        rows="1" placeholder="leave a comment" name="impact"
+                                                        rows="2" placeholder="leave a comment" name="impact"
                                                         [(ngModel)]="problem.impact" matInput></textarea>
                                                 </mat-form-field>
                                             </div>
@@ -177,7 +181,7 @@
                                             <div *ngIf="problem.createMode">
                                                 <mat-form-field class="example-full-width" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                                        rows="1" placeholder="leave a comment" name="solution"
+                                                        rows="2" placeholder="leave a comment" name="solution"
                                                         [(ngModel)]="problem.solution" matInput></textarea>
                                                 </mat-form-field>
                                             </div>
@@ -190,7 +194,7 @@
                                             <div *ngIf="problem.createMode">
                                                 <mat-form-field class="example-full-width" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                                        rows="1" placeholder="leave a comment" name="meetingSolution"
+                                                        rows="2" placeholder="leave a comment" name="meetingSolution"
                                                         [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                                 </mat-form-field>
                                             </div>
@@ -224,7 +228,7 @@
                                             </div>
 
                                         </td>
-                                        <td  class="text-center">
+                                        <td class="text-center">
                                             <button *ngIf="!problem.createMode" mat-button [matMenuTriggerFor]="menu"
                                                 [disabled]="processProblem">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -245,8 +249,8 @@
                                                 </button>
                                             </mat-menu>
                                             <div *ngIf="problem.createMode" class="pt-2">
-                                                <button [disabled]=" !problem.description || !problem.impact"
-                                                    class=" mr-3 submit-btn" style="background: none; border: none;"
+                                                <button [disabled]=" !problem.description " class=" mr-3 submit-btn"
+                                                    style="background: none; border: none;"
                                                     (click)="saveProblemReport(problem)">
                                                     <i style="color: green; ;" class="fas fa-check fa-2x"></i>
                                                 </button>
@@ -277,8 +281,7 @@
                         <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowWeeklyList=!isShowWeeklyList">
 
                             <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                            <button
-                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
                                 [hidden]="processWeekly || !isShowWeeklyList "
                                 (click)="addWeekReport();$event.stopPropagation()" class=" btn btn-primary ml-3">
                                 <i class="fa fa-plus-square"></i> Create
@@ -295,10 +298,10 @@
                                         <th>STT</th>
                                         <th>Nhân viên</th>
                                         <th>Project Role</th>
-                                        <th col-time>Thời gian thay đổi</th>
+                                        <th class="col-time">Từ ngày</th>
                                         <th>% Sử dụng nhân sự</th>
                                         <!-- <th>note</th> -->
-                                        <th col-action-menu >Action</th>
+                                        <th class="col-action-menu">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -336,7 +339,8 @@
                                             </div>
                                         </td>
 
-                                        <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
+                                        <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
+                                                }}</span>
 
                                             <div class="form-group row required" *ngIf="report.createMode">
                                                 <mat-form-field class="w-100 mx-auto" appearance="outline">
@@ -364,20 +368,15 @@
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <p *ngIf="!report.createMode" class="text-center"> <strong>
                                                     {{report.allocatePercentage}}%</strong></p>
                                             <div *ngIf="report.createMode">
-                                                <input class="form-control mt-1" type="text" mask="percent" required
-                                                    #Percentage="ngModel" #PercentageEl suffix="%"
-                                                    [(ngModel)]="report.allocatePercentage" placeholder="number" />
-                                                <abp-validation-summary [control]="Percentage"
-                                                    [controlEl]="PercentageEl">
-                                                </abp-validation-summary>
+                                                <radio-dropdown (outputData)="getPercentage(report,$event)"
+                                                    [data]="report.allocatePercentage"></radio-dropdown>
                                             </div>
-
                                         </td>
-                                        <td  class="text-center">
+                                        <td class="text-center">
                                             <button [hidden]="processWeekly" *ngIf="!report.createMode" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -399,7 +398,7 @@
                                             </mat-menu>
                                             <div *ngIf="report.createMode" class="pt-2">
                                                 <button
-                                                    [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage && report.allocatePercentage !=0"
+                                                    [disabled]="!report.userId || !report?.projectRole?.toString() || !report.startTime || !report.allocatePercentage && report.allocatePercentage !=0"
                                                     class=" mr-3 submit-btn" style="background: none; border: none;"
                                                     (click)="saveWeekReport(report)">
                                                     <i style="color: green; ;" class="fas fa-check fa-2x"></i>
@@ -423,8 +422,7 @@
                     <mat-expansion-panel [expanded]="isShowFutureList">
                         <mat-expansion-panel-header style="margin: 8px 0" (click)="isShowFutureList=!isShowFutureList">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                            <button
-                                *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                            <button *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create)"
                                 [hidden]="processFuture || !isShowFutureList "
                                 (click)="addFutureReport(); $event.stopPropagation()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
@@ -440,7 +438,7 @@
                                         <th>Project role</th>
                                         <th class="col-time">Từ ngày</th>
                                         <th>%Sử dụng nhân sự</th>
-                                        <th class="col-action-menu" >Action</th>
+                                        <th class="col-action-menu">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -478,7 +476,8 @@
                                             </div>
                                         </td>
 
-                                        <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
+                                        <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
+                                                }}</span>
 
                                             <div class="form-group row required" *ngIf="report.createMode">
                                                 <mat-form-field class="w-100 mx-auto" appearance="outline">
@@ -507,14 +506,20 @@
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <p class="text-center" *ngIf="!report.createMode"><strong>
                                                     {{report.allocatePercentage}}%</strong></p>
-                                            <input class="form-control mt-1" placeholder="number"
-                                                *ngIf="report.createMode" type="text" mask="percent" suffix="%"
-                                                [(ngModel)]="report.allocatePercentage" />
+                                            <!-- <input class="form-control mt-1" placeholder="number"
+                                                #reportPercentage="ngModel" *ngIf="report.createMode" type="text"
+                                                mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage"
+                                                required /> -->
+                                            <div *ngIf="report.createMode">
+                                                <radio-dropdown (outputData)="getPercentage(report,$event)"
+                                                    [data]="report.allocatePercentage"></radio-dropdown>
+                                            </div>
+
                                         </td>
-                                        <td  class="text-center">
+                                        <td class="text-center">
                                             <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -543,7 +548,7 @@
                                             </mat-menu>
                                             <div class="pt-2" *ngIf="report.createMode">
                                                 <button
-                                                    [disabled]="!report.userId || !report.projectRole.toString() || !report.startTime || !report.allocatePercentage && report.allocatePercentage !=0"
+                                                    [disabled]="!report.userId || !report?.projectRole?.toString() || !report.startTime || !report.allocatePercentage && report.allocatePercentage !=0"
                                                     class=" mr-3 submit-btn" style="background: none; border: none;"
                                                     (click)="saveFutureReport(report)">
                                                     <i style="color: green; ;" class="fas fa-check fa-2x"></i>
