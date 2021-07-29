@@ -11,10 +11,10 @@ namespace ProjectManagement.NccCore.BackgroundJob
 {
    public  class PMReportBackgroundJob : AsyncBackgroundJob<PMReportBackgroundJobArgs>, ITransientDependency
     {
-        readonly IRepository<PMReport, long> _pmReport;
-        public PMReportBackgroundJob(IRepository<PMReport, long> pmReport)
+        readonly IWorkScope _workScope;
+        public PMReportBackgroundJob(IWorkScope workScope)
         {
-            _pmReport = pmReport;
+            _workScope = workScope;
         }
         [UnitOfWork]
         protected override async Task ExecuteAsync(PMReportBackgroundJobArgs args)
@@ -22,9 +22,9 @@ namespace ProjectManagement.NccCore.BackgroundJob
             Logger.Info("PMReport background trigger!");
             try
             {
-                var test = await _pmReport.GetAsync(args.PMReportId);
-                test.PMReportStatus = args.PMReportStatus;
-                await _pmReport.UpdateAsync(test);
+                var pmReport = await _workScope.GetAsync<PMReport>(args.PMReportId);
+                pmReport.PMReportStatus = args.PMReportStatus;
+                await _workScope.UpdateAsync(pmReport);
             }
             catch (Exception e)
             {
