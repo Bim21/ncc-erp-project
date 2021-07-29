@@ -209,6 +209,29 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
 
     });
+  
+     
+      this.projectId = this.pmReportProjectList[0].projectId
+      this.generalNote = this.pmReportProjectList[0].note
+      this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
+      this.totalOverTime = this.pmReportProjectList[0].totalOverTime
+      if (!this.isJson(this.generalNote)) {
+        this.generalNote = JSON.parse(this.generalNote)
+      }
+      this.pmReportProjectId = this.pmReportProjectList[0].id
+      // this.pmReportProjectList[0].setBackground = true
+      this.pmReportProjectList.forEach(element => {
+        if (element.projectId == this.pmReportProjectList[0].projectId) {
+          element.setBackground = true;
+        } else {
+          element.setBackground = false;
+        }
+      });
+      this.getProjectInfo();
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem()
+   
   }
 
   public markRead(project) {
