@@ -91,7 +91,6 @@ namespace ProjectManagement.APIs.PMReports
             {
                 throw new UserFriendlyException("Report has been closed !");
             }
-
             pmReport.Note = note;
             await WorkScope.UpdateAsync(pmReport);
             return note;
