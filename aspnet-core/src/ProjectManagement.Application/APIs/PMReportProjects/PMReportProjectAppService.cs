@@ -11,6 +11,7 @@ using ProjectManagement.APIs.PMReports.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Timesheet;
@@ -23,6 +24,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReportProjects
 {
+    [AbpAuthorize]
     public class PMReportProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly TimesheetService _timesheetService;
@@ -79,6 +81,32 @@ namespace ProjectManagement.APIs.PMReportProjects
                         };
 
             return await query.FirstOrDefaultAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
+        public async Task<string> GetCurrentResourceOfProject(long projectId)
+        {
+            var builder = new StringBuilder();
+            var totalPercent = from u in WorkScope.GetAll<User>().ToList()
+                               join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+                               on u.Id equals pu.UserId
+                               into pp
+                               select new
+                               {
+                                   UserId = u.Id,
+                                   TotalPercent = pp.Sum(x => x.AllocatePercentage)
+                               };
+
+            var projectUsers = await WorkScope.GetAll<ProjectUser>()
+                                .Where(x => x.ProjectId == projectId)
+                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive).ToListAsync();
+
+            foreach(var item in projectUsers)
+            {
+                builder.Append($"{item.User.FullName} - {item.ProjectRole} - {item.AllocatePercentage}% -  Total: {totalPercent.FirstOrDefault(x => x.UserId == item.UserId).TotalPercent} <br>");
+            }
+            return builder.ToString();
         }
 
         [HttpPost]

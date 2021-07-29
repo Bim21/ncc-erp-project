@@ -21,6 +21,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReports
 {
+    [AbpAuthorize]
     public class PMReportAppService : ProjectManagementAppServiceBase
     {
         private readonly IBackgroundJobManager _backgroundJobManager;

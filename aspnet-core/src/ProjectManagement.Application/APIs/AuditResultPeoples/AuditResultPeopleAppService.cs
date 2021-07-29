@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.AuditResultPeoples
 {
+    [AbpAuthorize]
     public class AuditResultPeopleAppService : ProjectManagementAppServiceBase
     {
         [AbpAuthorize(PermissionNames.SaoDo_AuditResultPeople_Create)]

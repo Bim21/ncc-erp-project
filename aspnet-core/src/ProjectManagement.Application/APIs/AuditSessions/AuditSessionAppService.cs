@@ -17,6 +17,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.AuditSessions
 {
+    [AbpAuthorize]
     public class AuditSessionAppService : ProjectManagementAppServiceBase
     {
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Create)]

@@ -30,6 +30,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
+    [AbpAuthorize]
     public class TimesheetProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IWebHostEnvironment _hostingEnvironment;

@@ -13,6 +13,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Phases
 {
+    [AbpAuthorize]
     public class PhaseAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]

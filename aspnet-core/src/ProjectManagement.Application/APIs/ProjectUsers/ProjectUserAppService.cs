@@ -21,6 +21,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectUsers
 {
+    [AbpAuthorize]
     public class ProjectUserAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
