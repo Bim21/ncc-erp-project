@@ -387,6 +387,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.reportService.updateNote(this.generalNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
+      this.selectedReport.note =this.generalNote
     })
   }
   public canCelUpdateNote() {
