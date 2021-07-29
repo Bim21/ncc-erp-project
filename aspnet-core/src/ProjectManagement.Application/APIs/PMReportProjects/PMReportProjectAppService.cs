@@ -365,7 +365,7 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         public async Task<string> UpdateNote(string note, long pmReportProjectId)
         {
-            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport).SingleOrDefaultAsync(x => x.Id == pmReportProjectId);
 
             if (!pmReportProject.PMReport.IsActive)
             {
