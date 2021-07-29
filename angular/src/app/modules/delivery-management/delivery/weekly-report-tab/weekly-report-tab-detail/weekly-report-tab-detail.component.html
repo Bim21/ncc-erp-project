@@ -1,5 +1,5 @@
 <div class="row pt-2" style="position: relative;">
-    <div  style="min-width: 200px; width: 18%; position: fixed;  top:auto ; left:auto; ">
+    <div  style="min-width: 200px; width: 16%; position: fixed;  top:auto ; left:auto; ">
         <div class="card ml-2" style="height: 94vh; overflow-y: auto; overflow-x: hidden;">
             <div class="card-header" style="position: sticky; top: 0; z-index: 50; background-color: white;">
                 <div class="input-group">
@@ -39,73 +39,87 @@
             </div>
         </div>
     </div>
-    <div style="width: 77%; margin-left: 22%;">
+    <div style="width: 80%; margin-left: 19%;">
         <section class="content ">
             <div class=" px-2">
-                <h3>{{projectName}}</h3>
-                <div class="card ">
-                    <div class="card-body pt-0 pb-1">
-                        <div class="row " >
-                            <strong style="margin-top: 18px;">Đánh giá chung: </strong>
-                            <pre class="mb-0 p-0 mt-3 ml-2" style=" white-space: pre-line;
-                             font-size: 1.3em; font-family: sans-serif; align-self:flex-start;"
-                                *ngIf="!isEditingNote">
-                                {{generalNote}}
-                            </pre>
-                            <mat-form-field style="width:68%" appearance="outline" *ngIf="isEditingNote">
-                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-                                style="padding-bottom: 20px;" rows="2" id="message" matInput [(ngModel)]="generalNote"
-                                    name="notePM" placeholder="Đánh giá chung">
-                                </textarea>
-                            </mat-form-field>
-                            <div class="d-inline float-right pt-1 text-right  mt-1 ml-2">
-                                <button  *ngIf="!isEditingNote" class="btn bg-secondary mt-2"
-                                    (click)="isEditingNote = true">
-                                    <i class="fas fa-pencil-alt"  (click)="isEditingNote = true"></i>
-                                </button>
-                                <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
-                                    Save
-                                </button>
-                                <button *ngIf="isEditingNote" (click)="cancelUpdateNote(); ;"
-                                    class="btn btn-default">Cancel
-                                </button>
-                            </div>
-
-                        </div>
+            
+                
+                <div class="card w-100 " >
+                    <div class="card-body py-1">
+                        <h4>{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
+                        <table class="w-100 project-info">
+                        <tr> 
+                            <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
+                            <td>Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal / <strong>{{totalOverTime}}h </strong>OT </td>
+                            <td>Status:  <mat-form-field class="myFilter ml-5" appearance="outline" 
+                                >
+                                 <mat-select [disabled]="!isActive" name="flag" placeholder="Flag" [(ngModel)]="projectHealth"
+                                     (click)="$event.stopPropagation()">
+                                     <ng-container *ngFor="let flag of problemIssueList">
+                                         <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
+                                             (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
+                                             {{
+                                             flag
+                                             }}
+ 
+                                         </mat-option>
+                                     </ng-container>
+                                 </mat-select>
+                             </mat-form-field> </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="d-flex mt-1" >
+                                    <strong>Đánh giá chung: </strong>
+                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                     font-size: 1.1em; font-family: sans-serif; align-self:flex-start;"
+                                        *ngIf="!isEditingNote">
+                                        {{generalNote}}
+                                    </pre>
+                                    <mat-form-field class="ml-1" style="width:68%" appearance="outline" *ngIf="isEditingNote">
+                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                        style="padding-bottom: 20px;" rows="2" id="message" matInput [(ngModel)]="generalNote"
+                                            name="notePM" placeholder="Đánh giá chung">
+                                        </textarea>
+                                    </mat-form-field>
+                                    <div class="d-inline float-right pt-1 text-right   ml-2">
+                                        <i [hidden]= "!isActive" *ngIf="!isEditingNote" class="fas fa-edit mb-2 fa-lg"  (click)="isEditingNote = true"></i>
+                                        <button *ngIf="isEditingNote" class="btn bg-blue mr-1" (click)="updateNote()">
+                                            Save
+                                        </button>
+                                        <button *ngIf="isEditingNote" (click)="cancelUpdateNote(); ;"
+                                            class="btn btn-default">Cancel
+                                        </button>
+                                    </div>
+        
+                                </div>
+                            </td>
+                        </tr>
+                        </table>
+                      
 
                     </div>
 
                 </div>
 
 
-                <div class="card">
+                <div class="card" >
                     <mat-expansion-panel [expanded]="isShowProblemList">
                         <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProblemList=!isShowProblemList">
 
                             <h4 style="display: inline;">Các vấn đề trong tuần</h4>
                             <button class="mr-2"
-                                *ngIf="isActive=='true' && permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)"
+                                *ngIf=" permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)"
                                 [hidden]="processProblem || !isShowProblemList"
                                 (click)="addIssueReport();$event.stopPropagation()" class="btn btn-primary  ml-3"
                                 style="height: 40px;">
                                 <i class="fa fa-plus-square"></i>
                                 Create
                             </button>
-                            <mat-form-field class="myFilter ml-5" appearance="outline" [hidden]="processProblem || !isShowProblemList"
-                               >
-                                <mat-select name="flag" placeholder="Flag" [(ngModel)]="projectHealth"
-                                    (click)="$event.stopPropagation()">
-                                    <ng-container *ngFor="let flag of problemIssueList">
-                                        <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
-                                            (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
-                                            {{
-                                            flag
-                                            }}
-
-                                        </mat-option>
-                                    </ng-container>
-                                </mat-select>
-                            </mat-form-field>
+                           
                         </mat-expansion-panel-header>
                         <div class="card-body table-responsive p-4">
                             <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
@@ -116,9 +130,9 @@
                                         <th>Impact</th>
                                         <th>Solution</th>
                                         <th>meetingSolution</th>
-                                        <th>Thời gian tạo</th>
-                                        <th>Trạng thái</th>
-                                        <th *ngIf="isActive=='true'">Action</th>
+                                        <th class="col-time">Thời gian tạo</th>
+                                        <th class="col-time">Trạng thái</th>
+                                        <th class="col-action-menu">Action</th>
 
                                     </tr>
                                 </thead>
@@ -210,7 +224,7 @@
                                             </div>
 
                                         </td>
-                                        <td *ngIf="isActive=='true'" class="text-center">
+                                        <td  class="text-center">
                                             <button *ngIf="!problem.createMode" mat-button [matMenuTriggerFor]="menu"
                                                 [disabled]="processProblem">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -264,7 +278,7 @@
 
                             <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
                             <button
-                                *ngIf="isActive=='true' &&permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
                                 [hidden]="processWeekly || !isShowWeeklyList "
                                 (click)="addWeekReport();$event.stopPropagation()" class=" btn btn-primary ml-3">
                                 <i class="fa fa-plus-square"></i> Create
@@ -281,10 +295,10 @@
                                         <th>STT</th>
                                         <th>Nhân viên</th>
                                         <th>Project Role</th>
-                                        <th>Thời gian thay đổi</th>
+                                        <th col-time>Thời gian thay đổi</th>
                                         <th>% Sử dụng nhân sự</th>
                                         <!-- <th>note</th> -->
-                                        <th *ngIf="isActive=='true'">Action</th>
+                                        <th col-action-menu >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -322,7 +336,7 @@
                                             </div>
                                         </td>
 
-                                        <td> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
+                                        <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
 
                                             <div class="form-group row required" *ngIf="report.createMode">
                                                 <mat-form-field class="w-100 mx-auto" appearance="outline">
@@ -363,7 +377,7 @@
                                             </div>
 
                                         </td>
-                                        <td *ngIf="isActive=='true'" class="text-center">
+                                        <td  class="text-center">
                                             <button [hidden]="processWeekly" *ngIf="!report.createMode" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -410,7 +424,7 @@
                         <mat-expansion-panel-header style="margin: 8px 0" (click)="isShowFutureList=!isShowFutureList">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
                             <button
-                                *ngIf="isActive=='true' && permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                                *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create)"
                                 [hidden]="processFuture || !isShowFutureList "
                                 (click)="addFutureReport(); $event.stopPropagation()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
@@ -424,9 +438,9 @@
                                         <th>STT</th>
                                         <th>Nhân viên</th>
                                         <th>Project role</th>
-                                        <th>Thời gian thay đổi</th>
+                                        <th class="col-time">Từ ngày</th>
                                         <th>%Sử dụng nhân sự</th>
-                                        <th *ngIf="isActive=='true'">Action</th>
+                                        <th class="col-action-menu" >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -464,7 +478,7 @@
                                             </div>
                                         </td>
 
-                                        <td> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
+                                        <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole }}</span>
 
                                             <div class="form-group row required" *ngIf="report.createMode">
                                                 <mat-form-field class="w-100 mx-auto" appearance="outline">
@@ -500,7 +514,7 @@
                                                 *ngIf="report.createMode" type="text" mask="percent" suffix="%"
                                                 [(ngModel)]="report.allocatePercentage" />
                                         </td>
-                                        <td *ngIf="isActive=='true'" class="text-center">
+                                        <td  class="text-center">
                                             <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>

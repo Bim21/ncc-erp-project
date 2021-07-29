@@ -48,31 +48,24 @@
                 <div class="col-lg-1 col-md-3 col-sm-3 pt-3"> <strong >Đánh giá chung: </strong></div>
                 <div class="col-lg-11 col-md-9 col-sm-9">
                     <div *ngIf="!isEditingNote" class="w-100 row">
-                        
                             <pre style=" font-size: 1.3em; font-family: sans-serif; white-space: pre-line; max-width: 91%;" class="mb-0 p-0 mt-3"
                                 *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
                                 {{generalNote}}
                             </pre>
-                            <!-- <div [innerHTML]="generalNote"></div> -->
-
                         <div class="text-left pt-2 ml-2" style="max-width: 9%;">
-                            <button class="btn bg-secondary mt-2" (click)="isEditingNote = true">
+                            <button *ngIf="selectedReport.isActive" class="btn bg-secondary mt-2" (click)="isEditingNote = true">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </div>
-
                     </div>
-
                     <div *ngIf="isEditingNote" class="row ">
                         <div class="col-lg-11 col-md-10 res-area">
                             <mat-form-field class="w-100" appearance="outline">
-                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"  style="padding-bottom: 20px;" id="message" matInput [(ngModel)]="generalNote"
+                                <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"  style="padding-bottom: 20px;" id="message" matInput [(ngModel)]="generalNote"
                                     type="text" name="notePM" placeholder="Đánh giá chung">
                                 </textarea>
                             </mat-form-field>
-
                         </div>
-
                         <div class="col-lg-1 col-md-2 text-right mt-3 res-btn">
                             <button class="btn bg-blue mr-1 " (click)="updateNote()">
                                 Save
