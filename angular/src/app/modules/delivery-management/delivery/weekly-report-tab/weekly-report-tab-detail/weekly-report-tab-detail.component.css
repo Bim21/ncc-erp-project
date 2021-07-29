@@ -43,3 +43,28 @@ padding: 10px;
 .submit-btn:disabled i{
   color: gray !important;
 }
+button{
+  height: fit-content;
+}
+@media only screen and (min-width: 1921px) and (max-width: 2250px) {
+  .res-btn {
+    display: flex;
+    max-width: 15%;
+  
+  }
+  .res-area{
+    max-width: 90% !important ;
+  }
+}
+@media only screen and (max-width: 1920px) {
+  .res-area{
+    max-width: 85% !important ;
+  }
+  .res-btn{
+    margin-top: 5px;
+    display: flex;
+  }
+}
+::ng-deep .mat-expansion-panel-header{
+  margin: 0;
+}
