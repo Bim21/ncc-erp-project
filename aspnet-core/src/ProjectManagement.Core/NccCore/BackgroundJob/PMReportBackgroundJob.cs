@@ -21,7 +21,7 @@ namespace ProjectManagement.NccCore.BackgroundJob
             Logger.Info("PMReport background trigger!");
             try
             {
-                using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MustHaveTenant))
+                using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MustHaveTenant, AbpDataFilters.MayHaveTenant))
                 {
                     var pmReport = await _pmreport.GetAsync(args.PMReportId);
                     pmReport.PMReportStatus = args.PMReportStatus;
