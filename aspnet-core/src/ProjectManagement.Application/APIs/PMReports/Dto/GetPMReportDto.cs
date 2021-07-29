@@ -10,7 +10,6 @@ namespace ProjectManagement.APIs.PMReports.Dto
         [ApplySearchAttribute]
         public string Name { get; set; }
         public bool IsActive { get; set; }
-        [ApplySearchAttribute]
         public int Year { get; set; }
         public PMReportType Type { get; set; }
         public int NumberOfProject { get; set; }

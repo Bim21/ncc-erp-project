@@ -161,9 +161,9 @@ namespace ProjectManagement.APIs.PMReportProjects
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
                                         .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
 
-            if(!pmReportProject.PMReport.IsActive || pmReportProject.Status == PMReportProjectStatus.Sent)
+            if(!pmReportProject.PMReport.IsActive)
             {
-                throw new UserFriendlyException("Report has been sent or closed !");
+                throw new UserFriendlyException("Report has been closed !");
             }
 
             pmReportProject.ProjectHealth = projectHealth;
@@ -366,6 +366,12 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<string> UpdateNote(string note, long pmReportProjectId)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+
+            if (!pmReportProject.PMReport.IsActive)
+            {
+                throw new UserFriendlyException("Report has been closed !");
+            }
+
             pmReportProject.Note = note;
             await WorkScope.UpdateAsync(pmReportProject);
             return note;

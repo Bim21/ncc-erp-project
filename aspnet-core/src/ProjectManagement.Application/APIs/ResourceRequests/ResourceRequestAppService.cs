@@ -197,9 +197,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 .Select(x => new AvailableResourceDto
                                 {
                                     UserId = x.Id,
-                                    UserName = x.FullName,
                                     UserType = x.UserType,
-                                    FullName = x.FullName,
+                                    FullName = x.Name + " " + x.Surname,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
@@ -229,7 +228,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             AvatarPath = "/avatars/" + x.User.AvatarPath,
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
-                            FullName = x.User.FullName,
+                            FullName = x.User.Name + " " + x.User.Surname,
                             UserType = x.User.UserType,
                             Projectid = x.ProjectId,
                             ProjectName = x.Project.Name,
