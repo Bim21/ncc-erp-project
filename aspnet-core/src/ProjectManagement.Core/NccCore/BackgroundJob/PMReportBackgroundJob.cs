@@ -1,7 +1,7 @@
 ﻿using Abp.BackgroundJobs;
 using Abp.Dependency;
-using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using NccCore.IoC;
 using ProjectManagement.Entities;
 using System;
 
@@ -9,10 +9,10 @@ namespace ProjectManagement.NccCore.BackgroundJob
 {
    public  class PMReportBackgroundJob : BackgroundJob<PMReportBackgroundJobArgs>, ITransientDependency
     {
-        readonly IRepository<PMReport, long> _pmReport;
-        public PMReportBackgroundJob(IRepository<PMReport, long> pmReport)
+        readonly IWorkScope _workScope;
+        public PMReportBackgroundJob(IWorkScope workScope)
         {
-            _pmReport = pmReport;
+            _workScope = workScope;
         }
         [UnitOfWork]
         public override void Execute(PMReportBackgroundJobArgs args)
@@ -20,9 +20,9 @@ namespace ProjectManagement.NccCore.BackgroundJob
             Logger.Info("PMReport background trigger!");
             try
             {
-                var pmReport = _pmReport.Get(args.PMReportId);
+                var pmReport = _workScope.Get<PMReport>(args.PMReportId);
                 pmReport.PMReportStatus = args.PMReportStatus;
-                _pmReport.Update(pmReport);
+                _workScope.Update(pmReport);
             }
             catch (Exception e)
             {
