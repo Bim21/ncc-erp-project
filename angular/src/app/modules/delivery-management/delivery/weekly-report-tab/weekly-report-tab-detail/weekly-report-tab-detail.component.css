@@ -40,3 +40,6 @@ padding: 10px;
   border-left: 7px solid #ffc107;
 }
 
+.submit-btn:disabled i{
+  color: gray !important;
+}
