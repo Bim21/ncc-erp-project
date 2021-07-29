@@ -116,7 +116,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
    
   }
   public getPmReportProject(): void {
-    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, {}).subscribe((data => {
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
       this.projectId = this.pmReportProjectList[0].id
