@@ -194,15 +194,14 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
       if (data.result) {
         this.problemList = data.result.result;
-        this.isShowProblemList = this.problemList.length==0?false:true;
+       
         this.projectHealth = data.result.projectHealth;
       } else {
         this.problemList = [];
       }
-
-
-
     })
+    this.isShowProblemList=this.problemList.length==0?false:true;
+  
   }
   public search() {
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
@@ -232,6 +231,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if(item.id == this.pmReportProjectId){
           item.projectHealth = this.getByEnum(projectHealth,this.APP_ENUM.ProjectHealth)
         }
+        abp.notify.success("Update successfull")
       })
       this.getWeeklyReport();
       this.getFuturereport();

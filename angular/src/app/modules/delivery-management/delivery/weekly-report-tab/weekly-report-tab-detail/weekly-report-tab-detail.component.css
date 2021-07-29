@@ -68,3 +68,6 @@ button{
 ::ng-deep .mat-expansion-panel-header{
   margin: 0;
 }
+.sidebar-item:hover{
+  background-color: #e9edf1;
+}
