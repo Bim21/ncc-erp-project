@@ -25,20 +25,20 @@ import { PmReportService } from '@app/service/api/pm-report.service';
   styleUrls: ['./weekly-report.component.css']
 })
 export class WeeklyReportComponent extends AppComponentBase implements OnInit {
-  DeliveryManagement_PMReportProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
-  DeliveryManagement_PMReportProject_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
-  DeliveryManagement_PMReportProject_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
-  DeliveryManagement_PMReportProject_GetAll=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
-  DeliveryManagement_PMReportProject_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
-  DeliveryManagement_PMReportProject_GetAllByPmProject=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
-  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
-  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
-  DeliveryManagement_PMReportProject_SendReport=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
-  DeliveryManagement_PMReportProjectIssue=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
-  DeliveryManagement_PMReportProjectIssue_Create=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
-  DeliveryManagement_PMReportProjectIssue_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
-  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
-  DeliveryManagement_PMReportProjectIssue_Update=PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
+  DeliveryManagement_PMReportProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
+  DeliveryManagement_PMReportProject_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
+  DeliveryManagement_PMReportProject_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
+  DeliveryManagement_PMReportProject_GetAll = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
+  DeliveryManagement_PMReportProject_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
+  DeliveryManagement_PMReportProject_GetAllByPmProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
+  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
+  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
+  DeliveryManagement_PMReportProject_SendReport = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
+  DeliveryManagement_PMReportProjectIssue = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
+  DeliveryManagement_PMReportProjectIssue_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
+  DeliveryManagement_PMReportProjectIssue_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
+  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
+  DeliveryManagement_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
   DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
   DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
 
@@ -51,10 +51,10 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public processWeekly: boolean = false;
   public processFuture: boolean = false;
   public processProblem: boolean = false;
-  public searchPmReport:string="";
-  public activeReportId= {} as pmReportDto;
-  public isSentReport:boolean;
-  public isEditingNote:boolean = false;
+  public searchPmReport: string = "";
+  public selectedReport = {} as pmReportDto;
+  public isSentReport: boolean;
+  public isEditingNote: boolean = false;
 
   public pmReportList: any = [];
   public weeklyPeportList: projectReportDto[] = [];
@@ -63,20 +63,20 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public isEditProblem: boolean = false;
   public isEditFutureReport: boolean = false;
   public minDate = new Date();
-  public isEditWeeklyReport:boolean=false;
+  public isEditWeeklyReport: boolean = false;
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public projectHeathList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   private projectId: number;
-  generalNote:string ="";
-  public projectName="";
-  allowSendReport:boolean =true;
-  public projectHealth="";
+  generalNote: string = "";
+  public projectName = "";
+  allowSendReport: boolean = true;
+  public projectHealth = "";
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
     private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
-    private pmreportService:PmReportService, private projectService:ListProjectService) {
+    private pmreportService: PmReportService, private projectService: ListProjectService) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
   }
@@ -84,26 +84,26 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getAllPmReport();
     this.getUser();
-    this.minDate.setDate(this.minDate.getDate()+1)
+    this.minDate.setDate(this.minDate.getDate() + 1)
     this.getProjectById()
   }
   public getWeeklyReport() {
-    this.reportService.getChangesDuringWeek(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    this.reportService.getChangesDuringWeek(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.weeklyPeportList = data.result;
     })
   }
-  
+
   public getFuturereport(): void {
-    if(this.permission.isGranted(this.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)){
-      this.reportService.getChangesInFuture(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+    if (this.permission.isGranted(this.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)) {
+      this.reportService.getChangesInFuture(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
         this.futureReportList = data.result
       })
     }
 
-    
+
   }
-  getProjectById(){
-    this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(rs=>{
+  getProjectById() {
+    this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(rs => {
       this.projectName = rs.result.name
     })
   }
@@ -113,13 +113,13 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
   }
   private getProjectProblem(): void {
-    if(this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)){
-      this.reportIssueService.getProblemsOfTheWeek(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+    if (this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)) {
+      this.reportIssueService.getProblemsOfTheWeek(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         this.problemList = data.result;
-        this.projectHealth= data.result.projectHealth;
+        this.projectHealth = data.result.projectHealth;
       })
     }
-    
+
   }
   // Weekly report
   public addWeekReport() {
@@ -135,7 +135,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     report.status = "0";
     report.startTime = moment(report.startTime).format("YYYY-MM-DD");
     delete report["createMode"]
-    if(this.isEditWeeklyReport==true){
+    if (this.isEditWeeklyReport == true) {
       this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         report.startTime = moment(report.startTime).format("YYYY-MM-DD")
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
@@ -148,7 +148,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
         () => {
           report.createMode = true
         })
-    }else{
+    } else {
       this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         abp.notify.success("created new weekly report");
         this.processWeekly = false;
@@ -159,23 +159,23 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
           report.createMode = true
         })
     }
-    
+
 
   }
   public cancelWeekReport() {
     this.processWeekly = false;
     this.getWeeklyReport();
   }
-  updateWeekReport(report){
+  updateWeekReport(report) {
     this.processWeekly = true
     this.isEditWeeklyReport = true;
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
-    console.log("aaaaaaaaaaaa",report);
+    console.log("aaaaaaaaaaaa", report);
   }
 
-  deleteWeekReport(report){
-    
+  deleteWeekReport(report) {
+
     abp.message.confirm(
       "Delete Issue? ",
       "",
@@ -276,15 +276,15 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     report.createMode = true;
     report.projectRole = this.APP_ENUM.ProjectUserRole[report.projectRole]
   }
-  
+
   // Project Issue
   public getAllPmReport() {
     this.reportService.GetAllByProject(this.projectId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
-      this.activeReportId= this.pmReportList.filter(item=>item.isActive==true)[0];
-      this.isSentReport = this.activeReportId.status =='Draft'?true:false
-      this.generalNote =  this.activeReportId.note
-      this.allowSendReport = this.activeReportId.note?true:false
+      this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
+      this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
+      this.generalNote = JSON.parse(this.selectedReport.note)
+      this.allowSendReport = this.selectedReport.note ? true : false
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -300,7 +300,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public saveProblemReport(problem: projectProblemDto) {
     delete problem["createMode"]
     if (!this.isEditProblem) {
-      this.reportIssueService.createReportIssue(this.projectId,problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+      this.reportIssueService.createReportIssue(this.projectId, problem).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         abp.notify.success("created new Issue");
         this.processProblem = false;
         problem.createMode = false;
@@ -354,63 +354,52 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.processProblem = true
     this.isEditProblem = true;
     Issue.createMode = true
-    Issue.status= this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
-    
+    Issue.status = this.APP_ENUM.PMReportProjectIssueStatus[Issue.status]
+
   }
-  public onReportchange(){
+  public onReportchange() {
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
-    this.generalNote = this.activeReportId.note
-    this.isEditingNote =false;
+    this.generalNote = JSON.parse(this.selectedReport.note)
+    this.isEditingNote = false;
   }
-  public sendWeeklyreport(){
+  public sendWeeklyreport() {
     abp.message.confirm(
-      `send report ${this.activeReportId.pmReportName}? `,
+      `send report ${this.selectedReport.pmReportName}? `,
       "",
       (result: boolean) => {
         if (result) {
-          this.reportService.sendReport(this.projectId,this.activeReportId.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
-              abp.notify.success("Send report successful");
-              this.getAllPmReport();
+          this.reportService.sendReport(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+            abp.notify.success("Send report successful");
+            this.getAllPmReport();
           })
         }
       }
     );
 
 
-  
-    
+
+
   }
 
-  public updateNote(){
-    
-    this.reportService.updateNote(this.generalNote, this.activeReportId.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs=>{
+  public updateNote() {
+    this.reportService.updateNote(this.generalNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
-      this.isEditingNote =false;
-      this.getAllPmReport();
+      this.isEditingNote = false;
+      this.selectedReport.note =this.generalNote
     })
-    // this.lineBreak();
+  }
+  public canCelUpdateNote() {
+    this.isEditingNote = false;
+    this.generalNote = JSON.parse(this.selectedReport.note)
   }
 
   updateHealth(projectHealth) {
-    this.reportService.updateHealth(this.activeReportId.pmReportProjectId, projectHealth).subscribe((data) => {
+    this.reportService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).subscribe((data) => {
     })
 
   }
-  // public lineBreak(){
-  //   var txt;
-  //   txt = this.generalNote;
-  //   var text = txt.split(".");
-  //   var str = text.join('.</br>');
-    
-  // }
-  // public lineBreak(){
-  //   if(document.getElementById('bindNote')){
-  //     document.getElementById('bindNote').innerHTML=(<HTMLInputElement>document.getElementById('message')).value.replace(/\n/g,'<br />');
-  //   }
-    
-  // }
-  
+
 }
 

@@ -108,67 +108,76 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   ngOnInit(): void {
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.isActive = this.route.snapshot.queryParamMap.get('isActive');
-    // this.minDate.setDate(this.minDate.getDate() + 1);
-    // this.maxDate.setDate(this.maxDate.getDate()-1)
     this.getPmReportProject();
-    // this.getActiveReport();
     this.getUser();
-   
   }
   public getPmReportProject(): void {
     this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
-      this.projectId = this.pmReportProjectList[0].id
-      this.projectIdReport = this.projectId;
-      this.getActiveReport()
+      this.projectId = this.pmReportProjectList[0].projectId
+      this.generalNote = this.pmReportProjectList[0].note
+      if(!this.isJson(this.generalNote)){
+        this.generalNote =JSON.parse(this.generalNote)
+      }
+      this.pmReportProjectId = this.pmReportProjectList[0].id
+      this.pmReportProjectList[0].setBackground =true
+      this.projectName = this.pmReportProjectList[0].projectName
 
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem()
     }))
   }
-  private getActiveReport() {
-    this.pmReportProjectService.GetAllByProject(this.projectId).subscribe(data => {
-      this.activeReportId = data.result.filter(item => item.isActive == true)[0].id;
-      this.generalNote = data.result.filter(item => item.isActive == true)[0].note
-      if (this.pmReportProjectList) {
-        this.view(this.pmReportProjectList[0].projectId);
-      }
+  // private getActiveReport() {
+  //   this.pmReportProjectService.GetAllByProject(this.projectId).subscribe(data => {
+  //     this.activeReportId = data.result.filter(item => item.isActive == true)[0].id;
+  //     if (this.pmReportProjectList) {
+  //       this.view(this.pmReportProjectList[0].projectId);
+  //     }
 
-    })
+  //   })
 
-  }
+  // }
 
-  public view(item?) {
-    this.tempPmReportProjectList.forEach((project)=>{
-      if(item==project.projectId){
-        this.projectName=project.projectName
-
-      }
-    })
-    this.projectId = item;
+  public view(projectReport) {
+    this.projectName = projectReport.projectName
+    this.projectId = projectReport.projectId;
     this.pmReportProjectList.forEach(element => {
-      if (element.projectId == item) {
+      if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
       } else {
         element.setBackground = false;
       }
     });
-
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem()
-    // this.getActiveReport();
-    this.pmReportProjectService.GetAllByProject(this.projectId).subscribe(data => {
-      this.activeReportId = data.result.filter(item => item.isActive == true)[0].id;
-      this.generalNote = data.result.filter(item => item.isActive == true)[0].note
-
-
-    })
-    // this.isShowProblemList=false
- 
-
-
-
+    this.generalNote = projectReport.note
+    if(!this.isJson(this.generalNote)){
+      this.generalNote= JSON.parse(this.generalNote)
+    }
+    this.pmReportProjectId = projectReport.id
+    this.isEditingNote =false;
   }
+   isJson(item) {
+    item = typeof item !== "string"
+        ? JSON.stringify(item)
+        : item;
+
+    try {
+        item = JSON.parse(item);
+    } catch (e) {
+        return false;
+    }
+
+    if (typeof item === "object" && item !== null) {
+        return true;
+    }
+
+    return false;
+}
+
   public getWeeklyReport() {
     this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.weeklyReportList = data.result;
@@ -185,18 +194,14 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
       if (data.result) {
         this.problemList = data.result.result;
-        this.isShowProblemList = this.problemList.length==0?false:true;
        
-        
-        this.pmReportProjectId = data.result.pmReportProjectId;
         this.projectHealth = data.result.projectHealth;
       } else {
         this.problemList = [];
       }
-
-
-
     })
+    this.isShowProblemList=this.problemList.length==0?false:true;
+  
   }
   public search() {
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
@@ -204,7 +209,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
         
     });
-    this.getActiveReport()
+    // this.getActiveReport()
 
   }
 
@@ -213,10 +218,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
       if (project.seen == false) {
         abp.notify.success("Mark Read!");
-        // this.getPmReportProject();
       } else {
         abp.notify.success("Mark Unread!");
-        // this.getPmReportProject();
       }
 
     })
@@ -224,7 +227,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).subscribe((data) => {
-      this.view(this.projectId);
+        this.pmReportProjectList.forEach(item=> {
+        if(item.id == this.pmReportProjectId){
+          item.projectHealth = this.getByEnum(projectHealth,this.APP_ENUM.ProjectHealth)
+        }
+        abp.notify.success("Update successfull")
+      })
+      this.getWeeklyReport();
+      this.getFuturereport();
+      this.getProjectProblem()
     })
   }
   //weekly
@@ -459,9 +470,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public updateNote(){
-    this.pmReportProjectService.updateNote(this.generalNote, this.projectIdReport).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs=>{
+    console.log(this.pmReportProjectId)
+    this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs=>{
       abp.notify.success("Update successful!")
       this.isEditingNote =false;
+      this.pmReportProjectList.forEach(item=> {
+        if(item.id == this.pmReportProjectId){
+          item.note = this.generalNote;
+        }
+      })
+    })
+  }
+  cancelUpdateNote(){
+    this.isEditingNote = false; 
+     this.pmReportProjectList.forEach(item=> {
+      if(item.id == this.pmReportProjectId){
+        this.generalNote = JSON.parse(item.note)
+      }
     })
   }
 

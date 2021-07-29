@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.ChecklistTitles
 {
+    [AbpAuthorize]
     public class CheckListCategoryAppService : ProjectManagementAppServiceBase
     {
         private readonly CheckListItemAppService _checkListItem;

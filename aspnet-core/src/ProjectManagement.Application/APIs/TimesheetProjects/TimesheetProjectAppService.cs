@@ -30,6 +30,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
+    [AbpAuthorize]
     public class TimesheetProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -222,7 +223,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             PmUserName = u.UserName,
                             ClientId = c.Id,
                             ClientName = c.Name,
-                            File = "/timesheets/" + tsp.FilePath,
+                            File = tsp.FilePath,
                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
                             Note = tsp.Note,
                             IsSendReport = pr.Status

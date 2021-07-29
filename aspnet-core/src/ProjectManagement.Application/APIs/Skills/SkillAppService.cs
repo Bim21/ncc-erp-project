@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.Skills
 {
+    [AbpAuthorize]
     public class SkillAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]

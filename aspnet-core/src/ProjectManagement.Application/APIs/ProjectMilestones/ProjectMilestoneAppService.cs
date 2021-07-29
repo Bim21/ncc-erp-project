@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.ProjectMilestones
 {
+    [AbpAuthorize]
     public class ProjectMilestoneAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]

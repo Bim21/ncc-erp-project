@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.ProjectUserBills
 {
+    [AbpAuthorize]
     public class ProjectUserBillAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
