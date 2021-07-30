@@ -166,7 +166,7 @@
                     </table>
                 </div>
                 </div>
-                <pagination-controls *ngIf="userListCurrentPage>1" id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
+                <pagination-controls autoHide="true" id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
 
@@ -290,7 +290,7 @@
                 </div>
                 </div>
 
-                <pagination-controls *ngIf="resourceRequestCurrentPage>1" id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
+                <pagination-controls autoHide="true" id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -470,7 +470,7 @@
                 </div>
 
 
-                <pagination-controls *ngIf="userBillCurrentPage>1" class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
+                <pagination-controls autoHide="true" class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
