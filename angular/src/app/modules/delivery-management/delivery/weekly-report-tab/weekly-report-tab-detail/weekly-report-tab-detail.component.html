@@ -262,7 +262,7 @@
                             </table>
 
                         </div>
-                        <pagination-controls *ngIf="problemCurrentPage>1" id="problemPaging"
+                        <pagination-controls autoHide="true" id="problemPaging"
                             (pageChange)="problemCurrentPage = $event"></pagination-controls>
 
                     </mat-expansion-panel>
@@ -419,7 +419,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <pagination-controls *ngIf="weeklyCurrentPage>1" id="projectUser"
+                        <pagination-controls autoHide="true" id="projectUser"
                             (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
                     </mat-expansion-panel>
 
@@ -582,7 +582,7 @@
                             </table>
 
                         </div>
-                        <pagination-controls *ngIf="futureCurrentPage>1" id="futurePaging"
+                        <pagination-controls autoHide="true" id="futurePaging"
                             (pageChange)="futureCurrentPage = $event"></pagination-controls>
 
                     </mat-expansion-panel>
