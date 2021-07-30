@@ -16,6 +16,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
     public class GetPMReportProjectIssueDto : EntityDto<long>
     {
         public long PMReportProjectId { get; set; }
+        public string ProjectName { get; set; }
         public string Description { get; set; }
         public string Impact { get; set; }
         public string Critical { get; set; }

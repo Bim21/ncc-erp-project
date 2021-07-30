@@ -173,6 +173,7 @@ namespace ProjectManagement.Authorization
             public const string DeliveryManagement_PMReport_Update = "DeliveryManagement.PMReport.Update";
             public const string DeliveryManagement_PMReport_Delete = "DeliveryManagement.PMReport.Delete";
             public const string DeliveryManagement_PMReport_CloseReport = "DeliveryManagement.PMReport.CloseReport";
+            public const string DeliveryManagement_PMReport_StatisticsReport = "DeliveryManagement.PMReport.StatisticsReport";
 
             //PmReportProject
             public const string DeliveryManagement_PMReportProject = "DeliveryManagement.PMReportProject";
@@ -375,6 +376,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_PMReport_Update,
                     PermissionNames.DeliveryManagement_PMReport_Delete,
                     PermissionNames.DeliveryManagement_PMReport_CloseReport,
+                    PermissionNames.DeliveryManagement_PMReport_StatisticsReport,
 
                     //PMReportProject
                     PermissionNames.DeliveryManagement_PMReportProject,
@@ -586,6 +588,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PMReport" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PMReport" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_CloseReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close PMReport" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_StatisticsReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Statistics PMReport" },
 
                  //PmReportProject
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Report Project" },
@@ -797,6 +800,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update PM Report" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PM Report" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_CloseReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close PMReport" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReport_StatisticsReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Statistics PMReport" },
                             }
                         },
 
