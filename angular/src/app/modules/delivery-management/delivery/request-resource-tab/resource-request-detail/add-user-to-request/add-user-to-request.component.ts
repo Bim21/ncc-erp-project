@@ -60,6 +60,9 @@ export class AddUserToRequestComponent extends AppComponentBase implements OnIni
       }, () => this.isLoading = false);
     }
   }
+  getPercentage(report, data) {
+    report.allocatePercentage = data
+  }
 
 
 }

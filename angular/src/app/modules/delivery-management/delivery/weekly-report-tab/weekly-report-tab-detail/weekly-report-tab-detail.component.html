@@ -55,7 +55,7 @@
                                     <strong>{{totalOverTime}}h </strong>OT
                                 </td>
                                 <td>Status: <mat-form-field class="myFilter ml-5" appearance="outline">
-                                        <mat-select [disabled]="!isActive" name="flag" placeholder="Flag"
+                                        <mat-select [disabled]="!isActive" name="flag" placeholder="Project health"
                                             [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
                                             <ng-container *ngFor="let flag of problemIssueList">
                                                 <mat-option [value]="APP_ENUM.ProjectHealth[flag]"

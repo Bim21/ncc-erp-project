@@ -16,8 +16,8 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public getResourceRequestDetail(id: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/ResourceRequestDetail?resourceRequestId=' + id);
     }
-  public searchAvailableUserForRequest(item:any):Observable<any>{
-    return this.http.get<any>(this.rootUrl+'/SearchAvailableUserForRequest?startDate='+item)
+  public searchAvailableUserForRequest(item:any, request:PagedRequestDto):Observable<any>{
+    return this.http.post<any>(this.rootUrl+'/SearchAvailableUserForRequest?startDate='+item,request)
   }
   public AddUserToRequest(item:any):Observable<any>{
     return this.http.post<any>(this.rootUrl + '/AddUserToRequest',item);
