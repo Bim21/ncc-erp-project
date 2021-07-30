@@ -1,4 +1,3 @@
-import { element } from 'protractor';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,11 +6,8 @@ import { UserService } from './../../../../../service/api/user.service';
 import { ProjectUserService } from './../../../../../service/api/project-user.service';
 import { ProjectInfoDto, projectUserDto } from './../../../../../service/model/project.dto';
 import { PmReportService } from './../../../../../service/api/pm-report.service';
-import { APP_ENUMS } from './../../../../../../shared/AppEnums';
-import { isNgTemplate } from '@angular/compiler';
 import { PmReportIssueService } from './../../../../../service/api/pm-report-issue.service';
 import { projectProblemDto, projectReportDto } from './../../../../../service/model/projectReport.dto';
-import { result } from 'lodash-es';
 import { finalize, catchError } from 'rxjs/operators';
 
 import { ActivatedRoute } from '@angular/router';
@@ -19,7 +15,6 @@ import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto'
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { JsonHubProtocol } from '@aspnet/signalr';
 import * as moment from 'moment';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 
@@ -156,6 +151,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
     this.pmReportProjectId = projectReport.id
     this.isEditingNote = false;
+    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth] 
   }
   isJson(item) {
     item = typeof item !== "string"

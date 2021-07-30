@@ -28,16 +28,10 @@
                Sử dụng nhân sự:
             </label>
             <div class="col-md-9">
-                <input class="form-control mt-1"  type="text" mask="percent" placeholder="number" required 
-                    name="allocatePercentage" [(ngModel)]="userToRequest.allocatePercentage" #allocatePercentage="ngModel" #allocatePercentageEl
-                    suffix="%"  />
-                    <abp-validation-summary [control]="allocatePercentage" [controlEl]="allocatePercentageEl">
-                    </abp-validation-summary>
-
-                
+                    <radio-dropdown (outputData)="getPercentage(userToRequest,$event)"
+                    [data]="userToRequest.allocatePercentage"></radio-dropdown>
             </div>
         </div>
-        
     </div>
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
