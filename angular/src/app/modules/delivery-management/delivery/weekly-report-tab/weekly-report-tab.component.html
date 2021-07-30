@@ -1,4 +1,4 @@
-<section class="content px-2 pt-2" >
+<section class="content px-2 pt-2">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
@@ -80,20 +80,27 @@
                             </td>
                             <td style="white-space: normal; max-width: 150px;">{{item.note}}</td>
                             <td class="text-center">
-                                <div class="text-center">
-                                    <button
-                                        *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)"
-                                        class="btn btn-sm bg-danger " (click)="closeReport(item)">
-                                        <i class="fas fa-times"></i>
-                                        Close
-                                    </button>
-                                </div>
-                                <button class="btn btn-sm bg-secondary mt-1"
-                                    (click)="editReport(item)">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    Edit
+                                <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
+                                    <i class="fas fa-bars fa-lg"></i>
                                 </button>
-
+                                <mat-menu #menu="matMenu" class="p-2">
+                                    <div class="text-center">
+                                        <button
+                                            *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)"
+                                            class="mat-menu-item  w-100" (click)="closeReport(item)">
+                                            <i class="fas fa-times mr-1 text-danger fa-lg"></i>
+                                            Close report
+                                        </button>
+                                    </div>
+                                    <button class="mat-menu-item  w-100 mr-1"  (click)="editReport(item)">
+                                        <i class="fas fa-pencil-alt mt-1"></i>
+                                        Edit
+                                    </button>
+                                    <button class="mat-menu-item  w-100 mr-1"  (click)="viewReportInfo(item)">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        View
+                                    </button>
+                                </mat-menu>
                             </td>
                         </tr>
                     </tbody>

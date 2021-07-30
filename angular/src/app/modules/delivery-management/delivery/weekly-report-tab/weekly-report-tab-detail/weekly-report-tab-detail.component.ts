@@ -126,12 +126,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }))
   }
   getProjectInfo() {
-    this.pmReportProjectService.GetInfoProject(this.projectId).subscribe(data => {
+    this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).subscribe(data => {
       this.projectInfo = data.result
     })
   }
   public view(projectReport) {
+    this.pmReportProjectId = projectReport.id
     this.projectId = projectReport.projectId;
+    this.isEditingNote = false;
+    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth] 
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
@@ -139,19 +142,18 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         element.setBackground = false;
       }
     });
-    this.getProjectInfo();
-    this.getWeeklyReport();
-    this.getFuturereport();
-    this.getProjectProblem();
     this.totalNormalWorkingTime = projectReport.totalNormalWorkingTime
     this.totalOverTime = projectReport.totalOverTime
     this.generalNote = projectReport.note
     if (!this.isJson(this.generalNote)) {
       this.generalNote = JSON.parse(this.generalNote)
     }
-    this.pmReportProjectId = projectReport.id
-    this.isEditingNote = false;
-    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth] 
+    this.getProjectInfo();
+    this.getWeeklyReport();
+    this.getFuturereport();
+    this.getProjectProblem();
+  
+  
   }
   isJson(item) {
     item = typeof item !== "string"
