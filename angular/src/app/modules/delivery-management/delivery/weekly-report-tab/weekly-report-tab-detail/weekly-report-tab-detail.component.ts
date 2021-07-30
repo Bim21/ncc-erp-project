@@ -488,7 +488,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public updateNote() {
-    console.log(this.pmReportProjectId)
     this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
