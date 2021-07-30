@@ -40,6 +40,7 @@ export class reportInfoInWeekDto {
     fullName: string;
     userType: string;
     branch: string;
+    email:string;
     allocatePercentage: number
 }
 export class ReportFutureDto {
@@ -47,6 +48,7 @@ export class ReportFutureDto {
     fullName: string;
     userType: string;
     branch: string;
+    email:string;
     allocatePercentage: number
 }
 export class ReportIssueDto {

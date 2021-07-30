@@ -114,6 +114,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.generalNote = this.pmReportProjectList[0].note
       this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
       this.totalOverTime = this.pmReportProjectList[0].totalOverTime
+      this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0].projectHealth] 
       if (!this.isJson(this.generalNote)) {
         this.generalNote = JSON.parse(this.generalNote)
       }
@@ -488,7 +489,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public updateNote() {
-    console.log(this.pmReportProjectId)
     this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;

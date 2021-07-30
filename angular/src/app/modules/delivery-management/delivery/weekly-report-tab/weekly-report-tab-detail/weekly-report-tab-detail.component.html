@@ -45,7 +45,7 @@
                 <div class="card w-100 ">
                     <div class="card-body py-1">
                         <h4>{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
-                        <table class="w-100 project-info" style="table-layout: fixed;" >
+                        <table class="w-100 project-info" style="table-layout: fixed;">
                             <tr>
                                 <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
                                 <td>Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
@@ -147,12 +147,11 @@
                                             }; let i =index">
                                         <td>{{i+1}}</td>
 
-                                        <td>
+                                        <td style="white-space: normal;max-width: 200px;">
 
-                                            <p style="white-space: normal;max-width: 200px;"
-                                                *ngIf="!problem.createMode">{{problem.description}}</p>
+                                            <p *ngIf="!problem.createMode">{{problem.description}}</p>
                                             <div *ngIf="problem.createMode">
-                                                <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-form-field class="w-100" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                         required rows="2" placeholder="leave a comment"
                                                         name="description" [(ngModel)]="problem.description"
@@ -162,11 +161,10 @@
 
 
                                         </td>
-                                        <td>
-                                            <p style="white-space: normal;max-width: 200px;"
-                                                *ngIf="!problem.createMode">{{problem.impact}}</p>
+                                        <td style="white-space: normal;max-width: 200px;">
+                                            <p *ngIf="!problem.createMode">{{problem.impact}}</p>
                                             <div *ngIf="problem.createMode">
-                                                <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-form-field class="w-100" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                         rows="2" placeholder="leave a comment" name="impact"
                                                         [(ngModel)]="problem.impact" matInput></textarea>
@@ -175,11 +173,10 @@
 
                                         </td>
 
-                                        <td>
-                                            <p style="white-space: normal;max-width: 200px;"
-                                                *ngIf="!problem.createMode">{{problem.solution}}</p>
+                                        <td style="white-space: normal;max-width: 200px;">
+                                            <p *ngIf="!problem.createMode">{{problem.solution}}</p>
                                             <div *ngIf="problem.createMode">
-                                                <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-form-field class="w-100" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                         rows="2" placeholder="leave a comment" name="solution"
                                                         [(ngModel)]="problem.solution" matInput></textarea>
@@ -187,12 +184,11 @@
                                             </div>
 
                                         </td>
-                                        <td>
+                                        <td style="white-space: normal;max-width: 200px;">
 
-                                            <p style="white-space: normal;max-width: 200px;"
-                                                *ngIf="!problem.createMode">{{problem.meetingSolution}}</p>
+                                            <p *ngIf="!problem.createMode">{{problem.meetingSolution}}</p>
                                             <div *ngIf="problem.createMode">
-                                                <mat-form-field class="example-full-width" appearance="outline">
+                                                <mat-form-field class="w-100" appearance="outline">
                                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                         rows="2" placeholder="leave a comment" name="meetingSolution"
                                                         [(ngModel)]="problem.meetingSolution" matInput></textarea>
@@ -299,8 +295,9 @@
                                         <th>Nhân viên</th>
                                         <th>Project Role</th>
                                         <th class="col-time">Từ ngày</th>
+
                                         <th>% Sử dụng nhân sự</th>
-                                     
+                                        <th>Note</th>
                                         <th *ngIf="isActive" class="col-action-menu">Action</th>
                                     </tr>
                                 </thead>
@@ -376,6 +373,16 @@
                                                     [data]="report.allocatePercentage"></radio-dropdown>
                                             </div>
                                         </td>
+                                        <td style="white-space: normal;max-width: 200px;">
+                                            <p *ngIf="!report.createMode">{{report.note}}</p>
+                                            <div *ngIf="report.createMode">
+                                                <mat-form-field class="w-100" appearance="outline">
+                                                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                        rows="2" placeholder="leave a comment" name="weeklyNote"
+                                                        [(ngModel)]="report.note" matInput></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                        </td>
                                         <td class="text-center" *ngIf="isActive">
                                             <button [hidden]="processWeekly" *ngIf="!report.createMode" mat-button
                                                 [matMenuTriggerFor]="menu">
@@ -438,6 +445,7 @@
                                         <th>Project role</th>
                                         <th class="col-time">Từ ngày</th>
                                         <th>%Sử dụng nhân sự</th>
+                                        <th>Note</th>
                                         <th *ngIf="isActive" class="col-action-menu">Action</th>
                                     </tr>
                                 </thead>
@@ -518,6 +526,16 @@
                                                     [data]="report.allocatePercentage"></radio-dropdown>
                                             </div>
 
+                                        </td>
+                                        <td style="white-space: normal;max-width: 200px;">
+                                            <p *ngIf="!report.createMode">{{report.note}}</p>
+                                            <div *ngIf="report.createMode">
+                                                <mat-form-field class="w-100" appearance="outline">
+                                                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                        rows="2" placeholder="leave a comment" name="futureNote"
+                                                        [(ngModel)]="report.note" matInput></textarea>
+                                                </mat-form-field>
+                                            </div>
                                         </td>
                                         <td class="text-center" *ngIf="isActive">
                                             <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
