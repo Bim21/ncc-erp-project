@@ -65,20 +65,20 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
-        public async Task<object> GetInfoProject(long projectId)
+        public async Task<object> GetInfoProject(long pmReportProjectId)
         {
-            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.Status == ProjectUserStatus.Present && x.IsFutureActive);
-            var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId);
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present);
+            var projectUserBill = WorkScope.GetAll<ProjectUserBill>();
 
-            var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
-                        select new
-                        {
-                            ProjectName = p.Name,
-                            ClientName = p.Client.Name,
-                            PmName = p.PM.Name,
-                            TotalBill = projectUserBill.Count(),
-                            TotalResource = projectUser.Count()
-                        };
+            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.Id == pmReportProjectId)
+                                        .Select(x => new
+                                        {
+                                            ProjectName = x.Project.Name,
+                                            ClientName = x.Project.Client.Name,
+                                            PmName = x.PM.FullName,
+                                            TotalBill = projectUserBill.Where(b => b.ProjectId == x.ProjectId).Count(),
+                                            TotalResource = projectUser.Where(r => r.PMReportId == x.PMReportId).Count()
+                                        });
 
             return await query.FirstOrDefaultAsync();
         }
