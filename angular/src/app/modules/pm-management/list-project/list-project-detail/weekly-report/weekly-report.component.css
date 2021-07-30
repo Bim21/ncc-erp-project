@@ -12,15 +12,15 @@
 .inActive{
   color: darkgrey;
 }
-tr, th, td{
+/* tr, th, td{
   vertical-align: text-top ;
- }
+ } */
 /* .message{
   white-space: pre-wrap;
 } */
-.table {
+/* .table {
   table-layout: fixed;
-}
+} */
 
 button{
   height: fit-content;

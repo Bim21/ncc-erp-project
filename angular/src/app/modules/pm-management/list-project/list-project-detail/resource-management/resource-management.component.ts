@@ -314,5 +314,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public filterUser(userId: number) {
     return this.userForProjectUser.filter(item => item.id == userId)[0];
   }
+  getPercentage(user, data) {
+    user.allocatePercentage = data
+  }
+
 
 }

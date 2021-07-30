@@ -55,7 +55,7 @@
 
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select [(ngModel)]="user.userId" name="projectEmployee"
-                                                placeholder="select a role" required #projectEmployee="ngModel">
+                                                placeholder="select account" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                     <input matInput [(ngModel)]="searchUser" name="searchUser" #search>{{search.focus()}}
@@ -73,10 +73,10 @@
                                     </div>
                                 </td>
 
-                                <td> <span *ngIf="!user.createMode">{{ user.projectRole }}</span>
+                                <td class="text-center"> <span *ngIf="!user.createMode">{{ user.projectRole }}</span>
 
-                                    <div class="form-group row required" *ngIf="user.createMode">
-                                        <mat-form-field class="w-100" appearance="outline">
+                                    <div *ngIf="user.createMode">
+                                        <mat-form-field style="width: 130px;" appearance="outline">
                                             <mat-select [(ngModel)]="user.projectRole" name="projectrole"
                                                 placeholder="select a role" required #projectRole="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
@@ -91,11 +91,11 @@
                                         </mat-error>
                                     </div>
                                 </td>
-                                <td> <span *ngIf="!user.createMode">
+                                <td class="text-center"> <span *ngIf="!user.createMode">
                                         {{user.startTime | date:"dd/MM/yyyy"}}
                                     </span>
-                                    <div class="form-group row required" *ngIf="user.createMode">
-                                    <mat-form-field appearance="outline" class="w-100" >
+                                    <div  *ngIf="user.createMode">
+                                    <mat-form-field appearance="outline" style="width: 150px;" >
                                         <input matInput [matDatepicker]="picker" placeholder="chose a date" required
                                             [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel"
                                             #projectDateEl>
@@ -103,18 +103,13 @@
                                         <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
                                     </div>
-                                    <!-- <abp-validation-summary [control]="projectDate" [controlEl]="projectDateEl"></abp-validation-summary> -->
-
                                 </td>
 
                                 <td>
                                     <span *ngIf="!user.createMode"> <strong>{{user.allocatePercentage}}%</strong></span>
-                                    <div  class="form-group row required" *ngIf="user.createMode">
-                                        <input class="form-control mt-1" type="text" mask="percent" placeholder="number"
-                                            required name="allocatePercentage" #Percentage="ngModel" #PercentageEl
-                                            suffix="%" [(ngModel)]="user.allocatePercentage" />
-                                        <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl">
-                                        </abp-validation-summary>
+                                    <div *ngIf="user.createMode">
+                                        <radio-dropdown (outputData)="getPercentage(user,$event)"
+                                        [data]="user.allocatePercentage"></radio-dropdown>
                                     </div>
 
                                 </td>
