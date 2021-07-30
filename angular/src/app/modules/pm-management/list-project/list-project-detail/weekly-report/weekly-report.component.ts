@@ -425,6 +425,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
     return false;
   }
-
+  getWeekPercentage(report, data) {
+    report.allocatePercentage = data
+  }
+  getFuturePercentage(report, data) {
+    report.allocatePercentage = data
+  }
+  
 }
 

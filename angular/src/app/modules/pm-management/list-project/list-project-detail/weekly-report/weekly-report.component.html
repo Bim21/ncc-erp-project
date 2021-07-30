@@ -283,7 +283,7 @@
                                 <th class="stt">STT</th>
                                 <th class="account-info">Nhân viên</th>
                                 <th>Project Role</th>
-                                <th>Thời gian thay đổi</th>
+                                <th>Từ ngày</th>
                                 <th>% Sử dụng nhân sự</th>
                                 <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
                             </tr>
@@ -322,11 +322,11 @@
                                     </div>
                                 </td>
 
-                                <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
+                                <td style="width: 100px;" class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
                                         }}</span>
 
-                                    <div class="form-group row required" *ngIf="report.createMode">
-                                        <mat-form-field class="w-100" appearance="outline">
+                                    <div *ngIf="report.createMode">
+                                        <mat-form-field style="width: 200px ;"  appearance="outline">
                                             <mat-select [(ngModel)]="report.projectRole" name="projectrole"
                                                 placeholder="select a role" required #projectPM="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
@@ -341,11 +341,11 @@
                                         </mat-error>
                                     </div>
                                 </td>
-                                <td class="text-center"> <span *ngIf="!report.createMode">
+                                <td style="width: 100px;" class="text-center"> <span *ngIf="!report.createMode">
                                         {{report.startTime | date:"dd/MM/yyyy"}}
                                     </span>
-                                    <div class="form-group row required" *ngIf="report.createMode">
-                                        <mat-form-field appearance="outline" class="w-100">
+                                    <div *ngIf="report.createMode">
+                                        <mat-form-field appearance="outline" style="width: 200px;" >
                                             <input matInput [matDatepicker]="picker" placeholder="chose a date" required
                                                 [(ngModel)]="report.startTime" name="usercreateDate">
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -353,16 +353,13 @@
                                         </mat-form-field>
                                     </div>
                                 </td>
-                                <td class="text-center">
+                                <td style="width: 150px;" class="text-center">
 
                                     <span *ngIf="!report.createMode"> <strong>
                                             {{report.allocatePercentage}}%</strong></span>
-                                    <div *ngIf="report.createMode" class="form-group row required">
-                                        <input class="form-control " type="text" mask="percent" required
-                                            #Percentage="ngModel" #PercentageEl suffix="%"
-                                            [(ngModel)]="report.allocatePercentage" placeholder="number" />
-                                        <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl">
-                                        </abp-validation-summary>
+                                    <div *ngIf="report.createMode" >
+                                        <radio-dropdown (outputData)="getWeekPercentage(report,$event)"
+                                        [data]="report.allocatePercentage"></radio-dropdown>
                                     </div>
 
                                 </td>
@@ -425,7 +422,7 @@
                                     <th class="stt">STT</th>
                                     <th class="account-info">Nhân viên</th>
                                     <th>Project role</th>
-                                    <th>Thời gian thay đổi</th>
+                                    <th>Từ ngày</th>
                                     <th>%Sử dụng nhân sự</th>
                                     <th *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
                                 </tr>
@@ -445,7 +442,7 @@
                                         <div *ngIf="report.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="report.userId" name="reportUser"
-                                                    placeholder="select a role" required #reportUser="ngModel">
+                                                    placeholder="select account" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUser"
@@ -464,13 +461,13 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 180px;">
                                         <p *ngIf="!report.createMode">{{ report.projectRole }}</p>
 
-                                        <div class="form-group row required" *ngIf="report.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
+                                        <div  *ngIf="report.createMode">
+                                            <mat-form-field  style="width: 180px;" appearance="outline">
                                                 <mat-select [(ngModel)]="report.projectRole" name="projectrole"
-                                                    placeholder="select a role" required #projectPM="ngModel">
+                                                    placeholder="select account" required #projectPM="ngModel">
                                                     <mat-option *ngFor="let role of projectRoleList"
                                                         [value]="APP_ENUM.ProjectUserRole[role]">
                                                         {{role}}</mat-option>
@@ -483,12 +480,12 @@
                                             </mat-error>
                                         </div>
                                     </td>
-                                    <td class="text-center"> <span *ngIf="!report.createMode">
+                                    <td style="width: 180px;" class="text-center"> <span *ngIf="!report.createMode">
                                             {{report.startTime | date:"dd/MM/yyyy"}}
                                         </span>
-                                        <div class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline"
-                                                *ngIf="report.createMode">
+                                        <div   *ngIf="report.createMode">
+                                            <mat-form-field style="width: 180px;" appearance="outline"
+                                              >
                                                 <input [min]="minDate" matInput [matDatepicker]="picker"
                                                     placeholder="chose a date" [(ngModel)]="report.startTime"
                                                     name="usercreateDate">
@@ -498,13 +495,12 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 200px;">
                                         <span *ngIf="!report.createMode"><strong>
                                                 {{report.allocatePercentage}}%</strong></span>
-                                        <div class="form-group row required">
-                                            <input class="form-control" placeholder="number" *ngIf="report.createMode"
-                                                type="text" mask="percent" suffix="%"
-                                                [(ngModel)]="report.allocatePercentage" />
+                                        <div *ngIf="report.createMode">
+                                                <radio-dropdown (outputData)="getFuturePercentage(report,$event)"
+                                                [data]="report.allocatePercentage"></radio-dropdown>
                                         </div>
                                     </td>
                                     <td class="text-center" *ngIf="selectedReport.isActive">

@@ -50,4 +50,7 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
       this.isLoading =false;
     })
   }
+  getFuturePercentage(report, data) {
+    report.allocatePercentage = data
+  }
 }
