@@ -149,6 +149,11 @@ namespace ProjectManagement.APIs.ProjectUsers
             if (input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people to the past !");
 
+            if(input.ResourceRequestId != null && input.StartTime.Date < DateTime.Now.Date)
+            {
+                throw new UserFriendlyException("Can't add user at past time !");
+            }
+
             if (projectUser.Status == ProjectUserStatus.Future && input.Status == ProjectUserStatus.Present)
             {
                 var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
