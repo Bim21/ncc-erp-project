@@ -100,6 +100,7 @@ export class ChecklistComponent extends PagedListingComponentBase<any> implement
     }
     const dialogRef = this.dialog.open(CreateChecklistItemComponent, {
       width: '700px',
+      maxHeight: '100vh',
       disableClose: true,
       data: {
         dialogData: dialogData,
