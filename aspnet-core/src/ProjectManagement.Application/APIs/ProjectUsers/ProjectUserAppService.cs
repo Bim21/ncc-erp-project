@@ -50,7 +50,8 @@ namespace ProjectManagement.APIs.ProjectUsers
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
                             UserName = x.User.UserName,
-                            UserType = x.User.UserType
+                            UserType = x.User.UserType,
+                            Note = x.Note
                         });
 
             return await query.ToListAsync();
@@ -97,7 +98,8 @@ namespace ProjectManagement.APIs.ProjectUsers
                                     ResourceRequestName = x.ResourceRequest.Name,
                                     PMReportId = x.PMReportId,
                                     PMReportName = x.PMReport.Name,
-                                    IsFutureActive = x.IsFutureActive
+                                    IsFutureActive = x.IsFutureActive,
+                                    Note = x.Note
                                 });
             return await query.FirstOrDefaultAsync();
         }

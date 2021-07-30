@@ -97,7 +97,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Branch = x.User.Branch,
                                         EmailAddress = x.User.EmailAddress,
                                         UserName = x.User.UserName,
-                                        UserType = x.User.UserType
+                                        UserType = x.User.UserType,
+                                        Note = x.Note
                                     });
             return await query.ToListAsync();
         }
@@ -270,7 +271,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                 Status = ProjectUserStatus.Future,
                 IsExpense = input.IsExpense,
                 IsFutureActive = true,
-                PMReportId = pmReportActive.Id
+                PMReportId = pmReportActive.Id,
+                Note = input.Note
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 

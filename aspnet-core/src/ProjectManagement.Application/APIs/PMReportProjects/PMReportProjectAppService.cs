@@ -38,7 +38,8 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
         public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
-            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
+            var query = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.PMReportId == pmReportId)
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -54,13 +55,14 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmBranch = x.PM.Branch,
                     PmEmailAddress = x.PM.EmailAddress,
                     PmAvatarPath = x.PM.AvatarPath,
-                    PmFullName = x.PM.FullName,
+                    PmFullName = x.PM.Name + " " + x.PM.Surname,
                     PmUserName = x.PM.UserName,
                     PmUserType = x.PM.UserType,
                     Seen = x.Seen,
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                     TotalOverTime = x.TotalOverTime
-                });
+                }).OrderBy(x => x.PmFullName);
+
             return await query.ToListAsync();
         }
 
@@ -68,7 +70,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<object> GetInfoProject(long pmReportProjectId)
         {
             var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0);
-            var projectUserBill = WorkScope.GetAll<ProjectUserBill>();
+            var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.isActive);
 
             var query = WorkScope.GetAll<PMReportProject>().Where(x => x.Id == pmReportProjectId)
                                         .Select(x => new
@@ -225,7 +227,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 EmailAddress = x.User.EmailAddress,
                                 UserName = x.User.UserName,
                                 Branch = x.User.Branch,
-                                UserType = x.User.UserType
+                                UserType = x.User.UserType,
+                                Note = x.Note
                             });
 
             return await query.ToListAsync();
@@ -258,7 +261,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 AvatarPath = "/avatars/" + x.User.AvatarPath,
                                 EmailAddress = x.User.EmailAddress,
                                 UserType = x.User.UserType,
-                                Branch = x.User.Branch
+                                Branch = x.User.Branch,
+                                Note = x.Note
                             });
 
             return await query.ToListAsync();

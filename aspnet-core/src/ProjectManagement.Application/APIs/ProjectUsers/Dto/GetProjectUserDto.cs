@@ -27,5 +27,6 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
+        public string Note { get; set; }
     }
 }

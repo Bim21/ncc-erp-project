@@ -337,8 +337,8 @@ namespace ProjectManagement.APIs.PMReports
                         {
                             UserId = u.Id,
                             FullName = u.Name + " " + u.Surname,
-                            UserType = u.UserType.ToString(),
-                            Branch = u.Branch.ToString(),
+                            UserType = u.UserType,
+                            Branch = u.Branch,
                             UserEmail = u.EmailAddress,
                             AllocatePercentage = pp != null ? pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present && x.UserId == u.Id).Sum(x => x.AllocatePercentage) : 0,
                             TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
