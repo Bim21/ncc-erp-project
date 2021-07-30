@@ -330,7 +330,7 @@ namespace ProjectManagement.APIs.PMReports
                              CreatedAt = p.CreationTime
                          }).ToListAsync();
 
-            var users = from u in WorkScope.GetAll<User>().ToList()
+            var users = (from u in WorkScope.GetAll<User>().ToList()
                         join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status != ProjectUserStatus.Past) 
                         on u.Id equals pu.UserId into pp
                         select new 
@@ -343,7 +343,7 @@ namespace ProjectManagement.APIs.PMReports
                             AllocatePercentage = pp != null ? pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present && x.UserId == u.Id).Sum(x => x.AllocatePercentage) : 0,
                             TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
                             TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date).Sum(x => x.AllocatePercentage)
-                        };
+                        }).OrderByDescending(x => x.AllocatePercentage);
 
             var result = new ReportStatisticsDto
             {
