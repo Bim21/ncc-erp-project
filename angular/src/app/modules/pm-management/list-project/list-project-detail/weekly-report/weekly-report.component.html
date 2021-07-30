@@ -94,7 +94,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="d-inline">Các vấn đề trong tuần</h4>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)  "
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create) && selectedReport.isActive  "
                                 [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
@@ -128,7 +128,7 @@
                                 <th>Solution</th>
                                 <th>meetingSolution</th>
                                 <th>Trạng thái</th>
-                                <th>Action</th>
+                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
 
                             </tr>
                         </thead>
@@ -212,7 +212,7 @@
                                     </div>
 
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center" *ngIf="selectedReport.isActive">
                                     <button
                                         *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
                                         || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive"
@@ -266,7 +266,7 @@
                 <div class="card-header">
                     <div class="row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive"
                             [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
@@ -285,7 +285,7 @@
                                 <th>Project Role</th>
                                 <th>Thời gian thay đổi</th>
                                 <th>% Sử dụng nhân sự</th>
-                                <th>Action</th>
+                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -366,7 +366,7 @@
                                     </div>
 
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center" *ngIf="selectedReport.isActive">
                                     <button [disabled]="processWeekly" *ngIf="!report.createMode " mat-button
                                         [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
@@ -410,7 +410,7 @@
                     <div class="card-header">
                         <div class="row">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) "
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive "
                                 [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
@@ -427,7 +427,7 @@
                                     <th>Project role</th>
                                     <th>Thời gian thay đổi</th>
                                     <th>%Sử dụng nhân sự</th>
-                                    <th>Action</th>
+                                    <th *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -507,7 +507,7 @@
                                                 [(ngModel)]="report.allocatePercentage" />
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center" *ngIf="selectedReport.isActive">
                                         <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser) || permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser) 
                                         || permission.isGranted(DeliveryManagement_PMReportProject_Update))"
                                             [disabled]="processFuture" mat-button [matMenuTriggerFor]="menu">

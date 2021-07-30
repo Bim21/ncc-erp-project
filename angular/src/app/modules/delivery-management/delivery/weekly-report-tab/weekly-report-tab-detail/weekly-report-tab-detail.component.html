@@ -115,7 +115,7 @@
 
                             <h4 style="display: inline;">Các vấn đề trong tuần</h4>
                             <button class="mr-2"
-                                *ngIf=" permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)"
+                                *ngIf=" permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create) && isActive"
                                 [hidden]="processProblem || !isShowProblemList"
                                 (click)="addIssueReport();$event.stopPropagation()" class="btn btn-primary  ml-3"
                                 style="height: 40px;">
@@ -135,7 +135,7 @@
                                         <th>meetingSolution</th>
                                         <th class="col-time">Thời gian tạo</th>
                                         <th class="col-time">Trạng thái</th>
-                                        <th class="col-action-menu">Action</th>
+                                        <th class="col-action-menu" *ngIf="isActive">Action</th>
 
                                     </tr>
                                 </thead>
@@ -228,7 +228,7 @@
                                             </div>
 
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="isActive">
                                             <button *ngIf="!problem.createMode" mat-button [matMenuTriggerFor]="menu"
                                                 [disabled]="processProblem">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -281,7 +281,7 @@
                         <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowWeeklyList=!isShowWeeklyList">
 
                             <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && isActive"
                                 [hidden]="processWeekly || !isShowWeeklyList "
                                 (click)="addWeekReport();$event.stopPropagation()" class=" btn btn-primary ml-3">
                                 <i class="fa fa-plus-square"></i> Create
@@ -300,8 +300,8 @@
                                         <th>Project Role</th>
                                         <th class="col-time">Từ ngày</th>
                                         <th>% Sử dụng nhân sự</th>
-                                        <!-- <th>note</th> -->
-                                        <th class="col-action-menu">Action</th>
+                                     
+                                        <th *ngIf="isActive" class="col-action-menu">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -376,7 +376,7 @@
                                                     [data]="report.allocatePercentage"></radio-dropdown>
                                             </div>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="isActive">
                                             <button [hidden]="processWeekly" *ngIf="!report.createMode" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>
@@ -422,7 +422,7 @@
                     <mat-expansion-panel [expanded]="isShowFutureList">
                         <mat-expansion-panel-header style="margin: 8px 0" (click)="isShowFutureList=!isShowFutureList">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                            <button *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                            <button *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create) && isActive"
                                 [hidden]="processFuture || !isShowFutureList "
                                 (click)="addFutureReport(); $event.stopPropagation()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
@@ -438,7 +438,7 @@
                                         <th>Project role</th>
                                         <th class="col-time">Từ ngày</th>
                                         <th>%Sử dụng nhân sự</th>
-                                        <th class="col-action-menu">Action</th>
+                                        <th *ngIf="isActive" class="col-action-menu">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -519,7 +519,7 @@
                                             </div>
 
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" *ngIf="isActive">
                                             <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>
