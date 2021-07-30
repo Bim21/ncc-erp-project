@@ -10,6 +10,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { EditReportComponent } from './edit-report/edit-report.component';
+import { ReportInfoComponent } from './report-info/report-info.component';
 
 @Component({
   selector: 'app-weekly-report-tab',
@@ -94,5 +95,14 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
      }
    });
   }
-
+  viewReportInfo(report){
+    let dialogRef = this.dialog.open(ReportInfoComponent,{
+      width:'700px',
+      disableClose: true,
+      data: {
+        reportId: report.id
+      }
+    })
+    // dialogRef.afterClosed()
+  }
 }

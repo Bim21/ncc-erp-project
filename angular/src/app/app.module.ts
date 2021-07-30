@@ -92,6 +92,7 @@ import { CreateEditCriteriaCategoryComponent } from './modules/checkpoint/catego
 import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
 import { CreateEditCriteriaComponent } from './modules/checkpoint/category/criteria/create-edit-criteria/create-edit-criteria.component';
 import { EditReportComponent } from './modules/delivery-management/delivery/weekly-report-tab/edit-report/edit-report.component';
+import { ReportInfoComponent } from './modules/delivery-management/delivery/weekly-report-tab/report-info/report-info.component';
 
 
 
@@ -179,6 +180,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CriteriaComponent,
     CreateEditCriteriaComponent,
     EditReportComponent,
+    ReportInfoComponent,
 
     
   ],
