@@ -36,9 +36,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, ProjectHealth? health)
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
-            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId && (health == null || x.ProjectHealth == health))
+            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -67,7 +67,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         public async Task<object> GetInfoProject(long projectId)
         {
-            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive);
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.Status == ProjectUserStatus.Present && x.IsFutureActive);
             var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId);
 
             var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)

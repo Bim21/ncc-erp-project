@@ -144,9 +144,9 @@ namespace ProjectManagement.APIs.ResourceRequests
             return input;
         }
 
-        [HttpGet]
+        [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest)]
-        public async Task<List<ResourceRequestUserDto>> SearchAvailableUserForRequest(DateTime startDate)
+        public async Task<GridResult<ResourceRequestUserDto>> SearchAvailableUserForRequest(GridParam input, DateTime startDate)
         {
             if(startDate.Date < DateTime.Now.Date)
             {
@@ -165,16 +165,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 .Select(x => new ResourceRequestUserDto
                                 {
                                     UserId = x.Id,
-                                    UserName = x.FullName,
+                                    UserName = x.UserName,
                                     UserType = x.UserType,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
-                                    FullName = x.FullName,
+                                    FullName = x.Name + " " + x.Surname,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
                                 }).Where(x => x.Undisposed > 0);
 
-            return await users.ToListAsync();
+            return await users.GetGridResult(users, input);
         }
 
         [HttpPost]
