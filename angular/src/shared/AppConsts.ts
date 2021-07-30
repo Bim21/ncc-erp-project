@@ -31,7 +31,7 @@ export class AppConsts {
         Closed: "badge badge-pill badge-secondary"
         // Future:"badge badge-pill badge-light"
     }
-    static readonly isSentStyle={
+    static readonly isSentStyle = {
         Sent: "badge badge-pill badge-primary",
         Unsent: "badge badge-pill badge-danger"
     }
@@ -75,6 +75,11 @@ export class AppConsts {
         New: "badge badge-pill  badge-primary",
         InProcess: "badge badge-pill badge-success",
         Done: "badge badge-pill badge-primary"
+    }
+    static readonly projectHealth = {
+        0: "badge  badge-success",
+        1: "badge  badge-warning",
+        2: "badge  badge-danger"
     }
 
 

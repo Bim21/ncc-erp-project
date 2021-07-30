@@ -284,7 +284,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
       this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
       this.generalNote = JSON.parse(this.selectedReport.note)
-      this.allowSendReport = this.selectedReport.note != ""?true:false;
+      this.allowSendReport = this.selectedReport.note==null||this.selectedReport.note==''?false:true;
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -384,11 +384,14 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
 
   public updateNote() {
+    if(this.generalNote){
+      this.generalNote== ""
+    }
     this.reportService.updateNote(this.generalNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
       this.selectedReport.note = this.generalNote
-      this.allowSendReport = this.generalNote != ''?true:false
+      this.allowSendReport = this.generalNote?true:false
     })
   }
   public canCelUpdateNote() {
@@ -397,7 +400,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     if (!this.isJson(this.generalNote)) {
       this.generalNote = JSON.parse(this.generalNote)
     }
-    this.allowSendReport = this.generalNote != ''?true:false
+    this.allowSendReport = this.generalNote?true:false
   }
 
   updateHealth(projectHealth) {

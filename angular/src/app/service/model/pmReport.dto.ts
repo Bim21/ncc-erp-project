@@ -1,7 +1,7 @@
 export class pmReportDto{
     name:string;
     isActive: boolean;
-    year: string;
+    year: number;
     type: number;
     numberOfProject: number;
     reportId?: number;

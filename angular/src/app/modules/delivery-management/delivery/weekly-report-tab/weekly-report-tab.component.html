@@ -1,4 +1,4 @@
-<section class="content px-2">
+<section class="content px-2 pt-2" >
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="mb-0">
-                                    <div> 
+                                    <div>
                                         <div *ngFor="let item of filterItems; let i = index">
                                             <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
                                                 (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
@@ -39,33 +39,66 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                     <thead class="bg-light">
                         <tr>
-                            <th>STT</th>
+                            <th class="stt">STT</th>
                             <th>Weekly Report</th>
-                            <th>Số lượng project trong Report</th>
-                            <th>Actions</th>
+                            <th style="width: 220px;">Projects</th>
+                            <th>Note</th>
+                            <th style="width: 100px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of pmReportList; let i=index">
+                        <tr *ngFor="let item of pmReportList |paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }; let i=index">
                             <td class="text-center">{{i+1}}</td>
-                            <td class="text-center"><span
-                                class="hyperlink" (click)="showDetail(item)">{{item.name}}</span></td>
-                            <td class="text-center"><strong>{{item.numberOfProject}}</strong></td>
+                            <td class="text-center" style="white-space: normal; max-width: 150px;">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <span class="hyperlink" (click)="showDetail(item)">{{item.name}} </span>
+                                    </div>
+                                    <div class="col-3">
+                                        <span
+                                            [ngClass]="item.isActive?'badge  badge-success':'badge  badge-danger'">{{item.isActive?'Active':'Closed'}}</span>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="text-center">
-                                <p *ngIf="!item.isActive">Đã khóa</p>
-                                <button *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)" class="btn bg-blue" (click)="closeReport(item)">
-                                    Close Report
+                                <strong>{{item.numberOfProject}} </strong>(
+                                <span [ngClass]="" *ngFor="let project of item.countProjectHeath; let i =index">
+                                    {{project.number}} <span
+                                        [ngClass]="getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)">{{getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)}}</span>
+                                    <span *ngIf="i < item.countProjectHeath.length-1">/</span> </span> )
+                            </td>
+                            <td style="white-space: normal; max-width: 150px;">{{item.note}}</td>
+                            <td class="text-center">
+                                <div class="text-center">
+                                    <button
+                                        *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)"
+                                        class="btn btn-sm bg-danger " (click)="closeReport(item)">
+                                        <i class="fas fa-times"></i>
+                                        Close
+                                    </button>
+                                </div>
+                                <button class="btn btn-sm bg-secondary mt-1"
+                                    (click)="editReport(item)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
                                 </button>
+
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                
+
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">
@@ -107,8 +140,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
 </section>
-
