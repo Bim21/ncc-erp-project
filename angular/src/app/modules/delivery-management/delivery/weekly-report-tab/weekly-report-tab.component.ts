@@ -97,10 +97,11 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   }
   viewReportInfo(report){
     let dialogRef = this.dialog.open(ReportInfoComponent,{
-      width:'700px',
+      width:'1000px',
+      height: "95vh",
       disableClose: true,
       data: {
-        reportId: report.id
+        report: report
       }
     })
     // dialogRef.afterClosed()
