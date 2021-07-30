@@ -20,7 +20,7 @@
                                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>STT</th>
+                                                <th class="stt">STT</th>
                                                 <th>Project</th>
                                                 <th>Vấn đề</th>
                                                 <th>Impact</th>
@@ -41,14 +41,14 @@
                                                 <td>{{issue.description}}</td>
                                                 <td>{{issue.impact}}</td>
                                                 <td>{{issue.solution}}</td>
-                                                <td class="text-center">{{issue.createdAt |date:"dd/MM/yyyy"}}</td>
-                                                <td class="text-center"><span
+                                                <td class="text-center" style="width: 100px;">{{issue.createdAt |date:"dd/MM/yyyy"}}</td>
+                                                <td class="text-center" style="width: 100px;"><span
                                                         [ngClass]="APP_CONST.projectHealth[issue.projectHealth]">
                                                         {{getByEnum(
                                                         issue.projectHealth,APP_ENUM.ProjectHealth)}}</span>
                                                 </td>
-                                                <td class="text-center"><span
-                                                        [ngClass]="APP_CONST.statusStyle[issue.status]">{{issue.status}}</span>
+                                                <td class="text-center" style="width: 100px;"><span
+                                                        [ngClass]="APP_CONST.PMReportProjectIssueStatus[issue.status]">{{issue.status}}</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -67,7 +67,7 @@
                             <div class="container-fluid">
                                 <div class="mt-2">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-6 mt-2">
                                             <h5>List các user có resource < 20% trong tuần này</h5>
                                         </div>
                                         <div class="col-6">
@@ -125,7 +125,7 @@
                             <div class="container-fluid">
                                 <div class="mt-2">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-6 mt-2">
                                             <h5>List các user có resource < 20% trong tương lai</h5>
                                         </div>
                                         <div class="col-6">
