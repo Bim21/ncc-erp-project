@@ -339,6 +339,7 @@ namespace ProjectManagement.APIs.PMReports
                             FullName = u.Name + " " + u.Surname,
                             UserType = u.UserType.ToString(),
                             Branch = u.Branch.ToString(),
+                            UserEmail = u.EmailAddress,
                             AllocatePercentage = pp != null ? pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present && x.UserId == u.Id).Sum(x => x.AllocatePercentage) : 0,
                             TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
                             TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date).Sum(x => x.AllocatePercentage)
@@ -354,6 +355,7 @@ namespace ProjectManagement.APIs.PMReports
                     FullName = x.FullName,
                     UserType = x.UserType,
                     Branch = x.Branch,
+                    Email = x.UserEmail,
                     AllocatePercentage = (byte)x.AllocatePercentage
                 }).ToList(),
                 ResourceInTheFuture = users.Where(x => x.TotalInTheFuture < 20).Select(x => new ProjectUserStatistic
@@ -362,6 +364,7 @@ namespace ProjectManagement.APIs.PMReports
                     FullName = x.FullName,
                     UserType = x.UserType,
                     Branch = x.Branch,
+                    Email = x.UserEmail,
                     AllocatePercentage = (byte)x.AllocatePercentage
                 }).ToList()
             };

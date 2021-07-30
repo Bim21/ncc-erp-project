@@ -20,6 +20,7 @@ namespace ProjectManagement.APIs.PMReports.Dto
         public string FullName { get; set; }
         public string UserType { get; set; }
         public string Branch { get; set; }
+        public string Email { get; set; }
         public int AllocatePercentage { get; set; }
     }
 }
