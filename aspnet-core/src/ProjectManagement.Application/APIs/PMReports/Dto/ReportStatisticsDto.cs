@@ -3,6 +3,7 @@ using ProjectManagement.APIs.ProjectUsers.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReports.Dto
 {
@@ -18,8 +19,8 @@ namespace ProjectManagement.APIs.PMReports.Dto
     {
         public long UserId { get; set; }
         public string FullName { get; set; }
-        public string UserType { get; set; }
-        public string Branch { get; set; }
+        public UserType UserType { get; set; }
+        public Branch Branch { get; set; }
         public string Email { get; set; }
         public int AllocatePercentage { get; set; }
     }
