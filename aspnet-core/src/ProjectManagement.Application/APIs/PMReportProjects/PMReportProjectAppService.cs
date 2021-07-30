@@ -77,7 +77,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                             ClientName = x.Project.Client.Name,
                                             PmName = x.PM.FullName,
                                             TotalBill = projectUserBill.Where(b => b.ProjectId == x.ProjectId).Count(),
-                                            TotalResource = projectUser.Where(r => r.PMReportId == x.PMReportId).Count()
+                                            TotalResource = projectUser.Where(r => r.ProjectId == x.ProjectId).Count()
                                         });
 
             return await query.FirstOrDefaultAsync();
