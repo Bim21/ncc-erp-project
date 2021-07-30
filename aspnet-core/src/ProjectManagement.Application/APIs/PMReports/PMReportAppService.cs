@@ -8,8 +8,11 @@ using NccCore.Extension;
 using NccCore.Paging;
 using NccCore.Uitls;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReports.Dto;
+using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
 using ProjectManagement.NccCore.BackgroundJob;
@@ -303,6 +306,66 @@ namespace ProjectManagement.APIs.PMReports
             await Create(newPmReport);
 
             return $"{pmReport.Name} locked, new PmReport with name {pmReport.Name} (1) created";
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_StatisticsReport)]
+        public async Task<ReportStatisticsDto> StatisticsReport(long pmReportId)
+        {
+            var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
+
+            var issues = await (from p in WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.PMReportProject.PMReportId == pmReportId)
+                         select new GetPMReportProjectIssueDto
+                         {
+                             Id = p.Id,
+                             PMReportProjectId = p.PMReportProjectId,
+                             ProjectName = p.PMReportProject.Project.Name,
+                             Description = p.Description,
+                             Impact = p.Impact,
+                             Critical = p.Critical.ToString(),
+                             Source = p.Source.ToString(),
+                             Solution = p.Solution,
+                             MeetingSolution = p.MeetingSolution,
+                             Status = p.Status.ToString(),
+                             CreatedAt = p.CreationTime
+                         }).ToListAsync();
+
+            var users = from u in WorkScope.GetAll<User>().ToList()
+                        join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status != ProjectUserStatus.Past) 
+                        on u.Id equals pu.UserId into pp
+                        select new 
+                        {
+                            UserId = u.Id,
+                            FullName = u.Name + " " + u.Surname,
+                            UserType = u.UserType.ToString(),
+                            Branch = u.Branch.ToString(),
+                            AllocatePercentage = pp != null ? pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present && x.UserId == u.Id).Sum(x => x.AllocatePercentage) : 0,
+                            TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
+                            TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date).Sum(x => x.AllocatePercentage)
+                        };
+
+            var result = new ReportStatisticsDto
+            {
+                Note = pmReport.Note,
+                Issues = issues,
+                ResourceInTheWeek = users.Where(x => x.TotalInTheWeek < 20).Select(x => new ProjectUserStatistic
+                {
+                    UserId = x.UserId,
+                    FullName = x.FullName,
+                    UserType = x.UserType,
+                    Branch = x.Branch,
+                    AllocatePercentage = (byte)x.AllocatePercentage
+                }).ToList(),
+                ResourceInTheFuture = users.Where(x => x.TotalInTheFuture < 20).Select(x => new ProjectUserStatistic
+                {
+                    UserId = x.UserId,
+                    FullName = x.FullName,
+                    UserType = x.UserType,
+                    Branch = x.Branch,
+                    AllocatePercentage = (byte)x.AllocatePercentage
+                }).ToList()
+            };
+            return result;
         }
     }
 }
