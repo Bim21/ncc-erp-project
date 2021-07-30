@@ -26,4 +26,6 @@ export class pmReportProjectDto{
     createMode?:boolean;
     setBackground?:boolean;
     pmEmailAddress:string;
+    totalNormalWorkingTime:number;
+    totalOverTime:number;
 }

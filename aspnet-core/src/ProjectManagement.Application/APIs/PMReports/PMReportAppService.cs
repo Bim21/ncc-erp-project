@@ -87,6 +87,10 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<string> UpdateNote(long id, string note)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(id);
+            if (!pmReport.IsActive)
+            {
+                throw new UserFriendlyException("Report has been closed !");
+            }
             pmReport.Note = note;
             await WorkScope.UpdateAsync(pmReport);
             return note;

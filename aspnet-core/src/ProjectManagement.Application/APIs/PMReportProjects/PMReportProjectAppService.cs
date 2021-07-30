@@ -36,9 +36,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, ProjectHealth? health)
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
-            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId && (health == null || x.ProjectHealth == health))
+            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -67,7 +67,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         public async Task<object> GetInfoProject(long projectId)
         {
-            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive);
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.Status == ProjectUserStatus.Present && x.IsFutureActive);
             var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId);
 
             var query = from p in WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
@@ -161,9 +161,9 @@ namespace ProjectManagement.APIs.PMReportProjects
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
                                         .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
 
-            if(!pmReportProject.PMReport.IsActive || pmReportProject.Status == PMReportProjectStatus.Sent)
+            if(!pmReportProject.PMReport.IsActive)
             {
-                throw new UserFriendlyException("Report has been sent or closed !");
+                throw new UserFriendlyException("Report has been closed !");
             }
 
             pmReportProject.ProjectHealth = projectHealth;
@@ -365,7 +365,13 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         public async Task<string> UpdateNote(string note, long pmReportProjectId)
         {
-            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport).SingleOrDefaultAsync(x => x.Id == pmReportProjectId);
+
+            if (!pmReportProject.PMReport.IsActive)
+            {
+                throw new UserFriendlyException("Report has been closed !");
+            }
+
             pmReportProject.Note = note;
             await WorkScope.UpdateAsync(pmReportProject);
             return note;

@@ -13,9 +13,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
     {
         [ApplySearchAttribute]
         public string Name { get; set; }
-        [ApplySearchAttribute]
         public int Month { get; set; }
-        [ApplySearchAttribute]
         public int Year { get; set; }
         public bool IsActive { get; set; }
         public long TotalProject { get; set; }
