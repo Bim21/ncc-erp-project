@@ -207,8 +207,8 @@
                                             <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
                                                 *ngIf="!problem.createMode">{{ problem.status }}</span>
 
-                                            <div class="form-group row required" *ngIf="problem.createMode">
-                                                <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                            <div  *ngIf="problem.createMode">
+                                                <mat-form-field style="width: 150px;" class="mx-auto" appearance="outline">
                                                     <mat-select [(ngModel)]="problem.status" name="issueStatus"
                                                         placeholder="select a status" required #issueStatus="ngModel">
                                                         <mat-option *ngFor="let status of issueStatusList"
@@ -293,10 +293,9 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Nhân viên</th>
-                                        <th>Project Role</th>
+                                        <th>Role</th>
                                         <th class="col-time">Từ ngày</th>
-
-                                        <th>% Sử dụng nhân sự</th>
+                                        <th>% Sử dụng</th>
                                         <th>Note</th>
                                         <th *ngIf="isActive" class="col-action-menu">Action</th>
                                     </tr>
@@ -339,8 +338,8 @@
                                         <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
                                                 }}</span>
 
-                                            <div class="form-group row required" *ngIf="report.createMode">
-                                                <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                            <div  *ngIf="report.createMode">
+                                                <mat-form-field style="width: 150px;" class="mx-auto" appearance="outline">
                                                     <mat-select [(ngModel)]="report.projectRole" name="projectrole"
                                                         placeholder="select a role" required #projectPM="ngModel">
                                                         <mat-option *ngFor="let role of projectRoleList"
@@ -358,7 +357,7 @@
                                         <td class="text-center"> <span *ngIf="!report.createMode">
                                                 {{report.startTime | date:"dd/MM/yyyy"}}
                                             </span>
-                                            <mat-form-field appearance="outline" *ngIf="report.createMode">
+                                            <mat-form-field style="width: 150px;" appearance="outline" *ngIf="report.createMode">
                                                 <input matInput [matDatepicker]="picker" placeholder="chose a date"
                                                     required [(ngModel)]="report.startTime" name="usercreateDate">
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -442,9 +441,9 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Nhân viên</th>
-                                        <th>Project role</th>
+                                        <th>Role</th>
                                         <th class="col-time">Từ ngày</th>
-                                        <th>%Sử dụng nhân sự</th>
+                                        <th>%Sử dụng</th>
                                         <th>Note</th>
                                         <th *ngIf="isActive" class="col-action-menu">Action</th>
                                     </tr>
@@ -487,8 +486,8 @@
                                         <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
                                                 }}</span>
 
-                                            <div class="form-group row required" *ngIf="report.createMode">
-                                                <mat-form-field class="w-100 mx-auto" appearance="outline">
+                                            <div  *ngIf="report.createMode">
+                                                <mat-form-field style="width: 150px;" class="mx-auto" appearance="outline">
                                                     <mat-select [(ngModel)]="report.projectRole" name="projectrole"
                                                         placeholder="select a role" required #projectPM="ngModel">
                                                         <mat-option *ngFor="let role of projectRoleList"
@@ -506,7 +505,7 @@
                                         <td class="text-center"> <span *ngIf="!report.createMode">
                                                 {{report.startTime | date:"dd/MM/yyyy"}}
                                             </span>
-                                            <mat-form-field appearance="outline" *ngIf="report.createMode">
+                                            <mat-form-field style="width: 150px;" appearance="outline" *ngIf="report.createMode">
                                                 <input [min]="minDate" matInput [matDatepicker]="picker"
                                                     placeholder="chose a date" [(ngModel)]="report.startTime"
                                                     name="usercreateDate">
@@ -517,15 +516,10 @@
                                         <td class="text-center">
                                             <p class="text-center" *ngIf="!report.createMode"><strong>
                                                     {{report.allocatePercentage}}%</strong></p>
-                                            <!-- <input class="form-control mt-1" placeholder="number"
-                                                #reportPercentage="ngModel" *ngIf="report.createMode" type="text"
-                                                mask="percent" suffix="%" [(ngModel)]="report.allocatePercentage"
-                                                required /> -->
                                             <div *ngIf="report.createMode">
                                                 <radio-dropdown (outputData)="getPercentage(report,$event)"
                                                     [data]="report.allocatePercentage"></radio-dropdown>
                                             </div>
-
                                         </td>
                                         <td style="white-space: normal;max-width: 200px;">
                                             <p *ngIf="!report.createMode">{{report.note}}</p>
@@ -541,10 +535,8 @@
                                             <button *ngIf="!report.createMode" [disabled]="processFuture" mat-button
                                                 [matMenuTriggerFor]="menu">
                                                 <i class="fas fa-bars fa-lg"></i>
-
                                             </button>
                                             <mat-menu [disabled]="processFuture" #menu="matMenu" class="p-2">
-
                                                 <button (click)="approveRequest(report)" class="mat-menu-item  w-100"
                                                     *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser)">
                                                     <i class="fas fa-check mr-2 fa-lg "></i>
@@ -560,7 +552,6 @@
                                                     *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
                                                     class="mat-menu-item  w-100">
                                                     <i class="fas fa-edit mr-2 fa-lg"></i>
-
                                                     Update
                                                 </button>
                                             </mat-menu>
@@ -574,24 +565,17 @@
 
                                                 <i style="color: red;" class="fas fa-times fa-2x"
                                                     (click)="cancelFutureReport()"></i>
-
                                             </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-
                         </div>
                         <pagination-controls autoHide="true" id="futurePaging"
                             (pageChange)="futureCurrentPage = $event"></pagination-controls>
-
                     </mat-expansion-panel>
-
                 </div>
-
             </div>
         </section>
-
-
     </div>
 </div>

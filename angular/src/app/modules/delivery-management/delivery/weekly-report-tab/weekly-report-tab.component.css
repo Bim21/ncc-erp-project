@@ -10,3 +10,13 @@
 button{
     width: 70px;
 }
+@media only screen  and (max-width: 1500px) {
+    .fixTableHead{
+        height: 63vh 
+    }
+  }
+    /* @media only screen and (min-width: 1501px) {
+     .fixTableHead{
+          height: 80vh 
+      }
+  } */
