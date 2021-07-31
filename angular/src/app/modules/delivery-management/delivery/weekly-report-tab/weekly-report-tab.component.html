@@ -40,10 +40,11 @@
                 </div>
             </div>
 
-            <div class="card-body table-responsive p-4">
+            <div class="card-body table-responsive py-2">
+                <div class="fixTableHead">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                     <thead class="bg-light">
-                        <tr>
+                        <tr style="border: none;">
                             <th class="stt">STT</th>
                             <th>Weekly Report</th>
                             <th style="width: 220px;">Projects</th>
@@ -78,7 +79,7 @@
                                         [ngClass]="getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)">{{getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)}}</span>
                                     <span *ngIf="i < item.countProjectHeath.length-1">/</span> </span> )
                             </td>
-                            <td style="white-space: normal; max-width: 150px;">{{item.note}}</td>
+                            <td style="white-space: normal; max-width: 130px;">{{item.note}}</td>
                             <td class="text-center">
                                 <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                     <i class="fas fa-bars fa-lg"></i>
@@ -105,15 +106,16 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
 
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
-                        <button class="btn btn-secondary" (click)="refresh()">
+                        <button class="btn btn-secondary mb-2" (click)="refresh()">
                             <i class="fas fa-redo-alt"></i>
                         </button>
-                        <mat-form-field style="margin-top: 10px; width: 20%;margin-left: 30px;">
+                        <mat-form-field style="width: 20%;margin-left: 30px;">
                             <mat-label>Number items</mat-label>
                             <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">
                                 <mat-option [value]="5">
