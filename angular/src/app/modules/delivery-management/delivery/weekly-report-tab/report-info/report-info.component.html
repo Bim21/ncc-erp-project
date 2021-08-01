@@ -17,7 +17,7 @@
                             <strong>Danh sách Issue</strong>
                             <div class=" table-responsive ">
                                 <div class="fixTableHead" >
-                                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                                    <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                                         <thead>
                                             <tr>
                                                 <th class="stt">STT</th>
@@ -82,7 +82,7 @@
                                         <div class="fixTableHead" >
 
 
-                                            <table [busy]="isLoading" style="border-collapse: collapse;"
+                                            <table  style="border-collapse: collapse;"
                                                 class="table table-hover text-nowrap">
                                                 <thead>
                                                     <tr style="border: none;">
@@ -138,7 +138,7 @@
                                     </div>
                                     <div class=" table-responsive ">
                                         <div class="fixTableHead" >
-                                            <table [busy]="isLoading" style="border-collapse: collapse;"
+                                            <table  style="border-collapse: collapse;"
                                                 class="table table-hover text-nowrap">
                                                 <thead>
                                                     <tr style="border: none;">

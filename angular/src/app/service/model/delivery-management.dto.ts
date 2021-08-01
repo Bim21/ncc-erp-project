@@ -58,9 +58,11 @@ export class planUserDto{
   percentUsage: number;
   projectRole: number;
   startTime: string;
-  isExpense?: true
+  isExpense?: true;
+  fullName:string;
 }
 export class editFutureResourceDto{
+  fullName:string;
   userId: number;
   projectId: number;
   allocatePercentage: number;
@@ -69,6 +71,7 @@ export class editFutureResourceDto{
   status:number;
 }
 export class futureResourceDto{
+  fullName:string;
   userId: number;
   userName: string;
   projectid: number;

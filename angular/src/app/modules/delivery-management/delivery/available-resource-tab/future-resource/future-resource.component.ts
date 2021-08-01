@@ -17,16 +17,18 @@ import { Component, OnInit, Injector } from '@angular/core';
 })
 export class FutureResourceComponent extends PagedListingComponentBase<FutureResourceComponent> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.isLoading= true;
     this.availableRerourceService.availableResourceFuture(request).pipe(finalize(()=>{
       finishedCallback();
     }),catchError(this.availableRerourceService.handleError)).subscribe((data)=>{
       this.futureResourceList=data.result.items;
       this.showPaging(data.result,pageNumber);
+      this.isLoading = false;
     })
   }
   protected delete(item: FutureResourceComponent): void {
     abp.message.confirm(
-      "Delete TimeSheet " + item.userName + "?",
+      "Delete future resource: " + item.userName + "?",
       "",
       (result: boolean) => {
         if (result) {
@@ -56,7 +58,7 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
   }
   showDialog(command:string,User:futureResourceDto){
     let item={
-
+      fullName:User.fullName,
       status:2,
       userId:User.userId,
       allocatePercentage:User.use,

@@ -86,6 +86,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
   public projectInfo = {} as ProjectInfoDto
+  public projectCurrentResource:any
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
   constructor(private pmReportProjectService: PMReportProjectService,
@@ -123,7 +124,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getProjectInfo();
       this.getWeeklyReport();
       this.getFuturereport();
-      this.getProjectProblem()
+      this.getProjectProblem();
+      this.getCurrentResourceOfProject();
     }))
   }
   getProjectInfo() {
@@ -153,6 +155,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
+    this.getCurrentResourceOfProject();
   
   
   }
@@ -507,10 +510,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
     })
   }
-
   getPercentage(report, data) {
     report.allocatePercentage = data
   }
-
-
+  getCurrentResourceOfProject(){
+    this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
+    .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data=>{
+      this.projectCurrentResource=data.result
+    })
+  }
 }
