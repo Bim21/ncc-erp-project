@@ -4,7 +4,7 @@
             <div class="col-6">
                 <h1>{{'Timesheet' | localize}}</h1>
             </div>
-           
+
         </div>
     </div>
 </section>
@@ -31,16 +31,16 @@
                         <tr *ngFor="let timesheet of listTimesheetByProject ; let i = index">
                             <td>{{i+1}}</td>
                             <td> <span *ngIf="!timesheet.createMode">{{timesheet.timeSheetName}}</span>
-                                <div *ngIf="timesheet.createMode"> 
-                                <mat-form-field class="w-100" appearence ="outline">
-                                    <input matInput [(ngModel)]="timesheet.timeSheetName" placeholder="timesheet name" />
-                                </mat-form-field>    
+                                <div *ngIf="timesheet.createMode">
+                                    <mat-form-field class="w-100" appearence="outline">
+                                        <input matInput [(ngModel)]="timesheet.timeSheetName"
+                                            placeholder="timesheet name" />
+                                    </mat-form-field>
                                 </div>
                             </td>
                             <td>
-                                <span class="file-download">
-                                    <span (click)="downloadFile(timesheet)"class="fileName">{{timesheet.timesheetFile}}</span>
-                                </span>
+                                <span style="color: #007bff" (click)="downloadFile(timesheet)"
+                                    class="file-download">{{timesheet.timesheetFile}}</span>
                                 <span *ngIf="timesheet.timesheetFile !==null" style="margin-left: 5px;">
                                     <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(timesheet)"></i>
                                 </span>
@@ -49,10 +49,10 @@
                             <td><span>{{timesheet.note}}</span></td>
                             <td>
                                 <button class="btn btn-sm bg-success" (click)="importExcel(timesheet.id)"
-                                        #importFileBtn>
-                                        <i class="fas fa-upload"></i>
-                                        Import File
-                                    </button>
+                                    #importFileBtn>
+                                    <i class="fas fa-upload"></i>
+                                    Import File
+                                </button>
                             </td>
                         </tr>
                     </tbody>
