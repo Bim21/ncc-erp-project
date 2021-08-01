@@ -19,11 +19,13 @@ import { ReportInfoComponent } from './report-info/report-info.component';
 })
 export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyReportTabComponent> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.isLoading = true
     this.pmReportService.getAllPaging(request).pipe(finalize(()=>{
       finishedCallback();
     }),catchError(this.pmReportService.handleError)).subscribe((data)=>{
       this.pmReportList=data.result.items;
       this.showPaging(data.result,pageNumber);
+      this.isLoading =false;
     })
   }
   protected delete(entity: WeeklyReportTabComponent): void {

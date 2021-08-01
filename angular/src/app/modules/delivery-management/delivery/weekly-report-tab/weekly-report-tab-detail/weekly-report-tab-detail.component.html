@@ -44,11 +44,15 @@
             <div class=" px-2">
                 <div class="card w-100 ">
                     <div class="card-body py-1">
-                        <h4>{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
-                        <table class="w-100 project-info" style="table-layout: fixed;">
+                        
+                            <h4 >{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
+                            
+                        
+                        
+                        <table class=" project-info" style="table-layout: fixed; width: 95%;">
                             <tr>
-                                <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
-                                <td>Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
+                                <td>Total resource: <strong>{{projectInfo.totalResource}}</strong> / Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
+                                <td>Current project resource: <button class="btn btn-success btn-sm ml-1"><i class="far fa-eye mr-1"></i>View</button></td>
                             </tr>
                             <tr>
                                 <td>Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
@@ -75,7 +79,7 @@
                                     <div class="d-flex mt-1">
                                         <strong>Đánh giá chung: </strong>
                                         <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                     font-size: 1.1em; font-family: sans-serif; align-self:flex-start;"
+                                     font-size: 1.2em; font-family: sans-serif; align-self:flex-start; line-height: initial;"
                                             *ngIf="!isEditingNote">
                                         {{generalNote}}
                                     </pre>
