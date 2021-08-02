@@ -43,6 +43,7 @@ export class userToRequestDto{
   startTime: any;
   resourceRequestId?:number;
   projectId?:number;
+  status:number;
 }
 export class availableResourceDto{
   userId: number;

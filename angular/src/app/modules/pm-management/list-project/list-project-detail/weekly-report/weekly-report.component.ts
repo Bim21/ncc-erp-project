@@ -68,12 +68,11 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public isssueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
   public userList: UserDto[] = [];
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
-  public projectHeathList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   private projectId: number;
   generalNote: string = "";
   public projectName = "";
   allowSendReport: boolean = true;
-  public projectHealth = "";
+  public projectHealth:any;
   constructor(injector: Injector, private reportService: PMReportProjectService, private route: ActivatedRoute, private requestservice: ProjectResourceRequestService,
     private projectUserService: ProjectUserService, private userService: UserService, private reportIssueService: PmReportIssueService, private dialog: MatDialog,
     private pmreportService: PmReportService, private projectService: ListProjectService) {
@@ -116,7 +115,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     if (this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)) {
       this.reportIssueService.getProblemsOfTheWeek(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         this.problemList = data.result;
-        this.projectHealth = data.result.projectHealth;
+        // this.projectHealth = data.result.projectHealth;
       })
     }
 
@@ -285,6 +284,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
       this.generalNote = JSON.parse(this.selectedReport.note)
       this.allowSendReport = this.selectedReport.note==null||this.selectedReport.note==''?false:true;
+      this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
@@ -363,6 +363,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.getProjectProblem();
     this.generalNote = JSON.parse(this.selectedReport.note)
     this.isEditingNote = false;
+    this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
   }
   public sendWeeklyreport() {
     abp.message.confirm(
@@ -405,6 +406,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
   updateHealth(projectHealth) {
     this.reportService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).subscribe((data) => {
+      abp.notify.success("Update project health to " +this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth))
     })
 
   }
@@ -431,6 +433,19 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   getFuturePercentage(report, data) {
     report.allocatePercentage = data
   }
-  
+  // updateHealth(projectHealth) {
+  //   this.reportService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).pipe(catchError(this.reportService.handleError))
+  //     .subscribe((data) => {
+  //       this.pmReportProjectList.forEach(item => {
+  //         if (item.id == this.pmReportProjectId) {
+  //           item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
+  //         }
+  //         abp.notify.success("Update successfull")
+  //       })
+  //       this.getWeeklyReport();
+  //       this.getFuturereport();
+  //       this.getProjectProblem()
+  //     })
+  // }
 }
 
