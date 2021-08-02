@@ -10,6 +10,7 @@ export class pmReportDto {
     note: string;
     pmReportName: string;
     pmReportProjectId: number;
+    projectHealth:string;
 
 }
 export class pmReportProjectDto {

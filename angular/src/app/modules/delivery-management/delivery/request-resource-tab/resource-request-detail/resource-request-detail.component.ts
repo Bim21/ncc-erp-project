@@ -68,7 +68,8 @@ export class ResourceRequestDetailComponent extends PagedListingComponentBase<an
         allocatePercentage: userRequest.allocatePercentage,
         startTime: userRequest.startTime,
         id: userRequest.id,
-        projectId: userRequest.projectId
+        projectId: userRequest.projectId,
+        status: 2
       }
     }
     const show = this.dialog.open(AddUserToRequestComponent, {
