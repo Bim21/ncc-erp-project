@@ -15,7 +15,7 @@ export class ProjectUserService extends BaseApiService {
     super(http);
   }
   getAllProjectUser(id: number, viewHistory?: boolean): Observable<any> {
-    return this.http.post<any>(this.rootUrl + `/GetAllByProject?projectId=${id}&viewHistory=${viewHistory}`, {});
+    return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${id}&viewHistory=${viewHistory}`);
   }
   getAllProjectUserInProject(id: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllProjectUserInProject?projectId='+id);
