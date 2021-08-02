@@ -20,6 +20,7 @@ namespace ProjectManagement.APIs.Skills
     {
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.Admin_Skill_ViewAll)]
         public async Task<GridResult<SkillDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Skill>().Select(x => new SkillDto
