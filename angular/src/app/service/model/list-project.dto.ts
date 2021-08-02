@@ -19,3 +19,7 @@ export interface ClientDto {
     id: number;
 }
 
+export interface SkillDto {
+    name: string;
+    id: number;
+}

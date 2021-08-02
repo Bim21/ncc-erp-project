@@ -22,7 +22,7 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
       this.showPaging(data.result, pageNumber)
     })
   }
- 
+
   protected delete(client: ClientComponent): void {
     abp.message.confirm(
       "Delete Client" + client.name+ "?",
@@ -64,7 +64,7 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
         this.refresh();
       }
     })
-    
+
   }
   public createClient(){
     this.showDialog("create",{});
