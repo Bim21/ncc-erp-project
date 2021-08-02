@@ -392,7 +392,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       userId: resource.userId,
       projectRole: resource.projectRole,
       startTime: resource.startTime,
-      allocatePercentage: resource.allocatePercentage
+      allocatePercentage: resource.allocatePercentage,
+      fullName: resource.fullName
     }
     const dialogRef = this.dialog.open(ApproveDialogComponent, {
       data: {
