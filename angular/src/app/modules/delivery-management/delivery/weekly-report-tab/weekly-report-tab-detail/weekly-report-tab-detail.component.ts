@@ -100,7 +100,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private userService: UserService,
     private dialog: MatDialog,
     private requestservice: ProjectResourceRequestService,
-    private _layoutStore: LayoutStoreService
+    private _layoutStore: LayoutStoreService,
   ) {
     super(injector)
   }
@@ -112,7 +112,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getUser();
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
-      console.log(this.sidebarExpanded)
     });
   }
   public getPmReportProject(): void {
@@ -277,7 +276,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processWeekly = true;
   }
   public saveWeekReport(report: projectReportDto) {
-    console.log("xxxx", report.allocatePercentage)
     report.projectId = this.projectId
     report.isExpense = true;
     report.status = "0";

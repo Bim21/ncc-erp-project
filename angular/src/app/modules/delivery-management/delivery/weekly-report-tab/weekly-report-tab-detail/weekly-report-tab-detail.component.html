@@ -1,7 +1,7 @@
 <div class="row pt-2" style="position: relative;">
     <div style="min-width: 200px; width: 16%; position: fixed;  top:auto ; left:auto; ">
         <div class="card ml-2" style="height: 94vh; overflow-y: auto; overflow-x: hidden;">
-            <div class="card-header" style="position: sticky; top: 0; z-index: 50; background-color: white;">
+            <div class="p-1" style="position: sticky; top: 0; z-index: 50; background-color: white;">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <button type="button" class="btn bg-blue" (click)="search()">
@@ -105,7 +105,7 @@
 
                     </div>
                     <div class="text-right">
-                        <i class="fas fa-bars fa-lg m-2" title="Show/hide current resource" (click)="isShowCurrentResource=!isShowCurrentResource"></i>
+                        <i class="fas fa-th-list fa-lg m-2" title="Show/hide current resource" (click)="isShowCurrentResource=!isShowCurrentResource"></i>
                      </div>
                     
                 </div>
@@ -586,7 +586,7 @@
                             <div class="card-body">
                                 <h4>Resource hiện tại</h4>
                                 <p *ngFor="let user of projectCurrentResource">
-                                    <strong style="font-family: serif;">
+                                    <strong style="font-family: inherit;">
                                         {{user.fullName}}
                                     </strong> - {{user.projectRole}} - {{user.allocatePercentage}}% - Total: {{user.totalPercent}}%
                                 </p>

@@ -95,6 +95,7 @@ import { EditReportComponent } from './modules/delivery-management/delivery/week
 import { ReportInfoComponent } from './modules/delivery-management/delivery/weekly-report-tab/report-info/report-info.component';
 import { SkillComponent } from './modules/admin/skill/skill.component';
 import { CreateUpdateSkillComponent } from './modules/admin/skill/create-update-skill/create-update-skill.component';
+import { AddReportNoteComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
 
 
 
@@ -185,6 +186,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ReportInfoComponent,
     SkillComponent,
     CreateUpdateSkillComponent,
+    AddReportNoteComponent,
 
     
   ],

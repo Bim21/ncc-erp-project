@@ -72,15 +72,16 @@ button {
 ::ng-deep .mat-expansion-panel .mat-expansion-panel-body {
   padding: 0;
 }
-.project-info tr, .project-info td {
+.project-info tr,
+.project-info td {
   border: none;
 }
-.expand-content{
-  width: 83% !important; 
+.expand-content {
+  width: 83% !important;
   margin-left: 17% !important;
 }
 
-.toggle-bar{
+.toggle-bar {
   display: none;
-  transition: 1s ;
+  transition: 1s;
 }
