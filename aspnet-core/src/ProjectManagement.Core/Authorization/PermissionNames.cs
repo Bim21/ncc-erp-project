@@ -33,6 +33,7 @@ namespace ProjectManagement.Authorization
 
             //Skill
             public const string Admin_Skill = "Admin.Skill";
+            public const string Admin_Skill_ViewAll = "Admin.Skill.ViewAll";
             public const string Admin_Skill_Create = "Admin.Skill.Create";
             public const string Admin_Skill_Update = "Admin.Skill.Update";
             public const string Admin_Skill_Delete = "Admin.Skill.Delete";
@@ -272,6 +273,7 @@ namespace ProjectManagement.Authorization
 
                     //Skill
                     PermissionNames.Admin_Skill,
+                    PermissionNames.Admin_Skill_ViewAll,
                     PermissionNames.Admin_Skill_Create,
                     PermissionNames.Admin_Skill_Update,
                     PermissionNames.Admin_Skill_Delete,
@@ -483,6 +485,7 @@ namespace ProjectManagement.Authorization
 
                  //Skill
                  new SystemPermission{ Name =  PermissionNames.Admin_Skill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Skill" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Skill" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skill_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Skill" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skill_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill" },
@@ -677,6 +680,7 @@ namespace ProjectManagement.Authorization
                         new SystemPermission { Name =  PermissionNames.Admin_Skill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Skill",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skill_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Skill" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Skill_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Skill" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Skill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Skill_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill" },

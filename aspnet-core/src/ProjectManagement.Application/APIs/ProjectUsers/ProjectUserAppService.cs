@@ -24,7 +24,7 @@ namespace ProjectManagement.APIs.ProjectUsers
     [AbpAuthorize]
     public class ProjectUserAppService : ProjectManagementAppServiceBase
     {
-        [HttpPost]
+        [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject)]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
