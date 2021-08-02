@@ -89,12 +89,10 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
         public async Task<List<CurrentResourceDto>> GetCurrentResourceOfProject(long projectId)
         {
-            var totalPercent = from u in WorkScope.GetAll<User>()
-                               join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                               on u.Id equals pu.UserId
+            var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                select new
                                {
-                                   UserId = u.Id,
+                                   UserId = pu.UserId,
                                    TotalPercent = pu.AllocatePercentage
                                };
 
