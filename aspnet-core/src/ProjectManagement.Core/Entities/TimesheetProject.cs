@@ -22,5 +22,6 @@ namespace ProjectManagement.Entities
         [MaxLength(10000)]
         public string Note { get; set; }
         public string ProjectBillInfomation { get; set; }
+        public string HistoryFile { get; set; }
     }
 }

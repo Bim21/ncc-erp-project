@@ -1,29 +1,27 @@
 ﻿using Abp.Authorization;
+using Abp.Configuration;
 using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using NccCore.Uitls;
 using ProjectManagement.APIs.Projects.Dto;
-using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
+using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Finance;
 using ProjectManagement.Services.Finance.Dto;
+using ProjectManagement.Services.Komu;
+using ProjectManagement.Services.Komu.KomuDto;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -35,11 +33,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly FinanceService _financeService;
+        private ISettingManager _settingManager;
+        private KomuService _komuService;
 
-        public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService)
+        public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService, 
+            KomuService komuService, ISettingManager settingManager)
         {
             _hostingEnvironment = environment;
             _financeService = financeService;
+            _komuService = komuService;
+            _settingManager = settingManager;
         }
 
         [HttpGet]
@@ -55,7 +58,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             TimeSheetName = $"T{ts.Month}/{ts.Year}",
                             ProjectId = tsp.ProjectId,
                             TimesheetFile = tsp.FilePath,
-                            Note = tsp.Note
+                            Note = tsp.Note,
+                            HistoryFile = tsp.HistoryFile
                         };
             return await query.ToListAsync();
         }
@@ -225,7 +229,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             File = tsp.FilePath,
                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
                             Note = tsp.Note,
-                            IsSendReport = pr.Status
+                            IsSendReport = pr.Status,
+                            HistoryFile = tsp.HistoryFile,
                         }).OrderByDescending(x => x.ClientId);
 
             return await query.GetGridResult(query, input);
@@ -303,6 +308,17 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x => x.Timesheet)
                                         .Where(x => x.Id == input.TimesheetProjectId).FirstOrDefaultAsync();
+            
+            var now = DateTimeUtils.GetNow();
+            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            var historyFile = new StringBuilder();
+            string message;
+            string alias;
+            var ListAttach = new List<attachment>();
+            var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+            var komuUserNameSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames);
+            var komuUserNames = komuUserNameSetting.Split(";").ToList();
+            komuUserNames.RemoveAt(komuUserNames.Count-1);
 
             if (input != null && input.File != null && input.File.Length > 0)
             {
@@ -323,21 +339,44 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     {
                         await input.File.CopyToAsync(stream);
                         timesheetProject.FilePath = filePath;
-                        await WorkScope.UpdateAsync(timesheetProject);
                     }
                 }
                 else
                 {
                     throw new UserFriendlyException(String.Format("Only accept files xlsx, xltx, docx !"));
                 }
+
+                // thêm history upload file
+                historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} upload {timesheetProject.FilePath}<br>");
+                // nhắc nhở komu
+                message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} upload {timesheetProject.FilePath} vào project " +
+                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
+                alias = "Nhắc việc NCC";
+                ListAttach.Add(new attachment
+                {
+                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+                    titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}"
+                });
             }
             else
-            {
-                File.Delete(Path.Combine(path, timesheetProject.FilePath));
+            {                        
+                historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} delete {timesheetProject.FilePath}<br>");
+                message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} delete {timesheetProject.FilePath} vào project " +
+                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
+                alias = "Nhắc việc NCC";
+                ListAttach.Add(new attachment
+                {
+                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+                    titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}"
+                });
 
+                File.Delete(Path.Combine(path, timesheetProject.FilePath));
                 timesheetProject.FilePath = null;
-                await WorkScope.UpdateAsync(timesheetProject);
             }
+
+            await _komuService.ProcessKomu(ListAttach, message, alias, komuUserNames);
+            timesheetProject.HistoryFile += historyFile;
+            await WorkScope.UpdateAsync(timesheetProject);
         }
 
         [HttpGet]

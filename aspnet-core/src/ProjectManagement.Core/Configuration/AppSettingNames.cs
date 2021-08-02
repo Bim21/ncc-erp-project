@@ -15,5 +15,10 @@
         public const string CanSendHour = "App.CanSendHour";
         public const string ExpiredDay = "App.ExpiredDay";
         public const string ExpiredHour = "App.ExpiredHour";
+        public const string UserBot = "UserBot";
+        public const string PasswordBot = "PasswordBot";
+        public const string KomuUrl = "KomuUrl";
+        public const string ProjectUri = "ProjectUri";
+        public const string KomuUserNames = "KomuUsernames";
     }
 }

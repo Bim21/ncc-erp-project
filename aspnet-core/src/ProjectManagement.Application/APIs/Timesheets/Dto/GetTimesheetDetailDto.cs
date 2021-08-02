@@ -26,6 +26,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         [ApplySearchAttribute]
         public string ClientName { get; set; }
         public string File { get; set; }
+        public string HistoryFile { get; set; }
         public string ProjectBillInfomation { get; set; }
         public string Note { get; set; }
         public PMReportProjectStatus IsSendReport { get; set; }

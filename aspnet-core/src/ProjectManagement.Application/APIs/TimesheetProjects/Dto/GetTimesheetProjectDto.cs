@@ -14,5 +14,7 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
         public string TimeSheetName { get; set; }
         public string Note { get; set; }
         public string ProjectBillInfomation { get; set; }
+        public string HistoryFile { get; set; }
+
     }
 }
