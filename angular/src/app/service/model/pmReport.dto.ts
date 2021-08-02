@@ -11,6 +11,7 @@ export class pmReportDto {
     pmReportName: string;
     pmReportProjectId: number;
     projectHealth:string;
+    id:number;
 
 }
 export class pmReportProjectDto {

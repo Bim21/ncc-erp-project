@@ -79,7 +79,15 @@
                                         [ngClass]="getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)">{{getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)}}</span>
                                     <span *ngIf="i < item.countProjectHeath.length-1">/</span> </span> )
                             </td>
-                            <td style="white-space: normal; max-width: 130px;">{{item.note}}</td>
+                            <td style="white-space: normal; max-width: 130px;">
+                                <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                 font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                     >
+                                   {{item.note}}
+                               </pre>
+                            
+                            
+                            </td>
                             <td class="text-center">
                                 <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                     <i class="fas fa-bars fa-lg"></i>
