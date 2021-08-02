@@ -53,9 +53,10 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           "Pages.Tenants"
         ),
         new MenuItem(this.l("Clients"), "/app/clients", "fas fa-users", "Admin.Client"),
+        new MenuItem(this.l("Skills"), "/app/skills", "fas fa-users", "Admin.Skill"),
         new MenuItem(this.l("Users"), "/app/users", "fas fa-users", "Pages.Users"),
         new MenuItem(this.l("Roles"), "/app/roles", "fas fa-theater-masks", "Pages.Roles"),
-        
+
       ]),
       new MenuItem(
         this.l("PM Management"),
@@ -71,7 +72,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
       ]
       ),
-     
+
       new MenuItem(
         this.l("Sao đỏ"),
         "/app/sao-do",
@@ -141,11 +142,11 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       //       )
       //     ]
       //   ),
-        
+
 
       // ]
       // ),
-      
+
     ];
   }
 

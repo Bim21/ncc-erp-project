@@ -87,28 +87,28 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
-        public async Task<string> GetCurrentResourceOfProject(long projectId)
+        public async Task<List<CurrentResourceDto>> GetCurrentResourceOfProject(long projectId)
         {
-            var builder = new StringBuilder();
-            var totalPercent = from u in WorkScope.GetAll<User>().ToList()
-                               join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+            var totalPercent = from u in WorkScope.GetAll<User>()
+                               join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                on u.Id equals pu.UserId
-                               into pp
                                select new
                                {
                                    UserId = u.Id,
-                                   TotalPercent = pp.Sum(x => x.AllocatePercentage)
+                                   TotalPercent = pu.AllocatePercentage
                                };
 
-            var projectUsers = await WorkScope.GetAll<ProjectUser>()
+            var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.ProjectId == projectId)
-                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive).ToListAsync();
-
-            foreach(var item in projectUsers)
-            {
-                builder.Append($"{item.User.FullName} - {item.ProjectRole} - {item.AllocatePercentage}% -  Total: {totalPercent.FirstOrDefault(x => x.UserId == item.UserId).TotalPercent} <br>");
-            }
-            return builder.ToString();
+                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+                                .Select(x => new CurrentResourceDto
+                                { 
+                                    FullName = x.User.FullName,
+                                    ProjectRole = x.ProjectRole.ToString(),
+                                    AllocatePercentage = x.AllocatePercentage,
+                                    TotalPercent = totalPercent.Where(t => t.UserId == x.UserId).Sum(x => x.TotalPercent)
+                                });
+            return await projectUsers.ToListAsync();
         }
 
         [HttpPost]
