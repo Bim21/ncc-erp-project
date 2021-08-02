@@ -361,7 +361,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                             PMReportName = p.Name,
                             Status = l.Status.ToString(),
                             IsActive = p.IsActive,
-                            Note = l.Note
+                            Note = l.Note,
+                            ProjectHealth = l.ProjectHealth.ToString()
                         };
 
             return await query.ToListAsync();
