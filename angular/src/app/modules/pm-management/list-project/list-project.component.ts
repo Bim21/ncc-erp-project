@@ -143,7 +143,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   }
   getAllUser() {
-    this.userService.GetAllUserActive(true).subscribe(data => {
+    this.userService.GetAllUserActive(false).subscribe(data => {
       this.userList = data.result
     })
   }

@@ -29,7 +29,6 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getAllUser();
     this.resourcerequest = this.data.dialogData
-    console.log(this.resourcerequest)
     this.resourcerequest.projectRole = this.APP_ENUM.ProjectUserRole[this.resourcerequest.projectRole]
   }
   // public getAllUser(): void {
