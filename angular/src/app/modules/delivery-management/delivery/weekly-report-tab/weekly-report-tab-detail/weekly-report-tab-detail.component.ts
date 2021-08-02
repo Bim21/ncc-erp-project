@@ -17,6 +17,7 @@ import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import * as moment from 'moment';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
+import { LayoutStoreService } from '@shared/layout/layout-store.service';
 
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -86,9 +87,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
   public projectInfo = {} as ProjectInfoDto
-  public projectCurrentResource:any
+  public projectCurrentResource: any
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
+  sidebarExpanded: boolean;
+  isShowCurrentResource:boolean =true;
   constructor(private pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
@@ -97,6 +100,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private userService: UserService,
     private dialog: MatDialog,
     private requestservice: ProjectResourceRequestService,
+    private _layoutStore: LayoutStoreService
   ) {
     super(injector)
   }
@@ -106,6 +110,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
     this.getPmReportProject();
     this.getUser();
+    this._layoutStore.sidebarExpanded.subscribe((value) => {
+      this.sidebarExpanded = value;
+      console.log(this.sidebarExpanded)
+    });
   }
   public getPmReportProject(): void {
     this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
@@ -115,7 +123,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.generalNote = this.pmReportProjectList[0].note
       this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
       this.totalOverTime = this.pmReportProjectList[0].totalOverTime
-      this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0].projectHealth] 
+      this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0].projectHealth]
       if (!this.isJson(this.generalNote)) {
         this.generalNote = JSON.parse(this.generalNote)
       }
@@ -137,7 +145,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectId = projectReport.id
     this.projectId = projectReport.projectId;
     this.isEditingNote = false;
-    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth] 
+    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth]
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
@@ -156,8 +164,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getFuturereport();
     this.getProjectProblem();
     this.getCurrentResourceOfProject();
-  
-  
+
+
   }
   isJson(item) {
     item = typeof item !== "string"
@@ -332,7 +340,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   //Future
   public getUser(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userList = data.result;
     })
   }
@@ -514,10 +522,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   getPercentage(report, data) {
     report.allocatePercentage = data
   }
-  getCurrentResourceOfProject(){
+  getCurrentResourceOfProject() {
     this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
-    .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data=>{
-      this.projectCurrentResource=data.result
-    })
+      .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+        this.projectCurrentResource = data.result
+      })
   }
 }

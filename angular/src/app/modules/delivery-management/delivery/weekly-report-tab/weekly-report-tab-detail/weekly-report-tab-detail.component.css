@@ -75,3 +75,12 @@ button {
 .project-info tr, .project-info td {
   border: none;
 }
+.expand-content{
+  width: 83% !important; 
+  margin-left: 17% !important;
+}
+
+.toggle-bar{
+  display: none;
+  transition: 1s ;
+}

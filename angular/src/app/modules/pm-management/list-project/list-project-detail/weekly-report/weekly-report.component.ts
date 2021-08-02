@@ -107,7 +107,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
   }
   public getUser(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userList = data.result;
     })
   }
