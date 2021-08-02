@@ -244,6 +244,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     dialogData = {
       id: resource.id,
       userId: resource.userId,
+      fullName: resource.fullName,
       projectRole: resource.projectRole,
       startTime: resource.startTime,
       allocatePercentage: resource.allocatePercentage
