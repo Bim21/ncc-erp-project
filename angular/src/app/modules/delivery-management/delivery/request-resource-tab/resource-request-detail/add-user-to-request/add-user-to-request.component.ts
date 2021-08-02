@@ -19,7 +19,7 @@ export class AddUserToRequestComponent extends AppComponentBase implements OnIni
 
   public userToRequest = {} as userToRequestDto;
   public editToRequest = {} as userToRequestDto;
-  public minDate=new Date();
+  public minDate = new Date();
   public timeNeed;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, injector: Injector
@@ -50,15 +50,18 @@ export class AddUserToRequestComponent extends AppComponentBase implements OnIni
     this.userToRequest.startTime = moment(this.userToRequest.startTime).format("YYYY/MM/DD");
     if (this.data.command == "create") {
       this.resourceRequestService.AddUserToRequest(this.userToRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
-        abp.notify.success("Created timesheet detail successfully");
+        abp.notify.success("Add successfully");
         this.dialogRef.close(this.userToRequest)
       }, () => this.isLoading = false);
     } else {
       this.projectUserService.update(this.userToRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
-        abp.notify.success("Created timesheet detail successfully");
+        abp.notify.success("Update successfully");
         this.dialogRef.close(this.userToRequest)
       }, () => this.isLoading = false);
     }
+  }
+  getPercentage(report, data) {
+    report.allocatePercentage = data
   }
 
 

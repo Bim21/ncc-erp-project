@@ -49,6 +49,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Uploads\" />
     <Folder Include="wwwroot\avatars\" />
   </ItemGroup>
   <ItemGroup> 

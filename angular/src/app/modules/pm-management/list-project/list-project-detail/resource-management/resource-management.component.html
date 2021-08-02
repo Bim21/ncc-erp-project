@@ -26,7 +26,7 @@
 
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1">
-                    <div class="fixTableHead">
+                    <div class="">
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
@@ -55,7 +55,7 @@
 
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select [(ngModel)]="user.userId" name="projectEmployee"
-                                                placeholder="select a role" required #projectEmployee="ngModel">
+                                                placeholder="select account" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                     <input matInput [(ngModel)]="searchUser" name="searchUser" #search>{{search.focus()}}
@@ -73,10 +73,10 @@
                                     </div>
                                 </td>
 
-                                <td> <span *ngIf="!user.createMode">{{ user.projectRole }}</span>
+                                <td class="text-center"> <span *ngIf="!user.createMode">{{ user.projectRole }}</span>
 
-                                    <div class="form-group row required" *ngIf="user.createMode">
-                                        <mat-form-field class="w-100" appearance="outline">
+                                    <div *ngIf="user.createMode">
+                                        <mat-form-field style="width: 130px;" appearance="outline">
                                             <mat-select [(ngModel)]="user.projectRole" name="projectrole"
                                                 placeholder="select a role" required #projectRole="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
@@ -91,11 +91,11 @@
                                         </mat-error>
                                     </div>
                                 </td>
-                                <td> <span *ngIf="!user.createMode">
+                                <td class="text-center"> <span *ngIf="!user.createMode">
                                         {{user.startTime | date:"dd/MM/yyyy"}}
                                     </span>
-                                    <div class="form-group row required" *ngIf="user.createMode">
-                                    <mat-form-field appearance="outline" class="w-100" >
+                                    <div  *ngIf="user.createMode">
+                                    <mat-form-field appearance="outline" style="width: 150px;" >
                                         <input matInput [matDatepicker]="picker" placeholder="chose a date" required
                                             [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel"
                                             #projectDateEl>
@@ -103,18 +103,13 @@
                                         <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
                                     </div>
-                                    <!-- <abp-validation-summary [control]="projectDate" [controlEl]="projectDateEl"></abp-validation-summary> -->
-
                                 </td>
 
                                 <td>
                                     <span *ngIf="!user.createMode"> <strong>{{user.allocatePercentage}}%</strong></span>
-                                    <div  class="form-group row required" *ngIf="user.createMode">
-                                        <input class="form-control mt-1" type="text" mask="percent" placeholder="number"
-                                            required name="allocatePercentage" #Percentage="ngModel" #PercentageEl
-                                            suffix="%" [(ngModel)]="user.allocatePercentage" />
-                                        <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl">
-                                        </abp-validation-summary>
+                                    <div *ngIf="user.createMode">
+                                        <radio-dropdown (outputData)="getPercentage(user,$event)"
+                                        [data]="user.allocatePercentage"></radio-dropdown>
                                     </div>
 
                                 </td>
@@ -171,7 +166,7 @@
                     </table>
                 </div>
                 </div>
-                <pagination-controls *ngIf="userListCurrentPage>1" id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
+                <pagination-controls autoHide="true" id="projectUser" (pageChange)="userListCurrentPage = $event"></pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
 
@@ -204,7 +199,7 @@
 
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1">
-                    <div class="fixTableHead">
+                    <div class="">
 
                     
                     <table style="border-collapse: collapse ; table-layout:fixed !important" class="table table-hover text-nowrap" [busy]="isLoading">
@@ -295,7 +290,7 @@
                 </div>
                 </div>
 
-                <pagination-controls *ngIf="resourceRequestCurrentPage>1" id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
+                <pagination-controls autoHide="true" id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -321,8 +316,8 @@
                     </button>
 
                 </mat-expansion-panel-header>
-                <div class="table-responsive mb-1">
-                    <div class="fixTableHead">
+                <div class="table-responsive mb-1 p-4">
+                    <div class="">
 
                     
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
@@ -373,7 +368,19 @@
                                 </td>
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.billRole}}</span>
-                                    <div *ngIf="bill.createMode"  class="form-group row required mt-3"   >
+                                       
+                                    <div *ngIf="bill.createMode">
+
+                                        <input required class="form-control mt-1" #billRole="ngModel" #billRoteEl
+                                            type="text" placeholder="Charge role" name="billRole" [(ngModel)]="bill.billRole"
+                                           />
+                                        
+                                        <abp-validation-summary [control]="billRole" [controlEl]="billRoleEl">
+                                        </abp-validation-summary>
+
+                                    </div>
+                                    
+                                    <!-- <div *ngIf="bill.createMode"  class="form-group row required mt-3"   >
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="bill.billRole" name="billRole"
                                                     placeholder="select a role" required #billRole="ngModel">
@@ -387,7 +394,8 @@
                                                 style="font-size: 13px;">
                                                 This field is required
                                             </mat-error>
-                                    </div>
+
+                                    </div> -->
                                 </td>
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
@@ -462,7 +470,7 @@
                 </div>
 
 
-                <pagination-controls *ngIf="userBillCurrentPage>1" class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
+                <pagination-controls autoHide="true" class="mt-2" id="userBill" (pageChange)="userBillCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>
             <mat-expansion-panel>

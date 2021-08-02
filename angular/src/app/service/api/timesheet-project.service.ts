@@ -1,3 +1,4 @@
+import { PagedRequestDto } from '@shared/paged-listing-component-base';
 import { AppConsts } from './../../../shared/AppConsts';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
@@ -42,8 +43,8 @@ export class TimesheetProjectService extends BaseApiService{
     );
     return this.http.request(uploadReq);
   }
-  public GetTimesheetDetail(id: any): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/GetAllProjectTimesheetByTimesheet?timesheetId=' + id);
+  public GetTimesheetDetail(id: any,request: PagedRequestDto): Observable<any> {
+    return this.http.post<any>(this.rootUrl + '/GetAllProjectTimesheetByTimesheet?timesheetId='+id,request);
   }
   public getAllByProject(projectId:number){
     return this.http.get<any>(this.rootUrl + '/GetAllByProject?projectId=' + projectId);

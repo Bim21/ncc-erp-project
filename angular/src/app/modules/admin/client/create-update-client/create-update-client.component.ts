@@ -34,7 +34,7 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
         this.dialogRef.close(this.client);
       },()=>{this.isLoading=false})
     }
-    
+
   }
 
 }

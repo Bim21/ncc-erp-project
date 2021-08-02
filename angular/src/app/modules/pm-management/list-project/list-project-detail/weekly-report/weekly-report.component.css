@@ -12,15 +12,15 @@
 .inActive{
   color: darkgrey;
 }
-tr, th, td{
+/* tr, th, td{
   vertical-align: text-top ;
- }
+ } */
 /* .message{
   white-space: pre-wrap;
 } */
-.table {
+/* .table {
   table-layout: fixed;
-}
+} */
 
 button{
   height: fit-content;
@@ -44,4 +44,34 @@ button{
     display: flex;
   }
 }
-
+.label{
+  color: white;
+  padding: 12px;
+  font-family: Arial;
+  border-radius: 2px;
+  margin-bottom: -5px !important;
+}
+.info{
+  background-color: #2196F3;
+}
+.report-table td{
+  border: none;
+}
+.report-table tr{
+  border: none;
+}
+@media only screen  and (max-width: 1824px) {
+  .send-block{
+      width: 31% !important 
+  }
+}
+  @media only screen and (min-width: 1825px) {
+    .send-block{
+      width: 28% !important;
+    }
+}
+@media only screen  and (max-width: 1500px) {
+  .send-block{
+      width: 46% !important 
+  }
+}

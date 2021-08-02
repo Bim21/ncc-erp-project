@@ -14,19 +14,73 @@
   padding-top: 20px;
 } */
 .project-list {
-    /* width: 100%; */
+  /* width: 100%; */
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
   overflow: hidden;
 }
-::ng-deep .mat-list{
-padding: 10px;
+::ng-deep .mat-list {
+  padding: 10px;
 }
-::ng-deep .mat-list-item{
-    padding: 10px;
+::ng-deep .mat-list-item {
+  padding: 10px;
 }
-.projectActive{
-    background-color: #dce1e6;
+.projectActive {
+  background-color: #dce1e6;
+}
+.green {
+  border-left: 7px solid #28a745;
+}
+.red {
+  border-left: 7px solid #dc3545;
+}
+.yellow {
+  border-left: 7px solid #ffc107;
 }
 
+.submit-btn:disabled i {
+  color: gray !important;
+}
+button {
+  height: fit-content;
+}
+@media only screen and (min-width: 1921px) and (max-width: 2250px) {
+  .res-btn {
+    display: flex;
+    max-width: 15%;
+  }
+  .res-area {
+    max-width: 90% !important ;
+  }
+}
+@media only screen and (max-width: 1920px) {
+  .res-area {
+    max-width: 85% !important ;
+  }
+  .res-btn {
+    margin-top: 5px;
+    display: flex;
+  }
+}
+::ng-deep .mat-expansion-panel-header {
+  margin: 0;
+}
+.sidebar-item:hover {
+  background-color: #e9edf1;
+}
+::ng-deep .mat-expansion-panel .mat-expansion-panel-body {
+  padding: 0;
+}
+.project-info tr, .project-info td {
+  border: none;
+}
+.expand-content{
+  width: 83% !important; 
+  margin-left: 17% !important;
+}
+
+.toggle-bar{
+  display: none;
+  transition: 1s ;
+}

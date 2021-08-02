@@ -1,4 +1,5 @@
-﻿using Abp.UI;
+﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
@@ -13,6 +14,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Phases
 {
+    [AbpAuthorize]
     public class PhaseAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]

@@ -12,5 +12,6 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public string Note { get; set; }
         public string Status { get; set; }
         public bool IsActive { get; set; }
+        public string ProjectHealth { get; set; }
     }
 }

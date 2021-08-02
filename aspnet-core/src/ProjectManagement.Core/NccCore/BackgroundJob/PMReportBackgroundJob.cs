@@ -4,25 +4,30 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using ProjectManagement.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace ProjectManagement.NccCore.BackgroundJob
 {
-   public  class PMReportBackgroundJob : BackgroundJob<PMReportBackgroundJobArgs>, ITransientDependency
+   public  class PMReportBackgroundJob : AsyncBackgroundJob<PMReportBackgroundJobArgs>, ITransientDependency
     {
-        readonly IRepository<PMReport, long> _pmReport;
-        public PMReportBackgroundJob(IRepository<PMReport, long> pmReport)
+        readonly IRepository<PMReport, long> _pmreport;
+        public PMReportBackgroundJob(IRepository<PMReport, long> pmreport)
         {
-            _pmReport = pmReport;
+            _pmreport = pmreport;
         }
         [UnitOfWork]
-        public override void Execute(PMReportBackgroundJobArgs args)
+        protected override async Task ExecuteAsync(PMReportBackgroundJobArgs args)
         {
             Logger.Info("PMReport background trigger!");
             try
             {
-                var pmReport = _pmReport.Get(args.PMReportId);
-                pmReport.PMReportStatus = args.PMReportStatus;
-                _pmReport.Update(pmReport);
+                using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.MustHaveTenant, AbpDataFilters.MayHaveTenant))
+                {
+                    var pmReport = await _pmreport.GetAsync(args.PMReportId);
+                    pmReport.PMReportStatus = args.PMReportStatus;
+                    await _pmreport.UpdateAsync(pmReport);
+                }               
+                Logger.Info("PMReport background success!.");
             }
             catch (Exception e)
             {

@@ -39,7 +39,8 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
 
   private userList: UserDto[] = [];
-  projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
+  projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
+  projectWeeklys: string[]=Object.keys(this.APP_ENUM.WeeklySent);
 
   setValueProjectType(projectType, enumObject) {
     for (const key in enumObject) {
@@ -120,7 +121,8 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         command: command,
         dialogData: project
       },
-      width: '800px',
+      width: '700px',
+      maxHeight: '100vh',
       disableClose: true
     });
 
@@ -141,11 +143,19 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   }
   getAllUser() {
-    this.userService.GetAllUserActive(true).subscribe(data => {
+    this.userService.GetAllUserActive(false).subscribe(data => {
       this.userList = data.result
     })
   }
   public filterUser(userId: number) {
     return this.userList.filter(item => item.id == userId)[0];
   }
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
+  }
 }
+

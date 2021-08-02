@@ -19,11 +19,14 @@ import { Component, OnInit, Injector } from '@angular/core';
 export class PlanResourceComponent extends PagedListingComponentBase<PlanResourceComponent> implements OnInit {
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.isLoading =true;
     this.availableRerourceService.getAvailableResource(request).pipe(finalize(()=>{
       finishedCallback();
     }),catchError(this.availableRerourceService.handleError)).subscribe(data=>{
       this.availableResourceList=data.result.items;
       this.showPaging(data.result,pageNumber);
+      this.isLoading =false;
+
     })
   }
   protected delete(entity: PlanResourceComponent): void {
@@ -45,7 +48,8 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   }
   showDialogPlanUser(command:string,user:any){
     let item={
-      userId:user.userId
+      userId:user.userId,
+      fullName:user.fullName
     }
     
     const show=this.dialog.open(PlanUserComponent, {

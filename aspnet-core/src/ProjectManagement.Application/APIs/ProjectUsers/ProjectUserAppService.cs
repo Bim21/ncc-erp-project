@@ -21,9 +21,10 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectUsers
 {
+    [AbpAuthorize]
     public class ProjectUserAppService : ProjectManagementAppServiceBase
     {
-        [HttpPost]
+        [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject)]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
@@ -49,7 +50,8 @@ namespace ProjectManagement.APIs.ProjectUsers
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
                             UserName = x.User.UserName,
-                            UserType = x.User.UserType
+                            UserType = x.User.UserType,
+                            Note = x.Note
                         });
 
             return await query.ToListAsync();
@@ -96,7 +98,8 @@ namespace ProjectManagement.APIs.ProjectUsers
                                     ResourceRequestName = x.ResourceRequest.Name,
                                     PMReportId = x.PMReportId,
                                     PMReportName = x.PMReport.Name,
-                                    IsFutureActive = x.IsFutureActive
+                                    IsFutureActive = x.IsFutureActive,
+                                    Note = x.Note
                                 });
             return await query.FirstOrDefaultAsync();
         }
@@ -147,6 +150,11 @@ namespace ProjectManagement.APIs.ProjectUsers
 
             if (input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people to the past !");
+
+            if(input.ResourceRequestId != null && input.StartTime.Date < DateTime.Now.Date)
+            {
+                throw new UserFriendlyException("Can't add user at past time !");
+            }
 
             if (projectUser.Status == ProjectUserStatus.Future && input.Status == ProjectUserStatus.Present)
             {

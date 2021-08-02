@@ -294,7 +294,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     userBill.createMode = true;
     this.userBillProcess = true;
     this.isEditUserBill = true;
-    userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
+    // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
   public removeUserBill(userBill: projectUserBillDto): void {
     abp.message.confirm(
@@ -314,5 +314,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public filterUser(userId: number) {
     return this.userForProjectUser.filter(item => item.id == userId)[0];
   }
+  getPercentage(user, data) {
+    user.allocatePercentage = data
+  }
+
 
 }

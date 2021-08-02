@@ -1,84 +1,109 @@
 <section class="content px-2">
     <div class="container-fluid">
         <div class="row">
-
-
-            <div class="col-3">
-                <h3 class="mt-3">{{projectName}}</h3>
-            </div>
-            <div class="d-flex mt-2 text-left col-9" style="justify-content: flex-end;">
-
-                <div class="mr-3">
-                    <div class=" row">
-                        <div class=" text-right">
-                            <label class=" mt-1" for="" style="padding-top: 8px;">PM report:</label>
+            <table class="w-100 report-table">
+                <tr>
+                    <td class="col-5">
+                        <h3 class="mt-2">{{projectName}}</h3>
+                    </td>
+                    <td class=" send-block ">
+                        <div class="mr-3">
+                            <div class="row w-100">
+                                <div class="col-2">
+                                    <label  for="" class="mt-2" >PM report:</label>
+                                </div>
+                                <div class="col-10">
+                                    <mat-form-field class="ml-3" style="width: 205px;" appearance="outline">
+                                        <mat-select [(ngModel)]="selectedReport" name="pmReport"
+                                            (selectionChange)="onReportchange()" placeholder="select a role" required
+                                            #projectEmployee="ngModel">
+                                            <mat-form-field class="w-100 px-3 "
+                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
+                                                    placeholder="search">
+                                            </mat-form-field>
+                                            <mat-option *ngFor="let report of pmReportList |filter:searchPmReport"
+                                                [value]="report">
+                                                <div class="row">
+                                                    <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
+                                                    <div class="col-2"> <i class="fas fa-circle float-right mt-3"
+                                                            [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
+                                                </div>
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
+                                        [disabled]="!allowSendReport"
+                                        *ngIf="selectedReport.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && isSentReport  ">
+                                        <i class="fas fa-paper-plane"></i> Send report
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <mat-form-field class="w-100 col-8" style="min-width: 300px;" appearance="outline">
-                            <mat-select [(ngModel)]="activeReportId" name="pmReport"
-                                (selectionChange)="onReportchange()" placeholder="select a role" required
-                                #projectEmployee="ngModel">
-                                <mat-form-field class="w-100 px-3 "
-                                    style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                    <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
-                                        placeholder="search">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="send-block">
+                        <div class="row">
+                            <div class="col-2">
+                                <label  for="" class="mt-2" >Status:</label>
+                                
+                            </div>
+                            <div class="col-10">
+                                <mat-form-field style="margin-left: 10px !important;" class="myFilter ml-3" appearance="outline">
+                                    <mat-select [disabled]="!selectedReport.isActive" name="flag" 
+                                        placeholder="Project health" [(ngModel)]="projectHealth">
+                                        <ng-container *ngFor="let flag of problemIssueList">
+                                            <mat-option [value]="APP_ENUM.ProjectHealth[flag]"  (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
+                                                {{
+                                                flag
+                                                }}
+    
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
                                 </mat-form-field>
-                                <mat-option *ngFor="let report of pmReportList |filter:searchPmReport" [value]="report">
-                                    <div class="row">
-                                        <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
-                                        <div class="col-2"> <i class="fas fa-circle float-right mt-3"
-                                                [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
-                                    </div>
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-                    </div>
-                </div>
-                <div class="mt-2">
-                    <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3" [disabled]="!allowSendReport"
-                        *ngIf="activeReportId.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && isSentReport  ">
-                        <i class="fas fa-paper-plane"></i> Send weekly report
-                    </button>
-                </div>
-            </div>
+
         </div>
+
         <div class="ml-2 mt-1 mb-2">
 
             <div class="row">
-                <div class="col-lg-1 col-md-3 col-sm-3 pt-2"> <strong >Đánh giá chung: </strong></div>
+                <div class="col-lg-1 col-md-3 col-sm-3 pt-3"> <strong>Đánh giá chung: </strong></div>
                 <div class="col-lg-11 col-md-9 col-sm-9">
                     <div *ngIf="!isEditingNote" class="w-100 row">
-                        
-                            <pre style=" font-size: 1.3em; font-family: sans-serif; white-space: pre-line; max-width: 91%;"
-                                *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
+                        <pre style=" font-size: 1.2em; font-family: sans-serif; white-space: pre-line; max-width: 91%; line-height: initial;"
+                            class="mb-0 p-0 mt-3" *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
                                 {{generalNote}}
                             </pre>
-                            <!-- <div [innerHTML]="generalNote"></div> -->
-
-                        <div class="text-left pt-2" style="max-width: 9%;">
-                            <button class="btn bg-secondary mt-2" (click)="isEditingNote = true">
+                        <div class="text-left pt-2 ml-2" style="max-width: 9%;">
+                            <button *ngIf="selectedReport.isActive" class="btn bg-secondary mt-2"
+                                (click)="isEditingNote = true">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </div>
-
                     </div>
-
                     <div *ngIf="isEditingNote" class="row ">
                         <div class="col-lg-11 col-md-10 res-area">
                             <mat-form-field class="w-100" appearance="outline">
-                                <textarea style="padding-bottom: 20px;" id="message" matInput [(ngModel)]="generalNote"
+                                <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                    style="padding-bottom: 20px;" id="message" matInput [(ngModel)]="generalNote"
                                     type="text" name="notePM" placeholder="Đánh giá chung">
                                 </textarea>
                             </mat-form-field>
-
                         </div>
-
                         <div class="col-lg-1 col-md-2 text-right mt-3 res-btn">
                             <button class="btn bg-blue mr-1 " (click)="updateNote()">
                                 Save
                             </button>
-                            <button (click)="isEditingNote = false; note='' ;getAllPmReport()"
-                                class="btn btn-default ">Cancel
+                            <button (click)="canCelUpdateNote()" class="btn btn-default ">Cancel
                             </button>
                         </div>
 
@@ -101,11 +126,27 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="d-inline">Các vấn đề trong tuần</h4>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create)  "
+                            <button
+                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create) && selectedReport.isActive  "
                                 [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
                             </button>
+                            <!-- <mat-form-field class="myFilter ml-5" appearance="outline"
+                                [hidden]="(!isShowProblemList && problemList.length==0)">
+                                <mat-select name="flag" placeholder="Flag" [(ngModel)]="projectHealth"
+                                    (click)="$event.stopPropagation()">
+                                    <ng-container *ngFor="let flag of problemIssueList">
+                                        <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
+                                            (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
+                                            {{
+                                            flag
+                                            }}
+
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field> -->
                         </div>
 
                     </div>
@@ -120,7 +161,7 @@
                                 <th>Solution</th>
                                 <th>meetingSolution</th>
                                 <th>Trạng thái</th>
-                                <th>Action</th>
+                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
 
                             </tr>
                         </thead>
@@ -204,10 +245,10 @@
                                     </div>
 
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center" *ngIf="selectedReport.isActive">
                                     <button
                                         *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
-                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && activeReportId.isActive"
+                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive"
                                         mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
@@ -244,8 +285,7 @@
                     </table>
 
                 </div>
-                <pagination-controls *ngIf="problemCurrentPage>1" id="problemPaging"
-                    (pageChange)="problemCurrentPage = $event">
+                <pagination-controls autoHide="true" id="problemPaging" (pageChange)="problemCurrentPage = $event">
                 </pagination-controls>
 
             </div>
@@ -258,7 +298,8 @@
                 <div class="card-header">
                     <div class="row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
-                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create)"
+                        <button
+                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive"
                             [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
@@ -275,9 +316,10 @@
                                 <th class="stt">STT</th>
                                 <th class="account-info">Nhân viên</th>
                                 <th>Project Role</th>
-                                <th>Thời gian thay đổi</th>
+                                <th>Từ ngày</th>
                                 <th>% Sử dụng nhân sự</th>
-                                <th>Action</th>
+                                <th>Note</th>
+                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -314,11 +356,12 @@
                                     </div>
                                 </td>
 
-                                <td class="text-center"> <span *ngIf="!report.createMode">{{ report.projectRole
+                                <td style="width: 100px;" class="text-center"> <span *ngIf="!report.createMode">{{
+                                        report.projectRole
                                         }}</span>
 
-                                    <div class="form-group row required" *ngIf="report.createMode">
-                                        <mat-form-field class="w-100" appearance="outline">
+                                    <div *ngIf="report.createMode">
+                                        <mat-form-field style="width: 200px ;" appearance="outline">
                                             <mat-select [(ngModel)]="report.projectRole" name="projectrole"
                                                 placeholder="select a role" required #projectPM="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
@@ -333,11 +376,11 @@
                                         </mat-error>
                                     </div>
                                 </td>
-                                <td class="text-center"> <span *ngIf="!report.createMode">
+                                <td style="width: 100px;" class="text-center"> <span *ngIf="!report.createMode">
                                         {{report.startTime | date:"dd/MM/yyyy"}}
                                     </span>
-                                    <div class="form-group row required" *ngIf="report.createMode">
-                                        <mat-form-field appearance="outline" class="w-100">
+                                    <div *ngIf="report.createMode">
+                                        <mat-form-field appearance="outline" style="width: 200px;">
                                             <input matInput [matDatepicker]="picker" placeholder="chose a date" required
                                                 [(ngModel)]="report.startTime" name="usercreateDate">
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -345,20 +388,27 @@
                                         </mat-form-field>
                                     </div>
                                 </td>
-                                <td class="text-center">
+                                <td style="width: 150px;" class="text-center">
 
                                     <span *ngIf="!report.createMode"> <strong>
                                             {{report.allocatePercentage}}%</strong></span>
-                                    <div *ngIf="report.createMode" class="form-group row required">
-                                        <input class="form-control " type="text" mask="percent" required
-                                            #Percentage="ngModel" #PercentageEl suffix="%"
-                                            [(ngModel)]="report.allocatePercentage" placeholder="number" />
-                                        <abp-validation-summary [control]="Percentage" [controlEl]="PercentageEl">
-                                        </abp-validation-summary>
+                                    <div *ngIf="report.createMode">
+                                        <radio-dropdown (outputData)="getWeekPercentage(report,$event)"
+                                            [data]="report.allocatePercentage"></radio-dropdown>
                                     </div>
 
                                 </td>
-                                <td class="text-center">
+                                <td style="white-space: normal;max-width: 200px;">
+                                    <p *ngIf="!report.createMode">{{report.note}}</p>
+                                    <div *ngIf="report.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                                                placeholder="leave a comment" name="futureNote"
+                                                [(ngModel)]="report.note" matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </td>
+                                <td class="text-center" *ngIf="selectedReport.isActive">
                                     <button [disabled]="processWeekly" *ngIf="!report.createMode " mat-button
                                         [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
@@ -393,8 +443,8 @@
                         </tbody>
                     </table>
                 </div>
-                <pagination-controls *ngIf="weeklyCurrentPage>1" id="projectUser"
-                    (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
+                <pagination-controls autoHide="true" id="projectUser" (pageChange)="weeklyCurrentPage = $event">
+                </pagination-controls>
             </div>
             <div>
                 <div class="card"
@@ -402,7 +452,8 @@
                     <div class="card-header">
                         <div class="row">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) "
+                            <button
+                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive "
                                 [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
@@ -417,9 +468,10 @@
                                     <th class="stt">STT</th>
                                     <th class="account-info">Nhân viên</th>
                                     <th>Project role</th>
-                                    <th>Thời gian thay đổi</th>
+                                    <th>Từ ngày</th>
                                     <th>%Sử dụng nhân sự</th>
-                                    <th>Action</th>
+                                    <th>Note</th>
+                                    <th *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -437,7 +489,7 @@
                                         <div *ngIf="report.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="report.userId" name="reportUser"
-                                                    placeholder="select a role" required #reportUser="ngModel">
+                                                    placeholder="select account" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUser"
@@ -456,13 +508,13 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 180px;">
                                         <p *ngIf="!report.createMode">{{ report.projectRole }}</p>
 
-                                        <div class="form-group row required" *ngIf="report.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
+                                        <div *ngIf="report.createMode">
+                                            <mat-form-field style="width: 180px;" appearance="outline">
                                                 <mat-select [(ngModel)]="report.projectRole" name="projectrole"
-                                                    placeholder="select a role" required #projectPM="ngModel">
+                                                    placeholder="select account" required #projectPM="ngModel">
                                                     <mat-option *ngFor="let role of projectRoleList"
                                                         [value]="APP_ENUM.ProjectUserRole[role]">
                                                         {{role}}</mat-option>
@@ -475,12 +527,11 @@
                                             </mat-error>
                                         </div>
                                     </td>
-                                    <td class="text-center"> <span *ngIf="!report.createMode">
+                                    <td style="width: 180px;" class="text-center"> <span *ngIf="!report.createMode">
                                             {{report.startTime | date:"dd/MM/yyyy"}}
                                         </span>
-                                        <div class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline"
-                                                *ngIf="report.createMode">
+                                        <div *ngIf="report.createMode">
+                                            <mat-form-field style="width: 180px;" appearance="outline">
                                                 <input [min]="minDate" matInput [matDatepicker]="picker"
                                                     placeholder="chose a date" [(ngModel)]="report.startTime"
                                                     name="usercreateDate">
@@ -490,17 +541,26 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 200px;">
                                         <span *ngIf="!report.createMode"><strong>
                                                 {{report.allocatePercentage}}%</strong></span>
-                                        <div class="form-group row required">
-                                            <input class="form-control" placeholder="number" *ngIf="report.createMode"
-                                                type="text" mask="percent" suffix="%"
-                                                [(ngModel)]="report.allocatePercentage" />
+                                        <div *ngIf="report.createMode">
+                                            <radio-dropdown (outputData)="getFuturePercentage(report,$event)"
+                                                [data]="report.allocatePercentage"></radio-dropdown>
                                         </div>
                                     </td>
-                                    <td class="text-center">
-                                        <button *ngIf="!report.createMode && activeReportId.isActive && (permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser) || permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser) 
+                                    <td style="white-space: normal;max-width: 200px;">
+                                        <p *ngIf="!report.createMode">{{report.note}}</p>
+                                        <div *ngIf="report.createMode">
+                                            <mat-form-field class="w-100" appearance="outline">
+                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                                                    placeholder="leave a comment" name="futureNote"
+                                                    [(ngModel)]="report.note" matInput></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </td>
+                                    <td class="text-center" *ngIf="selectedReport.isActive">
+                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser) || permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser) 
                                         || permission.isGranted(DeliveryManagement_PMReportProject_Update))"
                                             [disabled]="processFuture" mat-button [matMenuTriggerFor]="menu">
                                             <i class="fas fa-bars fa-lg"></i>
@@ -544,8 +604,7 @@
                         </table>
 
                     </div>
-                    <pagination-controls *ngIf="futureCurrentPage>1" id="futurePaging"
-                        (pageChange)="futureCurrentPage = $event">
+                    <pagination-controls autoHide="true" id="futurePaging" (pageChange)="futureCurrentPage = $event">
                     </pagination-controls>
                 </div>
             </div>

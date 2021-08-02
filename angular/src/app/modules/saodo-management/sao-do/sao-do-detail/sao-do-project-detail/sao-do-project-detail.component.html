@@ -76,7 +76,7 @@
                                             <mat-form-field *ngIf="form.createMode" appearance="outline"
                                                 class="d-block">
                                                 <mat-select placeholder="Tên người vi phạm" [name]="form.id"
-                                                    [(ngModel)]="form.userId">
+                                                    [(ngModel)]="form.userId" #ngvipham>
                                                     <ng-container>
                                                         <mat-option *ngFor="let user of projectUserList"
                                                             [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
@@ -93,7 +93,7 @@
                                                         <mat-select [name]="form.id" placeholder="Tên người vi phạm"
                                                             [(ngModel)]="form.curatorId">
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.id != ngvipham.value"
+                                                                <mat-option *ngIf="user.id != ngvipham"
                                                                     [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </ng-container>
                                                         </mat-select>

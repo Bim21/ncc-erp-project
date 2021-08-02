@@ -29,5 +29,7 @@ namespace ProjectManagement.Entities
         public string Note { get; set; }
         public bool Seen { get; set; }
         public PunishStatus IsPunish { get; set; }
+        public int TotalNormalWorkingTime { get; set; }
+        public int TotalOverTime { get; set; }
     }
 }

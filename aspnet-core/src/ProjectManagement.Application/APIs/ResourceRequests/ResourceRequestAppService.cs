@@ -97,7 +97,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Branch = x.User.Branch,
                                         EmailAddress = x.User.EmailAddress,
                                         UserName = x.User.UserName,
-                                        UserType = x.User.UserType
+                                        UserType = x.User.UserType,
+                                        Note = x.Note
                                     });
             return await query.ToListAsync();
         }
@@ -106,7 +107,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest)]
         public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
         {
-            if(input.StartTime.Date <= DateTime.Now.Date)
+            if(input.StartTime.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("Can't add user at past time !");
             }
@@ -144,9 +145,9 @@ namespace ProjectManagement.APIs.ResourceRequests
             return input;
         }
 
-        [HttpGet]
+        [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest)]
-        public async Task<List<ResourceRequestUserDto>> SearchAvailableUserForRequest(DateTime startDate)
+        public async Task<GridResult<ResourceRequestUserDto>> SearchAvailableUserForRequest(GridParam input, DateTime startDate)
         {
             if(startDate.Date < DateTime.Now.Date)
             {
@@ -165,16 +166,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 .Select(x => new ResourceRequestUserDto
                                 {
                                     UserId = x.Id,
-                                    UserName = x.FullName,
+                                    UserName = x.UserName,
                                     UserType = x.UserType,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
-                                    FullName = x.FullName,
+                                    FullName = x.Name + " " + x.Surname,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
                                 }).Where(x => x.Undisposed > 0);
 
-            return await users.ToListAsync();
+            return await users.GetGridResult(users, input);
         }
 
         [HttpPost]
@@ -197,9 +198,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                                 .Select(x => new AvailableResourceDto
                                 {
                                     UserId = x.Id,
-                                    UserName = x.FullName,
                                     UserType = x.UserType,
-                                    FullName = x.FullName,
+                                    FullName = x.Name + " " + x.Surname,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
@@ -229,7 +229,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             AvatarPath = "/avatars/" + x.User.AvatarPath,
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
-                            FullName = x.User.FullName,
+                            FullName = x.User.Name + " " + x.User.Surname,
                             UserType = x.User.UserType,
                             Projectid = x.ProjectId,
                             ProjectName = x.Project.Name,
@@ -271,7 +271,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                 Status = ProjectUserStatus.Future,
                 IsExpense = input.IsExpense,
                 IsFutureActive = true,
-                PMReportId = pmReportActive.Id
+                PMReportId = pmReportActive.Id,
+                Note = input.Note
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 

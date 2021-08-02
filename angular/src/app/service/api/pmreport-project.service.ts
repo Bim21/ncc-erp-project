@@ -15,36 +15,47 @@ export class PMReportProjectService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
-  public getChangesDuringWeek(projectId: number, pmReportId:number): Observable<any> {
+  public getChangesDuringWeek(projectId: number, pmReportId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/ResourceChangesDuringTheWeek?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
-  public getChangesInFuture(projectId: number,pmReportId:number): Observable<any> {
-    return this.http.get<any>(this.rootUrl + `/ResourceChangesInTheFuture?projectId=${projectId}&pmReportId=${pmReportId}` );
+  public getChangesInFuture(projectId: number, pmReportId: number): Observable<any> {
+    return this.http.get<any>(this.rootUrl + `/ResourceChangesInTheFuture?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
   public GetAllPmReportProjectForDropDown(): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllPmReportProjectForDropDown');
   }
-  public GetAllByPmReport(pmReportId: number,item:any):Observable<any>{
-    return this.http.post<any>(this.rootUrl +'/GetAllByPmReport?pmReportId='+pmReportId,item);
+  public GetAllByPmReport(pmReportId: number): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/GetAllByPmReport?pmReportId=' + pmReportId);
   }
-  public sendReport(projectId:number,pmReportId: number):Observable<any>{
-    return this.http.post<any>(this.rootUrl +`/SendReport?projectId=${projectId}&pmReportId=${pmReportId}`,{});
+  public sendReport(projectId: number, pmReportId: number): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/SendReport?projectId=${projectId}&pmReportId=${pmReportId}`, {});
   }
-  public problemsOfTheWeekForReport(projectId: number, pmReportId:number): Observable<any> {
+  public problemsOfTheWeekForReport(projectId: number, pmReportId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/ProblemsOfTheWeekForReport?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
-  public updateHealth(pmReportProjectId: number, projectHealth:number) :Observable<any>{
-    return this.http.get<any>(this.rootUrl+ '/UpdateHealth?pmReportProjectId='+pmReportProjectId+'&projectHealth='+projectHealth)
+  public updateHealth(pmReportProjectId: number, projectHealth: number): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/UpdateHealth?pmReportProjectId=' + pmReportProjectId + '&projectHealth=' + projectHealth)
   }
-  public reverseDelete(pmReportProjectId:number,{}):Observable<any>{
-    return this.http.post<any>(this.rootUrl+`/ReverseSeen?pmReportProjectId=${pmReportProjectId}`,{});
+  public reverseDelete(pmReportProjectId: number, { }): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/ReverseSeen?pmReportProjectId=${pmReportProjectId}`, {});
   }
-  public GetAllByProject(projectId:number):Observable<any>{
-    return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${projectId}` );
+  public GetAllByProject(projectId: number): Observable<any> {
+    return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${projectId}`);
   }
-  public updateNote(note: string,pmReportProjectId:number): Observable<any> {
+  public updateNote(note: string, pmReportProjectId: number): Observable<any> {
+    if (note) {
+      note = JSON.stringify(note)
+    }
     return this.http.put<any>(this.rootUrl + `/UpdateNote?note=${note}&pmReportProjectId=${pmReportProjectId}`, {});
-}
+  }
+  public GetInfoProject(pmReportProjectId: number): Observable<any> {
+    return this.http.get<any>(this.rootUrl + `/GetInfoProject?pmReportProjectId=${pmReportProjectId}`);
+
+  }
+  public GetCurrentResourceOfProject(projectId:number){
+    return this.http.get<any>(this.rootUrl + `/GetCurrentResourceOfProject?projectId=${projectId}`);
+
+  }
 
 
 }

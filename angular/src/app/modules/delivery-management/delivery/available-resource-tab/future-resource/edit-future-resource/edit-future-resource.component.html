@@ -1,19 +1,16 @@
 <form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
-    <div class="card-header">
-        <abp-modal-header title="Edit future resource" (onCloseClick)="dialogRef.close()">
+        <abp-modal-header title="Edit future resource for: {{editUser.fullName}}" (onCloseClick)="dialogRef.close()">
         </abp-modal-header>
-    </div>
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="pm">
                 Sử dụng nhân sự:
              </label>
              <div class="col-md-9">
-                 <input class="form-control mt-1"  type="text" mask="percent" placeholder="number" required 
-                     name="allocatePercentage" [(ngModel)]="editUser.allocatePercentage" #allocatePercentage="ngModel" #allocatePercentageEl
-                     suffix="%"  />
-                     <abp-validation-summary [control]="allocatePercentage" [controlEl]="allocatePercentageEl">
-                     </abp-validation-summary>                 
+                     <div style="max-width: 260px;">
+                        <radio-dropdown (outputData)="getPercentage(editUser,$event)" [data]="editUser.allocatePercentage">
+                        </radio-dropdown>
+                    </div>
              </div>
         </div>
         <div class="form-group row required">
@@ -41,6 +38,7 @@
             <label class="col-md-3 col-form-label" for="tenancyName">
                 TimeStart:
             </label>
+            <div class="col-md-9">
             <mat-form-field appearance="outline">
                 <input placeholder="Choose date" matInput [matDatepicker]="picker" name="startDate"
                 [(ngModel)]="editUser.startTime" #timeStart="ngModel" required
@@ -52,6 +50,7 @@
                 style="font-size: 13px;">
                 This field is required
             </mat-error>
+            </div>
         </div>
     </div>
     <div align="end" class="row justify-content-between">

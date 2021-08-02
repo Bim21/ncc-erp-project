@@ -34,6 +34,7 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(PMReportId))]
         public PMReport PMReport { get; set; }
         public long PMReportId { get; set; }
+        public string Note { get; set; }
         public bool IsFutureActive { get; set; }
     }
 }

@@ -2,6 +2,8 @@
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NccCore.Extension;
+using NccCore.Paging;
 using ProjectManagement.APIs.Skills.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
@@ -13,8 +15,22 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.Skills
 {
+    [AbpAuthorize]
     public class SkillAppService : ProjectManagementAppServiceBase
     {
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Admin_Skill_ViewAll)]
+        public async Task<GridResult<SkillDto>> GetAllPaging(GridParam input)
+        {
+            var query = WorkScope.GetAll<Skill>().Select(x => new SkillDto
+            {
+                Id = x.Id,
+                Name = x.Name
+            });
+            return await query.GetGridResult(query, input);
+        }
+
         [HttpGet]
         public async Task<List<SkillDto>> GetAll()
         {

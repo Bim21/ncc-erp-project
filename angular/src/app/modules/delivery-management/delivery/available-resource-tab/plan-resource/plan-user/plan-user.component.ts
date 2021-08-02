@@ -30,6 +30,7 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getAllProject();
     this.planUser.userId=this.data.item.userId;
+    this.planUser.fullName = this.data.item.fullName;
   }
   public SaveAndClose(){
     if(this.data.command=="plan"){
@@ -47,6 +48,9 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
       this.listProject=data.result;
       
     })
+  }
+  getPercentage(user, data) {
+    user.percentUsage = data
   }
 
 

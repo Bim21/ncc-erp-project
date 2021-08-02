@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
@@ -10,8 +11,10 @@ using ProjectManagement.APIs.PMReports.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Timesheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +24,22 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReportProjects
 {
+    [AbpAuthorize]
     public class PMReportProjectAppService : ProjectManagementAppServiceBase
     {
-        [HttpPost]
+        private readonly TimesheetService _timesheetService;
+
+        public PMReportProjectAppService(TimesheetService timesheetService)
+        {
+            _timesheetService = timesheetService;
+        }
+
+        [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport)]
         public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
-            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == pmReportId)
+            var query = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.PMReportId == pmReportId)
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -43,12 +55,71 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmBranch = x.PM.Branch,
                     PmEmailAddress = x.PM.EmailAddress,
                     PmAvatarPath = x.PM.AvatarPath,
-                    PmFullName = x.PM.FullName,
+                    PmFullName = x.PM.Name + " " + x.PM.Surname,
                     PmUserName = x.PM.UserName,
                     PmUserType = x.PM.UserType,
-                    Seen = x.Seen
-                });
+                    Seen = x.Seen,
+                    TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                    TotalOverTime = x.TotalOverTime
+                }).OrderBy(x => x.PmFullName);
+
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<object> GetInfoProject(long pmReportProjectId)
+        {
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0);
+            var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.isActive);
+
+            var query = WorkScope.GetAll<PMReportProject>().Where(x => x.Id == pmReportProjectId)
+                                        .Select(x => new
+                                        {
+                                            ProjectName = x.Project.Name,
+                                            ClientName = x.Project.Client.Name,
+                                            PmName = x.PM.FullName,
+                                            TotalBill = projectUserBill.Where(b => b.ProjectId == x.ProjectId).Count(),
+                                            TotalResource = projectUser.Where(r => r.ProjectId == x.ProjectId).Count()
+                                        });
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
+        public async Task<List<CurrentResourceDto>> GetCurrentResourceOfProject(long projectId)
+        {
+            var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+                               select new
+                               {
+                                   UserId = pu.UserId,
+                                   TotalPercent = pu.AllocatePercentage
+                               };
+
+            var projectUsers = WorkScope.GetAll<ProjectUser>()
+                                .Where(x => x.ProjectId == projectId)
+                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+                                .Select(x => new CurrentResourceDto
+                                { 
+                                    FullName = x.User.FullName,
+                                    ProjectRole = x.ProjectRole.ToString(),
+                                    AllocatePercentage = x.AllocatePercentage,
+                                    TotalPercent = totalPercent.Where(t => t.UserId == x.UserId).Sum(x => x.TotalPercent)
+                                });
+            return await projectUsers.ToListAsync();
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet)]
+        public async Task GetWorkingTimeFromTimesheet(long pmReportProjectId, DateTime startTime, DateTime endTime)
+        {
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.Project).FirstOrDefaultAsync(x => x.Id == pmReportProjectId);
+
+            var result = await _timesheetService.GetWorkingHourFromTimesheet(pmReportProject.Project.Code, startTime, endTime);
+
+            pmReportProject.TotalNormalWorkingTime = result.NormalWorkingTime;
+            pmReportProject.TotalOverTime = result.OverTime;
+            await WorkScope.UpdateAsync(pmReportProject);
         }
 
         [HttpGet]
@@ -90,9 +161,9 @@ namespace ProjectManagement.APIs.PMReportProjects
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
                                         .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
 
-            if(!pmReportProject.PMReport.IsActive || pmReportProject.Status == PMReportProjectStatus.Sent)
+            if(!pmReportProject.PMReport.IsActive)
             {
-                throw new UserFriendlyException("Report has been sent or closed !");
+                throw new UserFriendlyException("Report has been closed !");
             }
 
             pmReportProject.ProjectHealth = projectHealth;
@@ -154,7 +225,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 EmailAddress = x.User.EmailAddress,
                                 UserName = x.User.UserName,
                                 Branch = x.User.Branch,
-                                UserType = x.User.UserType
+                                UserType = x.User.UserType,
+                                Note = x.Note
                             });
 
             return await query.ToListAsync();
@@ -187,7 +259,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 AvatarPath = "/avatars/" + x.User.AvatarPath,
                                 EmailAddress = x.User.EmailAddress,
                                 UserType = x.User.UserType,
-                                Branch = x.User.Branch
+                                Branch = x.User.Branch,
+                                Note = x.Note
                             });
 
             return await query.ToListAsync();
@@ -286,7 +359,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                             PMReportName = p.Name,
                             Status = l.Status.ToString(),
                             IsActive = p.IsActive,
-                            Note = l.Note
+                            Note = l.Note,
+                            ProjectHealth = l.ProjectHealth.ToString()
                         };
 
             return await query.ToListAsync();
@@ -294,7 +368,13 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         public async Task<string> UpdateNote(string note, long pmReportProjectId)
         {
-            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport).SingleOrDefaultAsync(x => x.Id == pmReportProjectId);
+
+            if (!pmReportProject.PMReport.IsActive)
+            {
+                throw new UserFriendlyException("Report has been closed !");
+            }
+
             pmReportProject.Note = note;
             await WorkScope.UpdateAsync(pmReportProject);
             return note;

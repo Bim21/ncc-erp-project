@@ -12,6 +12,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectCheckLists
 {
+    [AbpAuthorize]
     public class ProjectCheckListAppService : ProjectManagementAppServiceBase
     {
         [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_Create)]

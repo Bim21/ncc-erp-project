@@ -19,5 +19,6 @@ namespace ProjectManagement.Entities
         public int Year { get; set; }
         public PMReportType Type { get; set; }
         public PMReportStatus PMReportStatus { get; set; }
+        public string Note { get; set; }
     }
 }

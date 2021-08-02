@@ -43,6 +43,7 @@ export class userToRequestDto{
   startTime: any;
   resourceRequestId?:number;
   projectId?:number;
+  status:number;
 }
 export class availableResourceDto{
   userId: number;
@@ -58,9 +59,11 @@ export class planUserDto{
   percentUsage: number;
   projectRole: number;
   startTime: string;
-  isExpense?: true
+  isExpense?: true;
+  fullName:string;
 }
 export class editFutureResourceDto{
+  fullName:string;
   userId: number;
   projectId: number;
   allocatePercentage: number;
@@ -69,6 +72,7 @@ export class editFutureResourceDto{
   status:number;
 }
 export class futureResourceDto{
+  fullName:string;
   userId: number;
   userName: string;
   projectid: number;

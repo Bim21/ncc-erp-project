@@ -21,6 +21,7 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public bool IsExpense { get; set; }
         public long? ResourceRequestId { get; set; }
         public long PMReportId { get; set; }
+        public string Note { get; set; }
         public bool IsFutureActive { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 <form class="form-horizontal" autocomplete="off" #approveForm="ngForm" novalidate>
-    <abp-modal-header title="Create/edit checklist title" (onCloseClick)="dialogRef.close()">
+    <abp-modal-header title="Approve request for user: {{resourcerequest.fullName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
@@ -8,7 +8,7 @@
             </label>
             <div class="col-9">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="resourcerequest.userId" name="projectEmployee" placeholder="select a role"
+                    <mat-select [(ngModel)]="resourcerequest.userId" name="projectEmployee" placeholder="select user"
                         required #projectEmployee="ngModel">
                         <mat-form-field class="w-100 px-3 "
                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
@@ -61,10 +61,15 @@
                 allocatePercentage:
             </label>
             <div class="col-9">
-                <input class="form-control mt-1" placeholder="number" name="allocatePercentage" type="text" required
+                <!-- <input class="form-control mt-1" placeholder="number" name="allocatePercentage" type="text" required
                     mask="percent" suffix="%" [(ngModel)]="resourcerequest.allocatePercentage" #allocatePercentage="ngModel" #allocatePercentageEl/>
                     <abp-validation-summary [control]="allocatePercentage" [controlEl]="allocatePercentageEl">
-                    </abp-validation-summary>
+                    </abp-validation-summary> -->
+                    <div style="width: 250px;">
+                        <radio-dropdown (outputData)="getFuturePercentage(resourcerequest,$event)"
+                        [data]="resourcerequest.allocatePercentage"></radio-dropdown>
+                    </div>
+                    
             </div>
         </div>
     </div>

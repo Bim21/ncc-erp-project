@@ -2261,6 +2261,9 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte>("PMReportStatus")
                         .HasColumnType("tinyint");
 
@@ -2332,6 +2335,12 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalNormalWorkingTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalOverTime")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -2687,6 +2696,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("PMReportId")
                         .HasColumnType("bigint");
 
@@ -2995,6 +3007,9 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
+
+                    b.Property<string>("HistoryFile")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

@@ -1,5 +1,5 @@
 <form class="form-horizontal" autocomplete="off" #bankForm="ngForm">
-    <abp-modal-header title="Create/edit Project " (onCloseClick)="dialogRef.close()">
+    <abp-modal-header [title]="data.command =='create' ?'Create new project':'Edit project: '+project.name" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">

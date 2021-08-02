@@ -23,6 +23,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimeSheets
 {
+    [AbpAuthorize]
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
@@ -148,6 +149,14 @@ namespace ProjectManagement.APIs.TimeSheets
             }
 
             await WorkScope.DeleteAsync(timesheet);
+        }
+
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ReverseActive)]
+        public async Task ReverseActive(long id)
+        {
+            var timesheet = await WorkScope.GetAsync<Timesheet>(id);
+            timesheet.IsActive = !timesheet.IsActive;
+            await WorkScope.UpdateAsync(timesheet);
         }
     }
 }

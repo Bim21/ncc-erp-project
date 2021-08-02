@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { MatDialog } from '@angular/material/dialog';
+import { EditReportComponent } from './edit-report/edit-report.component';
+import { ReportInfoComponent } from './report-info/report-info.component';
 
 @Component({
   selector: 'app-weekly-report-tab',
@@ -15,13 +18,14 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
   styleUrls: ['./weekly-report-tab.component.css']
 })
 export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyReportTabComponent> implements OnInit {
-
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.isLoading = true
     this.pmReportService.getAllPaging(request).pipe(finalize(()=>{
       finishedCallback();
     }),catchError(this.pmReportService.handleError)).subscribe((data)=>{
       this.pmReportList=data.result.items;
       this.showPaging(data.result,pageNumber);
+      this.isLoading =false;
     })
   }
   protected delete(entity: WeeklyReportTabComponent): void {
@@ -34,8 +38,8 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
 
 
   constructor(public router:Router,
-    private pmReportService:PmReportService,
-    public injetor:Injector) { super(injetor)}
+    private pmReportService:PmReportService, private dialog:MatDialog,
+    public injector:Injector) { super(injector)}
     
 
   ngOnInit(): void {
@@ -53,13 +57,55 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   }
   
   closeReport(report:any){
-    this.pmReportService.closeReport(report.id).subscribe((res)=>{
-      if(res){
-        abp.notify.success(res.result);
+    abp.message.confirm(
+      "Close this report : " + report.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.pmReportService.closeReport(report.id).subscribe((res)=>{
+            if(res){
+              abp.notify.success(res.result);
+            }
+            this.refresh();
+          })
+        }
       }
-      this.refresh();
-    })
+    );
   }
-
-
+  editReport(pmReport:any){
+   let dialogData = {} as any
+     dialogData = {
+       id: pmReport.id,
+       name: pmReport.name,
+       isActive: pmReport.isActive,
+       year: pmReport.year,
+       type: pmReport.type,
+       pmReportStatus: pmReport.pmReportStatus,
+       note: pmReport.note
+     }
+   
+   const dialogRef = this.dialog.open(EditReportComponent, {
+     width: '700px',
+     disableClose: true,
+     data: {
+       dialogData: dialogData,
+     },
+   });
+   dialogRef.afterClosed().subscribe(result => {
+     if (result) {
+       this.refresh()
+     }
+   });
+  }
+  viewReportInfo(report){
+    let dialogRef = this.dialog.open(ReportInfoComponent,{
+      width:'1000px',
+      height: "98vh",
+      disableClose: true,
+      data: {
+        report: report
+      }
+    })
+    // dialogRef.afterClosed()
+  }
 }

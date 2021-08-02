@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row mb-4 card">
             <div class="col-12">
-                <nav mat-tab-nav-bar>
+                <nav mat-tab-nav-bar style="position: sticky; z-index: 2; top: 56px; background: white;">
                     <a  [ngClass]="currentUrl.includes('list-project-general')?'active':''" mat-tab-link (click)="routingGeneralTab()">
                         General
                     </a>

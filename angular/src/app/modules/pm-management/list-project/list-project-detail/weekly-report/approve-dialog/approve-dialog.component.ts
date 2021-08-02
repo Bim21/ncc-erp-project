@@ -35,7 +35,7 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
   //   this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => this.userList = data.result);
   // }
   public getAllUser(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userList = data.result;
     })
   }
@@ -49,5 +49,8 @@ export class ApproveDialogComponent extends AppComponentBase implements OnInit {
     },()=>{
       this.isLoading =false;
     })
+  }
+  getFuturePercentage(report, data) {
+    report.allocatePercentage = data
   }
 }

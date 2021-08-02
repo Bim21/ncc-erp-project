@@ -16,24 +16,25 @@ import { Component, OnInit, Injector } from '@angular/core';
 })
 export class RequestResourceTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.isLoading =true
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
-
+      this.isLoading=false;
     })
   }
   
   protected delete(item: RequestResourceDto): void {
     
     abp.message.confirm(
-      "Delete Resource Request " +item.name+"?",
+      "Delete request: " +item.name+"?",
       "",
       (result:boolean)=>{
         if(result){
           this.resourceRequestService.delete(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(()=>{
-            abp.notify.success("Deleted Resource Request "+item.name);
+            abp.notify.success("Deleted request: "+item.name);
             this.refresh();
           });
             

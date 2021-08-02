@@ -36,7 +36,7 @@ export class EditFutureResourceComponent extends AppComponentBase implements OnI
     if(this.data.command=="update"){
       this.editUser.startTime=moment(this.editUser.startTime).format("YYYY/MM/DD");
       this.projectUserService.update(this.editUser).pipe(catchError(this.projectUserService.handleError)).subscribe((res)=>{
-      abp.notify.success("Planed Successfully!");
+      abp.notify.success("Update future resource for: "+ this.editUser.fullName);
       this.dialogRef.close(this.editUser);
 
     },()=>this.isLoading=false);
@@ -50,5 +50,9 @@ export class EditFutureResourceComponent extends AppComponentBase implements OnI
       
     })
   }
+  getPercentage(user, data) {
+    user.allocatePercentage = data
+  }
+
 
 }
