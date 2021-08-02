@@ -330,7 +330,7 @@ namespace ProjectManagement.APIs.PMReports
                              CreatedAt = p.CreationTime
                          }).ToListAsync();
 
-            var users = (from u in WorkScope.GetAll<User>().ToList()
+            var users = from u in WorkScope.GetAll<User>().ToList()
                         join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status != ProjectUserStatus.Past) 
                         on u.Id equals pu.UserId into pp
                         select new 
@@ -340,32 +340,31 @@ namespace ProjectManagement.APIs.PMReports
                             UserType = u.UserType,
                             Branch = u.Branch,
                             UserEmail = u.EmailAddress,
-                            AllocatePercentage = pp != null ? pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present && x.UserId == u.Id).Sum(x => x.AllocatePercentage) : 0,
                             TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
                             TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date).Sum(x => x.AllocatePercentage)
-                        }).OrderByDescending(x => x.AllocatePercentage);
+                        };
 
             var result = new ReportStatisticsDto
             {
                 Note = pmReport.Note,
                 Issues = issues,
-                ResourceInTheWeek = users.Where(x => x.TotalInTheWeek < 20).Select(x => new ProjectUserStatistic
+                ResourceInTheWeek = users.Where(x => x.TotalInTheWeek < 20).OrderByDescending(x => x.TotalInTheWeek).Select(x => new ProjectUserStatistic
                 {
                     UserId = x.UserId,
                     FullName = x.FullName,
                     UserType = x.UserType,
                     Branch = x.Branch,
                     Email = x.UserEmail,
-                    AllocatePercentage = (byte)x.AllocatePercentage
+                    AllocatePercentage = x.TotalInTheWeek
                 }).ToList(),
-                ResourceInTheFuture = users.Where(x => x.TotalInTheFuture < 20).Select(x => new ProjectUserStatistic
+                ResourceInTheFuture = users.Where(x => x.TotalInTheFuture < 20).OrderByDescending(x => x.TotalInTheFuture).Select(x => new ProjectUserStatistic
                 {
                     UserId = x.UserId,
                     FullName = x.FullName,
                     UserType = x.UserType,
                     Branch = x.Branch,
                     Email = x.UserEmail,
-                    AllocatePercentage = (byte)x.AllocatePercentage
+                    AllocatePercentage = x.TotalInTheFuture
                 }).ToList()
             };
             return result;
