@@ -588,7 +588,7 @@
                                         </mat-menu>
                                         <div class="pt-2" *ngIf="report.createMode">
                                             <button
-                                                [disabled]="!report.userId || !report?.projectRole?.toString() || !report.startTime || !report.allocatePercentage"
+                                                [disabled]="!report.userId || !report?.projectRole?.toString() || !report.startTime || !report.allocatePercentage && report.allocatePercentage !=0"
                                                 class=" mr-3 submit-btn" style="background: none; border: none;"
                                                 (click)="saveFutureReport(report)">
                                                 <i style="color: green; ;" class="fas fa-check fa-2x"></i>
