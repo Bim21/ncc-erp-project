@@ -1,0 +1,15 @@
+@media only screen  and (max-width: 1824px) {
+    .header-report-nav{
+      margin-left: 120px !important;
+  }
+  }
+    @media only screen and (min-width: 1825px) {
+      .header-report-nav{
+        margin-left: 150px !important;
+    }
+  }
+  @media only screen  and (max-width: 1500px) {
+    .header-report-nav{
+        margin-left: 65px !important;
+    }
+  }

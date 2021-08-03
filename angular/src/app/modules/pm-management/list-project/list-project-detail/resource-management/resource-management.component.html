@@ -30,7 +30,7 @@
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
-                                <th>STT</th>
+                                <th class="stt">#</th>
                                 <th>Nhân viên</th>
                                 <th>Project Role</th>
                                 <th>Thời gian bắt đầu</th>
@@ -49,7 +49,7 @@
                                 <td class="text-left">
                                     <div *ngIf="!user.createMode">
                                         <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
-                                        userType:user.userType,emailAddress:user.emailAddress}"></app-user-info>
+                                        userType:user.userType,emailAddress:user.emailAddress, avatarPath:user.avatarPath}"></app-user-info>
                                     </div>
                                     <div *ngIf="user.createMode" class="form-group row required">
 
@@ -205,7 +205,7 @@
                     <table style="border-collapse: collapse ; table-layout:fixed !important" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr style="border: none;">
-                                <th>STT</th>
+                                <th class="stt">#</th>
                                 <th>Request name</th>
                                 <th>Thời gian cần</th>
                                 <th>Description</th>
@@ -323,7 +323,7 @@
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
-                                <th>STT</th>
+                                <th class="stt">#</th>
                                 <th>Nhân viên</th>
                                 <th>Charge Role</th>
                                 <th>Charge Price</th>
@@ -342,7 +342,7 @@
                                 <td><span>{{ i +1 }}</span></td>
                                 <td class="text-left">
                                     <span *ngIf="!bill.createMode"> <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
-                                        userType:bill.userType,emailAddress:bill.emailAddress}"></app-user-info></span>
+                                        userType:bill.userType,emailAddress:bill.emailAddress, avatarPath:bill.avatarPath}"></app-user-info></span>
                                     <div *ngIf="bill.createMode">
 
                                         <mat-form-field class="w-100" appearance="outline">
@@ -355,7 +355,7 @@
                                                 <mat-option
                                                     *ngFor="let user of userForUserBill | filter: searchUserBill"
                                                     [value]="user.id">
-                                                    {{user.name}} - ({{user.emailAddress}})</mat-option>
+                                                    {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="mt-1"

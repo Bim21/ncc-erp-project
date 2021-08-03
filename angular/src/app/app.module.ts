@@ -95,6 +95,9 @@ import { EditReportComponent } from './modules/delivery-management/delivery/week
 import { ReportInfoComponent } from './modules/delivery-management/delivery/weekly-report-tab/report-info/report-info.component';
 import { SkillComponent } from './modules/admin/skill/skill.component';
 import { CreateUpdateSkillComponent } from './modules/admin/skill/create-update-skill/create-update-skill.component';
+import { AddReportNoteComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
+import { UploadAvatarComponent } from './users/upload-avatar/upload-avatar.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 
@@ -185,6 +188,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ReportInfoComponent,
     SkillComponent,
     CreateUpdateSkillComponent,
+    AddReportNoteComponent,
+    UploadAvatarComponent,
 
     
   ],
@@ -205,7 +210,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     SocialLoginModule,
     NgxMaskModule.forRoot(),
     Ng2SearchPipeModule,
-   
+    ImageCropperModule,
   
 
 

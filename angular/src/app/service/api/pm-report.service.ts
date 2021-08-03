@@ -21,6 +21,12 @@ export class PmReportService extends BaseApiService {
   public getStatisticsReport(pmReportId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/StatisticsReport?pmReportId=' + pmReportId);
   }
+  public updateReportNote(pmReportId: number,note:string): Observable<any> {
+    if (note) {
+      note = JSON.stringify(note)
+    }
+    return this.http.put<any>(this.rootUrl + `/UpdateNote?id=${pmReportId}&note=${note}`,{});
+  }
 
 
 }

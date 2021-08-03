@@ -11,6 +11,7 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { EditReportComponent } from './edit-report/edit-report.component';
 import { ReportInfoComponent } from './report-info/report-info.component';
+import { InputFilterDto } from '@shared/filter/filter.component';
 
 @Component({
   selector: 'app-weekly-report-tab',
@@ -26,6 +27,11 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       this.pmReportList=data.result.items;
       this.showPaging(data.result,pageNumber);
       this.isLoading =false;
+      this.pmReportList.forEach(item=>{
+          item.note = JSON.parse(item.note)
+      })
+      console.log(this.pmReportList)
+     
     })
   }
   protected delete(entity: WeeklyReportTabComponent): void {
@@ -35,7 +41,12 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   public pmReportList:pmReportDto[]=[];
   public closeReportMessage;
   DeliveryManagement_PMReport_CloseReport=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
-
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
+    { propertyName: 'year', comparisions: [0, 1, 3], displayName: "Year" },
+    { propertyName: 'pmReportName', comparisions: [0, 6, 7, 8], displayName: "pmReport Name" },
+    { propertyName: 'projectHealth', comparisions: [0, 6, 7, 8], displayName: "Project Health" },
+  ];
 
   constructor(public router:Router,
     private pmReportService:PmReportService, private dialog:MatDialog,
@@ -106,6 +117,22 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
         report: report
       }
     })
-    // dialogRef.afterClosed()
   }
+  // isJson(item) {
+  //   item = typeof item !== "string"
+  //     ? JSON.stringify(item)
+  //     : item;
+
+  //   try {
+  //     item = JSON.parse(item);
+  //   } catch (e) {
+  //     return false;
+  //   }
+
+  //   if (typeof item === "object" && item !== null) {
+  //     return true;
+  //   }
+
+  //   return false;
+  // }
 }

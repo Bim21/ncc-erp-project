@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
+import { InputFilterDto } from '@shared/filter/filter.component';
 
 @Component({
   selector: 'app-resource-request-detail',
@@ -31,6 +32,11 @@ export class ResourceRequestDetailComponent extends PagedListingComponentBase<an
         () => { this.userAvailableList = [] }
       );
   }
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
+    { propertyName: 'undisposed', comparisions: [0, 1, 3], displayName: "% sử dụng còn lại" },
+  ];
+
   public minDate =new Date()
   public resourceRequestId: any;
   public resourceRequestList: ResourceRequestDetailDto[] = [];

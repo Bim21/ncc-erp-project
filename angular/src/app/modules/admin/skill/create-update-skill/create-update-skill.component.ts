@@ -12,7 +12,7 @@ import { AppComponentBase } from '@shared/app-component-base';
   styleUrls: ['./create-update-skill.component.css']
 })
 export class CreateUpdateSkillComponent extends AppComponentBase implements OnInit {
-
+  public title:string ="";
   public skill={} as SkillDto;
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
     public injector:Injector,
@@ -21,6 +21,7 @@ export class CreateUpdateSkillComponent extends AppComponentBase implements OnIn
 
   ngOnInit(): void {
     this.skill=this.data.item;
+    this.title =this.skill.name
   }
   SaveAndClose(){
     if(this.data.command == "create"){
