@@ -30,7 +30,7 @@
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
-                                <th>STT</th>
+                                <th class="stt">#</th>
                                 <th>Nhân viên</th>
                                 <th>Project Role</th>
                                 <th>Thời gian bắt đầu</th>
@@ -205,7 +205,7 @@
                     <table style="border-collapse: collapse ; table-layout:fixed !important" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr style="border: none;">
-                                <th>STT</th>
+                                <th class="stt">#</th>
                                 <th>Request name</th>
                                 <th>Thời gian cần</th>
                                 <th>Description</th>
@@ -323,7 +323,7 @@
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                         <thead class="bg-light">
                             <tr>
-                                <th>STT</th>
+                                <th class="stt">#</th>
                                 <th>Nhân viên</th>
                                 <th>Charge Role</th>
                                 <th>Charge Price</th>
@@ -355,7 +355,7 @@
                                                 <mat-option
                                                     *ngFor="let user of userForUserBill | filter: searchUserBill"
                                                     [value]="user.id">
-                                                    {{user.name}} - ({{user.emailAddress}})</mat-option>
+                                                    {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="mt-1"

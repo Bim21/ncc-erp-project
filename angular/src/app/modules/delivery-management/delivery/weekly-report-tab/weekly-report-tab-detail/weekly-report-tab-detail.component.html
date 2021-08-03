@@ -71,7 +71,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    <div class="d-flex mt-1">
+                                    <div class="d-flex mt-1" style="white-space: nowrap;">
                                         <strong>Đánh giá chung: </strong>
                                         <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                      font-size: 1.2em; font-family: sans-serif; align-self:flex-start; line-height: initial;"
@@ -80,9 +80,9 @@
                                     </pre>
                                         <mat-form-field class="ml-1" style="width:68%" appearance="outline"
                                             *ngIf="isEditingNote">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                            <textarea #generalNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 style="padding-bottom: 20px;" rows="2" id="message" matInput
-                                                [(ngModel)]="generalNote" name="notePM" placeholder="Đánh giá chung">
+                                                [(ngModel)]="generalNote" name="notePM" placeholder="Đánh giá chung">{{generalNoteFocus.focus()}}
                                         </textarea>
                                         </mat-form-field>
                                         <div class="d-inline float-right pt-1 text-right   ml-2">
@@ -328,7 +328,7 @@
                                                                 </mat-form-field>
                                                                 <mat-option *ngFor="let user of userList |filter:searchUser"
                                                                     [value]="user.id">
-                                                                    {{user.name}} - ({{user.emailAddress}})</mat-option>
+                                                                    {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </mat-select>
                                                         </mat-form-field>
                                                         <mat-error class="mt-1"
@@ -476,7 +476,7 @@
                                                                 </mat-form-field>
                                                                 <mat-option *ngFor="let user of userList |filter:searchUser"
                                                                     [value]="user.id">
-                                                                    {{user.name}} - ({{user.emailAddress}})</mat-option>
+                                                                    {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </mat-select>
                                                         </mat-form-field>
                                                         <mat-error class="mt-1"
