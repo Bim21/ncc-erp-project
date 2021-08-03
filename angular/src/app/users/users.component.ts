@@ -1,6 +1,6 @@
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { Component, Injector } from '@angular/core';
-import { finalize } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {
@@ -156,7 +156,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     });
     diaLogRef.afterClosed().subscribe(res => {
       if (res) {
-        this.userInfoService.uploadImageFile(res, user.id).subscribe(data => {
+        this.userInfoService.uploadImageFile(res, user.id).pipe(catchError(this.userInfoService.handleError)).subscribe(data => {
           if (data) {
             this.notify.success('Upload Avatar Successfully!');
             this.refresh();

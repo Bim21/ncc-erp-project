@@ -25,7 +25,7 @@
                                 <span>{{ i + 1 }}</span>
                             </td>
                             <td class="text-center"><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                userType:item.userType,emailAddress:item.emailAddress}"></app-user-info></td>
+                                userType:item.userType,emailAddress:item.emailAddress, avatarPath:item.avatarPath}"></app-user-info></td>
                             <td class="text-center">{{ item.startTime | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center"><strong>{{ item.allocatePercentage }}%</strong></td>
                             <td class="text-center" style="width: 100px;">
@@ -122,7 +122,7 @@
                                 <span>{{ i + 1 }}</span>
                             </td>
                             <td class="text-center"><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                userType:item.userType,emailAddress:item.emailAddress}"></app-user-info></td>
+                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}"></app-user-info></td>
                             <td class="text-center"><strong>{{ item.undisposed }}%</strong></td>
                             <td class="text-center">
                                 <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_AddUserToRequest)" class="btn bg-blue mb-2 ml-2 pt-2"
