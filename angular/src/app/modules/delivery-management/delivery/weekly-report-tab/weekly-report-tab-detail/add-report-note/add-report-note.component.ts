@@ -31,7 +31,6 @@ export class AddReportNoteComponent extends AppComponentBase implements OnInit {
   getReportById(){
     this.reportService.getById(this.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data=>{
       this.pmReport =data.result
-      this.pmReport.note = JSON.parse(this.pmReport.note)
     })
   }
 }
