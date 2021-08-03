@@ -3,6 +3,7 @@ using Abp.Authorization;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.APIs.AuditResults.Dto;
+using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using System.Linq;
@@ -50,12 +51,12 @@ namespace ProjectManagement.APIs.AuditResults
             return isExist.Note;
         }
         [AbpAuthorize(PermissionNames.SaoDo_AuditResult_UpdateNote)]
-        public async Task<string> UpdateNote(long id, string note)
+        public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
         {
-            var isExist = await WorkScope.GetAsync<AuditResult>(id);
-            isExist.Note = note;
+            var isExist = await WorkScope.GetAsync<AuditResult>(input.Id);
+            isExist.Note = input.Note;
             await WorkScope.UpdateAsync(isExist);
-            return isExist.Note;
+            return input;
         }
     }
 }
