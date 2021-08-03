@@ -369,5 +369,20 @@ namespace ProjectManagement.APIs.PMReports
             };
             return result;
         }
+
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Get)]
+        public async Task<PMReportDto> Get(long id)
+        {
+            var pmReport = await WorkScope.GetAsync<PMReport>(id);
+            return new PMReportDto { 
+                Id = pmReport.Id,
+                IsActive = pmReport.IsActive,
+                Name = pmReport.Name,
+                Note = pmReport.Note,
+                PMReportStatus = pmReport.PMReportStatus,
+                Type = pmReport.Type,
+                Year = pmReport.Year
+            };
+        }
     }
 }
