@@ -123,9 +123,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
       this.totalOverTime = this.pmReportProjectList[0].totalOverTime
       this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0].projectHealth]
-      if (!this.isJson(this.generalNote)) {
-        this.generalNote = JSON.parse(this.generalNote)
-      }
       this.pmReportProjectId = this.pmReportProjectList[0].id
       this.pmReportProjectList[0].setBackground = true
       this.getProjectInfo();
@@ -155,9 +152,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.totalNormalWorkingTime = projectReport.totalNormalWorkingTime
     this.totalOverTime = projectReport.totalOverTime
     this.generalNote = projectReport.note
-    if (!this.isJson(this.generalNote)) {
-      this.generalNote = JSON.parse(this.generalNote)
-    }
+   
     this.getProjectInfo();
     this.getWeeklyReport();
     this.getFuturereport();
@@ -166,23 +161,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
 
   }
-  isJson(item) {
-    item = typeof item !== "string"
-      ? JSON.stringify(item)
-      : item;
 
-    try {
-      item = JSON.parse(item);
-    } catch (e) {
-      return false;
-    }
-
-    if (typeof item === "object" && item !== null) {
-      return true;
-    }
-
-    return false;
-  }
 
   public getWeeklyReport() {
     this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
@@ -223,9 +202,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.generalNote = this.pmReportProjectList[0].note
     this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
-    if (!this.isJson(this.generalNote)) {
-      this.generalNote = JSON.parse(this.generalNote)
-    }
+  
     this.pmReportProjectId = this.pmReportProjectList[0].id
     // this.pmReportProjectList[0].setBackground = true
     this.pmReportProjectList.forEach(element => {
@@ -515,7 +492,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isEditingNote = false;
     this.pmReportProjectList.forEach(item => {
       if (item.id == this.pmReportProjectId) {
-        this.generalNote = JSON.parse(item.note)
+        this.generalNote = item.note
       }
     })
   }

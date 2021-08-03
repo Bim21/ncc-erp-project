@@ -35,7 +35,6 @@ export class ReportInfoComponent extends AppComponentBase implements OnInit {
         this.tempReportInfo.resourceInTheWeek = data.result.resourceInTheWeek
         this.tempReportInfo.resourceInTheFuture =data.result.resourceInTheFuture
         this.isLoading = false;
-        this.reportInfo.note = JSON.parse(this.reportInfo.note )
       })
   }
   searchWeeklyUser() {

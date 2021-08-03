@@ -18,7 +18,11 @@ export class AuditResultService extends BaseApiService {
     return this.http.get<any>(this.rootUrl + '/GetNote?id=' + id);
   }
   public updateNote(id: any, note:any): Observable<any> {
-    return this.http.put<any>(this.rootUrl + `/UpdateNote?id=${id}&note=${note}`,{});
+    let requestBody = {
+      note: note,
+      id: id
+    }
+    return this.http.put<any>(this.rootUrl + `/UpdateNote`,requestBody);
 }
   
 

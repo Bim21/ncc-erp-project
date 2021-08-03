@@ -27,10 +27,6 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       this.pmReportList=data.result.items;
       this.showPaging(data.result,pageNumber);
       this.isLoading =false;
-      this.pmReportList.forEach(item=>{
-          item.note = JSON.parse(item.note)
-      })
-      console.log(this.pmReportList)
      
     })
   }
@@ -118,21 +114,5 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       }
     })
   }
-  // isJson(item) {
-  //   item = typeof item !== "string"
-  //     ? JSON.stringify(item)
-  //     : item;
 
-  //   try {
-  //     item = JSON.parse(item);
-  //   } catch (e) {
-  //     return false;
-  //   }
-
-  //   if (typeof item === "object" && item !== null) {
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
 }

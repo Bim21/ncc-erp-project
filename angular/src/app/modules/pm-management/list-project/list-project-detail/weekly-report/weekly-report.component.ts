@@ -283,7 +283,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
       this.pmReportList = data.result;
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
       this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
-      this.generalNote = JSON.parse(this.selectedReport.note)
+      this.generalNote = this.selectedReport.note
       this.allowSendReport = this.selectedReport.note==null||this.selectedReport.note==''?false:true;
       this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
       this.getWeeklyReport();
@@ -362,7 +362,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
-    this.generalNote = JSON.parse(this.selectedReport.note)
+    this.generalNote = this.selectedReport.note
     this.isEditingNote = false;
     this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
   }
@@ -399,9 +399,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public canCelUpdateNote() {
     this.isEditingNote = false;
     this.generalNote= this.selectedReport.note
-    if (!this.isJson(this.generalNote)) {
-      this.generalNote = JSON.parse(this.generalNote)
-    }
+    
     this.allowSendReport = this.generalNote?true:false
   }
 
@@ -411,23 +409,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
 
   }
-  isJson(item) {
-    item = typeof item !== "string"
-      ? JSON.stringify(item)
-      : item;
 
-    try {
-      item = JSON.parse(item);
-    } catch (e) {
-      return false;
-    }
-
-    if (typeof item === "object" && item !== null) {
-      return true;
-    }
-
-    return false;
-  }
   getWeekPercentage(report, data) {
     report.allocatePercentage = data
   }
