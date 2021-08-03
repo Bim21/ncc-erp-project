@@ -20,9 +20,9 @@ namespace ProjectManagement.Authorization
                 public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
 
             //Config
-            public const string Admin_Configuration = "Configuration";
-            public const string Admin_Configuration_ViewAll = "Configuration.ViewAll";
-            public const string Admin_Configuration_Edit = "Configuration.Edit";
+            public const string Admin_Configuration = "Admin.Configuration";
+            public const string Admin_Configuration_ViewAll = "Admin.Configuration.ViewAll";
+            public const string Admin_Configuration_Edit = "Admin.Configuration.Edit";
 
             //Client
             public const string Admin_Client = "Admin.Client";

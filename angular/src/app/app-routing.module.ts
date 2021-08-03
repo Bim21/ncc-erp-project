@@ -36,6 +36,7 @@ import { ChangePasswordComponent } from './users/change-password/change-password
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
 import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
 import { SkillComponent } from './modules/admin/skill/skill.component';
+import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 
 
 @NgModule({
@@ -72,6 +73,11 @@ import { SkillComponent } from './modules/admin/skill/skill.component';
             path: "clients",
             component: ClientComponent,
             data: { permission: "" },
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "configurations",
+            component: ConfigurationComponent,
             canActivate: [AppRouteGuard],
           },
           {

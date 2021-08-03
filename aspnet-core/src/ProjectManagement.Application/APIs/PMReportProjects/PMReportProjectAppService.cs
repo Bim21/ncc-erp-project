@@ -366,18 +366,18 @@ namespace ProjectManagement.APIs.PMReportProjects
             return await query.ToListAsync();
         }
 
-        public async Task<string> UpdateNote(string note, long pmReportProjectId)
+        public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
         {
-            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport).SingleOrDefaultAsync(x => x.Id == pmReportProjectId);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport).SingleOrDefaultAsync(x => x.Id == input.Id);
 
             if (!pmReportProject.PMReport.IsActive)
             {
                 throw new UserFriendlyException("Report has been closed !");
             }
 
-            pmReportProject.Note = note;
+            pmReportProject.Note = input.Note;
             await WorkScope.UpdateAsync(pmReportProject);
-            return note;
+            return input;
         }
     }
 }
