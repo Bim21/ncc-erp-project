@@ -2,6 +2,7 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { UserService } from './../../../app/service/api/user.service';
 import { UserDto } from './../../service-proxies/service-proxies';
 import { Component, OnInit, Input, Injector } from '@angular/core';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
   selector: 'app-user-info',
@@ -26,6 +27,17 @@ public user:UserDto
         return key;
       }
     }
+  }
+  getAvatar(member) {
+    if (member.avatarPath) {
+      return AppConsts.remoteServiceBaseUrl + member.avatarPath;
+    } 
+    // if (member.avatarPath === '' && member.sex === 1) {
+    //   return 'assets/images/women.png';
+    // } if (member.avatarPath === '' && member.sex === 0) {
+    //   return 'assets/images/men.png';
+    // }
+    return '/assets/img/user.png';
   }
 
 }

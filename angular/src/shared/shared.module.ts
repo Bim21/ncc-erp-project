@@ -61,6 +61,7 @@ import { PercentageMaskDirective } from './directives/percentage-mask.directive'
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
 import { FormsModule } from '@angular/forms';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -121,7 +122,8 @@ import { FormsModule } from '@angular/forms';
         EqualValidator,
         PercentageMaskDirective,
         UserInfoComponent,
-        RadioDropdownComponent
+        RadioDropdownComponent,
+        FileUploadComponent
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -168,7 +170,8 @@ import { FormsModule } from '@angular/forms';
         MatFormFieldModule,
         PercentageMaskDirective,
         UserInfoComponent,
-        RadioDropdownComponent
+        RadioDropdownComponent,
+        FileUploadComponent
     ]
 })
 export class SharedModule {
