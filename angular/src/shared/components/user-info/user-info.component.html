@@ -3,7 +3,7 @@
       
         <div class="row w-100">
             <div class="col-3">
-                <img src="/assets/img/user.png" class="rounded-circle ml-3 mt-1" width="45px" style="max-width: 100%;" alt="avatar">
+                <img [src]="getAvatar(user)" class="rounded-circle ml-3 mt-1" width="45px" style="max-width: 100%;" alt="avatar">
             </div>
         <div class="col-9 pl-3 text-left" >
             <p class="m-0 text-overflow"><strong>{{user?.fullName}}</strong></p>

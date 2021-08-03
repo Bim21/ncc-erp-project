@@ -15,6 +15,10 @@ import {
 import { CreateUserDialogComponent } from './create-user/create-user-dialog.component';
 import { EditUserDialogComponent } from './edit-user/edit-user-dialog.component';
 import { ResetPasswordDialogComponent } from './reset-password/reset-password.component';
+import { UploadAvatarComponent } from './upload-avatar/upload-avatar.component';
+import { AppConsts } from '@shared/AppConsts';
+import { UserService } from '@app/service/api/user.service';
+import { MatDialog } from '@angular/material/dialog';
 
 class PagedUsersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -38,7 +42,9 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private userInfoService:UserService,
+    private dialog:MatDialog
   ) {
     super(injector);
   }
@@ -142,5 +148,31 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         return key;
       }
     }
+  }
+  upLoadAvatar(user): void {
+    let diaLogRef = this.dialog.open(UploadAvatarComponent, {
+      width: '600px',
+      data: user.id
+    });
+    diaLogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.userInfoService.uploadImageFile(res, user.id).subscribe(data => {
+          if (data) {
+            this.notify.success('Upload Avatar Successfully!');
+            this.refresh();
+            if (this.appSession.user.id == user.id) {
+              this.appSession.user.avatarPath = data.body.result;
+            }
+            user.avatarPath = AppConsts.remoteServiceBaseUrl + data.body.result;
+            this.users.forEach(u => {
+              if (u.managerId == user.id) {
+                u.managerAvatarPath = user.avatarPath;
+              }
+            });
+           
+          } else { this.notify.error('Upload Avatar Failed!'); }
+        });
+      }
+    });
   }
 }
