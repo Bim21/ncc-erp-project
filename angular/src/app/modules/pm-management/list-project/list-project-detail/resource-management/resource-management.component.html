@@ -49,7 +49,7 @@
                                 <td class="text-left">
                                     <div *ngIf="!user.createMode">
                                         <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
-                                        userType:user.userType,emailAddress:user.emailAddress}"></app-user-info>
+                                        userType:user.userType,emailAddress:user.emailAddress, avatarPath:user.avatarPath}"></app-user-info>
                                     </div>
                                     <div *ngIf="user.createMode" class="form-group row required">
 
@@ -342,7 +342,7 @@
                                 <td><span>{{ i +1 }}</span></td>
                                 <td class="text-left">
                                     <span *ngIf="!bill.createMode"> <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
-                                        userType:bill.userType,emailAddress:bill.emailAddress}"></app-user-info></span>
+                                        userType:bill.userType,emailAddress:bill.emailAddress, avatarPath:bill.avatarPath}"></app-user-info></span>
                                     <div *ngIf="bill.createMode">
 
                                         <mat-form-field class="w-100" appearance="outline">

@@ -314,7 +314,7 @@
                                                 <td>
                                                     <div *ngIf="!report.createMode">
                                                         <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
-                                                    userType:report.userType,emailAddress:report.emailAddress}">
+                                                    userType:report.userType,emailAddress:report.emailAddress,avatarPath: report.avatarPath}">
                                                         </app-user-info>
                                                     </div>
                                                     <div *ngIf="report.createMode" class="form-group row required">
@@ -462,7 +462,7 @@
                                                 <td>
                                                     <div *ngIf="!report.createMode">
                                                         <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
-                                                            userType:report.userType,emailAddress:report.emailAddress}">
+                                                            userType:report.userType,emailAddress:report.emailAddress, avatarPath:report.avatarPath}">
                                                         </app-user-info>
                                                     </div>
                                                     <div *ngIf="report.createMode" class="form-group row required">
