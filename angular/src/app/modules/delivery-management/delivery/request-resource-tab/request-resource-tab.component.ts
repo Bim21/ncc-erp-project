@@ -8,6 +8,7 @@ import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { RequestResourceDto } from './../../../../service/model/delivery-management.dto';
 import { Component, OnInit, Injector } from '@angular/core';
+import { InputFilterDto } from '@shared/filter/filter.component';
 
 @Component({
   selector: 'app-request-resource-tab',
@@ -45,6 +46,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
     
   }
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
+    { propertyName: 'projectName', comparisions: [0, 6, 7, 8], displayName: "Project Name" },
+    { propertyName: 'timeNeed', comparisions: [0, 1, 3], displayName: "Time Need", isDate:true },
+    { propertyName: 'timeDone', comparisions: [0, 1, 3], displayName: "Time Done", isDate:true },
+  ];
   public listRequest:RequestResourceDto[]=[];
   public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   DeliveryManagement_ResourceRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;

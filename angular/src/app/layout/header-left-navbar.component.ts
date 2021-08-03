@@ -21,6 +21,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   currentUrl: string = "";
   pmReportList: pmReportDto[] = [];
   pmReport = {} as pmReportDto
+  reportId:any
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, private reportService: PmReportService) {
@@ -33,6 +34,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     });
     this.currentUrl = this.router.url
     if (this.currentUrl.includes("weeklyReportTabDetail")) {
+      this.reportId = this.route.snapshot.queryParamMap.get("id")
       this.isShowReportBar = true
       this.getPmReportList();
     }
@@ -46,6 +48,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
       .subscribe(
         (event: NavigationEvent) => {
           this.currentUrl = this.router.url
+          this.reportId = this.route.snapshot.queryParamMap.get("id")
           if (this.currentUrl.includes("weeklyReportTabDetail")) {
             this.isShowReportBar = true
             this.getPmReportList();
@@ -59,7 +62,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   getPmReportList() {
     this.reportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
       this.pmReportList = data.result
-      this.pmReport = this.pmReportList.filter(report => report.id == Number(this.route.snapshot.queryParamMap.get("id")))[0]
+      this.pmReport = this.pmReportList.filter(report => report.id == Number(this.reportId))[0]
     })
   }
 
@@ -72,7 +75,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
       data: {
         reportId: reportId
       },
-      width: "700px"
+      width: "700px",
     })
   }
   routingReportDetail(){
@@ -95,4 +98,5 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     });
     
   }
+  
 }

@@ -1,13 +1,13 @@
 
   <form class="form-horizontal" autocomplete="off" #reportNote="ngForm">
-    <abp-modal-header title="Đánh giá cho report: " (onCloseClick)="dialogRef.close()">
+    <abp-modal-header title="Report: {{pmReport.name}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row">
-            <label for="">Report note:</label>
+            <label for="">Note:</label>
             <mat-form-field class="w-100" appearance="outline">
-                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                 name="note" rows="3" matInput placeholder="Leave a comment..." [(ngModel)]="PMReportNote"></textarea>
+                <textarea #generalNote cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                 name="note" rows="3" matInput placeholder="Leave a comment..." [(ngModel)]="pmReport.note">{{generalNote.focus()}}</textarea>
               </mat-form-field>
         </div>
     </div>

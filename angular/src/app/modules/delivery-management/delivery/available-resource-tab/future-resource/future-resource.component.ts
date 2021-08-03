@@ -48,8 +48,8 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
     private projectUserService: ProjectUserService) {super(injector)}
 
     public readonly FILTER_CONFIG: InputFilterDto[] = [
-      { propertyName: 'userName', comparisions: [0, 6, 7, 8], displayName: "User Name",isDate:true },
-      { propertyName: 'use', comparisions: [0, 1, 2, 3], displayName: "Used" },
+      { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
+      { propertyName: 'used', comparisions:  [0, 1, 3], displayName: "Used" },
       
     ];
 
