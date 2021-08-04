@@ -90,10 +90,11 @@ namespace ProjectManagement.Users
                 Branch = x.Branch,
                 IsActive = x.IsActive,
                 FullName = x.Name + " " + x.Surname,
-                UserSkills = userSkill.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto { 
-                            UserId = s.UserId,
-                            SkillId = s.SkillId,
-                            SkillName = s.Skill.Name
+                UserSkills = userSkill.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
+                {
+                    UserId = s.UserId,
+                    SkillId = s.SkillId,
+                    SkillName = s.Skill.Name
                 }).ToList(),
                 RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
             });
@@ -229,9 +230,15 @@ namespace ProjectManagement.Users
             var roleIds = user.Roles.Select(x => x.RoleId).ToArray();
 
             var roles = _roleManager.Roles.Where(r => roleIds.Contains(r.Id)).Select(r => r.NormalizedName);
-           
+            var userSkill = _workScope.GetAll<UserSkill>().Where(x => x.UserId == user.Id).Select(x => new UserSkillDto
+            {
+                UserId = x.UserId,
+                SkillId = x.SkillId,
+                SkillName = x.Skill.Name
+            });
             var userDto = base.MapToEntityDto(user);
             userDto.RoleNames = roles.ToArray();
+            userDto.UserSkills = userSkill.ToList();
 
             return userDto;
         }
