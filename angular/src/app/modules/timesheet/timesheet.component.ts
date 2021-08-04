@@ -4,7 +4,7 @@ import { TimesheetDto } from './../../service/model/timesheet.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { InputFilterDto } from '@shared/filter/filter.component';
-import {TimesheetService} from '@app/service/api/timesheet.service'
+import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError, finalize } from 'rxjs/operators';
 import { CreateEditTimesheetComponent } from './create-edit-timesheet/create-edit-timesheet.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -15,11 +15,12 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> implements OnInit {
   Timesheet_Timesheet = PERMISSIONS_CONSTANT.Timesheet_Timesheet;
-  Timesheet_Timesheet_Create = PERMISSIONS_CONSTANT. Timesheet_Timesheet_Create;
+  Timesheet_Timesheet_Create = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Create;
   Timesheet_Timesheet_Delete = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Delete;
   Timesheet_Timesheet_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
   Timesheet_Timesheet_ViewAll = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewAll;
-  public timesheetList:TimesheetDto[] = [];
+  Timesheet_Timesheet_ReverseActive = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ReverseActive
+  public timesheetList: TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
   ];
@@ -36,7 +37,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
 
     })
   }
-  protected delete (item: TimesheetDto): void {
+  protected delete(item: TimesheetDto): void {
     abp.message.confirm(
       "Delete TimeSheet " + item.name + "?",
       "",
@@ -49,38 +50,38 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
         }
       }
     );
-    
+
   }
- 
+
 
   constructor(
-    private timesheetService :TimesheetService,
+    private timesheetService: TimesheetService,
     private dialog: MatDialog,
-    injector:Injector,
+    injector: Injector,
     private route: ActivatedRoute,
-   
-    ) {
+
+  ) {
     super(injector)
-   }
-   ngOnInit(): void {
+  }
+  ngOnInit(): void {
     this.refresh()
     this.requestId = this.route.snapshot.queryParamMap.get("id")
-    
+
   }
-   showDialog(command: String, Timesheet:any): void {
+  showDialog(command: String, Timesheet: any): void {
     let timesheet = {} as TimesheetDto
     if (command == "edit") {
       timesheet = {
-        name :  Timesheet.name,
-        month : Timesheet.month,
-        year : Timesheet.year,
-        status : Timesheet.status,
-        isActive:Timesheet.isActive,
+        name: Timesheet.name,
+        month: Timesheet.month,
+        year: Timesheet.year,
+        status: Timesheet.status,
+        isActive: Timesheet.isActive,
         id: Timesheet.id
       }
     }
 
-    const show=this.dialog.open(CreateEditTimesheetComponent, {
+    const show = this.dialog.open(CreateEditTimesheetComponent, {
       data: {
         item: timesheet,
         command: command,
@@ -89,7 +90,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
       disableClose: true,
     });
     show.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         this.refresh();
       }
     });
@@ -102,16 +103,30 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.showDialog("edit", timesheet);
   }
 
-  showDetail(id:any){
-      this.router.navigate(['app/timesheetDetail'], {
-        queryParams: {
-          id: id,
-        }
-      })
-      
-    }
-  
-  
+  showDetail(timesheet: any) {
+    this.router.navigate(['app/timesheetDetail'], {
+      queryParams: {
+        id: timesheet.id,
+        isActive:timesheet.isActive
+      }
+    })
 
+  }
+
+
+  changeStatus(timesheet) {
+    this.timesheetService.ReverseActive(timesheet.id).pipe(catchError(this.timesheetService.handleError)).subscribe(rs => {
+      abp.notify.success("Update timesheet: " + timesheet.name)
+      if (timesheet.isActive) {
+        abp.notify.success("DeActive timesheet: " + timesheet.name)
+
+      }
+      else {
+        abp.notify.success("Active timesheet: " + timesheet.name)
+
+      }
+      this.refresh();
+    })
+  }
 
 }

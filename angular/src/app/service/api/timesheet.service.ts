@@ -20,6 +20,8 @@ export class TimesheetService extends BaseApiService{
         params: new HttpParams().set('timesheetId', id)
     })
 }
-
+public ReverseActive(id:number): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/ReverseActive?id='+id, {});
+}
 
 }

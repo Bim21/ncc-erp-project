@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-10">
                                 <mat-form-field style="margin-left: 10px !important;" class="myFilter ml-3" appearance="outline">
-                                    <mat-select [disabled]="!selectedReport.isActive" name="flag" 
+                                    <mat-select [disabled]="!selectedReport.isActive || !permission.isGranted(DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth)" name="flag" 
                                         placeholder="Project health" [(ngModel)]="projectHealth">
                                         <ng-container *ngFor="let flag of problemIssueList">
                                             <mat-option [value]="APP_ENUM.ProjectHealth[flag]"  (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
