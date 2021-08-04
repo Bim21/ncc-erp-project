@@ -278,6 +278,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
           this.getWeeklyReport();
+          this.getCurrentResourceOfProject();
           this.isEditWeeklyReport = false;
           this.processWeekly = false;
         })
@@ -292,6 +293,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processWeekly = false;
         report.createMode = false;
         this.getWeeklyReport();
+        this.getCurrentResourceOfProject();
+
       },
         () => {
           report.createMode = true
@@ -348,6 +351,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
           this.getFuturereport();
+          this.getCurrentResourceOfProject();
           this.isEditFutureReport = false;
           this.processFuture = false
         })
@@ -368,6 +372,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processFuture = false;
         report.createMode = false;
         this.getFuturereport();
+        this.getCurrentResourceOfProject();
+
       },
         () => {
           report.createMode = true
