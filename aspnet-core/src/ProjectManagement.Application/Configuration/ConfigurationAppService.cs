@@ -26,7 +26,6 @@ namespace ProjectManagement.Configuration
             return new AppSettingDto
             {
                 ClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId),
-                SecurityCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecurityCode),
                 SecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecretCode),
                 FinanceUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinaceUri),
                 FinanceSecretKey = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretKey),
@@ -48,7 +47,6 @@ namespace ProjectManagement.Configuration
         public async Task<AppSettingDto> Change(AppSettingDto input)
         {
             if (string.IsNullOrEmpty(input.ClientAppId) ||
-                string.IsNullOrEmpty(input.SecurityCode) ||
                 string.IsNullOrEmpty(input.SecretCode) ||
                 string.IsNullOrEmpty(input.FinanceUri) ||
                 string.IsNullOrEmpty(input.FinanceSecretKey) ||
@@ -68,7 +66,6 @@ namespace ProjectManagement.Configuration
 
             }
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ClientAppId, input.ClientAppId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecretCode, input.SecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinaceUri, input.FinanceUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceSecretKey, input.FinanceSecretKey);

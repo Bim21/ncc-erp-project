@@ -7,7 +7,6 @@ namespace ProjectManagement.Configuration.Dto
     public class AppSettingDto
     {
         public string ClientAppId { get; set; }
-        public string SecurityCode { get; set; }
         public string SecretCode { get; set; }
         public string FinanceUri { get; set; }
         public string FinanceSecretKey { get; set; }

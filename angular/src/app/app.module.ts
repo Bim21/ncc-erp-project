@@ -98,6 +98,7 @@ import { CreateUpdateSkillComponent } from './modules/admin/skill/create-update-
 import { AddReportNoteComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
 import { UploadAvatarComponent } from './users/upload-avatar/upload-avatar.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 
 
 
@@ -190,6 +191,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CreateUpdateSkillComponent,
     AddReportNoteComponent,
     UploadAvatarComponent,
+    ConfigurationComponent,
 
     
   ],

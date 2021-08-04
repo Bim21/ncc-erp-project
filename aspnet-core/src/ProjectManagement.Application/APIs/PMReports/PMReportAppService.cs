@@ -9,6 +9,7 @@ using NccCore.Paging;
 using NccCore.Uitls;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
+using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.PMReports.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
@@ -87,16 +88,16 @@ namespace ProjectManagement.APIs.PMReports
             return await query.ToListAsync();
         }
 
-        public async Task<string> UpdateNote(long id, string note)
+        public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
         {
-            var pmReport = await WorkScope.GetAsync<PMReport>(id);
+            var pmReport = await WorkScope.GetAsync<PMReport>(input.Id);
             if (!pmReport.IsActive)
             {
                 throw new UserFriendlyException("Report has been closed !");
             }
-            pmReport.Note = note;
+            pmReport.Note = input.Note;
             await WorkScope.UpdateAsync(pmReport);
-            return note;
+            return input;
         }
 
         [HttpPost]

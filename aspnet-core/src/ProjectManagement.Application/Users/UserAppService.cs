@@ -366,7 +366,7 @@ namespace ProjectManagement.Users
                         using (var stream = System.IO.File.Create(Path.Combine(_webHostEnvironment.WebRootPath, "avatars", avatarPath)))
                         {
                             await input.File.CopyToAsync(stream);
-                            user.AvatarPath = "/avatars/" + avatarPath;
+                            user.AvatarPath = avatarPath;
                             await _userManager.UpdateAsync(user);
                         }
                         return "/avatars/" + avatarPath;
