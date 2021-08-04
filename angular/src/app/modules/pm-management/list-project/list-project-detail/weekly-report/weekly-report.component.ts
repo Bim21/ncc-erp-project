@@ -43,7 +43,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
 
   // Paging
-  public itemPerPage: number = 5;
+  public itemPerPage: number = 50;
   public searchUser: string = "";
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
