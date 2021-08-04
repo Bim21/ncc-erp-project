@@ -180,7 +180,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input)
+        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
