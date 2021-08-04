@@ -41,7 +41,7 @@
     <div id="right-content" [ngClass]="sidebarExpanded?'expand-content':''" style="width: 80%; margin-left: 19%;">
         <section class="content ">
             <div class=" px-2">
-                <div class="card w-100 ">
+                <div class="card w-100 " [busy]="isLoading">
                     <div class="card-body py-1">
                             <h4 >{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
                         <table class=" project-info" style="table-layout: fixed; width: 95%;">
