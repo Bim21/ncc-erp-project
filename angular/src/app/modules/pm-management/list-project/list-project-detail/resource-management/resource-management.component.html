@@ -207,9 +207,9 @@
                             <tr style="border: none;">
                                 <th class="stt">#</th>
                                 <th>Request name</th>
-                                <th>Thời gian cần</th>
+                                <th >Thời gian cần</th>
                                 <th>Description</th>
-                                <th>Status</th>
+                                <th style="width: 100px">Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -231,10 +231,10 @@
                                 </td>
 
 
-                                <td>
+                                <td >
                                     <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
                                     <div *ngIf="request.createMode" class="form-group row required">
-                                        <mat-form-field appearance="outline" class="w-100">
+                                        <mat-form-field style="width: 150px;" appearance="outline" class="w-100">
                                             <input matInput [matDatepicker]="picker" placeholder="chose a date"
                                                 [(ngModel)]="request.timeNeed" name="requestTimeNeed" required>
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -326,7 +326,7 @@
                                 <th class="stt">#</th>
                                 <th>Nhân viên</th>
                                 <th>Charge Role</th>
-                                <th>Charge Price</th>
+                                <th>Rate</th>
                                 <th>Thời gian bắt đầu charge</th>
                                 <th>Thời gian kết thúc charge</th>
                                 <th>is Active</th>
@@ -371,7 +371,7 @@
                                        
                                     <div *ngIf="bill.createMode">
 
-                                        <input required class="form-control mt-1" #billRole="ngModel" #billRoteEl
+                                        <input style="min-width: 150px;" required class="form-control mt-1" #billRole="ngModel" #billRoleEl 
                                             type="text" placeholder="Charge role" name="billRole" [(ngModel)]="bill.billRole"
                                            />
                                         
@@ -379,29 +379,12 @@
                                         </abp-validation-summary>
 
                                     </div>
-                                    
-                                    <!-- <div *ngIf="bill.createMode"  class="form-group row required mt-3"   >
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select [(ngModel)]="bill.billRole" name="billRole"
-                                                    placeholder="select a role" required #billRole="ngModel">
-                                                    <mat-option *ngFor="let role of projectRoleList"
-                                                        [value]="APP_ENUM.ProjectUserRole[role]">
-                                                        {{role}}</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                            <mat-error class="mt-1"
-                                                *ngIf="billRole.hasError('required') && billRole.touched"
-                                                style="font-size: 13px;">
-                                                This field is required
-                                            </mat-error>
-
-                                    </div> -->
                                 </td>
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
-                                        {{getValueByEnum(bill.currency,APP_ENUM.Currency)}}</span>
+                                        </span>
                                     <div *ngIf="bill.createMode">
-                                        <input required class="form-control mt-1" #billRate="ngModel" #billRateEl
+                                        <input style="min-width: 150px;" required class="form-control mt-1" #billRate="ngModel" #billRateEl
                                             type="text" mask="separator" thousandSeparator="." placeholder="number"
                                             [(ngModel)]="bill.billRate">
                                         <abp-validation-summary [control]="billRate" [controlEl]="billRateEl">
@@ -412,7 +395,7 @@
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                     <div *ngIf="bill.createMode">
-                                        <mat-form-field appearance="outline">
+                                        <mat-form-field appearance="outline" style="width: 150px;">
                                             <input matInput [matDatepicker]="billStarttimePicker"
                                                 placeholder="chose a date" [(ngModel)]="bill.startTime"
                                                 name="billStarttime" required>
@@ -425,10 +408,10 @@
                                 <td>
                                     <span *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
                                     <div *ngIf="bill.createMode">
-                                        <mat-form-field appearance="outline">
+                                        <mat-form-field appearance="outline" style="width: 150px;">
                                             <input matInput [matDatepicker]="billEndtimepicker"
                                                 placeholder="chose a date" [(ngModel)]="bill.endTime" name="billEndtime"
-                                                required>
+                                                >
                                             <mat-datepicker-toggle matSuffix [for]="billEndtimepicker">
                                             </mat-datepicker-toggle>
                                             <mat-datepicker #billEndtimepicker></mat-datepicker>
@@ -452,7 +435,7 @@
                                     <div *ngIf="bill.createMode" class="pt-1">
 
                                         <button
-                                            [disabled]="!bill?.userId || !bill?.billRole?.toString()  || !bill?.startTime || !bill?.endTime || !bill?.billRate"
+                                            [disabled]="!bill?.userId   || !bill?.startTime  || !bill?.billRate"
                                             class=" mr-3 submit-btn" style="background: none; border: none;"
                                             (click)="saveUserBill(bill)">
                                             <i style="color: green;" class="fas fa-check fa-2x "></i>

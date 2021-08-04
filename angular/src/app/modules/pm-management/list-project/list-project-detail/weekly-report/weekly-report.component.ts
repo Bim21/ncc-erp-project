@@ -163,6 +163,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   public cancelWeekReport() {
     this.processWeekly = false;
+    this.isEditWeeklyReport =false;
     this.getWeeklyReport();
   }
   updateWeekReport(report) {
@@ -232,6 +233,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     }
   }
   public cancelFutureReport() {
+    this.isEditFutureReport= false;
     this.processFuture = false;
     this.getFuturereport();
   }
@@ -328,6 +330,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public cancelProblemReport() {
     this.processProblem = false;
     this.getProjectProblem();
+    this.isEditProblem =false;
   }
   public editProblemReport(user: projectUserDto) {
     this.isEditProblem = true;
