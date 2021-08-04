@@ -19,6 +19,7 @@ import { UploadAvatarComponent } from './upload-avatar/upload-avatar.component';
 import { AppConsts } from '@shared/AppConsts';
 import { UserService } from '@app/service/api/user.service';
 import { MatDialog } from '@angular/material/dialog';
+import { InputFilterDto } from '@shared/filter/filter.component';
 
 class PagedUsersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -30,6 +31,16 @@ class PagedUsersRequestDto extends PagedRequestDto {
   animations: [appModuleAnimation()]
 })
 export class UsersComponent extends PagedListingComponentBase<UserDto> {
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'fullName', displayName: "Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'emailAddress', displayName: "emailAddress", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'userCode', displayName: "User Code", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1 ,3], isDate:true },
+    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1 ,3], isDate:true },
+
+
+
+  ];
   users: UserDto[] = [];
   keyword = '';
   isActive: boolean | null;
@@ -75,21 +86,18 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     request.keyword = this.keyword;
     request.isActive = this.isActive;
 
-    this._userService
-      .getAll(
-        request.keyword,
-        request.isActive,
-        request.skipCount,
-        request.maxResultCount
+    this.userInfoService
+      .getAllPaging(
+        request
       )
       .pipe(
         finalize(() => {
           finishedCallback();
         })
       )
-      .subscribe((result: UserDtoPagedResultDto) => {
-        this.users = result.items;
-        this.showPaging(result, pageNumber);
+      .subscribe((result: any) => {
+        this.users = result.result.items;
+        this.showPaging(result.result, pageNumber);
       });
   }
 
