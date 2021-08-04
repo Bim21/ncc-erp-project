@@ -237,6 +237,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       } else {
         abp.notify.success("Mark Unread!");
       }
+      project.seen = ! project.seen
 
     })
 
