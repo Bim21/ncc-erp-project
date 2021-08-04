@@ -115,6 +115,11 @@ namespace ProjectManagement.APIs.TimeSheets
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
 
+            if (!timesheet.IsActive)
+            {
+                throw new UserFriendlyException("Timesheet not active !");
+            }
+
             var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name);
             if (nameExist)
             {
@@ -136,6 +141,11 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task Delete(long timesheetId)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
+
+            if (!timesheet.IsActive)
+            {
+                throw new UserFriendlyException("Timesheet not active !");
+            }
 
             var hasTimesheetproject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.TimesheetId == timesheetId && x.FilePath != null);
 
