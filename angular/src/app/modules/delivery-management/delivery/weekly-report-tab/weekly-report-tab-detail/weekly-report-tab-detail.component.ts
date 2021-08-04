@@ -136,9 +136,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }))
   }
   getProjectInfo() {
-    this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).subscribe(data => {
+    this.isLoading=true;
+    this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.projectInfo = data.result
-    })
+      this.isLoading =false;
+    },
+    ()=>{this.isLoading =false})
   }
   public view(projectReport) {
     this.pmReportProjectId = projectReport.id
