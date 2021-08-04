@@ -83,7 +83,7 @@ namespace ProjectManagement.Users
                 Surname = x.Surname,
                 EmailAddress = x.EmailAddress,
                 UserCode = x.UserCode,
-                AvatarPath = "/avatar/" + x.AvatarPath,
+                AvatarPath = "/avatars/" + x.AvatarPath,
                 UserType = x.UserType,
                 UserLevel = x.UserLevel,
                 Branch = x.Branch,
