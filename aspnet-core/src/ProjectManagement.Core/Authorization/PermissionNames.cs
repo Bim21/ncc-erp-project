@@ -13,6 +13,7 @@ namespace ProjectManagement.Authorization
             public const string Pages_Roles = "Pages.Roles";
             //User
             public const string Pages_Users = "Pages.Users";
+                public const string Pages_Users_ViewAll = "Pages.Users.ViewAll";
                 public const string Pages_Users_Create = "Pages.Users.Create";
                 public const string Pages_Users_Update = "Pages.Users.Update";
                 public const string Pages_Users_Delete = "Pages.Users.Delete";
@@ -251,6 +252,7 @@ namespace ProjectManagement.Authorization
                     //Admin
                         //User
                         PermissionNames.Pages_Users,
+                            PermissionNames.Pages_Users_ViewAll,
                             PermissionNames.Pages_Users_Create,
                             PermissionNames.Pages_Users_Update,
                             PermissionNames.Pages_Users_Delete,
@@ -467,6 +469,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Pages_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Tenants, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tenants" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
@@ -654,6 +657,7 @@ namespace ProjectManagement.Authorization
                          new SystemPermission { Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "User",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All User" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new User" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
