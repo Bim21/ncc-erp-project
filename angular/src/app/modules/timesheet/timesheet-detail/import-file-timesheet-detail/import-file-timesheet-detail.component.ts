@@ -34,9 +34,6 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
   }
   selectFile(event) {
     this.selectedFiles = event.target.files.item(0);
-    // this.currentFileUpload = this.selectedFiles.item(0);
-    //   this.selectedFiles = event.target.files;
-    // this.currentFileUpload = this.selectedFiles.item(0);
   }
   
 
@@ -45,15 +42,10 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
       abp.message.error("Choose a file!")
       return
     }
-    
-    // formData.append('TimesheetProjectId', this.uploadFile.TimesheetProjectId.toString());
-    // formData.append('file', this.currentFileUpload);
-    // this.uploadFile.File= formData;
-  
     this.timesheetProjectService.UpdateFileTimeSheetProject(this.selectedFiles, this.uploadFile.TimesheetProjectId )
-    .pipe(catchError(this.timesheetProjectService.handleError)).subscribe((res) => {
+    .subscribe((res) => {
       abp.notify.success("Upload File Successful!");
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     }, () => this.isDisable = false);
   }
 

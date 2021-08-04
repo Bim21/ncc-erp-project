@@ -29,11 +29,12 @@ export class TimesheetProjectService extends BaseApiService{
   
   public UpdateFileTimeSheetProject(file, id): Observable<any> {
     const formData = new FormData();
-    if (navigator.msSaveBlob) {
-        formData.append('File', file);
-    } else {
-        formData.append('File', file);
-    }
+    // if (navigator.msSaveBlob) {
+    //     formData.append('File', file);
+    // } else {
+        
+    // }
+    formData.append('File', file);
     formData.append('TimesheetProjectId', id);
     const uploadReq = new HttpRequest(
         'POST', AppConsts.remoteServiceBaseUrl + '/api/services/app/TimesheetProject/UpdateFileTimeSheetProject', formData,
