@@ -228,6 +228,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public cancelProjectRerequest(): void {
     this.getResourceRequestList();
     this.requestProcess = false
+    this.isEditRequest =false;
   }
   public editProjectRerequest(request: projectResourceRequestDto): void {
     request.createMode = true
@@ -261,7 +262,10 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     delete userBill["createMode"]
     // userBill.isActive = true;
     userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
-    userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
+    if (userBill.endTime) {
+      userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
+
+    }
 
     if (!this.isEditUserBill) {
       userBill.projectId = this.projectId
@@ -289,6 +293,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public cancelUserBill(): void {
     this.getUserBill();
     this.userBillProcess = false;
+    this.isEditUserBill=false;
   }
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;

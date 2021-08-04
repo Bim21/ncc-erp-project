@@ -76,6 +76,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
+  public processFuture:boolean = false;
+  public processProblem:boolean=false
+  public processWeekly:boolean =false;
   // public minDate = new Date();
   // public maxDate= new Date();
   public createdDate = new Date();
@@ -158,8 +161,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getFuturereport();
     this.getProjectProblem();
     this.getCurrentResourceOfProject();
-
-
+    this.isEditWeeklyReport = false;
+    this.isEditFutureReport = false;
+    this.isEditProblem = false;
+    this.processFuture = false;
+    this.processProblem=false
+    this.processWeekly =false;
+    
   }
 
 
@@ -266,7 +274,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
           this.getWeeklyReport();
-          this.isEditFutureReport = false;
+          this.isEditWeeklyReport = false;
           this.processWeekly = false;
         })
       },
@@ -290,6 +298,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelWeekReport() {
     this.processWeekly = false;
+    this.isEditWeeklyReport =false;
     this.getWeeklyReport();
   }
   updateWeekReport(report) {
@@ -354,7 +363,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success("created new future report");
         this.processFuture = false;
         report.createMode = false;
-        this.isEditFutureReport = false
         this.getFuturereport();
       },
         () => {
@@ -364,6 +372,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelFutureReport() {
     this.processFuture = false;
+    this.isEditFutureReport =false;
     this.getFuturereport();
   }
   public approveRequest(resource: projectUserDto): void {
@@ -391,6 +400,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       if (result) {
         this.getFuturereport();
         this.getWeeklyReport();
+        this.getCurrentResourceOfProject();
       }
     });
 
@@ -445,6 +455,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelProblemReport() {
     this.processProblem = false;
+    this.isEditProblem =false;
     this.getProjectProblem();
   }
   public editProblemReport(user: projectUserDto) {
