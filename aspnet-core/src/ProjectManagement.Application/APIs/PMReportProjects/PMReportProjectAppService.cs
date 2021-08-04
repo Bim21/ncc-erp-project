@@ -89,7 +89,8 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
         public async Task<List<CurrentResourceDto>> GetCurrentResourceOfProject(long projectId)
         {
-            var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+            var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Project.Status != ProjectStatus.Closed)
+                               .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                select new
                                {
                                    UserId = pu.UserId,
@@ -98,7 +99,7 @@ namespace ProjectManagement.APIs.PMReportProjects
 
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.ProjectId == projectId)
-                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
+                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive && x.AllocatePercentage > 0)
                                 .Select(x => new CurrentResourceDto
                                 { 
                                     FullName = x.User.FullName,

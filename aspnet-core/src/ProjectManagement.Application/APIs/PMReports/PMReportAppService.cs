@@ -328,6 +328,7 @@ namespace ProjectManagement.APIs.PMReports
                              Solution = p.Solution,
                              MeetingSolution = p.MeetingSolution,
                              Status = p.Status.ToString(),
+                             ProjectHealth = p.PMReportProject.ProjectHealth,
                              CreatedAt = p.CreationTime
                          }).ToListAsync();
 
@@ -342,7 +343,7 @@ namespace ProjectManagement.APIs.PMReports
                             Branch = u.Branch,
                             UserEmail = u.EmailAddress,
                             TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
-                            TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date).Sum(x => x.AllocatePercentage)
+                            TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date && x.StartTime.Date <= DateTime.Now.Date.AddDays(10)).Sum(x => x.AllocatePercentage)
                         };
 
             var result = new ReportStatisticsDto

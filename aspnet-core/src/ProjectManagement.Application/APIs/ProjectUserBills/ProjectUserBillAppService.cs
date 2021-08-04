@@ -72,7 +72,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_Create)]
         public async Task<ProjectUserBillDto> Create(ProjectUserBillDto input)
         {
-            if (input.StartTime.Date > input.EndTime.Value.Date)
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
