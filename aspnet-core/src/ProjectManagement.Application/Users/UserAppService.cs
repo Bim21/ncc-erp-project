@@ -75,7 +75,6 @@ namespace ProjectManagement.Users
         public async Task<GridResult<UserDto>> GetAllPaging(GridParam input)
         {
             var userSkill = _workScope.GetAll<UserSkill>();
-
             var users = _workScope.GetAll<User>().Select(x => new UserDto
             {
                 Id = x.Id,
