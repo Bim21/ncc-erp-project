@@ -86,7 +86,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         {
             var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(input.Id);
 
-            if (input.StartTime.Date > input.EndTime.Value.Date)
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserBillDto, ProjectUserBill>(input, projectUserBill));
