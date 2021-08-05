@@ -6,6 +6,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.Tags.Dto;
 using ProjectManagement.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ namespace ProjectManagement.APIs.Tags
     public class TagAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        public async Task<GridResult<TagDto>> GetAll(GridParam input)
+        public async Task<GridResult<TagDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Tag>()
                 .Select(x => new TagDto
@@ -23,6 +24,17 @@ namespace ProjectManagement.APIs.Tags
                     Name = x.Name,
                 });
             return await query.GetGridResult(query, input);
+        }
+        [HttpGet]
+        public async Task<List<TagDto>> GetAll()
+        {
+            var query = WorkScope.GetAll<Tag>()
+                .Select(x => new TagDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                });
+            return await query.ToListAsync();
         }
         [HttpPost]
         public async Task<TagDto> Create(TagDto input)
