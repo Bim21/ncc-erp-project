@@ -62,9 +62,9 @@ namespace ProjectManagement.APIs.CriteriaCategories
         [HttpDelete]
         public async System.Threading.Tasks.Task Delete(long id)
         {
-            var isExist = WorkScope.GetAll<Criteria>().Where(x => x.CriteriaCategoryId == id).Count();
+            var isExist = await WorkScope.GetAll<Criteria>().AnyAsync(x => x.CriteriaCategoryId == id);
 
-            if (isExist>0)
+            if (isExist)
                 throw new UserFriendlyException(String.Format("Category này đã có tiêu chí con nên không thể xóa"));
 
             await WorkScope.DeleteAsync<CriteriaCategory>(id);
