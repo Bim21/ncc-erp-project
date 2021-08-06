@@ -61,5 +61,8 @@ export class PMReportProjectService extends BaseApiService {
 
   }
 
+  public GetTimesheetWorking(pmReportProjectId: number,startTime:any,endTime:any): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/GetWorkingTimeFromTimesheet?pmReportProjectId=${pmReportProjectId}&startTime=${startTime}&endTime=${endTime}`, {});
+  }
 
 }

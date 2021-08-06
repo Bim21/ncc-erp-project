@@ -47,11 +47,17 @@
                         <table class=" project-info" style="table-layout: fixed; width: 95%;">
                             <tr>
                                 <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
-                                <td>Total bill: <strong>{{projectInfo.totalBill}}</strong></td>
+                                <td>
+                                    Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
+                                    <strong>{{totalOverTime}}h </strong>OT
+                                    <button class="btn btn-success btn-sm ml-2 mb-1" (click)="getTimesheetWorking()">
+                                        Get
+                                    </button>
+                                   </td>
                             </tr>
                             <tr>
-                                <td>Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
-                                    <strong>{{totalOverTime}}h </strong>OT
+                                <td>
+                                    Total bill: <strong>{{projectInfo.totalBill}}</strong>
                                 </td>
                                 <td>Status: <mat-form-field class="myFilter ml-5" appearance="outline">
                                         <mat-select [disabled]="!isActive" name="flag" placeholder="Project health"
