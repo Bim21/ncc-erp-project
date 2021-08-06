@@ -538,7 +538,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      this.getProjectInfo();
+      this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
+       let report =  data.result.filter(item=>item.id == this.pmReportProjectId)[0]
+       this.totalNormalWorkingTime = report.totalNormalWorkingTime
+       this.totalOverTime = report.totalOverTime
+      }))
     }
   });
  }
