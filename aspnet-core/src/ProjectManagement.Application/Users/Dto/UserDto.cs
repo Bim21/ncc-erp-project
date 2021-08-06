@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Authorization.Users;
 using Abp.AutoMapper;
+using NccCore.Anotations;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -28,6 +29,7 @@ namespace ProjectManagement.Users.Dto
         [Required]
         [EmailAddress]
         [StringLength(AbpUserBase.MaxEmailAddressLength)]
+        [ApplySearchAttribute]
         public string EmailAddress { get; set; }
         public string UserCode { set; get; }
         public string AvatarPath { get; set; }
@@ -36,7 +38,7 @@ namespace ProjectManagement.Users.Dto
         public Branch Branch { get; set; }
         public List<UserSkillDto> UserSkills { get; set; }
         public bool IsActive { get; set; }
-
+        [ApplySearchAttribute]
         public string FullName { get; set; }
 
         public DateTime? LastLoginTime { get; set; }

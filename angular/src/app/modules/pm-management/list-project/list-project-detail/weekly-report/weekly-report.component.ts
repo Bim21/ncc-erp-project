@@ -40,10 +40,11 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
   DeliveryManagement_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
   DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
-  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
+  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser;
+  DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth= PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth
 
   // Paging
-  public itemPerPage: number = 5;
+  public itemPerPage: number = 50;
   public searchUser: string = "";
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
@@ -163,6 +164,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
   public cancelWeekReport() {
     this.processWeekly = false;
+    this.isEditWeeklyReport =false;
     this.getWeeklyReport();
   }
   updateWeekReport(report) {
@@ -232,6 +234,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     }
   }
   public cancelFutureReport() {
+    this.isEditFutureReport= false;
     this.processFuture = false;
     this.getFuturereport();
   }
@@ -328,6 +331,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   public cancelProblemReport() {
     this.processProblem = false;
     this.getProjectProblem();
+    this.isEditProblem =false;
   }
   public editProblemReport(user: projectUserDto) {
     this.isEditProblem = true;

@@ -89,12 +89,14 @@ namespace ProjectManagement.APIs.TimeSheets
                                     {
                                         FullName = x.User.FullName,
                                         BillRole = x.BillRole,
-                                        BillRate = x.BillRate
+                                        BillRate = x.BillRate,
+                                        Note = x.Note,
+                                        Currency = x.Currency.ToString()
                                     });
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"{b.FullName} - {b.BillRole} - {b.BillRate}<br>");
+                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br><br>");
                 }
 
                 var timesheetProject = new TimesheetProject
@@ -114,6 +116,11 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task<TimesheetDto> Update(TimesheetDto input)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
+
+            if (!timesheet.IsActive)
+            {
+                throw new UserFriendlyException("Timesheet not active !");
+            }
 
             var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name);
             if (nameExist)
@@ -136,6 +143,11 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task Delete(long timesheetId)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
+
+            if (!timesheet.IsActive)
+            {
+                throw new UserFriendlyException("Timesheet not active !");
+            }
 
             var hasTimesheetproject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.TimesheetId == timesheetId && x.FilePath != null);
 

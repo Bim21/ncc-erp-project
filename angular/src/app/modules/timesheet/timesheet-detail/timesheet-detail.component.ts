@@ -10,7 +10,7 @@ import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto } from './../../
 import { Component, OnInit, Injector } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
-import { catchError} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
@@ -22,13 +22,13 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 })
 export class TimesheetDetailComponent extends PagedListingComponentBase<TimesheetDetailDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-  // request.maxResultCount=100;
-    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId,request).pipe(catchError(this.timesheetProjectService.handleError))
-    .subscribe((data: PagedResultResultDto)=>{
-      this.TimesheetDetaiList= data.result.items;
-      this.showPaging(data.result,pageNumber);
-      this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
-    })
+    // request.maxResultCount=100;
+    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
+      .subscribe((data: PagedResultResultDto) => {
+        this.TimesheetDetaiList = data.result.items;
+        this.showPaging(data.result, pageNumber);
+        this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
+      })
   }
   // protected list(
   //   request: PagedRequestDto,
@@ -51,7 +51,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       "",
       (result: boolean) => {
         if (result) {
-          this.timesheetProjectService.delete(item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
+          this.timesheetProjectService.delete(item.id).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(() => {
             abp.notify.success("Deleted Project Timesheet " + item.projectName);
             this.refresh();
           });
@@ -59,8 +59,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     );
   }
-  
- 
+
+
 
 
   public TimesheetDetaiList: TimesheetDetailDto[] = [];
@@ -69,18 +69,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public projectTimesheetDetailId: any;
   public searchText: string = "";
   public timesheetId: any;
-
+  public isActive: boolean
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
   ];
-  
-  
-    Timesheet_TimesheetProject_Create= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
-    Timesheet_TimesheetProject_Delete= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
-    Timesheet_TimesheetProject_DownloadFileTimesheetProject= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
-    Timesheet_TimesheetProject_Update= PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
-    Timesheet_TimesheetProject_UploadFileTimesheetProject= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
+
+
+  Timesheet_TimesheetProject_Create = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
+  Timesheet_TimesheetProject_Delete = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
+  Timesheet_TimesheetProject_DownloadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
+  Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
+  Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
 
 
   constructor(
@@ -89,7 +89,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector: Injector,
-    
+
 
   ) {
     super(injector)
@@ -98,7 +98,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
-
+    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false
     this.refresh();
 
   }
@@ -108,11 +108,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       timesheetDetail = {
         projectId: Timesheet.projectId,
         timesheetId: Timesheet.timesheetId,
-        clientName:Timesheet.clientName,
+        clientName: Timesheet.clientName,
         projectName: Timesheet.projectName,
         note: Timesheet.note,
         id: Timesheet.id,
-        projectBillInfomation:Timesheet.projectBillInfomation
+        projectBillInfomation: Timesheet.projectBillInfomation
 
       }
 
@@ -145,11 +145,13 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
 
   }
   importExcel(id: any) {
-    const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
+    const dialogRef = this.dialog.open(ImportFileTimesheetDetailComponent, {
       data: { id: id, width: '500px' }
     });
-    dialog.afterClosed().subscribe(result => {
-      this.refresh();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refresh();
+      }
     });
   }
   DeleteFile(item: any) {
@@ -158,7 +160,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       "",
       (result: boolean) => {
         if (result) {
-          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
+          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(() => {
             abp.notify.success("Deleted File  " + item.file);
             this.refresh();
           });
@@ -176,26 +178,26 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
 
   }
 
-importFile(id:number){
-  this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data=>{
-  })
-}
+  importFile(id: number) {
+    this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data => {
+    })
+  }
 
-downloadFile(projectTimesheet:any){
-  this.timesheetProjectService.GetTimesheetFile(projectTimesheet.id).subscribe(data=>{
-    const file = new Blob([this.s2ab(atob(data.result.data))], {
-      type: "application/vnd.ms-excel;charset=utf-8"
-    });
-    FileSaver.saveAs(file, data.result.fileName);
-  })
- 
-}
-s2ab(s) {
-  var buf = new ArrayBuffer(s.length);
-  var view = new Uint8Array(buf);
-  for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-  return buf;
-}
+  downloadFile(projectTimesheet: any) {
+    this.timesheetProjectService.GetTimesheetFile(projectTimesheet.id).subscribe(data => {
+      const file = new Blob([this.s2ab(atob(data.result.data))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      FileSaver.saveAs(file, data.result.fileName);
+    })
+
+  }
+  s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
 
 
 

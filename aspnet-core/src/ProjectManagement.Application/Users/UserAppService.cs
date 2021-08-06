@@ -32,6 +32,8 @@ using Abp.Authorization.Users;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Microsoft.AspNetCore.Hosting;
 using ProjectManagement.Entities;
+using NccCore.Paging;
+using NccCore.Extension;
 
 namespace ProjectManagement.Users
 {
@@ -68,6 +70,37 @@ namespace ProjectManagement.Users
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Pages_Users_ViewAll)]
+        public async Task<GridResult<UserDto>> GetAllPaging(GridParam input)
+        {
+            var userSkill = _workScope.GetAll<UserSkill>();
+            var users = _workScope.GetAll<User>().Select(x => new UserDto
+            {
+                Id = x.Id,
+                UserName = x.UserName,
+                Name = x.Name,
+                Surname = x.Surname,
+                EmailAddress = x.EmailAddress,
+                UserCode = x.UserCode,
+                AvatarPath = "/avatars/" + x.AvatarPath,
+                UserType = x.UserType,
+                UserLevel = x.UserLevel,
+                Branch = x.Branch,
+                IsActive = x.IsActive,
+                FullName = x.Name + " " + x.Surname,
+                UserSkills = userSkill.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
+                {
+                    UserId = s.UserId,
+                    SkillId = s.SkillId,
+                    SkillName = s.Skill.Name
+                }).ToList(),
+                RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
+            });
+
+            return await users.GetGridResult(users, input);
+        }
+
         [AbpAuthorize(PermissionNames.Pages_Users_Create)]
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
@@ -80,14 +113,14 @@ namespace ProjectManagement.Users
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
-            CheckErrors( await _userManager.CreateAsync(user, input.Password));
+            CheckErrors(await _userManager.CreateAsync(user, input.Password));
 
             if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
 
-            if(input.UserSkills != null)
+            if (input.UserSkills != null)
             {
                 foreach (var s in input.UserSkills)
                 {
@@ -128,14 +161,15 @@ namespace ProjectManagement.Users
             var deleteSkill = userSkills.Where(x => deleteSkillId.Contains(x.SkillId));
             var addSkill = input.UserSkills.Where(x => !currenUserSkillId.Contains(x.SkillId));
 
-            foreach(var item in deleteSkill)
+            foreach (var item in deleteSkill)
             {
                 await _workScope.DeleteAsync<UserSkill>(item);
             }
 
             foreach (var item in addSkill)
             {
-                var userSkill = new UserSkill {
+                var userSkill = new UserSkill
+                {
                     UserId = item.UserId,
                     SkillId = item.SkillId
                 };
@@ -153,7 +187,7 @@ namespace ProjectManagement.Users
                 throw new UserFriendlyException("User is a project manager !");
 
             var useSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.Id).ToListAsync();
-            foreach(var item in useSkills)
+            foreach (var item in useSkills)
             {
                 await _workScope.DeleteAsync(item);
             }
@@ -412,7 +446,7 @@ namespace ProjectManagement.Users
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                     var rowCount = worksheet.Dimension.Rows;
 
-                    for(int row = 2; row <= rowCount; row++)
+                    for (int row = 2; row <= rowCount; row++)
                     {
                         var fullName = worksheet.Cells[row, 3].Value.ToString().Trim();
                         var name = SplitUsername(fullName);

@@ -180,13 +180,14 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input)
+        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                .Select(x => new
                                {
                                    UserId = x.UserId,
+                                   ProjectId = x.ProjectId,
                                    ProjectName = x.Project.Name,
                                    AllocatePercentage = x.AllocatePercentage
                                });
@@ -203,7 +204,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
-                                    Projects = projectUsers.Where(y => y.UserId == x.Id).Select(x => x.ProjectName).ToList(),
+                                    Projects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0).Select(x => x.ProjectName).ToList(),
                                     Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage),
                                     ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan { 
                                         ProjectName = p.Project.Name,

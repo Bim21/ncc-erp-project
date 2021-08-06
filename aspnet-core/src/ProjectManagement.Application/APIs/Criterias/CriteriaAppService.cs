@@ -18,17 +18,18 @@ namespace ProjectManagement.APIs.Criterias
         [HttpPost]
         public async Task<GridResult<SelectCriteriaDto>> GetAllPaging(GridParam input)
         {
-            var query = from c in WorkScope.GetAll<Criteria>()
-                        join ct in WorkScope.GetAll<CriteriaCategory>() on c.CriteriaCategoryId equals ct.Id
-                        select new SelectCriteriaDto
-                        {
-                            Id = c.Id,
-                            Name = c.Name,
-                            Weight = c.Weight,
-                            CriteriaCategoryId = ct.Id,
-                            CriteriaCategoryName = ct.Name,
-                            Note = c.Note
-                        };
+            var query = WorkScope.GetAll<Criteria>()
+                .Include(x => x.CriteriaCategory)
+                .Select(c => new SelectCriteriaDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Weight = c.Weight,
+                    CriteriaCategoryId = c.CriteriaCategoryId,
+                    CriteriaCategoryName = c.CriteriaCategory.Name,
+                    Note = c.Note
+                });
+
             return await query.GetGridResult(query, input);
         }
         [HttpPost]
@@ -57,8 +58,8 @@ namespace ProjectManagement.APIs.Criterias
         [HttpDelete]
         public async Task Delete(long criteriaId)
         {
-            var isExist = WorkScope.GetAll<CheckPointUserDetail>().Count(x => x.CriteriaId == criteriaId);
-            if (isExist > 0)
+            var isExist = await WorkScope.GetAll<CheckPointUserDetail>().AnyAsync(x => x.CriteriaId == criteriaId);
+            if (isExist)
                 throw new UserFriendlyException(String.Format("Criteria này đang được dùng"));
 
             await WorkScope.DeleteAsync<Criteria>(criteriaId);

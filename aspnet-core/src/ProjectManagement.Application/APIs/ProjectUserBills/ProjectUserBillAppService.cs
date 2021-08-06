@@ -26,7 +26,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             var query = WorkScope.GetAll<ProjectUserBill>()
                         .Select(x => new GetProjectUserBillDto
                         {
-                            Id = x.Id,
+                           Id = x.Id,
                            UserId = x.UserId,
                            UserName = x.User.FullName,
                            ProjectId = x.ProjectId,
@@ -36,6 +36,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                            StartTime = x.StartTime.Date,
                            EndTime = x.EndTime.Value.Date,
                            Currency = x.Currency,
+                           Note= x.Note,
                            isActive = x.isActive
                         });
             return await query.GetGridResult(query, input);
@@ -58,6 +59,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             StartTime = x.StartTime.Date,
                             EndTime = x.EndTime.Value.Date,
                             Currency = x.Currency,
+                            Note = x.Note,
                             isActive = x.isActive,
                             AvatarPath = "/avatars/" + x.User.AvatarPath,
                             FullName = x.User.FullName,
@@ -72,7 +74,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_Create)]
         public async Task<ProjectUserBillDto> Create(ProjectUserBillDto input)
         {
-            if (input.StartTime.Date > input.EndTime.Value.Date)
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
@@ -86,7 +88,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         {
             var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(input.Id);
 
-            if (input.StartTime.Date > input.EndTime.Value.Date)
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserBillDto, ProjectUserBill>(input, projectUserBill));

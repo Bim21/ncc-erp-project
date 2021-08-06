@@ -99,6 +99,7 @@ import { AddReportNoteComponent } from './modules/delivery-management/delivery/w
 import { UploadAvatarComponent } from './users/upload-avatar/upload-avatar.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
+import { GetTimesheetWorkingComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/get-timesheet-working/get-timesheet-working.component';
 
 
 
@@ -192,6 +193,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddReportNoteComponent,
     UploadAvatarComponent,
     ConfigurationComponent,
+    GetTimesheetWorkingComponent,
 
     
   ],

@@ -67,6 +67,7 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProjectIssue_Delete: "DeliveryManagement.PMReportProjectIssue.Delete",
     DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek: "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek",
     DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue.Update",
+    DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth :"DeliveryManagement.PMReportProject.UpdatePmReportProjectHealth",
 
 
     Pages_Users_Create: "Pages.Users.Create",
@@ -157,6 +158,7 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_TimesheetProject_Update: "Timesheet.TimesheetProject.Update",
     Timesheet_TimesheetProject_UploadFileTimesheetProject: "Timesheet.TimesheetProject.UploadFileTimesheetProject",
     Timesheet_TimesheetProject_ViewInvoice: "Timesheet.TimesheetProject.ViewInvoice",
+    Timesheet_Timesheet_ReverseActive: "Timesheet.Timesheet.ReverseActive"
 
 
 }

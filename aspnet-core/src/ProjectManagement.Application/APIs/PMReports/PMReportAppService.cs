@@ -311,8 +311,10 @@ namespace ProjectManagement.APIs.PMReports
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_StatisticsReport)]
-        public async Task<ReportStatisticsDto> StatisticsReport(long pmReportId)
+        public async Task<ReportStatisticsDto> StatisticsReport(long pmReportId, DateTime startDate)
         {
+            var changeInFuture = new List<TotalFutureUseDto>();
+
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
 
             var issues = await (from p in WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.PMReportProject.PMReportId == pmReportId)
@@ -328,28 +330,59 @@ namespace ProjectManagement.APIs.PMReports
                              Solution = p.Solution,
                              MeetingSolution = p.MeetingSolution,
                              Status = p.Status.ToString(),
+                             ProjectHealth = p.PMReportProject.ProjectHealth,
                              CreatedAt = p.CreationTime
                          }).ToListAsync();
 
-            var users = from u in WorkScope.GetAll<User>().ToList()
-                        join pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Status != ProjectUserStatus.Past) 
-                        on u.Id equals pu.UserId into pp
-                        select new 
+            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status != ProjectUserStatus.Past && x.IsFutureActive);
+            var futureUser = projectUser.Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Future);
+            var presentUser = projectUser.Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive);
+
+            var changeUse = from p in presentUser
+                       join f in futureUser on p.UserId equals f.UserId
+                       where p.ProjectId == f.ProjectId
+                       select new
+                       {
+                           Present = p,
+                           Future = f
+                       };
+
+            foreach(var item in changeUse)
+            {
+                if(item.Present.AllocatePercentage != item.Future.AllocatePercentage)
+                {
+                    changeInFuture.Add(new TotalFutureUseDto
+                    { 
+                        UserId = item.Present.UserId,
+                        ProjectId = item.Present.ProjectId,
+                        Total = item.Future.AllocatePercentage - item.Present.AllocatePercentage
+                    });
+                }
+            }
+
+            var totalPercentageFuture = futureUser.Where(x => !changeInFuture.Select(r => r.UserId).Contains(x.Id) && !changeInFuture.Select(r => r.ProjectId).Contains(x.ProjectId));
+
+
+            var query = from u in WorkScope.GetAll<User>().ToList()
+                        join pu in projectUser on u.Id equals pu.UserId into pUser
+                        join c in changeInFuture on u.Id equals c.UserId into change
+                        join t in totalPercentageFuture on u.Id equals t.UserId into newFuture
+                        select new
                         {
                             UserId = u.Id,
                             FullName = u.Name + " " + u.Surname,
                             UserType = u.UserType,
                             Branch = u.Branch,
                             UserEmail = u.EmailAddress,
-                            TotalInTheWeek = pp.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
-                            TotalInTheFuture = pp.Where(x => x.StartTime.Date >= DateTime.Now.Date).Sum(x => x.AllocatePercentage)
+                            TotalInTheWeek = pUser.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
+                            TotalInTheFuture = presentUser.Where(x => x.UserId == u.Id).Sum(x => x.AllocatePercentage) + change.Sum(x => x.Total) + newFuture.Sum(x => x.AllocatePercentage)
                         };
 
             var result = new ReportStatisticsDto
             {
                 Note = pmReport.Note,
                 Issues = issues,
-                ResourceInTheWeek = users.Where(x => x.TotalInTheWeek < 20).OrderByDescending(x => x.TotalInTheWeek).Select(x => new ProjectUserStatistic
+                ResourceInTheWeek = query.OrderByDescending(x => x.TotalInTheWeek).Select(x => new ProjectUserStatistic
                 {
                     UserId = x.UserId,
                     FullName = x.FullName,
@@ -358,7 +391,7 @@ namespace ProjectManagement.APIs.PMReports
                     Email = x.UserEmail,
                     AllocatePercentage = x.TotalInTheWeek
                 }).ToList(),
-                ResourceInTheFuture = users.Where(x => x.TotalInTheFuture < 20).OrderByDescending(x => x.TotalInTheFuture).Select(x => new ProjectUserStatistic
+                ResourceInTheFuture = query.OrderByDescending(x => x.TotalInTheFuture).Select(x => new ProjectUserStatistic
                 {
                     UserId = x.UserId,
                     FullName = x.FullName,

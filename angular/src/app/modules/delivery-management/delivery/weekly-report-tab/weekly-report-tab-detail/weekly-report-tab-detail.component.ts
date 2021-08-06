@@ -18,6 +18,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 import * as moment from 'moment';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
+import { GetTimesheetWorkingComponent } from './get-timesheet-working/get-timesheet-working.component';
 
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -76,6 +77,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
+  public processFuture:boolean = false;
+  public processProblem:boolean=false
+  public processWeekly:boolean =false;
   // public minDate = new Date();
   // public maxDate= new Date();
   public createdDate = new Date();
@@ -133,9 +137,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }))
   }
   getProjectInfo() {
-    this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).subscribe(data => {
+    this.isLoading=true;
+    this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.projectInfo = data.result
-    })
+      this.isLoading =false;
+    },
+    ()=>{this.isLoading =false})
   }
   public view(projectReport) {
     this.pmReportProjectId = projectReport.id
@@ -158,8 +165,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getFuturereport();
     this.getProjectProblem();
     this.getCurrentResourceOfProject();
-
-
+    this.isEditWeeklyReport = false;
+    this.isEditFutureReport = false;
+    this.isEditProblem = false;
+    this.processFuture = false;
+    this.processProblem=false
+    this.processWeekly =false;
+    
   }
 
 
@@ -229,6 +241,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       } else {
         abp.notify.success("Mark Unread!");
       }
+      project.seen = ! project.seen
 
     })
 
@@ -266,7 +279,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
           this.getWeeklyReport();
-          this.isEditFutureReport = false;
+          this.getCurrentResourceOfProject();
+          this.isEditWeeklyReport = false;
           this.processWeekly = false;
         })
       },
@@ -280,6 +294,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processWeekly = false;
         report.createMode = false;
         this.getWeeklyReport();
+        this.getCurrentResourceOfProject();
+
       },
         () => {
           report.createMode = true
@@ -290,6 +306,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelWeekReport() {
     this.processWeekly = false;
+    this.isEditWeeklyReport =false;
     this.getWeeklyReport();
   }
   updateWeekReport(report) {
@@ -335,6 +352,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
           this.getFuturereport();
+          this.getCurrentResourceOfProject();
           this.isEditFutureReport = false;
           this.processFuture = false
         })
@@ -354,8 +372,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success("created new future report");
         this.processFuture = false;
         report.createMode = false;
-        this.isEditFutureReport = false
         this.getFuturereport();
+        this.getCurrentResourceOfProject();
+
       },
         () => {
           report.createMode = true
@@ -364,6 +383,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelFutureReport() {
     this.processFuture = false;
+    this.isEditFutureReport =false;
     this.getFuturereport();
   }
   public approveRequest(resource: projectUserDto): void {
@@ -391,6 +411,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       if (result) {
         this.getFuturereport();
         this.getWeeklyReport();
+        this.getCurrentResourceOfProject();
       }
     });
 
@@ -445,6 +466,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelProblemReport() {
     this.processProblem = false;
+    this.isEditProblem =false;
     this.getProjectProblem();
   }
   public editProblemReport(user: projectUserDto) {
@@ -505,4 +527,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectCurrentResource = data.result
       })
   }
+
+ getTimesheetWorking(){
+   const dialogRef = this.dialog.open(GetTimesheetWorkingComponent, {
+    data: {
+      dialogData: this.pmReportProjectId,
+    },
+    width: "500px",
+    disableClose: true,
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
+       let report =  data.result.filter(item=>item.id == this.pmReportProjectId)[0]
+       this.totalNormalWorkingTime = report.totalNormalWorkingTime
+       this.totalOverTime = report.totalOverTime
+      }))
+    }
+  });
+ }
 }
