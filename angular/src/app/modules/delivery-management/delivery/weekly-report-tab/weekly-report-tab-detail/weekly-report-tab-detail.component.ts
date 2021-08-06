@@ -18,6 +18,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 import * as moment from 'moment';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
+import { GetTimesheetWorkingComponent } from './get-timesheet-working/get-timesheet-working.component';
 
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -526,4 +527,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectCurrentResource = data.result
       })
   }
+
+ getTimesheetWorking(){
+   const dialogRef = this.dialog.open(GetTimesheetWorkingComponent, {
+    data: {
+      dialogData: this.pmReportProjectId,
+    },
+    width: "500px",
+    disableClose: true,
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.getProjectInfo();
+    }
+  });
+ }
 }

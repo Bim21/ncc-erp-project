@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
   selector: 'app-report-info',
   templateUrl: './report-info.component.html',
   styleUrls: ['./report-info.component.css'],
-  providers: [DatePipe]
+
 })
 export class ReportInfoComponent extends AppComponentBase implements OnInit {
   searchWeekResource: string = "";
@@ -29,14 +29,13 @@ export class ReportInfoComponent extends AppComponentBase implements OnInit {
   searchFutureCom:number=0;
 
   public reportInfo = {} as PmReportInfoDto
-  constructor(private reportService: PmReportService, private datePipe: DatePipe,
+  constructor(private reportService: PmReportService,
     public dialogRef: MatDialogRef<ReportInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, injector: Injector) {
     super(injector)
   }
 
   ngOnInit(): void {
-    // this.reportDate = this.datePipe.transform( new Date(this.currentDate.getTime() - 7 * 24 * 60 * 60 * 1000).toLocaleString(),"yyyy-MM-dd")
     this.getReportInfo();
   }
   getReportInfo() {
