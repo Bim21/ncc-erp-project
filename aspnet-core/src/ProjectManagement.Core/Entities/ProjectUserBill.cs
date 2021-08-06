@@ -16,7 +16,6 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
         public long UserId { get; set; }
-
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }
         public long ProjectId { get; set; }
@@ -25,6 +24,7 @@ namespace ProjectManagement.Entities
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public Currency Currency { get; set; }
+        public string Note { get; set; }
         public bool isActive { get; set; }
     }
 }

@@ -89,12 +89,14 @@ namespace ProjectManagement.APIs.TimeSheets
                                     {
                                         FullName = x.User.FullName,
                                         BillRole = x.BillRole,
-                                        BillRate = x.BillRate
+                                        BillRate = x.BillRate,
+                                        Note = x.Note,
+                                        Currency = x.Currency.ToString()
                                     });
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"{b.FullName} - {b.BillRole} - {b.BillRate}<br>");
+                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br><br>");
                 }
 
                 var timesheetProject = new TimesheetProject
