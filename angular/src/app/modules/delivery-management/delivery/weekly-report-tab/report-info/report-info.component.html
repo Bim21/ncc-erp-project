@@ -5,13 +5,13 @@
 <div class="card-header">
     <h3 class="d-inline">Thống kê cho report: {{data.report.name}}  </h3>
     <!-- <div class="text-right py-2"> -->
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="ml-4">
             <input placeholder="Choose date" matInput [matDatepicker]="picker" name="startDate"
                 [(ngModel)]="reportDate" #timeStart="ngModel" required />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <button style="margin-bottom: 13px;" type="button" class="btn bg-blue mb-2" (click)="getReportInfo()">
+        <button style="margin-bottom: 13px;" type="button" class="btn bg-blue " (click)="getReportInfo()">
             <i class="fas fa-search"></i>
         </button>
         <i class="fas fa-times float-right fa-lg" (click)="dialogRef.close()"></i>
@@ -172,17 +172,46 @@
                             <div class="container-fluid">
                                 <div class="mt-2">
                                     <div class="row">
-                                        <div class="col-6 mt-2">
-                                            <h5>List các user có resource < 20% trong tương lai</h5>
-                                        </div>
-                                        <div class="col-6">
-                                            <mat-form-field class="w-100 px-3 " appearance="outline"
+                                        <div class="col-5 mt-2">
+                                            <label for="" class="mt-2">Nhân viên:</label>
+                                            <mat-form-field style="width: 300px;" class=" px-3 " appearance="outline"
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchFutureResource" (ngModelChange)="searchFutureUser()"
-                                                    name="searchFutureResource" #searchFuture placeholder="Search user">
+                                                <input matInput [(ngModel)]="searchFutureResource" name="searchUserFuture" 
+                                                (ngModelChange)="searchFuturePercentage()"
+                                                    #searchUserFuture placeholder="Search user">
                                             </mat-form-field>
-                                           
                                         </div>
+                                        <div class="col-7 mt-2">
+                                            <label for="" class="mr-2">% sử dụng:</label>
+                                            <mat-form-field style="width: 200px;" appearance="outline">
+                                                <mat-select [(ngModel)]="searchFutureCom" (ngModelChange)="searchFuturePercentage()">
+                                                    <mat-option [value]="0">
+                                                        Lớn hơn 
+                                                    </mat-option >
+                                                    <mat-option [value]="1">
+                                                        Nhỏ hơn 
+                                                    </mat-option>
+                                                    <mat-option [value]="2">
+                                                        Lớn hơn hoặc bằng
+                                                    </mat-option >
+                                                    <mat-option [value]="3">
+                                                        Nhỏ hơn hoặc bằng
+                                                    </mat-option >
+                                                    <mat-option [value]="4">
+                                                        Bằng
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-form-field style="width: 300px;" class=" px-3 " appearance="outline"
+                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                                <input matInput [(ngModel)]="futurePercentage" 
+                                                
+                                                 name="futurePercentage" (ngModelChange)="searchFuturePercentage()" type="number"
+                                                    #search placeholder="% sử dụng">
+                                            </mat-form-field>
+                                            
+                                        </div>
+                                     
                                     </div>
                                     <div class=" table-responsive ">
                                         <div class="fixTableHead" >
