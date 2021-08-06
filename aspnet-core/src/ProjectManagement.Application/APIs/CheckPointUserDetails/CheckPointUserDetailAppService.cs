@@ -48,9 +48,11 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
             }
         }
         [HttpGet]
-        public async Task<List<CheckPointUserDetailBeforeDto>> GetAllBefore(long MemberId, long PhaseId)
+        public async Task<List<CheckPointUserDetailBeforeDto>> GetAllBefore(long checkPointUserId)
         {
-            var parentPhase = await WorkScope.GetAsync<Phase>(PhaseId);
+            var checkPointUser = await WorkScope.GetAsync<CheckPointUser>(checkPointUserId);
+
+            var parentPhase = await WorkScope.GetAsync<Phase>(checkPointUser.Id);
             var phases = WorkScope.GetAll<Phase>().Where(x => x.Type == PhaseType.Main && x.Status == PhaseStatus.Done);
             if (parentPhase.Index != 0)
             {
@@ -60,8 +62,8 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
 
             var query = from cpud in WorkScope.GetAll<CheckPointUserDetail>()
                         join cpu in WorkScope.GetAll<CheckPointUser>() on cpud.CheckPointUserId equals cpu.Id
-                        where cpu.UserId == MemberId && cpu.PhaseId == phaseBefore.Id
-                        && AbpSession.UserId == MemberId ? cpu.ReviewerId == MemberId : true && cpu.IsPublic == true
+                        where cpu.UserId == checkPointUser.UserId && cpu.PhaseId == phaseBefore.Id
+                        && AbpSession.UserId == checkPointUser.UserId ? cpu.ReviewerId == checkPointUser.UserId : true && cpu.IsPublic == true
                         select new CheckPointUserDetailBeforeDto
                         {
                             Id = cpud.Id,
