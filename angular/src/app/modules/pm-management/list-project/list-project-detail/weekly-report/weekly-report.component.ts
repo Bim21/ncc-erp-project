@@ -159,13 +159,15 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
           report.createMode = true
         })
     }
-
+    this.searchUser =""
+    
 
   }
   public cancelWeekReport() {
     this.processWeekly = false;
     this.isEditWeeklyReport =false;
     this.getWeeklyReport();
+    this.searchUser =""
   }
   updateWeekReport(report) {
     this.processWeekly = true
@@ -232,11 +234,13 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
           report.createMode = true
         })
     }
+    this.searchUser =""
   }
   public cancelFutureReport() {
     this.isEditFutureReport= false;
     this.processFuture = false;
     this.getFuturereport();
+    this.searchUser =""
   }
   public approveRequest(resource: projectUserDto): void {
     this.showDialog(resource);

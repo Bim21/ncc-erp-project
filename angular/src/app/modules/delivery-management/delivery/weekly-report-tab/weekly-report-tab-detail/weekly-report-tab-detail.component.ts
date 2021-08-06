@@ -96,6 +96,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   totalOverTime: number = 0;
   sidebarExpanded: boolean;
   isShowCurrentResource:boolean =true;
+  searchUser:string =""
   constructor(private pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
@@ -171,6 +172,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processFuture = false;
     this.processProblem=false
     this.processWeekly =false;
+    this.searchUser = ""
     
   }
 
@@ -229,7 +231,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getFuturereport();
     this.getProjectProblem()
     this.getCurrentResourceOfProject();
-
+    this.searchUser = ""
 
   }
 
@@ -282,6 +284,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.getCurrentResourceOfProject();
           this.isEditWeeklyReport = false;
           this.processWeekly = false;
+          this.searchUser = ""
         })
       },
         () => {
@@ -295,19 +298,20 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         report.createMode = false;
         this.getWeeklyReport();
         this.getCurrentResourceOfProject();
+        this.searchUser = ""
 
       },
         () => {
           report.createMode = true
         })
     }
-
-
+    
   }
   public cancelWeekReport() {
     this.processWeekly = false;
     this.isEditWeeklyReport =false;
     this.getWeeklyReport();
+    this.searchUser =""
   }
   updateWeekReport(report) {
     this.processWeekly = true
@@ -355,6 +359,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.getCurrentResourceOfProject();
           this.isEditFutureReport = false;
           this.processFuture = false
+          this.searchUser =""
         })
       },
         () => {
@@ -374,12 +379,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         report.createMode = false;
         this.getFuturereport();
         this.getCurrentResourceOfProject();
-
+        this.searchUser =""
       },
         () => {
           report.createMode = true
         })
     }
+    
   }
   public cancelFutureReport() {
     this.processFuture = false;
