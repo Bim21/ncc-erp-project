@@ -54,7 +54,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     throw new Error('Method not implemented.');
   }
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
-  public itemPerPage: number = 5;
+  public itemPerPage: number = 20;
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
   public problemCurrentPage: number = 1;
@@ -232,7 +232,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.getProjectProblem()
     this.getCurrentResourceOfProject();
     this.searchUser = ""
-
   }
 
   public markRead(project) {
