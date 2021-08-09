@@ -120,6 +120,7 @@ namespace ProjectManagement.APIs.PMReportProjects
 
             pmReportProject.TotalNormalWorkingTime = result.NormalWorkingTime;
             pmReportProject.TotalOverTime = result.OverTime;
+
             await WorkScope.UpdateAsync(pmReportProject);
         }
 
