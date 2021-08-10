@@ -73,6 +73,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], isConfirm:true },
+
   ];
 
 

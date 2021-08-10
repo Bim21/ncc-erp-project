@@ -24,9 +24,9 @@ export class ReportInfoComponent extends AppComponentBase implements OnInit {
   currentDate = new Date();
   reportDate: any = new Date()
   weeklyPercentage: number = 0;
-  searchWeeklyCom: number = 0;
-  futurePercentage:number =0;
-  searchFutureCom:number=0;
+  searchWeeklyCom: number = 2;
+  futurePercentage: number = 0;
+  searchFutureCom: number = 2;
 
   public reportInfo = {} as PmReportInfoDto
   constructor(private reportService: PmReportService,
@@ -71,86 +71,86 @@ export class ReportInfoComponent extends AppComponentBase implements OnInit {
       case 0:
         this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
           return user.allocatePercentage > this.weeklyPercentage && user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-          && ( user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-          || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()) )
+            && (user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()))
         })
         break;
       case 1:
         this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
           return user.allocatePercentage < this.weeklyPercentage
-          && ( user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-          || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()) )
+            && (user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()))
         })
         break;
-        case 2:
-          this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
-            return user.allocatePercentage >= this.weeklyPercentage
-            && ( user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-            || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()) )
-          })
-          break;
-          case 3:
-            this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
-              return user.allocatePercentage <= this.weeklyPercentage
-              && ( user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-              || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()) )
-            })
-            break;
+      case 2:
+        this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
+          return user.allocatePercentage >= this.weeklyPercentage
+            && (user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()))
+        })
+        break;
+      case 3:
+        this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
+          return user.allocatePercentage <= this.weeklyPercentage
+            && (user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()))
+        })
+        break;
       case 4:
         this.reportInfo.resourceInTheWeek = this.tempReportInfo.resourceInTheWeek.filter(user => {
           return user.allocatePercentage == this.weeklyPercentage
-          && (user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-          || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()) )
+            && (user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchWeekResource.toLowerCase()))
         })
         break;
-        
+
       default:
         break;
     }
-   
+
   }
   searchFuturePercentage() {
     switch (this.searchFutureCom) {
       case 0:
         this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
           return user.allocatePercentage > this.futurePercentage && user.email.toLowerCase().includes(this.searchWeekResource.toLowerCase())
-          && ( user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
-          || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()) )
+            && (user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()))
         })
         break;
       case 1:
         this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
           return user.allocatePercentage < this.futurePercentage
-          && ( user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
-          || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()) )
+            && (user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()))
         })
         break;
-        case 2:
-          this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
-            return user.allocatePercentage >= this.futurePercentage
-            && ( user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
-            || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()) )
-          })
-          break;
-          case 3:
-            this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
-              return user.allocatePercentage <= this.futurePercentage
-              && ( user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
-              || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()) )
-            })
-            break;
+      case 2:
+        this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
+          return user.allocatePercentage >= this.futurePercentage
+            && (user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()))
+        })
+        break;
+      case 3:
+        this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
+          return user.allocatePercentage <= this.futurePercentage
+            && (user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()))
+        })
+        break;
       case 4:
         this.reportInfo.resourceInTheFuture = this.tempReportInfo.resourceInTheFuture.filter(user => {
           return user.allocatePercentage == this.futurePercentage
-          && (user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
-          || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()) )
+            && (user.email.toLowerCase().includes(this.searchFutureResource.toLowerCase())
+              || user.fullName.toLowerCase().includes(this.searchFutureResource.toLowerCase()))
         })
         break;
-        
+
       default:
         break;
     }
-   
+
   }
 
 }

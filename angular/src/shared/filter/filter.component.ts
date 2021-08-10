@@ -16,11 +16,12 @@ export class FilterComponent {
   selectedPropertyName: string;
   selectedComparision: number;
   value: any;
-  isDateProperty:boolean;
+  isDateProperty: boolean;
+  isConFirmProperty: boolean = true;
 
   comparisions: ComparisionDto[] = [];
   constructor() {
-   }
+  }
   ngOnInit(): void {
     if (this.item.propertyName === '') {
       this.comparisions = [];
@@ -35,11 +36,12 @@ export class FilterComponent {
       });
 
     }
-    this.isDateProperty =this.item.isDate
+    this.isConFirmProperty = this.item.isConfirm
+    this.isDateProperty = this.item.isDate
   }
   onChange(value: string | number, name: string): void {
     if (name === 'propertyName') {
-      this.item.value =''
+      this.item.value = ''
       this.emitChange.emit({ name: 'comparision', value: undefined })
       if (value == '') {
         this.comparisions = [];
@@ -53,21 +55,37 @@ export class FilterComponent {
         com.name = COMPARISIONS[element];
         this.comparisions.push(com);
       });
-        this.isDateProperty = this.inputFilters.filter(item => item.propertyName == value)[0].isDate
-        if(this.isDateProperty ==true){
-          this.item.value = moment(new Date()).format("YYYY-MM-DD")
-          this.item.isDate = true
+      this.inputFilters.forEach(item => {
+        if (item.propertyName == value) {
+          this.isDateProperty = item.isDate
+          this.isConFirmProperty = item.isConfirm
+          if (this.isDateProperty == true) {
+            this.item.value = moment(new Date()).format("YYYY-MM-DD")
+            this.item.isDate = true
+          }
+          else {
+            this.item.isDate = false
+          }
+          if (this.isConFirmProperty) {
+            this.item.value =true
+            this.item.isConfirm = true
+          }
+          else {
+            this.item.isConfirm = false
+          }
+
         }
-        else{
-          this.item.isDate =false
-        }
+      })
     }
-    
+
     this.emitChange.emit({ name, value })
   }
-  onDateChange(){
+  onDateChange() {
     this.item.value = moment(this.item.value).format("YYYY-MM-DD")
     this.item.isDate = true
+  }
+  onRadioChange(event) {
+    this.item.value = event.value
   }
 
   deleteFilter() {
@@ -79,7 +97,8 @@ export class InputFilterDto {
   propertyName: string;
   displayName: string;
   comparisions: number[];
-  isDate?:boolean
+  isDate?: boolean
+  isConfirm?: boolean;
 }
 
 export class ComparisionDto {
