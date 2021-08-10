@@ -94,7 +94,7 @@ namespace ProjectManagement.APIs.TimeSheets
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate}");
+                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
                 }
 
                 var timesheetProject = new TimesheetProject
