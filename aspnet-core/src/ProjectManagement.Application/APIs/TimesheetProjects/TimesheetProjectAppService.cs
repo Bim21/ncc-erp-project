@@ -231,6 +231,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             Note = tsp.Note,
                             IsSendReport = pr.Status,
                             HistoryFile = tsp.HistoryFile,
+                            HasFile = !string.IsNullOrEmpty(tsp.FilePath)
                         }).OrderByDescending(x => x.ClientId);
 
             return await query.GetGridResult(query, input);
@@ -257,14 +258,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                 {
                                     FullName = x.User.FullName,
                                     BillRole = x.BillRole,
-                                    BillRate = x.BillRate,
-                                    Note = x.Note,
-                                    Currency = x.Currency.ToString()
+                                    BillRate = x.BillRate
                                 });
 
             foreach (var b in projectUserBills)
             {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br>");
+                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate}");
             }
 
             input.ProjectBillInfomation = $"{billInfomation}";
@@ -314,14 +313,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                 {
                                     FullName = x.User.FullName,
                                     BillRole = x.BillRole,
-                                    BillRate = x.BillRate,
-                                    Note = x.Note,
-                                    Currency = x.Currency.ToString()
+                                    BillRate = x.BillRate
                                 });
 
             foreach (var b in projectUserBills)
             {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br>");
+                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate}");
             }
 
             input.ProjectBillInfomation = $"{billInfomation}";
