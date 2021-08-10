@@ -10,7 +10,7 @@ using ProjectManagement.EntityFrameworkCore;
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    [Migration("20210810103146_add-TimeSendReport-PMReportProject")]
+    [Migration("20210810105140_add-TimeSendReport-PMReportProject")]
     partial class addTimeSendReportPMReportProject
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
