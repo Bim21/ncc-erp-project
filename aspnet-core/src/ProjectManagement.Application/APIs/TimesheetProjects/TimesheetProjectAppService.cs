@@ -263,7 +263,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             foreach (var b in projectUserBills)
             {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate}");
+                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
             }
 
             input.ProjectBillInfomation = $"{billInfomation}";
@@ -318,7 +318,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             foreach (var b in projectUserBills)
             {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate}");
+                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
             }
 
             input.ProjectBillInfomation = $"{billInfomation}";
