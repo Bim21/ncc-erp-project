@@ -25,6 +25,7 @@ namespace ProjectManagement.Entities
         public DateTime? EndTime { get; set; }
         public Currency Currency { get; set; }
         public string Note { get; set; }
+        public string shadowNote { get; set; }
         public bool isActive { get; set; }
     }
 }

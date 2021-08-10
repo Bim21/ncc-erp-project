@@ -371,6 +371,7 @@ namespace ProjectManagement.APIs.PMReports
                         {
                             UserId = u.Id,
                             FullName = u.Name + " " + u.Surname,
+                            Avatar = "/avatars/" + u.AvatarPath,
                             UserType = u.UserType,
                             Branch = u.Branch,
                             UserEmail = u.EmailAddress,
@@ -386,6 +387,7 @@ namespace ProjectManagement.APIs.PMReports
                 {
                     UserId = x.UserId,
                     FullName = x.FullName,
+                    Avatar = x.Avatar,
                     UserType = x.UserType,
                     Branch = x.Branch,
                     Email = x.UserEmail,
@@ -395,6 +397,7 @@ namespace ProjectManagement.APIs.PMReports
                 {
                     UserId = x.UserId,
                     FullName = x.FullName,
+                    Avatar = x.Avatar,
                     UserType = x.UserType,
                     Branch = x.Branch,
                     Email = x.UserEmail,

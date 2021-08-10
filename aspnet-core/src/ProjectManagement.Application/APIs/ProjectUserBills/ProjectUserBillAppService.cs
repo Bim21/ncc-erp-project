@@ -37,6 +37,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                            EndTime = x.EndTime.Value.Date,
                            Currency = x.Currency,
                            Note= x.Note,
+                           shadowNote = x.shadowNote,
                            isActive = x.isActive
                         });
             return await query.GetGridResult(query, input);
@@ -60,6 +61,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             EndTime = x.EndTime.Value.Date,
                             Currency = x.Currency,
                             Note = x.Note,
+                            shadowNote = x.shadowNote,
                             isActive = x.isActive,
                             AvatarPath = "/avatars/" + x.User.AvatarPath,
                             FullName = x.User.FullName,

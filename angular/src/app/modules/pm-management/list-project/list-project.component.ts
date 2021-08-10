@@ -22,8 +22,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
   PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
   PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
-
-
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'clientName', comparisions: [0, 6, 7, 8], displayName: "Client name" },

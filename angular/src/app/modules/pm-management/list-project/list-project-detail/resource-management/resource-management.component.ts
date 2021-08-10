@@ -139,6 +139,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         this.getProjectUser();
         abp.notify.success(`Added user to project`);
         this.projectUserProcess = false
+        this.searchUser = "";
+
       },
         () => {
           newUser.createMode = true
@@ -151,6 +153,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         this.getProjectUser();
         this.isEditUserProject = false;
         this.projectUserProcess = false
+        this.searchUser = "";
+
       })
     }
   }
@@ -185,6 +189,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getProjectUser();
     this.isEditUserProject = false;
     this.projectUserProcess = false
+    this.searchUser = ""
   }
   private filterProjectUserDropDown() {
 
@@ -210,6 +215,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`Created request: ${request.name}`)
         this.getResourceRequestList();
         this.requestProcess = false;
+
       },
         () => { request.createMode = true })
     }
@@ -219,6 +225,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         this.getResourceRequestList();
         this.requestProcess = false;
         this.isEditRequest = false;
+
       },
         () => { request.createMode = true })
     }
@@ -228,7 +235,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public cancelProjectRerequest(): void {
     this.getResourceRequestList();
     this.requestProcess = false
-    this.isEditRequest =false;
+    this.isEditRequest = false;
+    this.searchUser = "";
+
   }
   public editProjectRerequest(request: projectResourceRequestDto): void {
     request.createMode = true
@@ -273,6 +282,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         abp.notify.success(`Created new user bill`)
         this.getUserBill();
         this.userBillProcess = false;
+        this.searchUser = ""
+        this.searchUserBill = ""
       }, () => {
         userBill.createMode = true
       })
@@ -283,17 +294,22 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         this.getUserBill();
         this.userBillProcess = false;
         this.isEditUserBill = false;
+        this.searchUser = ""
+        this.searchUserBill = ""
       },
         () => {
           userBill.createMode = true;
         })
     }
 
+
   }
   public cancelUserBill(): void {
     this.getUserBill();
     this.userBillProcess = false;
-    this.isEditUserBill=false;
+    this.isEditUserBill = false;
+    this.searchUser = ""
+    this.searchUserBill = ""
   }
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;

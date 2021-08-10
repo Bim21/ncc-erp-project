@@ -355,6 +355,7 @@
                                     <th>Kết thúc charge</th>
                                     <th>is Active</th>
                                     <th>Note</th>
+                                    <th>Shadow note</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -365,7 +366,7 @@
                                     currentPage: userBillCurrentPage
                                     }  ; let i = index">
                                     <td><span>{{ i +1 }}</span></td>
-                                    <td class="text-left">
+                                    <td class="text-left" style="min-width: 250px;">
                                         <span *ngIf="!bill.createMode">
                                             <app-user-info
                                                 [userData]="{fullName:bill.fullName,branch:bill.branch,
@@ -453,15 +454,26 @@
                                             [(ngModel)]="bill.isActive">
                                         </mat-checkbox>
                                     </td>
-                                    <td style="white-space: normal; min-width: 200px;text-align: left;">
+                                    <td style="white-space: normal; min-width: 150px;text-align: left;">
                                         <span *ngIf="!bill.createMode">
                                             {{bill.note}}
                                         </span>
                                         <div *ngIf="bill.createMode">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
                                                 style="min-width: 150px;" class="form-control mt-1" #billRole="ngModel"
-                                                placeholder="Charge role" name="billNote"
+                                                placeholder="Note" name="billNote"
                                                 [(ngModel)]="bill.note"></textarea>
+                                        </div>
+                                    </td>
+                                    <td style="white-space: normal; min-width: 150px;text-align: left;">
+                                        <span *ngIf="!bill.createMode">
+                                            {{bill.shadowNote}}
+                                        </span>
+                                        <div *ngIf="bill.createMode">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                                                style="min-width: 150px;" class="form-control mt-1" #shadowNote="ngModel"
+                                                placeholder="Shadow note" name="shadowNote"
+                                                [(ngModel)]="bill.shadowNote"></textarea>
                                         </div>
                                     </td>
                                     <td>
