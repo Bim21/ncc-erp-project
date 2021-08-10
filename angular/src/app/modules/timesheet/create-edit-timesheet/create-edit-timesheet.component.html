@@ -1,8 +1,8 @@
 <form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
-    <div class="card-header">
-        <abp-modal-header title="Create/edit Timesheet" (onCloseClick)="dialogRef.close()">
+   
+        <abp-modal-header [title]="data.command == 'edit'?'Edit Timesheet: '+timesheet.name:'Create new Timesheet'"
+         (onCloseClick)="dialogRef.close()">
         </abp-modal-header>
-    </div>
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
@@ -41,7 +41,7 @@
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-select [(ngModel)]="timesheet.year" name="yearSelect" placeholder="select month"
                         required #account="ngModel">
-                        <ng-container *ngFor="let year of Years">
+                        <ng-container *ngFor="let year of listYear">
                             <mat-option  [value]="year">{{
                                 year
                                 }}</mat-option>
