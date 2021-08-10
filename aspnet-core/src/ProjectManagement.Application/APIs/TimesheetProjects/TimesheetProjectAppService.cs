@@ -296,7 +296,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Update)]
         public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
         {
-            var billInfomation = new StringBuilder();
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(input.Id);
             var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.Id != input.Id && (x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId));
@@ -308,20 +307,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 throw new UserFriendlyException("Timesheet not active !");
             }
 
-            var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == input.ProjectId && x.isActive && x.Project.IsCharge)
-                                .Select(x => new
-                                {
-                                    FullName = x.User.FullName,
-                                    BillRole = x.BillRole,
-                                    BillRate = x.BillRate
-                                });
-
-            foreach (var b in projectUserBills)
-            {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
-            }
-
-            input.ProjectBillInfomation = $"{billInfomation}";
+            if(string.IsNullOrEmpty(input.ProjectBillInfomation))
+                input.ProjectBillInfomation = timeSheetProject.ProjectBillInfomation;
             ObjectMapper.Map<TimesheetProjectDto, TimesheetProject>(input, timeSheetProject);
             await WorkScope.GetRepo<TimesheetProject, long>().UpdateAsync(timeSheetProject);
             return input;

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using NccCore.Uitls;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.PMReports.Dto;
@@ -278,6 +279,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                 throw new UserFriendlyException("Report has been sent !");
 
             pmReportProject.Status = PMReportProjectStatus.Sent;
+            pmReportProject.TimeSendReport = DateTimeUtils.GetNow();
             // phạt nhẹ nếu quá hạn
             if (pmReportProject.PMReport.PMReportStatus == PMReportStatus.Expired && pmReportProject.PMReport.Type == PMReportType.Weekly)
             {
