@@ -85,6 +85,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_CreateInvoice)]
         public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
         {
+            var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             var timesheetProject = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == input.TimesheetId && x.Timesheet.IsActive);
             var query = WorkScope.GetAll<Client>().Where(x => timesheetProject.Select(p => p.Project.ClientId).Contains(x.Id))
                 .Select(x => new
@@ -117,7 +118,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         }
                         var invoice = new CreateInvoiceDto
                         {
-                            Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{projectName}]",
+                            Name = $"Invoice {item.Month}/{item.Year}",
+                            ClientName = item.ClientName,
+                            Project = $"{projectName}",
                             AccountCode = item.ClientCode,
                             TotalPrice = 0,
                             Status = InvoiceStatus.New,
@@ -142,7 +145,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         {
                             var invoice = new CreateInvoiceDto
                             {
-                                Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{p.ProjectName}]",
+                                Name = $"Invoice {item.Month}/{item.Year}",
+                                ClientName = item.ClientName,
+                                Project = p.ProjectName,
                                 AccountCode = item.ClientCode,
                                 TotalPrice = 0,
                                 Status = InvoiceStatus.New,
@@ -165,6 +170,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var rs = await _financeService.CreateInvoiceToFinance(createInvoice);
             if (rs == null)
                 throw new UserFriendlyException("Error creating Invoice");
+
+            timesheet.CreatedInvoice = true;
+            await WorkScope.UpdateAsync(timesheet);
             return input;
         }
 
