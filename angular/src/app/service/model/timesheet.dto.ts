@@ -36,3 +36,8 @@ export class UploadFileDto{
     File:any;
     
 }
+export class ClientInvoiceDto{
+    clientId: number;
+    clientName: string;
+    totalProject: number
+}

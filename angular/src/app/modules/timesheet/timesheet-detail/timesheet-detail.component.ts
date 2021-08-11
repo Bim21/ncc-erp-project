@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
+import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -84,6 +85,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheet_TimesheetProject_DownloadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
   Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
   Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
+  Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
 
 
   constructor(
@@ -202,6 +204,19 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     return buf;
   }
 
-
+  createInvoice(){
+    const show = this.dialog.open(CreateInvoiceComponent, {
+      data: {
+        timeSheetId: this.timesheetId,
+      },
+      width: "700px",
+      disableClose: true,
+    });
+    // show.afterClosed().subscribe(res => {
+    //   if (res) {
+    //     // this.refresh();
+    //   }
+    // })
+  }
 
 }
