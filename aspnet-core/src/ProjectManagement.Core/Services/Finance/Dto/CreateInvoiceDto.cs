@@ -8,6 +8,8 @@ namespace ProjectManagement.Services.Finance.Dto
     public class CreateInvoiceDto
     {
         public string Name { get; set; }
+        public string ClientName { get; set; }
+        public string Project { get; set; }
         public string AccountCode { get; set; }
         public double TotalPrice { get; set; }
         public InvoiceStatus Status { get; set; }
