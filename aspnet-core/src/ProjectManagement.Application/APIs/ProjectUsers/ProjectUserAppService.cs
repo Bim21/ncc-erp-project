@@ -25,7 +25,7 @@ namespace ProjectManagement.APIs.ProjectUsers
     public class ProjectUserAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject)]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject, PermissionNames.DeliveryManagement_ProjectUser_ViewAllByProject)]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.IsFutureActive)
@@ -78,7 +78,8 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewDetailProjectUser)]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewDetailProjectUser,
+            PermissionNames.DeliveryManagement_ProjectUser_ViewDetailProjectUser)]
         public async Task<GetProjectUserDto> Get(long projectUserId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Id == projectUserId)
@@ -105,7 +106,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create)]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create, PermissionNames.DeliveryManagement_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto input)
         {
             var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId
@@ -140,7 +141,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Update)]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Update, PermissionNames.DeliveryManagement_ProjectUser_Update)]
         public async Task<ProjectUserDto> Update(ProjectUserDto input)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
@@ -178,7 +179,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Delete)]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Delete, PermissionNames.DeliveryManagement_ProjectUser_Delete)]
         public async Task Delete(long projectUserId)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);

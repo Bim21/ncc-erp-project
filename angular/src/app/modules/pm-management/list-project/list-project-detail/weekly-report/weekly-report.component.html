@@ -34,7 +34,7 @@
                                     </mat-form-field>
                                     <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
                                         [disabled]="!allowSendReport"
-                                        *ngIf="selectedReport.isActive && permission.isGranted(DeliveryManagement_PMReportProject_SendReport) && isSentReport  ">
+                                        *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport  ">
                                         <i class="fas fa-paper-plane"></i> Send report
                                     </button>
                                 </div>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-10">
                                 <mat-form-field style="margin-left: 10px !important;" class="myFilter ml-3" appearance="outline">
-                                    <mat-select [disabled]="!selectedReport.isActive || !permission.isGranted(DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth)" name="flag" 
+                                    <mat-select [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)" name="flag" 
                                         placeholder="Project health" [(ngModel)]="projectHealth">
                                         <ng-container *ngFor="let flag of problemIssueList">
                                             <mat-option [value]="APP_ENUM.ProjectHealth[flag]"  (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
@@ -120,14 +120,14 @@
         </div>
 
 
-        <div *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)">
+        <div *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_ProblemsOfTheWeek)">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="d-inline">Các vấn đề trong tuần</h4>
                             <button
-                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create) && selectedReport.isActive  "
+                                *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Create) && selectedReport.isActive  "
                                 [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
@@ -247,21 +247,21 @@
                                 </td>
                                 <td class="text-center" *ngIf="selectedReport.isActive">
                                     <button
-                                        *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
-                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive"
+                                        *ngIf="!problem.createMode && (permission.isGranted(PmManager_PMReportProjectIssue_Update)
+                                        || permission.isGranted(PmManager_PMReportProjectIssue_Delete)) && selectedReport.isActive"
                                         mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
                                         <button
-                                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)"
+                                            *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Update)"
                                             (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
 
                                         <button
-                                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)"
+                                            *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Delete)"
                                             (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
                                             Delete
@@ -293,13 +293,13 @@
         </div>
 
 
-        <div *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek)">
+        <div *ngIf="permission.isGranted(PmManager_PMReportProject_ResourceChangesDuringTheWeek)">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
                         <button
-                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive"
+                            *ngIf="permission.isGranted(PmManager_PMReportProject_Create) && selectedReport.isActive"
                             [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
@@ -415,14 +415,14 @@
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
                                         <button (click)="updateWeekReport(report)"
-                                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
+                                            *ngIf="permission.isGranted(PmManager_PMReportProject_Update)"
                                             class="mat-menu-item  w-100">
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
 
                                         <button (click)="deleteWeekReport(report)"
-                                            *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Delete)"
+                                            *ngIf="permission.isGranted(PmManager_PMReportProject_Delete)"
                                             class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
                                             Delete
@@ -448,12 +448,12 @@
             </div>
             <div>
                 <div class="card"
-                    *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)">
+                    *ngIf="permission.isGranted(PmManager_PMReportProject_ResourceChangesInTheFuture)">
                     <div class="card-header">
                         <div class="row">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
                             <button
-                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive "
+                                *ngIf="permission.isGranted(PmManager_PMReportProject_Create) && selectedReport.isActive "
                                 [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
@@ -560,8 +560,8 @@
                                         </div>
                                     </td>
                                     <td class="text-center" *ngIf="selectedReport.isActive">
-                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser) || permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser) 
-                                        || permission.isGranted(DeliveryManagement_PMReportProject_Update))"
+                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(PmManager_ResourceRequest_ApproveUser) || permission.isGranted(PmManager_ResourceRequest_RejectUser) 
+                                        || permission.isGranted(PmManager_PMReportProject_Update))"
                                             [disabled]="processFuture" mat-button [matMenuTriggerFor]="menu">
                                             <i class="fas fa-bars fa-lg"></i>
 
@@ -569,17 +569,17 @@
                                         <mat-menu #menu="matMenu" class="p-2">
 
                                             <button (click)="approveRequest(report)" class="mat-menu-item  w-100"
-                                                *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ApproveUser)">
+                                                *ngIf="permission.isGranted(PmManager_ResourceRequest_ApproveUser)">
                                                 <i class="fas fa-check mr-2 fa-lg "></i>
                                                 Xác nhận thay đổi
                                             </button>
                                             <button (click)="rejectRequest(report)" class="mat-menu-item  w-100"
-                                                *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_RejectUser)">
+                                                *ngIf="permission.isGranted(PmManager_ResourceRequest_RejectUser)">
                                                 <i class="fas fa-times mr-2 fa-lg"></i>
                                                 Từ chối
                                             </button>
                                             <button
-                                                *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Update)"
+                                                *ngIf="permission.isGranted(PmManager_PMReportProject_Update)"
                                                 (click)="updateRequest(report)" class="mat-menu-item  w-100">
                                                 <i class="fas fa-edit mr-2 fa-lg"></i>
 

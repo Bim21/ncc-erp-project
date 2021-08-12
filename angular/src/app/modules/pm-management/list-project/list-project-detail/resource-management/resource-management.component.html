@@ -201,10 +201,10 @@
         <div class="card mt-3">
 
             <mat-expansion-panel expanded=false
-                *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ViewAllByProject)">
+                *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <h4 class="d-inline">Request nhân sự</h4>
-                    <button *ngIf="!requestProcess  &&  permission.isGranted(DeliveryManagement_ResourceRequest_Create)"
+                    <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)"
                         [hidden]="!isShowRequest"
                         (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                         class="btn bg-blue ml-3">
@@ -281,12 +281,12 @@
                                     <td>
                                         <div *ngIf="!request.createMode">
                                             <button
-                                                *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
+                                                *ngIf="permission.isGranted(PmManager_ResourceRequest_Update)"
                                                 [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editProjectRerequest(request)"> <i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
                                             <button
-                                                *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                                *ngIf="permission.isGranted(PmManager_ResourceRequest_Delete)"
                                                 [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeProjectRerequest(request)"> <i
                                                     class="fas fa-trash"></i>delete</button>

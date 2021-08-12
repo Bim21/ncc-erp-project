@@ -9,8 +9,8 @@ import { AppComponentBase } from '@shared/app-component-base';
   styleUrls: ['./delivery.component.css']
 })
 export class DeliveryComponent extends AppComponentBase implements OnInit {
-  PmManager_CanViewMenu_ResourceManagement=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ResourceManagement;
-  PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
+  DeliveryManagement_CanViewMenu_ResourceManagement=PERMISSIONS_CONSTANT.Deliverymanagement_CanViewMenu_ResourceManagement;
+  DeliveryManagement_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.DeliveryManagement_CanViewMenu_WeeklyReport;
   DeliveryManagement_ResourceRequest_AvailableResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_AvailableResource
   currentUrl: string = ""
 
