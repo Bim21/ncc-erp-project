@@ -39,6 +39,7 @@ namespace ProjectManagement.APIs.TimeSheets
                     Month = x.Month,
                     Year = x.Year,
                     IsActive = x.IsActive,
+                    CreatedInvoice = x.CreatedInvoice,
                     TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
                     TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Count()
                 });
@@ -58,6 +59,7 @@ namespace ProjectManagement.APIs.TimeSheets
                                     Month = x.Month,
                                     Year = x.Year,
                                     IsActive = x.IsActive,
+                                    CreatedInvoice = x.CreatedInvoice
                                 });
             return await query.FirstOrDefaultAsync();
         }

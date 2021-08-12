@@ -103,16 +103,16 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.showDialog("edit", timesheet);
   }
 
-  showDetail(timesheet: any) {
-    this.router.navigate(['app/timesheetDetail'], {
-      queryParams: {
-        id: timesheet.id,
-        isActive:timesheet.isActive
-      }
-    })
-
-  }
-
+  showDetail(item:any){
+      this.router.navigate(['app/timesheetDetail'], {
+        queryParams: {
+          id: item.id,
+          createdInvoice:item.createdInvoice,
+          isActive:item.isActive
+        }
+      })
+      
+    }
 
   changeStatus(timesheet) {
     this.timesheetService.ReverseActive(timesheet.id).pipe(catchError(this.timesheetService.handleError)).subscribe(rs => {
