@@ -70,12 +70,13 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public projectTimesheetDetailId: any;
   public searchText: string = "";
   public timesheetId: any;
-  public isActive: boolean
+  public isActive: boolean;
+  public createdInvoice: boolean;
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], isConfirm:true },
+    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], isConfirm: true },
 
   ];
 
@@ -103,7 +104,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
-    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false
+    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
+    this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
     this.refresh();
 
   }
@@ -204,7 +206,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     return buf;
   }
 
-  createInvoice(){
+  createInvoice() {
     const show = this.dialog.open(CreateInvoiceComponent, {
       data: {
         timeSheetId: this.timesheetId,
@@ -212,11 +214,21 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       width: "700px",
       disableClose: true,
     });
-    // show.afterClosed().subscribe(res => {
-    //   if (res) {
-    //     // this.refresh();
-    //   }
-    // })
+    show.afterClosed().subscribe(res => {
+      if (res) {
+        this.reloadComponent();
+      }
+    })
   }
-
+  public reloadComponent() {
+    this.router.navigate(['app/timesheetDetail'], {
+      queryParams: {
+        id: this.timesheetId,
+        createdInvoice: true,
+        isActive: false
+      }
+    })
+    this.isActive = false;
+    this.createdInvoice = true;
+  }
 }

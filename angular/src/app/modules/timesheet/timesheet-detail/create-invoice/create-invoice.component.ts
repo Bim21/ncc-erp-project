@@ -35,7 +35,7 @@ export class CreateInvoiceComponent extends AppComponentBase implements OnInit {
     this.timeSheetProjectService.createInvoice(this.data.timeSheetId, this.listInvoice)
     .pipe(catchError(this.timeSheetProjectService.handleError))
     .subscribe(rs => {
-      this.dialogRef.close();
+      this.dialogRef.close(this.listInvoice);
       abp.notify.success("Create invoice successfully");
     },
       () => { this.isLoading = false })
