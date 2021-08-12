@@ -86,6 +86,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
+
+            if (timesheet.CreatedInvoice)
+                throw new UserFriendlyException("Invoice created !");
+
             var timesheetProject = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == input.TimesheetId && x.Timesheet.IsActive);
             var query = WorkScope.GetAll<Client>().Where(x => timesheetProject.Select(p => p.Project.ClientId).Contains(x.Id))
                 .Select(x => new
@@ -172,6 +176,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 throw new UserFriendlyException("Error creating Invoice");
 
             timesheet.CreatedInvoice = true;
+            timesheet.IsActive = false;
             await WorkScope.UpdateAsync(timesheet);
             return input;
         }
