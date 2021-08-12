@@ -304,16 +304,24 @@
 
                         <div class="card-body">
                             
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditCanSendDay" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.canSendDay" #canSendDay />
+                            <mat-form-field class="w-75" appearance="legacy">
+                                <!-- <input [readonly]="!isEditCanSendDay" class="w-100" type="text" matInput
+                                    [(ngModel)]="configuration.canSendDay" #canSendDay /> -->
+                                <mat-select [disabled]="!isEditCanSendDay" class="w-100" [(ngModel)]="configuration.canSendDay" #canSendDay>
+                                    <mat-option *ngFor="let day of listDays" [value]="day.value">
+                                        {{day.text}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
                         <div class="card-body">
                             
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditCanSendHour" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.canSendHour" #canSendHour />
+                            <mat-form-field class="w-75" appearance="legacy">
+                                <mat-select [disabled]="!isEditCanSendHour" class="w-100" [(ngModel)]="configuration.canSendHour" #canSendHour>
+                                    <mat-option *ngFor="let hour of listHours" [value]="hour.value">
+                                        {{hour.text}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
                     </div>
@@ -326,16 +334,22 @@
 
                         <div class="card-body">
 
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditExpiredDay" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.expiredDay" #expiredDay />
+                            <mat-form-field class="w-75" appearance="legacy">
+                                <mat-select [disabled]="!isEditExpiredDay" class="w-100" [(ngModel)]="configuration.expiredDay" #expiredDay>
+                                    <mat-option *ngFor="let day of listDays" [value]="day.value">
+                                        {{day.text}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
                         <div class="card-body">
 
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditExpiredHour" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.expiredHour" #expiredHour />
+                            <mat-form-field class="w-75" appearance="legacy">
+                                <mat-select [disabled]="!isEditExpiredHour" class="w-100" [(ngModel)]="configuration.expiredHour" #expiredHour>
+                                    <mat-option *ngFor="let hour of listHours" [value]="hour.value">
+                                        {{hour.text}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
                     </div>
