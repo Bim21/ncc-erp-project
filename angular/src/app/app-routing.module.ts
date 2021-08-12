@@ -1,3 +1,4 @@
+import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
 import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
 import { CategoryCriteriaComponent } from './modules/checkpoint/category/category-criteria/category-criteria.component';
 import { ClientComponent } from './modules/admin/client/client.component';
@@ -198,6 +199,11 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
               },
 
             ]
+          },
+          {
+            path:"phase",
+            component: PhaseComponent,
+            canActivate:[AppRouteGuard]
           },
           {
             path:"category-criteria",

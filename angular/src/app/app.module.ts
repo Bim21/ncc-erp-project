@@ -101,6 +101,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 import { GetTimesheetWorkingComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/get-timesheet-working/get-timesheet-working.component';
 import { CreateInvoiceComponent } from './modules/timesheet/timesheet-detail/create-invoice/create-invoice.component';
+import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
+import { CreateEditPhaseComponent } from './modules/checkpoint/phase/create-edit-phase/create-edit-phase.component';
 
 
 
@@ -196,6 +198,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ConfigurationComponent,
     GetTimesheetWorkingComponent,
     CreateInvoiceComponent,
+    PhaseComponent,
+    CreateEditPhaseComponent,
 
     
   ],
