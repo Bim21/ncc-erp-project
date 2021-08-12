@@ -29,9 +29,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   PmManager_ProjectUserBill_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
   PmManager_ProjectUserBill_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
   PmManager_ProjectUserBill_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
-  DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create
-  DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete
-  DeliveryManagement_ResourceRequest_Update = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update
+  PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
+  PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
+  PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -65,7 +65,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isShowUserBill: boolean = false;
 
 
-  DeliveryManagement_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewAllByProject
+  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
@@ -88,7 +88,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
 
   }
   private getResourceRequestList(): void {
-    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewAllByProject)) {
+    if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
       this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
