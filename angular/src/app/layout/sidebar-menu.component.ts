@@ -119,34 +119,40 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         ),
       ]
       ),
-      // new MenuItem(
-      //   this.l("CheckPoint"),
-      //   "",
-      //   "fas fa-tasks",
-      //   "", [
-      //   new MenuItem(
-      //     this.l("Category"),
-      //     "",
-      //     "fas fa-clipboard-list",
-      //     "",[
-      //       new MenuItem(
-      //         this.l("Category Criteria"),
-      //         "/app/category-criteria",
-      //         "fas fa-clipboard-list",
-      //         ""
-      //       ),
-      //       new MenuItem(
-      //         this.l("Criteria"),
-      //         "/app/category-criteria",
-      //         "fas fa-clipboard-list",
-      //         ""
-      //       )
-      //     ]
-      //   ),
+      new MenuItem(
+        this.l("CheckPoint"),
+        "",
+        "fas fa-tasks",
+        "", [
+          new MenuItem(
+            this.l("Phase"),
+            "/app/phase",
+            "fas fa-clipboard-list",
+            "",
+          ),
+          new MenuItem(
+            this.l("Category"),
+            "",
+            "fas fa-clipboard-list",
+            "",[
+              new MenuItem(
+                this.l("Category Criteria"),
+                "/app/category-criteria",
+                "fas fa-clipboard-list",
+                ""
+              ),
+              new MenuItem(
+                this.l("Criteria"),
+                "/app/category-criteria",
+                "fas fa-clipboard-list",
+                ""
+              )
+          ]
+        ),
 
 
-      // ]
-      // ),
+      ]
+      ),
 
     ];
   }
