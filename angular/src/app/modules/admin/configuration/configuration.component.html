@@ -318,8 +318,8 @@
                             
                             <mat-form-field class="w-75" appearance="legacy">
                                 <mat-select [disabled]="!isEditCanSendHour" class="w-100" [(ngModel)]="configuration.canSendHour" #canSendHour>
-                                    <mat-option *ngFor="let hour of listHours" [value]="hour">
-                                        {{hour}}
+                                    <mat-option *ngFor="let hour of listHours" [value]="hour.value">
+                                        {{hour.text}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -346,8 +346,8 @@
 
                             <mat-form-field class="w-75" appearance="legacy">
                                 <mat-select [disabled]="!isEditExpiredHour" class="w-100" [(ngModel)]="configuration.expiredHour" #expiredHour>
-                                    <mat-option *ngFor="let hour of listHours" [value]="hour">
-                                        {{hour}}
+                                    <mat-option *ngFor="let hour of listHours" [value]="hour.value">
+                                        {{hour.text}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>

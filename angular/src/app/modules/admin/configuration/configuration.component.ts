@@ -38,14 +38,15 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     {value:"7", text: "Saturday"},
     {value:"8", text: "Sunday"},
   ]
-  public listHours = Array<string>();
+  public listHours = [];
   constructor(private settingService: AppConfigurationService, injector:Injector) { 
     super(injector)
   }
 
   ngOnInit(): void {
     for (let index = 0; index < 24; index++) {
-      this.listHours.push(index.toString())
+      let hour = {value: index.toString(), text: index.toString()+"h"}
+      this.listHours.push(hour)
     }
     this.getSetting()
   }
