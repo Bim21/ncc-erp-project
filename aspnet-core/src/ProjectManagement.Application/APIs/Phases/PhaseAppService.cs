@@ -18,18 +18,18 @@ namespace ProjectManagement.APIs.Phases
     public class PhaseAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        public async Task<GridResult<SelectPhaseDto>> GetAllPaging(GridParam input)
+        public async Task<GridResult<PhaseDto>> GetAllPaging(GridParam input)
         {
             var query = from p in WorkScope.GetAll<Phase>()
                         join pt in WorkScope.GetAll<Phase>()
                         on p.ParentId equals pt.Id
-                        select new SelectPhaseDto()
+                        select new PhaseDto()
                         {
                             Id = p.Id,
                             Name = p.Name,
                             Year = p.Year,
-                            Type = p.Type.ToString(),
-                            ParentName = pt.Name,
+                            Type = p.Type,
+                            ParentId = pt.Id,
                             Status = p.Status,
                             IsCriteria = p.IsCriteria,
                             Index = p.Index,
@@ -40,6 +40,17 @@ namespace ProjectManagement.APIs.Phases
         public async Task<object> GetAll(int year)
         {
             var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year && x.Type == PhaseType.Main)
+                .Select(x => new
+                {
+                    ParentId = x.Id,
+                    ParentName = x.Name,
+                });
+            return await query.ToListAsync();
+        }
+        [HttpGet]
+        public async Task<object> GetAllParent(int year)
+        {
+            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year)
                 .Select(x => new
                 {
                     ParentId = x.Id,
