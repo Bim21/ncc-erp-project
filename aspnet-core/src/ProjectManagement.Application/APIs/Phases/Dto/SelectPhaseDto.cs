@@ -14,6 +14,7 @@ namespace ProjectManagement.APIs.Phases.Dto
     {
         [ApplySearchAttribute]
         public string Name { get; set; }
+        [ApplySearchAttribute]
         public int Year { get; set; }
         public string ParentName { get; set; }
         public string Type { get; set; }
