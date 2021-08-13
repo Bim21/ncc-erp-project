@@ -47,17 +47,6 @@ namespace ProjectManagement.APIs.Phases
                 });
             return await query.ToListAsync();
         }
-        [HttpGet]
-        public async Task<object> GetAllParent(int year)
-        {
-            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year)
-                .Select(x => new
-                {
-                    ParentId = x.Id,
-                    ParentName = x.Name,
-                });
-            return await query.ToListAsync();
-        }
         [HttpPost]
         public async Task<PhaseDto> Create(PhaseDto input)
         {
