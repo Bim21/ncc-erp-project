@@ -17,8 +17,8 @@ namespace ProjectManagement.APIs.Phases
     [AbpAuthorize]
     public class PhaseAppService : ProjectManagementAppServiceBase
     {
-        [HttpGet]
-        public async Task<List<SelectPhaseDto>> GetAll()
+        [HttpPost]
+        public async Task<GridResult<SelectPhaseDto>> GetAllPaging(GridParam input)
         {
             var query = from p in WorkScope.GetAll<Phase>()
                         join pt in WorkScope.GetAll<Phase>()
@@ -34,6 +34,17 @@ namespace ProjectManagement.APIs.Phases
                             IsCriteria = p.IsCriteria,
                             Index = p.Index,
                         };
+            return await query.GetGridResult(query, input);
+        }
+        [HttpGet]
+        public async Task<object> GetAll(int year)
+        {
+            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year && x.Type == PhaseType.Main)
+                .Select(x => new
+                {
+                    ParentId = x.Id,
+                    ParentName = x.Name,
+                });
             return await query.ToListAsync();
         }
         [HttpPost]
