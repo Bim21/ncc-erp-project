@@ -7,7 +7,7 @@
                 {{ 'Name' | localize }}:
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="projectName" id="projectName" 
+                <input type="text" class="form-control" name="projectName" id="projectName" placeholder="Name"
                     required [(ngModel)]="phase.name" #projectNameModel="ngModel" #projectNameEl />
                 <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
                 </abp-validation-summary>
@@ -18,14 +18,50 @@
                 {{ 'Year' | localize }}:
             </label>
             <div class="col-md-9">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-select [(ngModel)]="phase.year" name="yearSelect" placeholder="Select Year"
+                        required #account="ngModel">
+                        <ng-container *ngFor="let year of listYear">
+                            <mat-option  [value]="year" (click)="getParent(year)">{{
+                                year
+                                }}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
                 
             </div>
         </div>
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="phase.year">
+            <label class="col-md-3 col-form-label" for="projectName">
+                {{ 'Type' | localize }}:
+            </label>
+            <div class="col-md-9">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-select  [(ngModel)]="phase.type" name="type" placeholder="Select type phase" required
+                        #type="ngModel" (selectionChange)="onTypeChange()">
+                        <mat-option *ngFor="let type of typePhase" [value]="APP_ENUM.TypePhase[type]">
+                            {{type}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error class="mt-1" *ngIf="type.hasError('required') && type.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
+            </div>
+        </div>
+        <div class="form-group row required" *ngIf="phase.type=='1'">
             <label class="col-md-3 col-form-label" for="projectName">
                 {{ 'ParentName' | localize }}:
             </label>
             <div class="col-md-9">
+                <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
+                    <mat-select required placeholder="Select project name" 
+                    [(ngModel)]="phase.parentId" name="projectType">
+                        <mat-option *ngFor="let parent of parenttList" [value]="parent.parentId"  >
+                            {{parent.parentName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
                 
             </div>
         </div>
@@ -38,20 +74,13 @@
                 </mat-checkbox>
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="projectName">
-                {{ 'Type' | localize }}:
-            </label>
-            <div class="col-md-9">
-                
-            </div>
-        </div>
+        
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="projectName">
                 {{ 'Không áp dụng cho tiêu chí đánh giá' | localize }}:
             </label>
             <div class="col-md-9">
-                <mat-checkbox  class="example-margin" >
+                <mat-checkbox  name="isCheck" class="example-margin" [(ngModel)]="check">
                 </mat-checkbox>
             </div>
         </div>
@@ -61,6 +90,6 @@
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button mat-raised-button color="primary" class="saving-btn"mat-button
-        [disabled]="!timesheetForm.form.valid ||isLoading"  >Save</button>
+          (click)="SaveAndClose()">Save</button>
     </div>
 </form>

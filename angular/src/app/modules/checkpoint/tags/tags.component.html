@@ -2,10 +2,10 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
-                <h1>Phase</h1>
+                <h1>Tags</h1>
             </div>
             <div class="col-6 text-right">
-                <button (click)='create()'
+                <button   (click)="create()"
                     class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                    Create
@@ -56,71 +56,31 @@
                     </form>
                 </div>
             </div>
-            
             <div class="card-body table-responsive p-4">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
-                            <th>Year</th>
-                            <th>Parent Name</th>
-                            <th>Is Active</th>
-                            <th>Type</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of phaseList; let i=index">
+                        <tr *ngFor="let item of tagsList; let i=index">
                             <td>{{i+1}}</td>
                             <td>{{item.name}}</td>
-                            <td>{{item.year}}</td>
-                            <td>{{item.parentName}}</td>
-                            <td>
-                                <mat-checkbox  class="example-margin" [(ngModel)]="item.isCriteria">
-                                </mat-checkbox>
-                                </td>
-                            <td>
-                                <span  
-                                    [ngClass]="getByEnum(item.type,APP_ENUM.TypePhase)" class="mr-1" >
-                                    {{getByEnum(item.type,APP_ENUM.TypePhase)}}</span>
-                            </td>
                             <td class="text-center">
-                                <button mat-button [matMenuTriggerFor]="menu">
-                                    <i class="fas fa-bars fa-lg"></i>
+                                <button class="btn btn-secondary mr-2" (click)="edit(item)">
+                                    Edit
                                 </button>
-                                <mat-menu #menu="matMenu" class="p-2" >
-                                    <button
-                                        
-                                        class="mat-menu-item  w-100" (click)="edit(item)">
-                                        <i class="fas fa-pencil-alt fa-lg mr-1"></i>
-
-                                        Edit
-                                    </button>
-                                    <button
-                                       
-                                        class="mat-menu-item  w-100" (click)="delete(item)" #deleteBtn>
-                                        <i class="fas fa-trash fa-lg mr-1"></i>
-                                        Delete
-                                    </button>
-                                    <button 
-                                        class="mat-menu-item  w-100" (click)="changeStatus(item)" >
-                                        <i *ngIf="!item.isCriteria" class="fas fa-check fa-lg mr-1"></i>
-                                        <i *ngIf="item.isCriteria" class="fas fa-times fa-lg mr-1"></i>
-                                        {{item.isCriteria?'DeActive':'Active'}}
-                                    </button>
-                                    <button
-                                        class="mat-menu-item  w-100" (click)="done(item)" #deleteBtn>
-                                        <i class="fas fa-check-double"></i>
-                                        Done
-                                    </button>
-                                </mat-menu>
+                                <button class="btn btn-danger" (click)="delete(item)">
+                                    Delete
+                                </button>
                             </td>
-                            
                         </tr>
                     </tbody>
                 </table>
-            
+            </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
@@ -162,7 +122,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </section>
 

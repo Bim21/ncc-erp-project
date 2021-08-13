@@ -1,3 +1,4 @@
+import { TagsComponent } from './modules/checkpoint/tags/tags.component';
 import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
 import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
 import { CategoryCriteriaComponent } from './modules/checkpoint/category/category-criteria/category-criteria.component';
@@ -199,6 +200,11 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
               },
 
             ]
+          },
+          {
+            path:"tags",
+            component:TagsComponent,
+            canActivate:[AppRouteGuard]
           },
           {
             path:"phase",

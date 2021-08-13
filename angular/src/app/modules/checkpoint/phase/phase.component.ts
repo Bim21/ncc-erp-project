@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators';
 import { CreateEditPhaseComponent } from './create-edit-phase/create-edit-phase.component';
 import { MatDialog } from '@angular/material/dialog';
 import { result } from 'lodash-es';
@@ -12,17 +13,29 @@ import { Component, OnInit, Injector } from '@angular/core';
   templateUrl: './phase.component.html',
   styleUrls: ['./phase.component.css']
 })
-export class PhaseComponent extends AppComponentBase implements OnInit {
-  // protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-  //   this.pageSizeType=50;
-  //   this.phaseService.getAll(request).pipe(catchError(this.phaseService)).subscribe((data)=>{
-  //     this.phaseList= data.result.items;
-  //     this.showPaging(data.result, pageNumber);
-  //   })
-  // }
-  // protected delete(entity: PhaseComponent): void {
-  //   throw new Error('Method not implemented.');
-  // }
+export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> implements OnInit {
+ 
+  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.pageSizeType=50;
+    this.phaseService.getAllPaging(request).pipe(catchError(this.phaseService.handleError)).subscribe((data)=>{
+      this.phaseList= data.result.items;
+      this.showPaging(data.result, pageNumber);
+    })
+  }
+  protected delete(phase): void {
+    abp.message.confirm(
+      "Delete Phase " + phase.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.phaseService.delete(phase.id).subscribe(() => {
+            abp.notify.success("Deleted TimeSheet " + phase.name);
+            this.refresh();
+          });
+        }
+      }
+    );
+  }
 
   public phaseList: PhaseDto[] = [];
   public searchText="";
@@ -32,13 +45,13 @@ export class PhaseComponent extends AppComponentBase implements OnInit {
   ) { super(injector) }
 
   ngOnInit(): void {
-    this.getAllPhase();
+    this.refresh();
   }
-  public getAllPhase() {
-    this.phaseService.getAll().subscribe((data) => {
-      this.phaseList = data.result;
-    })
-  }
+  // public getAllPhase() {
+  //   this.phaseService.getAll().subscribe((data) => {
+  //     this.phaseList = data.result;
+  //   })
+  // }
   changeStatus(phase) {
     if (phase.isCriteria) {
       this.phaseService.DeActive(phase.id).subscribe(rs => {
@@ -52,7 +65,7 @@ export class PhaseComponent extends AppComponentBase implements OnInit {
 
       })
     }
-    this.getAllPhase();
+    this.refresh();
 
   }
   showDialog(command: String, Phase:any):void{
@@ -61,12 +74,12 @@ export class PhaseComponent extends AppComponentBase implements OnInit {
       phase={
         name: Phase.name,
         year: Phase.year,
-        parentId: 1,
+        parentId: Phase.parentId,
         type:Phase.type,
         status: Phase.status,
         isCriteria: Phase.isCriteria,
         index:Phase.index,
-        id: Phase.id
+        id: Phase.id,
       }
     }
     const show = this.dialog.open(CreateEditPhaseComponent, {
@@ -79,7 +92,7 @@ export class PhaseComponent extends AppComponentBase implements OnInit {
     });
     show.afterClosed().subscribe(result => {
       if (result) {
-        this.getAllPhase();
+        this.refresh();
       }
     });
 
@@ -88,13 +101,22 @@ export class PhaseComponent extends AppComponentBase implements OnInit {
     this.showDialog("create", {});
   }
   public edit(phase:PhaseDto){
-    this.showDialog("edit",phase)
+    this.showDialog("edit",phase);
   }
   public done(phase){
     this.phaseService.Done(phase.id).subscribe((res)=>{
-      abp.notify.success("Active phase: " + phase.name)
+      abp.notify.success("Active phase: " + phase.name);
     })
+    this.refresh();
   }
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
+  }
+  
   
   
 

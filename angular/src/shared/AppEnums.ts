@@ -156,6 +156,10 @@ export const APP_ENUMS = {
     WeeklySent:{
         Unsent: 0,
         Sent:1
+    },
+    TypePhase:{
+        Main:0,
+        Sub:1
     }
 
    

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseApiService } from './base-api.service';
 
 import { Injectable } from '@angular/core';
@@ -22,6 +22,16 @@ export class PhaseService extends BaseApiService {
   }
   public Done(id:number):Observable<any>{
     return this.http.put<any>(this.rootUrl + '/Done?phaseId='+id,{});
+  }
+  public delete(id: any): Observable<any> {
+    return this.http.delete<any>(this.rootUrl + '/Delete', {
+        params: new HttpParams().set('phaseId', id)
+  })
+  
+}
+  public getParent(year:number): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetAll?year='+year);
+
   }
   
 }
