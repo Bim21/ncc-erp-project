@@ -53,9 +53,11 @@ namespace ProjectManagement.APIs.CheckPointUsers
                          .Where(x => x.Id == Id)
                          .Select(x => new CheckPointUserDto
                          {
+                             ReviewerId = x.ReviewerId,
                              ReviewerName = x.Reviewer.FullName,
                              ReviewerEmail = x.Reviewer.EmailAddress,
                              ReviewerAvatar = x.Reviewer.AvatarPath,
+                             UserId = x.UserId,
                              UserName = x.User.FullName,
                              UserEmail = x.User.EmailAddress,
                              UserAvatar = x.User.AvatarPath,
