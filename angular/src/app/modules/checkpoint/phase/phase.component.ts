@@ -19,6 +19,7 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
     this.pageSizeType=50;
     this.phaseService.getAllPaging(request).pipe(catchError(this.phaseService.handleError)).subscribe((data)=>{
       this.phaseList= data.result.items;
+      this.tempPhaseList=this.phaseList;
       this.showPaging(data.result, pageNumber);
     })
   }
@@ -38,13 +39,21 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
   }
 
   public phaseList: PhaseDto[] = [];
+  public tempPhaseList: PhaseDto[] = [];
   public searchText="";
+  public listYear: number[] = [];
+  private currentYear = new Date().getFullYear();
+  public year=-1;
+  
   constructor(public injector: Injector,
     public phaseService: PhaseService,
     public dialog: MatDialog
   ) { super(injector) }
 
   ngOnInit(): void {
+    for (let i = this.currentYear - 4; i < this.currentYear + 2; i++) {
+      this.listYear.push(i)
+    }
     this.refresh();
   }
   // public getAllPhase() {
@@ -52,21 +61,37 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
   //     this.phaseList = data.result;
   //   })
   // }
-  changeStatus(phase) {
-    if (phase.isCriteria) {
-      this.phaseService.DeActive(phase.id).subscribe(rs => {
-        abp.notify.success("DeActive phase: " + phase.name);
+  // changeStatus(phase) {
+  //   if (phase.status==0) {
+  //     this.phaseService.DeActive(phase.id).subscribe(rs => {
+  //       abp.notify.success("DeActive phase: " + phase.name);
 
-      })
-    }
-    else {
-      this.phaseService.Active(phase.id).subscribe(rs => {
-        abp.notify.success("Active phase: " + phase.name)
+  //     })
+  //   }
+  //   if(phase.status==1){
+  //     this.phaseService.Active(phase.id).subscribe(rs => {
+  //       abp.notify.success("Active phase: " + phase.name)
 
-      })
-    }
+  //     })
+  //   }else{
+  //     this.done(phase.id);
+  //   }
+  //   this.refresh();
+
+  // }
+  active(phase){
+    this.phaseService.Active(phase.id).subscribe(rs => {
+      abp.notify.success("Active phase: " + phase.name)
+
+    })
     this.refresh();
+  }
+  deactive(phase){
+    this.phaseService.DeActive(phase.id).subscribe(rs => {
+      abp.notify.success("DeActive phase: " + phase.name)
 
+    })
+    this.refresh();
   }
   showDialog(command: String, Phase:any):void{
     let phase={} as PhaseDto;
@@ -116,7 +141,22 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
       }
     }
   }
-  
+  filterYear(e){
+    this.phaseList=this.tempPhaseList.filter(item=>{
+      return item.year==e;
+    })
+    
+
+  }
+  public showDetail(item){
+    this.router.navigate(['app/setup-reviewer'], {
+      queryParams: {
+        id: item.id,
+        name:item.name,
+        type:item.type
+      }
+    })
+  }
   
   
 

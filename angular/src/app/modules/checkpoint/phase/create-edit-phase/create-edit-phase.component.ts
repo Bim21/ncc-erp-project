@@ -12,47 +12,47 @@ import { PhaseService } from '@app/service/api/phase.service';
   styleUrls: ['./create-edit-phase.component.css']
 })
 export class CreateEditPhaseComponent extends AppComponentBase implements OnInit {
-  public phase={} as PhaseDto;
+  public phase = {} as PhaseDto;
   public listYear: number[] = [];
   private currentYear = new Date().getFullYear();
-  public parenttList=[];
-  public tempparenttList=[];
+  public parenttList = [];
+  public tempparenttList = [];
   typePhase = Object.keys(this.APP_ENUM.TypePhase);
-  public check:boolean;
-  
+  public check: boolean;
+
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data:any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CreateEditPhaseComponent>,
-    public injector:Injector,
-    public phaseSerivce: PhaseService) {super(injector) }
-    
+    public injector: Injector,
+    public phaseSerivce: PhaseService) { super(injector) }
+
   ngOnInit(): void {
-    this.phase= this.data.item;
+    this.phase = this.data.item;
     console.log(this.data.item);
     for (let i = this.currentYear - 4; i < this.currentYear + 2; i++) {
       this.listYear.push(i)
     }
-    if(this.phase.type=='0'){
-      this.check=true;
-    }if(this.phase.type=='1'){
-      this.check=false;
+    if (this.phase.type == '0') {
+      this.phase.isCriteria = true;
+    } if (this.phase.type == '1') {
+      this.phase.isCriteria = false;
     }
-
-    if(this.data.command=='edit'){
+    
+    if (this.data.command == 'edit') {
       this.getParent(this.phase.year);
     }
 
 
-    
+
   }
-  public getParent(year){
-    this.phaseSerivce.getParent(this.phase.year).subscribe((data)=>{
-        this.parenttList=data.result;
-        this.tempparenttList=this.parenttList;
-        
+  public getParent(year) {
+    this.phaseSerivce.getParent(this.phase.year).subscribe((data) => {
+      this.parenttList = data.result;
+      this.tempparenttList = this.parenttList;
+
     })
-    
+
   }
   public getByEnum(enumValue: number, enumObject: any) {
     for (const key in enumObject) {
@@ -61,20 +61,24 @@ export class CreateEditPhaseComponent extends AppComponentBase implements OnInit
       }
     }
   }
-  onTypeChange(){
-    if(this.phase.type=='0'){
-      this.check=true;
-      this.parenttList=[];
-    }if(this.phase.type=='1'){
-      this.check=false;
-      this.parenttList=this.tempparenttList;
+  onTypeChange() {
+    if (this.phase.type == '0') {
+      this.phase.isCriteria = true;
+      this.parenttList = [];
+    } if (this.phase.type == '1') {
+      this.phase.isCriteria = false;
+      this.parenttList = this.tempparenttList;
     }
   }
   SaveAndClose() {
-    // this.isDisable = true
+    if (!this.phase.status) {
+      this.phase.status = 1;
+    }
     if (this.data.command == "create") {
-      this.phase.status = 0;
-      this.phase.index=0;
+
+   
+      this.phase.index = 0;
+
       this.phaseSerivce.create(this.phase).pipe(catchError(this.phaseSerivce.handleError)).subscribe((res) => {
         abp.notify.success("created outcomeRequest ");
         this.dialogRef.close(this.phase);
@@ -87,6 +91,16 @@ export class CreateEditPhaseComponent extends AppComponentBase implements OnInit
         this.dialogRef.close(this.phase);
       });
     }
+    console.log(this.phase);
+  }
+  changeStatus(e) {
+
+    if (e.checked == true) {
+      this.phase.status = 0;
+    } else {
+      this.phase.status = 1;
+    }
+    console.log(this.phase)
   }
 
 }

@@ -1,3 +1,4 @@
+import { SetUpReviewerComponent } from './modules/checkpoint/set-up-reviewer/set-up-reviewer.component';
 import { TagsComponent } from './modules/checkpoint/tags/tags.component';
 import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
 import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
@@ -209,6 +210,11 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
           {
             path:"phase",
             component: PhaseComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"setup-reviewer",
+            component: SetUpReviewerComponent,
             canActivate:[AppRouteGuard]
           },
           {

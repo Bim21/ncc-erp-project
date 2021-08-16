@@ -160,6 +160,19 @@ export const APP_ENUMS = {
     TypePhase:{
         Main:0,
         Sub:1
+    },
+    CheckPointUserType:
+    {
+        PM : 0,
+        Team :1,
+        Client : 2,
+        Self : 3,
+        Exam : 4
+    },
+    CheckPointUserStatus:
+    {
+        Draft : 0,
+        Reviewed : 1
     }
 
    

@@ -70,7 +70,7 @@
                 {{ 'Is Active' | localize }}:
             </label>
             <div class="col-md-9">
-                <mat-checkbox name="isActive" class="example-margin" [(ngModel)]="phase.isCriteria">
+                <mat-checkbox name="isActive" class="example-margin" (change)="changeStatus($event)" [checked]="phase.status==0">
                 </mat-checkbox>
             </div>
         </div>
@@ -80,7 +80,7 @@
                 {{ 'Không áp dụng cho tiêu chí đánh giá' | localize }}:
             </label>
             <div class="col-md-9">
-                <mat-checkbox  name="isCheck" class="example-margin" [(ngModel)]="check">
+                <mat-checkbox [disabled]="phase.type=='1'" name="isCheck" class="example-margin" [(ngModel)]="phase.isCriteria">
                 </mat-checkbox>
             </div>
         </div>
