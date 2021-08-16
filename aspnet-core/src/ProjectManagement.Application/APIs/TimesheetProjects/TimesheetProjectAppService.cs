@@ -85,6 +85,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_CreateInvoice)]
         public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
         {
+            var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
+
+            if (timesheet.CreatedInvoice)
+                throw new UserFriendlyException("Invoice created !");
+
             var timesheetProject = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == input.TimesheetId && x.Timesheet.IsActive);
             var query = WorkScope.GetAll<Client>().Where(x => timesheetProject.Select(p => p.Project.ClientId).Contains(x.Id))
                 .Select(x => new
@@ -117,7 +122,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         }
                         var invoice = new CreateInvoiceDto
                         {
-                            Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{projectName}]",
+                            Name = $"Invoice {item.Month}/{item.Year}",
+                            ClientName = item.ClientName,
+                            Project = $"{projectName}",
                             AccountCode = item.ClientCode,
                             TotalPrice = 0,
                             Status = InvoiceStatus.New,
@@ -142,7 +149,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         {
                             var invoice = new CreateInvoiceDto
                             {
-                                Name = $"Invoice {item.Month}/{item.Year} - {item.ClientName} - Project:[{p.ProjectName}]",
+                                Name = $"Invoice {item.Month}/{item.Year}",
+                                ClientName = item.ClientName,
+                                Project = p.ProjectName,
                                 AccountCode = item.ClientCode,
                                 TotalPrice = 0,
                                 Status = InvoiceStatus.New,
@@ -165,6 +174,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var rs = await _financeService.CreateInvoiceToFinance(createInvoice);
             if (rs == null)
                 throw new UserFriendlyException("Error creating Invoice");
+
+            timesheet.CreatedInvoice = true;
+            timesheet.IsActive = false;
+            await WorkScope.UpdateAsync(timesheet);
             return input;
         }
 
@@ -231,6 +244,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             Note = tsp.Note,
                             IsSendReport = pr.Status,
                             HistoryFile = tsp.HistoryFile,
+                            HasFile = !string.IsNullOrEmpty(tsp.FilePath)
                         }).OrderByDescending(x => x.ClientId);
 
             return await query.GetGridResult(query, input);
@@ -257,14 +271,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                 {
                                     FullName = x.User.FullName,
                                     BillRole = x.BillRole,
-                                    BillRate = x.BillRate,
-                                    Note = x.Note,
-                                    Currency = x.Currency.ToString()
+                                    BillRate = x.BillRate
                                 });
 
             foreach (var b in projectUserBills)
             {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br>");
+                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
             }
 
             input.ProjectBillInfomation = $"{billInfomation}";
@@ -297,7 +309,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Update)]
         public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
         {
-            var billInfomation = new StringBuilder();
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             var timeSheetProject = await WorkScope.GetAsync<TimesheetProject>(input.Id);
             var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.Id != input.Id && (x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId));
@@ -309,22 +320,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 throw new UserFriendlyException("Timesheet not active !");
             }
 
-            var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == input.ProjectId && x.isActive && x.Project.IsCharge)
-                                .Select(x => new
-                                {
-                                    FullName = x.User.FullName,
-                                    BillRole = x.BillRole,
-                                    BillRate = x.BillRate,
-                                    Note = x.Note,
-                                    Currency = x.Currency.ToString()
-                                });
-
-            foreach (var b in projectUserBills)
-            {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br>");
-            }
-
-            input.ProjectBillInfomation = $"{billInfomation}";
+            if(string.IsNullOrEmpty(input.ProjectBillInfomation))
+                input.ProjectBillInfomation = timeSheetProject.ProjectBillInfomation;
             ObjectMapper.Map<TimesheetProjectDto, TimesheetProject>(input, timeSheetProject);
             await WorkScope.GetRepo<TimesheetProject, long>().UpdateAsync(timeSheetProject);
             return input;

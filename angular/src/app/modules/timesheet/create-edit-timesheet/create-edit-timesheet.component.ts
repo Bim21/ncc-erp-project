@@ -21,22 +21,29 @@ import { catchError } from 'rxjs/operators';
 export class CreateEditTimesheetComponent implements OnInit {
   public timesheet = {} as TimesheetDto;
   public isDisable = false;
+  public listYear: number[] = [];
+  public Months =
+    [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+    ]
+  private currentYear = new Date().getFullYear()
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-  public dialogRef: MatDialogRef<CreateEditTimesheetComponent>,
-  private timesheetService:TimesheetService,
-  private router: Router) { }
+    public dialogRef: MatDialogRef<CreateEditTimesheetComponent>,
+    private timesheetService: TimesheetService,
+    private router: Router) { }
 
   ngOnInit(): void {
     if (this.data.command == "edit") {
       this.timesheet = this.data.item;
-  
-
+    }
+    for (let i = this.currentYear - 4; i < this.currentYear + 2; i++) {
+      this.listYear.push(i)
     }
   }
-  SaveAndClose(){
+  SaveAndClose() {
     this.isDisable = true
     if (this.data.command == "create") {
-      this.timesheet.isActive=true;
+      this.timesheet.isActive = true;
       this.timesheetService.create(this.timesheet).pipe(catchError(this.timesheetService.handleError)).subscribe((res) => {
         abp.notify.success("created outcomeRequest ");
         this.dialogRef.close(this.timesheet);
@@ -55,14 +62,8 @@ export class CreateEditTimesheetComponent implements OnInit {
       this.router.navigate(['/app/timesheet']);
     });
   }
-  public Months =
-  [
-   1,2,3,4,5,6,7,8,9,10,11,12
-  ]
-  public Years =
-  [
-    2016, 2017, 2018 , 2019 , 2020 , 2021 , 2022
-  ]
+
+
 
 }
 

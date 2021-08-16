@@ -72,6 +72,7 @@
                             <th>{{'Charge khách hàng' | localize}}</th>
                             <th>{{'Trạng thái' | localize}}</th>
                             <th>{{'Weekly Report' | localize}}</th>
+                            <th>Thời gian gửi</th>
                             <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
                         </tr>
                     </thead>
@@ -89,8 +90,10 @@
                             <td>{{project.clientName}}</td>
                             <td>
                                 <div style="width: 300px;">
-                                    <app-user-info [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
-                                userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarPath:project.pmAvatarPath}"></app-user-info>
+                                    <app-user-info
+                                        [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                                userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarPath:project.pmAvatarPath}">
+                                    </app-user-info>
                                 </div>
                             </td>
 
@@ -103,8 +106,12 @@
                             <td class="text-center"> <span
                                     [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
                             <td class="text-center">
-                                <span [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]"
-                                  >{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}} </span>
+                                <span
+                                    [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
+                                </span>
+                            </td>
+                            <td>
+                                {{project.timeSendReport| date:"dd/MM/yyyy hh:mm a"}}
                             </td>
                             <td class="text-center" style="padding: 12px;">
                                 <button type="button" class="btn btn-sm bg-secondary mr-1"

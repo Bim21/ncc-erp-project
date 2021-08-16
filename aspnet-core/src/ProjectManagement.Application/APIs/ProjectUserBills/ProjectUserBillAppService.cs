@@ -6,6 +6,7 @@ using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
@@ -79,7 +80,18 @@ namespace ProjectManagement.APIs.ProjectUserBills
             if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
-            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
+
+            var currentTimesheetProject = await WorkScope.GetAll<TimesheetProject>()
+                .Where(x => x.ProjectId == input.ProjectId)
+                .OrderByDescending(x => x.CreationTime)
+                .FirstOrDefaultAsync();
+            if(currentTimesheetProject != default)
+            {
+                var user = await WorkScope.GetAsync<User>(input.UserId);
+                currentTimesheetProject.ProjectBillInfomation += $"<b>{user.FullName}</b> - {input.BillRole} - {input.BillRate} <br>";
+                await WorkScope.UpdateAsync(currentTimesheetProject);
+            }
 
             return input;
         }

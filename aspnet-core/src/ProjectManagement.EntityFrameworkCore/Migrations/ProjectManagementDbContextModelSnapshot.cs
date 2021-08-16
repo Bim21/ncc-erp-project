@@ -2337,6 +2337,9 @@ namespace ProjectManagement.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("TimeSendReport")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("TotalNormalWorkingTime")
                         .HasColumnType("int");
 
@@ -2948,6 +2951,9 @@ namespace ProjectManagement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CreatedInvoice")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");

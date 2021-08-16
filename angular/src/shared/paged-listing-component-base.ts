@@ -10,7 +10,7 @@ export class FilterDto {
     propertyName: string;
     value: any;
     comparision: number;
-    isDate?:boolean;
+    isDate?: boolean;
 }
 export class EntityDto {
     id: number;
@@ -30,19 +30,19 @@ export class PagedResultResultDto {
 
 @Component({
     template: ''
-  })
+})
 export abstract class PagedListingComponentBase<TEntityDto> extends AppComponentBase implements OnInit {
     [x: string]: any;
 
-    public pageSize:number = 5;
-    public pageNumber:number = 1;
-    public totalPages:number = 1;
+    public pageSize: number = 5;
+    public pageNumber: number = 1;
+    public totalPages: number = 1;
     public totalItems: number;
     public searchText: string = '';
     public filterItems: FilterDto[] = [];
-    public pageSizeType:number = 20;
+    public pageSizeType: number = 20;
 
-    public advancedFiltersVisible:boolean = false;
+    public advancedFiltersVisible: boolean = false;
 
     activatedRoute: ActivatedRoute;
     router: Router;
@@ -87,12 +87,22 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
         req.maxResultCount = this.pageSize;
         req.skipCount = (page - 1) * this.pageSize;
         req.filterItems = this.filterItems;
+        if (this.filterItems.length > 0){
+            req.filterItems.forEach((item, index) => {
+                if (item.propertyName == "") {
+                    req.filterItems.splice(index, 1)
+                }
+            })
+        }
+        this.advancedFiltersVisible = this.filterItems.length > 0;
         req.searchText = this.searchText;
         this.isLoading = true;
         this.pageNumber = page;
-        this.router.navigate([], { queryParamsHandling: "merge",
-      replaceUrl: true,
-        queryParams: { pageNumber: this.pageNumber, pageSize: this.pageSize, searchText: this.searchText, filterItems: JSON.stringify(this.filterItems) } })
+        this.router.navigate([], {
+            queryParamsHandling: "merge",
+            replaceUrl: true,
+            queryParams: { pageNumber: this.pageNumber, pageSize: this.pageSize, searchText: this.searchText, filterItems: JSON.stringify(this.filterItems) }
+        })
             .then(_ => this.list(req, page, () => {
                 this.isLoading = false;
             }));

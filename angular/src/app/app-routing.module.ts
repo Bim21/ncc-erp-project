@@ -1,3 +1,6 @@
+import { SetUpReviewerComponent } from './modules/checkpoint/set-up-reviewer/set-up-reviewer.component';
+import { TagsComponent } from './modules/checkpoint/tags/tags.component';
+import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
 import { CriteriaComponent } from './modules/checkpoint/category/criteria/criteria.component';
 import { CategoryCriteriaComponent } from './modules/checkpoint/category/category-criteria/category-criteria.component';
 import { ClientComponent } from './modules/admin/client/client.component';
@@ -198,6 +201,21 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
               },
 
             ]
+          },
+          {
+            path:"tags",
+            component:TagsComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"phase",
+            component: PhaseComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"setup-reviewer",
+            component: SetUpReviewerComponent,
+            canActivate:[AppRouteGuard]
           },
           {
             path:"category-criteria",

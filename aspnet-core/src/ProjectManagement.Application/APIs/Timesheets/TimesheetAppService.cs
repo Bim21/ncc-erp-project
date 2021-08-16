@@ -39,6 +39,7 @@ namespace ProjectManagement.APIs.TimeSheets
                     Month = x.Month,
                     Year = x.Year,
                     IsActive = x.IsActive,
+                    CreatedInvoice = x.CreatedInvoice,
                     TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
                     TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Count()
                 });
@@ -58,6 +59,7 @@ namespace ProjectManagement.APIs.TimeSheets
                                     Month = x.Month,
                                     Year = x.Year,
                                     IsActive = x.IsActive,
+                                    CreatedInvoice = x.CreatedInvoice
                                 });
             return await query.FirstOrDefaultAsync();
         }
@@ -89,14 +91,12 @@ namespace ProjectManagement.APIs.TimeSheets
                                     {
                                         FullName = x.User.FullName,
                                         BillRole = x.BillRole,
-                                        BillRate = x.BillRate,
-                                        Note = x.Note,
-                                        Currency = x.Currency.ToString()
+                                        BillRate = x.BillRate
                                     });
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} {b.Currency}<br>Daily: <span>{b.Note}<span><br>");
+                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
                 }
 
                 var timesheetProject = new TimesheetProject

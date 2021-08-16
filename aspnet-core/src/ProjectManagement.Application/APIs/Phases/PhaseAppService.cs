@@ -17,23 +17,34 @@ namespace ProjectManagement.APIs.Phases
     [AbpAuthorize]
     public class PhaseAppService : ProjectManagementAppServiceBase
     {
-        [HttpGet]
-        public async Task<List<SelectPhaseDto>> GetAll()
+        [HttpPost]
+        public async Task<GridResult<PhaseDto>> GetAllPaging(GridParam input)
         {
             var query = from p in WorkScope.GetAll<Phase>()
                         join pt in WorkScope.GetAll<Phase>()
                         on p.ParentId equals pt.Id
-                        select new SelectPhaseDto()
+                        select new PhaseDto()
                         {
                             Id = p.Id,
                             Name = p.Name,
                             Year = p.Year,
-                            Type = p.Type.ToString(),
-                            ParentName = pt.Name,
+                            Type = p.Type,
+                            ParentId = pt.Id,
                             Status = p.Status,
                             IsCriteria = p.IsCriteria,
                             Index = p.Index,
                         };
+            return await query.GetGridResult(query, input);
+        }
+        [HttpGet]
+        public async Task<object> GetAll(int year)
+        {
+            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year && x.Type == PhaseType.Main)
+                .Select(x => new
+                {
+                    ParentId = x.Id,
+                    ParentName = x.Name,
+                });
             return await query.ToListAsync();
         }
         [HttpPost]

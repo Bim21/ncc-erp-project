@@ -16,5 +16,6 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public int Month { get; set; }
         public int Year { get; set; }
         public bool IsActive { get; set; }
+        public bool CreatedInvoice { get; set; }
     }
 }

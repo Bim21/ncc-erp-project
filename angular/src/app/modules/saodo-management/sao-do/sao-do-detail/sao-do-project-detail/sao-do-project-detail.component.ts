@@ -129,7 +129,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
   saveNote(){
     this.isEditingNote=true;
     this.auditResultService.updateNote(this.auditResultId,this.note).subscribe(data=>{
-      this.note=data.result;
+      // this.note=data.result;
       abp.notify.success("Update Successfully!");
     })
   }

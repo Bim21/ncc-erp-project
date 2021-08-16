@@ -26,13 +26,13 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'clientName', comparisions: [0, 6, 7, 8], displayName: "Client name" },
     { propertyName: 'pmName', comparisions: [0, 6, 7, 8], displayName: "PM name" },
-    { propertyName: 'startTime', comparisions: [0, 1, 2], displayName: "Start time", isDate: true },
-    { propertyName: 'endTime', comparisions: [0, 1, 2], displayName: "End time", isDate: true },
+    { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Start time", isDate: true },
+    { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "End time", isDate: true },
   ];
 
   private userList: UserDto[] = [];
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
-  projectWeeklys: string[]=Object.keys(this.APP_ENUM.WeeklySent);
+  projectWeeklys: string[] = Object.keys(this.APP_ENUM.WeeklySent);
 
   setValueProjectType(projectType, enumObject) {
     for (const key in enumObject) {

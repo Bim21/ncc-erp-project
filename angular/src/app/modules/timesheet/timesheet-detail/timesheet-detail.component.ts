@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
+import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -69,10 +70,14 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public projectTimesheetDetailId: any;
   public searchText: string = "";
   public timesheetId: any;
-  public isActive: boolean
+  public isActive: boolean;
+  public createdInvoice: boolean;
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], isConfirm: true },
+
   ];
 
 
@@ -81,6 +86,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheet_TimesheetProject_DownloadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
   Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
   Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
+  Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
 
 
   constructor(
@@ -98,7 +104,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
-    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false
+    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
+    this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
     this.refresh();
 
   }
@@ -199,6 +206,29 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     return buf;
   }
 
-
-
+  createInvoice() {
+    const show = this.dialog.open(CreateInvoiceComponent, {
+      data: {
+        timeSheetId: this.timesheetId,
+      },
+      width: "700px",
+      disableClose: true,
+    });
+    show.afterClosed().subscribe(res => {
+      if (res) {
+        this.reloadComponent();
+      }
+    })
+  }
+  public reloadComponent() {
+    this.router.navigate(['app/timesheetDetail'], {
+      queryParams: {
+        id: this.timesheetId,
+        createdInvoice: true,
+        isActive: false
+      }
+    })
+    this.isActive = false;
+    this.createdInvoice = true;
+  }
 }

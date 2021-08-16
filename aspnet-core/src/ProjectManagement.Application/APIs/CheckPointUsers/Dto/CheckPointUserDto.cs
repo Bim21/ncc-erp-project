@@ -26,7 +26,7 @@ namespace ProjectManagement.APIs.CheckPointUsers.Dto
         public CheckPointUserStatus Status { get; set; }
         public int? Score { get; set; }
         public string Note { get; set; }
-
+        public DateTime? UpdateAt { get; set; }
         //public bool PhaseStatus { get; set; }
 
     }

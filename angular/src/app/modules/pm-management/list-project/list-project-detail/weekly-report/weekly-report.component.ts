@@ -25,23 +25,21 @@ import { PmReportService } from '@app/service/api/pm-report.service';
   styleUrls: ['./weekly-report.component.css']
 })
 export class WeeklyReportComponent extends AppComponentBase implements OnInit {
-  DeliveryManagement_PMReportProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
-  DeliveryManagement_PMReportProject_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
-  DeliveryManagement_PMReportProject_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
-  DeliveryManagement_PMReportProject_GetAll = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
-  DeliveryManagement_PMReportProject_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
-  DeliveryManagement_PMReportProject_GetAllByPmProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
-  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
-  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
-  DeliveryManagement_PMReportProject_SendReport = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
-  DeliveryManagement_PMReportProjectIssue = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
-  DeliveryManagement_PMReportProjectIssue_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
-  DeliveryManagement_PMReportProjectIssue_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
-  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
-  DeliveryManagement_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
-  DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
-  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser;
-  DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth= PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth
+  PmManager_PMReportProject_Create = PERMISSIONS_CONSTANT.PmManager_PMReportProject_Create;
+  PmManager_PMReportProject_Delete = PERMISSIONS_CONSTANT.PmManager_PMReportProject_Delete;
+  PmManager_PMReportProject_Update = PERMISSIONS_CONSTANT.PmManager_PMReportProject_Update;
+  PmManager_PMReportProject_GetAllByPmProject = PERMISSIONS_CONSTANT.PmManager_PMReportProject_GetAllByPmReport;
+  PmManager_PMReportProject_ResourceChangesDuringTheWeek = PERMISSIONS_CONSTANT.PmManager_PMReportProject_ResourceChangesDuringTheWeek;
+  PmManager_PMReportProject_ResourceChangesInTheFuture = PERMISSIONS_CONSTANT.PmManager_PMReportProject_ResourceChangesInTheFuture;
+  PmManager_PMReportProject_SendReport = PERMISSIONS_CONSTANT.PmManager_PMReportProject_SendReport;
+  PmManager_PMReportProjectIssue = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue;
+  PmManager_PMReportProjectIssue_Create = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_Create;
+  PmManager_PMReportProjectIssue_Delete = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_Delete;
+  PmManager_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_ProblemsOfTheWeek;
+  PmManager_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_Update;
+  PmManager_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ApproveUser;
+  PmManager_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_RejectUser;
+  PmManager_PMReportProject_UpdatePmReportProjectHealth= PERMISSIONS_CONSTANT.PmManager_PMReportProject_UpdatePmReportProjectHealth
 
   // Paging
   public itemPerPage: number = 50;
@@ -94,7 +92,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
 
   public getFuturereport(): void {
-    if (this.permission.isGranted(this.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)) {
+    if (this.permission.isGranted(this.PmManager_PMReportProject_ResourceChangesInTheFuture)) {
       this.reportService.getChangesInFuture(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
         this.futureReportList = data.result
       })
@@ -113,7 +111,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
   }
   private getProjectProblem(): void {
-    if (this.permission.isGranted(this.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek)) {
+    if (this.permission.isGranted(this.PmManager_PMReportProjectIssue_ProblemsOfTheWeek)) {
       this.reportIssueService.getProblemsOfTheWeek(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         this.problemList = data.result;
         // this.projectHealth = data.result.projectHealth;
