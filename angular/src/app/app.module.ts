@@ -103,6 +103,10 @@ import { GetTimesheetWorkingComponent } from './modules/delivery-management/deli
 import { CreateInvoiceComponent } from './modules/timesheet/timesheet-detail/create-invoice/create-invoice.component';
 import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
 import { CreateEditPhaseComponent } from './modules/checkpoint/phase/create-edit-phase/create-edit-phase.component';
+import { TagsComponent } from './modules/checkpoint/tags/tags.component';
+import { CreateEditTagComponent } from './modules/checkpoint/tags/create-edit-tag/create-edit-tag.component';
+import { SetUpReviewerComponent } from './modules/checkpoint/set-up-reviewer/set-up-reviewer.component';
+import { CreateEditSetupReviewerComponent } from './modules/checkpoint/set-up-reviewer/create-edit-setup-reviewer/create-edit-setup-reviewer.component';
 
 
 
@@ -200,6 +204,10 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CreateInvoiceComponent,
     PhaseComponent,
     CreateEditPhaseComponent,
+    TagsComponent,
+    CreateEditTagComponent,
+    SetUpReviewerComponent,
+    CreateEditSetupReviewerComponent,
 
     
   ],

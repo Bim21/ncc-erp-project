@@ -131,6 +131,18 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             "",
           ),
           new MenuItem(
+            this.l("Setup đánh giá"),
+            "/app/setup-reviewer",
+            "fas fa-clipboard-list",
+            "",
+          ),
+          new MenuItem(
+            this.l("Tags"),
+            "/app/tags",
+            "fas fa-clipboard-list",
+            "",
+          ),
+          new MenuItem(
             this.l("Category"),
             "",
             "fas fa-clipboard-list",
