@@ -34,7 +34,7 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement: "DeliveryManagement",
     DeliveryManagement_CanViewMenu: "DeliveryManagement.CanViewMenu",
     Deliverymanagement_CanViewMenu_ResourceManagement: "Deliverymanagement.CanViewMenu.ResourceManagement",
-    DeliveryManagement_CanViewMenu_WeeklyReport: "DeliveryManagement.CanViewMenu.WeeklyReport",
+    DeliveryManagement_CanViewMenu_WeeklyReport: "Deliverymanagement.CanViewMenu.WeeklyReport",
 
     DeliveryManagement_PMReport: "DeliveryManagement.PMReport",
     DeliveryManagement_PMReport_CloseReport: "DeliveryManagement.PMReport.CloseReport",
@@ -42,6 +42,8 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReport_Delete: "DeliveryManagement.PMReport.Delete",
     DeliveryManagement_PMReport_Update: "DeliveryManagement.PMReport.Update",
     DeliveryManagement_PMReport_ViewAll: "DeliveryManagement.PMReport.ViewAll",
+    DeliveryManagement_PMReport_StatisticsReport: "DeliveryManagement.PMReport.StatisticsReport",
+
     DeliveryManagement_PMReportProject: "DeliveryManagement.PMReportProject",
     DeliveryManagement_PMReportProject_Create: "DeliveryManagement.PMReportProject.Create",
     DeliveryManagement_PMReportProject_Delete: "DeliveryManagement.PMReportProject.Delete",
