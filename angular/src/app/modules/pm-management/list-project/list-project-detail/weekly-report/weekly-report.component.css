@@ -75,3 +75,7 @@ button{
       width: 46% !important 
   }
 }
+
+::ng-deep .mat-tooltip {
+ font-size: 12px;
+}
