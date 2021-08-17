@@ -100,7 +100,9 @@
             <div class="col-md-9 pt-2">
                 <mat-checkbox [(ngModel)]="project.isCharge" name="ischarge">
                     is Charge
-                    <span><i class="fas fa-question-circle showText"></i></span>
+                    <span class="ml-2" 
+                    matTooltip="Charge vào timesheet tháng này!"
+                    ><i class="fas fa-question-circle "></i></span>
                 </mat-checkbox>
             </div>
         </div>
