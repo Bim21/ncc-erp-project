@@ -84,7 +84,7 @@
                                 {{generalNote}}
                             </pre>
                         <div class="text-left pt-2 ml-2" style="max-width: 9%;">
-                            <button *ngIf="selectedReport.isActive" class="btn bg-secondary mt-2"
+                            <button *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_UpdateNote)" class="btn bg-secondary mt-2"
                                 (click)="isEditingNote = true">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
