@@ -26,7 +26,10 @@ export class SetupReviewerService extends BaseApiService {
   public updateReviewer(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/Update', item);
 }
-public createReviewer(isAdmin: boolean,item: any): Observable<any> {
-  return this.http.post<any>(this.rootUrl + '/Create?isAdmin='+isAdmin, item);
-}
+  public createReviewer(isAdmin: boolean,item: any): Observable<any> {
+    return this.http.post<any>(this.rootUrl + '/Create?isAdmin='+isAdmin, item);
+  }
+  public Get(id: any): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/Get?Id=' + id);
+  }
 }

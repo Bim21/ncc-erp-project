@@ -1,8 +1,9 @@
+
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
-                <h1>{{phaseName}}</h1>
+                <h1>Kết quả:{{phaseName}}</h1>
             </div>
             <div class="col-6 text-right">
                 <button (click)='create()'
@@ -110,18 +111,15 @@
 
             
             <div class="card-body table-responsive p-4">
-                <div class="text-right">
-                    <button mat-button class="btn bg-blue " style="margin: 10px auto" (click)="generateReviewer()">Generate Reviewer</button>
-                </div>
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                <table *ngIf="phaseType=='0'" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
                             <th>User Name</th>
                             <th>ReviewerName</th>
                             <th>Type</th>
-                            <!-- <th>Note</th>
-                            <th>Status</th> -->
+                            <th>Note</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -149,10 +147,10 @@
                                 </div></td>
                             <td> <span [ngClass]="getByEnum(item.type,APP_ENUM.CheckPointUserType)" class="mr-1">
                                 {{getByEnum(item.type,APP_ENUM.CheckPointUserType)}}</span></td>
-                            <!-- <td style="white-space: normal; min-width: 300px;">
+                            <td style="white-space: normal; min-width: 300px;">
                                 {{item.note}}
                             </td>
-                            <td [ngClass]="getByEnum(item.type,APP_ENUM.CheckPointUserType)">{{getByEnum(item.status,APP_ENUM.CheckPointUserStatus)}}</td> -->
+                            <td [ngClass]="getByEnum(item.type,APP_ENUM.CheckPointUserType)">{{getByEnum(item.status,APP_ENUM.CheckPointUserStatus)}}</td>
 
                             <td class="text-center">
                                 <button mat-button [matMenuTriggerFor]="menu" *ngIf="item.status==0">
@@ -179,7 +177,74 @@
                         </tr>
                     </tbody>
                 </table>
-               
+                <table *ngIf="phaseType=='1'" style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>User Name</th>
+                            <th>ReviewerName</th>
+                            <th>User Note</th>
+                            <th>PM Note</th>
+                            <th>Final Note</th>
+                            <th>Level</th>
+                            <th>Tags</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of reviewerList
+                        |paginate
+                            : {
+                                id: 'server',
+                                itemsPerPage: pageSize,
+                                currentPage: pageNumber,
+                                totalItems: totalItems
+                              }; let i=index">
+                            <td>{{i+1}}</td>
+                            <td>
+                                <div style="width: 300px;">
+                                    <app-user-info [userData]="{fullName:item.userName,
+                                        emailAddress:item.userEmail,avatarPath:item.userAvatar}"></app-user-info>
+                                </div>
+                                
+                            </td>
+                            <td>
+                                <div style="width: 300px;">
+                                    <app-user-info [userData]="{fullName:item.reviewerName,
+                                        emailAddress:item.reviewerEmail,avatarPath:item.reviewerAvatar}"></app-user-info>
+                                </div></td>
+                            <td> <span [ngClass]="getByEnum(item.type,APP_ENUM.CheckPointUserType)" class="mr-1">
+                                {{getByEnum(item.type,APP_ENUM.CheckPointUserType)}}</span></td>
+                            <td style="white-space: normal; min-width: 300px;">
+                                {{item.note}}
+                            </td>
+                            <td [ngClass]="getByEnum(item.type,APP_ENUM.CheckPointUserType)">{{getByEnum(item.status,APP_ENUM.CheckPointUserStatus)}}</td>
+
+                            <td class="text-center">
+                                <button mat-button [matMenuTriggerFor]="menu" *ngIf="item.status==0">
+                                    <i class="fas fa-bars fa-lg"></i>
+                                </button>
+                                <mat-menu #menu="matMenu" class="p-2" >
+                                    <button
+                                        
+                                        class="mat-menu-item  w-100" (click)="edit(item)">
+                                        <i class="fas fa-pencil-alt fa-lg mr-1"></i>
+
+                                        Edit
+                                    </button>
+                                    <button
+                                       
+                                        class="mat-menu-item  w-100" (click)="delete(item)" #deleteBtn>
+                                        <i class="fas fa-trash fa-lg mr-1"></i>
+                                        Delete
+                                    </button>
+                                    
+                                </mat-menu>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
             
             <div class="card-footer bg-light border-top">
                 <div class="row">
