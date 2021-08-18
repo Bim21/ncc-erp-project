@@ -1,3 +1,5 @@
+import { UserService } from './../../../service/api/user.service';
+import { InputFilterDto } from './../../../../shared/filter/filter.component';
 import { result } from 'lodash-es';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,21 +39,31 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
     );
   }
   public reviewerList:CheckpointUserDto[]=[];
+  public reviewerUserList=[];
   public phaseId="";
   public phaseName="";
+  public phaseType="";
   public reviewerTypeList: string[] = Object.keys(this.APP_ENUM.CheckPointUserType);
-  public reiviewerStatus: string[] = Object.keys(this.APP_ENUM.CheckPointUserType);
+  public reiviewerStatus: string[] = Object.keys(this.APP_ENUM.CheckPointUserStatus);
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'status', comparisions: [0, 6, 7, 8], displayName: "Status" },
+    { propertyName: 'reviewerId', comparisions: [0, 6, 7, 8], displayName: "Reviewer Name" },
+    { propertyName: 'type', comparisions: [0, 6, 7, 8], displayName: "Type" },
+  ];
 
   constructor(public injector: Injector,
     public reviewerService: SetupReviewerService,
     public dialog:MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public userService: UserService
     ) { super(injector) }
 
   ngOnInit(): void {
     this.refresh();
     this.phaseId=this.route.snapshot.queryParamMap.get("id");
     this.phaseName=this.route.snapshot.queryParamMap.get("name");
+    this.phaseType=this.route.snapshot.queryParamMap.get("type");
+    this.getAllReviewers();
   }
   public showDialog(command: string , Reviewer:any){
     let reviewer={} as CheckpointUserDto;
@@ -89,6 +101,7 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
   }
   generateReviewer(){
     this.reviewerService.generateReviewer(this.phaseId).subscribe((data)=>{
+      abp.notify.success("Generate Success!")
        this.refresh();
 
     })
@@ -99,6 +112,30 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
         return key;
       }
     }
+  }
+  getAllReviewers(){
+    this.userService.GetAllUserActive(true).subscribe((data)=>{
+      this.reviewerUserList=data.result;
+      
+    })
+    
+  }
+  // filterByReviewer(name){
+  //   console.log(name)
+  //   this.reviewerService.Get(name).subscribe((data)=>{
+  //     this.reviewerList=data.result;
+  //   })
+      
+  // }
+  showDetail(item){
+    this.router.navigate(['app/result-reviewer'], {
+      queryParams: {
+        phaseId: this.phaseId,
+        phaseName:this.phaseName,
+        type:this.phaseType,
+        id:item.id,
+      }
+    })
   }
 
 }
