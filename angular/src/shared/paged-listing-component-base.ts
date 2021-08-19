@@ -129,6 +129,22 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
         this.pageSize = this.pageSizeType;
         this.refresh();
     }
+    AddFilterItem(request: PagedRequestDto, propertyName: string, value: any) {
+        let filterList = request.filterItems
+        if (value) {
+          filterList.unshift({ propertyName: propertyName, comparision: 0, value: value })
+    
+        }
+        return filterList
+      }
+      clearFilter(request: PagedRequestDto, propertyName: string, value: any) {
+        let filterList = request.filterItems
+        if (value) {
+          let item = filterList.filter(item => item.propertyName === propertyName)[0]
+          filterList.splice(request.filterItems.indexOf(item), 1)
+        }
+        return filterList
+      }
 
     protected abstract list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void;
     protected abstract delete(entity: TEntityDto): void;
