@@ -124,36 +124,60 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         "",
         "fas fa-tasks",
         "", [
+        new MenuItem(
+          this.l("Phase"),
+          "/app/phase",
+          "fas fa-clipboard-list",
+          "",
+        ),
+        
+
+        new MenuItem(
+          this.l("Đánh giá thành viên"),
+          "/app/review-user",
+          "fas fa-clipboard-list",
+          ""
+
+        )
+
+        ,
+        new MenuItem(
+          this.l("Tags"),
+          "/app/tags",
+          "fas fa-clipboard-list",
+          "",
+        ),
+        // new MenuItem(
+        //   this.l("Setup đánh giá"),
+        //   "/app/setup-reviewer",
+        //   "fas fa-clipboard-list",
+        //   ""
+
+        // )
+
+        // ,
+        // new MenuItem(
+        //   this.l("Kết quả đánh giá"),
+        //   "/app/result-reviewer",
+        //   "fas fa-clipboard-list",
+        //   ""
+
+        // )
+
+        ,
+        new MenuItem(
+          this.l("Category"),
+          "",
+          "fas fa-clipboard-list",
+          "", [
           new MenuItem(
-            this.l("Phase"),
-            "/app/phase",
+            this.l("Category Criteria"),
+            "/app/category-criteria",
             "fas fa-clipboard-list",
-            "",
+            ""
           ),
-          new MenuItem(
-            this.l("Tags"),
-            "/app/tags",
-            "fas fa-clipboard-list",
-            "",
-          ),
-          new MenuItem(
-            this.l("Category"),
-            "",
-            "fas fa-clipboard-list",
-            "",[
-              new MenuItem(
-                this.l("Category Criteria"),
-                "/app/category-criteria",
-                "fas fa-clipboard-list",
-                ""
-              ),
-              new MenuItem(
-                this.l("Criteria"),
-                "/app/category-criteria",
-                "fas fa-clipboard-list",
-                ""
-              )
-          ]
+
+        ]
         ),
 
 

@@ -28,10 +28,12 @@ export class PhaseService extends BaseApiService {
         params: new HttpParams().set('phaseId', id)
   })
   
-}
+  }
   public getParent(year:number): Observable<any>{
     return this.http.get<any>(this.rootUrl + '/GetAll?year='+year);
 
   }
+
+ s
   
 }

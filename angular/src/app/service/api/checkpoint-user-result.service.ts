@@ -15,6 +15,9 @@ export class CheckpointUserResultService extends BaseApiService{
     super(http);
   }
   public getAllUserResult(id:any):Observable<any>{
-    return this.http.get<any>(this.rootUrl+ 'CheckpointUserResult?phaseId='+id);
+    return this.http.get<any>(this.rootUrl+ '/getAll?phaseId='+id);
+  }
+  public Done(id:any):Observable<any>{
+    return this.http.post<any>(this.rootUrl+ `/Done?checkPointUserResultId=${id}`,id);
   }
 }

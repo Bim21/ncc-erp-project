@@ -1,3 +1,4 @@
+import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
 import { ResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/result-reviewer.component';
 import { SetUpReviewerComponent } from './modules/checkpoint/set-up-reviewer/set-up-reviewer.component';
 import { TagsComponent } from './modules/checkpoint/tags/tags.component';
@@ -221,6 +222,11 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
           {
             path:"result-reviewer",
             component: ResultReviewerComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"review-user",
+            component: ReviewUserComponent,
             canActivate:[AppRouteGuard]
           },
           {

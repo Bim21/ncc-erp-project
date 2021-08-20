@@ -108,6 +108,8 @@ import { CreateEditTagComponent } from './modules/checkpoint/tags/create-edit-ta
 import { SetUpReviewerComponent } from './modules/checkpoint/set-up-reviewer/set-up-reviewer.component';
 import { CreateEditSetupReviewerComponent } from './modules/checkpoint/set-up-reviewer/create-edit-setup-reviewer/create-edit-setup-reviewer.component';
 import { ResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/result-reviewer.component';
+import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
+import { CreateEditReviewUserComponent } from './modules/checkpoint/review-user/create-edit-review-user/create-edit-review-user.component';
 
 
 
@@ -210,6 +212,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     SetUpReviewerComponent,
     CreateEditSetupReviewerComponent,
     ResultReviewerComponent,
+    ReviewUserComponent,
+    CreateEditReviewUserComponent,
 
     
   ],
