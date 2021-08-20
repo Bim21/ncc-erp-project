@@ -37,13 +37,24 @@ namespace ProjectManagement.APIs.Phases
             return await query.GetGridResult(query, input);
         }
         [HttpGet]
-        public async Task<object> GetAll(int year)
+        public async Task<object> GetAllParent(int year)
         {
             var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year && x.Type == PhaseType.Main)
                 .Select(x => new
                 {
                     ParentId = x.Id,
                     ParentName = x.Name,
+                });
+            return await query.ToListAsync();
+        }
+        [HttpGet]
+        public async Task<object> GetAllPhase(int year)
+        {
+            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year)
+                .Select(x => new
+                {
+                    PhaseId = x.Id,
+                    PhaseName = x.Name,
                 });
             return await query.ToListAsync();
         }

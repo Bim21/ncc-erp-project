@@ -21,7 +21,8 @@ namespace ProjectManagement.APIs.RequestLevel
         {
             var phaseId = input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
             var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == Convert.ToInt64(phaseId) && x.Type == PhaseType.Main);
-            if (!isPhaseMain) {
+            if (!isPhaseMain)
+            {
                 throw new UserFriendlyException(String.Format("Không phải phase main"));
             }
             var resultMain = from cpur in WorkScope.GetAll<CheckPointUserResult>()
@@ -107,13 +108,22 @@ namespace ProjectManagement.APIs.RequestLevel
             return await resultMain.ToListAsync();
         }
         [HttpPut]
-        public async Task EditMain(long checkPointUserResultId, List<ResultTagDto> input)
+        public async Task EditMain(EditMainDto input)
         {
+            var checkPointUserResultId = input.CheckPointUserResultId;
+            var tagIds = input.TagIds;
+            //edit final note với userlever now
+            var checkPointUserResult = await WorkScope.GetAsync<CheckPointUserResult>(checkPointUserResultId);
+            checkPointUserResult.FinalNote = input.FinalNote;
+            //checkPointUserResult.NewLevel = Now;
+            await WorkScope.UpdateAsync<CheckPointUserResult>(checkPointUserResult);
+
+            //edit tags
             var oldTags = WorkScope.GetAll<CheckPointUserResultTag>().Where(x => x.CheckPointUserResultId == checkPointUserResultId).ToList();
 
             var oldTagIds = oldTags.Select(x => x.TagId);
-            var insertTags = input.Select(x => x.TagId).Except(oldTagIds);
-            var deleteTags = oldTagIds.Except(input.Select(x => x.TagId));
+            var insertTags = tagIds.Select(x => x).Except(oldTagIds);
+            var deleteTags = oldTagIds.Except(tagIds.Select(x => x));
             var deleteTagIds = oldTags.Where(x => deleteTags.Contains(x.TagId));
 
             foreach (var item in insertTags)
@@ -131,6 +141,20 @@ namespace ProjectManagement.APIs.RequestLevel
 
             cpuResult.Status = CheckPointUserResultStatus.FinalDone;
             await WorkScope.UpdateAsync<CheckPointUserResult>(cpuResult);
+        }
+        [HttpGet]
+        public async Task<object> GetAllTagNotSelect(long checkPointUserResultId)
+        {
+            var tagIdSelects = WorkScope.GetAll<CheckPointUserResultTag>()
+            .Where(x => x.CheckPointUserResultId == checkPointUserResultId)
+            .Select(x => x.TagId).ToList();
+            var tagIdNotSelects = WorkScope.GetAll<Tag>().Where(x => !tagIdSelects.Contains(x.Id));
+
+            return tagIdNotSelects.Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+            }).ToList();
         }
         [HttpGet]
         public async Task<object> ShowShortDetails(long checkPointUserResultId)
