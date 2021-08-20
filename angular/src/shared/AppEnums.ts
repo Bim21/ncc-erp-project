@@ -173,6 +173,13 @@ export const APP_ENUMS = {
     {
         Draft : 0,
         Reviewed : 1
+    },
+    CheckpointUserResult:{
+        Draft : 0,
+        UserDone : 1,
+        PMDone : 2,
+        FinalDone :3,
+
     }
 
    

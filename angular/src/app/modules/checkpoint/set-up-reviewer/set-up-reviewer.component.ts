@@ -18,10 +18,19 @@ import { Component, inject, Inject, OnInit, Injector } from '@angular/core';
 })
 export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpReviewerComponent> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    request.filterItems=this.AddFilterItem(request,"type",this.type)
+    request.filterItems=this.AddFilterItem(request,"reviewerName",this.reviewerName)
+    request.filterItems=this.AddFilterItem(request,"status",this.status)
+    
     this.pageSizeType=50;
     this.reviewerService.getAllPagging(request, this.phaseId).pipe(catchError(this.reviewerService.handleError)).subscribe((data)=>{
       this.reviewerList= data.result.items;
       this.showPaging(data.result, pageNumber);
+      request.filterItems=this.clearFilter(request,"type",this.type);
+      request.filterItems=this.clearFilter(request,"reviewerName",this.reviewerName)
+      request.filterItems=this.clearFilter(request,"status",this.status)
+      
+// code trang đó đâu, đây chính đây đây trang  set up mà set upreview.component kìa , đúng trang này mà :v
     })
   }
   protected delete(item): void {
@@ -43,13 +52,16 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
   public phaseId="";
   public phaseName="";
   public phaseType="";
+  public reviewerName="";
+  public type="";
+  public status="";
   public reviewerTypeList: string[] = Object.keys(this.APP_ENUM.CheckPointUserType);
   public reiviewerStatus: string[] = Object.keys(this.APP_ENUM.CheckPointUserStatus);
-  public readonly FILTER_CONFIG: InputFilterDto[] = [
-    { propertyName: 'status', comparisions: [0, 6, 7, 8], displayName: "Status" },
-    { propertyName: 'reviewerId', comparisions: [0, 6, 7, 8], displayName: "Reviewer Name" },
-    { propertyName: 'type', comparisions: [0, 6, 7, 8], displayName: "Type" },
-  ];
+  // public readonly FILTER_CONFIG: InputFilterDto[] = [
+  //   { propertyName: 'status', comparisions: [0, 6, 7, 8], displayName: "Status" },
+  //   { propertyName: 'reviewerId', comparisions: [0, 6, 7, 8], displayName: "Reviewer Name" },
+  //   { propertyName: 'type', comparisions: [0, 6, 7, 8], displayName: "Type" },
+  // ];
 
   constructor(public injector: Injector,
     public reviewerService: SetupReviewerService,
@@ -120,13 +132,18 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
     })
     
   }
-  // filterByReviewer(name){
-  //   console.log(name)
-  //   this.reviewerService.Get(name).subscribe((data)=>{
-  //     this.reviewerList=data.result;
-  //   })
+  filterByReviewerName(){
+    this.refresh();
       
-  // }
+  }
+  filerByType(){
+    this.refresh();
+      // hmmmmm
+  }
+  filterByStatus(){
+    this.refresh();
+      
+  }
   showDetail(item){
     this.router.navigate(['app/result-reviewer'], {
       queryParams: {
