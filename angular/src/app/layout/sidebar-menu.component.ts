@@ -130,6 +130,20 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           "fas fa-clipboard-list",
           "",
         ),
+        new MenuItem(
+          this.l("Category"),
+          "",
+          "fas fa-clipboard-list",
+          "", [
+          new MenuItem(
+            this.l("Category Criteria"),
+            "/app/category-criteria",
+            "fas fa-clipboard-list",
+            ""
+          ),
+
+        ]
+        ),
         
 
         new MenuItem(
@@ -164,21 +178,8 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
         // )
 
-        ,
-        new MenuItem(
-          this.l("Category"),
-          "",
-          "fas fa-clipboard-list",
-          "", [
-          new MenuItem(
-            this.l("Category Criteria"),
-            "/app/category-criteria",
-            "fas fa-clipboard-list",
-            ""
-          ),
-
-        ]
-        ),
+        
+      
 
 
       ]
