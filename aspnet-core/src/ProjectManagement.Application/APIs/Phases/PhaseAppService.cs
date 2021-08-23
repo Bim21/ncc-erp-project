@@ -55,6 +55,7 @@ namespace ProjectManagement.APIs.Phases
                 {
                     PhaseId = x.Id,
                     PhaseName = x.Name,
+                    Status = x.Status,
                 });
             return await query.ToListAsync();
         }
