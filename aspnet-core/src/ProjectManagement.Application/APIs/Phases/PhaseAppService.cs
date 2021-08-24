@@ -50,7 +50,7 @@ namespace ProjectManagement.APIs.Phases
         [HttpGet]
         public async Task<object> GetAllPhase(int year)
         {
-            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year)
+            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year && x.Status == PhaseStatus.Active)
                 .Select(x => new
                 {
                     PhaseId = x.Id,
