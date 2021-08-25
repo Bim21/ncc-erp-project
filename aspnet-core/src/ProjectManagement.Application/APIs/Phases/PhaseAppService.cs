@@ -50,13 +50,13 @@ namespace ProjectManagement.APIs.Phases
         [HttpGet]
         public async Task<object> GetAllPhase(int year)
         {
-            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year && x.Status == PhaseStatus.Active)
-                .Select(x => new
-                {
-                    PhaseId = x.Id,
-                    PhaseName = x.Name,
-                    Status = x.Status,
-                });
+            var query = WorkScope.GetAll<Phase>().Where(x => x.Year == year)
+                 .Select(x => new
+                 {
+                     PhaseId = x.Id,
+                     PhaseName = x.Name,
+                     Status = x.Status,
+                 });
             return await query.ToListAsync();
         }
         [HttpPost]
@@ -139,6 +139,18 @@ namespace ProjectManagement.APIs.Phases
         public async Task Active(long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
+            var isExistActive = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Status == PhaseStatus.Active && x.Year==phase.Year);
+
+            if (isExistActive)
+            {
+                throw new UserFriendlyException(String.Format("Đã có phase active trước đó nên ko thể active"));
+            }
+
+            if (phase.Status == PhaseStatus.Done)
+            {
+                throw new UserFriendlyException(String.Format("Đợt này đã xong rồi, không thể active nữa"));
+            }
+
             phase.Status = PhaseStatus.Active;
             await WorkScope.UpdateAsync<Phase>(phase);
         }
@@ -146,6 +158,12 @@ namespace ProjectManagement.APIs.Phases
         public async Task DeActive(long phaseId)
         {
             var phase = await WorkScope.GetAsync<Phase>(phaseId);
+
+            if (phase.Status == PhaseStatus.Done)
+            {
+                throw new UserFriendlyException(String.Format("Đợt này đã xong rồi, không thể deactive nữa"));
+            }
+
             phase.Status = PhaseStatus.DeActive;
             await WorkScope.UpdateAsync<Phase>(phase);
         }
