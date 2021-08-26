@@ -69,7 +69,7 @@ namespace ProjectManagement.APIs.CheckPointUsers
         //Set up ai đánh giá ai
         public async Task<CheckPointUserInputDto> Create(CheckPointUserInputDto input, bool isAdmin)
         {
-            var isExist = await WorkScope.GetAll<CheckPointUser>().AnyAsync(x => x.ReviewerId == input.ReviewerId && x.UserId == input.UserId);
+            var isExist = await WorkScope.GetAll<CheckPointUser>().AnyAsync(x => x.ReviewerId == input.ReviewerId && x.UserId == input.UserId && x.PhaseId == input.PhaseId);
             if(isExist)
             {
                 throw new UserFriendlyException("This user has been evaluated by this reviewer!");
@@ -123,6 +123,17 @@ namespace ProjectManagement.APIs.CheckPointUsers
             await WorkScope.UpdateAsync(ObjectMapper.Map<CheckPointUserInputDto, CheckPointUser>(input, checkPointUser));
 
             return input;
+        }
+        //edit by self
+        public async Task EditBySelf(EditBySelfDto input)
+        {
+            var checkPointUser = await WorkScope.GetAsync<CheckPointUser>(input.CheckPointUserId);
+
+            checkPointUser.Note = input.Note;
+            checkPointUser.Score = input.Score;
+
+            await WorkScope.UpdateAsync(checkPointUser);
+
         }
         public async Task Delete(long Id)
         {
@@ -254,6 +265,7 @@ namespace ProjectManagement.APIs.CheckPointUsers
                                 .Where(x => x.ReviewerId == AbpSession.UserId.Value)
                                 .Select(x => new CheckPointUserDto
                                 {
+                                    Id = x.Id,
                                     UserId = x.UserId,
                                     UserName = x.User.FullName,
                                     UserEmail = x.User.EmailAddress,
