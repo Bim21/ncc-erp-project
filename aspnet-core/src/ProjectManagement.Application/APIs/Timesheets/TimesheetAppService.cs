@@ -82,7 +82,7 @@ namespace ProjectManagement.APIs.TimeSheets
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
            
-            var project = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && x.IsCharge).ToListAsync();
+            var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge).ToListAsync();
             foreach (var item in project)
             {
                 var billInfomation = new StringBuilder();
