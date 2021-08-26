@@ -62,7 +62,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+            var query = WorkScope.GetAll<Project>().Where(x=>x.IsCharge)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,
