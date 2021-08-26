@@ -79,6 +79,7 @@ namespace ProjectManagement.APIs.RequestLevel
                        {
                            Id = a.Id,
                            CPURId = a.CheckPointUserResultId,
+                           TagId = b.Id,
                            TagName = b.Name,
                        };
 
@@ -115,7 +116,7 @@ namespace ProjectManagement.APIs.RequestLevel
             //edit final note với userlever now
             var checkPointUserResult = await WorkScope.GetAsync<CheckPointUserResult>(checkPointUserResultId);
             checkPointUserResult.FinalNote = input.FinalNote;
-            //checkPointUserResult.NewLevel = Now;
+            checkPointUserResult.NewLevel = input.Now;
             await WorkScope.UpdateAsync<CheckPointUserResult>(checkPointUserResult);
 
             //edit tags
