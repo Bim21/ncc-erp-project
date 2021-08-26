@@ -29,14 +29,14 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <label style="padding-top: 10px; margin-right: 10px;">Year:</label>
+                    <label style="padding-top: 10px; margin-right: 10px;">Phase:</label>
                     <mat-form-field style="max-width: 200px;" appearance="outline">
-                        <mat-select  name="yearSelect" placeholder="Select Year"  (selectionChange)="filterPhase($event.value)"
+                        <mat-select  name="yearSelect" placeholder="Select Phase"  (selectionChange)="filterPhase($event.value)"
                             >
                             <ng-container *ngFor="let phase of phaseList">
                                 
-                                <mat-option  [value]="phase.id" >{{
-                                    phase.name
+                                <mat-option  [value]="phase.phaseId" >{{
+                                    phase.phaseName
                                     }}</mat-option>
                             </ng-container>
                         </mat-select>

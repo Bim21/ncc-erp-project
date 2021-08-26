@@ -152,6 +152,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           "fas fa-clipboard-list",
           ""
 
+        ),
+        new MenuItem(
+          this.l("Đánh giá bản thân"),
+          "/app/review-yourself",
+          "fas fa-clipboard-list",
+          "",
         )
 
         ,
@@ -161,6 +167,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           "fas fa-clipboard-list",
           "",
         ),
+        
         // new MenuItem(
         //   this.l("Setup đánh giá"),
         //   "/app/setup-reviewer",

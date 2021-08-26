@@ -30,7 +30,7 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
       request.filterItems=this.clearFilter(request,"reviewerName",this.reviewerName)
       request.filterItems=this.clearFilter(request,"status",this.status)
       
-// code trang đó đâu, đây chính đây đây trang  set up mà set upreview.component kìa , đúng trang này mà :v
+
     })
   }
   protected delete(item): void {
@@ -138,7 +138,7 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
   }
   filerByType(){
     this.refresh();
-      // hmmmmm
+    
   }
   filterByStatus(){
     this.refresh();

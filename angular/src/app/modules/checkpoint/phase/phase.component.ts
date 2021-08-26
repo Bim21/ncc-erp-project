@@ -52,6 +52,7 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
   public searchText = "";
   public listYear: number[] = [];
   private currentYear = new Date().getFullYear();
+  
   // public year=-1;
 
   constructor(public injector: Injector,

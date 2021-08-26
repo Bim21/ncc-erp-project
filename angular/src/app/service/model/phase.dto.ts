@@ -9,3 +9,7 @@ export class PhaseDto{
     id: number;
     parentId:number;
 }
+export class getAllPhaseDto{
+    phaseId: number;
+    phaseName:string;
+}
