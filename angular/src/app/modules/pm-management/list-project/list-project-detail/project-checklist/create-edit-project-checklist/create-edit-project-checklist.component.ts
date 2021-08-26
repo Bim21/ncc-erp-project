@@ -88,11 +88,8 @@ export class CreateEditProjectChecklistComponent extends AppComponentBase implem
   
       })
       if(event.source.checked==false){
-       
-        
-              this.arrCheckLists=[]
-            console.log("hihiiiiiiiiiiiiiiii")
-  
+        this.arrCheckLists=[]
+            
       }
   
     // else{
@@ -106,17 +103,16 @@ export class CreateEditProjectChecklistComponent extends AppComponentBase implem
   updateCheckAllStatus(item, event) {
     if (this.listItems.every(el =>  el.createMode == false )) {
       this.checkAllItems = 0;
-      alert("hihi")
+
       
     }
     else if (this.listItems.every(el =>  el.createMode == true)) {
       this.checkAllItems = 1;
       this.arrCheckLists.push(item)
-      alert("huhu")
+
 
     }
     else {
-      alert("hfdfdfuhu")
 
       this.checkAllItems = 2;
       if (event.checked) {

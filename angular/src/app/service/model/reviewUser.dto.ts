@@ -1,4 +1,5 @@
 export class ReviewUserDto{
+    phaseId?:string;
     reviewerId: string;
     reviewerName: string;
     reviewerEmail?: string;

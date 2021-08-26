@@ -5,7 +5,7 @@ import { result } from 'lodash-es';
 import { catchError } from 'rxjs/operators';
 import { CheckpointResultDto } from './../../../../service/model/result-review.dto';
 import { CheckpointUserResultService } from './../../../../service/api/checkpoint-user-result.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { Component, Inject, OnInit, Injector, inject } from '@angular/core';
@@ -37,7 +37,8 @@ export class ResultReviewerComponent extends AppComponentBase implements OnInit 
     public injector :Injector,
     public route:ActivatedRoute,
     public checkpointUserResultService: CheckpointUserResultService,
-    public phaseService: PhaseService){
+    public phaseService: PhaseService,
+    public router:Router){
     super(injector);
     
   }
@@ -58,6 +59,7 @@ export class ResultReviewerComponent extends AppComponentBase implements OnInit 
     this.checkpointUserResultService.getAllUserResult(this.phaseId).subscribe((data)=>{
       this.listCheckpointResult=data.result;
     })
+    this.setParamToUrl();
   }
   create(){
 
@@ -76,16 +78,27 @@ export class ResultReviewerComponent extends AppComponentBase implements OnInit 
   }
   filterYear(year){
 
-    this.phaseService.getParent(year).subscribe((data)=>{
-      this.phaseList= data.result;
-      console.log(this.phaseList)
+    this.phaseService.getAllPhase(this.year).subscribe((data)=>{
+      this.phaseList=data.result;
     })
   }
+  phaseSelected="";
   filterPhase(id){
-    
+    this.phaseSelected=id;
     this.checkpointUserResultService.getAllUserResult(id).subscribe((data)=>{
       this.listCheckpointResult=data.result;
     })
+    this.setParamToUrl();
   }
+  
+  setParamToUrl(){
+    this.router.navigate([],{
+      queryParams:{
+        phaseId:this.phaseSelected,
+      },
+      queryParamsHandling:"merge"
+    })
+  }
+ 
 
 }
