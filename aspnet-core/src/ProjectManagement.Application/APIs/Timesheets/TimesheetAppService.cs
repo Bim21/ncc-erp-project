@@ -82,7 +82,7 @@ namespace ProjectManagement.APIs.TimeSheets
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
            
-            var project = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed && x.IsCharge).ToListAsync();
+            var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge).ToListAsync();
             foreach (var item in project)
             {
                 var billInfomation = new StringBuilder();
@@ -92,11 +92,12 @@ namespace ProjectManagement.APIs.TimeSheets
                                         FullName = x.User.FullName,
                                         BillRole = x.BillRole,
                                         BillRate = x.BillRate
+                                        Note = x.Note
                                     });
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
+                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} <br>");
                 }
 
                 var timesheetProject = new TimesheetProject

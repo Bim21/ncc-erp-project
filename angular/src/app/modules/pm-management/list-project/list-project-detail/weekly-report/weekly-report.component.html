@@ -7,7 +7,7 @@
                         <h3 class="mt-2">{{projectName}}</h3>
                     </td>
                     <td class=" send-block ">
-                        <div class="mr-3">
+                        <div class="mr-3 pt-2">
                             <div class="row w-100">
                                 <div class="col-2">
                                     <label  for="" class="mt-2" >PM report:</label>
@@ -35,8 +35,11 @@
                                     <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
                                         [disabled]="!allowSendReport"
                                         *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport  ">
-                                        <i class="fas fa-paper-plane"></i> Send report
+                                        <i class="fas fa-paper-plane ml-2"></i> Send report
                                     </button>
+                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive" 
+                                    matTooltip="Cần nhập đánh giá chung để có thể gửi report"
+                                    ><i class="fas fa-question-circle text-danger fa-lg"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +87,7 @@
                                 {{generalNote}}
                             </pre>
                         <div class="text-left pt-2 ml-2" style="max-width: 9%;">
-                            <button *ngIf="selectedReport.isActive" class="btn bg-secondary mt-2"
+                            <button *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_UpdateNote)" class="btn bg-secondary mt-2"
                                 (click)="isEditingNote = true">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>

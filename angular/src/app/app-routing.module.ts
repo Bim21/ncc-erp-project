@@ -1,3 +1,6 @@
+import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
+import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
+import { ResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/result-reviewer.component';
 import { SetUpReviewerComponent } from './modules/checkpoint/set-up-reviewer/set-up-reviewer.component';
 import { TagsComponent } from './modules/checkpoint/tags/tags.component';
 import { PhaseComponent } from './modules/checkpoint/phase/phase.component';
@@ -215,6 +218,21 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
           {
             path:"setup-reviewer",
             component: SetUpReviewerComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"result-reviewer",
+            component: ResultReviewerComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"review-user",
+            component: ReviewUserComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"review-yourself",
+            component: ReviewYourselfComponent,
             canActivate:[AppRouteGuard]
           },
           {

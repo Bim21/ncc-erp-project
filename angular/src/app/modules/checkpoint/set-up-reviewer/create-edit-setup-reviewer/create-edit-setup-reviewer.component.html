@@ -1,4 +1,4 @@
-<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
+<form class="form-horizontal" autocomplete="off" #checkpointForm="ngForm" novalidate>
     <abp-modal-header title="Create/Edit" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
@@ -10,12 +10,17 @@
                 
                     <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                         <mat-select required placeholder="Select project name" 
-                        [(ngModel)]="reviewer.userId" name="reviewerName">
+                        [(ngModel)]="reviewer.userId" name="reviewerName" #UserName="ngModel">
                             <mat-option *ngFor="let item of userList" [value]="item.userId"  >
                                 {{item.userName}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <mat-error class="mt-1" *ngIf="UserName.hasError('required') && UserName.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                     </mat-error>
+
                     
               
                 
@@ -24,12 +29,16 @@
                 
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                     <mat-select required placeholder="Select project name" 
-                    [(ngModel)]="reviewer.userId" name="userName">
+                    [(ngModel)]="reviewer.userId" name="userName" #UserName="ngModel">
                         <mat-option *ngFor="let item of reviewerList" [value]="item.id"  >
                             {{item.fullName}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
+                <mat-error class="mt-1" *ngIf="UserName.hasError('required') && UserName.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
                 
           
             
@@ -43,12 +52,16 @@
             <div class="col-md-9">
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                     <mat-select required placeholder="Select project name" 
-                    [(ngModel)]="reviewer.reviewerId" name="reviewerName">
+                    [(ngModel)]="reviewer.reviewerId" name="reviewerName" #ReviewerName="ngModel">
                         <mat-option *ngFor="let item of reviewerList" [value]="item.id"  >
                             {{item.fullName}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
+                <mat-error class="mt-1" *ngIf="ReviewerName.hasError('required') && ReviewerName.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
                 
             </div>
         </div>
@@ -81,7 +94,7 @@
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button mat-raised-button color="primary" class="saving-btn"mat-button
-          (click)="SaveAndClose()">Save</button>
+        [disabled]="!checkpointForm.valid || isLoading" (click)="SaveAndClose()">Save</button>
     </div>
 </form>
 

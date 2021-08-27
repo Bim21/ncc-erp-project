@@ -40,6 +40,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   PmManager_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ApproveUser;
   PmManager_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_RejectUser;
   PmManager_PMReportProject_UpdatePmReportProjectHealth= PERMISSIONS_CONSTANT.PmManager_PMReportProject_UpdatePmReportProjectHealth
+  PmManager_PMReportProject_UpdateNote = PERMISSIONS_CONSTANT.PmManager_PMReportProject_UpdateNote
 
   // Paging
   public itemPerPage: number = 50;

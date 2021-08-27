@@ -1,6 +1,8 @@
 ﻿using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NccCore.Extension;
+using NccCore.Paging;
 using ProjectManagement.APIs.CheckPointUserResults.Dto;
 using ProjectManagement.Entities;
 using System;
@@ -14,6 +16,39 @@ namespace ProjectManagement.APIs.RequestLevel
 {
     public class CheckPointUserResultAppService : ProjectManagementAppServiceBase
     {
+        [HttpPost]
+        public async Task<GridResult<CheckPointUserResultDto>> GetAllPaging(GridParam input)
+        {
+            var phaseId = input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
+            var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == Convert.ToInt64(phaseId) && x.Type == PhaseType.Main);
+            if (!isPhaseMain)
+            {
+                throw new UserFriendlyException(String.Format("Không phải phase main"));
+            }
+            var resultMain = from cpur in WorkScope.GetAll<CheckPointUserResult>()
+                             select new CheckPointUserResultDto
+                             {
+                                 Id = cpur.Id,
+                                 PhaseId = cpur.PhaseId,
+                                 UserId = cpur.User.Id,
+                                 UserName = cpur.User.FullName,
+                                 ReviewerId = cpur.PM.Id,
+                                 ReviewerName = cpur.PM.FullName,
+                                 UserNote = cpur.UserNote,
+                                 PMNote = cpur.PMNote,
+                                 FinalNote = cpur.FinalNote,
+                                 CurrentLevel = cpur.User.UserLevel,
+                                 ExpectedLevel = cpur.User.UserLevel,
+                                 NowLevel = cpur.NewLevel,
+                                 PMScore = cpur.PMScore.Value,
+                                 TeamScore = cpur.TeamScore.Value,
+                                 ClientScore = cpur.ClientScore.Value,
+                                 ExamScore = cpur.ExamScore.Value,
+                                 Status = cpur.Status,
+                                 //Tags = cput.Where(x=>x.CheckPointUserResultId==cpur.Id).ToList(),
+                             };
+            return await resultMain.GetGridResult(resultMain, input);
+        }
         [HttpGet]
         public async Task<object> GetAll(long phaseId)
         {
@@ -28,10 +63,12 @@ namespace ProjectManagement.APIs.RequestLevel
                         PhaseId = x.Phase.Name,
                         Note = x.Note,
                         ReviewerName = x.Reviewer.FullName,
+                        ReviewerId = x.ReviewerId,
                         Score = x.Score.Value,
                         Status = x.Status,
                         Type = x.Type,
                         UserName = x.User.Name,
+                        UserId = x.UserId
                     });
                 return await resultSub.ToListAsync();
             }
@@ -42,6 +79,7 @@ namespace ProjectManagement.APIs.RequestLevel
                        {
                            Id = a.Id,
                            CPURId = a.CheckPointUserResultId,
+                           TagId = b.Id,
                            TagName = b.Name,
                        };
 
@@ -50,12 +88,17 @@ namespace ProjectManagement.APIs.RequestLevel
                              select new
                              {
                                  Id = cpur.Id,
-                                 PhaseId = cpur.Phase.Name,
+                                 PhaseId = cpur.PhaseId,
+                                 UserId = cpur.User.Id,
                                  UserName = cpur.User.FullName,
-                                 PMName = cpur.PM.FullName,
+                                 ReviewerId = cpur.PM.Id,
+                                 ReviewerName = cpur.PM.FullName,
+                                 UserNote = cpur.UserNote,
                                  PMNote = cpur.PMNote,
-                                 CurrentLevel = cpur.OldLevel,
-                                 NewLevel = cpur.NewLevel,
+                                 FinalNote = cpur.FinalNote,
+                                 CurrentLevel = cpur.User.UserLevel,
+                                 ExpectedLevel = cpur.User.UserLevel,
+                                 NowLevel = cpur.NewLevel,
                                  PMScore = cpur.PMScore.Value,
                                  TeamScore = cpur.TeamScore.Value,
                                  ClientScore = cpur.ClientScore.Value,
@@ -66,13 +109,22 @@ namespace ProjectManagement.APIs.RequestLevel
             return await resultMain.ToListAsync();
         }
         [HttpPut]
-        public async Task EditMain(long checkPointUserResultId, List<ResultTagDto> input)
+        public async Task EditMain(EditMainDto input)
         {
+            var checkPointUserResultId = input.CheckPointUserResultId;
+            var tagIds = input.TagIds;
+            //edit final note với userlever now
+            var checkPointUserResult = await WorkScope.GetAsync<CheckPointUserResult>(checkPointUserResultId);
+            checkPointUserResult.FinalNote = input.FinalNote;
+            checkPointUserResult.NewLevel = input.Now;
+            await WorkScope.UpdateAsync<CheckPointUserResult>(checkPointUserResult);
+
+            //edit tags
             var oldTags = WorkScope.GetAll<CheckPointUserResultTag>().Where(x => x.CheckPointUserResultId == checkPointUserResultId).ToList();
 
             var oldTagIds = oldTags.Select(x => x.TagId);
-            var insertTags = input.Select(x => x.TagId).Except(oldTagIds);
-            var deleteTags = oldTagIds.Except(input.Select(x => x.TagId));
+            var insertTags = tagIds.Select(x => x).Except(oldTagIds);
+            var deleteTags = oldTagIds.Except(tagIds.Select(x => x));
             var deleteTagIds = oldTags.Where(x => deleteTags.Contains(x.TagId));
 
             foreach (var item in insertTags)
@@ -92,6 +144,20 @@ namespace ProjectManagement.APIs.RequestLevel
             await WorkScope.UpdateAsync<CheckPointUserResult>(cpuResult);
         }
         [HttpGet]
+        public async Task<object> GetAllTagNotSelect(long checkPointUserResultId)
+        {
+            var tagIdSelects = WorkScope.GetAll<CheckPointUserResultTag>()
+            .Where(x => x.CheckPointUserResultId == checkPointUserResultId)
+            .Select(x => x.TagId).ToList();
+            var tagIdNotSelects = WorkScope.GetAll<Tag>().Where(x => !tagIdSelects.Contains(x.Id));
+
+            return tagIdNotSelects.Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+            }).ToList();
+        }
+        [HttpGet]
         public async Task<object> ShowShortDetails(long checkPointUserResultId)
         {
             var cpur = await WorkScope.GetAsync<CheckPointUserResult>(checkPointUserResultId);
@@ -103,6 +169,20 @@ namespace ProjectManagement.APIs.RequestLevel
                     Note = x.Note,
                 }).ToList();
             return cpus;
+        }
+        [HttpPost]
+        public async Task Done(long checkPointUserResultId)
+        {
+            var checkPointUserResult = await WorkScope.GetAsync<CheckPointUserResult>(checkPointUserResultId);
+            var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == checkPointUserResult.PhaseId && x.Type == PhaseType.Main);
+            if (!isPhaseMain)
+                throw new UserFriendlyException(String.Format("Không phải đợt main"));
+
+            if (checkPointUserResult.Status == CheckPointUserResultStatus.FinalDone)
+                throw new UserFriendlyException(String.Format("Đã final done rồi"));
+
+            checkPointUserResult.Status = CheckPointUserResultStatus.FinalDone;
+            await WorkScope.UpdateAsync<CheckPointUserResult>(checkPointUserResult);
         }
     }
 }

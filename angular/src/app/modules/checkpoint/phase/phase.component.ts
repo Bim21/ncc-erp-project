@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/operators';
+import { catchError, filter } from 'rxjs/operators';
 import { CreateEditPhaseComponent } from './create-edit-phase/create-edit-phase.component';
 import { MatDialog } from '@angular/material/dialog';
 import { result } from 'lodash-es';
@@ -7,6 +7,7 @@ import { PhaseDto } from './../../../service/model/phase.dto';
 import { PhaseService } from './../../../service/api/phase.service';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { Component, OnInit, Injector } from '@angular/core';
+import { InputFilterDto } from '@shared/filter/filter.component';
 
 @Component({
   selector: 'app-phase',
@@ -14,13 +15,16 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./phase.component.css']
 })
 export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> implements OnInit {
- 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.pageSizeType=50;
-    this.phaseService.getAllPaging(request).pipe(catchError(this.phaseService.handleError)).subscribe((data)=>{
-      this.phaseList= data.result.items;
-      this.tempPhaseList=this.phaseList;
+    this.isLoading =true
+    request.filterItems = this.AddFilterItem(request, "year", this.year)
+    this.pageSizeType = 50;
+    this.phaseService.getAllPaging(request).pipe(catchError(this.phaseService.handleError)).subscribe((data) => {
+      this.phaseList = data.result.items;
+      this.tempPhaseList = this.phaseList;
       this.showPaging(data.result, pageNumber);
+      request.filterItems = this.clearFilter(request, "year", this.year)
+      this.isLoading =false
     })
   }
   protected delete(phase): void {
@@ -37,14 +41,20 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
       }
     );
   }
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
+  ];
 
+
+  public year: any = new Date().getFullYear()
   public phaseList: PhaseDto[] = [];
   public tempPhaseList: PhaseDto[] = [];
-  public searchText="";
+  public searchText = "";
   public listYear: number[] = [];
   private currentYear = new Date().getFullYear();
-  public year=-1;
   
+  // public year=-1;
+
   constructor(public injector: Injector,
     public phaseService: PhaseService,
     public dialog: MatDialog
@@ -56,54 +66,32 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
     }
     this.refresh();
   }
-  // public getAllPhase() {
-  //   this.phaseService.getAll().subscribe((data) => {
-  //     this.phaseList = data.result;
-  //   })
-  // }
-  // changeStatus(phase) {
-  //   if (phase.status==0) {
-  //     this.phaseService.DeActive(phase.id).subscribe(rs => {
-  //       abp.notify.success("DeActive phase: " + phase.name);
 
-  //     })
-  //   }
-  //   if(phase.status==1){
-  //     this.phaseService.Active(phase.id).subscribe(rs => {
-  //       abp.notify.success("Active phase: " + phase.name)
-
-  //     })
-  //   }else{
-  //     this.done(phase.id);
-  //   }
-  //   this.refresh();
-
-  // }
-  active(phase){
+  active(phase) {
     this.phaseService.Active(phase.id).subscribe(rs => {
       abp.notify.success("Active phase: " + phase.name)
 
     })
     this.refresh();
   }
-  deactive(phase){
+  deactive(phase) {
     this.phaseService.DeActive(phase.id).subscribe(rs => {
       abp.notify.success("DeActive phase: " + phase.name)
 
     })
     this.refresh();
   }
-  showDialog(command: String, Phase:any):void{
-    let phase={} as PhaseDto;
-    if(command== "edit"){
-      phase={
+  showDialog(command: String, Phase: any): void {
+    let phase = {} as PhaseDto;
+    if (command == "edit") {
+      phase = {
         name: Phase.name,
         year: Phase.year,
         parentId: Phase.parentId,
-        type:Phase.type,
+        type: Phase.type,
         status: Phase.status,
         isCriteria: Phase.isCriteria,
-        index:Phase.index,
+        index: Phase.index,
         id: Phase.id,
       }
     }
@@ -122,14 +110,14 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
     });
 
   }
-  public create(){
+  public create() {
     this.showDialog("create", {});
   }
-  public edit(phase:PhaseDto){
-    this.showDialog("edit",phase);
+  public edit(phase: PhaseDto) {
+    this.showDialog("edit", phase);
   }
-  public done(phase){
-    this.phaseService.Done(phase.id).subscribe((res)=>{
+  public done(phase) {
+    this.phaseService.Done(phase.id).subscribe((res) => {
       abp.notify.success("Active phase: " + phase.name);
     })
     this.refresh();
@@ -141,23 +129,21 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
       }
     }
   }
-  filterYear(e){
-    this.phaseList=this.tempPhaseList.filter(item=>{
-      return item.year==e;
-    })
-    
+  filterYear(e) {
+    this.refresh()
+
 
   }
-  public showDetail(item){
+  public showDetail(item) {
     this.router.navigate(['app/setup-reviewer'], {
       queryParams: {
         id: item.id,
-        name:item.name,
-        type:item.type
+        name: item.name,
+        type: item.type
       }
     })
   }
-  
-  
+
+
 
 }

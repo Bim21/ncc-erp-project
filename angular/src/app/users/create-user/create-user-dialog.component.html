@@ -1,4 +1,5 @@
-<form
+<form style="  display: flex;
+flex-direction: column;"
   class="form-horizontal"
   autocomplete="off"
   #createUserModal="ngForm"
@@ -7,8 +8,11 @@
   <abp-modal-header
     [title]="'CreateNewUser' | localize"
     (onCloseClick)="bsModalRef.hide()"
+   
   ></abp-modal-header>
-  <div class="modal-body">
+  <div class="modal-body" style="
+  max-height: 500px;
+  overflow-y: auto;">
     <tabset>
       <tab [heading]="'UserDetails' | localize" class="pt-3 px-2">
         <div class="form-group row required">
@@ -292,8 +296,10 @@
     </tabset>
   </div>
   <abp-modal-footer
+  
     [cancelDisabled]="saving"
     [saveDisabled]="!createUserModal.form.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
+  
   ></abp-modal-footer>
 </form>

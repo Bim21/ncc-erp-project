@@ -272,11 +272,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                     FullName = x.User.FullName,
                                     BillRole = x.BillRole,
                                     BillRate = x.BillRate
+                                    Note = x.Note
                                 });
 
             foreach (var b in projectUserBills)
             {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} <br>");
+                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} <br>");
             }
 
             input.ProjectBillInfomation = $"{billInfomation}";

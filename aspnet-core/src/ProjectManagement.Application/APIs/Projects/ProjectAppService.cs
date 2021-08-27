@@ -62,7 +62,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+            var query = WorkScope.GetAll<Project>().Where(x=>x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,
@@ -119,7 +119,7 @@ namespace ProjectManagement.APIs.Projects
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
 
-            if(input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
             {
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
@@ -128,13 +128,14 @@ namespace ProjectManagement.APIs.Projects
 
             var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
                                 .Where(x => x.ProjectType == input.ProjectType)
-                                .Select(x => new ProjectCheckList{
+                                .Select(x => new ProjectCheckList
+                                {
                                     ProjectId = input.Id,
                                     CheckListItemId = x.CheckListItemId,
                                     IsActive = true,
                                 }).ToListAsync();
 
-            foreach(var i in projectCheckLists)
+            foreach (var i in projectCheckLists)
             {
                 await WorkScope.InsertAsync(i);
             }

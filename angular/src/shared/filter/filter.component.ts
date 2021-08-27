@@ -17,7 +17,7 @@ export class FilterComponent {
   selectedComparision: number;
   value: any;
   isDateProperty: boolean;
-  isConFirmProperty: boolean = true;
+  isConFirmProperty: boolean = false;
 
   comparisions: ComparisionDto[] = [];
   constructor() {
@@ -27,7 +27,7 @@ export class FilterComponent {
       this.comparisions = [];
     }
     else {
-      let comps = this.inputFilters.find(i => i.propertyName === this.item.propertyName).comparisions;
+      let comps = this.inputFilters.find(i => i.propertyName === this.item.propertyName)?.comparisions || [0];
       comps.forEach(element => {
         var com = new ComparisionDto();
         com.id = element;

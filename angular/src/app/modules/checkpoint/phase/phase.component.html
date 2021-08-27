@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
+            <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1" [busy]="isLoading">
                 <div class="card-body">
                     <form class="form-horizontal">
                         <div class="row">
@@ -63,7 +63,7 @@
                     <mat-form-field style="max-width: 200px;" appearance="outline">
                         <mat-select  name="yearSelect" placeholder="Select Year" [(ngModel)]="year" (selectionChange)="filterYear($event.value)"
                             >
-                            <mat-option [value]="-1">All</mat-option>
+                            <mat-option [value]="''">All</mat-option>
                             <ng-container *ngFor="let year of listYear">
                                 
                                 <mat-option  [value]="year" >{{
@@ -73,7 +73,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
@@ -95,9 +95,9 @@
                                 totalItems: totalItems
                               }; let i=index">
                             <td>{{i+1}}</td>
-                            <td><span class="hyperlink" (click)="showDetail(item)">{{item.name}}</span></td>
+                            <td style="white-space: normal; min-width: 300px;"><span class="hyperlink" (click)="showDetail(item)">{{item.name}}</span></td>
                             <td>{{item.year}}</td>
-                            <td>{{item.parentName}}</td>
+                            <td style="white-space: normal; min-width: 300px;">{{item.parentName}}</td>
                             <td>
                                 <mat-checkbox class="example-margin" [checked]="item.status==0">
                                 </mat-checkbox>

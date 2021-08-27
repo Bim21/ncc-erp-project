@@ -1,4 +1,4 @@
-<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
+<form class="form-horizontal" autocomplete="off" #checkpointForm="ngForm" novalidate>
     <abp-modal-header title="Create/Edit" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
@@ -20,7 +20,7 @@
             <div class="col-md-9">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-select [(ngModel)]="phase.year" name="yearSelect" placeholder="Select Year"
-                        required #account="ngModel">
+                        required #year="ngModel">
                         <ng-container *ngFor="let year of listYear">
                             <mat-option  [value]="year" (click)="getParent(year)">{{
                                 year
@@ -28,6 +28,10 @@
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
+                <mat-error class="mt-1" *ngIf="year.hasError('required') && year.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
                 
             </div>
         </div>
@@ -55,13 +59,14 @@
             </label>
             <div class="col-md-9">
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
-                    <mat-select required placeholder="Select project name" 
+                    <mat-select placeholder="Select project name" 
                     [(ngModel)]="phase.parentId" name="projectType">
                         <mat-option *ngFor="let parent of parenttList" [value]="parent.parentId"  >
                             {{parent.parentName}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
+
                 
             </div>
         </div>
@@ -90,6 +95,6 @@
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button mat-raised-button color="primary" class="saving-btn"mat-button
-          (click)="SaveAndClose()">Save</button>
+        [disabled]="!checkpointForm.valid || isLoading" (click)="SaveAndClose()">Save</button>
     </div>
 </form>
