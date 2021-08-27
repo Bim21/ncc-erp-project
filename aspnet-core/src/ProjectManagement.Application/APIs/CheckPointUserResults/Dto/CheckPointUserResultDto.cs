@@ -1,10 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.CheckPointUserResults.Dto
@@ -28,6 +26,6 @@ namespace ProjectManagement.APIs.CheckPointUserResults.Dto
         public int ClientScore { get; set; }
         public int ExamScore { get; set; }
         public CheckPointUserResultStatus Status { get; set; }
-        //public IEnumerable<TagDto> Tags { get; set; }
+        public IEnumerable<ResultTagDto> Tags { get; set; }
     }
 }
