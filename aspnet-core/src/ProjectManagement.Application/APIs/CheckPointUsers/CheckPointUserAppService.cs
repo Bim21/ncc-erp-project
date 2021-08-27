@@ -21,12 +21,10 @@ namespace ProjectManagement.APIs.CheckPointUsers
     {
         //paging của trang kết quả đánh giá
         [HttpPost]
-        public async Task<GridResult<CheckPointUserDto>> GetAllPagingSub(GridParam input)
+        public async Task<GridResult<CheckPointUserDto>> GetAllPagingSub(GridParam input,long phaseId)
         {
-            var phaseId = (long)input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
-            var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == Convert.ToInt64(phaseId) && x.Type == PhaseType.Sub);
-            var cput = WorkScope.GetAll<CheckPointUserResultTag>();
-            if (!isPhaseMain)
+            var isPhaseSub = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == phaseId && x.Type == PhaseType.Sub);
+            if (!isPhaseSub)
             {
                 throw new UserFriendlyException(String.Format("Không phải phase sub"));
             }
