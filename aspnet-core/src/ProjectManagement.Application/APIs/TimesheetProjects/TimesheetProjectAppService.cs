@@ -271,7 +271,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                 {
                                     FullName = x.User.FullName,
                                     BillRole = x.BillRole,
-                                    BillRate = x.BillRate
+                                    BillRate = x.BillRate,
                                     Note = x.Note
                                 });
 
