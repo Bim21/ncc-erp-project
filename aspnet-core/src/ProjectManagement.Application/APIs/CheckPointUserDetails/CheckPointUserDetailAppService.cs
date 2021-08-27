@@ -14,8 +14,12 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
     public class CheckPointUserDetailAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
-        public async Task<object> GetAll(long checkPointUserId)
+        public async Task<object> GetAll(long phaseId, long memberId)
         {
+            var checkPointUser = await WorkScope.GetAll<CheckPointUser>().Where(x => x.PhaseId == phaseId && x.ReviewerId == memberId && x.UserId == memberId).FirstOrDefaultAsync();
+            var phase = await WorkScope.GetAsync<Phase>(checkPointUser.PhaseId);
+            var checkPointUserId = checkPointUser.Id;
+
             var listDetail = WorkScope.GetAll<CheckPointUserDetail>().Where(x => x.CheckPointUserId == checkPointUserId).Select(x => new
             {
                 Id = x.Id,
@@ -25,8 +29,11 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
                 Score = x.Score,
             }).ToList();
 
-            var checkPointUser = await WorkScope.GetAll<CheckPointUser>().Where(x => x.Id == checkPointUserId).FirstOrDefaultAsync();
-            var phase = await WorkScope.GetAsync<Phase>(checkPointUser.PhaseId);
+            if (listDetail == null)
+            {
+                throw new UserFriendlyException(String.Format("Chưa được đánh giá"));
+            }
+
             if (phase.Type == PhaseType.Main)
             {
                 return new
@@ -48,9 +55,11 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
             }
         }
         [HttpGet]
-        public async Task<List<CheckPointUserDetailBeforeDto>> GetAllBefore(long checkPointUserId)
+        public async Task<List<CheckPointUserDetailBeforeDto>> GetAllBefore(long phaseId, long memberId)
         {
-            var checkPointUser = await WorkScope.GetAsync<CheckPointUser>(checkPointUserId);
+            var checkPointUser = WorkScope.GetAll<CheckPointUser>()
+                .Where(x => x.PhaseId == phaseId && x.ReviewerId == memberId && x.UserId == memberId)
+                .FirstOrDefault();
 
             var parentPhase = await WorkScope.GetAsync<Phase>(checkPointUser.Id);
             var phases = WorkScope.GetAll<Phase>().Where(x => x.Type == PhaseType.Main && x.Status == PhaseStatus.Done);
@@ -79,22 +88,26 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
             var criterias = WorkScope.GetAll<Criteria>().ToList();
             var weightSum = criterias.Sum(x => x.Weight);
 
+            var checkPointUserId = WorkScope.GetAll<CheckPointUser>().FirstOrDefault(x => x.UserId == input.MemberId && x.PhaseId == input.PhaseId && x.ReviewerId == input.MemberId).Id;
+
             var score = 0;
             foreach (var cpudNew in input.CheckPointUserDetails)
             {
                 var cpudOld = await WorkScope.GetAsync<CheckPointUserDetail>(cpudNew.Id);
 
+                var tempCpud = new CheckPointUserDetail() { Id = cpudNew.Id, CheckPointUserId = checkPointUserId, CriteriaId = cpudNew.CriteriaId, Score = cpudNew.Score, Note = cpudNew.Note };
+
                 var weight = criterias.Where(x => x.Id == cpudNew.CriteriaId).Select(x => x.Weight).FirstOrDefault();
                 if (cpudNew.Score != null)
                     score += (cpudNew.Score * weight).Value;
                 //if (!string.IsNullOrEmpty(cpudNew.Note))
-                await WorkScope.UpdateAsync(ObjectMapper.Map<CheckPointUserDetailDto, CheckPointUserDetail>(cpudNew, cpudOld));
+                await WorkScope.UpdateAsync(tempCpud);
             }
 
             //tính điểm để nhập vào checkpointuser
             var checkpointuser = await WorkScope.GetAsync<CheckPointUser>(input.Id);
             checkpointuser.Note = input.Note;
-            checkpointuser.Score = (int)score/weightSum;
+            checkpointuser.Score = (int)score / weightSum;
             checkpointuser.Status = CheckPointUserStatus.Reviewed;
 
             await WorkScope.UpdateAsync<CheckPointUser>(checkpointuser);
@@ -125,7 +138,7 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
             else
             {
                 var scoreTeam = cpuTypeTeam.Average(x => x.Score);
-                cpuResult.TeamScore = checkpointuser.Score; 
+                cpuResult.TeamScore = checkpointuser.Score;
             }
 
             await WorkScope.UpdateAsync<CheckPointUserResult>(cpuResult);
