@@ -21,7 +21,13 @@ namespace ProjectManagement.APIs.RequestLevel
         {
             var phaseId = (long)input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
             var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == Convert.ToInt64(phaseId) && x.Type == PhaseType.Main);
-            var cput = WorkScope.GetAll<CheckPointUserResultTag>();
+            var cput = WorkScope.GetAll<CheckPointUserResultTag>()
+                .Select(x => new ResultTagDto
+                {
+                    Id=x.Id,
+                    TagId=x.TagId,
+                    CheckPointUserResultId=x.CheckPointUserResultId,
+                });
             if (!isPhaseMain)
             {
                 throw new UserFriendlyException(String.Format("Không phải phase main"));

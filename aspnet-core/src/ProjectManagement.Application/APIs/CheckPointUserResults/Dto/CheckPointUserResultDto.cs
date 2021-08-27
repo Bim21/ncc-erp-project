@@ -26,6 +26,6 @@ namespace ProjectManagement.APIs.CheckPointUserResults.Dto
         public int ClientScore { get; set; }
         public int ExamScore { get; set; }
         public CheckPointUserResultStatus Status { get; set; }
-        public IEnumerable<object> Tags { get; set; }
+        public IEnumerable<ResultTagDto> Tags { get; set; }
     }
 }
