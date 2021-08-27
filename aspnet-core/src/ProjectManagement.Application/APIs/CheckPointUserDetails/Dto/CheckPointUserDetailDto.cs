@@ -10,6 +10,7 @@ namespace ProjectManagement.APIs.CheckPointUserDetails.Dto
     [AutoMapTo(typeof(CheckPointUserDetail))]
     public class CheckPointUserDetailDto : EntityDto<long>
     {
+        public long CheckPointUserId { get; set; }
         public long CriteriaId { get; set; }
         public int? Score { get; set; }
         public string Note { get; set; }

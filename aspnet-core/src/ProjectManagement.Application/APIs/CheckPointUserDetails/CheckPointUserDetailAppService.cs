@@ -95,13 +95,11 @@ namespace ProjectManagement.APIs.CheckPointUserDetails
             {
                 var cpudOld = await WorkScope.GetAsync<CheckPointUserDetail>(cpudNew.Id);
 
-                var tempCpud = new CheckPointUserDetail() { Id = cpudNew.Id, CheckPointUserId = checkPointUserId, CriteriaId = cpudNew.CriteriaId, Score = cpudNew.Score, Note = cpudNew.Note };
-
                 var weight = criterias.Where(x => x.Id == cpudNew.CriteriaId).Select(x => x.Weight).FirstOrDefault();
                 if (cpudNew.Score != null)
                     score += (cpudNew.Score * weight).Value;
                 //if (!string.IsNullOrEmpty(cpudNew.Note))
-                await WorkScope.UpdateAsync(tempCpud);
+                await WorkScope.UpdateAsync(ObjectMapper.Map<CheckPointUserDetailDto,CheckPointUserDetail>(cpudNew,cpudOld));
             }
 
             //tính điểm để nhập vào checkpointuser
