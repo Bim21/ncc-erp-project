@@ -17,15 +17,17 @@ namespace ProjectManagement.APIs.RequestLevel
     public class CheckPointUserResultAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        public async Task<GridResult<CheckPointUserResultDto>> GetAllPaging(GridParam input)
+        public async Task<GridResult<CheckPointUserResultDto>> GetAllPagingMain(GridParam input)
         {
-            var phaseId = input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
+            var phaseId = (long)input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
             var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == Convert.ToInt64(phaseId) && x.Type == PhaseType.Main);
+            var cput = WorkScope.GetAll<CheckPointUserResultTag>();
             if (!isPhaseMain)
             {
                 throw new UserFriendlyException(String.Format("Không phải phase main"));
             }
             var resultMain = from cpur in WorkScope.GetAll<CheckPointUserResult>()
+                             where cpur.PhaseId == phaseId
                              select new CheckPointUserResultDto
                              {
                                  Id = cpur.Id,
@@ -45,7 +47,7 @@ namespace ProjectManagement.APIs.RequestLevel
                                  ClientScore = cpur.ClientScore.Value,
                                  ExamScore = cpur.ExamScore.Value,
                                  Status = cpur.Status,
-                                 //Tags = cput.Where(x=>x.CheckPointUserResultId==cpur.Id).ToList(),
+                                 Tags = cput.Where(x=>x.CheckPointUserResultId==cpur.Id).ToList(),
                              };
             return await resultMain.GetGridResult(resultMain, input);
         }
