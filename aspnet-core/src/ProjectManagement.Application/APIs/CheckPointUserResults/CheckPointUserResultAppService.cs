@@ -25,6 +25,7 @@ namespace ProjectManagement.APIs.RequestLevel
                 {
                     Id=x.Id,
                     TagId=x.TagId,
+                    TagName = x.Tag.Name,
                     CheckPointUserResultId=x.CheckPointUserResultId,
                 });
             if (!isPhaseMain)

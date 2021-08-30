@@ -12,5 +12,6 @@ namespace ProjectManagement.APIs.CheckPointUserResults.Dto
     {
         public long CheckPointUserResultId { get; set; }
         public long TagId { get; set; }
+        public string TagName { get; set; }
     }
 }
