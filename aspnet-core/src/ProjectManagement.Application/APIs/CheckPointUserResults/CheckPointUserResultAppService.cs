@@ -17,15 +17,15 @@ namespace ProjectManagement.APIs.RequestLevel
     public class CheckPointUserResultAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        public async Task<GridResult<CheckPointUserResultDto>> GetAllPagingMain(GridParam input)
+        public async Task<GridResult<CheckPointUserResultDto>> GetAllPagingMain(GridParam input,long phaseId)
         {
-            var phaseId = (long)input.FilterItems.FirstOrDefault(x => x.PropertyName == "phaseId").Value;
-            var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == Convert.ToInt64(phaseId) && x.Type == PhaseType.Main);
+            var isPhaseMain = await WorkScope.GetAll<Phase>().AnyAsync(x => x.Id == phaseId && x.Type == PhaseType.Main);
             var cput = WorkScope.GetAll<CheckPointUserResultTag>()
                 .Select(x => new ResultTagDto
                 {
                     Id=x.Id,
                     TagId=x.TagId,
+                    TagName = x.Tag.Name,
                     CheckPointUserResultId=x.CheckPointUserResultId,
                 });
             if (!isPhaseMain)
