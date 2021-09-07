@@ -29,7 +29,7 @@ namespace ProjectManagement.Services.Timesheet
 
         public async Task<TotalWorkingTimeOfWeekDto> GetWorkingHourFromTimesheet(string projectCode, DateTime startDate, DateTime endDate)
         {
-            return await GetAsync<TotalWorkingTimeOfWeekDto>($"api/services/app/ProjectManagement/GetTotalWorkingTime?projectCode={projectCode}&startDate={startDate}&endDate={endDate}");
+            return await GetAsync<TotalWorkingTimeOfWeekDto>($"api/services/app/ProjectManagement/GetTotalWorkingTime?projectCode={projectCode}&startDate={startDate.ToString("yyyy/MM/dd")}&endDate={endDate.ToString("yyyy/MM/dd")}");
         }
 
         private async Task<T> GetAsync<T>(string Url)
@@ -40,7 +40,11 @@ namespace ProjectManagement.Services.Timesheet
                 httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri));
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretKey));
                 HttpResponseMessage response = new HttpResponseMessage();
-                try { response = await httpClient.GetAsync(Url); }
+                try 
+                { 
+                    response = await httpClient.GetAsync(Url);
+                    logger.LogInformation($"Get: {Url} responseCode: {response.StatusCode}");
+                }
                 catch (Exception ex)
                 {
                     throw new UserFriendlyException("Khong the ket noi Timesheet");
