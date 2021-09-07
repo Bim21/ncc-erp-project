@@ -63,7 +63,8 @@ export class AppConsts {
     static readonly userBranchStyle = {
         0: "badge badge-pill badge-danger",
         1: "badge badge-pill badge-success",
-        2: "badge badge-pill badge-primary"
+        2: "badge badge-pill badge-primary",
+        3: "badge badge-pill badge-warning",
     }
     static readonly userTypeStyle = {
         0: "badge badge-success",
