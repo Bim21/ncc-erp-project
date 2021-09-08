@@ -175,6 +175,7 @@ namespace ProjectManagement.Constants.Enum
             HaNoi = 0,
             DaNang = 1,
             HCM = 2,
+            Vinh = 3,
             Other = 4
         }
         public enum InvoiceStatus

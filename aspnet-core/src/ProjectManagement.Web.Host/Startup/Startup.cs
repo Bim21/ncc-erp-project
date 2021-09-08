@@ -21,6 +21,7 @@ using Newtonsoft.Json.Serialization;
 using ProjectManagement.Services.Finance;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Komu;
+using ProjectManagement.Services.HRM;
 
 namespace ProjectManagement.Web.Host.Startup
 {
@@ -80,6 +81,7 @@ namespace ProjectManagement.Web.Host.Startup
             services.AddHttpClient<FinanceService>();
             services.AddHttpClient<TimesheetService>();
             services.AddHttpClient<KomuService>();
+            services.AddHttpClient<HrmService>();
 
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
