@@ -152,6 +152,64 @@
             </div>
         </div>
 
+
+
+
+        <div class="card">
+            <div class="card-header">
+                <h4>HRM Setting</h4>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="col-12 mb-4 ml-1">
+                    <a  href="javascript:;" class="btn bg-blue mr-3"
+                        (click)="isEditHRM = !isEditHRM;
+                        hrmUri.focus() ;" [hidden]="isEditHRM">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </a>
+                    <a href="javascript:;" class="btn bg-red mr-3"
+                        (click)="saveConfiguration();isEditHRM = !isEditHRM;"
+                        [hidden]="!isEditHRM">
+                        Save
+                    </a>
+
+                    <a href="javascript:;" class="btn bg-secondary"
+                        (click)="isEditHRM = !isEditHRM;
+                        getSetting()" [hidden]="!isEditHRM">
+                        Cancel
+                    </a>
+                </div>
+
+
+                <div class="">
+                    <div class="card-body">
+
+                        <mat-form-field class="w-75">
+                            <input [readonly]="!isEditHRM" class="w-100" type="text" matInput
+                                [(ngModel)]="configuration.hrmUri" #hrmUri />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+
+
+                
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="card">
             <div class="card-header">
                 <h4>Timesheet Setting</h4>
