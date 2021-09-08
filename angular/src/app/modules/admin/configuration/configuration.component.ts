@@ -29,6 +29,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditExpiredDay: boolean = false
   public isEditExpiredHour: boolean = false
   public isEditGoogleKey: boolean = false
+  public isEditHRM:boolean =false
   public listDays: any[] = [
     {value:"2", text: "Monday"},
     {value:"3", text: "Tuesday"},
@@ -78,5 +79,6 @@ export class ConfigurationDto {
   canSendHour: string;
   expiredDay: string;
   expiredHour: string;
+  hrmUri:string;
 }
 
