@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { Component, Injector } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
@@ -182,5 +183,18 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         });
       }
     });
+  }
+  updateDataHRM(){
+    abp.message.confirm("Update data from HRM?",
+    undefined,
+    (result:boolean)=>{
+      if(result){
+        this.userInfoService.autoUpdateUserFromHRM().subscribe((res)=>{
+          abp.notify.success("Update Successfully!");
+          this.refresh();
+        })
+      }
+    }
+    )
   }
 }
