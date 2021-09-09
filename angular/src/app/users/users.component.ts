@@ -193,10 +193,13 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       undefined,
       (result: boolean) => {
         if (result) {
+          this.isLoading = true 
           this.userInfoService.autoUpdateUserFromHRM().pipe(catchError(this.userInfoService.handleError)).subscribe((res) => {
             abp.notify.success("Updated user list!");
             this.refresh();
-          })
+            this.isLoading = false
+          },
+          ()=>{this.isLoading = false})
         }
       }
     )
