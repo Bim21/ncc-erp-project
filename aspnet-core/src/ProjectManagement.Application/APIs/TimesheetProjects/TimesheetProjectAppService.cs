@@ -220,7 +220,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
-                        join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
+                        //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
                         join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
                         where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
@@ -242,7 +242,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             File = tsp.FilePath,
                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
                             Note = tsp.Note,
-                            IsSendReport = pr.Status,
+                            //IsSendReport = pr.Status,
                             HistoryFile = tsp.HistoryFile,
                             HasFile = !string.IsNullOrEmpty(tsp.FilePath)
                         }).OrderByDescending(x => x.ClientId);

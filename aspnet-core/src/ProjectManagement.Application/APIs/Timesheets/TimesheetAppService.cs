@@ -31,7 +31,7 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
             var timesheetProject = WorkScope.GetAll<TimesheetProject>();
-            var query = WorkScope.GetAll<Timesheet>().OrderBy(x => x.Year).OrderBy(x => x.Month)
+            var query = WorkScope.GetAll<Timesheet>().OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
                 .Select(x => new GetTimesheetDto
                 {
                     Id = x.Id,
@@ -79,9 +79,7 @@ namespace ProjectManagement.APIs.TimeSheets
             {
                 throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
             }
-
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
-           
             var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge).ToListAsync();
             foreach (var item in project)
             {
@@ -92,12 +90,13 @@ namespace ProjectManagement.APIs.TimeSheets
                                         FullName = x.User.FullName,
                                         BillRole = x.BillRole,
                                         BillRate = x.BillRate,
-                                        Note = x.Note
+                                        Note = x.Note,
+                                        ShadowNote = x.shadowNote
                                     });
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} <br>");
+                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} - {b.ShadowNote} <br>");
                 }
 
                 var timesheetProject = new TimesheetProject
@@ -108,7 +107,6 @@ namespace ProjectManagement.APIs.TimeSheets
                 };
                 await WorkScope.InsertAndGetIdAsync(timesheetProject);
             }
-
             return input;
         }
 

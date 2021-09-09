@@ -19,6 +19,7 @@ namespace ProjectManagement.Authorization
                 public const string Pages_Users_Delete = "Pages.Users.Delete";
                 public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
                 public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
+                public const string Pages_Users_AutoUpdateUserFromHRM = "Pages.Users.AutoUpdateUserFromHRM";
 
             //Config
             public const string Admin_Configuration = "Admin.Configuration";
@@ -308,6 +309,7 @@ namespace ProjectManagement.Authorization
                             PermissionNames.Pages_Users_Delete,
                             PermissionNames.Pages_Users_ImportUserFromFile,
                             PermissionNames.Pages_Users_UpdateAvatar,
+                            PermissionNames.Pages_Users_AutoUpdateUserFromHRM,
 
                     PermissionNames.Pages_Tenants,
                     PermissionNames.Pages_Roles,
@@ -573,6 +575,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_AutoUpdateUserFromHRM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update All User From HRM" },
 
                  //Configuration
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuration, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuration" },
@@ -805,6 +808,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_AutoUpdateUserFromHRM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update All User From HRM" },
                             }
                         },
                         //Configuration
