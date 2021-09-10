@@ -42,15 +42,15 @@ namespace ProjectManagement.APIs.PMReports
             var query = WorkScope.GetAll<PMReport>()
                 .OrderByDescending(x => x.CreationTime)
                 .Select(x => new GetPMReportDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Year = x.Year,
-                IsActive = x.IsActive,
-                Type = x.Type,
-                PMReportStatus = x.PMReportStatus,
-                NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count(),
-                CountProjectHeath = new List<CountProjectHealth> { 
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+                    IsActive = x.IsActive,
+                    Type = x.Type,
+                    PMReportStatus = x.PMReportStatus,
+                    NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count(),
+                    CountProjectHeath = new List<CountProjectHealth> {
                     new CountProjectHealth
                     {
                         ProjectHealth = ProjectHealth.Green,
@@ -67,8 +67,8 @@ namespace ProjectManagement.APIs.PMReports
                         Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Yellow),
                     },
                 },
-                Note = x.Note,
-            });
+                    Note = x.Note,
+                });
             return await query.GetGridResult(query, input);
         }
 
@@ -238,7 +238,7 @@ namespace ProjectManagement.APIs.PMReports
                         PMReportStatus = PMReportStatus.CanSend
                     }, BackgroundJobPriority.High, TimeSpan.FromHours((input.CanSendTime.Value - DateTimeUtils.GetNow()).TotalHours));
                 }
-            }           
+            }
 
             return input;
         }
@@ -259,7 +259,7 @@ namespace ProjectManagement.APIs.PMReports
             if (isExist)
                 throw new UserFriendlyException("PM Report already exist !");
 
-            if(input.IsActive != pmReport.IsActive)
+            if (input.IsActive != pmReport.IsActive)
             {
                 throw new UserFriendlyException("Report status cannot be edited !");
             }
@@ -289,9 +289,9 @@ namespace ProjectManagement.APIs.PMReports
 
             // phạt nếu chưa gửi report
             var pmReportProjects = WorkScope.GetAll<PMReportProject>()
-                .Where(x => x.PMReportId == pmReportId && x.Status == PMReportProjectStatus.Draft 
+                .Where(x => x.PMReportId == pmReportId && x.Status == PMReportProjectStatus.Draft
                 && x.PMReport.Type == PMReportType.Weekly);
-            foreach(var i in pmReportProjects)
+            foreach (var i in pmReportProjects)
             {
                 i.IsPunish = PunishStatus.High;
                 await WorkScope.UpdateAsync(i);
@@ -318,41 +318,42 @@ namespace ProjectManagement.APIs.PMReports
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
 
             var issues = await (from p in WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.PMReportProject.PMReportId == pmReportId)
-                         select new GetPMReportProjectIssueDto
-                         {
-                             Id = p.Id,
-                             PMReportProjectId = p.PMReportProjectId,
-                             ProjectName = p.PMReportProject.Project.Name,
-                             Description = p.Description,
-                             Impact = p.Impact,
-                             Critical = p.Critical.ToString(),
-                             Source = p.Source.ToString(),
-                             Solution = p.Solution,
-                             MeetingSolution = p.MeetingSolution,
-                             Status = p.Status.ToString(),
-                             ProjectHealth = p.PMReportProject.ProjectHealth,
-                             CreatedAt = p.CreationTime
-                         }).ToListAsync();
+                                select new GetPMReportProjectIssueDto
+                                {
+                                    Id = p.Id,
+                                    PMReportProjectId = p.PMReportProjectId,
+                                    ProjectName = p.PMReportProject.Project.Name,
+                                    Description = p.Description,
+                                    Impact = p.Impact,
+                                    Critical = p.Critical.ToString(),
+                                    Source = p.Source.ToString(),
+                                    Solution = p.Solution,
+                                    MeetingSolution = p.MeetingSolution,
+                                    Status = p.Status.ToString(),
+                                    ProjectHealth = p.PMReportProject.ProjectHealth,
+                                    CreatedAt = p.CreationTime
+                                }).ToListAsync();
 
-            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status != ProjectUserStatus.Past && x.IsFutureActive);
+            var projectUser = WorkScope.GetAll<ProjectUser>().Include(x => x.Project)
+                .Where(x => x.Status != ProjectUserStatus.Past && x.IsFutureActive && x.Project.Status != ProjectStatus.Closed);
             var futureUser = projectUser.Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Future);
             var presentUser = projectUser.Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive);
 
             var changeUse = from p in presentUser
-                       join f in futureUser on p.UserId equals f.UserId
-                       where p.ProjectId == f.ProjectId
-                       select new
-                       {
-                           Present = p,
-                           Future = f
-                       };
+                            join f in futureUser on p.UserId equals f.UserId
+                            where p.ProjectId == f.ProjectId
+                            select new
+                            {
+                                Present = p,
+                                Future = f
+                            };
 
-            foreach(var item in changeUse)
+            foreach (var item in changeUse)
             {
-                if(item.Present.AllocatePercentage != item.Future.AllocatePercentage)
+                if (item.Present.AllocatePercentage != item.Future.AllocatePercentage)
                 {
                     changeInFuture.Add(new TotalFutureUseDto
-                    { 
+                    {
                         UserId = item.Present.UserId,
                         ProjectId = item.Present.ProjectId,
                         Total = item.Future.AllocatePercentage - item.Present.AllocatePercentage
@@ -411,7 +412,8 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<PMReportDto> Get(long id)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(id);
-            return new PMReportDto { 
+            return new PMReportDto
+            {
                 Id = pmReport.Id,
                 IsActive = pmReport.IsActive,
                 Name = pmReport.Name,
