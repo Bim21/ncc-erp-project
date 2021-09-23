@@ -21,5 +21,6 @@ namespace ProjectManagement.Configuration.Dto
         public string UserBot { get; set; }
         public string PasswordBot { get; set; }
         public string ProjectUri { get; set; }
+        public string HRMUri { get; set; }
     }
 }

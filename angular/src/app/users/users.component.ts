@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { Component, Injector } from '@angular/core';
 import { catchError, finalize } from 'rxjs/operators';
@@ -35,8 +36,8 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     { propertyName: 'fullName', displayName: "Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'emailAddress', displayName: "emailAddress", comparisions: [0, 6, 7, 8] },
     { propertyName: 'userCode', displayName: "User Code", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1 ,3], isDate:true },
-    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1 ,3], isDate:true },
+    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1, 3], isDate: true },
+    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1, 3], isDate: true },
 
 
 
@@ -45,17 +46,17 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   keyword = '';
   isActive: boolean | null;
   advancedFiltersVisible = false;
-  Pages_Users_Create=PERMISSIONS_CONSTANT.Pages_Users_Create;
-  Pages_Users_Delete=PERMISSIONS_CONSTANT.Pages_Users_Delete;
-  Pages_Users_ImportUserFromFile=PERMISSIONS_CONSTANT.Pages_Users_ImportUserFromFile;
-  Pages_Users_Update=PERMISSIONS_CONSTANT.Pages_Users_Update;
-  Pages_Users_UpdateAvatar=PERMISSIONS_CONSTANT.Pages_Users_UpdateAvatar;
+  Pages_Users_Create = PERMISSIONS_CONSTANT.Pages_Users_Create;
+  Pages_Users_Delete = PERMISSIONS_CONSTANT.Pages_Users_Delete;
+  Pages_Users_ImportUserFromFile = PERMISSIONS_CONSTANT.Pages_Users_ImportUserFromFile;
+  Pages_Users_Update = PERMISSIONS_CONSTANT.Pages_Users_Update;
+  Pages_Users_UpdateAvatar = PERMISSIONS_CONSTANT.Pages_Users_UpdateAvatar;
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,
     private _modalService: BsModalService,
-    private userInfoService:UserService,
-    private dialog:MatDialog
+    private userInfoService: UserService,
+    private dialog: MatDialog
   ) {
     super(injector);
   }
@@ -85,7 +86,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   ): void {
     request.keyword = this.keyword;
     request.isActive = this.isActive;
-
+    this.isLoading = true
     this.userInfoService
       .getAllPaging(
         request
@@ -98,7 +99,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       .subscribe((result: any) => {
         this.users = result.result.items;
         this.showPaging(result.result, pageNumber);
-      });
+        this.isLoading = false
+      },
+        () => {
+          this.isLoading = false
+        });
   }
 
   protected delete(user: UserDto): void {
@@ -177,10 +182,26 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
                 u.managerAvatarPath = user.avatarPath;
               }
             });
-           
+
           } else { this.notify.error('Upload Avatar Failed!'); }
         });
       }
     });
+  }
+  updateDataHRM() {
+    abp.message.confirm("Get user data from HRM?",
+      undefined,
+      (result: boolean) => {
+        if (result) {
+          this.isLoading = true 
+          this.userInfoService.autoUpdateUserFromHRM().pipe(catchError(this.userInfoService.handleError)).subscribe((res) => {
+            abp.notify.success("Updated user list!");
+            this.refresh();
+            this.isLoading = false
+          },
+          ()=>{this.isLoading = false})
+        }
+      }
+    )
   }
 }

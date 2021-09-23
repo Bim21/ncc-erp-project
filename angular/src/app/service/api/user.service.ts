@@ -64,4 +64,7 @@ export class UserService extends BaseApiService {
     );
     return this.http.request(uploadReq);
   }
+  autoUpdateUserFromHRM(): Observable<any> {
+    return this.http.post<any>(this.rootUrl +'/AutoUpdateUserFromHRM',{})
+  }
 }

@@ -34,6 +34,8 @@ using Microsoft.AspNetCore.Hosting;
 using ProjectManagement.Entities;
 using NccCore.Paging;
 using NccCore.Extension;
+using ProjectManagement.Services.HRM;
+using ProjectManagement.Services.HRM.Dto;
 
 namespace ProjectManagement.Users
 {
@@ -47,6 +49,7 @@ namespace ProjectManagement.Users
         private readonly LogInManager _logInManager;
         private readonly IWorkScope _workScope;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly HrmService _hrmService;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -57,7 +60,8 @@ namespace ProjectManagement.Users
             IAbpSession abpSession,
             LogInManager logInManager,
             IWorkScope workScope,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            HrmService hrmService)
             : base(repository)
         {
             _userManager = userManager;
@@ -68,6 +72,7 @@ namespace ProjectManagement.Users
             _logInManager = logInManager;
             _workScope = workScope;
             _webHostEnvironment = webHostEnvironment;
+            _hrmService = hrmService;
         }
 
         [HttpPost]
@@ -496,7 +501,103 @@ namespace ProjectManagement.Users
             }
             return new { successList, failedList };
         }
-
+        [AbpAuthorize(PermissionNames.Pages_Users_AutoUpdateUserFromHRM)]
+        public async Task<object> AutoUpdateUserFromHRM()
+        {
+            var userFromHRMs = await _hrmService.GetUserFromHRM();
+            var currentUsers = await _workScope.GetAll<User>().ToListAsync();
+            var currentUserEmails = currentUsers.Select(x => x.EmailAddress).ToList();
+            var successListInsert = new List<string>();
+            var failedListInsert = new List<string>();
+            var successListUpdate = new List<string>();
+            var failedListUpdate = new List<string>();
+            foreach (var user in userFromHRMs.OrderByDescending(x=>x.UserLevel))
+            {
+                if(currentUserEmails.Contains(user.EmailAddress))
+                {
+                    try
+                    {
+                        var updateUser = await UpdateUserFromHRM(user);
+                        successListUpdate.Add(user.EmailAddress);
+                    }
+                    catch (Exception e)
+                    {
+                        failedListUpdate.Add(user.EmailAddress + " error =>" + e.Message);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        var createUser = await InsertUserFromHRM(user);
+                        successListInsert.Add(user.EmailAddress);
+                    }
+                    catch(Exception e)
+                    {
+                        failedListInsert.Add(user.EmailAddress + " error =>" + e.Message);
+                    }
+                }
+            }
+            return new
+            {
+                successListInsert,
+                failedListInsert,
+                successListUpdate,
+                failedListUpdate,
+            };
+        }
+        private async Task<CreateUserDto> InsertUserFromHRM(AutoUpdateUserDto user)
+        {
+            var createUser = new CreateUserDto
+            {
+                UserName = user.UserName,
+                Name = user.Name,
+                Surname = user.Surname,
+                EmailAddress = user.EmailAddress,
+                UserCode = user.UserCode,
+                UserType = user.UserType,
+                UserLevel = user.UserLevel,
+                Branch = user.Branch.Value,
+                IsActive = true,
+                Password = "123Abc123@",
+                RoleNames = new string[] { "EMPLOYEE" }
+            };
+            await CreateAsync(createUser);
+            return createUser;
+        }
+        private async Task<UserDto> UpdateUserFromHRM(AutoUpdateUserDto user)
+        {
+            var currentUser = await _workScope.GetAll<User>().Where(x => x.EmailAddress == user.EmailAddress).FirstOrDefaultAsync();
+            var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == currentUser.Id).Select(x => new UserSkillDto
+            {
+                SkillId = x.SkillId,
+                SkillName = x.Skill.Name,
+                UserId = x.UserId
+            }).ToListAsync();
+            var userRoleIds = _workScope.GetAll<UserRole>().Where(x => x.UserId == currentUser.Id).Select(x => x.RoleId).ToArray();
+            var roles = _roleManager.Roles.Where(r => userRoleIds.Contains(r.Id)).Select(r => r.NormalizedName);
+            var updateUser = new UserDto
+            {
+                Id = currentUser.Id,
+                UserName = user.UserName,
+                Name = user.Name,
+                Surname = user.Surname,
+                EmailAddress = user.EmailAddress,
+                UserCode = user.UserCode,
+                UserType = user.UserType,
+                UserLevel = user.UserLevel,
+                Branch = user.Branch.HasValue ? user.Branch.Value : currentUser.Branch,
+                FullName = user.FullName,
+                UserSkills = userSkills,
+                RoleNames = roles.ToArray(),
+                IsActive = currentUser.IsActive,
+                AvatarPath = currentUser.AvatarPath,
+                CreationTime = currentUser.CreationTime,
+                LastLoginTime = currentUser.LastModificationTime
+            };
+            await UpdateAsync(updateUser);
+            return updateUser;
+        }
         private NameSplitDto SplitUsername(string fullName)
         {
             var name = "";
