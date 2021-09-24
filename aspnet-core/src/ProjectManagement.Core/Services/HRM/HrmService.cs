@@ -39,7 +39,11 @@ namespace ProjectManagement.Services.HRM
                 httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri));
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecretCode));
                 HttpResponseMessage response = new HttpResponseMessage();
-                try { response = await httpClient.GetAsync(Url); }
+                try 
+                { 
+                    response = await httpClient.GetAsync(Url);
+                    logger.LogInformation($"Get: {Url} responseCode: {response.StatusCode}");
+                }
                 catch (Exception ex)
                 {
                     throw new UserFriendlyException("Khong the ket noi HRM");
@@ -69,7 +73,11 @@ namespace ProjectManagement.Services.HRM
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecretCode));
                 var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = new HttpResponseMessage();
-                try { response = await httpClient.PostAsync(Url, contentString); }
+                try 
+                { 
+                    response = await httpClient.PostAsync(Url, contentString);
+                    logger.LogInformation($"Post: {Url} responseCode: {response.StatusCode}");
+                }
                 catch (Exception ex)
                 {
                     throw new UserFriendlyException("Khong the ket noi HRM");
