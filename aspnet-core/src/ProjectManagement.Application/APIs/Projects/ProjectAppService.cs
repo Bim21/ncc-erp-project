@@ -110,6 +110,23 @@ namespace ProjectManagement.APIs.Projects
             return await query.FirstOrDefaultAsync();
         }
 
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
+        public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
+        {
+             return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
+                               .Select(x => new ProjectDetailDto
+                               {
+                                   ProjectId = x.Id,
+                                   BriefDescription = x.BriefDescription,
+                                   DetailDescription = x.DetailDescription,
+                                   TechnologyUsed = x.TechnologyUsed,
+                                   TechnicalProblems = x.TechnicalProblems,
+                                   OtherProblems = x.OtherProblems,
+                                   NewKnowledge = x.NewKnowledge
+                               }).FirstOrDefaultAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
         public async Task<ProjectDto> Create(ProjectDto input)
@@ -162,6 +179,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
         public async Task<ProjectDto> Update(ProjectDto input)
         {
+            var allproject = await WorkScope.GetAll<Project>().Select(x=>x.Id).ToListAsync();
             var project = await WorkScope.GetAsync<Project>(input.Id);
 
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));

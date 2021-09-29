@@ -21,5 +21,11 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long ClientId { get; set; }
         public bool IsCharge { get; set; }
         public long PmId { get; set; }
+        public string BriefDescription { get; set; }
+        public string DetailDescription { get; set; }
+        public string TechnologyUsed { get; set; }
+        public string TechnicalProblems { get; set; }
+        public string OtherProblems { get; set; }
+        public string NewKnowledge { get; set; }
     }
 }
