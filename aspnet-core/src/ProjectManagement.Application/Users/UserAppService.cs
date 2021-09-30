@@ -529,8 +529,11 @@ namespace ProjectManagement.Users
                 {
                     try
                     {
-                        var createUser = await InsertUserFromHRM(user);
-                        successListInsert.Add(user.EmailAddress);
+                        if(user.IsActive)
+                        {
+                            var createUser = await InsertUserFromHRM(user);
+                            successListInsert.Add(user.EmailAddress);
+                        }    
                     }
                     catch(Exception e)
                     {
@@ -558,9 +561,9 @@ namespace ProjectManagement.Users
                 UserType = user.UserType,
                 UserLevel = user.UserLevel,
                 Branch = user.Branch.Value,
-                IsActive = true,
+                IsActive = user.IsActive,
                 Password = "123Abc123@",
-                RoleNames = new string[] { "EMPLOYEE" }
+                //RoleNames = new string[] { "EMPLOYEE" }
             };
             await CreateAsync(createUser);
             return createUser;
@@ -590,7 +593,7 @@ namespace ProjectManagement.Users
                 FullName = user.FullName,
                 UserSkills = userSkills,
                 RoleNames = roles.ToArray(),
-                IsActive = currentUser.IsActive,
+                IsActive = user.IsActive,
                 AvatarPath = currentUser.AvatarPath,
                 CreationTime = currentUser.CreationTime,
                 LastLoginTime = currentUser.LastModificationTime
