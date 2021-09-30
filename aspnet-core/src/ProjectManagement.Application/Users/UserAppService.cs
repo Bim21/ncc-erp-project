@@ -501,7 +501,7 @@ namespace ProjectManagement.Users
             }
             return new { successList, failedList };
         }
-        //[AbpAuthorize(PermissionNames.Pages_Users_AutoUpdateUserFromHRM)]
+        [AbpAuthorize(PermissionNames.Pages_Users_AutoUpdateUserFromHRM)]
         public async Task<object> AutoUpdateUserFromHRM()
         {
             var userFromHRMs = await _hrmService.GetUserFromHRM();
