@@ -217,6 +217,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     show.afterClosed().subscribe(res => {
       if (res) {
         this.reloadComponent();
+        // this.refresh();
       }
     })
   }

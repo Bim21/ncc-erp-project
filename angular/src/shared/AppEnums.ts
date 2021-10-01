@@ -181,7 +181,12 @@ export const APP_ENUMS = {
         PMDone : 2,
         FinalDone :3,
 
+    },
+    checkpointUserTags:{
+        Up:1,
+        
     }
+  
 
    
 

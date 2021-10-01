@@ -1,3 +1,4 @@
+import { PagedRequestDto } from './../../../shared/paged-listing-component-base';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { BaseApiService } from './base-api.service';
@@ -19,5 +20,14 @@ export class CheckpointUserResultService extends BaseApiService{
   }
   public Done(id:any):Observable<any>{
     return this.http.post<any>(this.rootUrl+ `/Done?checkPointUserResultId=${id}`,id);
+  }
+  public GetAllTagNotSelect(id:any):Observable<any>{
+    return this.http.get<any>(this.rootUrl+'/GetAllTagNotSelect?checkPointUserResultId='+id);
+  }
+  public EditMain(item:any):Observable<any>{
+    return this.http.put<any>(this.rootUrl+'/EditMain',item);
+  }
+  public GetAllPagingMain(id:any,request: PagedRequestDto): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/GetAllPagingMain?phaseId=${id}`, request);
   }
 }
