@@ -49,7 +49,9 @@ export class FutureResourceComponent extends PagedListingComponentBase<FutureRes
 
     public readonly FILTER_CONFIG: InputFilterDto[] = [
       { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
-      { propertyName: 'used', comparisions:  [0, 1, 3], displayName: "Used" },
+      { propertyName: 'projectName', comparisions:  [0, 6, 7, 8], displayName: "Project Name" },
+      { propertyName: 'use', comparisions:  [0, 1, 2, 3, 4], displayName: "Used" },
+      { propertyName: 'startDate', comparisions:  [0, 1, 2, 3, 4], displayName: "Start Date", filterType:1 },
       
     ];
 

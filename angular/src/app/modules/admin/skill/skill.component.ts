@@ -1,3 +1,4 @@
+import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from './../../../service/model/list-project.dto';
 import { SkillService } from './../../../service/api/skill.service';
 import { Component, Injector, OnInit } from '@angular/core';
@@ -12,7 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./skill.component.css']
 })
 export class SkillComponent extends PagedListingComponentBase<SkillComponent> implements OnInit {
-
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'name', comparisions: [6, 0, 7, 8], displayName: "Tên", },
+   
+  ];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.skillService.getAllPaging(request).pipe(finalize(()=>{
       finishedCallback();

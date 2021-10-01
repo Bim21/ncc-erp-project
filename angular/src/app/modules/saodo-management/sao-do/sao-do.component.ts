@@ -1,3 +1,4 @@
+import { InputFilterDto } from '@shared/filter/filter.component';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +24,10 @@ export class SaoDoComponent extends PagedListingComponentBase<SaodoDto> implemen
   SaoDo_AuditSession_Update = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Update;
   SaoDo_AuditSession_View = PERMISSIONS_CONSTANT.SaoDo_AuditSession_View;
   SaoDo_AuditSession_ViewAll = PERMISSIONS_CONSTANT.SaoDo_AuditSession_ViewAll;
-
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Đợt", },
+    { propertyName: 'countFail', comparisions: [0, 1, 2, 3, 4], displayName: "Tổng sai phạm", },
+  ];
   listSaoDo :SaodoDto[]=[];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.saodoService.getAllPaging(request).pipe(finalize(() => {

@@ -7,6 +7,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 import { ClientService } from './../../../service/api/client.service';
 import { Component, OnInit, inject, Injector } from '@angular/core';
 import { isNgTemplate } from '@angular/compiler';
+import { InputFilterDto } from '@shared/filter/filter.component';
 
 @Component({
   selector: 'app-client',
@@ -14,6 +15,10 @@ import { isNgTemplate } from '@angular/compiler';
   styleUrls: ['./client.component.css']
 })
 export class ClientComponent extends PagedListingComponentBase<ClientComponent> implements OnInit {
+  public readonly FILTER_CONFIG: InputFilterDto[] = [
+    { propertyName: 'name', comparisions: [6, 0, 7, 8], displayName: "Tên", },
+   
+  ];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.clientService.getAllPaging(request).pipe(finalize(()=>{
       finishedCallback();

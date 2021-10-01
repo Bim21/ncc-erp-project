@@ -32,15 +32,21 @@ class PagedUsersRequestDto extends PagedRequestDto {
   animations: [appModuleAnimation()]
 })
 export class UsersComponent extends PagedListingComponentBase<UserDto> {
+  userLevelParam = Object.entries(this.APP_ENUM.UserLevel).map(item=>{
+    return { 
+      displayName: item[0],
+      value: item[1]
+    }
+  })
+
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', displayName: "Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'emailAddress', displayName: "emailAddress", comparisions: [0, 6, 7, 8] },
     { propertyName: 'userCode', displayName: "User Code", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1, 3], isDate: true },
-    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1, 3], isDate: true },
-
-
-
+    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1, 2, 3, 4], filterType:1 },
+    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1, 2, 3, 4], filterType:1 },
+    { propertyName: 'userLevel', comparisions: [0], displayName: "Level", filterType:3, dropdownData: this.userLevelParam},
+    { propertyName: 'isActive', comparisions: [0], displayName: "Active", filterType: 2 },
   ];
   users: UserDto[] = [];
   keyword = '';

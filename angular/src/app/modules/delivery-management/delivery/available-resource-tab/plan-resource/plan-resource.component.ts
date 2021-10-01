@@ -34,7 +34,9 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
-    { propertyName: 'used', comparisions:  [0, 1, 3], displayName: "Used" },
+    { propertyName: 'used', comparisions:  [0, 1, 2, 3, 4], displayName: "Used" },
+    // { propertyName: 'projects', comparisions:  [0, 6, 7, 8], displayName: "projectName" },
+
     
   ];
   public availableResourceList:availableResourceDto[]=[];

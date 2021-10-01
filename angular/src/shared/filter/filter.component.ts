@@ -13,12 +13,14 @@ export class FilterComponent {
   @Input() item: any;
   @Output() emitChange = new EventEmitter<any>();
   @Output() deleteDataFilter = new EventEmitter<any>();
-  selectedPropertyName: string;
-  selectedComparision: number;
   value: any;
-  isDateProperty: boolean;
-  isConFirmProperty: boolean = false;
-
+  dropdownData:any[]=[]
+  filterType:number=0
+// filterType:
+// 0: text
+// 1: Date
+// 2: Confirm Yes/no
+// 3: Dropdown
   comparisions: ComparisionDto[] = [];
   constructor() {
   }
@@ -34,10 +36,9 @@ export class FilterComponent {
         com.name = COMPARISIONS[element];
         this.comparisions.push(com);
       });
-
     }
-    this.isConFirmProperty = this.item.isConfirm
-    this.isDateProperty = this.item.isDate
+    this.filterType = this.item.filterType
+    this.dropdownData = this.item.dropdownData 
   }
   onChange(value: string | number, name: string): void {
     if (name === 'propertyName') {
@@ -57,37 +58,32 @@ export class FilterComponent {
       });
       this.inputFilters.forEach(item => {
         if (item.propertyName == value) {
-          this.isDateProperty = item.isDate
-          this.isConFirmProperty = item.isConfirm
-          if (this.isDateProperty == true) {
-            this.item.value = moment(new Date()).format("YYYY-MM-DD")
-            this.item.isDate = true
+          this.filterType = item.filterType
+          this.item.filterType = item.filterType
+          switch(this.filterType){
+            case 1:  this.item.value = moment(new Date()).format("YYYY-MM-DD")
+            break;
+            case 2: this.item.value =true
+            break;
+            case 3: this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
+            break;
           }
-          else {
-            this.item.isDate = false
-          }
-          if (this.isConFirmProperty) {
-            this.item.value =true
-            this.item.isConfirm = true
-          }
-          else {
-            this.item.isConfirm = false
-          }
-
         }
+        return;
       })
     }
-
     this.emitChange.emit({ name, value })
+ 
   }
   onDateChange() {
     this.item.value = moment(this.item.value).format("YYYY-MM-DD")
-    this.item.isDate = true
   }
   onRadioChange(event) {
     this.item.value = event.value
   }
-
+  onDropdownChange(data){
+    this.item.value = data
+  }
   deleteFilter() {
     this.deleteDataFilter.emit();
   }
@@ -97,8 +93,8 @@ export class InputFilterDto {
   propertyName: string;
   displayName: string;
   comparisions: number[];
-  isDate?: boolean
-  isConfirm?: boolean;
+  filterType?:number;
+  dropdownData?:DropDownDataDto[]
 }
 
 export class ComparisionDto {
@@ -108,13 +104,17 @@ export class ComparisionDto {
 
 
 export const COMPARISIONS: string[] =
-  ['Equal',
-    'Less Than',
-    'Less Than Or Equal',
-    'Greater Than',
-    'Greater Than Or Equal',
-    'Not Equal',
-    'Contains',
-    'Starts With',
-    'Ends With',
-    'In']
+  [ 'Bằng',
+    'Nhỏ hơn',
+    'Nhỏ hơn hoặc bằng',
+    'Lớn hơn',
+    'Lớn hơn hoặc bằng',
+    'Không bằng',
+    'Chứa kí tự',
+    'Bắt đầu với',
+    'Kết thúc bằng',
+    'Trong']
+export class DropDownDataDto{
+  value: any;
+  displayName:any
+}

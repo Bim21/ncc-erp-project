@@ -46,11 +46,18 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
     
   }
+  statusParam = Object.entries(this.APP_ENUM.ResourceRequestStatus).map(item=>{
+    return { 
+      displayName: item[0],
+      value: item[1]
+    }
+  })
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'projectName', comparisions: [0, 6, 7, 8], displayName: "Project Name" },
-    { propertyName: 'timeNeed', comparisions: [0, 1, 3], displayName: "Time Need", isDate:true },
-    { propertyName: 'timeDone', comparisions: [0, 1, 3], displayName: "Time Done", isDate:true },
+    { propertyName: 'timeNeed', comparisions: [0, 1, 2, 3, 4], displayName: "Time Need", filterType:1 },
+    { propertyName: 'timeDone', comparisions: [0, 1, 2, 3, 4], displayName: "Time Done", filterType:1 },
+    { propertyName: 'status', comparisions: [0], displayName: "status", filterType:3, dropdownData:this.statusParam },
   ];
   public listRequest:RequestResourceDto[]=[];
   public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);

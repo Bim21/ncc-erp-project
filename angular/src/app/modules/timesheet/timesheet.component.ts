@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TimesheetDto } from './../../service/model/timesheet.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { InputFilterDto } from '@shared/filter/filter.component';
+import { DropDownDataDto, InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError, finalize } from 'rxjs/operators';
 import { CreateEditTimesheetComponent } from './create-edit-timesheet/create-edit-timesheet.component';
@@ -23,6 +23,9 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   public timesheetList: TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'isActive', displayName: "Active", comparisions: [0], filterType: 2},
+    { propertyName: 'month', displayName: "Month", comparisions: [0, 1, 2, 3, 4] },
+    { propertyName: 'year', displayName: "Year", comparisions: [0, 1, 2, 3, 4]}
   ];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // throw new Error('Method not implemented.');
@@ -103,16 +106,16 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.showDialog("edit", timesheet);
   }
 
-  showDetail(item:any){
-      this.router.navigate(['app/timesheetDetail'], {
-        queryParams: {
-          id: item.id,
-          createdInvoice:item.createdInvoice,
-          isActive:item.isActive
-        }
-      })
-      
-    }
+  showDetail(item: any) {
+    this.router.navigate(['app/timesheetDetail'], {
+      queryParams: {
+        id: item.id,
+        createdInvoice: item.createdInvoice,
+        isActive: item.isActive
+      }
+    })
+
+  }
 
   changeStatus(timesheet) {
     this.timesheetService.ReverseActive(timesheet.id).pipe(catchError(this.timesheetService.handleError)).subscribe(rs => {
