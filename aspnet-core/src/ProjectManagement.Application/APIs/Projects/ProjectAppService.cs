@@ -41,7 +41,7 @@ namespace ProjectManagement.APIs.Projects
                             ProjectType = p.ProjectType.ToString(),
                             StartTime = p.StartTime.Date,
                             EndTime = p.EndTime.Value.Date,
-                            Status = p.Status.ToString(),
+                            Status = p.Status,
                             ClientId = p.ClientId,
                             ClientName = p.Client.Name,
                             IsCharge = p.IsCharge,
@@ -71,7 +71,7 @@ namespace ProjectManagement.APIs.Projects
                     ProjectType = x.ProjectType.ToString(),
                     StartTime = x.StartTime.Date,
                     EndTime = x.EndTime.Value.Date,
-                    Status = x.Status.ToString(),
+                    Status = x.Status,
                     ClientId = x.ClientId,
                     ClientName = x.Client.Name,
                     IsCharge = x.IsCharge,
@@ -94,7 +94,7 @@ namespace ProjectManagement.APIs.Projects
                                     ProjectType = x.ProjectType.ToString(),
                                     StartTime = x.StartTime.Date,
                                     EndTime = x.EndTime.Value.Date,
-                                    Status = x.Status.ToString(),
+                                    Status = x.Status,
                                     ClientId = x.ClientId,
                                     ClientName = x.Client.Name,
                                     IsCharge = x.IsCharge,
@@ -126,6 +126,9 @@ namespace ProjectManagement.APIs.Projects
                                    NewKnowledge = x.NewKnowledge
                                }).FirstOrDefaultAsync();
         }
+
+       
+
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]

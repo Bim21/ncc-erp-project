@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.PMReportProjectIssues;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.APIs.ResourceRequests.Dto;
@@ -24,14 +25,16 @@ namespace ProjectManagement.APIs.ResourceRequests
     public class ResourceRequestAppService : ProjectManagementAppServiceBase
     {
         private readonly ProjectUserAppService _projectUserAppService;
+        private readonly PMReportProjectIssueAppService _pMReportProjectIssueAppService;
 
-        public ResourceRequestAppService(ProjectUserAppService projectUserAppService)
+        public ResourceRequestAppService(ProjectUserAppService projectUserAppService, PMReportProjectIssueAppService pMReportProjectIssueAppService)
         {
             _projectUserAppService = projectUserAppService;
+            _pMReportProjectIssueAppService = pMReportProjectIssueAppService;
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, 
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject,
             PermissionNames.PmManager_ResourceRequest_ViewAllByProject)]
         public async Task<List<GetResourceRequestDto>> GetAllByProject(long projectId)
         {
@@ -71,7 +74,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 Note = x.Note,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
-               
+
             return await query.GetGridResult(query, input);
         }
 
@@ -111,7 +114,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             PermissionNames.PmManager_ResourceRequest_AddUserToRequest)]
         public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
         {
-            if(input.StartTime.Date < DateTime.Now.Date)
+            if (input.StartTime.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("Can't add user at past time !");
             }
@@ -124,7 +127,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>((long)input.ResourceRequestId);
 
-            if(input.StartTime.Date < resourceRequest.TimeNeed.Date)
+            if (input.StartTime.Date < resourceRequest.TimeNeed.Date)
                 throw new UserFriendlyException("Start date must be greater than request date !");
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
@@ -154,7 +157,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             PermissionNames.PmManager_ResourceRequest_SearchAvailableUserForRequest)]
         public async Task<GridResult<ResourceRequestUserDto>> SearchAvailableUserForRequest(GridParam input, DateTime startDate)
         {
-            if(startDate.Date < DateTime.Now.Date)
+            if (startDate.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("The start date must be greater than the current time !");
             }
@@ -197,11 +200,11 @@ namespace ProjectManagement.APIs.ResourceRequests
                                    ProjectName = x.Project.Name,
                                    AllocatePercentage = x.AllocatePercentage
                                });
-
+            var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
             var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
 
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive)
+            var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
                                 .Select(x => new AvailableResourceDto
                                 {
                                     UserId = x.Id,
@@ -210,18 +213,44 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
-                                    Projects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0).Select(x => x.ProjectName).ToList(),
+                                    Projects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
+                                    .Select(x => new ProjectBaseDto
+                                    {
+                                        ProjectId = x.ProjectId,
+                                        ProjectName = x.ProjectName,
+                                    }).ToList(),
                                     Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage),
-                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan { 
+                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
+                                    {
                                         ProjectName = p.Project.Name,
                                         StartTime = p.StartTime.Date,
                                         AllocatePercentage = p.AllocatePercentage
+                                    }).ToList(),
+                                    ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
+                                    {
+                                        Id = uk.SkillId,
+                                        Name = uk.Skill.Name
                                     }).ToList()
                                 });
 
             return await users.GetGridResult(users, input);
         }
-
+        public async Task<ProjectForDMDto> GetProjectForDM(long projectId, long pmReportId)
+        {
+            var problemsOfTheWeek = await _pMReportProjectIssueAppService.ProblemsOfTheWeek(projectId, pmReportId);
+            var result = await (from pu in WorkScope.GetAll<ProjectUser>()
+                                .Include(x => x.User).Include(x => x.Project).ThenInclude(x => x.PM)
+                                .Where(x => x.ProjectId == projectId)
+                                group pu by new { pu.Project.Name, pu.ProjectId, pu.Project.PM.FullName } into pus
+                                select new ProjectForDMDto
+                                {
+                                    ProjectName = pus.Key.Name,
+                                    PMName = pus.Key.FullName,
+                                    ListUsers = pus.Select(u => u.User.FullName).ToList(),
+                                    ProblemsOfTheWeek = problemsOfTheWeek
+                                }).FirstOrDefaultAsync();
+            return result;
+        }
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture,
             PermissionNames.PmManager_ResourceRequest_AvailableResourceFuture)]
@@ -254,18 +283,18 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<ProjectUser> PlanUser(PlanUserDto input)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && 
+                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed &&
                                x.Status == ProjectUserStatus.Future && x.IsFutureActive);
 
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
-            if(input.StartTime.Date <= DateTime.Now.Date)
+            if (input.StartTime.Date <= DateTime.Now.Date)
                 throw new UserFriendlyException("The start date must be greater than the current time !");
 
             var isExist = projectUsers.Any(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.StartTime == input.StartTime);
-            if(isExist)
+            if (isExist)
             {
                 throw new UserFriendlyException($"Project User already exist in {input.StartTime.Date} !");
             }
@@ -294,7 +323,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<ProjectUserDto> ApproveUser(ProjectUserDto input)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
-            if(projectUser.Status != ProjectUserStatus.Future)
+            if (projectUser.Status != ProjectUserStatus.Future)
             {
                 throw new UserFriendlyException("Can't approve request not in the future !");
             }

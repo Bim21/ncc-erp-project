@@ -17,7 +17,8 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string ProjectType { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public string Status { get; set; }
+        public ProjectStatus Status { get; set; }
+        //public string Status { get; set; }
         public long ClientId { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
