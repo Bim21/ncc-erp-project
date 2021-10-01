@@ -118,7 +118,7 @@
                                     <div> 
                                         <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                                             <mat-select required placeholder="Select project name" 
-                                             name="reviewerName" [(value)]="selected" [(ngModel)]="phaseActiveId" (selectionChange)="filerBy($event.value)">
+                                             name="reviewerName"  [(ngModel)]="phaseActiveId" (selectionChange)="filterByPhase($event.value)">
                                                 <mat-option *ngFor="let item of phaseList" [value]="item.phaseId"  >
                                                     {{item.phaseName}}
                                                 </mat-option>

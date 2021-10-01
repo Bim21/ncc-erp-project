@@ -15,7 +15,16 @@ export class CheckpointUserDetailService extends BaseApiService{
     super(http);
   }
   showHistory(id:any):Observable<any>{
-    return this.http.get<any>(this.rootUrl+'ShowHistory?userId=',id)
+    return this.http.get<any>(this.rootUrl+'/ShowHistory?userId=',id)
+  }
+  public getAllUserDetail(phaseId: any, memberId: any):Observable<any>{
+    return this.http.get<any>(this.rootUrl+'/GetAll?phaseId='+phaseId+'&memberId='+memberId);
+  }
+  public update(review:any):Observable<any>{
+    return this.http.put<any>(this.rootUrl + '/Update',review);
+  }
+  public getAllBefore(phaseId: any, memberId: any):Observable<any>{
+    return this.http.get<any>(this.rootUrl+'/GetAllBefore?phaseId='+phaseId+'&memberId='+memberId);
   }
   
 }

@@ -111,6 +111,8 @@ import { ResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/re
 import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
 import { CreateEditReviewUserComponent } from './modules/checkpoint/review-user/create-edit-review-user/create-edit-review-user.component';
 import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
+import { EditResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/edit-result-reviewer/edit-result-reviewer.component';
+import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
 
 
 
@@ -216,6 +218,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ReviewUserComponent,
     CreateEditReviewUserComponent,
     ReviewYourselfComponent,
+    EditResultReviewerComponent,
+    ProjectDescriptionComponent,
 
     
   ],

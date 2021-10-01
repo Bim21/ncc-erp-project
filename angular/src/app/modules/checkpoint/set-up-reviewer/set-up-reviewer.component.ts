@@ -57,6 +57,8 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
   public status="";
   public reviewerTypeList: string[] = Object.keys(this.APP_ENUM.CheckPointUserType);
   public reiviewerStatus: string[] = Object.keys(this.APP_ENUM.CheckPointUserStatus);
+  public searchUser: string = "";
+  public searchReviewer: string = "";
   // public readonly FILTER_CONFIG: InputFilterDto[] = [
   //   { propertyName: 'status', comparisions: [0, 6, 7, 8], displayName: "Status" },
   //   { propertyName: 'reviewerId', comparisions: [0, 6, 7, 8], displayName: "Reviewer Name" },
@@ -76,6 +78,7 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
     this.phaseName=this.route.snapshot.queryParamMap.get("name");
     this.phaseType=this.route.snapshot.queryParamMap.get("type");
     this.getAllReviewers();
+    console.log(this.phaseId)
   }
   public showDialog(command: string , Reviewer:any){
     let reviewer={} as CheckpointUserDto;
@@ -125,6 +128,7 @@ export class SetUpReviewerComponent extends PagedListingComponentBase<SetUpRevie
       }
     }
   }
+  
   getAllReviewers(){
     this.userService.GetAllUserActive(true).subscribe((data)=>{
       this.reviewerUserList=data.result;

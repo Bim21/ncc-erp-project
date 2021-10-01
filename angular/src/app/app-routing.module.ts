@@ -1,3 +1,4 @@
+import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
 import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
 import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
 import { ResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/result-reviewer.component';
@@ -166,6 +167,11 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
               {
                 path: "timesheet-tab",
                 component: ProjectTimesheetComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "description-tab",
+                component: ProjectDescriptionComponent,
                 canActivate: [AppRouteGuard]
               }
             ],

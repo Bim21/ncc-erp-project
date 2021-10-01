@@ -1,3 +1,4 @@
+import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { PagedRequestDto } from './../../../shared/paged-listing-component-base';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -40,5 +41,8 @@ export class SetupReviewerService extends BaseApiService {
   }
   public getAllReviewBySelf(request: PagedRequestDto):Observable<any>{
     return this.http.post<any>(this.rootUrl + '/GetAllReviewBySelf', request);
+  }
+  public getAllPagingSub(id:any,request: PagedRequestDto):Observable<any>{
+    return this.http.post<any>(this.rootUrl+ `/GetAllPagingSub?phaseId=${id}`, request)
   }
 }

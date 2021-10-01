@@ -21,6 +21,8 @@ export class CreateEditSetupReviewerComponent extends AppComponentBase implement
   public phaseId="";
   public command="";
   public reviewerTypeList: string[] = Object.keys(this.APP_ENUM.CheckPointUserType);
+  public searchReviewer="";
+  public searchUser="";
   constructor(@Inject(MAT_DIALOG_DATA ) public data: any,
   public userService: UserService,
   public reviewerService: SetupReviewerService,
@@ -33,6 +35,7 @@ export class CreateEditSetupReviewerComponent extends AppComponentBase implement
   ngOnInit(): void {
     this.phaseId= this.route.snapshot.queryParamMap.get('id');
     this.reviewer= this.data.item;
+    console.log(this.reviewer)
     this.getAllUsers();
     this.getAllReviewers();
 
