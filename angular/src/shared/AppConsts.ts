@@ -32,7 +32,7 @@ export class AppConsts {
         // Future:"badge badge-pill badge-light"
     }
     static readonly isSentStyle = {
-        Sent: "badge badge-pill badge-primary",
+        Sent: "badge badge-pill badge-success",
         Unsent: "badge badge-pill badge-danger"
     }
     static readonly projectRole = {

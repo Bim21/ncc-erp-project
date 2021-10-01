@@ -104,7 +104,7 @@
                                 </mat-checkbox>
                             </td>
                             <td class="text-center"> <span
-                                    [ngClass]=" APP_CONST.statusStyle[project.status]">{{project.status}}</span></td>
+                                    [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{ getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
                             <td class="text-center">
                                 <span
                                     [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
