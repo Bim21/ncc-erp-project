@@ -196,7 +196,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     ProjectType = x.ProjectType.ToString(),
                     StartTime = x.StartTime.Date,
                     EndTime = x.EndTime.Value.Date,
-                    Status = x.Status.ToString(),
+                    Status = x.Status,
                     ClientId = x.ClientId,
                     ClientName = x.Client.Name,
                     IsCharge = x.IsCharge,
