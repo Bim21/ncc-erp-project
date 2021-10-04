@@ -1,6 +1,6 @@
 import { UserDto } from './../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../service/api/user.service';
-import { InputFilterDto } from './../../../../shared/filter/filter.component';
+import { InputFilterDto, DropDownDataDto } from './../../../../shared/filter/filter.component';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { ListProjectService } from './../../../service/api/list-project.service';
 import { ProjectDto } from './../../../service/model/list-project.dto';
@@ -22,25 +22,32 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
   PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
   PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
-  statusFilterList = [{ displayName: "InProgress", value: 1 },
-  { displayName: "Potential", value: 0 },
-  { displayName: "Closed", value: 2 }
+  statusFilterList = [{ displayName: "Not Closed", value: 3 },
+  { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
+  { displayName: "Closed", value: 2 },
+
   ]
+  projectTypeParam = Object.entries(this.APP_ENUM.ProjectType).map(item => {
+    return {
+      displayName: item[0],
+      value: item[1]
+    }
+  })
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên project", },
     { propertyName: 'clientName', comparisions: [0, 6, 7, 8], displayName: "Tên khách hàng", },
     { propertyName: 'pmName', comparisions: [0, 6, 7, 8], displayName: "Tên PM", },
     { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
-    { propertyName: 'isCharge', comparisions: [0], displayName: "Charge khách hàng", filterType:2 },
-    { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType:2 },
-    { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType:1 },
-    { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType:1 },
-    { propertyName: 'timeSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType:1 },
+    { propertyName: 'isCharge', comparisions: [0], displayName: "Charge khách hàng", filterType: 2 },
+    { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
+    { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
+    { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
+    { propertyName: 'timeSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
+    { propertyName: 'TimeAndMaterials', comparisions: [0], displayName: "Loại project", filterType: 3, dropdownData: this.projectTypeParam },
 
   ];
-
-
   private userList: UserDto[] = [];
+  public projectStatus: any = 3;
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
   projectWeeklys: string[] = Object.keys(this.APP_ENUM.WeeklySent);
 
@@ -51,8 +58,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     }
   }
-
-
   listProjects: ProjectDto[] = [];
   protected delete(entity: any): void {
     abp.message.confirm(
@@ -85,6 +90,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     pageNumber: number,
     finishedCallback: Function
   ): void {
+    if (this.projectStatus !== "" || this.projectStatus == 0) {
+      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
+    }
+    if (this.projectStatus === "") {
+      request.filterItems = this.clearFilter(request, "status", this.projectStatus)
+    }
     this.listProjectService
       .getAllPaging(request)
       .pipe(finalize(() => {
@@ -93,6 +104,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       .subscribe((result: PagedResultResultDto) => {
         this.listProjects = result.result.items;
         this.showPaging(result.result, pageNumber);
+        request.filterItems = this.clearFilter(request, "status", this.projectStatus)
       });
   }
 
@@ -158,6 +170,13 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         return key;
       }
     }
+  }
+  onStatuschange() {
+
+  }
+  clearStatus() {
+    this.projectStatus = "";
+    this.refresh();
   }
 }
 
