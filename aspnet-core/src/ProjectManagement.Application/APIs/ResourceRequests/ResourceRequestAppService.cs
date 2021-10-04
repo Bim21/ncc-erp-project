@@ -189,7 +189,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
             PermissionNames.PmManager_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime)
+        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
         {
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
@@ -230,25 +230,26 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     {
                                         Id = uk.SkillId,
                                         Name = uk.Skill.Name
-                                    }).ToList()
-                                });
+                                    }).ToList(),
+                                }).Where(x=> !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
 
             return await users.GetGridResult(users, input);
         }
         public async Task<ProjectForDMDto> GetProjectForDM(long projectId, long pmReportId)
         {
             var problemsOfTheWeek = await _pMReportProjectIssueAppService.ProblemsOfTheWeek(projectId, pmReportId);
-            var result = await (from pu in WorkScope.GetAll<ProjectUser>()
+            var projectUsers = await WorkScope.GetAll<ProjectUser>()
                                 .Include(x => x.User).Include(x => x.Project).ThenInclude(x => x.PM)
-                                .Where(x => x.ProjectId == projectId)
-                                group pu by new { pu.Project.Name, pu.ProjectId, pu.Project.PM.FullName } into pus
-                                select new ProjectForDMDto
-                                {
-                                    ProjectName = pus.Key.Name,
-                                    PMName = pus.Key.FullName,
-                                    ListUsers = pus.Select(u => u.User.FullName).ToList(),
-                                    ProblemsOfTheWeek = problemsOfTheWeek
-                                }).FirstOrDefaultAsync();
+                                .Where(x => x.ProjectId == projectId).ToListAsync();
+            var result = (from pu in projectUsers
+                          group pu by new { pu.Project.Name, pu.ProjectId, pu.Project.PM.FullName } into pus
+                          select new ProjectForDMDto
+                          {
+                              ProjectName = pus.Key.Name,
+                              PMName = pus.Key.FullName,
+                              ListUsers = pus.Where(x => x.Status == ProjectUserStatus.Present).Select(u => u.User.FullName).ToList(),
+                              ProblemsOfTheWeek = problemsOfTheWeek
+                          }).FirstOrDefault();
             return result;
         }
         [HttpPost]
