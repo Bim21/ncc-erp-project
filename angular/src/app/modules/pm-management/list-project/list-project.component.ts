@@ -37,7 +37,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên project", },
     { propertyName: 'clientName', comparisions: [0, 6, 7, 8], displayName: "Tên khách hàng", },
     { propertyName: 'pmName', comparisions: [0, 6, 7, 8], displayName: "Tên PM", },
-    { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
+    // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
     { propertyName: 'isCharge', comparisions: [0], displayName: "Charge khách hàng", filterType: 2 },
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
