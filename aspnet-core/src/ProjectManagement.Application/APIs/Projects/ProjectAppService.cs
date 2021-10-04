@@ -29,8 +29,16 @@ namespace ProjectManagement.APIs.Projects
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
-
-            var query = from p in WorkScope.GetAll<Project>().Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
+            var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
+            int valueStatus = -1;
+            if (filterStatus != null)
+            {
+                valueStatus = Convert.ToInt32(filterStatus.Value);
+                input.FilterItems.Remove(filterStatus);
+            }
+            var query = from p in WorkScope.GetAll<Project>()
+                        .Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
+                        .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
                         from l in lst.DefaultIfEmpty()
                         select new GetProjectDto
@@ -62,7 +70,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Project>().Where(x=>x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,
@@ -114,20 +122,20 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
         {
-             return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
-                               .Select(x => new ProjectDetailDto
-                               {
-                                   ProjectId = x.Id,
-                                   BriefDescription = x.BriefDescription,
-                                   DetailDescription = x.DetailDescription,
-                                   TechnologyUsed = x.TechnologyUsed,
-                                   TechnicalProblems = x.TechnicalProblems,
-                                   OtherProblems = x.OtherProblems,
-                                   NewKnowledge = x.NewKnowledge
-                               }).FirstOrDefaultAsync();
+            return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
+                              .Select(x => new ProjectDetailDto
+                              {
+                                  ProjectId = x.Id,
+                                  BriefDescription = x.BriefDescription,
+                                  DetailDescription = x.DetailDescription,
+                                  TechnologyUsed = x.TechnologyUsed,
+                                  TechnicalProblems = x.TechnicalProblems,
+                                  OtherProblems = x.OtherProblems,
+                                  NewKnowledge = x.NewKnowledge
+                              }).FirstOrDefaultAsync();
         }
 
-       
+
 
 
         [HttpPost]
@@ -182,7 +190,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
         public async Task<ProjectDto> Update(ProjectDto input)
         {
-            var allproject = await WorkScope.GetAll<Project>().Select(x=>x.Id).ToListAsync();
+            var allproject = await WorkScope.GetAll<Project>().Select(x => x.Id).ToListAsync();
             var project = await WorkScope.GetAsync<Project>(input.Id);
 
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
