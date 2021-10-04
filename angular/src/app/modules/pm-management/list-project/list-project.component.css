@@ -1,3 +1,6 @@
 tr, th, td{
  vertical-align: text-top ;
 }
+button{
+    height: fit-content;
+}
