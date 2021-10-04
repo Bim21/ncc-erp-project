@@ -247,6 +247,7 @@ namespace ProjectManagement.Authorization
             public const string DeliveryManagement_ResourceRequest_Create = "DeliveryManagement.ResourceRequest.Create";
             public const string DeliveryManagement_ResourceRequest_Update = "DeliveryManagement.ResourceRequest.Update";
             public const string DeliveryManagement_ResourceRequest_Delete = "DeliveryManagement.ResourceRequest.Delete";
+            public const string DeliveryManagement_ResourceRequest_GetProjectForDM = "DeliveryManagement.ResourceRequest.GetProjectForDM";
 
             //PMReportProjectIssues
             public const string DeliveryManagement_PMReportProjectIssue = "DeliveryManagement.PMReportProjectIssue";
@@ -502,6 +503,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_ResourceRequest_Create,
                     PermissionNames.DeliveryManagement_ResourceRequest_Update,
                     PermissionNames.DeliveryManagement_ResourceRequest_Delete,
+                    PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM,
 
                     //PMReportProjectIssues
                     PermissionNames.DeliveryManagement_PMReportProjectIssue,
@@ -739,6 +741,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Project For Delivery Management" },
 
                  //PMReportProjectIssues
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PMReport Project Issues" },
@@ -938,6 +941,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Resource Request" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Project For Delivery Management" },
                             }
                         },
                          // PMReport Project Issues

@@ -235,6 +235,9 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             return await users.GetGridResult(users, input);
         }
+
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM,
+        PermissionNames.PmManager_ResourceRequest_SearchAvailableUserForRequest)]
         public async Task<ProjectForDMDto> GetProjectForDM(long projectId, long pmReportId)
         {
             var problemsOfTheWeek = await _pMReportProjectIssueAppService.ProblemsOfTheWeek(projectId, pmReportId);
