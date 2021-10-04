@@ -67,7 +67,9 @@
                                 </div>
                             </td>
                             <td style="white-space: normal; max-width: 200px;">
-                                <strong>{{item.projects}}</strong>
+                                <strong *ngFor="let project of item.projects;let i =index">
+                                    {{project.projectName}} <span *ngIf="i < item.projects.length-1">,</span>
+                                </strong>
                             </td>
                             <td style="white-space: normal; max-width: 200px;">
                                 <div *ngFor="let i of item.projectUserPlans">
