@@ -20,6 +20,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public int Used { get; set; }
         public List<ProjectUserPlan> ProjectUserPlans { get; set; }
         public List<SkillDto> ListSkills { get; set; }
+        public List<long> ListSkillIds { get; set; }
     }
 
     public class ProjectUserPlan
