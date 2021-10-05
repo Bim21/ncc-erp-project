@@ -23,3 +23,9 @@ export interface SkillDto {
     name: string;
     id: number;
 }
+export class projectForDM{
+    projectName: string;
+    pmName: string;
+    listUsers: [];
+    problemsOfTheWeek: []
+}

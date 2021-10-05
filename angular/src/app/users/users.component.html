@@ -98,8 +98,9 @@
                       *ngIf="i < user.userSkills.length-1">, </span> </span></td>
                 <td class="text-center">
                   <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" disabled [checked]="user.isActive" />
-                    <label class="custom-control-label"></label>
+                    <input *ngIf="user.isActive" type="checkbox" class="custom-control-input" disabled [checked]="user.isActive" />
+                    <label  *ngIf="user.isActive" class="custom-control-label"></label>
+                    <span *ngIf="!user.isActive">Đã nghỉ việc</span>
                   </div>
                 </td>
                 <td class="text-center">

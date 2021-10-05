@@ -113,6 +113,7 @@ import { CreateEditReviewUserComponent } from './modules/checkpoint/review-user/
 import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
 import { EditResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/edit-result-reviewer/edit-result-reviewer.component';
 import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
+import { ProjectDetailComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-detail/project-detail.component';
 
 
 
@@ -220,6 +221,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ReviewYourselfComponent,
     EditResultReviewerComponent,
     ProjectDescriptionComponent,
+    ProjectDetailComponent,
 
     
   ],
