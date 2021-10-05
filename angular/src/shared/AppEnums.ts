@@ -152,7 +152,9 @@ export const APP_ENUMS = {
         Internship: 0,
         Collaborators: 1,
         Staff: 2,
-        ProbationaryStaff: 3
+        ProbationaryStaff: 3,
+        FakeUser:4,
+        
     },
     WeeklySent:{
         Unsent: 0,

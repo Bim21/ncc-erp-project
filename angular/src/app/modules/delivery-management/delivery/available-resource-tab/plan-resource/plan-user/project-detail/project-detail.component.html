@@ -1,0 +1,48 @@
+<section>
+    <abp-modal-header title={{data.projectName}} (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
+    <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" >
+               PM Name:
+            </label>
+            <div class="col-md-8">
+                {{projectDetail.pmName}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" >
+               Danh sách nhân viên:
+            </label>
+            <div class="col-md-8">
+                <ng-container *ngFor="let item of projectDetail.listUsers">
+                    <p>-{{item}}</p>
+                </ng-container>
+                
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" >
+               Các vấn đề trong tuần: 
+            </label>
+            <div class="col-md-8">
+                <ng-container *ngFor="let item of projectDetail.problemsOfTheWeek">
+                    <p>-{{item}}</p>
+                </ng-container>
+                
+            </div>
+        </div>
+
+    </div>
+    <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
+        <button class="btn btn-danger cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+    </div>
+      
+        
+        
+       
+       
+       
+     
+    
+</section>
