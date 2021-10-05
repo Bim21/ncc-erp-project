@@ -129,6 +129,12 @@ export const APP_ENUMS = {
         "Vinh":3,
          Other: 4
     },
+    UserBranch: {
+        "Hà Nội": 0,
+        "Đà Nẵng": 1,
+        "Hồ chí Minh": 2,
+        "Vinh":3,
+    },
     UserLevel:
     {
         Intern_0: 0,

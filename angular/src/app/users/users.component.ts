@@ -32,14 +32,20 @@ class PagedUsersRequestDto extends PagedRequestDto {
   animations: [appModuleAnimation()]
 })
 export class UsersComponent extends PagedListingComponentBase<UserDto> {
-  userLevelParam = Object.entries(this.APP_ENUM.UserLevel).map(item=>{
-    return { 
+  userLevelParam = Object.entries(this.APP_ENUM.UserLevel).map(item => {
+    return {
       displayName: item[0],
       value: item[1]
     }
   })
-  userTypeParam = Object.entries(this.APP_ENUM.UserType).map(item=>{
-    return { 
+  userTypeParam = Object.entries(this.APP_ENUM.UserType).map(item => {
+    return {
+      displayName: item[0],
+      value: item[1]
+    }
+  })
+  branchParam = Object.entries(this.APP_ENUM.UserBranch).map(item => {
+    return {
       displayName: item[0],
       value: item[1]
     }
@@ -49,10 +55,12 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     { propertyName: 'fullName', displayName: "Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'emailAddress', displayName: "emailAddress", comparisions: [0, 6, 7, 8] },
     { propertyName: 'userCode', displayName: "User Code", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1, 2, 3, 4], filterType:1 },
-    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1, 2, 3, 4], filterType:1 },
-    { propertyName: 'userLevel', comparisions: [0], displayName: "Level", filterType:3, dropdownData: this.userLevelParam},
-    { propertyName: 'userType', comparisions: [0], displayName: "User type", filterType: 3, dropdownData: this.userTypeParam},
+    { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1, 2, 3, 4], filterType: 1 },
+    { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1, 2, 3, 4], filterType: 1 },
+    { propertyName: 'userLevel', comparisions: [0], displayName: "Level", filterType: 3, dropdownData: this.userLevelParam },
+    { propertyName: 'userType', comparisions: [0], displayName: "User type", filterType: 3, dropdownData: this.userTypeParam },
+    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
+
     { propertyName: 'isActive', comparisions: [0], displayName: "Active", filterType: 2 },
 
   ];
@@ -207,13 +215,13 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       undefined,
       (result: boolean) => {
         if (result) {
-          this.isLoading = true 
+          this.isLoading = true
           this.userInfoService.autoUpdateUserFromHRM().pipe(catchError(this.userInfoService.handleError)).subscribe((res) => {
             abp.notify.success("Updated user list!");
             this.refresh();
             this.isLoading = false
           },
-          ()=>{this.isLoading = false})
+            () => { this.isLoading = false })
         }
       }
     )
