@@ -38,6 +38,12 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       value: item[1]
     }
   })
+  userTypeParam = Object.entries(this.APP_ENUM.UserType).map(item=>{
+    return { 
+      displayName: item[0],
+      value: item[1]
+    }
+  })
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -46,7 +52,9 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     { propertyName: 'lastLoginTime', displayName: "Last Login Time", comparisions: [0, 1, 2, 3, 4], filterType:1 },
     { propertyName: 'creationTime', displayName: "Creation Time", comparisions: [0, 1, 2, 3, 4], filterType:1 },
     { propertyName: 'userLevel', comparisions: [0], displayName: "Level", filterType:3, dropdownData: this.userLevelParam},
+    { propertyName: 'userType', comparisions: [0], displayName: "User type", filterType: 3, dropdownData: this.userTypeParam},
     { propertyName: 'isActive', comparisions: [0], displayName: "Active", filterType: 2 },
+
   ];
   users: UserDto[] = [];
   keyword = '';
