@@ -2486,6 +2486,9 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("BriefDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("ClientId")
                         .HasColumnType("bigint");
 
@@ -2504,6 +2507,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("DetailDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
@@ -2524,6 +2530,12 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
+                    b.Property<string>("NewKnowledge")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProblems")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<long>("PMId")
                         .HasColumnType("bigint");
 
@@ -2535,6 +2547,12 @@ namespace ProjectManagement.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("TechnicalProblems")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TechnologyUsed")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");

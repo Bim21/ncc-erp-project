@@ -79,5 +79,13 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
       // replaceUrl: true
     })
   }
+  
+  public routingDescriptionTab(){
+    this.router.navigate(['description-tab'],{
+      relativeTo: this.route, queryParams:{
+        id:this.requestId
+      }
+    })
+  }
 
 }

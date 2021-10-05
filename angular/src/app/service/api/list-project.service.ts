@@ -20,5 +20,9 @@ export class ListProjectService extends BaseApiService {
         params: new HttpParams().set('projectID', id)
     })
 }
+public getProjectDetail(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetProjectDetail?projectId=' + id);
+}
+
 
 }

@@ -10,7 +10,7 @@ export class FilterDto {
     propertyName: string;
     value: any;
     comparision: number;
-    isDate?: boolean;
+    // isDate?: boolean;
 }
 export class EntityDto {
     id: number;
@@ -33,7 +33,6 @@ export class PagedResultResultDto {
 })
 export abstract class PagedListingComponentBase<TEntityDto> extends AppComponentBase implements OnInit {
     [x: string]: any;
-
     public pageSize: number = 5;
     public pageNumber: number = 1;
     public totalPages: number = 1;
@@ -41,12 +40,9 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
     public searchText: string = '';
     public filterItems: FilterDto[] = [];
     public pageSizeType: number = 20;
-
     public advancedFiltersVisible: boolean = false;
-
     activatedRoute: ActivatedRoute;
     router: Router;
-
     constructor(injector: Injector) {
         super(injector);
         this.activatedRoute = injector.get(ActivatedRoute);
@@ -131,21 +127,19 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
     }
     AddFilterItem(request: PagedRequestDto, propertyName: string, value: any) {
         let filterList = request.filterItems
-        if (value) {
+        if (value !== "" || value==0) {
             filterList.unshift({ propertyName: propertyName, comparision: 0, value: value })
-
         }
         return filterList
     }
     clearFilter(request: PagedRequestDto, propertyName: string, value: any) {
         let filterList = request.filterItems
-        if (value) {
+        if (value !=="" || value==0) {
             let item = filterList.filter(item => item.propertyName === propertyName)[0]
             filterList.splice(request.filterItems.indexOf(item), 1)
         }
         return filterList
     }
-
     protected abstract list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void;
     protected abstract delete(entity: TEntityDto): void;
 }

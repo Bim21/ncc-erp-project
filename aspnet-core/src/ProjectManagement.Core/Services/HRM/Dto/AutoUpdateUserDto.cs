@@ -16,5 +16,6 @@ namespace ProjectManagement.Services.HRM.Dto
         public UserLevel UserLevel { get; set; }
         public Branch? Branch { get; set; }
         public string FullName { get; set; }
+        public bool IsActive { get; set; }
     }
 }

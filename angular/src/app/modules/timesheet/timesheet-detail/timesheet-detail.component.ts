@@ -76,7 +76,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], isConfirm: true },
+    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType:2 },
 
   ];
 
@@ -217,6 +217,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     show.afterClosed().subscribe(res => {
       if (res) {
         this.reloadComponent();
+        // this.refresh();
       }
     })
   }

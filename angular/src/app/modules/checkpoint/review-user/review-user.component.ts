@@ -39,7 +39,7 @@ export class ReviewUserComponent extends PagedListingComponentBase<ResultReviewe
       "",
       (result: boolean) => {
         if (result) {
-          this.checkpointUserService.delete(item.userId).subscribe(() => {
+          this.checkpointUserService.delete(item.id).subscribe(() => {
             abp.notify.success("Deleted Reviewed");
             this.refresh();
           });
@@ -145,10 +145,19 @@ export class ReviewUserComponent extends PagedListingComponentBase<ResultReviewe
       console.log(this.phaseActiveId)
     })
   }
+  
+  filterYear(year){
+    this.phaseService.getAllPhase(this.year).subscribe((data) => {
+      this.phaseList = data.result;
+    })
+  }
+  filterByPhase(id){
+  
+    this.setParamToUrl();
+  }
   setParamToUrl() {
     this.router.navigate([], {
       queryParams: {
-        year: new Date().getFullYear(),
         phaseId: this.phaseActiveId,
       },
       queryParamsHandling: "merge"
@@ -156,6 +165,8 @@ export class ReviewUserComponent extends PagedListingComponentBase<ResultReviewe
       
     })
   }
+  
+  
   
 
 }

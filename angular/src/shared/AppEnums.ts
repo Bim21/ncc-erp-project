@@ -129,6 +129,12 @@ export const APP_ENUMS = {
         "Vinh":3,
          Other: 4
     },
+    UserBranch: {
+        "Hà Nội": 0,
+        "Đà Nẵng": 1,
+        "Hồ chí Minh": 2,
+        "Vinh":3,
+    },
     UserLevel:
     {
         Intern_0: 0,
@@ -152,7 +158,9 @@ export const APP_ENUMS = {
         Internship: 0,
         Collaborators: 1,
         Staff: 2,
-        ProbationaryStaff: 3
+        ProbationaryStaff: 3,
+        FakeUser:4,
+        
     },
     WeeklySent:{
         Unsent: 0,
@@ -181,7 +189,12 @@ export const APP_ENUMS = {
         PMDone : 2,
         FinalDone :3,
 
+    },
+    checkpointUserTags:{
+        Up:1,
+        
     }
+  
 
    
 

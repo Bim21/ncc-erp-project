@@ -12,4 +12,6 @@ export class PhaseDto{
 export class getAllPhaseDto{
     phaseId: number;
     phaseName:string;
+    type:number;
+    status:number;
 }

@@ -11,7 +11,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-lg-2 col-sm-2" *ngIf="!isConFirmProperty">
+    <div class="col-lg-2 col-sm-2" *ngIf="!(filterType == 2 ||filterType == 3)">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-select placeholder="Comparision" id="comparision" [value]="item.comparision"
           (valueChange)="onChange($event, 'comparision')">
@@ -20,13 +20,13 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-lg-7 col-sm-7" *ngIf="!isDateProperty && !isConFirmProperty">
+    <div class="col-lg-7 col-sm-7" *ngIf="!filterType">
       <mat-form-field appearance="outline" style="width: 100%;">
         <input matInput placeholder="text" [value]="item.value" id="filterValue" type="text" name="value"
           maxlength="128" class="validate" (change)="onChange($event?.target?.value || '', 'value')">
       </mat-form-field>
     </div>
-    <div class="col-lg-7 col-sm-7" *ngIf="isDateProperty">
+    <div class="col-lg-7 col-sm-7" *ngIf="filterType==1">
       <mat-form-field appearance="outline">
         <input placeholder="Choose a date" matInput [matDatepicker]="picker" [(ngModel)]="item.value" name="date"
           (dateChange)="onDateChange()">
@@ -34,11 +34,20 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
     </div>
-    <div class="col-lg-2 col-sm-2" style="padding-top: 13px;" *ngIf="isConFirmProperty">
+    <div class="col-lg-2 col-sm-2" style="padding-top: 13px;" *ngIf="filterType==2">
       <mat-radio-group aria-label="Select an option" [(ngModel)]="item.value" (change)="onRadioChange($event)">
         <mat-radio-button class="mr-5" [value]="true">Yes</mat-radio-button>
         <mat-radio-button [value]="false">No</mat-radio-button>
       </mat-radio-group>
+    </div>
+    <div class="col-lg-2 col-sm-2" *ngIf="filterType==3">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-select [placeholder]="'select '+item.propertyName" [(ngModel)]="item.value"
+          (selectionChange)="onDropdownChange(dropdown.value)" #dropdown>
+          <mat-option *ngFor="let data of dropdownData" [value]="data.value">{{data.displayName |translate}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="col-lg-1 col-sm-1 " style="padding-top: 13px;">
