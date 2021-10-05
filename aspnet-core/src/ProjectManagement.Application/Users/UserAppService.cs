@@ -553,7 +553,7 @@ namespace ProjectManagement.Users
         {
             var createUser = new CreateUserDto
             {
-                UserName = user.UserName,
+                UserName = user.EmailAddress,
                 Name = user.Name,
                 Surname = user.Surname,
                 EmailAddress = user.EmailAddress,
@@ -582,7 +582,7 @@ namespace ProjectManagement.Users
             var updateUser = new UserDto
             {
                 Id = currentUser.Id,
-                UserName = user.UserName,
+                UserName = user.EmailAddress,
                 Name = user.Name,
                 Surname = user.Surname,
                 EmailAddress = user.EmailAddress,
