@@ -21,7 +21,9 @@ import { ProjectResourceRequestService } from '@app/service/api/project-resource
   styleUrls: ['./plan-resource.component.css']
 })
 export class PlanResourceComponent extends PagedListingComponentBase<PlanResourceComponent> implements OnInit {
-
+  public listSkills:SkillDto[]=[];
+  public skill='';
+  public skillsParam=[];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function,skill?): void {
     this.isLoading =true;
     this.availableRerourceService.getAvailableResource(request,this.skill).pipe(finalize(()=>{
@@ -39,15 +41,16 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   protected delete(entity: PlanResourceComponent): void {
     
   }
+  
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions:  [0, 1, 2, 3, 4], displayName: "Used" },
-
+    
     
   ];
+  
   public availableResourceList:availableResourceDto[]=[];
-  public listSkills:SkillDto[]=[];
-  public skill='';
+ 
   constructor(public injector:Injector,
     private availableRerourceService: DeliveryResourceRequestService,
     private dialog:MatDialog,
@@ -82,15 +85,27 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
 
     
   }
+  
+ 
   planUser(user:any){
     this.showDialogPlanUser("plan",user);
   }
   showUserDetail(userId:any){
     
   }
+  
   getAllSkills(){
     this.skillService.getAll().subscribe((data)=>{
       this.listSkills=data.result;
+      this.skillsParam =data.result.map(item => {
+        return {
+          displayName: item.name,
+          value: item.id
+        }
+      })
+      this.FILTER_CONFIG.push({ propertyName: 'skillId', comparisions: [0], displayName: "Skills", filterType: 3, dropdownData: this.skillsParam },
+      )
+      console.log(this.skillsParam)
     })
     
   }
@@ -113,9 +128,9 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
       data:{
         projectId:projectId,
         projectName:projectName,
-        width:'700px',
-      
-      }
+      },
+      width: '700px',
+      maxHeight: '100vh',
     })
   }
   
