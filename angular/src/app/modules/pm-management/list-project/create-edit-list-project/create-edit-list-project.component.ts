@@ -42,8 +42,8 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     this.getAllPM();
     if (this.data.command == "edit") {
       this.project = this.data.dialogData
-      this.project.projectType = this.APP_ENUM.ProjectType[this.project.projectType]
-      this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
+      // this.project.projectType = this.APP_ENUM.ProjectType[this.project.projectType]
+      // this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
       this.isEditStatus = true
     }
     this.getAllClient()

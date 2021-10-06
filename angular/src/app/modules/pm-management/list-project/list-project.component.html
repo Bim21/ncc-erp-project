@@ -102,7 +102,7 @@
                   }; let i = index">
                             <td style="min-width: 200px;  white-space: normal;"><span class="hyperlink"
                                     (click)="showDetail(project.id)">{{ project.name }}</span></td>
-                            <td>{{project.projectType}}</td>
+                            <td class="text-center">{{ getByEnum(project.projectType,APP_ENUM.ProjectType)   }}</td>
                             <td>{{project.clientName}}</td>
                             <td>
                                 <div style="width: 300px;">
