@@ -119,7 +119,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_ViewProjectInfor)]
         public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
         {
             return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
