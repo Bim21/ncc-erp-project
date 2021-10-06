@@ -193,7 +193,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     Id = x.Id,
                     Name = x.Name,
                     Code = x.Code,
-                    ProjectType = x.ProjectType.ToString(),
+                    ProjectType = x.ProjectType,
                     StartTime = x.StartTime.Date,
                     EndTime = x.EndTime.Value.Date,
                     Status = x.Status,
