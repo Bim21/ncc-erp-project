@@ -27,7 +27,7 @@ export class ProjectResourceRequestService extends BaseApiService {
   public approveRequest(projectUser:any): Observable<any>{
     return this.http.post<any>(this.rootUrl + `/ApproveUser`, projectUser);
   }
-  public getProjectForDM(projectId:any){
-    return this.http.get<any>(this.rootUrl+ '/GetProjectForDM?projectId='+projectId);
-  }
+  public getProjectForDM(projectId:any,pmReportId:any){
+    return this.http.get<any>(this.rootUrl+ '/GetProjectForDM?projectId='+projectId+'&pmReportId='+pmReportId);
+  } 
 }
