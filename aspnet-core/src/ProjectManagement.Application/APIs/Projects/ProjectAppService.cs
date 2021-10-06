@@ -139,13 +139,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_UpdateProjectDetail)]
         public async Task<ProjectDetailDto> UpdateProjectDetail(ProjectDetailDto input)
         {
-            var allproject = await WorkScope.GetAll<Project>().Select(x => x.Id).ToListAsync();
             var project = await WorkScope.GetAsync<Project>(input.ProjectId);
-
-            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.ProjectId);
-
-            if (isExist)
-                throw new UserFriendlyException($"Project Id = {input.ProjectId} already exist !");
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDetailDto, Project>(input, project));
             return input;
