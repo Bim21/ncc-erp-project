@@ -77,9 +77,9 @@ namespace ProjectManagement.Users
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Pages_Users_ViewAll)]
-        public async Task<GridResult<UserDto>> GetAllPaging(GridParam input)
+        public async Task<GridResult<UserDto>> GetAllPaging(GridParam input, long? skillId)
         {
-            var userSkill = _workScope.GetAll<UserSkill>();
+            var userSkills = _workScope.GetAll<UserSkill>();
             var users = _workScope.GetAll<User>().Select(x => new UserDto
             {
                 Id = x.Id,
@@ -94,14 +94,14 @@ namespace ProjectManagement.Users
                 Branch = x.Branch,
                 IsActive = x.IsActive,
                 FullName = x.Name + " " + x.Surname,
-                UserSkills = userSkill.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
+                UserSkills = userSkills.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
                 {
                     UserId = s.UserId,
                     SkillId = s.SkillId,
                     SkillName = s.Skill.Name
                 }).ToList(),
                 RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
-            });
+            }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.Id).Select(y => y.SkillId).Contains(skillId.Value));
 
             return await users.GetGridResult(users, input);
         }
