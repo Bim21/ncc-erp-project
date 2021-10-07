@@ -16,6 +16,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   PmManager_CanViewMenu_ResourceManagement=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ResourceManagement;
   PmManager_CanViewMenu_Timesheet=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Timesheet;
   PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
+  PmManager_Project_ViewProjectInfor=PERMISSIONS_CONSTANT.PmManager_Project_ViewProjectInfor
 
 
   constructor(private route: ActivatedRoute, private router: Router, injector:Injector) {

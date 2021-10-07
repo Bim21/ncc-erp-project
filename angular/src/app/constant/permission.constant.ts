@@ -205,7 +205,10 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_TimesheetProject_Update: "Timesheet.TimesheetProject.Update",
     Timesheet_TimesheetProject_UploadFileTimesheetProject: "Timesheet.TimesheetProject.UploadFileTimesheetProject",
     Timesheet_TimesheetProject_ViewInvoice: "Timesheet.TimesheetProject.ViewInvoice",
-    Timesheet_Timesheet_ReverseActive: "Timesheet.Timesheet.ReverseActive"
+    Timesheet_Timesheet_ReverseActive: "Timesheet.Timesheet.ReverseActive",
+
+    PmManager_Project_UpdateProjectDetail: "PmManager.Project.UpdateProjectDetail",
+    PmManager_Project_ViewProjectInfor:"PmManager.Project.ViewProjectInfor"
 
 
 }
