@@ -61,6 +61,17 @@
         </div>
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
+                HR/DM Note:
+            </label>
+            <div class="col-md-9">
+                <textarea placeholder="request name" type="text" class="form-control" name="name" 
+                    [(ngModel)]="resourceRequestDto.dmNote" required #nameEl  #name="ngModel"></textarea>
+                    <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                    </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
                 Time Need:
             </label>
             <div class="col-md-9">

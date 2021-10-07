@@ -6,7 +6,8 @@ export class RequestResourceDto{
   status : number;
   statusName? :  string ;
   timeDone :  string;
-  note?: string ;
+  pmNote?: string ;
+  dmNote?: string ;
   plannedNumberOfPersonnel? : number;
   id?: number;
   
