@@ -1,36 +1,48 @@
 <section>
-    <abp-modal-header title={{data.projectName}} (onCloseClick)="dialogRef.close()">
-    </abp-modal-header>
-    <div class="form-group row mt-4" style="max-height: 500px; overflow-y: auto;">
-        <div class="row w-100">
-                                <div class="col-4">
-                                    <label  for="" class="mt-2" >PM report:</label>
-                                </div>
-                                <div class="col-8">
-                                    <mat-form-field class="ml-3" style="width: 205px;" appearance="outline">
-                                        <mat-select [(ngModel)]="selectedReport" name="pmReport"
-                                            (selectionChange)="onReportchange($event.value)" placeholder="select a role" required
-                                            #projectEmployee="ngModel">
-                                            <mat-form-field class="w-100 px-3 "
-                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
-                                                    placeholder="search">
+    <div class="row card-header pt-0">
+        <div class="col-6">
+            <h3>{{data.projectName}} </h3>
+        </div>
+        <div class="col-6 text-right">
+            <div class="" style="max-height: 500px;">
+                <div class="row w-100">
+                                        <div class="col-4">
+                                            <label  for="" class="mt-2" >PM report:</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <mat-form-field class="ml-3" style="width: 205px;" appearance="outline">
+                                                <mat-select [(ngModel)]="selectedReport" name="pmReport"
+                                                    (selectionChange)="onReportchange($event.value)" placeholder="select a role" required
+                                                    #projectEmployee="ngModel">
+                                                    <mat-form-field class="w-100 px-3 "
+                                                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                                        <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
+                                                            placeholder="search">
+                                                    </mat-form-field>
+                                                    <mat-option *ngFor="let report of pmReportList |filter:searchPmReport"
+                                                        [value]="report">
+                                                        <div class="row">
+                                                            <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
+                                                            <div class="col-2"> <i class="fas fa-circle float-right mt-3"
+                                                                    [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
+                                                        </div>
+                                                    </mat-option>
+                                                </mat-select>
                                             </mat-form-field>
-                                            <mat-option *ngFor="let report of pmReportList |filter:searchPmReport"
-                                                [value]="report">
-                                                <div class="row">
-                                                    <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
-                                                    <div class="col-2"> <i class="fas fa-circle float-right mt-3"
-                                                            [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
-                                                </div>
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+            
+        </div>
+    </div>
+    <!-- <abp-modal-header title={{data.projectName}} (onCloseClick)="dialogRef.close()">
+        
+    </abp-modal-header> -->
+   
+    
                     
-        <div class="form-group row" >
+    <div class="card-body">
+        <div class="form-group row mt-2" >
             <label class="col-md-4 col-form-label" >
                PM Name:
             </label>
@@ -42,10 +54,24 @@
             <label class="col-md-4 col-form-label" >
                Danh sách nhân viên:
             </label>
-            <div class="col-md-8">
-                <ng-container *ngFor="let item of projectDetail.listUsers">
-                    <p>-{{item}}</p>
-                </ng-container>
+            <div class="col-md-12">
+                <mat-accordion >
+                  
+                    <mat-expansion-panel expanded=true>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Danh sách nhân viên
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <ng-container *ngFor="let item of projectDetail.listUsers">
+                        <p>{{item}}</p>
+                    </ng-container>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+               
                 
             </div>
         </div>
@@ -105,6 +131,7 @@
             </div>
         </div>
 
+    </div>    
     
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-danger cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>

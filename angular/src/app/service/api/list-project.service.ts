@@ -23,6 +23,8 @@ export class ListProjectService extends BaseApiService {
 public getProjectDetail(id: any): Observable<any> {
   return this.http.get<any>(this.rootUrl + '/GetProjectDetail?projectId=' + id);
 }
-
+public UpdateProjectDetail(requestBody): Observable<any> {
+  return this.http.put<any>(this.rootUrl + '/UpdateProjectDetail',requestBody);
+}
 
 }
