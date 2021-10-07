@@ -87,7 +87,7 @@
                                     {{project.projectName}} <span *ngIf="i < item.projects.length-1">,</span>
                                 </strong> -->
                                 <ng-container *ngFor="let project of item.projects">
-                                    <p><strong class="hyperlink" (click)="showProjectDetail(project.projectId,project.projectName)">-{{project.projectName}}</strong></p>
+                                    <div><strong class="hyperlink" (click)="showProjectDetail(project.projectId,project.projectName)">-{{project.projectName}}</strong></div>
                                 </ng-container>
                                 
                             

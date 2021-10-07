@@ -100,8 +100,9 @@
                   <div class="custom-control custom-checkbox">
                     <input *ngIf="user.isActive" type="checkbox" class="custom-control-input" disabled [checked]="user.isActive" />
                     <label  *ngIf="user.isActive" class="custom-control-label"></label>
-                    <span *ngIf="!user.isActive">Đã nghỉ việc</span>
+                   
                   </div>
+                  <span *ngIf="!user.isActive">Đã nghỉ việc</span>
                 </td>
                 <td class="text-center">
                   <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
