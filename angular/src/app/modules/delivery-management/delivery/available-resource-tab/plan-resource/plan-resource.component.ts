@@ -32,6 +32,7 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
         request.filterItems = this.clearFilter(request,"skill",0)
         this.skill = item.value
       }
+      
     })
     this.availableRerourceService.getAvailableResource(request, this.skill).pipe(finalize(() => {
       finishedCallback();
@@ -43,6 +44,7 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
       }));
       this.showPaging(data.result, pageNumber);
       this.isLoading = false;
+      this.skill=''
       // if(this.count>0){
 
       // }
