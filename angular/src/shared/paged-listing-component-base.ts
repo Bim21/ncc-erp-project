@@ -11,6 +11,7 @@ export class FilterDto {
     value: any;
     comparision: number;
     // isDate?: boolean;
+    filterType?:number
 }
 export class EntityDto {
     id: number;

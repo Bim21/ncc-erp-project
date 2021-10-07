@@ -11,7 +11,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-lg-2 col-sm-2" *ngIf="!(filterType == 2 ||filterType == 3)">
+    <div class="col-lg-2 col-sm-2" *ngIf="!(filterType == 2 ||filterType == 3 || filterType ==4)">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-select placeholder="Comparision" id="comparision" [value]="item.comparision"
           (valueChange)="onChange($event, 'comparision')">
@@ -43,6 +43,15 @@
     <div class="col-lg-2 col-sm-2" *ngIf="filterType==3">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-select [placeholder]="'select '+item.propertyName" [(ngModel)]="item.value"
+          (selectionChange)="onDropdownChange(dropdown.value)" #dropdown>
+          <mat-option *ngFor="let data of dropdownData" [value]="data.value">{{data.displayName |translate}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-2 col-sm-2" *ngIf="filterType==4">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-select  [placeholder]="'select '+item.propertyName" [(ngModel)]="item.value"
           (selectionChange)="onDropdownChange(dropdown.value)" #dropdown>
           <mat-option *ngFor="let data of dropdownData" [value]="data.value">{{data.displayName |translate}}
           </mat-option>

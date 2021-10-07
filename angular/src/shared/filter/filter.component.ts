@@ -39,6 +39,7 @@ export class FilterComponent {
     }
     this.filterType = this.item.filterType
     this.dropdownData = this.item.dropdownData 
+
   }
   onChange(value: string | number, name: string): void {
     if (name === 'propertyName') {
@@ -65,8 +66,11 @@ export class FilterComponent {
             break;
             case 2: this.item.value =true
             break;
-            case 3: this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
+            case 3 : this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
             break;
+            case 4: this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
+            break;
+
           }
         }
         return;

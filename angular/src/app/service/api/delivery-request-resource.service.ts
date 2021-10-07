@@ -28,10 +28,10 @@ export class DeliveryResourceRequestService extends BaseApiService {
     })
   }
   public getAvailableResource(request:PagedRequestDto,skillId?:any):Observable<any>{
-    if(skillId){
+  
       return this.http.post<any>(this.rootUrl+'/AvailableResource?skillId='+skillId,request);
-    }
-    return this.http.post<any>(this.rootUrl+'/AvailableResource',request);
+   
+   
     
   }
   public planUser(item:any):Observable<any>{
