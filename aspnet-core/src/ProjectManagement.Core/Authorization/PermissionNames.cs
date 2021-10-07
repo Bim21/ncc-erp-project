@@ -59,6 +59,7 @@ namespace ProjectManagement.Authorization
             public const string PmManager_Project_ViewAll = "PmManager.Project.ViewAll";
             public const string PmManager_Project_ViewonlyMe = "PmManager.Project.ViewOnlyMe";
             public const string PmManager_Project_ViewDetail = "PmManager.Project.ViewDetail";
+            public const string PmManager_Project_ViewProjectInfor = "PmManager.Project.ViewProjectInfor";
             public const string PmManager_Project_Create = "PmManager.Project.Create";
             public const string PmManager_Project_Update = "PmManager.Project.Update";
             public const string PmManager_Project_Delete = "PmManager.Project.Delete";
@@ -340,6 +341,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_Project_ViewAll,
                     PermissionNames.PmManager_Project_ViewonlyMe,
                     PermissionNames.PmManager_Project_ViewDetail,
+                    PermissionNames.PmManager_Project_ViewProjectInfor,
                     PermissionNames.PmManager_Project_Create,
                     PermissionNames.PmManager_Project_Update,
                     PermissionNames.PmManager_Project_Delete,
@@ -609,6 +611,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_UpdateProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update For Project Detail" },
+                 new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewProjectInfor, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Information" },
 
                  // TimeSheet
                  new SystemPermission{ Name =  PermissionNames.Timesheet_Timesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet" },
@@ -875,6 +878,7 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_UpdateProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update For Project Detail" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewProjectInfor, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Information" },
 
                             }
                         },                   
