@@ -67,7 +67,8 @@
                             <th>Project</th>
                             <th>Nhân sự đã plan</th>
                             <th>Time Need</th>
-                            <th>Note</th>
+                            <th>PM Note</th>
+                            <th>HR,DM Note</th>
                             <th>Trạng thái</th>
                             <th>Actions</th>
                         </tr>
@@ -86,7 +87,8 @@
                             <td class="text-center">{{item.projectName}}</td>
                             <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
                             <td>{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
-                            <td style="white-space: normal; max-width: 210px;">{{item.note}}</td>
+                            <td style="white-space: normal; max-width: 210px;">{{item.pmNote}}</td>
+                            <td style="white-space: normal; max-width: 210px;">{{item.dmNote}}</td>
                             <td  class="text-center">
                                 <span [ngClass]="APP_CONST.statusStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
                                 

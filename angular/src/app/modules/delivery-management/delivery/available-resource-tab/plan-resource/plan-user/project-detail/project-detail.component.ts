@@ -44,7 +44,7 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
   public onReportchange(pmReport) {
 
     this.selectedReport=pmReport;
-    this.pmId=this.selectedReport.pmReportProjectId;
+    this.pmId=this.selectedReport.reportId;
     
   
    this.getProjectDetail();

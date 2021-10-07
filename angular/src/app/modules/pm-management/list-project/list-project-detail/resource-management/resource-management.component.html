@@ -223,7 +223,8 @@
                                     <th class="stt">#</th>
                                     <th>Request name</th>
                                     <th>Thời gian cần</th>
-                                    <th>Description</th>
+                                    <th>PM Note</th>
+                                    <th>HR/DM Note</th>
                                     <th style="width: 100px">Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -269,6 +270,7 @@
                                             </mat-form-field>
                                         </div>
                                     </td>
+                                    <td style="white-space: normal; max-width: 210px;">{{request.dmNote}}</td>
                                     <td class="text-center">
                                         <p style="font-size: 12px;"
                                             [ngClass]="APP_CONST.statusStyle[request.statusName]"
