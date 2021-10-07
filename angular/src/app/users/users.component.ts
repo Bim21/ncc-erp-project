@@ -60,8 +60,9 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     { propertyName: 'userLevel', comparisions: [0], displayName: "Level", filterType: 3, dropdownData: this.userLevelParam },
     { propertyName: 'userType', comparisions: [0], displayName: "User type", filterType: 3, dropdownData: this.userTypeParam },
     { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
-
     { propertyName: 'isActive', comparisions: [0], displayName: "Active", filterType: 2 },
+    { propertyName: 'userSkills', comparisions: [0,6,7,8], displayName: "user Skills"},
+
 
   ];
   users: UserDto[] = [];

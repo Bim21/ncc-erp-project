@@ -21,122 +21,139 @@ import { ProjectResourceRequestService } from '@app/service/api/project-resource
   styleUrls: ['./plan-resource.component.css']
 })
 export class PlanResourceComponent extends PagedListingComponentBase<PlanResourceComponent> implements OnInit {
-  public listSkills:SkillDto[]=[];
-  public skill='';
-  public skillsParam=[];
-  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function,skill?): void {
-    this.isLoading =true;
-    this.availableRerourceService.getAvailableResource(request,this.skill).pipe(finalize(()=>{
+  public listSkills: SkillDto[] = [];
+  public skill = '';
+  public skillsParam = [];
+  // count=0
+  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
+    this.isLoading = true;
+    request.filterItems.forEach(item=>{
+      if(item.filterType==4){
+        request.filterItems = this.clearFilter(request,"skill",0)
+        this.skill = item.value
+      }
+    })
+    this.availableRerourceService.getAvailableResource(request, this.skill).pipe(finalize(() => {
       finishedCallback();
-    }),catchError(this.availableRerourceService.handleError)).subscribe(data=>{
-      this.availableResourceList=data.result.items.filter((item=>{
-        if(item.userType !==4){
+    }), catchError(this.availableRerourceService.handleError)).subscribe(data => {
+      this.availableResourceList = data.result.items.filter((item => {
+        if (item.userType !== 4) {
           return item;
         }
       }));
-      this.showPaging(data.result,pageNumber);
-      this.isLoading =false;
+      this.showPaging(data.result, pageNumber);
+      this.isLoading = false;
+      // if(this.count>0){
+
+      // }
+      // request.filterItems.forEach(item =>{
+      //   if(item.filterType ==4 ){
+      //     this.count++
+      //     if(this.count>0){
+      //       this.inputFilters= this.inputFilters.filter(filter => filter.filterType!=4)
+      //     }
+      //   }
+      // })
+      // console.log("aa",this.inputFilters)
     })
   }
   protected delete(entity: PlanResourceComponent): void {
-    
+
   }
-  
+
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
-    { propertyName: 'used', comparisions:  [0, 1, 2, 3, 4], displayName: "Used" },
-    
-    
+    { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
+    // { propertyName: 'skill', comparisions: [0], displayName: "skill", filterType: 4, dropdownData: this.skillsParam },
   ];
-  
-  public availableResourceList:availableResourceDto[]=[];
- 
-  constructor(public injector:Injector,
+
+  public availableResourceList: availableResourceDto[] = [];
+
+  constructor(public injector: Injector,
     private availableRerourceService: DeliveryResourceRequestService,
-    private dialog:MatDialog,
-    private skillService:SkillService,
-    
-  
-    ) {super(injector) }
+    private dialog: MatDialog,
+    private skillService: SkillService,
+
+
+  ) { super(injector) }
 
   ngOnInit(): void {
     this.refresh();
     this.getAllSkills();
   }
-  showDialogPlanUser(command:string,user:any){
-    let item={
-      userId:user.userId,
-      fullName:user.fullName
+  showDialogPlanUser(command: string, user: any) {
+    let item = {
+      userId: user.userId,
+      fullName: user.fullName
     }
-    
-    const show=this.dialog.open(PlanUserComponent, {
+
+    const show = this.dialog.open(PlanUserComponent, {
       width: '700px',
       disableClose: true,
       data: {
-        item:item,
-        command:command
+        item: item,
+        command: command
       },
     });
     show.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         this.refresh()
       }
     });
 
-    
+
   }
-  
- 
-  planUser(user:any){
-    this.showDialogPlanUser("plan",user);
+
+
+  planUser(user: any) {
+    this.showDialogPlanUser("plan", user);
   }
-  showUserDetail(userId:any){
-    
+  showUserDetail(userId: any) {
+
   }
-  
-  getAllSkills(){
-    this.skillService.getAll().subscribe((data)=>{
-      this.listSkills=data.result;
-      this.skillsParam =data.result.map(item => {
+
+  getAllSkills() {
+    this.skillService.getAll().subscribe((data) => {
+      this.listSkills = data.result;
+      this.skillsParam = data.result.map(item => {
         return {
           displayName: item.name,
           value: item.id
         }
       })
-      this.FILTER_CONFIG.push({ propertyName: 'skillId', comparisions: [0], displayName: "Skills", filterType: 3, dropdownData: this.skillsParam },
+      this.FILTER_CONFIG.push({ propertyName: 'skill', comparisions: [0], displayName: "Skill", filterType: 4, dropdownData: this.skillsParam },
       )
-      console.log(this.skillsParam)
     })
-    
+
   }
 
-  skillsCommas(arr){
-    arr=arr.map((item)=>{
+  skillsCommas(arr) {
+    arr = arr.map((item) => {
       return item.name;
     })
     return arr.join(',')
   }
-  projectsCommas(arr){
-    arr=arr.map((item)=>{
+  projectsCommas(arr) {
+    arr = arr.map((item) => {
       return item.projectName;
     })
     return arr.join(',')
   }
- 
-  showProjectDetail(projectId,projectName){
-    const show= this.dialog.open(ProjectDetailComponent,{
-      data:{
-        projectId:projectId,
-        projectName:projectName,
+
+  showProjectDetail(projectId, projectName) {
+    const show = this.dialog.open(ProjectDetailComponent, {
+      data: {
+        projectId: projectId,
+        projectName: projectName,
       },
       width: '800px',
       maxHeight: '90vh',
     })
   }
-  
-  
-  
-  
+
+
+
+
 
 
 

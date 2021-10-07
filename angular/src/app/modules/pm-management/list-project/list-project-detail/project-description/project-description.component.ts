@@ -27,6 +27,12 @@ export class ProjectDescriptionComponent extends AppComponentBase{
     })
   }
   updateInfo(){
+    this.isLoading =true
+    this.projectService.UpdateProjectDetail(this.projectDetail).pipe(catchError(this.projectService.handleError)).subscribe(rs=>{
+      abp.notify.success("Update successful")
+    this.isLoading =false
+    },
+    ()=> this.isLoading =false)
   }
   editRequest(){
     this.readMode =false
