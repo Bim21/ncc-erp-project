@@ -47,7 +47,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                             Name = x.Name,
                             Status = x.Status,
                             StatusName = x.Status.ToString(),
-                            Note = x.Note,
+                            PMNote = x.PMNote,
+                            DMNote =  x.DMNote,
                             TimeNeed = x.TimeNeed,
                             TimeDone = x.TimeDone.Value
                         });
@@ -71,7 +72,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                 StatusName = x.Status.ToString(),
                 TimeNeed = x.TimeNeed,
                 TimeDone = x.TimeDone.Value,
-                Note = x.Note,
+                PMNote = x.PMNote,
+                DMNote = x.DMNote,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
 
@@ -314,7 +316,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 IsExpense = input.IsExpense,
                 IsFutureActive = true,
                 PMReportId = pmReportActive.Id,
-                Note = input.Note
+                Note = input.PMNote
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 

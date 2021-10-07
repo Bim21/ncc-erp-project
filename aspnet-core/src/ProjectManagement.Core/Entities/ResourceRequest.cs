@@ -22,6 +22,7 @@ namespace ProjectManagement.Entities
         public ResourceRequestStatus Status { get; set; }
         public DateTime? TimeDone { get; set; }
         [MaxLength(10000)]        
-        public string Note { get; set; }
+        public string PMNote { get; set; }
+        public string DMNote { get; set; }
     }
 }

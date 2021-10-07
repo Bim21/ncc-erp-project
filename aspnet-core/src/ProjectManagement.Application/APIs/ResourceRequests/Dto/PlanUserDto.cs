@@ -14,6 +14,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public ProjectUserRole ProjectRole { get; set; }
         public DateTime StartTime { get; set; }
         public bool IsExpense { get; set; }
-        public string Note { get; set; }
+        public string PMNote { get; set; }
     }
 }
