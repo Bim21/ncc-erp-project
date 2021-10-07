@@ -316,7 +316,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 IsExpense = input.IsExpense,
                 IsFutureActive = true,
                 PMReportId = pmReportActive.Id,
-                Note = input.PMNote
+                Note = input.Note
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 
