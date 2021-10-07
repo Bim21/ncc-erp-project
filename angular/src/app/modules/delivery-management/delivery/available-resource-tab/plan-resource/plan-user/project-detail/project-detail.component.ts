@@ -21,6 +21,7 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
   public pmReportList: any = [];
   public pmId=0;
   public show:boolean=false;
+  public panelOpenState:boolean=true;
   constructor(@Inject( MAT_DIALOG_DATA) public data:any,
     private resourceRequestService: ProjectResourceRequestService,
     public dialogRef: MatDialogRef<ProjectDetailComponent>,
