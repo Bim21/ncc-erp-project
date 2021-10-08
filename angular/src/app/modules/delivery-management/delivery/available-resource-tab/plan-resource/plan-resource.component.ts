@@ -155,8 +155,8 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
         projectId: projectId,
         projectName: projectName,
       },
-      width: '800px',
-      maxHeight: '90vh',
+      width: '95vw',
+      height: '90vh',
     })
   }
 
