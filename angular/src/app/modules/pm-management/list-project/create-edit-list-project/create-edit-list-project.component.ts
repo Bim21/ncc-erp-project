@@ -26,6 +26,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
   public pmList: UserDto;
   public isEditStatus = false;
   public searchPM: string = "";
+  public title =""
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     injector: Injector,
@@ -47,6 +48,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       this.isEditStatus = true
     }
     this.getAllClient()
+    this.title = this.project.name
   }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
