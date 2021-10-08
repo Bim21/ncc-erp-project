@@ -111,6 +111,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     pageNumber: number,
     finishedCallback: Function
   ): void {
+    let check =false
     request.keyword = this.keyword;
     request.isActive = this.isActive;
     this.isLoading = true
@@ -118,6 +119,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       if(item.filterType==4){
         request.filterItems = this.clearFilter(request,"skill",0)
         this.skill = item.value
+        check =true
       }
     })
     this.userInfoService
@@ -133,7 +135,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         this.users = result.result.items;
         this.showPaging(result.result, pageNumber);
         this.isLoading = false
-        this.skill =''
+        if(check==true){
+          request.filterItems.push( { propertyName: 'skill', comparision:0, value: this.skill ,filterType: 4, dropdownData:this.skillsParam})
+          this.skill =''
+        }
+        
       },
         () => {
           this.isLoading = false

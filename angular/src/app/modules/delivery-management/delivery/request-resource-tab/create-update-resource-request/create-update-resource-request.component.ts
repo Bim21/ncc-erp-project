@@ -20,7 +20,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   public listProject:ProjectDto[]=[];
   public statusList:string[]=Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public resourceRequestDto={} as RequestResourceDto;
-
+  public title 
   constructor(injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService:ListProjectService,
@@ -31,6 +31,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   ngOnInit(): void {
     this.getAllProject();
     this.resourceRequestDto=this.data.item;
+    this.title = this.resourceRequestDto.name
   }
   SaveAndClose(){
     this.isLoading =true;

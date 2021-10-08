@@ -1,7 +1,7 @@
 <form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
         <abp-modal-header *ngIf="data.command=='create'" title="Create new request resource" (onCloseClick)="dialogRef.close()">
         </abp-modal-header>
-        <abp-modal-header *ngIf="data.command=='edit'" title="Edit request: {{resourceRequestDto.name}}" (onCloseClick)="dialogRef.close()">
+        <abp-modal-header *ngIf="data.command=='edit'" title="Edit request: {{title}}" (onCloseClick)="dialogRef.close()">
         </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
@@ -59,17 +59,7 @@
                 </mat-error>
             </div>
         </div>
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="tenancyName">
-                HR/DM Note:
-            </label>
-            <div class="col-md-9">
-                <textarea placeholder="request name" type="text" class="form-control" name="name" 
-                    [(ngModel)]="resourceRequestDto.dmNote" required #nameEl  #name="ngModel"></textarea>
-                    <abp-validation-summary [control]="name" [controlEl]="nameEl">
-                    </abp-validation-summary>
-            </div>
-        </div>
+      
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Time Need:
@@ -100,6 +90,18 @@
                 
             </div>
         </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                HR/DM Note:
+            </label>
+            <div class="col-md-9">
+                <textarea rows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note" type="text" class="form-control" name="DMnote" 
+                    [(ngModel)]="resourceRequestDto.dmNote" required #nameEl  #name="ngModel"></textarea>
+                    <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                    </abp-validation-summary>
+            </div>
+        </div>
+       
     </div>
     <div align="end" class="row justify-content-between">
         <button class="btn btn-default" mat-dialog-close>Cancel</button>

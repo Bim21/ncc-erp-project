@@ -18,12 +18,24 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 export class RequestResourceTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.isLoading =true;
+    let check=false
+    request.filterItems.forEach(item =>{
+      if(item.propertyName == "status"){
+        check =true
+      }
+    })
+    if(check == false){
+      request.filterItems = this.AddFilterItem(request, "status", 0)
+    }
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
       this.tempListRequest= data.result.items;
       this.showPaging(data.result, pageNumber);
+      if(check ==false){
+        request.filterItems = this.clearFilter(request, "status", "")
+      }
       this.isLoading=false;
     })
   }
