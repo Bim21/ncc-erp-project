@@ -10,7 +10,6 @@ export class RequestResourceDto{
   dmNote?: string ;
   plannedNumberOfPersonnel? : number;
   id?: number;
-  
 }
 export class ResourceRequestDetailDto{
   

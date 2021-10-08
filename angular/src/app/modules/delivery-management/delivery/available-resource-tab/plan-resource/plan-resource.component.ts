@@ -27,9 +27,11 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   // count=0
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
+    let check =false
     request.filterItems.forEach(item=>{
       if(item.filterType==4){
         request.filterItems = this.clearFilter(request,"skill",0)
+        check =true
         this.skill = item.value
       }
       
@@ -42,9 +44,14 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
           return item;
         }
       }));
+      if(check==true){
+        request.filterItems.push( { propertyName: 'skill', comparision:0, value: this.skill ,filterType: 4, dropdownData:this.skillsParam})
+        this.skill=''
+      }
+      
       this.showPaging(data.result, pageNumber);
       this.isLoading = false;
-      this.skill=''
+      
       // if(this.count>0){
 
       // }
