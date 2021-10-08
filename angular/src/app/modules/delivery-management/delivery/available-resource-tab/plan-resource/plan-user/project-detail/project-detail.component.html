@@ -46,36 +46,130 @@
             <label class="col-md-2 col-form-label" >
                PM Name:
             </label>
-            <div class="col-md-10">
+            <div class="col-md-10 pt-1" style="margin-left:-30px">
                 {{projectDetail.pmName}}
             </div>
         </div>
         <div class="form-group row" >
-            <label class="col-md-4 col-form-label" >
+            <!-- <label class="col-md-4 col-form-label" >
                Danh sách nhân viên:
-            </label>
+            </label> -->
             <div class="col-md-12">
                 <mat-accordion >
                   
                     <mat-expansion-panel expanded=true>
                       <mat-expansion-panel-header>
                         <mat-panel-title>
-                            Danh sách nhân viên
+                          <b>Danh sách nhân viên</b>
                         </mat-panel-title>
                         <mat-panel-description>
                           
                         </mat-panel-description>
                       </mat-expansion-panel-header>
-                      <ng-container *ngFor="let item of projectDetail.listUsers">
-                        <p>{{item}}</p>
-                    </ng-container>
+                
+                    <div class="card-body table-responsive p-4">
+                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="stt text-center">STT</th>
+                                    <th>Nhân viên</th>
+                                    
+                                    
+    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of projectDetail.listUsers ; let i =index">
+                                    <td>{{i+1}}</td>
+    
+                                    <td>
+    
+                                        <div  class="">
+                                            <div>
+                                                <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
+                                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}"></app-user-info>
+                                            </div>
+                                        </div>
+                                        
+    
+    
+                                    </td>
+                                    
+                                   
+                                    
+                                  
+                                </tr>
+                            </tbody>
+                        </table>
+    
+                    </div>
                     </mat-expansion-panel>
                   </mat-accordion>
                
                 
             </div>
         </div>
-        <div >
+        <div class="form-group row" >
+            <!-- <label class="col-md-4 col-form-label" >
+               Danh sách nhân viên:
+            </label> -->
+            <div class="col-md-12">
+                <mat-accordion >
+                  
+                    <mat-expansion-panel expanded=true>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <b>Các vấn đề trong tuần</b>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                
+                      <div class="card-body table-responsive p-4">
+                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="stt text-center">STT</th>
+                                    <th>Vấn đề</th>
+                                    <th>Trạng thái</th>
+                                    
+    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let problem of projectDetail.problemsOfTheWeek ; let i =index">
+                                    <td>{{i+1}}</td>
+    
+                                    <td>
+    
+                                        <p style="white-space: normal; width: 250px;" >
+                                            {{problem.description}}</p>
+                                        
+    
+    
+                                    </td>
+                                    
+                                    <td class="text-center">
+                                        <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
+                                            >{{ problem.status }}</span>
+    
+                                        
+    
+                                    </td>
+                                  
+                                </tr>
+                            </tbody>
+                        </table>
+    
+                    </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+               
+                
+            </div>
+        </div>
+        <!-- <div >
             <div>
                 <div class="card">
                     <div class="card-header">
@@ -129,7 +223,7 @@
                 </div>
     
             </div>
-        </div>
+        </div> -->
 
     </div>    
     
