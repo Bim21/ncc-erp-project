@@ -2,240 +2,134 @@
     <div class="row card-header pt-0">
         <div class="col-6">
             <h3>{{data.projectName}} </h3>
+           
         </div>
         <div class="col-6 text-right">
             <div class="" style="max-height: 500px;">
-                <div class="row w-100">
-                                        <div class="col-4">
-                                            <label  for="" class="mt-2" >PM report:</label>
+                <div class="">
+
+                    <div class="row" style="justify-content: space-between;">
+                        <div class="d-inline">
+                            <label for="" class="mt-2">PM report:</label>
+                            <mat-form-field class="ml-3" style="width: 205px;" appearance="outline">
+                                <mat-select [(ngModel)]="selectedReport" name="pmReport"
+                                    (selectionChange)="onReportchange($event.value)" placeholder="select a role" required
+                                    #projectEmployee="ngModel">
+                                    <mat-form-field class="w-100 px-3 "
+                                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                        <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
+                                            placeholder="search">
+                                    </mat-form-field>
+                                    <mat-option *ngFor="let report of pmReportList |filter:searchPmReport" [value]="report">
+                                        <div class="row">
+                                            <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
+                                            <div class="col-2"> <i class="fas fa-circle float-right mt-3"
+                                                    [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
                                         </div>
-                                        <div class="col-8">
-                                            <mat-form-field class="ml-3" style="width: 205px;" appearance="outline">
-                                                <mat-select [(ngModel)]="selectedReport" name="pmReport"
-                                                    (selectionChange)="onReportchange($event.value)" placeholder="select a role" required
-                                                    #projectEmployee="ngModel">
-                                                    <mat-form-field class="w-100 px-3 "
-                                                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                        <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
-                                                            placeholder="search">
-                                                    </mat-form-field>
-                                                    <mat-option *ngFor="let report of pmReportList |filter:searchPmReport"
-                                                        [value]="report">
-                                                        <div class="row">
-                                                            <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
-                                                            <div class="col-2"> <i class="fas fa-circle float-right mt-3"
-                                                                    [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
-                                                        </div>
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </div>
-            
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                       
+                        <i style="margin-top: 12px;" class="fas fa-times fa-lg" (click)="dialogRef.close()"></i>
+                    </div>
+                    
+                </div>
+                
+            </div>
+           
         </div>
     </div>
-    <!-- <abp-modal-header title={{data.projectName}} (onCloseClick)="dialogRef.close()">
-        
-    </abp-modal-header> -->
-   
-    
-                    
-    <div class="card-body">
-        <div class="form-group row mt-2" >
-            <label class="col-md-2 col-form-label" >
-               PM Name:
-            </label>
-            <div class="col-md-10 pt-1" style="margin-left:-30px">
-                {{projectDetail.pmName}}
-            </div>
-        </div>
-        <div class="form-group row" >
-            <!-- <label class="col-md-4 col-form-label" >
-               Danh sách nhân viên:
-            </label> -->
-            <div class="col-md-12">
-                <mat-accordion >
-                  
-                    <mat-expansion-panel expanded=true>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>
-                          <b>Danh sách nhân viên</b>
-                        </mat-panel-title>
-                        <mat-panel-description>
-                          
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                
-                    <div class="card-body table-responsive p-4">
-                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="stt text-center">STT</th>
-                                    <th>Nhân viên</th>
-                                    
-                                    
-    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of projectDetail.listUsers ; let i =index">
-                                    <td>{{i+1}}</td>
-    
-                                    <td>
-    
-                                        <div  class="">
-                                            <div>
-                                                <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}"></app-user-info>
-                                            </div>
-                                        </div>
-                                        
-    
-    
-                                    </td>
-                                    
-                                   
-                                    
-                                  
-                                </tr>
-                            </tbody>
-                        </table>
-    
-                    </div>
-                    </mat-expansion-panel>
-                  </mat-accordion>
-               
-                
-            </div>
-        </div>
-        <div class="form-group row" >
-            <!-- <label class="col-md-4 col-form-label" >
-               Danh sách nhân viên:
-            </label> -->
-            <div class="col-md-12">
-                <mat-accordion >
-                  
-                    <mat-expansion-panel expanded=true>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>
-                          <b>Các vấn đề trong tuần</b>
-                        </mat-panel-title>
-                        <mat-panel-description>
-                          
-                        </mat-panel-description>
-                      </mat-expansion-panel-header>
-                
-                      <div class="card-body table-responsive p-4">
-                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="stt text-center">STT</th>
-                                    <th>Vấn đề</th>
-                                    <th>Trạng thái</th>
-                                    
-    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let problem of projectDetail.problemsOfTheWeek ; let i =index">
-                                    <td>{{i+1}}</td>
-    
-                                    <td>
-    
-                                        <p style="white-space: normal; width: 250px;" >
-                                            {{problem.description}}</p>
-                                        
-    
-    
-                                    </td>
-                                    
-                                    <td class="text-center">
-                                        <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
-                                            >{{ problem.status }}</span>
-    
-                                        
-    
-                                    </td>
-                                  
-                                </tr>
-                            </tbody>
-                        </table>
-    
-                    </div>
-                    </mat-expansion-panel>
-                  </mat-accordion>
-               
-                
-            </div>
-        </div>
-        <!-- <div >
-            <div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4 class="d-inline">Các vấn đề trong tuần</h4>
 
-                            </div>
-    
+    <div class="card-body">
+        <div class="row ">
+            <label class="" style="font-weight: normal; margin-top: 2px;">
+                Pm:
+            </label>
+            <div class="ml-2">
+                <strong style="font-size: 1.2rem; margin-bottom: 5px;">
+                    {{projectDetail.pmName}}
+                </strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="py-4 table-responsive ">
+                        <div class="fixTableHead">
+                            <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                                <thead class="bg-light">
+                                    <tr style="border: none;">
+                                        <th class="stt text-center">STT</th>
+                                        <th>Nhân viên({{projectDetail.listUsers.length}})</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of projectDetail.listUsers ; let i =index">
+                                        <td>{{i+1}}</td>
+                                        <td>
+                                            <div class="">
+                                                <div>
+                                                    <app-user-info
+                                                        [userData]="{fullName:item.fullName,branch:item.branch,
+                                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}">
+                                                    </app-user-info>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="card-body table-responsive p-4">
-                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="stt text-center">STT</th>
-                                    <th>Vấn đề</th>
-                                    <th>Trạng thái</th>
-                                    
-    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let problem of projectDetail.problemsOfTheWeek ; let i =index">
-                                    <td>{{i+1}}</td>
-    
-                                    <td>
-    
-                                        <p style="white-space: normal; width: 250px;" >
-                                            {{problem.description}}</p>
-                                        
-    
-    
-                                    </td>
-                                    
-                                    <td class="text-center">
-                                        <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
-                                            >{{ problem.status }}</span>
-    
-                                        
-    
-                                    </td>
-                                  
-                                </tr>
-                            </tbody>
-                        </table>
-    
-                    </div>
-                    
-    
                 </div>
-    
             </div>
-        </div> -->
+            <div class="col-8">
+                <div class="form-group row">
+                    <!-- <label class="col-md-4 col-form-label" >
+                       Danh sách nhân viên:
+                    </label> -->
+                    <div class="col-md-12">
+                        <div class="py-4 table-responsive p-4">
+                            <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="stt text-center">STT</th>
+                                        <th>Vấn đề</th>
+                                        <th style="width: 100px;">Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let problem of projectDetail.problemsOfTheWeek ; let i =index">
+                                        <td>{{i+1}}</td>
+                                        <td>
 
-    </div>    
-    
-    <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
-        <button class="btn btn-danger cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+                                            <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                        font-family: sans-serif; align-self:flex-start; ">
+                          {{problem.description}}
+                      </pre>
+                                        </td>
+                                        <td class="text-center">
+                                            <span
+                                                [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]">{{
+                                                problem.status }}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <mat-tab-group> -->
+        <!-- <mat-tab label="Danh sách nhân viên"> -->
+
+        <!-- </mat-tab> -->
+        <!-- <mat-tab label="Các vấn đề trong tuần">  -->
+
+        <!-- </mat-tab>
+          </mat-tab-group> -->
+
     </div>
-      
-        
-        
-       
-       
-       
-     
-    
 </section>
