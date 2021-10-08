@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 import { AppComponentBase } from 'shared/app-component-base';
 import { PMReportProjectService } from './../../../../../../../service/api/pmreport-project.service';
 import { pmReportDto } from './../../../../../../../service/model/pmReport.dto';
@@ -16,7 +17,7 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
 
   public projectId='';
   public projectDetail={} as projectForDM;
-  public selectedReport = {} as pmReportDto;
+  public selectedReport ={} as pmReportDto;;
   public searchPmReport: string = "";
   public pmReportList: any = [];
   public pmId=0;
@@ -33,18 +34,16 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
     this.projectId=this.data.projectId;
     console.log(this.data)
    
-    this.getProjectDetail();
+    // this.getProjectDetail();
     this. getAllPmReport();
   }
   public getProjectDetail(){
-    this.resourceRequestService.getProjectForDM(this.projectId,this.pmId).subscribe((data)=>{
+    this.resourceRequestService.getProjectForDM(this.projectId,this.selectedReport.reportId).subscribe((data)=>{
       this.projectDetail=data.result;
     })
   }
   public onReportchange(pmReport) {
-
     this.selectedReport=pmReport;
-    this.pmId=this.selectedReport.reportId;
     
   
    this.getProjectDetail();
@@ -55,10 +54,9 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
   public getAllPmReport() {
     this.reportService.GetAllByProject(Number(this.projectId)).subscribe(data => {
       this.pmReportList = data.result;
-      this.selectedReport = data.result.filter(item => item.isActive == true)[0];
-      this.pmId=this.selectedReport.pmReportProjectId;
-
-      console.log("jjii",this.selectedReport)
+      this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
+      // this.pmId=this.selectedReport.reportId;
+      console.log("id",this.selectedReport )
       this.getProjectDetail();
      
     })
