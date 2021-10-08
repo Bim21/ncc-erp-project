@@ -183,7 +183,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     FullName = x.Name + " " + x.Surname,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
-                                }).Where(x => x.Undisposed > 0);
+                                });
 
             return await users.GetGridResult(users, input);
         }
