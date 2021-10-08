@@ -62,7 +62,8 @@ namespace ProjectManagement.APIs.Projects
                             PmUserType = p.PM.UserType,
                             PmBranch = p.PM.Branch,
                             IsSent = l.Status,
-                            TimeSendReport = l.TimeSendReport
+                            TimeSendReport = l.TimeSendReport,
+                            DateSendReport = l.TimeSendReport.Value.Date
                         };
             return await query.GetGridResult(query, input);
         }

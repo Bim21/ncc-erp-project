@@ -252,7 +252,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                           {
                               ProjectName = pus.Key.Name,
                               PMName = pus.Key.FullName,
-                              ListUsers = pus.Where(x => x.Status == ProjectUserStatus.Present).Select(u => u.User.FullName).ToList(),
+                              ListUsers = pus
+                              .Where(x => x.Status == ProjectUserStatus.Present)
+                              .Select(u => new UserBaseDto
+                              {
+                                  FullName = u.User.FullName,
+                                  EmailAddress = u.User.EmailAddress,
+                                  AvatarPath = "/avatars/" + u.User.AvatarPath,
+                                  UserType = u.User.UserType,
+                                  Branch = u.User.Branch
+                              }).ToList(),
                               ProblemsOfTheWeek = problemsOfTheWeek
                           }).FirstOrDefault();
             return result;
