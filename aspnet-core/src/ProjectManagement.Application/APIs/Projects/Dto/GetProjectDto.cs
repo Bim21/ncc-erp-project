@@ -33,5 +33,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public Branch PmBranch { get; set; }
         public PMReportProjectStatus IsSent { get; set; }
         public DateTime? TimeSendReport { get; set; }
+        public DateTime? DateSendReport { get; set; }
     }
 }
