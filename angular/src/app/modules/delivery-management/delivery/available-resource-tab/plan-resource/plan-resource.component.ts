@@ -69,11 +69,25 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   protected delete(entity: PlanResourceComponent): void {
 
   }
+  userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item)=>{
+    return{
+      displayName: item[0],
+      value: item[1]
+    }
+    
+  })
+  branchParam = Object.entries(this.APP_ENUM.UserBranch).map((item)=>{
+    return {
+      displayName: item[0],
+      value: item[1]
+    }
+  })
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
-    // { propertyName: 'skill', comparisions: [0], displayName: "skill", filterType: 4, dropdownData: this.skillsParam },
+    { propertyName: 'userType' , comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam},
+    { propertyName: 'branch' , comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam}
   ];
 
   public availableResourceList: availableResourceDto[] = [];
