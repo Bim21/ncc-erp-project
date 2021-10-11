@@ -254,6 +254,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                               PMName = pus.Key.FullName,
                               ListUsers = pus
                               .Where(x => x.Status == ProjectUserStatus.Present)
+                              .Where(x => x.AllocatePercentage > 0)
                               .Select(u => new UserBaseDto
                               {
                                   FullName = u.User.FullName,
