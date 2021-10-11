@@ -505,15 +505,34 @@ namespace ProjectManagement.Users
         public async Task<object> AutoUpdateUserFromHRM()
         {
             var userFromHRMs = await _hrmService.GetUserFromHRM();
+            var userFromHRMEmails = userFromHRMs.Select(x => x.EmailAddress).ToList();
+
             var currentUsers = await _workScope.GetAll<User>().ToListAsync();
             var currentUserEmails = currentUsers.Select(x => x.EmailAddress).ToList();
+
             var successListInsert = new List<string>();
             var failedListInsert = new List<string>();
             var successListUpdate = new List<string>();
             var failedListUpdate = new List<string>();
-            foreach (var user in userFromHRMs.OrderByDescending(x=>x.UserLevel))
+          
+            var updatefakeUsers = currentUsers.Where(x => !userFromHRMEmails.Contains(x.EmailAddress)).ToList();
+            foreach(var user in updatefakeUsers)
             {
-                if(currentUserEmails.Contains(user.EmailAddress))
+                try
+                {
+                    user.UserType = UserType.FakeUser;
+                    await _workScope.UpdateAsync(user);
+                    successListUpdate.Add(user.EmailAddress);
+                }
+                catch (Exception e)
+                {
+                    failedListUpdate.Add(user.EmailAddress + " error =>" + e.Message);
+                }
+            }
+
+            foreach (var user in userFromHRMs.OrderByDescending(x => x.UserLevel))
+            {
+                if (currentUserEmails.Contains(user.EmailAddress))
                 {
                     try
                     {
@@ -529,13 +548,13 @@ namespace ProjectManagement.Users
                 {
                     try
                     {
-                        if(user.IsActive)
+                        if (user.IsActive)
                         {
                             var createUser = await InsertUserFromHRM(user);
                             successListInsert.Add(user.EmailAddress);
-                        }    
+                        }
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         failedListInsert.Add(user.EmailAddress + " error =>" + e.Message);
                     }
