@@ -85,7 +85,8 @@ namespace ProjectManagement.Constants.Enum
         {
             PENDING = 0,
             DONE = 1,
-            CANCELLED = 2
+            CANCELLED = 2,
+            APPROVE = 3
         }
         public enum ProjectIssueSource
         {
