@@ -1,17 +1,17 @@
-<section class="content-header py-1" >
+<section class="content-header py-1">
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
                 <h3>Request Resource</h3>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Create)" (click)="createRequest()"
-                    class="btn bg-blue">
+                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Create)"
+                    (click)="createRequest()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
-                   Create
+                    Create
                 </button>
             </div>
-            
+
         </div>
     </div>
 </section>
@@ -42,7 +42,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="mb-0">
-                                    <div> 
+                                    <div>
                                         <div *ngFor="let item of filterItems; let i = index">
                                             <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
                                                 (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
@@ -59,65 +59,77 @@
             </div>
             <div class="card-body table-responsive pb-1">
                 <div class="fixTableHead">
-                <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap" >
-                    <thead class="bg-light">
-                        <tr style="border: none;">
-                            <th>STT</th>
-                            <th>Request</th>
-                            <th>Project</th>
-                            <th>Nhân sự đã plan</th>
-                            <th>Time Need</th>
-                            <th>Note</th>
-                            <th>Trạng thái</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of listRequest |paginate
+                    <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                        <thead class="bg-light">
+                            <tr style="border: none;">
+                                <th>STT</th>
+                                <th>Request</th>
+                                <th>Project</th>
+                                <th style="width: 100px;">Nhân sự đã plan</th>
+                                <th style="width: 100px;">Time Need</th>
+                                <th>PM Note</th>
+                                <th>HR,DM Note</th>
+                                <th style="width: 120px;">Trạng thái</th>
+                                <th style="width: 120px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of listRequest |paginate
                             : {
                                 id: 'server',
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index"  >
-                            <td class="text-center"><span >{{ i +1 }}</span></td>
-                            <td class="text-left" style="white-space: normal; max-width: 250px;"><span
-                                class="hyperlink" (click)="showDetail(item)">{{ item.name }}</span></td>
-                            <td class="text-center">{{item.projectName}}</td>
-                            <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
-                            <td>{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
-                            <td style="white-space: normal; max-width: 210px;">{{item.note}}</td>
-                            <td  class="text-center">
-                                <span [ngClass]="APP_CONST.statusStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{ getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
-                                
-                            </td>
-                            <td class="text-center">
-                                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
-                                
-                                class="btn btn-sm bg-secondary mr-1" 
-                                (click)="editRequest(item);$event.stopPropagation()">
-                                <i class="fas fa-pencil-alt" ></i>
+                              }; let i = index">
+                                <td class="text-center"><span>{{ i +1 }}</span></td>
+                                <td class="text-left" style="white-space: normal; max-width: 250px;"><span
+                                        class="hyperlink" (click)="showDetail(item)">{{ item.name }}</span></td>
+                                <td class="text-center">{{item.projectName}}</td>
+                                <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
+                                <td class="text-center">{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
+                                <td style="white-space: normal; max-width: 250px;">
+                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                      {{item.pmNote}}
+                                  </pre>
+                                </td>
+                                <td style="white-space: normal; max-width: 250px;">
+                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                  {{item.dmNote}}
+                              </pre>
+                                </td>
+                                <td class="text-center">
+                                    <span
+                                        [ngClass]="APP_CONST.statusStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{
+                                        getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
 
-                                Edit
-                            </button>
-                            <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
-                                class="btn btn-sm bg-danger ml-1"
-                                (click)="delete(item);$event.stopPropagation()"
-                                 #deleteBtn>
-                                <i class="fas fa-trash"></i>
-                                Delete
-                            </button>
-                            </td>
-                            
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                </td>
+                                <td class="text-center">
+                                    <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
+                                        class="btn btn-sm bg-secondary mr-1"
+                                        (click)="editRequest(item);$event.stopPropagation()">
+                                        <i class="fas fa-pencil-alt"></i>
+
+                                        Edit
+                                    </button>
+                                    <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                        class="btn btn-sm bg-danger ml-1"
+                                        (click)="delete(item);$event.stopPropagation()" #deleteBtn>
+                                        <i class="fas fa-trash"></i>
+                                        Delete
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
-                        <button class="btn btn-secondary mb-2"  (click)="refresh()">
+                        <button class="btn btn-secondary mb-2" (click)="refresh()">
                             <i class="fas fa-redo-alt"></i>
                         </button>
                         <mat-form-field style=" width: 20%;margin-left: 30px;">

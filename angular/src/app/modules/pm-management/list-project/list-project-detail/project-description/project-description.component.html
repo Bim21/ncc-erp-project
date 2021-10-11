@@ -1,81 +1,136 @@
+
 <div class="card mt-3">
     <div class="card-header">
         <div class="row">
             <div class="col-md-6">
-                <h3>Thông tin dự án</h3>
+                <h3>Thông tin chi tiết dự án</h3>
+            </div>
+            <div class="col-6 text-right ">
+                <a   class="btn bg-primary  mt-3"  (click)="editRequest()" *ngIf="readMode && permission.isGranted(PmManager_Project_UpdateProjectDetail)" >
+                    <i class="fas fa-edit"></i>
+                    Edit
+                </a>
+            </div>
             </div>
         </div>
-    </div>
-
-
     <div class="card-body table-responsive p-4">
         <form class="form-horizontal" autocomplete="off" #requestDetail="ngForm">
             <div class="form-group row detail ">
                 <label class="col-md-2 col-form-label" for="requestName">
                     Mô tả ngắn dự án:
                 </label>
-                <div class="col-md-4 mt-2">
-                    <p>{{projectDetail.briefDescription}}</p>
+                <div *ngIf="readMode" class="col-md-9 mt-2">
+                        <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                        font-family: sans-serif; align-self:flex-start; ">
+                          {{projectDetail.briefDescription}}
+                      </pre>
                 </div>
-
+                <div *ngIf="!readMode" class="col-md-9">
+                    <textarea rows="2"  cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text" class="form-control" name="briefDescription" id="briefDescription"
+                        required [(ngModel)]="projectDetail.briefDescription" #briefDescription="ngModel" #briefDescriptionEl ></textarea>
+                    <!-- <abp-validation-summary [control]="briefDescription" [controlEl]="briefDescriptionEl">
+                    </abp-validation-summary> -->
+                </div>
             </div>
             <div class="form-group row detail ">
-                <label class="col-md-2 col-form-label" for="projectCode">
+                <label class="col-md-2 col-form-label" for="detailDescription">
                     Mô tả chi tiết dự án:
                 </label>
-                <div class="col-md-4 mt-2">
-                    <p>{{projectDetail.detailDescription}}</p>
-                    
+                <div *ngIf="readMode" class="col-md-9 mt-2">
+                        <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                        font-family: sans-serif; align-self:flex-start; ">
+                          {{projectDetail.detailDescription}}
+                      </pre>
                 </div>
-
+                <div *ngIf="!readMode" class="col-md-9">
+                    <textarea rows="2"  cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text" class="form-control" name="detailDescription" id="detailDescription" 
+                        required [(ngModel)]="projectDetail.detailDescription" #detailDescription="ngModel" #detailDescriptionEl ></textarea>
+                    <!-- <abp-validation-summary [control]="detailDescription" [controlEl]="detailDescriptionEl">
+                    </abp-validation-summary> -->
+                </div>
             </div>
             <div class="form-group row detail ">
-                <label class="col-md-2 col-form-label" for="projectPM">
+                <label class="col-md-2 col-form-label" for="technologyUsed">
                     Công nghệ sử dụng:
                 </label>
-                <div class="col-md-4 mt-2">
-                    <p>{{projectDetail.technologyUsed}}</p>
-
+                <div *ngIf="readMode" class="col-md-9 mt-2">
+                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                    font-family: sans-serif; align-self:flex-start; ">
+                      {{projectDetail.technologyUsed}}
+                  </pre>
                 </div>
-
+                <div *ngIf="!readMode" class="col-md-9">
+                    <textarea rows="2"  cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text" class="form-control" name="technologyUsed" id="technologyUsed" 
+                        required [(ngModel)]="projectDetail.technologyUsed" #technologyUsed="ngModel" #technologyUsedEl ></textarea>
+                    <!-- <abp-validation-summary [control]="technologyUsed" [controlEl]="technologyUsedEl">
+                    </abp-validation-summary> -->
+                </div>
             </div>
+           
+          
             <div class="form-group row detail ">
-                <label class="col-md-2 col-form-label" for="requestName">
+                <label class="col-md-2 col-form-label" for="technicalProblems">
                     Các vấn đề kĩ thuật:
                 </label>
-                <div class="col-md-4 mt-2">
-                    <p>{{projectDetail.technicalProblems}}</p>
-
+                <div *ngIf="readMode" class="col-md-9 mt-2">
+                        <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                    font-family: sans-serif; align-self:flex-start; ">
+                      {{projectDetail.technicalProblems}}
+                  </pre>
                 </div>
-
+                <div *ngIf="!readMode" class="col-md-9">
+                    <textarea rows="2"  cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text" class="form-control" name="technicalProblems" id="technicalProblems" 
+                        required [(ngModel)]="projectDetail.technicalProblems" #technicalProblems="ngModel" #technicalProblemsEl ></textarea>
+                    <!-- <abp-validation-summary [control]="technicalProblems" [controlEl]="technicalProblemsEl">
+                    </abp-validation-summary> -->
+                </div>
             </div>
             <div class="form-group row detail ">
-                <label class="col-md-2 col-form-label" for="requestName">
+                <label class="col-md-2 col-form-label" for="otherProblems">
                     Các vấn đề khác:
                 </label>
-                <div class="col-md-4 mt-2">
-                    <p>{{projectDetail.otherProblems}}</p>
-
+                <div *ngIf="readMode" class="col-md-9 mt-2">
+                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                    font-family: sans-serif; align-self:flex-start; ">
+                      {{projectDetail.otherProblems}}
+                  </pre>
                 </div>
-
+                <div *ngIf="!readMode" class="col-md-9">
+                    <textarea rows="2"  cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text" class="form-control" name="otherProblems" id="otherProblems" 
+                        required [(ngModel)]="projectDetail.otherProblems" #otherProblems="ngModel" #otherProblemsEl ></textarea>
+                    <!-- <abp-validation-summary [control]="otherProblems" [controlEl]="otherProblemsEl">
+                    </abp-validation-summary> -->
+                </div>
             </div>
             <div class="form-group row detail ">
-                <label class="col-md-2 col-form-label" for="requestName">
-                    Kiến thức mới:
+                <label class="col-md-2 col-form-label" for="newKnowledge">
+                    Kiến thức mới có thể sử dụng sau này:
                 </label>
-                <div class="col-md-4 mt-2">
-                    <p>{{projectDetail.newKnowledge}}</p>
-
+                <div *ngIf="readMode" class="col-md-9 mt-2">
+                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                    font-family: sans-serif; align-self:flex-start; ">
+                      {{projectDetail.newKnowledge}}
+                  </pre>
                 </div>
-
+                <div *ngIf="!readMode" class="col-md-9">
+                    <textarea rows="2"  cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text" class="form-control" name="newKnowledge" id="newKnowledge" 
+                        required [(ngModel)]="projectDetail.newKnowledge" #newKnowledge="ngModel" #newKnowledgeEl ></textarea>
+                    <!-- <abp-validation-summary [control]="newKnowledge" [controlEl]="newKnowledgeEl">
+                    </abp-validation-summary> -->
+                </div>
             </div>
-
-
-
+         
+            <div class="form-group row" [hidden]="readMode">
+                <div class="form-group row d-flex justify-content-between">
+                    <button class="btn btn-default mx-2" (click)="readMode = true; " (click)="getProjectDetail()"> 
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" [disabled]=" isLoading"  (click)="updateInfo()">
+                        Save
+                    </button>
+                </div>
+            </div>
         </form>
-
     </div>
-
-
-
 </div>
+

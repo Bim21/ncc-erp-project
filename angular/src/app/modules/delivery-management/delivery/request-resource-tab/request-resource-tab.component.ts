@@ -17,12 +17,25 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 })
 export class RequestResourceTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.isLoading =true
+    this.isLoading =true;
+    let check=false
+    request.filterItems.forEach(item =>{
+      if(item.propertyName == "status"){
+        check =true
+      }
+    })
+    if(check == false){
+      request.filterItems = this.AddFilterItem(request, "status", 0)
+    }
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
+      this.tempListRequest= data.result.items;
       this.showPaging(data.result, pageNumber);
+      if(check ==false){
+        request.filterItems = this.clearFilter(request, "status", "")
+      }
       this.isLoading=false;
     })
   }
@@ -60,6 +73,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     { propertyName: 'status', comparisions: [0], displayName: "status", filterType:3, dropdownData:this.statusParam },
   ];
   public listRequest:RequestResourceDto[]=[];
+  public tempListRequest:RequestResourceDto[]=[];
   public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   DeliveryManagement_ResourceRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
   DeliveryManagement_ResourceRequest_Create=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
@@ -74,6 +88,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   ngOnInit(): void {
     this.refresh();
+   
+   
   }
   showDetail(item:any){
     if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)){
@@ -105,7 +121,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         status:request.status,
         timeDone:request.timeDone,
         id:request.id,
-        note:request.note
+        pmNote:request.pmNote,
+        dmNote:request.dmNote
       }
     }
     const show=this.dialog.open(CreateUpdateResourceRequestComponent,{
@@ -113,7 +130,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         command:command,
         item:resourceRequest
       },
-      width:"700px"
+      width:"700px",
+      maxHeight: '90vh',
     })
     show.afterClosed().subscribe(result => {
       if(result){

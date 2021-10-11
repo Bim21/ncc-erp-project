@@ -47,7 +47,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                             Name = x.Name,
                             Status = x.Status,
                             StatusName = x.Status.ToString(),
-                            Note = x.Note,
+                            PMNote = x.PMNote,
+                            DMNote =  x.DMNote,
                             TimeNeed = x.TimeNeed,
                             TimeDone = x.TimeDone.Value
                         });
@@ -71,7 +72,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                 StatusName = x.Status.ToString(),
                 TimeNeed = x.TimeNeed,
                 TimeDone = x.TimeDone.Value,
-                Note = x.Note,
+                PMNote = x.PMNote,
+                DMNote = x.DMNote,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
 
@@ -181,7 +183,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     FullName = x.Name + " " + x.Surname,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
-                                }).Where(x => x.Undisposed > 0);
+                                });
 
             return await users.GetGridResult(users, input);
         }
@@ -250,7 +252,17 @@ namespace ProjectManagement.APIs.ResourceRequests
                           {
                               ProjectName = pus.Key.Name,
                               PMName = pus.Key.FullName,
-                              ListUsers = pus.Where(x => x.Status == ProjectUserStatus.Present).Select(u => u.User.FullName).ToList(),
+                              ListUsers = pus
+                              .Where(x => x.Status == ProjectUserStatus.Present)
+                              .Where(x => x.AllocatePercentage > 0)
+                              .Select(u => new UserBaseDto
+                              {
+                                  FullName = u.User.FullName,
+                                  EmailAddress = u.User.EmailAddress,
+                                  AvatarPath = "/avatars/" + u.User.AvatarPath,
+                                  UserType = u.User.UserType,
+                                  Branch = u.User.Branch
+                              }).ToList(),
                               ProblemsOfTheWeek = problemsOfTheWeek
                           }).FirstOrDefault();
             return result;

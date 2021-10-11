@@ -46,7 +46,7 @@ namespace ProjectManagement.APIs.Projects
                             Id = p.Id,
                             Name = p.Name,
                             Code = p.Code,
-                            ProjectType = p.ProjectType.ToString(),
+                            ProjectType = p.ProjectType,
                             StartTime = p.StartTime.Date,
                             EndTime = p.EndTime.Value.Date,
                             Status = p.Status,
@@ -62,7 +62,8 @@ namespace ProjectManagement.APIs.Projects
                             PmUserType = p.PM.UserType,
                             PmBranch = p.PM.Branch,
                             IsSent = l.Status,
-                            TimeSendReport = l.TimeSendReport
+                            TimeSendReport = l.TimeSendReport,
+                            DateSendReport = l.TimeSendReport.Value.Date
                         };
             return await query.GetGridResult(query, input);
         }
@@ -76,7 +77,7 @@ namespace ProjectManagement.APIs.Projects
                     Id = x.Id,
                     Name = x.Name,
                     Code = x.Code,
-                    ProjectType = x.ProjectType.ToString(),
+                    ProjectType = x.ProjectType,
                     StartTime = x.StartTime.Date,
                     EndTime = x.EndTime.Value.Date,
                     Status = x.Status,
@@ -99,7 +100,7 @@ namespace ProjectManagement.APIs.Projects
                                     Id = x.Id,
                                     Name = x.Name,
                                     Code = x.Code,
-                                    ProjectType = x.ProjectType.ToString(),
+                                    ProjectType = x.ProjectType,
                                     StartTime = x.StartTime.Date,
                                     EndTime = x.EndTime.Value.Date,
                                     Status = x.Status,
@@ -119,7 +120,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
+        [AbpAuthorize(PermissionNames.PmManager_Project_ViewProjectInfor)]
         public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
         {
             return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
@@ -135,8 +136,15 @@ namespace ProjectManagement.APIs.Projects
                               }).FirstOrDefaultAsync();
         }
 
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.PmManager_Project_UpdateProjectDetail)]
+        public async Task<ProjectDetailDto> UpdateProjectDetail(ProjectDetailDto input)
+        {
+            var project = await WorkScope.GetAsync<Project>(input.ProjectId);
 
-
+            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDetailDto, Project>(input, project));
+            return input;
+        }
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]

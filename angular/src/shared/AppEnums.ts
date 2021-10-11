@@ -94,7 +94,8 @@ export const APP_ENUMS = {
     {
         PENDING: 0,
         DONE: 1,
-        CANCELLED: 2
+        CANCELLED: 2,
+        APPROVED:3,
     },
     ProjectIssueSource:
     {

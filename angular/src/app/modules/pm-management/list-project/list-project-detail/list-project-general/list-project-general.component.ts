@@ -43,8 +43,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public getProjectDetail(): void {
     this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
       this.project = data.result
-      this.project.projectType = this.APP_ENUM.ProjectType[this.project.projectType]
-      this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
+ 
     })
   }
   public editRequest(): void {

@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Abp.AutoMapper;
+using ProjectManagement.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ProjectManagement.APIs.Projects.Dto
 {
+    [AutoMapTo(typeof(Project))]
     public class ProjectDetailDto
     {
         public long ProjectId { get; set; }

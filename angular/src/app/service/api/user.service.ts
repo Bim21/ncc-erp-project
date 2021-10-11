@@ -1,3 +1,4 @@
+import { PagedRequestDto } from './../../../shared/paged-listing-component-base';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -67,4 +68,8 @@ export class UserService extends BaseApiService {
   autoUpdateUserFromHRM(): Observable<any> {
     return this.http.post<any>(this.rootUrl +'/AutoUpdateUserFromHRM',{})
   }
+  getUserPaging(request:PagedRequestDto,skillId:any): Observable<any> {
+    return this.http.post<any>(this.rootUrl +`/GetAllPaging?skillId=${skillId}`,request)
+  }
+  
 }

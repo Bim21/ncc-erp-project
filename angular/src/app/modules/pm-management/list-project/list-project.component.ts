@@ -42,8 +42,8 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-    { propertyName: 'timeSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
-    { propertyName: 'TimeAndMaterials', comparisions: [0], displayName: "Loại project", filterType: 3, dropdownData: this.projectTypeParam },
+    { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
+    { propertyName: 'projectType', comparisions: [0], displayName: "Loại project", filterType: 3, dropdownData: this.projectTypeParam },
 
   ];
   private userList: UserDto[] = [];

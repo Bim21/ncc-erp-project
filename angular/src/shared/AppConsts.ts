@@ -28,7 +28,8 @@ export class AppConsts {
         Past: "badge badge-pill badge-secondary",
         Potential: "badge badge-pill badge-primary",
         InProgress: "badge badge-pill badge-success",
-        Closed: "badge badge-pill badge-secondary"
+        Closed: "badge badge-pill badge-secondary",
+        APPROVED:"badge badge-pill badge-danger"
         // Future:"badge badge-pill badge-light"
     }
     static readonly isSentStyle = {

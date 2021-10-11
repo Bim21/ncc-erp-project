@@ -14,7 +14,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string Name { get; set; }
         [ApplySearchAttribute]
         public string Code { get; set; }
-        public string ProjectType { get; set; }
+        public ProjectType ProjectType { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }
@@ -33,5 +33,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public Branch PmBranch { get; set; }
         public PMReportProjectStatus IsSent { get; set; }
         public DateTime? TimeSendReport { get; set; }
+        public DateTime? DateSendReport { get; set; }
     }
 }

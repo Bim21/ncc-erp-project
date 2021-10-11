@@ -1,3 +1,5 @@
+import { SkillService } from './../service/api/skill.service';
+import { DropDownDataDto } from './../../shared/filter/filter.component';
 import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { Component, Injector } from '@angular/core';
@@ -60,13 +62,15 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     { propertyName: 'userLevel', comparisions: [0], displayName: "Level", filterType: 3, dropdownData: this.userLevelParam },
     { propertyName: 'userType', comparisions: [0], displayName: "User type", filterType: 3, dropdownData: this.userTypeParam },
     { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
-
     { propertyName: 'isActive', comparisions: [0], displayName: "Active", filterType: 2 },
+
 
   ];
   users: UserDto[] = [];
   keyword = '';
   isActive: boolean | null;
+  skillsParam:DropDownDataDto[]=[]
+  skill=""
   advancedFiltersVisible = false;
   Pages_Users_Create = PERMISSIONS_CONSTANT.Pages_Users_Create;
   Pages_Users_Delete = PERMISSIONS_CONSTANT.Pages_Users_Delete;
@@ -78,7 +82,8 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     private _userService: UserServiceProxy,
     private _modalService: BsModalService,
     private userInfoService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private skillService:SkillService
   ) {
     super(injector);
   }
@@ -106,12 +111,20 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     pageNumber: number,
     finishedCallback: Function
   ): void {
+    let check =false
     request.keyword = this.keyword;
     request.isActive = this.isActive;
     this.isLoading = true
+    request.filterItems.forEach(item=>{
+      if(item.filterType==4){
+        request.filterItems = this.clearFilter(request,"skill",0)
+        this.skill = item.value
+        check =true
+      }
+    })
     this.userInfoService
-      .getAllPaging(
-        request
+      .getUserPaging(
+        request, this.skill
       )
       .pipe(
         finalize(() => {
@@ -122,6 +135,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         this.users = result.result.items;
         this.showPaging(result.result, pageNumber);
         this.isLoading = false
+        if(check==true){
+          request.filterItems.push( { propertyName: 'skill', comparision:0, value: this.skill ,filterType: 4, dropdownData:this.skillsParam})
+          this.skill =''
+        }
+        
       },
         () => {
           this.isLoading = false
@@ -142,6 +160,10 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       }
     );
   }
+  ngOnInit() {
+    this.refresh()
+    this.getAllSkills()
+  }
 
   private showResetPasswordUserDialog(id?: number): void {
     this._modalService.show(ResetPasswordDialogComponent, {
@@ -150,6 +172,20 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         id: id,
       },
     });
+  }
+  getAllSkills() {
+    this.skillService.getAll().subscribe((data) => {
+      this.listSkills = data.result;
+      this.skillsParam = data.result.map(item => {
+        return {
+          displayName: item.name,
+          value: item.id
+        }
+      })
+      this.FILTER_CONFIG.push({ propertyName: 'skill', comparisions: [0], displayName: "Skill", filterType: 4, dropdownData: this.skillsParam },
+      )
+    })
+
   }
 
   private showCreateOrEditUserDialog(id?: number): void {

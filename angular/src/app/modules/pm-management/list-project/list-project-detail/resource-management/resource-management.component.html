@@ -222,10 +222,11 @@
                                 <tr style="border: none;">
                                     <th class="stt">#</th>
                                     <th>Request name</th>
-                                    <th>Thời gian cần</th>
-                                    <th>Description</th>
-                                    <th style="width: 100px">Status</th>
-                                    <th>Action</th>
+                                    <th style="width: 120px;">Thời gian cần</th>
+                                    <th>PM Note</th>
+                                    <th>HR/DM Note</th>
+                                    <th style="width: 120px">Status</th>
+                                    <th style="width: 180px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -249,7 +250,7 @@
 
                                     <td>
                                         <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
-                                        <div *ngIf="request.createMode" class="form-group row required">
+                                        <div style="margin-top: 10px;" *ngIf="request.createMode" class="form-group row required">
                                             <mat-form-field style="width: 150px;" appearance="outline" class="w-100">
                                                 <input matInput [matDatepicker]="picker" placeholder="chose a date"
                                                     [(ngModel)]="request.timeNeed" name="requestTimeNeed" required>
@@ -260,15 +261,21 @@
                                         </div>
                                     </td>
                                     <td style="white-space: normal; max-width: 300px; " class="text-left">
-                                        <p *ngIf="!request.createMode">{{request.note}}</p>
+                                        <pre *ngIf="!request.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                        font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                          {{request.pmNote}}</pre>
                                         <div *ngIf="request.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                                    placeholder="leave a comment" [(ngModel)]="request.note"
+                                                    placeholder="leave a comment" [(ngModel)]="request.pmNote"
                                                     matInput></textarea>
                                             </mat-form-field>
                                         </div>
                                     </td>
+                                    <td style="white-space: normal; max-width: 210px;">
+                                        <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                        font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                          {{request.dmNote}}</pre>
                                     <td class="text-center">
                                         <p style="font-size: 12px;"
                                             [ngClass]="APP_CONST.statusStyle[request.statusName]"
@@ -280,13 +287,11 @@
                                     </td>
                                     <td>
                                         <div *ngIf="!request.createMode">
-                                            <button
-                                                *ngIf="permission.isGranted(PmManager_ResourceRequest_Update)"
+                                            <button *ngIf="permission.isGranted(PmManager_ResourceRequest_Update)"
                                                 [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editProjectRerequest(request)"> <i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button
-                                                *ngIf="permission.isGranted(PmManager_ResourceRequest_Delete)"
+                                            <button *ngIf="permission.isGranted(PmManager_ResourceRequest_Delete)"
                                                 [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeProjectRerequest(request)"> <i
                                                     class="fas fa-trash"></i>delete</button>
@@ -461,8 +466,7 @@
                                         <div *ngIf="bill.createMode">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
                                                 style="min-width: 150px;" class="form-control mt-1" #billRole="ngModel"
-                                                placeholder="Note" name="billNote"
-                                                [(ngModel)]="bill.note"></textarea>
+                                                placeholder="Note" name="billNote" [(ngModel)]="bill.note"></textarea>
                                         </div>
                                     </td>
                                     <td style="white-space: normal; min-width: 150px;text-align: left;">
@@ -471,8 +475,8 @@
                                         </span>
                                         <div *ngIf="bill.createMode">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                                style="min-width: 150px;" class="form-control mt-1" #shadowNote="ngModel"
-                                                placeholder="Shadow note" name="shadowNote"
+                                                style="min-width: 150px;" class="form-control mt-1"
+                                                #shadowNote="ngModel" placeholder="Shadow note" name="shadowNote"
                                                 [(ngModel)]="bill.shadowNote"></textarea>
                                         </div>
                                     </td>

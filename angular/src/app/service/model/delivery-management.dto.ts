@@ -6,10 +6,10 @@ export class RequestResourceDto{
   status : number;
   statusName? :  string ;
   timeDone :  string;
-  note?: string ;
+  pmNote?: string ;
+  dmNote?: string ;
   plannedNumberOfPersonnel? : number;
   id?: number;
-  
 }
 export class ResourceRequestDetailDto{
   
@@ -51,7 +51,8 @@ export class availableResourceDto{
   projects: [
 
   ];
-  used:number
+  used:number;
+  listSkills:any[];
 }
 export class planUserDto{
   projectId: number;
