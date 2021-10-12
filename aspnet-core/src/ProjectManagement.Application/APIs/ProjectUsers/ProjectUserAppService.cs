@@ -1,16 +1,23 @@
 ﻿using Abp.Authorization;
 using Abp.Collections.Extensions;
+using Abp.Configuration;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using NccCore.Uitls;
+using Newtonsoft.Json;
 using ProjectManagement.APIs.PMReportProjects.Dto;
+using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Configuration;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Komu;
+using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
@@ -24,6 +31,14 @@ namespace ProjectManagement.APIs.ProjectUsers
     [AbpAuthorize]
     public class ProjectUserAppService : ProjectManagementAppServiceBase
     {
+        private ISettingManager _settingManager;
+        private KomuService _komuService;
+        public ProjectUserAppService(
+            KomuService komuService, ISettingManager settingManager)
+        {
+            _komuService = komuService;
+            _settingManager = settingManager;
+        }
         [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject, PermissionNames.DeliveryManagement_ProjectUser_ViewAllByProject)]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
@@ -127,7 +142,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             input.Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
 
-            if(input.Status == ProjectUserStatus.Present)
+            if (input.Status == ProjectUserStatus.Present)
             {
                 var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
                 foreach (var item in projectUsers)
@@ -135,8 +150,90 @@ namespace ProjectManagement.APIs.ProjectUsers
                     item.Status = ProjectUserStatus.Past;
                     await WorkScope.UpdateAsync(item);
                 }
-            }
 
+            }
+            //Komu bot nhắn tin đến nhóm
+            
+            var login = new LoginDto
+            {
+                password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+                user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+            };
+            var response = await _komuService.Login(login);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+                var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+                //get name project
+                var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
+                                    .Select(x => new GetProjectDto
+                                    {
+                                        Name = x.Name,
+                                    });
+                var result = await query.FirstOrDefaultAsync();
+                var nameProject = result.Name;
+                //
+                var res = from a in WorkScope.GetAll<ProjectUser>()
+                          join b in(from prUser in WorkScope.GetAll<ProjectUser>()
+                          where prUser.UserId==input.UserId &&prUser.IsDeleted==false&&(prUser.StartTime< input.StartTime||prUser.StartTime==input.StartTime)&&prUser.ProjectId!= input.ProjectId
+                          group prUser by prUser.ProjectId into x
+                          select new 
+                          {
+                              prId= x.Key,
+                              time = x.Max(t3 => t3.StartTime)
+
+                          }) on new { h=a.ProjectId,k= a.StartTime } equals new {h=b.prId,k=b.time}
+                          select new {
+                             alp= a.AllocatePercentage
+                          };
+                int sum = 0;
+                foreach(var item in res.ToList())
+                {
+                    sum += item.alp;
+                    
+                }
+                //sum += input.AllocatePercentage;
+                var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+                var now = DateTimeUtils.GetNow();
+                var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+                var user = await WorkScope.GetAsync<User>(input.UserId);
+                var message=string.Empty;
+                var startTime = $"{input.StartTime.Day}/{input.StartTime.Month}/{input.StartTime.Year}";
+                if (input.AllocatePercentage==0)
+                {
+                    message= $"Từ ngày {startTime}, PM {admin.UserName} release {user.UserName} ra khỏi dự án {nameProject}.";
+                    if(sum>0)
+                    {
+                        message += $"\n Tổng % còn lại: {sum}%";
+                    }    
+                }
+                else
+                {
+                    message = $"Từ ngày {startTime}, PM {admin.UserName} request {user.UserName} làm việc ở dự án {nameProject}.";
+                    if ((input.AllocatePercentage+sum)>100)
+                    {
+                        message += $"\n Tổng % hiện tại: {sum+ input.AllocatePercentage}%";
+                    }    
+                }  
+                var alias = "Nhắc việc NCC";
+                var ListAttach = new List<attachment>();
+                ListAttach.Add(new attachment
+                {
+                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+                    titlelink = $"{projectUri.Replace("-api", String.Empty)}/app/list-project-detail/resourcemanagement?id={input.ProjectId}"
+                });
+                var postMessage = new PostMessage
+                {
+                    channel = room,
+                    text = message.ToString(),
+                    alias = alias,
+                    attachments = ListAttach
+                };
+                await _komuService.PostMessage(postMessage, DecryptContent.data);
+
+                await _komuService.Logout(DecryptContent.data);
+            }
             return input;
         }
 
@@ -152,7 +249,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             if (input.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people to the past !");
 
-            if(input.ResourceRequestId != null && input.StartTime.Date < DateTime.Now.Date)
+            if (input.ResourceRequestId != null && input.StartTime.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("Can't add user at past time !");
             }

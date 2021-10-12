@@ -20,5 +20,6 @@
         public const string ProjectUri = "ProjectUri";
         public const string KomuUserNames = "KomuUsernames";
         public const string HRMUri = "HRMUri";
+        public const string KomuRoom = "KomuRoom";
     }
 }
