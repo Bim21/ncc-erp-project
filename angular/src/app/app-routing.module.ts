@@ -182,7 +182,7 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
             canActivate: [AppRouteGuard],
           },
           {
-            path: "request-resource",
+            path: "resource-request",
             component: RequestResourceTabComponent,
             canActivate: [AppRouteGuard],
           },
