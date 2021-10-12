@@ -94,7 +94,12 @@
                                    
                                 </td>
                                 <td class="text-center">{{item.clientName}}</td>
-                                <td style="white-space: normal; min-width: 180px;">{{item.note}}</td>
+                                <td style="white-space: normal; min-width: 180px; max-width: 350px;">
+                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                       {{item.note}}
+                                  </pre>
+                                   </td>
                                 <td class="text-left">
                                     <div [innerHtml]="item.projectBillInfomation"></div>
                                 </td>
