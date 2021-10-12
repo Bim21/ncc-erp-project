@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-6">
-                <h3>Request Resource</h3>
+                <h3>Resource request</h3>
             </div>
             <div class="col-6 text-right">
                 <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Create)"
@@ -57,8 +57,8 @@
                     </form>
                 </div>
             </div>
-            <div class="card-body table-responsive pb-1">
-                <div class="fixTableHead">
+            <div class="card-body table-responsive pb-4">
+                <!-- <div class="fixTableHead"> -->
                     <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                         <thead class="bg-light">
                             <tr style="border: none;">
@@ -124,7 +124,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                <!-- </div> -->
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">

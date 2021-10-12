@@ -177,38 +177,30 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
             ],
           },
           {
-            path: "delivery",
-            component: DeliveryComponent,
+            path: "weekly-report",
+            component: WeeklyReportTabComponent,
             canActivate: [AppRouteGuard],
-            children: [
+          },
+          {
+            path: "resource-request",
+            component: RequestResourceTabComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "available-resource",
+            component: AvailableResourceTabComponent,
+            canActivate: [AppRouteGuard],
+            children:[
               {
-                path: "weekly-report-tab",
-                component: WeeklyReportTabComponent,
-                canActivate: [AppRouteGuard],
+                path:"pool",
+                component:PlanResourceComponent,
+                canActivate:[AppRouteGuard],
               },
               {
-                path: "request-resource-tab",
-                component: RequestResourceTabComponent,
-                canActivate: [AppRouteGuard],
-              },
-              {
-                path: "available-resource-tab",
-                component: AvailableResourceTabComponent,
-                canActivate: [AppRouteGuard],
-                children:[
-                  {
-                    path:"plan-resource",
-                    component:PlanResourceComponent,
-                    canActivate:[AppRouteGuard],
-                  },
-                  {
-                    path:"future-resource",
-                    component:FutureResourceComponent,
-                    canActivate:[AppRouteGuard],
-                  }
-                ]
-              },
-
+                path:"future-resource",
+                component:FutureResourceComponent,
+                canActivate:[AppRouteGuard],
+              }
             ]
           },
           {

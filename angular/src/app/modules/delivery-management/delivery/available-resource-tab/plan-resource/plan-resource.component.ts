@@ -27,15 +27,25 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   // count=0
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
-    let check =false
-    request.filterItems.forEach(item=>{
-      if(item.filterType==4){
-        request.filterItems = this.clearFilter(request,"skill",0)
-        check =true
+    let check = false
+    request.filterItems.forEach(item => {
+      if (item.filterType == 4) {
+        request.filterItems = this.clearFilter(request, "skill", 0)
+        check = true
         this.skill = item.value
       }
-      
+
     })
+    let check2 = false
+    request.filterItems.forEach(item => {
+      if (item.propertyName == "used") {
+        check2 = true
+      }
+    })
+    if (check2 == false) {
+      request.filterItems = this.AddFilterItem(request, "used", 0)
+    }
+
     this.availableRerourceService.getAvailableResource(request, this.skill).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.availableRerourceService.handleError)).subscribe(data => {
@@ -44,14 +54,18 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
           return item;
         }
       }));
-      if(check==true){
-        request.filterItems.push( { propertyName: 'skill', comparision:0, value: this.skill ,filterType: 4, dropdownData:this.skillsParam})
-        this.skill=''
+      if (check == true) {
+        request.filterItems.push({ propertyName: 'skill', comparision: 0, value: this.skill, filterType: 4, dropdownData: this.skillsParam })
+        this.skill = ''
       }
-      
+      if (check2 == false) {
+        request.filterItems = this.clearFilter(request, "used", "")
+      }
+
+
       this.showPaging(data.result, pageNumber);
       this.isLoading = false;
-      
+
       // if(this.count>0){
 
       // }
@@ -69,14 +83,14 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   protected delete(entity: PlanResourceComponent): void {
 
   }
-  userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item)=>{
-    return{
+  userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
+    return {
       displayName: item[0],
       value: item[1]
     }
-    
+
   })
-  branchParam = Object.entries(this.APP_ENUM.UserBranch).map((item)=>{
+  branchParam = Object.entries(this.APP_ENUM.UserBranch).map((item) => {
     return {
       displayName: item[0],
       value: item[1]
@@ -86,8 +100,8 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
-    { propertyName: 'userType' , comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam},
-    { propertyName: 'branch' , comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam}
+    { propertyName: 'userType', comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam },
+    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam }
   ];
 
   public availableResourceList: availableResourceDto[] = [];

@@ -101,10 +101,22 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       ]
       ),
       new MenuItem(
-        this.l("Delivery Management"),
-        "/app/delivery/weekly-report-tab",
+        this.l("Weekly report"),
+        "/app/weekly-report",
         "fas fa-chalkboard-teacher",
-        "DeliveryManagement.CanViewMenu",
+        "Deliverymanagement.CanViewMenu.WeeklyReport",
+      ),
+      new MenuItem(
+        this.l("Resource request"),
+        "/app/resource-request",
+        "fab fa-chromecast",
+        "Deliverymanagement.CanViewMenu.ResourceManagement",
+      ),
+      new MenuItem(
+        this.l("Available resource"),
+        "/app/available-resource/pool",
+        "fas fa-hockey-puck",
+        "DeliveryManagement.ResourceRequest.AvailableResource",
       ),
       new MenuItem(
         this.l("Timesheet"),
@@ -119,78 +131,78 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         ),
       ]
       ),
-      new MenuItem(
-        this.l("CheckPoint"),
-        "",
-        "fas fa-tasks",
-        "", [
-        new MenuItem(
-          this.l("Phase"),
-          "/app/phase",
-          "fas fa-clipboard-list",
-          "",
-        ),
-        new MenuItem(
-          this.l("Category"),
-          "",
-          "fas fa-clipboard-list",
-          "", [
-          new MenuItem(
-            this.l("Category Criteria"),
-            "/app/category-criteria",
-            "fas fa-clipboard-list",
-            ""
-          ),
+      // new MenuItem(
+      //   this.l("CheckPoint"),
+      //   "",
+      //   "fas fa-tasks",
+      //   "", [
+      //   new MenuItem(
+      //     this.l("Phase"),
+      //     "/app/phase",
+      //     "fas fa-clipboard-list",
+      //     "",
+      //   ),
+      //   new MenuItem(
+      //     this.l("Category"),
+      //     "",
+      //     "fas fa-clipboard-list",
+      //     "", [
+      //     new MenuItem(
+      //       this.l("Category Criteria"),
+      //       "/app/category-criteria",
+      //       "fas fa-clipboard-list",
+      //       ""
+      //     ),
 
-        ]
-        ),
+      //   ]
+      //   ),
         
 
-        new MenuItem(
-          this.l("Đánh giá thành viên"),
-          "/app/review-user",
-          "fas fa-clipboard-list",
-          ""
+      //   new MenuItem(
+      //     this.l("Đánh giá thành viên"),
+      //     "/app/review-user",
+      //     "fas fa-clipboard-list",
+      //     ""
 
-        ),
-        new MenuItem(
-          this.l("Đánh giá bản thân"),
-          "/app/review-yourself",
-          "fas fa-clipboard-list",
-          "",
-        )
+      //   ),
+      //   new MenuItem(
+      //     this.l("Đánh giá bản thân"),
+      //     "/app/review-yourself",
+      //     "fas fa-clipboard-list",
+      //     "",
+      //   )
 
-        ,
-        new MenuItem(
-          this.l("Tags"),
-          "/app/tags",
-          "fas fa-clipboard-list",
-          "",
-        ),
+      //   ,
+      //   new MenuItem(
+      //     this.l("Tags"),
+      //     "/app/tags",
+      //     "fas fa-clipboard-list",
+      //     "",
+      //   ),
         
-        // new MenuItem(
-        //   this.l("Setup đánh giá"),
-        //   "/app/setup-reviewer",
-        //   "fas fa-clipboard-list",
-        //   ""
+      //   // new MenuItem(
+      //   //   this.l("Setup đánh giá"),
+      //   //   "/app/setup-reviewer",
+      //   //   "fas fa-clipboard-list",
+      //   //   ""
 
-        // )
+      //   // )
 
-        // ,
-        // new MenuItem(
-        //   this.l("Kết quả đánh giá"),
-        //   "/app/result-reviewer",
-        //   "fas fa-clipboard-list",
-        //   ""
+      //   // ,
+      //   // new MenuItem(
+      //   //   this.l("Kết quả đánh giá"),
+      //   //   "/app/result-reviewer",
+      //   //   "fas fa-clipboard-list",
+      //   //   ""
 
-        // )
+      //   // )
 
         
       
 
 
-      ]
-      ),
+      // ]
+      // ),
 
     ];
   }

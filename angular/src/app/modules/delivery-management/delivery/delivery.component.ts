@@ -19,29 +19,29 @@ export class DeliveryComponent extends AppComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentUrl =this.router.url
-    this.router.events.subscribe(res => this.currentUrl = this.router.url)
-    this.router.navigate(['weekly-report-tab'], {
-      relativeTo: this.route ,
-      replaceUrl: true
-    })
+    // this.currentUrl =this.router.url
+    // this.router.events.subscribe(res => this.currentUrl = this.router.url)
+    // this.router.navigate(['weekly-report-tab'], {
+    //   relativeTo: this.route ,
+    //   replaceUrl: true
+    // })
   }
 
   
-  routingWeeklyReportTab(){
-    this.router.navigate(['weekly-report-tab'],{
-      relativeTo:this.route
-    })
+  // routingWeeklyReportTab(){
+  //   this.router.navigate(['weekly-report-tab'],{
+  //     relativeTo:this.route
+  //   })
     
-  }
-  routingRequestResourceTab(){
-    this.router.navigate(['request-resource-tab'],{
-      relativeTo:this.route
-    })
-  }
-  routingAvailableResourceTab(){
-    this.router.navigate(['available-resource-tab/plan-resource'],{
-      relativeTo:this.route
-    })
-  }
+  // }
+  // routingRequestResourceTab(){
+  //   this.router.navigate(['request-resource-tab'],{
+  //     relativeTo:this.route
+  //   })
+  // }
+  // routingAvailableResourceTab(){
+  //   this.router.navigate(['available-resource-tab/plan-resource'],{
+  //     relativeTo:this.route
+  //   })
+  // }
 }

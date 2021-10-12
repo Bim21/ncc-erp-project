@@ -41,6 +41,7 @@ namespace ProjectManagement.Configuration
                 PasswordBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
                 ProjectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri),
                 HRMUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri),
+                KomuRoom=await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
             };
         }
 
@@ -62,7 +63,9 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.UserBot) ||
                 string.IsNullOrEmpty(input.PasswordBot) ||
                 string.IsNullOrEmpty(input.ProjectUri) ||
-                string.IsNullOrEmpty(input.HRMUri))
+                string.IsNullOrEmpty(input.HRMUri)||
+                string.IsNullOrEmpty(input.KomuRoom)
+                )
             {
                 throw new UserFriendlyException("All setting values need to be completed");
 
@@ -83,6 +86,7 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.PasswordBot, input.PasswordBot);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ProjectUri, input.ProjectUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMUri, input.HRMUri);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuRoom, input.KomuRoom);
             return input;
         }
 

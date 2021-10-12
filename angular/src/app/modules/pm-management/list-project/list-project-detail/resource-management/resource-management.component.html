@@ -230,7 +230,7 @@
                                     <th style="width: 120px;">Thời gian cần</th>
                                     <th>PM Note</th>
                                     <th>HPM note</th>
-                                    <th style="width: 120px">Status</th>
+                                    <th style="width: 220px;">Status</th>
                                     <th style="width: 180px;">Action</th>
                                 </tr>
                             </thead>
@@ -267,7 +267,7 @@
                                     </td>
                                     <td style="white-space: normal; max-width: 300px; " class="text-left">
                                         <pre *ngIf="!request.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                        font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                        font-family: sans-serif; align-self:flex-start; line-height: initial; font-size: 14px;">
                                           {{request.pmNote}}</pre>
                                         <div *ngIf="request.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
@@ -279,21 +279,23 @@
                                     </td>
                                     <td style="white-space: normal; max-width: 210px;">
                                         <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                        font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                        font-family: sans-serif; align-self:flex-start; line-height: initial; font-size: 14px;">
                                           {{request.dmNote}}</pre>
+                                          </td>
                                     <td class="text-center">
-                                        <p style="font-size: 12px;"
+                                        <p 
                                             [ngClass]="APP_CONST.statusStyle[request.statusName]"
-                                            *ngIf="!request.craeteMode">
+                                            *ngIf="!request.createMode">
                                             {{request.statusName}}</p>
-                                        <div *ngIf="request.createMode && !isEditRequest" class="form-group ">
-                                            <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1">PENDING</p>
-<!-- 
-                                            <mat-form-field>
-                                                <mat-select [(ngModel)]="request.st">
-                                                    <mat-option></mat-option>
+                                             <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1" *ngIf="request.createMode && !isEditRequest">PENDING</p>
+                                        <div *ngIf="request.createMode && isEditRequest" class="form-group ">
+                                            <mat-form-field appearance="outline" style="width: 180px;">
+                                                <mat-select [(ngModel)]="request.status">
+                                                    <mat-option *ngFor="let item of requestStatusList" [value]="APP_ENUM.ResourceRequestStatus[item]">
+                                                        {{item}}
+                                                    </mat-option>
                                                 </mat-select>
-                                            </mat-form-field> -->
+                                            </mat-form-field>
                                         </div>
 
 
