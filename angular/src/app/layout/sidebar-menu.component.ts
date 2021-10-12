@@ -101,10 +101,22 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       ]
       ),
       new MenuItem(
-        this.l("Delivery Management"),
-        "/app/delivery/weekly-report-tab",
+        this.l("Weeky report"),
+        "/app/weekly-report",
         "fas fa-chalkboard-teacher",
-        "DeliveryManagement.CanViewMenu",
+        "Deliverymanagement.CanViewMenu.WeeklyReport",
+      ),
+      new MenuItem(
+        this.l("Request resource"),
+        "/app/request-resource",
+        "fab fa-chromecast",
+        "Deliverymanagement.CanViewMenu.ResourceManagement",
+      ),
+      new MenuItem(
+        this.l("Available resource"),
+        "/app/available-resource",
+        "fas fa-hockey-puck",
+        "DeliveryManagement.ResourceRequest.AvailableResource",
       ),
       new MenuItem(
         this.l("Timesheet"),

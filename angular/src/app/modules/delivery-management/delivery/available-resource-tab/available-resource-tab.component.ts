@@ -15,15 +15,16 @@ export class AvailableResourceTabComponent extends AppComponentBase implements O
   }
 
   ngOnInit(): void {
+    this.currentUrl =this.router.url
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
-    this.router.navigate(['plan-resource'],{
+    this.router.navigate(['pool'],{
       relativeTo:this.route,
       replaceUrl:true
     })
   }
 
   routingPlanResourceTab(){
-    this.router.navigate(['plan-resource'],{
+    this.router.navigate(['pool'],{
       relativeTo:this.route,
     })
 
