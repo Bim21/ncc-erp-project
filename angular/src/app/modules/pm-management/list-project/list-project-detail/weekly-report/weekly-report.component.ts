@@ -417,12 +417,12 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
 
   }
 
-  getWeekPercentage(report, data) {
-    report.allocatePercentage = data
-  }
-  getFuturePercentage(report, data) {
-    report.allocatePercentage = data
-  }
+  // getWeekPercentage(report, data) {
+  //   report.allocatePercentage = data
+  // }
+  // getFuturePercentage(report, data) {
+  //   report.allocatePercentage = data
+  // }
   // updateHealth(projectHealth) {
   //   this.reportService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).pipe(catchError(this.reportService.handleError))
   //     .subscribe((data) => {
