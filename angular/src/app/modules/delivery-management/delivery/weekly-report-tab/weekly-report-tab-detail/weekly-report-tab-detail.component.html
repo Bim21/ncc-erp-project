@@ -380,7 +380,7 @@
                                                     <div *ngIf="report.createMode">
                                                         <!-- <radio-dropdown (outputData)="getPercentage(report,$event)"
                                                             [data]="report.allocatePercentage"></radio-dropdown> -->
-                                                            <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option">
+                                                            <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
                                                                 <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
                                                                 <br/>
                                                                 <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
@@ -534,7 +534,7 @@
                                                     <div *ngIf="report.createMode">
                                                         <!-- <radio-dropdown (outputData)="getPercentage(report,$event)"
                                                             [data]="report.allocatePercentage"></radio-dropdown> -->
-                                                            <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option">
+                                                            <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option" name="allocatePercentage2">
                                                                 <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
                                                                 <br/>
                                                                 <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>

@@ -50,9 +50,9 @@ export class EditFutureResourceComponent extends AppComponentBase implements OnI
       
     })
   }
-  getPercentage(user, data) {
-    user.allocatePercentage = data
-  }
+  // getPercentage(user, data) {
+  //   user.allocatePercentage = data
+  // }
 
 
 }
