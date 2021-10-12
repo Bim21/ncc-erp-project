@@ -30,7 +30,7 @@
                 <div style="max-width: 304px;">
                     <!-- <radio-dropdown (outputData)="getPercentage(userToRequest,$event)"
                     [data]="userToRequest.allocatePercentage"></radio-dropdown> -->
-                    <mat-radio-group [(ngModel)]="userToRequest.allocatePercentage" aria-label="Select an option">
+                    <mat-radio-group [(ngModel)]="userToRequest.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
                         <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
                         <br/>
                         <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
