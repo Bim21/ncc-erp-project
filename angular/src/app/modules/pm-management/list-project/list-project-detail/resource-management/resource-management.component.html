@@ -113,11 +113,16 @@
                                     </td>
 
                                     <td>
-                                        <span *ngIf="!user.createMode">
-                                            <strong>{{user.allocatePercentage}}%</strong></span>
+                                        <p class="text-center" *ngIf="!user.createMode">
+                                            <strong>{{user.allocatePercentage}}%</strong></p>
                                         <div *ngIf="user.createMode">
-                                            <radio-dropdown (outputData)="getPercentage(user,$event)"
-                                                [data]="user.allocatePercentage"></radio-dropdown>
+                                            <!-- <radio-dropdown (outputData)="getPercentage(user,$event)"
+                                                [data]="user.allocatePercentage"></radio-dropdown> -->
+                                                <mat-radio-group [(ngModel)]="user.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
+                                                    <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
+                                                    <br/>
+                                                    <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
+                                                  </mat-radio-group>
                                         </div>
 
                                     </td>
@@ -224,7 +229,7 @@
                                     <th>Request name</th>
                                     <th style="width: 120px;">Thời gian cần</th>
                                     <th>PM Note</th>
-                                    <th>HR/DM Note</th>
+                                    <th>HPM note</th>
                                     <th style="width: 120px">Status</th>
                                     <th style="width: 180px;">Action</th>
                                 </tr>
@@ -283,7 +288,15 @@
                                             {{request.statusName}}</p>
                                         <div *ngIf="request.createMode && !isEditRequest" class="form-group ">
                                             <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1">PENDING</p>
+<!-- 
+                                            <mat-form-field>
+                                                <mat-select [(ngModel)]="request.st">
+                                                    <mat-option></mat-option>
+                                                </mat-select>
+                                            </mat-form-field> -->
                                         </div>
+
+
                                     </td>
                                     <td>
                                         <div *ngIf="!request.createMode">

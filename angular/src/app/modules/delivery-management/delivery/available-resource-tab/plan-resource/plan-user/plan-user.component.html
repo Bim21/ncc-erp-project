@@ -8,8 +8,13 @@
             </label>
             <div class="col-md-9">
                 <div style="max-width: 260px;">
-                    <radio-dropdown (outputData)="getPercentage(planUser,$event)" [data]="planUser.percentUsage">
-                    </radio-dropdown>
+                    <!-- <radio-dropdown (outputData)="getPercentage(planUser,$event)" [data]="planUser.percentUsage">
+                    </radio-dropdown> -->
+                    <mat-radio-group [(ngModel)]="planUser.percentUsage" aria-label="Select an option" name="allocatePercentageDropdown">
+                        <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
+                        <br/>
+                        <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
+                      </mat-radio-group>
                 </div>
             </div>
         </div>

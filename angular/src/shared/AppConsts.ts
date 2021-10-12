@@ -20,6 +20,7 @@ export class AppConsts {
 
     static readonly statusStyle = {
         PENDING: "badge badge-pill badge-primary",
+        APPROVE:"badge badge-pill badge-warning",
         DONE: "badge badge-pill badge-success",
         Future: "badge badge-pill badge-danger",
         CANCELLED: "badge badge-pill badge-danger",
@@ -29,7 +30,9 @@ export class AppConsts {
         Potential: "badge badge-pill badge-primary",
         InProgress: "badge badge-pill badge-success",
         Closed: "badge badge-pill badge-secondary",
-        APPROVED:"badge badge-pill badge-danger"
+        APPROVED:"badge badge-pill badge-danger",
+        
+
         // Future:"badge badge-pill badge-light"
     }
     static readonly isSentStyle = {

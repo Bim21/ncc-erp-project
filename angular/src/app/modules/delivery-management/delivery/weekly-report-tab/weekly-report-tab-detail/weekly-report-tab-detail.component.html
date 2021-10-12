@@ -374,12 +374,17 @@
                                                         <mat-datepicker #picker></mat-datepicker>
                                                     </mat-form-field>
                                                 </td>
-                                                <td class="text-center">
+                                                <td >
                                                     <p *ngIf="!report.createMode" class="text-center"> <strong>
                                                             {{report.allocatePercentage}}%</strong></p>
                                                     <div *ngIf="report.createMode">
-                                                        <radio-dropdown (outputData)="getPercentage(report,$event)"
-                                                            [data]="report.allocatePercentage"></radio-dropdown>
+                                                        <!-- <radio-dropdown (outputData)="getPercentage(report,$event)"
+                                                            [data]="report.allocatePercentage"></radio-dropdown> -->
+                                                            <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
+                                                                <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
+                                                                <br/>
+                                                                <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
+                                                              </mat-radio-group>
                                                     </div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">
@@ -523,12 +528,17 @@
                                                         <mat-datepicker #picker></mat-datepicker>
                                                     </mat-form-field>
                                                 </td>
-                                                <td class="text-center">
+                                                <td >
                                                     <p class="text-center" *ngIf="!report.createMode"><strong>
                                                             {{report.allocatePercentage}}%</strong></p>
                                                     <div *ngIf="report.createMode">
-                                                        <radio-dropdown (outputData)="getPercentage(report,$event)"
-                                                            [data]="report.allocatePercentage"></radio-dropdown>
+                                                        <!-- <radio-dropdown (outputData)="getPercentage(report,$event)"
+                                                            [data]="report.allocatePercentage"></radio-dropdown> -->
+                                                            <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option" name="allocatePercentage2">
+                                                                <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
+                                                                <br/>
+                                                                <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
+                                                              </mat-radio-group>
                                                     </div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">

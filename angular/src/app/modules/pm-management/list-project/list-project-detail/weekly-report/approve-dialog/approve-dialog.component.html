@@ -66,8 +66,13 @@
                     <abp-validation-summary [control]="allocatePercentage" [controlEl]="allocatePercentageEl">
                     </abp-validation-summary> -->
                     <div style="width: 250px;">
-                        <radio-dropdown (outputData)="getFuturePercentage(resourcerequest,$event)"
-                        [data]="resourcerequest.allocatePercentage"></radio-dropdown>
+                        <!-- <radio-dropdown (outputData)="getFuturePercentage(resourcerequest,$event)"
+                        [data]="resourcerequest.allocatePercentage"></radio-dropdown> -->
+                        <mat-radio-group [(ngModel)]="resourcerequest.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
+                            <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
+                            <br/>
+                            <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
+                          </mat-radio-group>
                     </div>
                     
             </div>
