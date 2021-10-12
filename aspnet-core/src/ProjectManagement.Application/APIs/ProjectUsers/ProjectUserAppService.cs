@@ -164,7 +164,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
                 //get name project
                 var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
                                     .Select(x => new GetProjectDto
@@ -193,7 +192,6 @@ namespace ProjectManagement.APIs.ProjectUsers
                     sum += item.alp;
                     
                 }
-                //sum += input.AllocatePercentage;
                 var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
                 var now = DateTimeUtils.GetNow();
                 var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
@@ -217,18 +215,11 @@ namespace ProjectManagement.APIs.ProjectUsers
                     }    
                 }  
                 var alias = "Nhắc việc NCC";
-                var ListAttach = new List<attachment>();
-                ListAttach.Add(new attachment
-                {
-                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                    titlelink = $"{projectUri.Replace("-api", String.Empty)}/app/list-project-detail/resourcemanagement?id={input.ProjectId}"
-                });
                 var postMessage = new PostMessage
                 {
                     channel = room,
                     text = message.ToString(),
-                    alias = alias,
-                    attachments = ListAttach
+                    alias = alias
                 };
                 await _komuService.PostMessage(postMessage, DecryptContent.data);
 

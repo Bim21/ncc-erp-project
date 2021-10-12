@@ -1,17 +1,23 @@
 ﻿using Abp.Authorization;
+using Abp.Configuration;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using Newtonsoft.Json;
 using ProjectManagement.APIs.PMReportProjectIssues;
+using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.APIs.ResourceRequests.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Configuration;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Komu;
+using ProjectManagement.Services.Komu.KomuDto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +32,15 @@ namespace ProjectManagement.APIs.ResourceRequests
     {
         private readonly ProjectUserAppService _projectUserAppService;
         private readonly PMReportProjectIssueAppService _pMReportProjectIssueAppService;
+        private ISettingManager _settingManager;
+        private KomuService _komuService;
 
-        public ResourceRequestAppService(ProjectUserAppService projectUserAppService, PMReportProjectIssueAppService pMReportProjectIssueAppService)
+        public ResourceRequestAppService(ProjectUserAppService projectUserAppService, PMReportProjectIssueAppService pMReportProjectIssueAppService, KomuService komuService, ISettingManager settingManager)
         {
             _projectUserAppService = projectUserAppService;
             _pMReportProjectIssueAppService = pMReportProjectIssueAppService;
+            _komuService = komuService;
+            _settingManager = settingManager;
         }
 
         [HttpGet]
@@ -376,6 +386,49 @@ namespace ProjectManagement.APIs.ResourceRequests
             var isExist = await WorkScope.GetAll<ResourceRequest>().AnyAsync(x => x.Name == input.Name && x.ProjectId == input.ProjectId && x.TimeNeed == input.TimeNeed);
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(input));
+            //Komu bot nhắn tin đến nhóm
+
+            var login = new LoginDto
+            {
+                password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+                user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+            };
+            var response = await _komuService.Login(login);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+                var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+                //get name project
+                var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
+                                    .Select(x => new GetProjectDto
+                                    {
+                                        Name = x.Name,
+                                    });
+                var result = await query.FirstOrDefaultAsync();
+                var nameProject = result.Name;
+                //
+                var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+                var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+                var message = $"PM {admin.UserName} đã tạo mới request {input.Name} cho dự án {nameProject}.";
+                var alias = "Nhắc việc NCC";
+                var ListAttach = new List<attachment>();
+                ListAttach.Add(new attachment
+                {
+                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+                    titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request"
+                });
+                var postMessage = new PostMessage
+                {
+                    channel = room,
+                    text = message.ToString(),
+                    alias = alias,
+                    attachments = ListAttach
+                };
+                await _komuService.PostMessage(postMessage, DecryptContent.data);
+
+                await _komuService.Logout(DecryptContent.data);
+            }
             return input;
         }
 
@@ -386,6 +439,65 @@ namespace ProjectManagement.APIs.ResourceRequests
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.Id);
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ResourceRequestDto, ResourceRequest>(input, resourceRequest));
+            //Komu bot nhắn tin đến nhóm
+            bool check = false;
+            if (input.Status.ToString() == "DONE"|| input.Status.ToString() == "CANCELLED")
+            {
+                check = true;
+            }
+            
+            if (check)
+            {
+                var login = new LoginDto
+                {
+                    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+                    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+                };
+                var response = await _komuService.Login(login);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+                    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+                    //get name project
+                    var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
+                                        .Select(x => new GetProjectDto
+                                        {
+                                            Name = x.Name,
+                                        });
+                    var result = await query.FirstOrDefaultAsync();
+                    var nameProject = result.Name;
+                    //
+                    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+                    var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+                    var message = string.Empty;
+                    if (input.Status.ToString() == "DONE")
+                    {
+                        message = $"Request {input.Name} cho dự án {nameProject} đã được {admin.UserName} chuyển sang trạng thái hoàn thành.";
+                    }
+                    else if (input.Status.ToString() == "CANCELLED")
+                    {
+                        message = $"Request {input.Name} cho dự án {nameProject} đã được huỷ bởi {admin.UserName}.";
+                    }
+                    var alias = "Nhắc việc NCC";
+                    var ListAttach = new List<attachment>();
+                    ListAttach.Add(new attachment
+                    {
+                        title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+                        titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request"
+                    });
+                    var postMessage = new PostMessage
+                    {
+                        channel = room,
+                        text = message.ToString(),
+                        alias = alias,
+                        attachments = ListAttach
+                    };
+                    await _komuService.PostMessage(postMessage, DecryptContent.data);
+
+                    await _komuService.Logout(DecryptContent.data);
+                }
+            }
             return input;
         }
 
