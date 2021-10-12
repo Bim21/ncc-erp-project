@@ -26,6 +26,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.KomuUrl,"https://komu.nccsoft.vn/api/v1/",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.ProjectUri,"http://project.dev.nccsoft.vn/",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuUserNames,"hang.buithidiem.ncc;trung.do.trong;lam.buihoang.ncc;",scopes:SettingScopes.Application |SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.KomuRoom,"erp-team-ncc",scopes:SettingScopes.Application |SettingScopes.Tenant),
             };
         }
     }
