@@ -178,8 +178,11 @@
 
                                 <td>
 
-                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                        {{problem.description}}</p>
+                                 
+                                        <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                      {{problem.description}}
+                                  </pre>
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
@@ -191,8 +194,11 @@
 
                                 </td>
                                 <td>
-                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                        {{problem.impact}}</p>
+                                    <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                      {{problem.impact}}
+                                  </pre>
+                                    
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
@@ -204,8 +210,11 @@
                                 </td>
 
                                 <td>
-                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                        {{problem.solution}}</p>
+                                    <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                      {{problem.solution}}
+                                  </pre>
+                                   
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
@@ -216,9 +225,11 @@
 
                                 </td>
                                 <td>
-
-                                    <p style="white-space: normal; width: 250px;" *ngIf="!problem.createMode">
-                                        {{problem.meetingSolution}}</p>
+                                    <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                      {{problem.meetingSolution}}
+                                  </pre>
+                                   
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
@@ -405,7 +416,11 @@
 
                                 </td>
                                 <td style="white-space: normal;max-width: 200px;">
-                                    <p *ngIf="!report.createMode">{{report.note}}</p>
+                                    <pre *ngIf="!report.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                      {{report.note}}
+                                  </pre>
+                                  
                                     <div *ngIf="report.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -561,7 +576,11 @@
                                         </div>
                                     </td>
                                     <td style="white-space: normal;max-width: 200px;">
-                                        <p *ngIf="!report.createMode">{{report.note}}</p>
+                                        <!-- <p *ngIf="!report.createMode">{{report.note}}</p> -->
+                                        <pre *ngIf="!report.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+                                    font-family: sans-serif; align-self:flex-start; ">
+                                      {{report.note}}
+                                  </pre>
                                         <div *ngIf="report.createMode">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
