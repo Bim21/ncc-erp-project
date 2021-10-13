@@ -77,6 +77,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getResourceRequestList();
     this.getUserBill();
     this.getAllUser();
+    this.getAllFakeUser()
   }
   // get data
   private getProjectUser() {
@@ -103,8 +104,14 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
 
   }
   private getAllUser() {
-    this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    this.userService.GetAllUserActive(false,false).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userForProjectUser = data.result;
+      // this.userForUserBill = data.result;
+    })
+  }
+  private getAllFakeUser() {
+    this.userService.GetAllUserActive(false,true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+      // this.userForProjectUser = data.result;
       this.userForUserBill = data.result;
     })
   }
