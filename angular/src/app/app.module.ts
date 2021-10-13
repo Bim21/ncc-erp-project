@@ -114,6 +114,8 @@ import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/re
 import { EditResultReviewerComponent } from './modules/checkpoint/set-up-reviewer/result-reviewer/edit-result-reviewer/edit-result-reviewer.component';
 import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
 import { ProjectDetailComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-detail/project-detail.component';
+import { CurrencyComponent } from './modules/admin/currency/currency.component';
+import { CreateEditCurrencyComponent } from './modules/admin/currency/create-edit-currency/create-edit-currency.component';
 
 
 
@@ -222,6 +224,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditResultReviewerComponent,
     ProjectDescriptionComponent,
     ProjectDetailComponent,
+    CurrencyComponent,
+    CreateEditCurrencyComponent,
 
     
   ],

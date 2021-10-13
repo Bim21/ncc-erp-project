@@ -210,6 +210,23 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     const show = this.dialog.open(CreateInvoiceComponent, {
       data: {
         timeSheetId: this.timesheetId,
+        title:"Create Invoice"
+      },
+      width: "700px",
+      disableClose: true,
+    });
+    show.afterClosed().subscribe(res => {
+      if (res) {
+        this.reloadComponent();
+        // this.refresh();
+      }
+    })
+  }
+  exportInvoice() {
+    const show = this.dialog.open(CreateInvoiceComponent, {
+      data: {
+        timeSheetId: this.timesheetId,
+        title:"Export Invoice"
       },
       width: "700px",
       disableClose: true,

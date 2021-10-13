@@ -23,7 +23,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   public timesheetList: TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'isActive', displayName: "Status", comparisions: [0], filterType: 2},
+    { propertyName: 'isActive', displayName: "IsActive", comparisions: [0], filterType: 2},
     { propertyName: 'month', displayName: "Month", comparisions: [0, 1, 2, 3, 4] },
     { propertyName: 'year', displayName: "Year", comparisions: [0, 1, 2, 3, 4]},
   ];

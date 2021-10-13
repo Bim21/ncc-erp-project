@@ -1,5 +1,5 @@
 <form class="form-horizontal" autocomplete="off" #invoiceForm="ngForm" novalidate>
-    <abp-modal-header title="Create Invoice" (onCloseClick)="dialogRef.close()">
+    <abp-modal-header title= {{data.title}} (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class=" table-responsive ">
@@ -28,7 +28,9 @@
     </div>
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button mat-raised-button color="primary" class="saving-btn" mat-button
+        <button *ngIf="data.title !=='Export Invoice'" mat-raised-button color="primary" class="saving-btn" mat-button
             [disabled]="!invoiceForm.form.valid ||isLoading" (click)="SaveAndClose()">Save</button>
+        <button *ngIf="data.title =='Export Invoice'" mat-raised-button color="primary" class="saving-btn" mat-button
+        [disabled]="!invoiceForm.form.valid ||isLoading" (click)="SaveAndClose()">Export</button>
     </div>
 </form>
