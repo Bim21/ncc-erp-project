@@ -1,3 +1,6 @@
+import { result } from 'lodash-es';
+import { CurrencyService } from './../../../../../service/api/currency.service';
+import { CurrencyDto } from './../../../../../service/model/currency.dto';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { ClientService } from './../../../../../service/api/client.service';
 import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
@@ -22,9 +25,11 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus)
   public clientList: ClientDto[] = [];
   public pmList: UserDto[] = [];
-  public project = {} as ProjectDto
+  public project = {} as ProjectDto;
+  public currencyList: CurrencyDto[]=[];
   PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
-  constructor(injector: Injector, private userService: UserService, private clientService: ClientService, private projectService: ListProjectService, private route: ActivatedRoute) {
+  constructor(injector: Injector, private userService: UserService, private clientService: ClientService,
+     private projectService: ListProjectService, private route: ActivatedRoute, private currencyService: CurrencyService) {
     super(injector);
   }
   ngOnInit(): void {
@@ -32,6 +37,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
     this.getProjectDetail();
     this.getClient();
     this.getPm();
+    this.getAllCurrency();
   }
   public getByEnum(enumValue: number, enumObject: any) {
     for (const key in enumObject) {
@@ -59,6 +65,12 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
       this.pmList = data.result;
     })
   }
+  public getAllCurrency(){
+    this.currencyService.getAll().pipe(catchError(this.currencyService.handleError)).subscribe(data => {
+      this.currencyList = data.result;
+    })
+    
+  }
 
   public saveAndClose(): void {
     this.isLoading=true;
@@ -75,5 +87,6 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
         this.getProjectDetail();
       }, () => this.isLoading = false);
   }
+  
 
 }
