@@ -172,26 +172,6 @@ namespace ProjectManagement.APIs.ProjectUsers
                                     });
                 var result = await query.FirstOrDefaultAsync();
                 var nameProject = result.Name;
-                //
-                var res = from a in WorkScope.GetAll<ProjectUser>()
-                          join b in(from prUser in WorkScope.GetAll<ProjectUser>()
-                          where prUser.UserId==input.UserId &&prUser.IsDeleted==false&&(prUser.StartTime< input.StartTime||prUser.StartTime==input.StartTime)&&prUser.ProjectId!= input.ProjectId
-                          group prUser by prUser.ProjectId into x
-                          select new 
-                          {
-                              prId= x.Key,
-                              time = x.Max(t3 => t3.StartTime)
-
-                          }) on new { h=a.ProjectId,k= a.StartTime } equals new {h=b.prId,k=b.time}
-                          select new {
-                             alp= a.AllocatePercentage
-                          };
-                int sum = 0;
-                foreach(var item in res.ToList())
-                {
-                    sum += item.alp;
-                    
-                }
                 var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
                 var now = DateTimeUtils.GetNow();
                 var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
@@ -200,19 +180,11 @@ namespace ProjectManagement.APIs.ProjectUsers
                 var startTime = $"{input.StartTime.Day}/{input.StartTime.Month}/{input.StartTime.Year}";
                 if (input.AllocatePercentage==0)
                 {
-                    message= $"Từ ngày {startTime}, PM {admin.UserName} release {user.UserName} ra khỏi dự án {nameProject}.";
-                    if(sum>0)
-                    {
-                        message += $"\n Tổng % còn lại: {sum}%";
-                    }    
+                    message= $"Từ ngày {startTime}, PM {admin.UserName} release {user.UserName} ra khỏi dự án {nameProject}."; 
                 }
                 else
                 {
                     message = $"Từ ngày {startTime}, PM {admin.UserName} request {user.UserName} làm việc ở dự án {nameProject}.";
-                    if ((input.AllocatePercentage+sum)>100)
-                    {
-                        message += $"\n Tổng % hiện tại: {sum+ input.AllocatePercentage}%";
-                    }    
                 }  
                 var alias = "Nhắc việc NCC";
                 var postMessage = new PostMessage
