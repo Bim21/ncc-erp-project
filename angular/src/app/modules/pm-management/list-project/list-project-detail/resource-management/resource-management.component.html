@@ -115,7 +115,7 @@
                                     <td>
                                         <p class="text-center" *ngIf="!user.createMode">
                                             <strong>{{user.allocatePercentage}}%</strong></p>
-                                        <div *ngIf="user.createMode">
+                                        <div *ngIf="user.createMode" class="text-left">
                                             <!-- <radio-dropdown (outputData)="getPercentage(user,$event)"
                                                 [data]="user.allocatePercentage"></radio-dropdown> -->
                                                 <mat-radio-group [(ngModel)]="user.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
@@ -255,7 +255,7 @@
 
                                     <td>
                                         <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
-                                        <div style="margin-top: 10px;" *ngIf="request.createMode" class="form-group row required">
+                                        <div style="margin-top: 7px;" *ngIf="request.createMode" class="form-group row required">
                                             <mat-form-field style="width: 150px;" appearance="outline" class="w-100">
                                                 <input matInput [matDatepicker]="picker" placeholder="chose a date"
                                                     [(ngModel)]="request.timeNeed" name="requestTimeNeed" required>

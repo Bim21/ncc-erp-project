@@ -74,10 +74,13 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
+                <div class="fixTableHead">
+
+                
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
                     [busy]="isLoading">
                     <thead class="bg-light">
-                        <tr>
+                        <tr style="border: none;">
                             <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
                             <th>{{'Loại dự án' | localize}}</th>
                             <th>khách hàng</th>
@@ -145,6 +148,7 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
 
             </div>
             <div class="card-footer bg-light border-top">
