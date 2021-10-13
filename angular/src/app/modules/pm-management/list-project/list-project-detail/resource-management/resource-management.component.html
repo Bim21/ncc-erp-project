@@ -284,9 +284,9 @@
                                           </td>
                                     <td class="text-center">
                                         <p 
-                                            [ngClass]="APP_CONST.statusStyle[request.statusName]"
+                                            [ngClass]="APP_CONST.resourceRequestStyle[getByEnum(request.status,APP_ENUM.ResourceRequestStatus)]"
                                             *ngIf="!request.createMode">
-                                            {{request.statusName}}</p>
+                                            {{getByEnum(request.status,APP_ENUM.ResourceRequestStatus)}}</p>
                                              <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1" *ngIf="request.createMode && !isEditRequest">PENDING</p>
                                         <div *ngIf="request.createMode && isEditRequest" class="form-group ">
                                             <mat-form-field appearance="outline" style="width: 180px;">
