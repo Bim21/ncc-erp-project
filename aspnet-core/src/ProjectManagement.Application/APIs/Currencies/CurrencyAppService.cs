@@ -18,7 +18,7 @@ namespace ProjectManagement.APIs.Currencies
     [AbpAuthorize]
     public class CurrencyAppService : ProjectManagementAppServiceBase
     {
-        [HttpGet]
+        [HttpPost]
         [AbpAuthorize(PermissionNames.Admin_Currency_ViewAll)]
         public async Task<GridResult<CurrencyDto>> GetAllPaging(GridParam input)
         {
