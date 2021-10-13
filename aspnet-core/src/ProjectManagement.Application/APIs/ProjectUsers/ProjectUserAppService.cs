@@ -68,7 +68,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             UserType = x.User.UserType,
                             Note = x.Note
                         });
-
+            query = query.Where(x => x.UserType != UserType.FakeUser);
             return await query.ToListAsync();
         }
 
