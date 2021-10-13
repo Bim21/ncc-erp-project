@@ -22,6 +22,8 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long ClientId { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
+        public long? CurrencyId { get; set; }
+        public string CurrencyName { get; set; }
         public bool IsCharge { get; set; }
         public long PmId { get; set; }
         public string PmName { get; set; }

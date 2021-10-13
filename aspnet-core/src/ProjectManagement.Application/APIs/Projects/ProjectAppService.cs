@@ -36,7 +36,7 @@ namespace ProjectManagement.APIs.Projects
                 valueStatus = Convert.ToInt32(filterStatus.Value);
                 input.FilterItems.Remove(filterStatus);
             }
-            var query = from p in WorkScope.GetAll<Project>()
+            var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
                         .Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
@@ -52,6 +52,8 @@ namespace ProjectManagement.APIs.Projects
                             Status = p.Status,
                             ClientId = p.ClientId,
                             ClientName = p.Client.Name,
+                            CurrencyId = p.CurrencyId,
+                            CurrencyName = p.Currency.Name,
                             IsCharge = p.IsCharge,
                             PmId = p.PMId,
                             PmName = p.PM.Name,
@@ -71,7 +73,9 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+            var query = WorkScope.GetAll<Project>()
+                .Include(x => x.Currency)
+                .Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,
@@ -83,6 +87,8 @@ namespace ProjectManagement.APIs.Projects
                     Status = x.Status,
                     ClientId = x.ClientId,
                     ClientName = x.Client.Name,
+                    CurrencyId = x.CurrencyId,
+                    CurrencyName = x.Currency.Name,
                     IsCharge = x.IsCharge,
                     PmId = x.PMId,
                     PmName = x.PM.Name,
@@ -94,7 +100,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<GetProjectDto> Get(long projectId)
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
+            var query = WorkScope.GetAll<Project>().Include(x => x.Currency).Where(x => x.Id == projectId)
                                 .Select(x => new GetProjectDto
                                 {
                                     Id = x.Id,
@@ -114,7 +120,9 @@ namespace ProjectManagement.APIs.Projects
                                     PmEmailAddress = x.PM.EmailAddress,
                                     PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
                                     PmBranch = x.PM.Branch,
-                                    PmUserType = x.PM.UserType
+                                    PmUserType = x.PM.UserType,
+                                    CurrencyId = x.CurrencyId,
+                                    CurrencyName = x.Currency.Name
                                 });
             return await query.FirstOrDefaultAsync();
         }

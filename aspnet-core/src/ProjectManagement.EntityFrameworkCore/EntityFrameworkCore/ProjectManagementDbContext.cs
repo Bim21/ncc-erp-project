@@ -39,6 +39,8 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<CheckPointUserResultTag> CheckPointUserResultTags { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<UserSkill> UserSkills { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<TimesheetProjectBill> TimesheetProjectBills { get; set; }
 
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)
