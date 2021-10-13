@@ -1,7 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +9,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
 {
-    public class ProjectUserBill : FullAuditedEntity<long>, IMayHaveTenant
+    public class TimesheetProjectBill : FullAuditedEntity<long>, IMayHaveTenant
     {
         public int? TenantId { get; set; }
         [ForeignKey(nameof(UserId))]
@@ -25,7 +24,8 @@ namespace ProjectManagement.Entities
         public DateTime? EndTime { get; set; }
         public CurrencyCode Currency { get; set; }
         public string Note { get; set; }
-        public string shadowNote { get; set; }
-        public bool isActive { get; set; }
+        public string ShadowNote { get; set; }
+        public bool IsActive { get; set; }
+        public float WorkingTime { get; set; }
     }
 }
