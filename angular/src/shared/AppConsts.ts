@@ -74,7 +74,9 @@ export class AppConsts {
         0: "badge badge-success",
         1: "badge badge-primary",
         2: "badge badge-danger",
-        3: "badge badge-warning"
+        3: "badge badge-warning",
+        4: "badge badge-secondary"
+
     }
     static readonly SaodoStatusStyle = {
         New: "badge badge-pill  badge-primary",
