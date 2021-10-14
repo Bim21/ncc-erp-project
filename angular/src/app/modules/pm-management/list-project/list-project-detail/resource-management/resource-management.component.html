@@ -371,6 +371,7 @@
                                     <th>Nhân viên</th>
                                     <th>Charge Role</th>
                                     <th>Rate</th>
+                                    <th>Currency</th>
                                     <th>Bắt đầu charge</th>
                                     <th>Kết thúc charge</th>
                                     <th>is Active</th>
@@ -442,6 +443,23 @@
                                             </abp-validation-summary>
 
                                         </div>
+                                    </td>
+                                    <td>
+                                        <span *ngIf="!bill.createMode">{{getCurrencyName(currencyList, bill.currency)}}</span>
+                                        <div *ngIf="bill.createMode"  class="col-md-5 ">
+                                            <mat-form-field appearance="outline">
+                                                <mat-select [(ngModel)]="bill.currency" name="currency" placeholder="select currency" required
+                                                    #currency="ngModel">
+                                                    <mat-option *ngFor="let currency of currencyList" [value]="currency.id">
+                                                        {{currency.name}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-error class="mt-1" *ngIf="currency.hasError('required') && currency.touched" style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
+                                        </div>
+
+
                                     </td>
                                     <td>
                                         <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
