@@ -439,7 +439,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ResourceRequestDto, ResourceRequest>(input, resourceRequest));
             //Komu bot nhắn tin đến nhóm
-            if (input.Status == ResourceRequestStatus.DONE|| input.Status == ResourceRequestStatus.DONE)
+            if (input.Status == ResourceRequestStatus.DONE|| input.Status == ResourceRequestStatus.CANCELLED)
             {
                 var login = new LoginDto
                 {
