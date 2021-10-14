@@ -22,10 +22,16 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     request.filterItems.forEach(item =>{
       if(item.propertyName == "status"){
         check =true
+        item.value = this.selectedStatus
       }
     })
     if(check == false){
-      request.filterItems = this.AddFilterItem(request, "status", 0)
+      request.filterItems = this.AddFilterItem(request, "status", this.selectedStatus)
+    }
+    if(this.selectedStatus === -1){
+      request.filterItems = this.clearFilter(request, "status", "")
+      check =true
+      
     }
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
@@ -70,11 +76,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     { propertyName: 'projectName', comparisions: [0, 6, 7, 8], displayName: "Project Name" },
     { propertyName: 'timeNeed', comparisions: [0, 1, 2, 3, 4], displayName: "Time Need", filterType:1 },
     { propertyName: 'timeDone', comparisions: [0, 1, 2, 3, 4], displayName: "Time Done", filterType:1 },
-    { propertyName: 'status', comparisions: [0], displayName: "status", filterType:3, dropdownData:this.statusParam },
+    // { propertyName: 'status', comparisions: [0], displayName: "status", filterType:3, dropdownData:this.statusParam },
   ];
+  public selectedStatus:any = 0
   public listRequest:RequestResourceDto[]=[];
   public tempListRequest:RequestResourceDto[]=[];
-  public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
+  public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus)
   DeliveryManagement_ResourceRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
   DeliveryManagement_ResourceRequest_Create=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
   DeliveryManagement_ResourceRequest_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
@@ -109,6 +116,9 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         return key;
       }
     }
+  }
+  public onStatusChange(){
+    this.refresh()
   }
   
   showDialog(command:string, request:any){

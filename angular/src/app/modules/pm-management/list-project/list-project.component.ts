@@ -91,11 +91,26 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     pageNumber: number,
     finishedCallback: Function
   ): void {
-    if (this.projectStatus !== "" || this.projectStatus == 0) {
+    // if (this.projectStatus !== "" || this.projectStatus == 0) {
+    //   request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
+    // }
+    // if (this.projectStatus === "") {
+    //   request.filterItems = this.clearFilter(request, "status", this.projectStatus)
+    // }
+    let check=false
+    request.filterItems.forEach(item =>{
+      if(item.propertyName == "status"){
+        check =true
+        item.value = this.projectStatus
+      }
+    })
+    if(check == false){
       request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
     }
-    if (this.projectStatus === "") {
-      request.filterItems = this.clearFilter(request, "status", this.projectStatus)
+    if(this.projectStatus === -1){
+      request.filterItems = this.clearFilter(request, "status", "")
+      check =true
+      
     }
     this.listProjectService
       .getAllPaging(request)
@@ -105,7 +120,10 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       .subscribe((result: PagedResultResultDto) => {
         this.listProjects = result.result.items;
         this.showPaging(result.result, pageNumber);
-        request.filterItems = this.clearFilter(request, "status", this.projectStatus)
+        // request.filterItems = this.clearFilter(request, "status", this.projectStatus)
+        if(check ==false){
+          request.filterItems = this.clearFilter(request, "status", "")
+        }
       });
   }
 
