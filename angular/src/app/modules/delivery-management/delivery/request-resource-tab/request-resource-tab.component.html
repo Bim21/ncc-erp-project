@@ -19,44 +19,62 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+                <div class="row">
+                    <div class="col-8 pt-1">
 
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-                        (keyup.enter)="getDataPage(1)" />
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-default" (click)="checkAddFilter()">
-                            <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
-                                [class.fa-angle-down]="!advancedFiltersVisible"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
-                <div class="card-body">
-                    <form class="form-horizontal">
-                        <div class="row">
-                            <div class="col-md-12 col-xl-12">
-                                <div class="mb-0">
-                                    <div>
-                                        <div *ngFor="let item of filterItems; let i = index">
-                                            <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
-                                                (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
-                                            </app-filter>
-                                        </div>
-                                        <i style="padding: 0;" class="fas fa-plus-circle ml-3"
-                                            (click)="addFilter()"></i>
-                                    </div>
-                                </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
+                                (keyup.enter)="getDataPage(1)" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+                                    <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                                        [class.fa-angle-down]="!advancedFiltersVisible"></i>
+                                </button>
                             </div>
                         </div>
-                    </form>
+                    
+                    <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
+                        <div class="card-body">
+                            <form class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-12 col-xl-12">
+                                        <div class="mb-0">
+                                            <div>
+                                                <div *ngFor="let item of filterItems; let i = index">
+                                                    <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
+                                                        (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
+                                                    </app-filter>
+                                                </div>
+                                                <i style="padding: 0;" class="fas fa-plus-circle ml-3"
+                                                    (click)="addFilter()"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                    <div class="col-4">
+                        <label class="ml-4 mr-2 pt-3">Trạng thái:</label>
+                        <mat-form-field appearance="outline" style="width: 250px;">
+                            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+                                <mat-option [value]="-1">All</mat-option>
+                                <mat-option *ngFor="let status of statusList" [value]="APP_ENUM.ResourceRequestStatus[status]">
+                                    {{status}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    </div>
+                    
+                </div>
+            
             <div class="card-body table-responsive pb-4">
                 <!-- <div class="fixTableHead"> -->
                     <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
