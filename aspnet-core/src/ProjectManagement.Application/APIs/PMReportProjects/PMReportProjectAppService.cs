@@ -103,6 +103,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                 .Where(x => x.ProjectId == projectId)
                                 .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive && x.AllocatePercentage > 0)
+                                .Where(x => x.User.UserType != UserType.FakeUser)
                                 .Select(x => new CurrentResourceDto
                                 { 
                                     FullName = x.User.FullName,
@@ -213,6 +214,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId && x.IsFutureActive)
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
+                            .Where(x => x.User.UserType != UserType.FakeUser)
                             .Select(x => new GetProjectUserDto
                             {
                                 Id = x.Id,
@@ -237,7 +239,6 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 UserType = x.User.UserType,
                                 Note = x.Note
                             });
-            query = query.Where(x => x.UserType != UserType.FakeUser);
             return await query.ToListAsync();
         }
 

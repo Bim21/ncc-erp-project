@@ -96,6 +96,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<List<GetProjectUserDto>> ResourceRequestDetail(long resourceRequestId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ResourceRequestId == resourceRequestId)
+                                    .Where(x => x.User.UserType != UserType.FakeUser)
                                     .Select(x => new GetProjectUserDto
                                     {
                                         Id = x.Id,
