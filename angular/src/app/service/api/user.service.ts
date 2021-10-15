@@ -16,8 +16,15 @@ export class UserService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
-  public GetAllUserActive(onlyStaff: boolean): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/GetAllUserActive?onlyStaff=' + onlyStaff);
+  public GetAllUserActive(onlyStaff: boolean, isFake?:any): Observable<any> {
+    if(isFake){
+      return this.http.get<any>(this.rootUrl + `/GetAllUserActive?onlyStaff=${onlyStaff}&isFake=${isFake}`);
+    }
+    else{
+
+      return this.http.get<any>(this.rootUrl + `/GetAllUserActive?onlyStaff=${onlyStaff}`);
+
+    }
 
   }
   public uploadImageFile(file, id): Observable<any> {

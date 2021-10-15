@@ -5,14 +5,18 @@
                 <h1>Timesheet Detail</h1>
             </div>
             <div class="col-6 text-right">
-                <span *ngIf="createdInvoice==true" class="mr-2" style="color: red;font-weight: 800;">Timesheet đã được tạo Invoice</span>
+                <!-- <span *ngIf="createdInvoice==true" class="mr-2" style="color: red;font-weight: 800;">Timesheet đã được tạo Invoice</span> -->
                 <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Create)" (click)="createTimeSheet()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                     Create
                 </button>
-                <button *ngIf="createdInvoice==false && permission.isGranted(Timesheet_TimesheetProject_CreateInvoice)" (click)="createInvoice()" class="btn btn-success ml-3">
+                <!-- <button *ngIf="createdInvoice==false && permission.isGranted(Timesheet_TimesheetProject_CreateInvoice)" (click)="createInvoice()" class="btn btn-success ml-3">
                     <i class="fas fa-file-invoice-dollar"></i>
                     Create Invoice
+                </button> -->
+                <button  (click)="exportInvoice()" class="btn btn-success ml-3">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    Export Invoice
                 </button>
                 
             </div>

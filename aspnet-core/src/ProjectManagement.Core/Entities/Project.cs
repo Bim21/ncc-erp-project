@@ -26,6 +26,9 @@ namespace ProjectManagement.Entities
         public long ClientId { get; set; }
         [ForeignKey(nameof(ClientId))]
         public Client Client { get; set; }
+        public long? CurrencyId { get; set; }
+        [ForeignKey(nameof(CurrencyId))]
+        public Currency Currency { get; set; }
         public bool IsCharge { get; set; }
         public long PMId { get; set; }
         [ForeignKey(nameof(PMId))]

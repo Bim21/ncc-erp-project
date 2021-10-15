@@ -19,6 +19,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }
         public long ClientId { get; set; }
+        public long? CurrencyId { get; set; }
         public bool IsCharge { get; set; }
         public long PmId { get; set; }
         public string BriefDescription { get; set; }

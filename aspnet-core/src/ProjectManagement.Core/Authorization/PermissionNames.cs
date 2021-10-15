@@ -33,6 +33,13 @@ namespace ProjectManagement.Authorization
             public const string Admin_Client_Edit = "Admin.Client.Edit";
             public const string Admin_Client_Delete = "Admin.Client.Delete";
 
+            //Currency
+            public const string Admin_Currency = "Admin.Currency";
+            public const string Admin_Currency_ViewAll = "Admin.Currency.ViewAll";
+            public const string Admin_Currency_Create = "Admin.Currency.Create";
+            public const string Admin_Currency_Edit = "Admin.Currency.Edit";
+            public const string Admin_Currency_Delete = "Admin.Currency.Delete";
+
             //Skill
             public const string Admin_Skill = "Admin.Skill";
             public const string Admin_Skill_ViewAll = "Admin.Skill.ViewAll";
@@ -329,6 +336,13 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Client_Edit,
                     PermissionNames.Admin_Client_Delete,
 
+                    //Currency
+                    PermissionNames.Admin_Currency,
+                    PermissionNames.Admin_Currency_ViewAll,
+                    PermissionNames.Admin_Currency_Create,
+                    PermissionNames.Admin_Currency_Edit,
+                    PermissionNames.Admin_Currency_Delete,
+
                     //Skill
                     PermissionNames.Admin_Skill,
                     PermissionNames.Admin_Skill_ViewAll,
@@ -594,6 +608,13 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Client" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Client" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Client" },
+                 
+                 //Currency
+                 new SystemPermission{ Name =  PermissionNames.Admin_Currency, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Currency" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Currency" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Currency" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit One Currency" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete One Currency" },
 
                  //Skill
                  new SystemPermission{ Name =  PermissionNames.Admin_Skill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Skill" },
@@ -836,6 +857,16 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Client" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Client" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Client_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Client" },
+                            }
+                        },
+                        //Currency
+                        new SystemPermission { Name =  PermissionNames.Admin_Currency, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Currency",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Currency" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Currency" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit One Currency" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Currency_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete One Currency" },
                             }
                         },
                         //Skill

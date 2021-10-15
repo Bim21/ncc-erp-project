@@ -35,6 +35,16 @@ export class AppConsts {
 
         // Future:"badge badge-pill badge-light"
     }
+    static resourceRequestStyle ={
+        PENDING: "badge badge-pill badge-primary",
+        DONE: "badge badge-pill badge-secondary",
+        CANCELLED: "badge badge-pill badge-danger",
+        APPROVED:"badge badge-pill badge-success",
+
+
+
+        
+    }
     static readonly isSentStyle = {
         Sent: "badge badge-pill badge-success",
         Unsent: "badge badge-pill badge-danger"
@@ -74,7 +84,9 @@ export class AppConsts {
         0: "badge badge-success",
         1: "badge badge-primary",
         2: "badge badge-danger",
-        3: "badge badge-warning"
+        3: "badge badge-warning",
+        4: "badge badge-secondary"
+
     }
     static readonly SaodoStatusStyle = {
         New: "badge badge-pill  badge-primary",

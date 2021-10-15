@@ -36,19 +36,16 @@
 
                 </div>
                 <div class="col-4 row">
-                    <mat-form-field class="col-8" appearance="outline">
+                    <label class="ml-5 mr-2 mt-3">Trạng thái:</label>
+                    <mat-form-field  appearance="outline" style="width: 250px;">
                         <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"  (selectionChange)="refresh()"
                            >
-                           <mat-option value="">All</mat-option>
+                           <mat-option value="-1">All</mat-option>
                             <mat-option *ngFor="let item of statusFilterList" [value]="item.value">{{item.displayName}}</mat-option>
                           
                         </mat-select>
                     </mat-form-field>
-                    <div class="col-md-3">
-                        <!-- <i class="fas fa-times" style="margin-top: 12px; cursor: pointer;" (click)="clearStatus()"></i> -->
-                        <!-- <mat-icon style="margin-top: 14px; cursor: pointer;" *ngIf="selectedStatus!=''"
-                            (click)="selectedStatus=''; getDataPage(1);setParamToUrl()">clear</mat-icon> -->
-                    </div>
+                   
                 </div>
                 
             </div>
@@ -74,10 +71,13 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
+                <div class="fixTableHead">
+
+                
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
                     [busy]="isLoading">
                     <thead class="bg-light">
-                        <tr>
+                        <tr style="border: none;">
                             <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
                             <th>{{'Loại dự án' | localize}}</th>
                             <th>khách hàng</th>
@@ -145,6 +145,7 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
 
             </div>
             <div class="card-footer bg-light border-top">

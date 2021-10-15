@@ -45,6 +45,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.IsFutureActive)
                         .Where(x => viewHistory || x.Status != ProjectUserStatus.Past && (x.Status == ProjectUserStatus.Present ? x.AllocatePercentage > 0 : true))
+                        .Where(x => x.User.UserType != UserType.FakeUser)
                         .OrderByDescending(x => x.CreationTime)
                         .Select(x => new GetProjectUserDto
                         {
@@ -68,7 +69,6 @@ namespace ProjectManagement.APIs.ProjectUsers
                             UserType = x.User.UserType,
                             Note = x.Note
                         });
-
             return await query.ToListAsync();
         }
 

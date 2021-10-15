@@ -44,6 +44,7 @@ import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.compone
 import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
 import { SkillComponent } from './modules/admin/skill/skill.component';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
+import { CurrencyComponent } from './modules/admin/currency/currency.component';
 
 
 @NgModule({
@@ -85,6 +86,12 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
           {
             path: "configurations",
             component: ConfigurationComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "currency",
+            component: CurrencyComponent,
+            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
           {

@@ -9,7 +9,7 @@ namespace ProjectManagement.Constants.Enum
             Medium = 1,
             High = 2
         }
-        public enum Currency
+        public enum CurrencyCode
         {
             VND = 0,
             USD = 1,

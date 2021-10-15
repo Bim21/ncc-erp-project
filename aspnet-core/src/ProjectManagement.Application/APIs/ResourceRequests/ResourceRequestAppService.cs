@@ -96,6 +96,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<List<GetProjectUserDto>> ResourceRequestDetail(long resourceRequestId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ResourceRequestId == resourceRequestId)
+                                    .Where(x => x.User.UserType != UserType.FakeUser)
                                     .Select(x => new GetProjectUserDto
                                     {
                                         Id = x.Id,
@@ -182,7 +183,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.UserId,
                                     AllocatePercentage = x.AllocatePercentage
                                 });
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive)
+            var users = WorkScope.GetAll<User>().Where(x => x.IsActive&& x.UserType != UserType.FakeUser)
                                 .Select(x => new ResourceRequestUserDto
                                 {
                                     UserId = x.Id,
@@ -231,7 +232,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         ProjectId = x.ProjectId,
                                         ProjectName = x.ProjectName,
                                     }).ToList(),
-                                    Used = projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage),
+                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)>0)? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage):0,
                                     ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
                                     {
                                         ProjectName = p.Project.Name,
@@ -244,7 +245,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Name = uk.Skill.Name
                                     }).ToList(),
                                 }).Where(x=> !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-
             return await users.GetGridResult(users, input);
         }
 
@@ -299,7 +299,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             StartDate = x.StartTime.Date,
                             Use = x.AllocatePercentage
                         });
-
+            query = query.Where(x => x.UserType != UserType.FakeUser);
             return await query.GetGridResult(query, input);
         }
 
@@ -440,13 +440,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ResourceRequestDto, ResourceRequest>(input, resourceRequest));
             //Komu bot nhắn tin đến nhóm
-            bool check = false;
-            if (input.Status.ToString() == "DONE"|| input.Status.ToString() == "CANCELLED")
-            {
-                check = true;
-            }
-            
-            if (check)
+            if (input.Status == ResourceRequestStatus.DONE|| input.Status == ResourceRequestStatus.CANCELLED)
             {
                 var login = new LoginDto
                 {
@@ -471,11 +465,11 @@ namespace ProjectManagement.APIs.ResourceRequests
                     var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
                     var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
                     var message = string.Empty;
-                    if (input.Status.ToString() == "DONE")
+                    if (input.Status == ResourceRequestStatus.DONE)
                     {
                         message = $"Request {input.Name} cho dự án {nameProject} đã được {admin.UserName} chuyển sang trạng thái hoàn thành.";
                     }
-                    else if (input.Status.ToString() == "CANCELLED")
+                    else if (input.Status == ResourceRequestStatus.CANCELLED)
                     {
                         message = $"Request {input.Name} cho dự án {nameProject} đã được huỷ bởi {admin.UserName}.";
                     }
@@ -498,6 +492,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                     await _komuService.Logout(DecryptContent.data);
                 }
             }
+            
             return input;
         }
 
