@@ -21,10 +21,15 @@
                 Project:
             </label>
             <div class="col-md-9">
-                <mat-form-field class="mt-2" appearance="outline">
+                <mat-form-field class="mt-2" appearance="outline" style="width: 250px;">
                     <mat-select name="projectId" #projectIdValid="ngModel" placeholder="Select project" required
                         [(ngModel)]="resourceRequestDto.projectId">
-                        <ng-container *ngFor="let project of listProject">
+                        <mat-form-field class="w-100 px-3 "
+                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                        <input matInput [(ngModel)]="searchProject" name="searchProject" placeholder="Search" #search>{{search.focus()}}
+                    </mat-form-field>
+                        <ng-container *ngFor="let project of listProject | filter: searchProject">
+                            
                             <mat-option [value]="project.id" >
                                 {{project.name}}
                                 </mat-option>
@@ -42,7 +47,7 @@
                 Status:
             </label>
             <div class="col-md-9">
-                <mat-form-field class="mt-2" appearance="outline">
+                <mat-form-field class="mt-2" appearance="outline"  style="width: 250px;">
                     <mat-select name="status" #statusValid="ngModel" placeholder="Select Status" required
                         [(ngModel)]="resourceRequestDto.status">
                         <ng-container *ngFor="let status of statusList">
@@ -65,7 +70,7 @@
                 Time Need:
             </label>
             <div class="col-md-9">
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" style="width: 250px;">
                     <input matInput placeholder="Time need" [matDatepicker]="picker" name="startTime"  #timeNeed="ngModel" [(ngModel)]="resourceRequestDto.timeNeed" required>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
@@ -82,7 +87,7 @@
                Time done:
             </label>
             <div class="col-md-9">
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" style="width: 250px;">
                     <input placeholder="Time end"  matInput [matDatepicker]="pickerEnd" name="endTime" [(ngModel)]="resourceRequestDto.timeDone">
                     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEnd></mat-datepicker>

@@ -21,6 +21,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   public statusList:string[]=Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public resourceRequestDto={} as RequestResourceDto;
   public title 
+  public searchProject:string =""
   constructor(injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService:ListProjectService,

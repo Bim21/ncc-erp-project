@@ -11,7 +11,11 @@
             <div class="col-md-9">
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                     <mat-select required placeholder="Select project name" [(ngModel)]="projectTimesheet.projectId" name="projectType">
-                        <mat-option *ngFor="let project of projectList" [value]="project.id"  >
+                        <mat-form-field class="w-100 px-3 "
+                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                        <input matInput [(ngModel)]="searchProject" name="searchProject" placeholder="Search" #search>{{search.focus()}}
+                    </mat-form-field>
+                        <mat-option *ngFor="let project of projectList |filter:searchProject" [value]="project.id"  >
                             {{project.name}}
                         </mat-option>
                     </mat-select>
