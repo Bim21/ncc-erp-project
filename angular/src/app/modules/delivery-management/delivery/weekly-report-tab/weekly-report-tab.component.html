@@ -1,6 +1,6 @@
-<section class="content px-2 pt-2">
+<section class="content px-2 pt-2 weekly-report">
     <div class="container-fluid">
-        <div class="card">
+        <div class="card" style="min-height: 93vh;">
             <div class="card-header">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -41,7 +41,7 @@
             </div>
 
             <div class="card-body table-responsive py-2">
-                <div class="fixTableHead">
+                <div class="fixHead">
                     <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                         <thead class="bg-light">
                             <tr style="border: none;">
@@ -123,7 +123,7 @@
                 </div>
 
             </div>
-            <div class="card-footer bg-light border-top">
+            <div class="card-footer bg-light border-top pb-0">
                 <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
                         <button class="btn btn-secondary mb-2" (click)="refresh()">
