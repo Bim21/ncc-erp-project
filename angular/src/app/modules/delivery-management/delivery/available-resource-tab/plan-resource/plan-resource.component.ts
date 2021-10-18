@@ -26,6 +26,10 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   public skillsParam = [];
   // count=0
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
+    
+    // this.pageSizeType = request.maxResultCount
+    // this.pageSizeType = this.pageSize
+    // request.maxResultCount = this.pageSize
     this.isLoading = true;
     let check = false
     request.filterItems.forEach(item => {
@@ -115,7 +119,8 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   ) { super(injector) }
 
   ngOnInit(): void {
-    this.refresh();
+    this.pageSizeType =100
+    this.changePageSize();
     this.getAllSkills();
   }
   showDialogPlanUser(command: string, user: any) {
