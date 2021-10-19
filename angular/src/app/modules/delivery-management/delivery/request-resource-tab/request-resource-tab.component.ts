@@ -31,7 +31,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     if(this.selectedStatus === -1){
       request.filterItems = this.clearFilter(request, "status", "")
       check =true
-      
+       
     }
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
