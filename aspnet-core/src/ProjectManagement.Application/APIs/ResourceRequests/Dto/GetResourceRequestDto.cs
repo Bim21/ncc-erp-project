@@ -14,6 +14,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public long ProjectId { get; set; }
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
+        [ApplySearchAttribute]
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }
         public string StatusName { get; set; }
@@ -21,5 +22,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string PMNote { get; set; }
         public string DMNote { get; set; }
         public int PlannedNumberOfPersonnel { get; set; }
+        public List<GetSkillDetailDto> UserSkills { get; set; }
+        public long  SumSkill { get; set; }
     }
 }
