@@ -28,9 +28,10 @@
                         [(ngModel)]="planUser.projectId">
                         <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                        <input matInput [(ngModel)]="searchProject" name="searchProject" placeholder="Search" #search>{{search.focus()}}
+                        <input matInput [(ngModel)]="searchProject" name="searchProjectName" placeholder="Search" #search (keydown)="$event.stopPropagation()"
+                        >{{search.focus()}}
                     </mat-form-field>
-                        <ng-container *ngFor="let project of listProject |filter:searchProject">
+                        <ng-container *ngFor="let project of listProject |listFilter: 'name'  :searchProject">
                             <mat-option [value]="project.id">
                                 {{project.name}}
                             </mat-option>

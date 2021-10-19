@@ -13,10 +13,10 @@
                         [(ngModel)]="reviewer.userId" name="reviewerName" #UserName="ngModel">
                             <mat-form-field class="w-100 px-3 "
                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                            <input matInput [(ngModel)]="searchUser" name="searchUser"
+                            <input matInput [(ngModel)]="searchUser" name="searchUserName" (keydown)="$event.stopPropagation()"
                                 #search placeholder="search">{{search.focus()}}
                             </mat-form-field>
-                            <mat-option *ngFor="let item of userList |filter searchUser" [value]="item.userId"  >
+                            <mat-option *ngFor="let item of userList |listFilter: 'userName' : searchUser" [value]="item.userId"  >
                                 {{item.userName}}
                             </mat-option>
                         </mat-select>
@@ -59,12 +59,12 @@
                 <mat-form-field style="width: 100%; height: 38px;" appearance="outline">
                     <mat-select required placeholder="Select project name" 
                     [(ngModel)]="reviewer.reviewerId" name="reviewerName" #ReviewerName="ngModel">
-                    <!-- <mat-form-field class="w-100 px-3 "
+                    <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                        <input matInput [(ngModel)]="searchReviewer" name="searchReviewer"
-                            #searchReviewer placeholder="search">{{searchReviewer.focus()}}
-                    </mat-form-field> -->
-                        <mat-option *ngFor="let item of reviewerList| filter searchReviewer" [value]="item.id"  >
+                        <input matInput [(ngModel)]="searchReviewer" name="searchReviewerName" (keydown)="$event.stopPropagation()"
+                            #searchReviewerName placeholder="search">{{searchReviewerName.focus() }}
+                    </mat-form-field>
+                        <mat-option *ngFor="let item of reviewerList| listFilter: 'fullName' : searchReviewer" [value]="item.id"  >
                             {{item.fullName}}
                         </mat-option>
                     </mat-select>

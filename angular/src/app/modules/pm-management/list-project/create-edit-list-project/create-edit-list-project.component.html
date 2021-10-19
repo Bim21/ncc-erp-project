@@ -46,13 +46,13 @@
             <label class="col-md-3 col-form-label" for="PM">PM:</label>
             <div class="col-md-9 ">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required
+                    <mat-select  [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required 
                         #projectPM="ngModel">
                         <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                        <input matInput [(ngModel)]="searchPM" name="searchPM" placeholder="Search" #search>{{search.focus()}}
+                        <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
                     </mat-form-field>
-                        <mat-option *ngFor="let pm of pmList | filter: searchPM" [value]="pm.id">
+                        <mat-option *ngFor="let pm of pmList | listFilter:  'fullName' : searchPM" [value]="pm.id">
                             {{pm.fullName}} - ({{pm.emailAddress}})</mat-option>
                     </mat-select>
                 </mat-form-field>

@@ -329,10 +329,10 @@
                                                                 placeholder="select a role" required #projectEmployee="ngModel">
                                                                 <mat-form-field class="w-100 px-3 "
                                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                                    <input matInput [(ngModel)]="searchUser" name="searchUser"
+                                                                    <input matInput [(ngModel)]="searchUser" name="searchUserName" (keydown)="$event.stopPropagation()"
                                                                         #search placeholder="search">{{search.focus()}}
                                                                 </mat-form-field>
-                                                                <mat-option *ngFor="let user of userList |filter:searchUser"
+                                                                <mat-option *ngFor="let user of userList |listFilter : 'fullName'  :searchUser"
                                                                     [value]="user.id">
                                                                     {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </mat-select>
@@ -482,10 +482,10 @@
                                                                 placeholder="select a role" required #reportUser="ngModel">
                                                                 <mat-form-field class="w-100 px-3 "
                                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                                    <input matInput [(ngModel)]="searchUser" name="searchUser"
+                                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" (keydown)="$event.stopPropagation()"
                                                                         #search placeholder="search">{{search.focus()}}
                                                                 </mat-form-field>
-                                                                <mat-option *ngFor="let user of userList |filter:searchUser"
+                                                                <mat-option *ngFor="let user of userList |listFilter: 'fullName' :searchUser"
                                                                     [value]="user.id">
                                                                     {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </mat-select>
