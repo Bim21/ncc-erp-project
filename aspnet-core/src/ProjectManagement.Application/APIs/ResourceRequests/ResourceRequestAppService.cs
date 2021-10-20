@@ -64,25 +64,10 @@ namespace ProjectManagement.APIs.ResourceRequests
                         });
             return await query.ToListAsync();
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest,
-            PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
-        public async Task<GridResult<GetSkillDetailDto>> GetAllBySkill(GridParam input)
-        {
-            var SumSkillBySkill = WorkScope.GetAll<ResourceRequestSkill>()
-                    .Select(x => new GetSkillDetailDto
-                    {
-                        SkillName = x.Skill.Name,
-                        Quantity = x.Quantity,
-                        ResourceRequestName = x.ResourceRequest.Name
-                    });
-            return await SumSkillBySkill.GetGridResult(SumSkillBySkill, input);
-        }
-
-
-            [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest,
-            PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
+        PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(GridParam input, string order = "PROJECT")
         {
             var projectUser = WorkScope.GetAll<ProjectUser>();
@@ -109,19 +94,25 @@ namespace ProjectManagement.APIs.ResourceRequests
                 DMNote = x.DMNote,
                 UserSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).Select(z => new GetSkillDetailDto
                 {
+                    SkillId=z.SkillId,
+                    SkillName=z.Skill.Name,
                     Quantity = z.Quantity,
+                    ResourceRequestId=z.ResourceRequestId,
                     ResourceRequestName = z.ResourceRequest.Name
-                }).ToList(),
+                }).OrderBy(x=>x.SkillName).ToList(),
                 SumSkill = SumSkillByResourceRequest.Where(h => h.ResourceRequestId == x.Id).FirstOrDefault().Sum,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
-            if (order == "PROJECT")
-            {
-                query = query.OrderByDescending(x => x.SumSkill);
-            }
-            else if (order == "TIMENEED")
+            if (order == "TIMENEED")
             {
                 query = query.OrderByDescending(x => x.TimeNeed);
+            }
+            else if (order == "SKILL")
+            {
+            }
+            else
+            {
+                query = query.OrderByDescending(x => x.SumSkill);
             }
 
 
