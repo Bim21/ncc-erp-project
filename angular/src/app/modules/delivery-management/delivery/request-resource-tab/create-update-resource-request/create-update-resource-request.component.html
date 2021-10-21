@@ -1,21 +1,22 @@
 <form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
-        <abp-modal-header *ngIf="data.command=='create'" title="Create new request resource" (onCloseClick)="dialogRef.close()">
-        </abp-modal-header>
-        <abp-modal-header *ngIf="data.command=='edit'" title="Edit request: {{title}}" (onCloseClick)="dialogRef.close()">
-        </abp-modal-header>
+    <abp-modal-header *ngIf="data.command=='create'" title="Create new request resource"
+        (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
+    <abp-modal-header *ngIf="data.command=='edit'" title="Edit request: {{title}}" (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Name
             </label>
             <div class="col-md-9">
-                <input placeholder="request name" type="text" class="form-control" name="name" minlength="2" maxlength="1024"
-                    [(ngModel)]="resourceRequestDto.name" required #nameEl  #name="ngModel"/>
-                    <abp-validation-summary [control]="name" [controlEl]="nameEl">
-                    </abp-validation-summary>
+                <input placeholder="request name" type="text" class="form-control" name="name" minlength="2"
+                    maxlength="1024" [(ngModel)]="resourceRequestDto.name" required #nameEl #name="ngModel" />
+                <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                </abp-validation-summary>
             </div>
         </div>
-     
+
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Project:
@@ -25,15 +26,15 @@
                     <mat-select name="projectId" #projectIdValid="ngModel" placeholder="Select project" required
                         [(ngModel)]="resourceRequestDto.projectId">
                         <mat-form-field class="w-100 px-3 "
-                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                        <input matInput [(ngModel)]="searchProject" name="searchProjectName" (keydown)="$event.stopPropagation()"
-                         placeholder="Search" #search>{{search.focus()}}
-                    </mat-form-field>
+                            style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                            <input matInput [(ngModel)]="searchProject" name="searchProjectName"
+                                (keydown)="$event.stopPropagation()" placeholder="Search" #search>{{search.focus()}}
+                        </mat-form-field>
                         <ng-container *ngFor="let project of listProject | listFilter: 'name' : searchProject">
-                            
-                            <mat-option [value]="project.id" >
+
+                            <mat-option [value]="project.id">
                                 {{project.name}}
-                                </mat-option>
+                            </mat-option>
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
@@ -48,7 +49,7 @@
                 Status:
             </label>
             <div class="col-md-9">
-                <mat-form-field class="mt-2" appearance="outline"  style="width: 250px;">
+                <mat-form-field class="mt-2" appearance="outline" style="width: 250px;">
                     <mat-select name="status" #statusValid="ngModel" placeholder="Select Status" required
                         [(ngModel)]="resourceRequestDto.status">
                         <ng-container *ngFor="let status of statusList">
@@ -65,14 +66,15 @@
                 </mat-error>
             </div>
         </div>
-      
+
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Time Need:
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline" style="width: 250px;">
-                    <input matInput placeholder="Time need" [matDatepicker]="picker" name="startTime"  #timeNeed="ngModel" [(ngModel)]="resourceRequestDto.timeNeed" required>
+                    <input matInput placeholder="Time need" [matDatepicker]="picker" name="startTime" name="timeNedd"
+                        #timeNeed="ngModel" [(ngModel)]="resourceRequestDto.timeNeed" required>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -82,37 +84,66 @@
                 </mat-error>
             </div>
         </div>
-     
+
         <div class="form-group row">
             <label class="col-md-3 col-form-label" for="tenancyName">
-               Time done:
+                Time done:
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline" style="width: 250px;">
-                    <input placeholder="Time end"  matInput [matDatepicker]="pickerEnd" name="endTime" [(ngModel)]="resourceRequestDto.timeDone">
+                    <input placeholder="Time end" matInput [matDatepicker]="pickerEnd" name="endTime"
+                        [(ngModel)]="resourceRequestDto.timeDone">
                     <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                     <mat-datepicker #pickerEnd></mat-datepicker>
-                  </mat-form-field>
-                
+                </mat-form-field>
+
             </div>
         </div>
+        <div class="form-group row" *ngIf="data.command == 'edit'">
+            <label class="col-md-3 col-form-label" for="tenancyName">
+                Skill:
+            </label>
+            <div class="col-md-9 ">
+                
+                    <div *ngFor="let item of listSkillDetail; let i =index" class="row">
+                        <mat-form-field appearance="outline" style="width: 250px;" class="ml-2">
+                            <mat-select [disabled]="!item.pending" [name]="'skill'+i"  [(ngModel)]="item.skillId" placeholder="skill">
+                                <mat-option *ngFor="let skill of listSkill" [value]="skill.id">
+                                    {{skill.name}}
+                                </mat-option>
+                              
+                            </mat-select>
+                        </mat-form-field>
+                        <input [disabled]="!item.pending" type="number" class="form-control mt-1 mr-3 ml-3" placeholder="quantity" [name]="'quantity'+i" id="" [(ngModel)]="item.quantity"
+                            style="width: 100px;">
+                        <i class="fas fa-times fa-lg mt-3 ml-2" (click)="removeSkill(item)"></i>
+                        <i *ngIf="item.pending" class="fas fa-check text-success fa-lg ml-3" style="margin-top: 14px;" (click)="saveSkill(item)"></i>
+                        <!-- <button *ngIf="item.pending" class="btn" (click)="saveSkill(item)">test</button> -->
+                    </div>
+               
+                <div *ngIf="!isAddingSkill" >
+                    <i class="fas fa-plus fa-1x mt-2" (click)="addSkill()"></i></div>
+            </div>
+           
+        </div>
+
         <div class="form-group row ">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 HR/DM Note:
             </label>
             <div class="col-md-9">
-                <textarea rows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note" type="text" class="form-control" name="DMnote" 
-                    [(ngModel)]="resourceRequestDto.dmNote"  #nameEl  #name="ngModel"></textarea>
-                    <!-- <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                <textarea rows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note" name="note"
+                    type="text" class="form-control" name="DMnote" [(ngModel)]="resourceRequestDto.dmNote" #nameEl
+                    #name="ngModel"></textarea>
+                <!-- <abp-validation-summary [control]="name" [controlEl]="nameEl">
                     </abp-validation-summary> -->
             </div>
         </div>
-       
+
     </div>
     <div align="end" class="row justify-content-between">
         <button class="btn btn-default" mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary"
-            [disabled]="!resourceRequestForm.valid || isLoading" (click)="SaveAndClose()">Save</button>
+        <button class="btn btn-primary" [disabled]="!resourceRequestForm.valid || isLoading"
+            (click)="SaveAndClose()">Save</button>
     </div>
 </form>
-

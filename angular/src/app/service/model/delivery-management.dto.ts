@@ -10,6 +10,7 @@ export class RequestResourceDto{
   dmNote?: string ;
   plannedNumberOfPersonnel? : number;
   id?: number;
+  userSkills?:any;
 }
 export class ResourceRequestDetailDto{
   

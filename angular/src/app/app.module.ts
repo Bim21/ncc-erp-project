@@ -116,6 +116,7 @@ import { ProjectDescriptionComponent } from './modules/pm-management/list-projec
 import { ProjectDetailComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-detail/project-detail.component';
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
 import { CreateEditCurrencyComponent } from './modules/admin/currency/create-edit-currency/create-edit-currency.component';
+import { CdTimerModule } from 'angular-cd-timer';
 
 
 
@@ -247,7 +248,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     NgxMaskModule.forRoot(),
     Ng2SearchPipeModule,
     ImageCropperModule,
-  
+    CdTimerModule,
 
 
     TranslateModule.forRoot({
