@@ -28,11 +28,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
     })
   }
   public getAvailableResource(request:PagedRequestDto,skillId?:any):Observable<any>{
-  
       return this.http.post<any>(this.rootUrl+'/AvailableResource?skillId='+skillId,request);
-   
-   
-    
   }
   public planUser(item:any):Observable<any>{
     return this.http.post<any>(this.rootUrl+'/PlanUser',item);
@@ -40,10 +36,16 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public availableResourceFuture(request:PagedRequestDto):Observable<any>{
     return this.http.post<any>(this.rootUrl+'/AvailableResourceFuture',request);
   }
+  public createSkill(skill):Observable<any>{
+    return this.http.post<any>(this.rootUrl+'/CreateSkill',skill);
+  }
+  public deleteSkill(resourceRequestSkillId: any): Observable<any> {
+    return this.http.delete<any>(this.rootUrl+`/DeleteSkill?resourceRequestSkillId=${resourceRequestSkillId}`);
+}
   
-
-  
-  
+public GetSkillDetail(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetSkillDetail?resourceRequestId=' + id);
+  }
    
   
   

@@ -85,6 +85,7 @@
                                 <th>Project</th>
                                 <th style="width: 100px;">Nhân sự đã plan</th>
                                 <th style="width: 100px;">Time Need</th>
+                                <th style="width: 100px;" >Thông tin request</th>
                                 <th>PM Note</th>
                                 <th>HR,DM Note</th>
                                 <th style="width: 120px;">Trạng thái</th>
@@ -105,6 +106,14 @@
                                 <td class="text-center">{{item.projectName}}</td>
                                 <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
                                 <td class="text-center">{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
+                                <td>
+                                    <ul class="pl-3  pt-1">
+                                        <li *ngFor="let skill of item.userSkills">
+                                            <strong>{{skill.quantity}}</strong> {{skill.skillName}}
+                                        </li>
+                                    </ul>
+                                   
+                                </td>
                                 <td style="white-space: normal; max-width: 250px;">
                                     <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                     font-family: sans-serif; align-self:flex-start; line-height: initial;">

@@ -54,6 +54,13 @@
                                         Get
                                     </button>
                                    </td>
+                                   <td>
+                                    <button *ngIf="!isTimmerCounting" class="btn btn-sm btn-success mb-2 mr-1" (click)="startTimmer()" >start</button>
+                                    <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
+                                    <button class="btn btn-sm btn-danger mx-1 mb-2" (click)="stopTimmer()" *ngIf="!isStopCounting ">stop</button>
+                                    <button class="btn btn-sm btn-success mx-1 mb-2" (click)="resumeTimmer()" *ngIf="isStopCounting">resume</button>
+                                    <button class="btn btn-sm btn-danger mx-1 mb-2" (click)="refreshTimmer()">refresh</button>
+                                   </td>
                             </tr>
                             <tr>
                                 <td>
@@ -73,6 +80,9 @@
                                             </ng-container>
                                         </mat-select>
                                     </mat-form-field>
+                                </td>
+                                <td>
+                                  
                                 </td>
                             </tr>
                             <tr>

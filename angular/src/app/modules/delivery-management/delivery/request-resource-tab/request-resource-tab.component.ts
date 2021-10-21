@@ -17,56 +17,59 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 })
 export class RequestResourceTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.isLoading =true;
-    let check=false
-    request.filterItems.forEach(item =>{
-      if(item.propertyName == "status"){
-        check =true
+    this.isLoading = true;
+    let check = false
+    request.filterItems.forEach(item => {
+      if (item.propertyName == "status") {
+        check = true
         item.value = this.selectedStatus
       }
     })
-    if(check == false){
+    if (check == false) {
       request.filterItems = this.AddFilterItem(request, "status", this.selectedStatus)
     }
-    if(this.selectedStatus === -1){
+    if (this.selectedStatus === -1) {
       request.filterItems = this.clearFilter(request, "status", "")
-      check =true
-       
+      check = true
+
     }
     this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
-      this.tempListRequest= data.result.items;
+      // this.listRequest.forEach(request => {
+      //   request.userSkills = request.userSkills.map(item => item.skillName).join(", ")
+      // })
+      this.tempListRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
-      if(check ==false){
+      if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "")
       }
-      this.isLoading=false;
+      this.isLoading = false;
     })
   }
-  
+
   protected delete(item: RequestResourceDto): void {
-    
+
     abp.message.confirm(
-      "Delete request: " +item.name+"?",
+      "Delete request: " + item.name + "?",
       "",
-      (result:boolean)=>{
-        if(result){
-          this.resourceRequestService.delete(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(()=>{
-            abp.notify.success("Deleted request: "+item.name);
+      (result: boolean) => {
+        if (result) {
+          this.resourceRequestService.delete(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted request: " + item.name);
             this.refresh();
           });
-            
-          }
+
         }
-      
+      }
+
     );
 
-    
+
   }
-  statusParam = Object.entries(this.APP_ENUM.ResourceRequestStatus).map(item=>{
-    return { 
+  statusParam = Object.entries(this.APP_ENUM.ResourceRequestStatus).map(item => {
+    return {
       displayName: item[0],
       value: item[1]
     }
@@ -74,42 +77,42 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'projectName', comparisions: [0, 6, 7, 8], displayName: "Project Name" },
-    { propertyName: 'timeNeed', comparisions: [0, 1, 2, 3, 4], displayName: "Time Need", filterType:1 },
-    { propertyName: 'timeDone', comparisions: [0, 1, 2, 3, 4], displayName: "Time Done", filterType:1 },
+    { propertyName: 'timeNeed', comparisions: [0, 1, 2, 3, 4], displayName: "Time Need", filterType: 1 },
+    { propertyName: 'timeDone', comparisions: [0, 1, 2, 3, 4], displayName: "Time Done", filterType: 1 },
     // { propertyName: 'status', comparisions: [0], displayName: "status", filterType:3, dropdownData:this.statusParam },
   ];
-  public selectedStatus:any = 0
-  public listRequest:RequestResourceDto[]=[];
-  public tempListRequest:RequestResourceDto[]=[];
+  public selectedStatus: any = 0
+  public listRequest: RequestResourceDto[] = [];
+  public tempListRequest: RequestResourceDto[] = [];
   public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus)
-  DeliveryManagement_ResourceRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
-  DeliveryManagement_ResourceRequest_Create=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
-  DeliveryManagement_ResourceRequest_Delete=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
-  DeliveryManagement_ResourceRequest_Update=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update;
-  DeliveryManagement_ResourceRequest_ViewDetailResourceRequest=PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest;
-  
-  
-  constructor(private injector:Injector,
-  private resourceRequestService:DeliveryResourceRequestService,
-  private dialog: MatDialog) {super(injector) }
+  DeliveryManagement_ResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
+  DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
+  DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
+  DeliveryManagement_ResourceRequest_Update = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update;
+  DeliveryManagement_ResourceRequest_ViewDetailResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest;
+
+
+  constructor(private injector: Injector,
+    private resourceRequestService: DeliveryResourceRequestService,
+    private dialog: MatDialog) { super(injector) }
 
   ngOnInit(): void {
     this.refresh();
-   
-   
+
+
   }
-  showDetail(item:any){
-    if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)){
+  showDetail(item: any) {
+    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)) {
       this.router.navigate(['app/resourceRequestDetail'], {
         queryParams: {
           id: item.id,
-          timeNeed:item.timeNeed
+          timeNeed: item.timeNeed
         }
       })
     }
-      
+
   }
-  
+
   public getValueByEnum(enumValue: number, enumObject) {
     for (const key in enumObject) {
       if (enumObject[key] == enumValue) {
@@ -117,43 +120,41 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     }
   }
-  public onStatusChange(){
+  public onStatusChange() {
     this.refresh()
   }
-  
-  showDialog(command:string, request:any){
-    let resourceRequest={} as RequestResourceDto;
-    if(command=="edit"){
-      resourceRequest={
-        name:request.name,
-        projectId:request.projectId,
-        timeNeed:request.timeNeed,
-        status:request.status,
-        timeDone:request.timeDone,
-        id:request.id,
-        pmNote:request.pmNote,
-        dmNote:request.dmNote
+
+  showDialog(command: string, request: any) {
+    let resourceRequest = {} as RequestResourceDto;
+    if (command == "edit") {
+      resourceRequest = {
+        name: request.name,
+        projectId: request.projectId,
+        timeNeed: request.timeNeed,
+        status: request.status,
+        timeDone: request.timeDone,
+        id: request.id,
+        pmNote: request.pmNote,
+        dmNote: request.dmNote
       }
     }
-    const show=this.dialog.open(CreateUpdateResourceRequestComponent,{
-      data:{
-        command:command,
-        item:resourceRequest
+    const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
+      data: {
+        command: command,
+        item: resourceRequest
       },
-      width:"700px",
+      width: "700px",
       maxHeight: '90vh',
     })
     show.afterClosed().subscribe(result => {
-      if(result){
-        this.refresh()
-      }
+      this.refresh()
     });
   }
-  public createRequest(){
-    this.showDialog("create",{});
+  public createRequest() {
+    this.showDialog("create", {});
   }
-  public editRequest(item:any){
-    this.showDialog("edit",item);
+  public editRequest(item: any) {
+    this.showDialog("edit", item);
   }
-  
+
 }
