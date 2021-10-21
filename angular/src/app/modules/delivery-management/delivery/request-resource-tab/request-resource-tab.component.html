@@ -76,8 +76,16 @@
                 </div>
             
             <div class="card-body table-responsive pb-4">
+                <label for="">Order by:  </label>
+                <mat-form-field appearance="outline" class="ml-1">
+                    <mat-select [(ngModel)]="selectedOption" (selectionChange)="refresh()">
+                        <mat-option [value]="'PROJECT'">Project</mat-option>
+                        <mat-option [value]="'TIMENEED'">Time need</mat-option>
+                        <mat-option [value]="'SKILL'">Skill</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <!-- <div class="fixTableHead"> -->
-                    <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                    <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap mt-2">
                         <thead class="bg-light">
                             <tr style="border: none;">
                                 <th>STT</th>
@@ -107,7 +115,7 @@
                                 <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
                                 <td class="text-center">{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
                                 <td>
-                                    <ul class="pl-3  pt-1">
+                                    <ul class="pl-3  m-0">
                                         <li *ngFor="let skill of item.userSkills">
                                             <strong>{{skill.quantity}}</strong> {{skill.skillName}}
                                         </li>

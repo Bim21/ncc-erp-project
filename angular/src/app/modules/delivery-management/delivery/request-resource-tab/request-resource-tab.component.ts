@@ -33,14 +33,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       check = true
 
     }
-    this.resourceRequestService.getAllPaging(request).pipe(finalize(() => {
+    this.resourceRequestService.getResourcePaging(request,this.selectedOption).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
-      // this.listRequest.forEach(request => {
-      //   request.userSkills = request.userSkills.map(item => item.skillName).join(", ")
-      // })
       this.tempListRequest = data.result.items;
+      // this.listRequest.sort(this.compare)
       this.showPaging(data.result, pageNumber);
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "")
@@ -48,6 +46,17 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       this.isLoading = false;
     })
   }
+  //  compare( a, b ) {
+  //   if ( a.userSkills[0].skillName < b.userSkills[0].skillName ){
+  //     return -1;
+  //   }
+  //   if ( a.userSkills[0].skillName > b.userSkills[0].skillName ){
+  //     return 1;
+  //   }
+  //   return 0;
+  // }
+  
+ 
 
   protected delete(item: RequestResourceDto): void {
 
@@ -81,6 +90,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     { propertyName: 'timeDone', comparisions: [0, 1, 2, 3, 4], displayName: "Time Done", filterType: 1 },
     // { propertyName: 'status', comparisions: [0], displayName: "status", filterType:3, dropdownData:this.statusParam },
   ];
+  public selectedOption:string ="PROJECT"
   public selectedStatus: any = 0
   public listRequest: RequestResourceDto[] = [];
   public tempListRequest: RequestResourceDto[] = [];
