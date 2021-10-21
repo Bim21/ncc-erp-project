@@ -75,25 +75,18 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   getallskill() {
     this.skillService.getAll().pipe(catchError(this.skillService.handleError)).subscribe(data => {
       this.listSkill = data.result
+      this.temp =data.result
       this.getSkillDetail();
     })
   }
+  temp
   getSkillDetail() {
     if (this.data.command == "edit") {
       this.resourceRequestService.GetSkillDetail(this.data.item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(data => {
         this.listSkillDetail = data.result
-      // console.log(this.listSkill)
-
-      //   let b = this.listSkillDetail.map(item => {
-      //     return {
-      //       name: item.skillName,
-      //       id: item.skillId
-      //     }
-      //   })
-      //   console.log(b);
-      //   this.listSkill=  this.listSkill.filter(item=> b.indexOf(item) ==-1)
-
-
+        
+        let b = this.listSkillDetail.map(item => item.skillId)
+        this.listSkill=  this.temp.filter(item=>  !b.includes(item.id))
       })
     }
   }
@@ -121,7 +114,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       })
     }
     else {
-      abp.notify.warn("skill and quantity is require")
+      abp.notify.error("Skill or Quantity not valid")
     }
     this.isAddingSkill = false
 

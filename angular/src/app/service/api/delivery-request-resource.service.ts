@@ -46,6 +46,9 @@ export class DeliveryResourceRequestService extends BaseApiService {
 public GetSkillDetail(id: any): Observable<any> {
   return this.http.get<any>(this.rootUrl + '/GetSkillDetail?resourceRequestId=' + id);
   }
+  public getResourcePaging(request: PagedRequestDto, option:string): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/GetAllPaging?order=${option}`, request);
+}
    
   
   

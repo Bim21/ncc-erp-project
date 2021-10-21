@@ -104,27 +104,32 @@
                 Skill:
             </label>
             <div class="col-md-9 ">
-                
-                    <div *ngFor="let item of listSkillDetail; let i =index" class="row">
-                        <mat-form-field appearance="outline" style="width: 250px;" class="ml-2">
-                            <mat-select [disabled]="!item.pending" [name]="'skill'+i"  [(ngModel)]="item.skillId" placeholder="skill">
-                                <mat-option *ngFor="let skill of listSkill" [value]="skill.id">
-                                    {{skill.name}}
-                                </mat-option>
-                              
-                            </mat-select>
-                        </mat-form-field>
-                        <input [disabled]="!item.pending" type="number" class="form-control mt-1 mr-3 ml-3" placeholder="quantity" [name]="'quantity'+i" id="" [(ngModel)]="item.quantity"
-                            style="width: 100px;">
-                        <i class="fas fa-times fa-lg mt-3 ml-2" (click)="removeSkill(item)"></i>
-                        <i *ngIf="item.pending" class="fas fa-check text-success fa-lg ml-3" style="margin-top: 14px;" (click)="saveSkill(item)"></i>
-                        <!-- <button *ngIf="item.pending" class="btn" (click)="saveSkill(item)">test</button> -->
-                    </div>
-               
-                <div *ngIf="!isAddingSkill" >
-                    <i class="fas fa-plus fa-1x mt-2" (click)="addSkill()"></i></div>
+
+                <div *ngFor="let item of listSkillDetail; let i =index" class="row mb-1" >
+                    <input style="width: 250px; margin-top: 4px !important;" class=" formControl  ml-2" type="text" [value]="item.skillName"
+                        disabled=true *ngIf="!item.pending">
+                    <mat-form-field appearance="outline" style="width: 250px;" class="ml-2" *ngIf="item.pending">
+                        <mat-select [name]="'skill'+i" [(ngModel)]="item.skillId" placeholder="select skill">
+                            <mat-option *ngFor="let skill of listSkill" [value]="skill.id">
+                                {{skill.name}}
+                            </mat-option>
+
+                        </mat-select>
+                    </mat-form-field>
+                    <input style=" width: 100px;" [disabled]="!item.pending" type="number"
+                        class="form-control mt-1 mr-3 ml-3" placeholder="quantity" [name]="'quantity'+i" id=""
+                        [(ngModel)]="item.quantity">
+                    <i class="fas fa-times fa-lg mt-3 ml-2 text-danger" (click)="removeSkill(item)"></i>
+                    <i *ngIf="item.pending" class="fas fa-check text-success fa-lg ml-3" style="margin-top: 14px;"
+                        (click)="saveSkill(item)"></i>
+                    <!-- <button *ngIf="item.pending" class="btn" (click)="saveSkill(item)">test</button> -->
+                </div>
+
+                <div *ngIf="!isAddingSkill">
+                    <i class="fas fa-plus fa-1x mt-2  fa-lg" (click)="addSkill()"></i>
+                </div>
             </div>
-           
+
         </div>
 
         <div class="form-group row ">
@@ -132,9 +137,9 @@
                 HR/DM Note:
             </label>
             <div class="col-md-9">
-                <textarea rows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note" name="note"
-                    type="text" class="form-control" name="DMnote" [(ngModel)]="resourceRequestDto.dmNote" #nameEl
-                    #name="ngModel"></textarea>
+                <textarea rows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note"
+                    name="note" type="text" class="form-control" name="DMnote" [(ngModel)]="resourceRequestDto.dmNote"
+                    #nameEl #name="ngModel"></textarea>
                 <!-- <abp-validation-summary [control]="name" [controlEl]="nameEl">
                     </abp-validation-summary> -->
             </div>
