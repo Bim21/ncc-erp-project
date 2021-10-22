@@ -100,6 +100,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   searchUser:string =""
   isTimmerCounting:boolean =false
   isStopCounting:boolean =false
+  isRefresh:boolean = false
+  isStart:boolean =false
 
   constructor(private pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
@@ -127,22 +129,31 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.timmerCount.start()
     this.isTimmerCounting=true
     this.isStopCounting = false
+    this.isRefresh =false
+    this.isStart =true
+
   }
   public stopTimmer(){
     this.timmerCount.stop()
-    this.isTimmerCounting=true
+    this.isTimmerCounting=false
     this.isStopCounting =true
+    this.isRefresh =false
+
   }
   public refreshTimmer(){
     this.timmerCount.reset()
     this.isTimmerCounting=false
     this.isStopCounting =true
+    this.isRefresh =true
+    this.isStart =false
 
   }
   public resumeTimmer(){
     this.timmerCount.resume()
     this.isTimmerCounting=true
     this.isStopCounting =false
+    this.isRefresh =false
+
 
 
   }
