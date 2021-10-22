@@ -117,6 +117,7 @@ import { ProjectDetailComponent } from './modules/delivery-management/delivery/a
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
 import { CreateEditCurrencyComponent } from './modules/admin/currency/create-edit-currency/create-edit-currency.component';
 import { CdTimerModule } from 'angular-cd-timer';
+import { ViewBillComponent } from './modules/timesheet/timesheet-detail/view-bill/view-bill.component';
 
 
 
@@ -227,6 +228,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProjectDetailComponent,
     CurrencyComponent,
     CreateEditCurrencyComponent,
+    ViewBillComponent,
 
     
   ],
