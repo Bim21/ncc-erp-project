@@ -43,23 +43,24 @@
             <div class=" px-2">
                 <div class="card w-100 " [busy]="isLoading">
                     <div class="card-body py-1 ">
-                       
+
                         <h4>{{projectInfo.projectName}} - {{projectInfo.clientName}} - {{projectInfo.pmName}}</h4>
 
 
 
                         <div class="row">
-                            <table class=" project-info col-9" style="table-layout: fixed;" >
+                            <table class=" project-info col-9" style="table-layout: fixed;">
                                 <tr>
                                     <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
                                     <td>
                                         Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
                                         <strong>{{totalOverTime}}h </strong>OT
-                                        <button class="btn btn-success btn-sm ml-2 mb-1" (click)="getTimesheetWorking()">
+                                        <button class="btn btn-success btn-sm ml-2 mb-1"
+                                            (click)="getTimesheetWorking()">
                                             Get
                                         </button>
                                     </td>
-                                    
+
                                 </tr>
                                 <tr>
                                     <td>
@@ -74,13 +75,13 @@
                                                         {{
                                                         flag
                                                         }}
-    
+
                                                     </mat-option>
                                                 </ng-container>
                                             </mat-select>
                                         </mat-form-field>
                                     </td>
-    
+
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="text-center">
@@ -95,9 +96,9 @@
                                             <mat-form-field class="ml-1" style="width:68%" appearance="outline"
                                                 *ngIf="isEditingNote">
                                                 <textarea #generalNoteFocus cdkTextareaAutosize
-                                                    #autosize="cdkTextareaAutosize" style="padding-bottom: 20px;" rows="2"
-                                                    id="message" matInput [(ngModel)]="generalNote" name="notePM"
-                                                    placeholder="Đánh giá chung">{{generalNoteFocus.focus()}}
+                                                    #autosize="cdkTextareaAutosize" style="padding-bottom: 20px;"
+                                                    rows="2" id="message" matInput [(ngModel)]="generalNote"
+                                                    name="notePM" placeholder="Đánh giá chung">{{generalNoteFocus.focus()}}
                                             </textarea>
                                             </mat-form-field>
                                             <div class="d-inline float-right pt-1 text-right   ml-2">
@@ -111,25 +112,36 @@
                                                     class="btn btn-default">Cancel
                                                 </button>
                                             </div>
-    
+
                                         </div>
                                     </td>
                                 </tr>
                             </table>
-                            <div class="col-3"> 
-                                <button *ngIf="(!isTimmerCounting && !isStopCounting) || isRefresh"
-                                class="btn btn-sm btn-success mb-2 mr-1" (click)="startTimmer()">start</button>
-                            <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
-                            <i class="fas fa-pause mx-1 mb-2 fa-lg" (click)="stopTimmer()"
-                                *ngIf="!isStopCounting && isStart "></i>
-                            <i class="fas fa-play mx-1 mb-2 fa-lg" (click)="resumeTimmer()"
-                                *ngIf="isStopCounting && !isTimmerCounting && !isRefresh"></i>
-                            <i class="fas fa-redo-alt mx-1 mb-2 fa-lg" (click)="refreshTimmer()"
-                                *ngIf="isStart"></i>
+                            <div class="col-3 text-right" style="display: flex;">
+                                <div class="count-timer">
+                                    <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
+                                    <button *ngIf="(!isTimmerCounting && !isStopCounting) || isRefresh"
+                                        class="btn btn-sm  mb-2 pr-0" (click)="startTimmer()">
+                                        <i class="fas fa-clock fa-lg"></i>
+                                    </button>
+                                    <button (click)="stopTimmer()" *ngIf="!isStopCounting && isStart " 
+                                        class="btn btn-sm mb-2 pr-0">
+                                        <i class="fas fa-pause fa-lg"></i>
+                                    </button>
+                                    <button (click)="resumeTimmer()"
+                                        *ngIf="isStopCounting && !isTimmerCounting && !isRefresh"
+                                        class="btn btn-sm mb-2 pr-0">
+                                        <i class="fas fa-play fa-lg"></i>
+                                    </button>
+                                </div>
+                                <div style="padding-top: 16px;">
+                                    <i class="fas fa-redo-alt mx-1 mb-2 fa-lg" (click)="refreshTimmer()"
+                                        *ngIf="isStart"></i>
+                                </div>
                             </div>
                         </div>
-                     
-                       
+
+
 
                     </div>
                     <div class="text-right">
