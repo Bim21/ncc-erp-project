@@ -1,19 +1,19 @@
 <form class="form-horizontal" autocomplete="off" #timesheetDetailForm="ngForm" novalidate>
-    <abp-modal-header title="Bill detail: {{data.projectName}}" (onCloseClick)="dialogRef.close()" >
+    <abp-modal-header title="Thông tin bill dự án: {{data.projectName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
-        <button class="btn btn-success ml-2" (click)="syncProjectBill()"><i class="fas fa-sync-alt mr-1"></i>Sync project bill</button>
+        <button class="btn btn-success ml-2" (click)="syncProjectBill()"><i class="fas fa-sync-alt mr-1"></i>Sync
+            project bill</button>
         <div class="table-responsive mb-1 p-2">
             <div class="fixTableHead">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap"
-                    [busy]="isLoading">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th class="stt">#</th>
                             <th>Nhân viên</th>
                             <th>Charge Role</th>
                             <th>Rate</th>
-                            <!-- <th>Currency</th> -->
+                            <th>Working time</th>
                             <th>Bắt đầu charge</th>
                             <th>Kết thúc charge</th>
                             <th>is Active</th>
@@ -24,12 +24,11 @@
                     </thead>
                     <h5 *ngIf="billDetail.length==0" class="text-center mt-2">No data!</h5>
                     <tbody *ngIf="billDetail.length>0">
-                        <tr *ngFor="let bill of billDetail  ; let i = index" >
+                        <tr *ngFor="let bill of billDetail  ; let i = index">
                             <td><span>{{ i +1 }}</span></td>
                             <td class="text-left" style="min-width: 200px;">
                                 <span *ngIf="!bill.createMode">
-                                    <app-user-info
-                                        [userData]="{fullName:bill.fullName,branch:bill.branch,
+                                    <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
                                 userType:bill.userType,emailAddress:bill.emailAddress, avatarPath:bill.avatarPath}">
                                     </app-user-info>
                                 </span>
@@ -40,8 +39,9 @@
                                             placeholder="select an user" required #userBill="ngModel">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchUserBill" placeholder="search" (keydown)="$event.stopPropagation()"
-                                                    name="searchBillUser" #search>{{search.focus()}} 
+                                                <input matInput [(ngModel)]="searchUserBill" placeholder="search"
+                                                    (keydown)="$event.stopPropagation()" name="searchBillUser"
+                                                    #search>{{search.focus()}}
                                             </mat-form-field>
                                             <mat-option
                                                 *ngFor="let user of userForUserBill | listFilter: 'fullName' : searchUserBill : 'emailAddress'"
@@ -49,8 +49,7 @@
                                                 {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <mat-error class="mt-1"
-                                        *ngIf="userBill.hasError('required') && userBill.touched"
+                                    <mat-error class="mt-1" *ngIf="userBill.hasError('required') && userBill.touched"
                                         style="font-size: 13px;">
                                         This field is required
                                     </mat-error>
@@ -80,8 +79,8 @@
                                 </div>
                             </td>
                             <!-- <td> -->
-                                <!-- <span *ngIf="!bill.createMode">{{getCurrencyName(currencyList, bill.currency)}}</span> -->
-                                <!-- <div *ngIf="bill.createMode"  class="col-md-5 ">
+                            <!-- <span *ngIf="!bill.createMode">{{getCurrencyName(currencyList, bill.currency)}}</span> -->
+                            <!-- <div *ngIf="bill.createMode"  class="col-md-5 ">
                                     <mat-form-field appearance="outline">
                                         <mat-select [(ngModel)]="bill.currency" name="currency" placeholder="select currency" required
                                             #currency="ngModel">
@@ -96,13 +95,13 @@
 
 
                             <!-- </td> -->
+                            <td class="text-center">{{bill.workingTime}}</td>
                             <td class="text-center">
                                 <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                 <div *ngIf="bill.createMode">
                                     <mat-form-field appearance="outline" style="width: 150px;">
-                                        <input matInput [matDatepicker]="billStarttimePicker"
-                                            placeholder="chose a date" [(ngModel)]="bill.startTime"
-                                            name="billStarttime" required>
+                                        <input matInput [matDatepicker]="billStarttimePicker" placeholder="chose a date"
+                                            [(ngModel)]="bill.startTime" name="billStarttime" required>
                                         <mat-datepicker-toggle matSuffix [for]="billStarttimePicker">
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #billStarttimePicker></mat-datepicker>
@@ -113,47 +112,47 @@
                                 <span *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
                                 <div *ngIf="bill.createMode">
                                     <mat-form-field appearance="outline" style="width: 150px;">
-                                        <input matInput [matDatepicker]="billEndtimepicker"
-                                            placeholder="chose a date" [(ngModel)]="bill.endTime"
-                                            name="billEndtime">
+                                        <input matInput [matDatepicker]="billEndtimepicker" placeholder="chose a date"
+                                            [(ngModel)]="bill.endTime" name="billEndtime">
                                         <mat-datepicker-toggle matSuffix [for]="billEndtimepicker">
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #billEndtimepicker></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                             </td>
-                            <td class="text-center pt-3" >
-                                <mat-checkbox [disabled]="!bill.createMode" class="mt-1" name="isactive+{{i}}" (change)="onActiveChange(active,bill)" #active
-                                    [checked]="bill.isActive">
+                            <td class="text-center pt-3">
+                                <mat-checkbox [disabled]="!bill.createMode" class="mt-1" name="isactive+{{i}}"
+                                    (change)="onActiveChange(active,bill)" #active [checked]="bill.isActive">
                                 </mat-checkbox>
                             </td>
-                            <td style="white-space: normal; min-width: 150px;text-align: left;">
-                                <span *ngIf="!bill.createMode">
-                                    {{bill.note}}
-                                </span>
+                            <td>
+                                <pre class="mb-0 p-0  ml-2" *ngIf="!bill.createMode" style=" white-space: pre-line; word-wrap: break-word; 
+                        font-family: sans-serif; align-self:flex-start; width: 150px;">
+                           {{bill.note}}
+                      </pre>
                                 <div *ngIf="bill.createMode">
                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
                                         style="min-width: 150px;" class="form-control mt-1" #billRole="ngModel"
                                         placeholder="Note" name="billNote" [(ngModel)]="bill.note"></textarea>
                                 </div>
                             </td>
-                            <td style="white-space: normal; min-width: 150px;text-align: left;">
-                                <span *ngIf="!bill.createMode">
-                                    {{bill.shadowNote}}
-                                </span>
+                            <td style="white-space: normal; text-align: left;">
+                                <pre class="mb-0 p-0  ml-2" *ngIf="!bill.createMode" style=" white-space: pre-line; word-wrap: break-word;  width: 150px;
+                                font-family: sans-serif; align-self:flex-start; ">
+                                   {{bill.shadowNote}}
+                              </pre>
+
                                 <div *ngIf="bill.createMode">
                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                        style="min-width: 150px;" class="form-control mt-1"
-                                        #shadowNote="ngModel" placeholder="Shadow note" name="shadowNote"
+                                        style="min-width: 150px;" class="form-control mt-1" #shadowNote="ngModel"
+                                        placeholder="Shadow note" name="shadowNote"
                                         [(ngModel)]="bill.shadowNote"></textarea>
                                 </div>
                             </td>
                             <td class="text-center">
                                 <div *ngIf="!bill.createMode">
-                                    <button 
-                                        [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
-                                        (click)="editUserBill(bill)"><i
-                                            class="fas fa-pencil-alt"></i>Edit</button>
+                                    <button [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
+                                        (click)="editUserBill(bill)"><i class="fas fa-pencil-alt"></i>Edit</button>
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1">
                                     <button [disabled]="!bill?.userId   || !bill?.startTime  || !bill?.billRate"
@@ -161,8 +160,7 @@
                                         (click)="saveUserBill(bill)">
                                         <i style="color: green;" class="fas fa-check fa-2x "></i>
                                     </button>
-                                    <i style="color: red;" class="fas fa-times fa-2x"
-                                        (click)="cancelUserBill()"></i>
+                                    <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill()"></i>
                                 </div>
                             </td>
                         </tr>
@@ -170,8 +168,7 @@
                 </table>
             </div>
         </div>
-       
-    </div>
-  
-</form>
 
+    </div>
+
+</form>
