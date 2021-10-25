@@ -60,6 +60,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     if (userBill.endTime) {
       userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
     }
+    userBill.timesheetId = this.data.timesheetId
     this.projectBillService.updateProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
       abp.notify.success(`Update successfull`)
       this.getProjectBill();
