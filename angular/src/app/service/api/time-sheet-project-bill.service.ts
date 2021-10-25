@@ -13,8 +13,8 @@ export class TimeSheetProjectBillService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
-  public getProjectBill(projectId: any): Observable<any> {
-    return this.http.get<any>(this.rootUrl + `/GetAll?projectId=${projectId}`)
+  public getProjectBill(projectId: any,timesheetId:any): Observable<any> {
+    return this.http.get<any>(this.rootUrl + `/GetAll?timesheetId=${timesheetId}&&projectId=${projectId}`)
   }
   public updateProjectBill(item: any): Observable<any> {
     return this.http.put<any>(this.rootUrl + '/Update', item);

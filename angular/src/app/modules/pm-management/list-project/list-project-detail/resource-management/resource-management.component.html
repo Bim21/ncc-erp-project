@@ -66,7 +66,7 @@
                                                             #search>{{search.focus()}}
                                                     </mat-form-field>
                                                     <mat-option
-                                                        *ngFor="let user of userForProjectUser |listFilter: 'fullName'  :searchUser"
+                                                        *ngFor="let user of userForProjectUser |listFilter: 'fullName'  :searchUser : 'emailAddress'"
                                                         [value]="user.id">
                                                         {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                 </mat-select>
@@ -405,7 +405,7 @@
                                                             name="searchBillUser" #search>{{search.focus()}} 
                                                     </mat-form-field>
                                                     <mat-option
-                                                        *ngFor="let user of userForUserBill | listFilter: 'fullName' : searchUserBill"
+                                                        *ngFor="let user of userForUserBill | listFilter: 'fullName' : searchUserBill : 'emailAddress'"
                                                         [value]="user.id">
                                                         {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                 </mat-select>
