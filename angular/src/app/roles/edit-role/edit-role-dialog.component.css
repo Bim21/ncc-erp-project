@@ -131,8 +131,8 @@
     white-space: normal !important;
   }
   
-  ::ng-deep .modal {
-    z-index: 121;
+ ::ng-deep .modal-dialog {
+    z-index: 998 !important;
   }
   ::ng-deep .modal-backdrop {
     z-index: 120;

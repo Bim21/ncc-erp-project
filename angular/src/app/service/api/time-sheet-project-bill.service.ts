@@ -14,12 +14,12 @@ export class TimeSheetProjectBillService extends BaseApiService {
     super(http);
   }
   public getProjectBill(projectId: any,timesheetId:any): Observable<any> {
-    return this.http.get<any>(this.rootUrl + `/GetAll?timesheetId=${timesheetId}&&projectId=${projectId}`)
+    return this.http.get<any>(this.rootUrl + `/GetAll?timesheetId=${timesheetId}&projectId=${projectId}`)
   }
   public updateProjectBill(item: any): Observable<any> {
     return this.http.put<any>(this.rootUrl + '/Update', item);
   }
-  public UpdateFromProjectUserBill(projectId: any): Observable<any> {
-    return this.http.put<any>(this.rootUrl + `/UpdateFromProjectUserBill?projectId=${projectId}`, {});
+  public UpdateFromProjectUserBill(projectId: any,timesheetId:any): Observable<any> {
+    return this.http.put<any>(this.rootUrl + `/UpdateFromProjectUserBill?projectId=${projectId}&timesheetId=${timesheetId}`, {});
   }
 }
