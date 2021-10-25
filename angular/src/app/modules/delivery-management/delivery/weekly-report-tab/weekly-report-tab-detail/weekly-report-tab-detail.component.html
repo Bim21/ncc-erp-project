@@ -376,7 +376,7 @@
                                                                         placeholder="search">{{search.focus()}}
                                                                 </mat-form-field>
                                                                 <mat-option
-                                                                    *ngFor="let user of userList |listFilter : 'fullName'  :searchUser"
+                                                                    *ngFor="let user of userList |listFilter : 'fullName'  :searchUser : 'emailAddress'"
                                                                     [value]="user.id">
                                                                     {{user.fullName}} - ({{user.emailAddress}})
                                                                 </mat-option>
@@ -548,7 +548,7 @@
                                                                         placeholder="search">{{search.focus()}}
                                                                 </mat-form-field>
                                                                 <mat-option
-                                                                    *ngFor="let user of userList |listFilter: 'fullName' :searchUser"
+                                                                    *ngFor="let user of userList |listFilter: 'fullName' :searchUser : 'emailAddress'"
                                                                     [value]="user.id">
                                                                     {{user.fullName}} - ({{user.emailAddress}})
                                                                 </mat-option>
