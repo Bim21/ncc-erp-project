@@ -13,6 +13,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
     public class TimeSheetProjectBillDto : EntityDto<long>
     {
         public long ProjectId { get; set; }
+        public long? TimeSheetId { get; set; }
         public long UserId { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }

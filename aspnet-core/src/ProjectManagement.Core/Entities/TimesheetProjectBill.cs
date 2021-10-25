@@ -18,6 +18,9 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }
         public long ProjectId { get; set; }
+        [ForeignKey(nameof(TimesheetId))]
+        public Timesheet TimeSheet { get; set; }
+        public long? TimesheetId { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
@@ -27,5 +30,6 @@ namespace ProjectManagement.Entities
         public string ShadowNote { get; set; }
         public bool IsActive { get; set; }
         public float WorkingTime { get; set; }
+
     }
 }
