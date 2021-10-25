@@ -42,7 +42,7 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
       abp.message.error("Choose a file!")
       return
     }
-    this.timesheetProjectService.UpdateFileTimeSheetProject(this.selectedFiles, this.uploadFile.TimesheetProjectId )
+    this.timesheetProjectService.UpdateFileTimeSheetProject(this.selectedFiles, this.uploadFile.TimesheetProjectId ).pipe(catchError(this.timesheetProjectService.handleError))
     .subscribe((res) => {
       abp.notify.success("Upload File Successful!");
       this.dialogRef.close(true);

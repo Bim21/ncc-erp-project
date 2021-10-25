@@ -1,10 +1,10 @@
 @media only screen  and (max-width: 1500px) {
   .report-info .fixTableHead{
-      height: 58vh !important
+      height: 51vh !important
   }
 }
   @media only screen and (min-width: 1501px) {
    .report-info .fixTableHead{
-        height: 80vh !important
+        height: 64vh !important
     }
 }

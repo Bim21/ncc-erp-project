@@ -185,7 +185,7 @@
                                   </pre>
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="description"
                                                 [(ngModel)]="problem.description" matInput></textarea>
                                         </mat-form-field>
@@ -201,7 +201,7 @@
                                     
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
                                                 matInput></textarea>
                                         </mat-form-field>
@@ -217,7 +217,7 @@
                                    
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="solution"
                                                 [(ngModel)]="problem.solution" matInput></textarea>
                                         </mat-form-field>
@@ -232,7 +232,7 @@
                                    
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="meetingSolution"
                                                 [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                         </mat-form-field>

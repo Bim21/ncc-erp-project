@@ -247,7 +247,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     });
   }
   updateDataHRM() {
-    abp.message.confirm("Get user data from HRM?",
+    abp.message.confirm("Sync user data from HRM?",
       undefined,
       (result: boolean) => {
         if (result) {
