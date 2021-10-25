@@ -42,7 +42,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       (result: boolean) => {
         if (result) {
           this.isLoading = true
-          this.projectBillService.UpdateFromProjectUserBill(this.data.projectId).subscribe(rs => {
+          this.projectBillService.UpdateFromProjectUserBill(this.data.projectId,this.data.timesheetId).subscribe(rs => {
             this.isLoading = false
             abp.notify.success("Sync data sucessful")
             this.getProjectBill()
