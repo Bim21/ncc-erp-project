@@ -89,8 +89,7 @@
                                             <strong>Đánh giá chung: </strong>
                                             <pre class="mb-0 p-0  ml-2 text-left"
                                                 style=" white-space: pre-line;
-                                         font-size: 1.2em; font-family: sans-serif; align-self:flex-start; line-height: initial;"
-                                                *ngIf="!isEditingNote">
+                                         font-size: 1.2em; font-family: sans-serif; align-self:flex-start; line-height: initial;" *ngIf="!isEditingNote">
                                             {{generalNote}}
                                         </pre>
                                             <mat-form-field class="ml-1" style="width:68%" appearance="outline"
@@ -118,17 +117,18 @@
                                 </tr>
                             </table>
                             <div class="col-3 text-right" style="display: flex;">
-                                <div class="count-timer">
+                                <div class="count-timer" (click)="startTimmer()"
+                                    [ngClass]="!isTimmerCounting&&!isStopCounting?'pointer':''">
                                     <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
                                     <button *ngIf="(!isTimmerCounting && !isStopCounting) || isRefresh"
-                                        class="btn btn-sm  mb-2 pr-0" (click)="startTimmer()">
+                                        class="btn btn-sm  mb-2 pr-0">
                                         <i class="fas fa-clock fa-lg"></i>
                                     </button>
-                                    <button (click)="stopTimmer()" *ngIf="!isStopCounting && isStart " 
-                                        class="btn btn-sm mb-2 pr-0">
+                                    <button (click)="stopTimmer(); $event.stopPropagation()"
+                                        *ngIf="!isStopCounting && isStart " class="btn btn-sm mb-2 pr-0">
                                         <i class="fas fa-pause fa-lg"></i>
                                     </button>
-                                    <button (click)="resumeTimmer()"
+                                    <button (click)="resumeTimmer(); $event.stopPropagation()"
                                         *ngIf="isStopCounting && !isTimmerCounting && !isRefresh"
                                         class="btn btn-sm mb-2 pr-0">
                                         <i class="fas fa-play fa-lg"></i>

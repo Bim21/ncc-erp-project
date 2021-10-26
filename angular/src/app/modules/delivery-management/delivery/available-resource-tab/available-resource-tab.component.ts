@@ -36,6 +36,11 @@ export class AvailableResourceTabComponent extends AppComponentBase implements O
       relativeTo:this.route
     })
   }
+  routingAllResourceTab(){
+    this.router.navigate(['all-resource'],{
+      relativeTo:this.route
+    })
+  }
   reloadComponent() {
     this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/app/accountType']);

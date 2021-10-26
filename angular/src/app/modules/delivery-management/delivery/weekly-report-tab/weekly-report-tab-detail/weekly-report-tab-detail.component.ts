@@ -126,12 +126,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
   }
   public startTimmer(){
-    this.timmerCount.start()
-    this.isTimmerCounting=true
-    this.isStopCounting = false
-    this.isRefresh =false
-    this.isStart =true
-
+    if(!this.isTimmerCounting && ! this.isStopCounting ){
+      this.timmerCount.start()
+      this.isTimmerCounting=true
+      this.isStopCounting = false
+      this.isRefresh =false
+      this.isStart =true
+    }
   }
   public stopTimmer(){
     this.timmerCount.stop()
