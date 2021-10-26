@@ -45,6 +45,7 @@ import { ListProjectGeneralComponent } from './modules/pm-management/list-projec
 import { SkillComponent } from './modules/admin/skill/skill.component';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
+import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
 
 
 @NgModule({
@@ -206,6 +207,11 @@ import { CurrencyComponent } from './modules/admin/currency/currency.component';
               {
                 path:"future-resource",
                 component:FutureResourceComponent,
+                canActivate:[AppRouteGuard],
+              },
+              {
+                path:"all-resource",
+                component:AllResourceComponent,
                 canActivate:[AppRouteGuard],
               }
             ]

@@ -95,7 +95,15 @@
 
 
                             <!-- </td> -->
-                            <td class="text-center">{{bill.workingTime}}</td>
+                            <td class="text-center">
+                                <span *ngIf="!bill.createMode">
+                                    {{bill.workingTime}}
+                                </span>
+                                <div *ngIf="bill.createMode">
+                                    <input type="number" name="workTime" id="" class="form-control mt-1"
+                                        [(ngModel)]="bill.workingTime">
+                                </div>
+                            </td>
                             <td class="text-center">
                                 <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                 <div *ngIf="bill.createMode">
