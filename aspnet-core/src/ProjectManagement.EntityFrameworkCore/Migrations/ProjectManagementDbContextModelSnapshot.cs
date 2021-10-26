@@ -2935,6 +2935,55 @@ namespace ProjectManagement.Migrations
                     b.ToTable("ResourceRequests");
                 });
 
+            modelBuilder.Entity("ProjectManagement.Entities.ResourceRequestSkill", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ResourceRequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SkillId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceRequestId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("ResourceRequestSkills");
+                });
+
             modelBuilder.Entity("ProjectManagement.Entities.Skill", b =>
                 {
                     b.Property<long>("Id")
@@ -3183,6 +3232,9 @@ namespace ProjectManagement.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<long?>("TimesheetId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -3192,6 +3244,8 @@ namespace ProjectManagement.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("TimesheetId");
 
                     b.HasIndex("UserId");
 
@@ -3766,6 +3820,21 @@ namespace ProjectManagement.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectManagement.Entities.ResourceRequestSkill", b =>
+                {
+                    b.HasOne("ProjectManagement.Entities.ResourceRequest", "ResourceRequest")
+                        .WithMany()
+                        .HasForeignKey("ResourceRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Entities.Skill", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProjectManagement.Entities.TimesheetProject", b =>
                 {
                     b.HasOne("ProjectManagement.Entities.Project", "Project")
@@ -3788,6 +3857,10 @@ namespace ProjectManagement.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ProjectManagement.Entities.Timesheet", "TimeSheet")
+                        .WithMany()
+                        .HasForeignKey("TimesheetId");
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
                         .WithMany()

@@ -8,8 +8,8 @@
         <div class="col-6 text-right">
           <a href="javascript:;" class="btn btn-success mr-2" 
             (click)="updateDataHRM()">
-            <i class="fas fa-download"></i>
-            {{ "Get data from HRM" | localize }}
+            <i class="fas fa-sync-alt mr-1"></i>
+            {{ "Sync data from HRM" | localize }}
           </a>
           <a href="javascript:;" class="btn bg-blue" *ngIf="permission.isGranted(Pages_Users_Create)"
             (click)="createUser()">

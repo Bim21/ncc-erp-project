@@ -85,3 +85,15 @@ button {
   display: none;
   transition: 1s;
 }
+cd-timer{
+  font-size: 33px;
+  font-weight: bold;
+}
+.count-timer{
+  background-color: #ffc107;
+  height: 50px;
+  padding:0px 12px; border-radius: 5px;
+}
+.pointer{
+  cursor: pointer;
+}

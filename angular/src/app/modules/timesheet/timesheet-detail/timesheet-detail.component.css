@@ -5,3 +5,6 @@
 .file-download:hover {
   color: blue;
 }
+.project-timesheet td{
+  vertical-align: middle;
+}

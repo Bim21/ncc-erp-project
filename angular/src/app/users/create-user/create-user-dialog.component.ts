@@ -58,6 +58,8 @@ export class CreateUserDialogComponent extends AppComponentBase
   }
 
   ngOnInit(): void {
+    this.user.userName=""
+    this.user.password=""
     this.user.isActive = true;
     this.getAllSkill();
     this._userService.getRoles().subscribe((result) => {
@@ -115,7 +117,6 @@ export class CreateUserDialogComponent extends AppComponentBase
         this.bsModalRef.hide();
         this.onSave.emit();
       });
-      console.log(this.user);
   }
   public getByEnum(enumValue: number, enumObject: any) {
     for (const key in enumObject) {

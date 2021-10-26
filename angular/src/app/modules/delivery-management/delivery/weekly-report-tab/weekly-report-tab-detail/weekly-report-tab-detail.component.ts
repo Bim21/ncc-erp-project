@@ -54,6 +54,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     throw new Error('Method not implemented.');
   }
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
+  @ViewChild("timmer") timmerCount;
   public itemPerPage: number = 20;
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
@@ -97,6 +98,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   sidebarExpanded: boolean;
   isShowCurrentResource:boolean =true;
   searchUser:string =""
+  isTimmerCounting:boolean =false
+  isStopCounting:boolean =false
+  isRefresh:boolean = false
+  isStart:boolean =false
+
   constructor(private pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
@@ -118,6 +124,39 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
     });
+  }
+  public startTimmer(){
+    if(!this.isTimmerCounting && ! this.isStopCounting ){
+      this.timmerCount.start()
+      this.isTimmerCounting=true
+      this.isStopCounting = false
+      this.isRefresh =false
+      this.isStart =true
+    }
+  }
+  public stopTimmer(){
+    this.timmerCount.stop()
+    this.isTimmerCounting=false
+    this.isStopCounting =true
+    this.isRefresh =false
+
+  }
+  public refreshTimmer(){
+    this.timmerCount.reset()
+    this.isTimmerCounting=false
+    this.isStopCounting =true
+    this.isRefresh =true
+    this.isStart =false
+
+  }
+  public resumeTimmer(){
+    this.timmerCount.resume()
+    this.isTimmerCounting=true
+    this.isStopCounting =false
+    this.isRefresh =false
+
+
+
   }
   public getPmReportProject(): void {
     this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {

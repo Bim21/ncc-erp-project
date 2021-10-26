@@ -15,7 +15,7 @@ import * as _ from 'lodash';
   styleUrls: ['./create-edit-timesheet-detail.component.css']
 })
 export class CreateEditTimesheetDetailComponent implements OnInit {
-
+  public searchProject:string =""
   public isDisable = false;
   public timesheetDetail = {} as TimesheetDetailDto;
   public project = {} as ProjectDto;

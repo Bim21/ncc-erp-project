@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
+using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
@@ -84,19 +85,33 @@ namespace ProjectManagement.APIs.TimeSheets
             foreach (var item in project)
             {
                 var billInfomation = new StringBuilder();
-                var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == item.Id && x.isActive && x.Project.IsCharge)
-                                    .Select(x => new
-                                    {
-                                        FullName = x.User.FullName,
-                                        BillRole = x.BillRole,
-                                        BillRate = x.BillRate,
-                                        Note = x.Note,
-                                        ShadowNote = x.shadowNote
-                                    });
+                var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x=>x.User).Where(x => x.ProjectId == item.Id && x.isActive && x.Project.IsCharge);
+                                    //.Select(x => new
+                                    //{
+                                    //    FullName = x.User.FullName,
+                                    //    BillRole = x.BillRole,
+                                    //    BillRate = x.BillRate,
+                                    //    Note = x.Note,
+                                    //    ShadowNote = x.shadowNote
+                                    //});
 
                 foreach (var b in projectUserBills)
                 {
-                    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} - {b.ShadowNote} <br>");
+                    billInfomation.Append($"<b>{b.User.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} - {b.shadowNote} <br>");
+                    var timesheetProjectBill = new TimeSheetProjectBillDto
+                    {
+                        ProjectId = b.ProjectId,
+                        TimeSheetId = input.Id,
+                        UserId = b.UserId,
+                        BillRole = b.BillRole,
+                        BillRate = b.BillRate,
+                        StartTime = b.StartTime,
+                        EndTime = b.EndTime,
+                        Note = b.Note,
+                        ShadowNote = b.shadowNote,
+                        IsActive = b.isActive
+                    };
+                    await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
                 }
 
                 var timesheetProject = new TimesheetProject

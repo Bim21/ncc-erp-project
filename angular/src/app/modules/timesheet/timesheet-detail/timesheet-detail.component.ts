@@ -1,3 +1,4 @@
+import { ViewBillComponent } from './view-bill/view-bill.component';
 import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
 import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
@@ -23,7 +24,6 @@ import { CreateInvoiceComponent } from './create-invoice/create-invoice.componen
 })
 export class TimesheetDetailComponent extends PagedListingComponentBase<TimesheetDetailDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    // request.maxResultCount=100;
     this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
       .subscribe((data: PagedResultResultDto) => {
         this.TimesheetDetaiList = data.result.items;
@@ -31,21 +31,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
       })
   }
-  // protected list(
-  //   request: PagedRequestDto,
-  //   pageNumber: number,
-  //   finishedCallback: Function
-  // ): void {
-  //   this.listProjectService
-  //     .getAllPaging(request)
-  //     .pipe(finalize(() => {
-  //       finishedCallback();
-  //     }))
-  //     .subscribe((result: PagedResultResultDto) => {
-  //       this.listProjects = result.result.items;
-  //       this.showPaging(result.result, pageNumber);
-  //     });
-  // }
   protected delete(item: TimesheetDetailDto): void {
     abp.message.confirm(
       "Delete TimeSheet " + item.projectName + "?",
@@ -248,5 +233,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
     this.isActive = false;
     this.createdInvoice = true;
+  }
+  public viewBillDetail(bill){
+    this.dialog.open(ViewBillComponent,{
+      width: "95%",
+      data: bill
+    })
+  }
+  mouseEnter(item){
+    item.showIcon =true
+
+  }
+  mouseLeave(item){
+    item.showIcon =false
   }
 }

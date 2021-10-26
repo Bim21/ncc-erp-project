@@ -5,273 +5,285 @@ using static ProjectManagement.Authorization.Roles.StaticRoleNames;
 namespace ProjectManagement.Authorization
 {
     public static class PermissionNames
-    {     
+    {
         //Admin
         public const string Admin = "Admin";
-            public const string Admin_CanViewMenu = "Admin.CanViewMenu";
-            public const string Pages_Tenants = "Pages.Tenants";
-            public const string Pages_Roles = "Pages.Roles";
-            //User
-            public const string Pages_Users = "Pages.Users";
-                public const string Pages_Users_ViewAll = "Pages.Users.ViewAll";
-                public const string Pages_Users_Create = "Pages.Users.Create";
-                public const string Pages_Users_Update = "Pages.Users.Update";
-                public const string Pages_Users_Delete = "Pages.Users.Delete";
-                public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
-                public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
-                public const string Pages_Users_AutoUpdateUserFromHRM = "Pages.Users.AutoUpdateUserFromHRM";
+        public const string Admin_CanViewMenu = "Admin.CanViewMenu";
+        public const string Pages_Tenants = "Pages.Tenants";
+        public const string Pages_Roles = "Pages.Roles";
+        //User
+        public const string Pages_Users = "Pages.Users";
+        public const string Pages_Users_ViewAll = "Pages.Users.ViewAll";
+        public const string Pages_Users_Create = "Pages.Users.Create";
+        public const string Pages_Users_Update = "Pages.Users.Update";
+        public const string Pages_Users_Delete = "Pages.Users.Delete";
+        public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
+        public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
+        public const string Pages_Users_AutoUpdateUserFromHRM = "Pages.Users.AutoUpdateUserFromHRM";
 
-            //Config
-            public const string Admin_Configuration = "Admin.Configuration";
-            public const string Admin_Configuration_ViewAll = "Admin.Configuration.ViewAll";
-            public const string Admin_Configuration_Edit = "Admin.Configuration.Edit";
+        //Config
+        public const string Admin_Configuration = "Admin.Configuration";
+        public const string Admin_Configuration_ViewAll = "Admin.Configuration.ViewAll";
+        public const string Admin_Configuration_Edit = "Admin.Configuration.Edit";
 
-            //Client
-            public const string Admin_Client = "Admin.Client";
-            public const string Admin_Client_ViewAll = "Admin.Client.ViewAll";
-            public const string Admin_Client_Create = "Admin.Client.Create";
-            public const string Admin_Client_Edit = "Admin.Client.Edit";
-            public const string Admin_Client_Delete = "Admin.Client.Delete";
+        //Client
+        public const string Admin_Client = "Admin.Client";
+        public const string Admin_Client_ViewAll = "Admin.Client.ViewAll";
+        public const string Admin_Client_Create = "Admin.Client.Create";
+        public const string Admin_Client_Edit = "Admin.Client.Edit";
+        public const string Admin_Client_Delete = "Admin.Client.Delete";
 
-            //Currency
-            public const string Admin_Currency = "Admin.Currency";
-            public const string Admin_Currency_ViewAll = "Admin.Currency.ViewAll";
-            public const string Admin_Currency_Create = "Admin.Currency.Create";
-            public const string Admin_Currency_Edit = "Admin.Currency.Edit";
-            public const string Admin_Currency_Delete = "Admin.Currency.Delete";
+        //Currency
+        public const string Admin_Currency = "Admin.Currency";
+        public const string Admin_Currency_ViewAll = "Admin.Currency.ViewAll";
+        public const string Admin_Currency_Create = "Admin.Currency.Create";
+        public const string Admin_Currency_Edit = "Admin.Currency.Edit";
+        public const string Admin_Currency_Delete = "Admin.Currency.Delete";
 
-            //Skill
-            public const string Admin_Skill = "Admin.Skill";
-            public const string Admin_Skill_ViewAll = "Admin.Skill.ViewAll";
-            public const string Admin_Skill_Create = "Admin.Skill.Create";
-            public const string Admin_Skill_Update = "Admin.Skill.Update";
-            public const string Admin_Skill_Delete = "Admin.Skill.Delete";
+        //Skill
+        public const string Admin_Skill = "Admin.Skill";
+        public const string Admin_Skill_ViewAll = "Admin.Skill.ViewAll";
+        public const string Admin_Skill_Create = "Admin.Skill.Create";
+        public const string Admin_Skill_Update = "Admin.Skill.Update";
+        public const string Admin_Skill_Delete = "Admin.Skill.Delete";
 
         //Pm Manager
         public const string PmManager = "PmManager";
-            // view menu
-            public const string PmManager_CanViewMenu = "PmManager.CanViewMenu";
-            public const string PmManager_CanViewMenu_ResourceManagement = "PmManager.CanViewMenu.ResourceManagement";
-            public const string PmManager_CanViewMenu_Milestone = "PmManager.CanViewMenu.Milestone";
-            public const string PmManager_CanViewMenu_WeeklyReport = "PmManager.CanViewMenu.WeeklyReport";
-            public const string PmManager_CanViewMenu_ProjectChecklist = "PmManager.CanViewMenu.ProjectChecklist";
-            public const string PmManager_CanViewMenu_Timesheet = "PmManager.CanViewMenu.Timesheet";
+        // view menu
+        public const string PmManager_CanViewMenu = "PmManager.CanViewMenu";
+        public const string PmManager_CanViewMenu_ResourceManagement = "PmManager.CanViewMenu.ResourceManagement";
+        public const string PmManager_CanViewMenu_Milestone = "PmManager.CanViewMenu.Milestone";
+        public const string PmManager_CanViewMenu_WeeklyReport = "PmManager.CanViewMenu.WeeklyReport";
+        public const string PmManager_CanViewMenu_ProjectChecklist = "PmManager.CanViewMenu.ProjectChecklist";
+        public const string PmManager_CanViewMenu_Timesheet = "PmManager.CanViewMenu.Timesheet";
 
-            public const string PmManager_CanViewMenu_PMCanCreate = "PmManager.CanViewMenu.PMCanCreateProjectUser";
-            public const string PmManager_CanViewMenu_PMCanUpdate = "PmManager.CanViewMenu.PMCanUpdateProjectUser";
-            public const string PmManager_CanViewMenu_PMCanDelete = "PmManager.CanViewMenu.PMCanDeleteProjectUser";
+        public const string PmManager_CanViewMenu_PMCanCreate = "PmManager.CanViewMenu.PMCanCreateProjectUser";
+        public const string PmManager_CanViewMenu_PMCanUpdate = "PmManager.CanViewMenu.PMCanUpdateProjectUser";
+        public const string PmManager_CanViewMenu_PMCanDelete = "PmManager.CanViewMenu.PMCanDeleteProjectUser";
 
-            //Project
-            public const string PmManager_Project = "PmManager.Project";
-            public const string PmManager_Project_ViewAll = "PmManager.Project.ViewAll";
-            public const string PmManager_Project_ViewonlyMe = "PmManager.Project.ViewOnlyMe";
-            public const string PmManager_Project_ViewDetail = "PmManager.Project.ViewDetail";
-            public const string PmManager_Project_ViewProjectInfor = "PmManager.Project.ViewProjectInfor";
-            public const string PmManager_Project_Create = "PmManager.Project.Create";
-            public const string PmManager_Project_Update = "PmManager.Project.Update";
-            public const string PmManager_Project_Delete = "PmManager.Project.Delete";
-            public const string PmManager_Project_UpdateProjectDetail = "PmManager.Project.UpdateProjectDetail";
+        //Project
+        public const string PmManager_Project = "PmManager.Project";
+        public const string PmManager_Project_ViewAll = "PmManager.Project.ViewAll";
+        public const string PmManager_Project_ViewonlyMe = "PmManager.Project.ViewOnlyMe";
+        public const string PmManager_Project_ViewDetail = "PmManager.Project.ViewDetail";
+        public const string PmManager_Project_ViewProjectInfor = "PmManager.Project.ViewProjectInfor";
+        public const string PmManager_Project_Create = "PmManager.Project.Create";
+        public const string PmManager_Project_Update = "PmManager.Project.Update";
+        public const string PmManager_Project_Delete = "PmManager.Project.Delete";
+        public const string PmManager_Project_UpdateProjectDetail = "PmManager.Project.UpdateProjectDetail";
 
-            //Project User Bill
-            public const string PmManager_ProjectUserBill = "PmManager.ProjectUserBill";
-            public const string PmManager_ProjectUserBill_GetAllPaging = "PmManager.ProjectUserBill.GetAllPaging";
-            public const string PmManager_ProjectUserBill_GetAllByproject = "PmManager.ProjectUserBill.GetAllbyProject";
-            public const string PmManager_ProjectUserBill_Create = "PmManager.ProjectUserBill.Create";
-            public const string PmManager_ProjectUserBill_Update = "PmManager.ProjectUserBill.Update";
-            public const string PmManager_ProjectUserBill_Delete = "PmManager.ProjectUserBill.Delete";
+        //Project User Bill
+        public const string PmManager_ProjectUserBill = "PmManager.ProjectUserBill";
+        public const string PmManager_ProjectUserBill_GetAllPaging = "PmManager.ProjectUserBill.GetAllPaging";
+        public const string PmManager_ProjectUserBill_GetAllByproject = "PmManager.ProjectUserBill.GetAllbyProject";
+        public const string PmManager_ProjectUserBill_Create = "PmManager.ProjectUserBill.Create";
+        public const string PmManager_ProjectUserBill_Update = "PmManager.ProjectUserBill.Update";
+        public const string PmManager_ProjectUserBill_Delete = "PmManager.ProjectUserBill.Delete";
 
-            //ProjectUser
-            public const string PmManager_ProjectUser = "PmManager.ProjectUser";
-            public const string PmManager_ProjectUser_ViewAllByProject = "PmManager.ProjectUser.ViewAllByProject";
-            public const string PmManager_ProjectUser_ViewDetailProjectUser = "PmManager.ProjectUser.ViewDetailProjectUser";
-            public const string PmManager_ProjectUser_Create = "PmManager.ProjectUser.Create";
-            public const string PmManager_ProjectUser_Update = "PmManager.ProjectUser.Update";
-            public const string PmManager_ProjectUser_Delete = "PmManager.ProjectUser.Delete";
+        //ProjectUser
+        public const string PmManager_ProjectUser = "PmManager.ProjectUser";
+        public const string PmManager_ProjectUser_ViewAllByProject = "PmManager.ProjectUser.ViewAllByProject";
+        public const string PmManager_ProjectUser_ViewDetailProjectUser = "PmManager.ProjectUser.ViewDetailProjectUser";
+        public const string PmManager_ProjectUser_Create = "PmManager.ProjectUser.Create";
+        public const string PmManager_ProjectUser_Update = "PmManager.ProjectUser.Update";
+        public const string PmManager_ProjectUser_Delete = "PmManager.ProjectUser.Delete";
 
-            //Project Milestone
-            public const string PmManager_ProjectMilestone = "PmManager.ProjectMilestone";
-            public const string PmManager_ProjectMilestone_Create = "PmManager.ProjectMilestone.Create";
-            public const string PmManager_ProjectMilestone_Delete = "PmManager.ProjectMilestone.Delete";
-            public const string PmManager_ProjectMilestone_Update = "PmManager.ProjectMilestone.Update";
-            public const string PmManager_ProjectMilestone_ViewAll = "PmManager.ProjectMilestone.ViewAll";
+        //Project Milestone
+        public const string PmManager_ProjectMilestone = "PmManager.ProjectMilestone";
+        public const string PmManager_ProjectMilestone_Create = "PmManager.ProjectMilestone.Create";
+        public const string PmManager_ProjectMilestone_Delete = "PmManager.ProjectMilestone.Delete";
+        public const string PmManager_ProjectMilestone_Update = "PmManager.ProjectMilestone.Update";
+        public const string PmManager_ProjectMilestone_ViewAll = "PmManager.ProjectMilestone.ViewAll";
 
-            //PmReportProject
-            public const string PmManager_PMReportProject = "PmManager.PMReportProject";
-            public const string PmManager_PMReportProject_GetAllByPmReport = "PmManager.PMReportProject.GetAllByPmProject";
-            public const string PmManager_PMReportProject_ResourceChangesDuringTheWeek = "PmManager.PMReportProject.ResourceChangesDuringTheWeek";
-            public const string PmManager_PMReportProject_ResourceChangesInTheFuture = "PmManager.PMReportProject.ResourceChangesInTheFuture";
-            public const string PmManager_PMReportProject_SendReport = "PmManager.PMReportProject.SendReport";
-            public const string PmManager_PMReportProject_UpdatePmReportProjectHealth = "PmManager.PMReportProject.UpdatePmReportProjectHealth";
-            public const string PmManager_PMReportProject_Create = "PmManager.PMReportProject.Create";
-            public const string PmManager_PMReportProject_Update = "PmManager.PMReportProject.Update";
-            public const string PmManager_PMReportProject_Delete = "PmManager.PMReportProject.Delete";
-            public const string PmManager_PMReportProject_UpdateNote = "PmManager.PMReportProject.UpdateNote";
-            public const string PmManager_PMReportProject_GetWorkingTimeFromTimesheet = "PmManager.PMReportProject.GetWorkingTimeFromTimesheet";
+        //PmReportProject
+        public const string PmManager_PMReportProject = "PmManager.PMReportProject";
+        public const string PmManager_PMReportProject_GetAllByPmReport = "PmManager.PMReportProject.GetAllByPmProject";
+        public const string PmManager_PMReportProject_ResourceChangesDuringTheWeek = "PmManager.PMReportProject.ResourceChangesDuringTheWeek";
+        public const string PmManager_PMReportProject_ResourceChangesInTheFuture = "PmManager.PMReportProject.ResourceChangesInTheFuture";
+        public const string PmManager_PMReportProject_SendReport = "PmManager.PMReportProject.SendReport";
+        public const string PmManager_PMReportProject_UpdatePmReportProjectHealth = "PmManager.PMReportProject.UpdatePmReportProjectHealth";
+        public const string PmManager_PMReportProject_Create = "PmManager.PMReportProject.Create";
+        public const string PmManager_PMReportProject_Update = "PmManager.PMReportProject.Update";
+        public const string PmManager_PMReportProject_Delete = "PmManager.PMReportProject.Delete";
+        public const string PmManager_PMReportProject_UpdateNote = "PmManager.PMReportProject.UpdateNote";
+        public const string PmManager_PMReportProject_GetWorkingTimeFromTimesheet = "PmManager.PMReportProject.GetWorkingTimeFromTimesheet";
 
 
-            //Resource Request
-            public const string PmManager_ResourceRequest = "PmManager.ResourceRequest";
-            public const string PmManager_ResourceRequest_ViewAllByProject = "PmManager.ResourceRequest.ViewAllByProject";
-            public const string PmManager_ResourceRequest_ViewAllResourceRequest = "PmManager.ResourceRequest.ViewAllResourceRequest";
-            public const string PmManager_ResourceRequest_ViewDetailResourceRequest = "PmManager.ResourceRequest.ViewDetailResourceRequest";
-            public const string PmManager_ResourceRequest_AddUserToRequest = "PmManager.ResourceRequest.AddUserToRequest";
-            public const string PmManager_ResourceRequest_SearchAvailableUserForRequest = "PmManager.ResourceRequest.SearchAvailableUserForRequest";
-            public const string PmManager_ResourceRequest_AvailableResource = "PmManager.ResourceRequest.AvailableResource";
-            public const string PmManager_ResourceRequest_AvailableResourceFuture = "PmManager.ResourceRequest.AvailableResourceFuture";
-            public const string PmManager_ResourceRequest_PlanUser = "PmManager.ResourceRequest.PlanUser";
-            public const string PmManager_ResourceRequest_ApproveUser = "PmManager.ResourceRequest.ApproveUser";
-            public const string PmManager_ResourceRequest_RejectUser = "PmManager.ResourceRequest.RejectUser";
-            public const string PmManager_ResourceRequest_Create = "PmManager.ResourceRequest.Create";
-            public const string PmManager_ResourceRequest_Update = "PmManager.ResourceRequest.Update";
-            public const string PmManager_ResourceRequest_Delete = "PmManager.ResourceRequest.Delete";
+        //Resource Request
+        public const string PmManager_ResourceRequest = "PmManager.ResourceRequest";
+        public const string PmManager_ResourceRequest_ViewAllByProject = "PmManager.ResourceRequest.ViewAllByProject";
+        public const string PmManager_ResourceRequest_ViewAllResourceRequest = "PmManager.ResourceRequest.ViewAllResourceRequest";
+        public const string PmManager_ResourceRequest_ViewDetailResourceRequest = "PmManager.ResourceRequest.ViewDetailResourceRequest";
+        public const string PmManager_ResourceRequest_AddUserToRequest = "PmManager.ResourceRequest.AddUserToRequest";
+        public const string PmManager_ResourceRequest_SearchAvailableUserForRequest = "PmManager.ResourceRequest.SearchAvailableUserForRequest";
+        public const string PmManager_ResourceRequest_AvailableResource = "PmManager.ResourceRequest.AvailableResource";
+        public const string PmManager_ResourceRequest_AvailableResourceFuture = "PmManager.ResourceRequest.AvailableResourceFuture";
+        public const string PmManager_ResourceRequest_PlanUser = "PmManager.ResourceRequest.PlanUser";
+        public const string PmManager_ResourceRequest_ApproveUser = "PmManager.ResourceRequest.ApproveUser";
+        public const string PmManager_ResourceRequest_RejectUser = "PmManager.ResourceRequest.RejectUser";
+        public const string PmManager_ResourceRequest_Create = "PmManager.ResourceRequest.Create";
+        public const string PmManager_ResourceRequest_Update = "PmManager.ResourceRequest.Update";
+        public const string PmManager_ResourceRequest_Delete = "PmManager.ResourceRequest.Delete";
+        public const string PmManager_ResourceRequest_CreateSkill = "PmManager.ResourceRequest.CreateSkill";
+        public const string PmManager_ResourceRequest_DeleteSkill = "PmManager.ResourceRequest.DeleteSkill";
+        public const string PmManager_ResourceRequest_GetSkillDetail = "PmManager.ResourceRequest.GetSkillDetail";
 
-            //PMReportProjectIssues
-            public const string PmManager_PMReportProjectIssue = "PmManager.PMReportProjectIssue";
-            public const string PmManager_PMReportProjectIssue_ProblemsOfTheWeek = "PmManager.PMReportProjectIssue.ProblemsOfTheWeek";
-            public const string PmManager_PMReportProjectIssue_Create = "PmManager.PMReportProjectIssue.Create";
-            public const string PmManager_PMReportProjectIssue_Update = "PmManager.PMReportProjectIssue.Update";
-            public const string PmManager_PMReportProjectIssue_Delete = "PmManager.PMReportProjectIssue.Delete";
+        //PMReportProjectIssues
+        public const string PmManager_PMReportProjectIssue = "PmManager.PMReportProjectIssue";
+        public const string PmManager_PMReportProjectIssue_ProblemsOfTheWeek = "PmManager.PMReportProjectIssue.ProblemsOfTheWeek";
+        public const string PmManager_PMReportProjectIssue_Create = "PmManager.PMReportProjectIssue.Create";
+        public const string PmManager_PMReportProjectIssue_Update = "PmManager.PMReportProjectIssue.Update";
+        public const string PmManager_PMReportProjectIssue_Delete = "PmManager.PMReportProjectIssue.Delete";
 
         //Timesheet
         public const string Timesheet = "Timesheet";
-            public const string Timesheet_CanViewMenu = "Timesheet.CanViewMenu";
-            //Timesheet
-            public const string Timesheet_Timesheet = "Timesheet.Timesheet";
-            public const string Timesheet_Timesheet_ViewAll = "Timesheet.Timesheet.ViewAll";
-            public const string Timesheet_Timesheet_Get = "Timesheet.Timesheet.Get";
-            public const string Timesheet_Timesheet_Create = "Timesheet.Timesheet.Create";
-            public const string Timesheet_Timesheet_Update = "Timesheet.Timesheet.Update";
-            public const string Timesheet_Timesheet_Delete = "Timesheet.Timesheet.Delete";
-            public const string Timesheet_Timesheet_DoneTimesheetById = "Timesheet.Timesheet.DoneTimesheetById";
-            public const string Timesheet_Timesheet_ReverseActive = "Timesheet.Timesheet.ReverseActive";
+        public const string Timesheet_CanViewMenu = "Timesheet.CanViewMenu";
+        //Timesheet
+        public const string Timesheet_Timesheet = "Timesheet.Timesheet";
+        public const string Timesheet_Timesheet_ViewAll = "Timesheet.Timesheet.ViewAll";
+        public const string Timesheet_Timesheet_Get = "Timesheet.Timesheet.Get";
+        public const string Timesheet_Timesheet_Create = "Timesheet.Timesheet.Create";
+        public const string Timesheet_Timesheet_Update = "Timesheet.Timesheet.Update";
+        public const string Timesheet_Timesheet_Delete = "Timesheet.Timesheet.Delete";
+        public const string Timesheet_Timesheet_DoneTimesheetById = "Timesheet.Timesheet.DoneTimesheetById";
+        public const string Timesheet_Timesheet_ReverseActive = "Timesheet.Timesheet.ReverseActive";
 
-            //TimesheetProject
-            public const string Timesheet_TimesheetProject = "Timesheet.TimesheetProject";
-            public const string Timesheet_TimesheetProject_GetAllByproject = "Timesheet.TimesheetProject.GetAllByProject";
-            public const string Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet = "Timesheet.Timesheet.GetAllProjectTimesheetByTimesheet";
-            public const string Timesheet_TimesheetProject_ViewOnlyme = "Timesheet.Timesheet.ViewOnlyMe";
-            public const string Timesheet_TimesheetProject_ViewOnlyActiveProject = "Timesheet.Timesheet.ViewOnlyActiveProject";
-            public const string Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = "Timesheet.TimesheetProject.GetAllRemainProjectInTimesheet";
-            public const string Timesheet_TimesheetProject_ViewProjectBillInfomation = "Timesheet.Timesheet.ViewProjectBillInfomation";
-            public const string Timesheet_TimesheetProject_Create = "Timesheet.TimesheetProject.Create";
-            public const string Timesheet_TimesheetProject_Update = "Timesheet.TimesheetProject.Update";
-            public const string Timesheet_TimesheetProject_Delete = "Timesheet.TimesheetProject.Delete";
-            public const string Timesheet_TimesheetProject_UploadFileTimesheetProject = "Timesheet.TimesheetProject.UploadFileTimesheetProject";
-            public const string Timesheet_TimesheetProject_DownloadFileTimesheetProject = "Timesheet.TimesheetProject.DownloadFileTimesheetProject";
-            public const string Timesheet_TimesheetProject_ViewInvoice = "Timesheet.TimesheetProject.ViewInvoice";
-            public const string Timesheet_TimesheetProject_CreateInvoice = "Timesheet.TimesheetProject.CreateInvoice";
+        //TimesheetProject
+        public const string Timesheet_TimesheetProject = "Timesheet.TimesheetProject";
+        public const string Timesheet_TimesheetProject_GetAllByproject = "Timesheet.TimesheetProject.GetAllByProject";
+        public const string Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet = "Timesheet.Timesheet.GetAllProjectTimesheetByTimesheet";
+        public const string Timesheet_TimesheetProject_ViewOnlyme = "Timesheet.Timesheet.ViewOnlyMe";
+        public const string Timesheet_TimesheetProject_ViewOnlyActiveProject = "Timesheet.Timesheet.ViewOnlyActiveProject";
+        public const string Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = "Timesheet.TimesheetProject.GetAllRemainProjectInTimesheet";
+        public const string Timesheet_TimesheetProject_ViewProjectBillInfomation = "Timesheet.Timesheet.ViewProjectBillInfomation";
+        public const string Timesheet_TimesheetProject_Create = "Timesheet.TimesheetProject.Create";
+        public const string Timesheet_TimesheetProject_Update = "Timesheet.TimesheetProject.Update";
+        public const string Timesheet_TimesheetProject_Delete = "Timesheet.TimesheetProject.Delete";
+        public const string Timesheet_TimesheetProject_UploadFileTimesheetProject = "Timesheet.TimesheetProject.UploadFileTimesheetProject";
+        public const string Timesheet_TimesheetProject_DownloadFileTimesheetProject = "Timesheet.TimesheetProject.DownloadFileTimesheetProject";
+        public const string Timesheet_TimesheetProject_ViewInvoice = "Timesheet.TimesheetProject.ViewInvoice";
+        public const string Timesheet_TimesheetProject_CreateInvoice = "Timesheet.TimesheetProject.CreateInvoice";
+
+            //TimeSheetProjectBill
+            public const string Timesheet_TimesheetProject_TimesheetProjectBill = "Timesheet.TimesheetProject.TimesheetProjectBill";
+            public const string Timesheet_TimesheetProject_TimesheetProjectBill_GetAll = "Timesheet.TimesheetProject.TimesheetProjectBill.GetAll";
+            public const string Timesheet_TimesheetProject_TimesheetProjectBill_Update = "Timesheet.TimesheetProject.TimesheetProjectBill.Update";
+            public const string Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill = "Timesheet.TimesheetProject.TimesheetProjectBill.UpdateFromProjectUserBill";
 
         //Checklist
         public const string CheckList = "CheckList";
-            public const string CheckList_CanViewMenu = "CheckList.CanviewMenu";
-            // Check List Category
-            public const string CheckList_CheckListCategory = "CheckList.CheckListCategory";
-            public const string CheckList_CheckListCategory_ViewAll = "CheckList.CheckListCategory.ViewAll";
-            public const string CheckList_CheckListCategory_Create = "CheckList.CheckListCategory.Create";
-            public const string CheckList_CheckListCategory_Update = "CheckList.CheckListCategory.Update";
-            public const string CheckList_CheckListCategory_Delete = "CheckList.CheckListCategory.Delete";
+        public const string CheckList_CanViewMenu = "CheckList.CanviewMenu";
+        // Check List Category
+        public const string CheckList_CheckListCategory = "CheckList.CheckListCategory";
+        public const string CheckList_CheckListCategory_ViewAll = "CheckList.CheckListCategory.ViewAll";
+        public const string CheckList_CheckListCategory_Create = "CheckList.CheckListCategory.Create";
+        public const string CheckList_CheckListCategory_Update = "CheckList.CheckListCategory.Update";
+        public const string CheckList_CheckListCategory_Delete = "CheckList.CheckListCategory.Delete";
 
-            // Check List Item
-            public const string CheckList_CheckListItem = "CheckList.CheckListItem";
-            public const string CheckList_CheckListItem_ViewAll = "CheckList.CheckListItem.ViewAll";
-            public const string CheckList_CheckListItem_Create = "CheckList.CheckListItem.Create";
-            public const string CheckList_CheckListItem_Update = "CheckList.CheckListItem.Update";
-            public const string CheckList_CheckListItem_Delete = "CheckList.CheckListItem.Delete";
+        // Check List Item
+        public const string CheckList_CheckListItem = "CheckList.CheckListItem";
+        public const string CheckList_CheckListItem_ViewAll = "CheckList.CheckListItem.ViewAll";
+        public const string CheckList_CheckListItem_Create = "CheckList.CheckListItem.Create";
+        public const string CheckList_CheckListItem_Update = "CheckList.CheckListItem.Update";
+        public const string CheckList_CheckListItem_Delete = "CheckList.CheckListItem.Delete";
 
-            // Project Checklist
-            public const string CheckList_ProjectChecklist = "CheckList.ProjectChecklist";
-            public const string CheckList_ProjectChecklist_Create = "CheckList.ProjectChecklist.Create";
-            public const string CheckList_ProjectChecklist_Delete = "CheckList.ProjectChecklist.Delete";
-            public const string CheckList_ProjectChecklist_ReverseActive = "CheckList.ProjectChecklist.ReverseActive";
-            public const string CheckList_ProjectChecklist_AddByProjectType = "CheckList.ProjectChecklist.AddByProjectType";
-            public const string CheckList_ProjectChecklist_GetCheckListItemByProject = "CheckList.ProjectChecklist.GetCheckListItemByProject";
-            public const string CheckList_ProjectChecklist_AddCheckListItemByProject = "CheckList.ProjectChecklist.AddCheckListItemByProject";
+        // Project Checklist
+        public const string CheckList_ProjectChecklist = "CheckList.ProjectChecklist";
+        public const string CheckList_ProjectChecklist_Create = "CheckList.ProjectChecklist.Create";
+        public const string CheckList_ProjectChecklist_Delete = "CheckList.ProjectChecklist.Delete";
+        public const string CheckList_ProjectChecklist_ReverseActive = "CheckList.ProjectChecklist.ReverseActive";
+        public const string CheckList_ProjectChecklist_AddByProjectType = "CheckList.ProjectChecklist.AddByProjectType";
+        public const string CheckList_ProjectChecklist_GetCheckListItemByProject = "CheckList.ProjectChecklist.GetCheckListItemByProject";
+        public const string CheckList_ProjectChecklist_AddCheckListItemByProject = "CheckList.ProjectChecklist.AddCheckListItemByProject";
 
         //Sao Do
-        public const string SaoDo = "SaoDo";   
-            public const string SaoDo_CanViewMenu = "SaoDo.CanViewMenu";
-            // Audit Result People
-            public const string SaoDo_AuditResultPeople = "SaoDo.AuditResultPeople";
-            public const string SaoDo_AuditResultPeople_Create = "SaoDo.AuditResultPeople.Create";
-            public const string SaoDo_AuditResultPeople_Delete = "SaoDo.AuditResultPeople.Delete";
-            public const string SaoDo_AuditResultPeople_Update = "SaoDo.AuditResultPeople.Update";
+        public const string SaoDo = "SaoDo";
+        public const string SaoDo_CanViewMenu = "SaoDo.CanViewMenu";
+        // Audit Result People
+        public const string SaoDo_AuditResultPeople = "SaoDo.AuditResultPeople";
+        public const string SaoDo_AuditResultPeople_Create = "SaoDo.AuditResultPeople.Create";
+        public const string SaoDo_AuditResultPeople_Delete = "SaoDo.AuditResultPeople.Delete";
+        public const string SaoDo_AuditResultPeople_Update = "SaoDo.AuditResultPeople.Update";
 
-            // Audit Result
-            public const string SaoDo_AuditResult = "SaoDo.AuditResult";
-            public const string SaoDo_AuditResult_Create = "SaoDo.AuditResult.Create";
-            public const string SaoDo_AuditResult_Delete = "SaoDo.AuditResult.Delete";
-            public const string SaoDo_AuditResult_Update = "SaoDo.AuditResult.Update";
-            public const string SaoDo_AuditResult_GetNote = "SaoDo.AuditResult.GetNote";
-            public const string SaoDo_AuditResult_UpdateNote = "SaoDo.AuditResult.UpdateNote";
+        // Audit Result
+        public const string SaoDo_AuditResult = "SaoDo.AuditResult";
+        public const string SaoDo_AuditResult_Create = "SaoDo.AuditResult.Create";
+        public const string SaoDo_AuditResult_Delete = "SaoDo.AuditResult.Delete";
+        public const string SaoDo_AuditResult_Update = "SaoDo.AuditResult.Update";
+        public const string SaoDo_AuditResult_GetNote = "SaoDo.AuditResult.GetNote";
+        public const string SaoDo_AuditResult_UpdateNote = "SaoDo.AuditResult.UpdateNote";
 
-            // Audit Session
-            public const string SaoDo_AuditSession = "SaoDo.AuditSession";
-            public const string SaoDo_AuditSession_Create = "SaoDo.AuditSession.Create";
-            public const string SaoDo_AuditSession_Delete = "SaoDo.AuditSession.Delete";
-            public const string SaoDo_AuditSession_Update = "SaoDo.AuditSession.Update";
-            public const string SaoDo_AuditSession_View = "SaoDo.AuditSession.View";
-            public const string SaoDo_AuditSession_ViewAll = "SaoDo.AuditSession.ViewAll";
-            public const string SaoDo_AuditSession_AddAuditResult = "SaoDo.AuditSession.AddAuditResult";
+        // Audit Session
+        public const string SaoDo_AuditSession = "SaoDo.AuditSession";
+        public const string SaoDo_AuditSession_Create = "SaoDo.AuditSession.Create";
+        public const string SaoDo_AuditSession_Delete = "SaoDo.AuditSession.Delete";
+        public const string SaoDo_AuditSession_Update = "SaoDo.AuditSession.Update";
+        public const string SaoDo_AuditSession_View = "SaoDo.AuditSession.View";
+        public const string SaoDo_AuditSession_ViewAll = "SaoDo.AuditSession.ViewAll";
+        public const string SaoDo_AuditSession_AddAuditResult = "SaoDo.AuditSession.AddAuditResult";
 
         //Delivery Management
         public const string DeliveryManagement = "DeliveryManagement";
-            public const string DeliveryManagement_CanViewMenu = "DeliveryManagement.CanViewMenu";
-            public const string Deliverymanagement_CanViewMenu_ResourceManagement = "Deliverymanagement.CanViewMenu.ResourceManagement";
-            public const string DeliveryManagement_CanViewMenu_WeeklyReport = "Deliverymanagement.CanViewMenu.WeeklyReport";
-            //PmReport
-            public const string DeliveryManagement_PMReport = "DeliveryManagement.PMReport";
-            public const string DeliveryManagement_PMReport_ViewAll = "DeliveryManagement.PMReport.ViewAll";
-            public const string DeliveryManagement_PMReport_Create = "DeliveryManagement.PMReport.Create";
-            public const string DeliveryManagement_PMReport_Update = "DeliveryManagement.PMReport.Update";
-            public const string DeliveryManagement_PMReport_Delete = "DeliveryManagement.PMReport.Delete";
-            public const string DeliveryManagement_PMReport_Get = "DeliveryManagement.PMReport.Get";
-            public const string DeliveryManagement_PMReport_CloseReport = "DeliveryManagement.PMReport.CloseReport";
-            public const string DeliveryManagement_PMReport_StatisticsReport = "DeliveryManagement.PMReport.StatisticsReport";
+        public const string DeliveryManagement_CanViewMenu = "DeliveryManagement.CanViewMenu";
+        public const string Deliverymanagement_CanViewMenu_ResourceManagement = "Deliverymanagement.CanViewMenu.ResourceManagement";
+        public const string DeliveryManagement_CanViewMenu_WeeklyReport = "Deliverymanagement.CanViewMenu.WeeklyReport";
+        //PmReport
+        public const string DeliveryManagement_PMReport = "DeliveryManagement.PMReport";
+        public const string DeliveryManagement_PMReport_ViewAll = "DeliveryManagement.PMReport.ViewAll";
+        public const string DeliveryManagement_PMReport_Create = "DeliveryManagement.PMReport.Create";
+        public const string DeliveryManagement_PMReport_Update = "DeliveryManagement.PMReport.Update";
+        public const string DeliveryManagement_PMReport_Delete = "DeliveryManagement.PMReport.Delete";
+        public const string DeliveryManagement_PMReport_Get = "DeliveryManagement.PMReport.Get";
+        public const string DeliveryManagement_PMReport_CloseReport = "DeliveryManagement.PMReport.CloseReport";
+        public const string DeliveryManagement_PMReport_StatisticsReport = "DeliveryManagement.PMReport.StatisticsReport";
 
-            //PmReportProject
-            public const string DeliveryManagement_PMReportProject = "DeliveryManagement.PMReportProject";
-            public const string DeliveryManagement_PMReportProject_GetAllByPmReport = "DeliveryManagement.PMReportProject.GetAllByPmProject";
-            public const string DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = "DeliveryManagement.PMReportProject.ResourceChangesDuringTheWeek";
-            public const string DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = "DeliveryManagement.PMReportProject.ResourceChangesInTheFuture";
-            public const string DeliveryManagement_PMReportProject_SendReport = "DeliveryManagement.PMReportProject.SendReport";
-            public const string DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth = "DeliveryManagement.PMReportProject.UpdatePmReportProjectHealth";
-            public const string DeliveryManagement_PMReportProject_Create = "DeliveryManagement.PMReportProject.Create";
-            public const string DeliveryManagement_PMReportProject_Update = "DeliveryManagement.PMReportProject.Update";
-            public const string DeliveryManagement_PMReportProject_Delete = "DeliveryManagement.PMReportProject.Delete";
-            public const string DeliveryManagement_PMReportProject_UpdateNote = "DeliveryManagement.PMReportProject.UpdateNote";
-            public const string DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet = "DeliveryManagement.PMReportProject.GetWorkingTimeFromTimesheet";
+        //PmReportProject
+        public const string DeliveryManagement_PMReportProject = "DeliveryManagement.PMReportProject";
+        public const string DeliveryManagement_PMReportProject_GetAllByPmReport = "DeliveryManagement.PMReportProject.GetAllByPmProject";
+        public const string DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = "DeliveryManagement.PMReportProject.ResourceChangesDuringTheWeek";
+        public const string DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = "DeliveryManagement.PMReportProject.ResourceChangesInTheFuture";
+        public const string DeliveryManagement_PMReportProject_SendReport = "DeliveryManagement.PMReportProject.SendReport";
+        public const string DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth = "DeliveryManagement.PMReportProject.UpdatePmReportProjectHealth";
+        public const string DeliveryManagement_PMReportProject_Create = "DeliveryManagement.PMReportProject.Create";
+        public const string DeliveryManagement_PMReportProject_Update = "DeliveryManagement.PMReportProject.Update";
+        public const string DeliveryManagement_PMReportProject_Delete = "DeliveryManagement.PMReportProject.Delete";
+        public const string DeliveryManagement_PMReportProject_UpdateNote = "DeliveryManagement.PMReportProject.UpdateNote";
+        public const string DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet = "DeliveryManagement.PMReportProject.GetWorkingTimeFromTimesheet";
 
-            //Resource Request
-            public const string DeliveryManagement_ResourceRequest = "DeliveryManagement.ResourceRequest";
-            public const string DeliveryManagement_ResourceRequest_ViewAllByProject = "DeliveryManagement.ResourceRequest.ViewAllByProject";
-            public const string DeliveryManagement_ResourceRequest_ViewAllResourceRequest = "DeliveryManagement.ResourceRequest.ViewAllResourceRequest";
-            public const string DeliveryManagement_ResourceRequest_ViewDetailResourceRequest = "DeliveryManagement.ResourceRequest.ViewDetailResourceRequest";
-            public const string DeliveryManagement_ResourceRequest_AddUserToRequest = "DeliveryManagement.ResourceRequest.AddUserToRequest";
-            public const string DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest = "DeliveryManagement.ResourceRequest.SearchAvailableUserForRequest";
-            public const string DeliveryManagement_ResourceRequest_AvailableResource = "DeliveryManagement.ResourceRequest.AvailableResource";
-            public const string DeliveryManagement_ResourceRequest_AvailableResourceFuture = "DeliveryManagement.ResourceRequest.AvailableResourceFuture";
-            public const string DeliveryManagement_ResourceRequest_PlanUser = "DeliveryManagement.ResourceRequest.PlanUser";
-            public const string DeliveryManagement_ResourceRequest_ApproveUser = "DeliveryManagement.ResourceRequest.ApproveUser";
-            public const string DeliveryManagement_ResourceRequest_RejectUser = "DeliveryManagement.ResourceRequest.RejectUser";
-            public const string DeliveryManagement_ResourceRequest_Create = "DeliveryManagement.ResourceRequest.Create";
-            public const string DeliveryManagement_ResourceRequest_Update = "DeliveryManagement.ResourceRequest.Update";
-            public const string DeliveryManagement_ResourceRequest_Delete = "DeliveryManagement.ResourceRequest.Delete";
-            public const string DeliveryManagement_ResourceRequest_GetProjectForDM = "DeliveryManagement.ResourceRequest.GetProjectForDM";
+        //Resource Request
+        public const string DeliveryManagement_ResourceRequest = "DeliveryManagement.ResourceRequest";
+        public const string DeliveryManagement_ResourceRequest_ViewAllByProject = "DeliveryManagement.ResourceRequest.ViewAllByProject";
+        public const string DeliveryManagement_ResourceRequest_ViewAllResourceRequest = "DeliveryManagement.ResourceRequest.ViewAllResourceRequest";
+        public const string DeliveryManagement_ResourceRequest_ViewDetailResourceRequest = "DeliveryManagement.ResourceRequest.ViewDetailResourceRequest";
+        public const string DeliveryManagement_ResourceRequest_AddUserToRequest = "DeliveryManagement.ResourceRequest.AddUserToRequest";
+        public const string DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest = "DeliveryManagement.ResourceRequest.SearchAvailableUserForRequest";
+        public const string DeliveryManagement_ResourceRequest_AvailableResource = "DeliveryManagement.ResourceRequest.AvailableResource";
+        public const string DeliveryManagement_ResourceRequest_AvailableResourceFuture = "DeliveryManagement.ResourceRequest.AvailableResourceFuture";
+        public const string DeliveryManagement_ResourceRequest_PlanUser = "DeliveryManagement.ResourceRequest.PlanUser";
+        public const string DeliveryManagement_ResourceRequest_ApproveUser = "DeliveryManagement.ResourceRequest.ApproveUser";
+        public const string DeliveryManagement_ResourceRequest_RejectUser = "DeliveryManagement.ResourceRequest.RejectUser";
+        public const string DeliveryManagement_ResourceRequest_Create = "DeliveryManagement.ResourceRequest.Create";
+        public const string DeliveryManagement_ResourceRequest_Update = "DeliveryManagement.ResourceRequest.Update";
+        public const string DeliveryManagement_ResourceRequest_Delete = "DeliveryManagement.ResourceRequest.Delete";
+        public const string DeliveryManagement_ResourceRequest_GetProjectForDM = "DeliveryManagement.ResourceRequest.GetProjectForDM";
+        public const string DeliveryManagement_ResourceRequest_CreateSkill = "DeliveryManagement.ResourceRequest.CreateSkill";
+        public const string DeliveryManagement_ResourceRequest_DeleteSkill = "DeliveryManagement.ResourceRequest.DeleteSkill";
+        public const string DeliveryManagement_ResourceRequest_GetSkillDetail = "DeliveryManagement.ResourceRequest.GetSkillDetail";
 
-            //PMReportProjectIssues
-            public const string DeliveryManagement_PMReportProjectIssue = "DeliveryManagement.PMReportProjectIssue";
-            public const string DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek";
-            public const string DeliveryManagement_PMReportProjectIssue_Create = "DeliveryManagement.PMReportProjectIssue.Create";
-            public const string DeliveryManagement_PMReportProjectIssue_Update = "DeliveryManagement.PMReportProjectIssue.Update";
-            public const string DeliveryManagement_PMReportProjectIssue_Delete = "DeliveryManagement.PMReportProjectIssue.Delete";
+        //PMReportProjectIssues
+        public const string DeliveryManagement_PMReportProjectIssue = "DeliveryManagement.PMReportProjectIssue";
+        public const string DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek";
+        public const string DeliveryManagement_PMReportProjectIssue_Create = "DeliveryManagement.PMReportProjectIssue.Create";
+        public const string DeliveryManagement_PMReportProjectIssue_Update = "DeliveryManagement.PMReportProjectIssue.Update";
+        public const string DeliveryManagement_PMReportProjectIssue_Delete = "DeliveryManagement.PMReportProjectIssue.Delete";
 
-            //ProjectUser
-            public const string DeliveryManagement_ProjectUser = "DeliveryManagement.ProjectUser";
-            public const string DeliveryManagement_ProjectUser_ViewAllByProject = "DeliveryManagement.ProjectUser.ViewAllByProject";
-            public const string DeliveryManagement_ProjectUser_ViewDetailProjectUser = "DeliveryManagement.ProjectUser.ViewDetailProjectUser";
-            public const string DeliveryManagement_ProjectUser_Create = "DeliveryManagement.ProjectUser.Create";
-            public const string DeliveryManagement_ProjectUser_Update = "DeliveryManagement.ProjectUser.Update";
-            public const string DeliveryManagement_ProjectUser_Delete = "DeliveryManagement.ProjectUser.Delete";
+        //ProjectUser
+        public const string DeliveryManagement_ProjectUser = "DeliveryManagement.ProjectUser";
+        public const string DeliveryManagement_ProjectUser_ViewAllByProject = "DeliveryManagement.ProjectUser.ViewAllByProject";
+        public const string DeliveryManagement_ProjectUser_ViewDetailProjectUser = "DeliveryManagement.ProjectUser.ViewDetailProjectUser";
+        public const string DeliveryManagement_ProjectUser_Create = "DeliveryManagement.ProjectUser.Create";
+        public const string DeliveryManagement_ProjectUser_Update = "DeliveryManagement.ProjectUser.Update";
+        public const string DeliveryManagement_ProjectUser_Delete = "DeliveryManagement.ProjectUser.Delete";
     }
 
     public class GrantPermissionRoles
@@ -384,6 +396,12 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject,
                     PermissionNames.Timesheet_TimesheetProject_ViewInvoice,
                     PermissionNames.Timesheet_TimesheetProject_CreateInvoice,
+
+                    //Timesheet Project Bill
+                    PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill,
+                    PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll,
+                    PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update,
+                    PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill,
 
                     //Project User Bill
                     PermissionNames.PmManager_ProjectUserBill,
@@ -522,6 +540,9 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_ResourceRequest_Update,
                     PermissionNames.DeliveryManagement_ResourceRequest_Delete,
                     PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM,
+                    PermissionNames.DeliveryManagement_ResourceRequest_CreateSkill,
+                    PermissionNames.DeliveryManagement_ResourceRequest_DeleteSkill,
+                    PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail,
 
                     //PMReportProjectIssues
                     PermissionNames.DeliveryManagement_PMReportProjectIssue,
@@ -660,6 +681,12 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View info Invoice" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_CreateInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Invoice To Finance" },
 
+                 //Timesheet Project Bill
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project Bill" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All TimeSheet Project Bill" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Working Time For User" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update From Project User Bill" },
+
                   //Project User Bill
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project User Bill" },
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUserBill_GetAllPaging, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All" },
@@ -695,7 +722,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Item" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Check List Item" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Check List Item" },
-                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Item" },                 
+                 new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Check List Item" },
                  new SystemPermission{ Name =  PermissionNames.CheckList_CheckListItem_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Check List Item" },
 
                  //Audit Result People
@@ -769,7 +796,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Project For Delivery Management" },
-
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CreateSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Skill Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_DeleteSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Skill Detail" },
                  //PMReportProjectIssues
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PMReport Project Issues" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Problems Of The Week" },
@@ -982,6 +1011,9 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Project For Delivery Management" },
+                                new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_CreateSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Skill Resource Request" },
+                                new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_DeleteSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill Resource Request" },
+                                new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_GetSkillDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Skill Detail" },
                             }
                         },
                          // PMReport Project Issues
@@ -994,7 +1026,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.PmManager_PMReportProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete PMReport Project Issues" },
                             }
                         },
-                        
+
                     }
                 },
                 //Sao Do
@@ -1035,7 +1067,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.SaoDo_AuditSession_AddAuditResult, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Audit Result" },
                             }
                         },
-                        
+
                     }
                 },
                 //Delivery Management
@@ -1093,6 +1125,9 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Resource Request" },
+                                new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CreateSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Skill Resource Request" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_DeleteSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Skill Resource Request" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get Skill Detail" },
                             }
                         },
                          // PMReport Project Issues
@@ -1190,6 +1225,16 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View info Invoice" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_CreateInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Invoice To Finance" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project Bill",
+                                    Childrens = new List<SystemPermission>()
+                                    {
+                                          new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All TimeSheet Project Bill" },
+                                          new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Working Time For User" },
+                                          new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update From Project User Bill" },
+
+                                    }
+                                    },
+
                             }
                         }
                     }

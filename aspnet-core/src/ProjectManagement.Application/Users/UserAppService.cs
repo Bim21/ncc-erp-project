@@ -36,6 +36,10 @@ using NccCore.Paging;
 using NccCore.Extension;
 using ProjectManagement.Services.HRM;
 using ProjectManagement.Services.HRM.Dto;
+using Abp.Configuration;
+using ProjectManagement.Services.Komu;
+using ProjectManagement.Configuration;
+using ProjectManagement.Services.Komu.KomuDto;
 
 namespace ProjectManagement.Users
 {
@@ -50,6 +54,8 @@ namespace ProjectManagement.Users
         private readonly IWorkScope _workScope;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly HrmService _hrmService;
+        private ISettingManager _settingManager;
+        private KomuService _komuService;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -61,7 +67,9 @@ namespace ProjectManagement.Users
             LogInManager logInManager,
             IWorkScope workScope,
             IWebHostEnvironment webHostEnvironment,
-            HrmService hrmService)
+            HrmService hrmService,
+            KomuService komuService,
+            ISettingManager settingManager)
             : base(repository)
         {
             _userManager = userManager;
@@ -73,6 +81,8 @@ namespace ProjectManagement.Users
             _workScope = workScope;
             _webHostEnvironment = webHostEnvironment;
             _hrmService = hrmService;
+            _komuService = komuService;
+            _settingManager = settingManager;
         }
 
         [HttpPost]
@@ -560,7 +570,40 @@ namespace ProjectManagement.Users
                     }
                 }
             }
-            return new
+            if(successListInsert.Count>0)
+            {
+                var login = new LoginDto
+                {
+                    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+                    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+                };
+                var response = await _komuService.Login(login);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+                    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+                    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+                    var listUser = string.Empty;
+                    var list = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
+                    foreach (var item in list)
+                    {
+                        listUser += item.FullName+",";
+                    }
+                    listUser = listUser.Remove(listUser.Length - 1);
+                    var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào. ";
+                    var alias = "Nhắc việc NCC";
+                    var postMessage = new PostMessage
+                    {
+                        channel = room,
+                        text = message.ToString(),
+                        alias = alias };
+                    await _komuService.PostMessage(postMessage, DecryptContent.data);
+
+                    await _komuService.Logout(DecryptContent.data);
+                }
+            }    
+             return new
             {
                 successListInsert,
                 failedListInsert,
@@ -582,7 +625,7 @@ namespace ProjectManagement.Users
                 Branch = user.Branch.Value,
                 IsActive = user.IsActive,
                 Password = "123Abc123@",
-                //RoleNames = new string[] { "EMPLOYEE" }
+                RoleNames = new string[] { "EMPLOYEE" }
             };
             await CreateAsync(createUser);
             return createUser;
@@ -639,6 +682,7 @@ namespace ProjectManagement.Users
                 SurName = surName
             };
         }
+
     }
 }
 

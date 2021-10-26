@@ -19,10 +19,10 @@
                                             #projectEmployee="ngModel">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReport"
+                                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReportName" (keydown)="$event.stopPropagation()"
                                                     placeholder="search">
                                             </mat-form-field>
-                                            <mat-option *ngFor="let report of pmReportList |filter:searchPmReport"
+                                            <mat-option *ngFor="let report of pmReportList |listFilter: 'pmReportName' :searchPmReport"
                                                 [value]="report">
                                                 <div class="row">
                                                     <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
@@ -185,7 +185,7 @@
                                   </pre>
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="description"
                                                 [(ngModel)]="problem.description" matInput></textarea>
                                         </mat-form-field>
@@ -201,7 +201,7 @@
                                     
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
                                                 matInput></textarea>
                                         </mat-form-field>
@@ -217,7 +217,7 @@
                                    
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="solution"
                                                 [(ngModel)]="problem.solution" matInput></textarea>
                                         </mat-form-field>
@@ -232,7 +232,7 @@
                                    
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="1"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
                                                 placeholder="leave a comment" name="meetingSolution"
                                                 [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                         </mat-form-field>
@@ -354,10 +354,10 @@
                                                 placeholder="select a role" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput
+                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput (keydown)="$event.stopPropagation()"
                                                         placeholder="search">{{myInput.focus()}}
                                                 </mat-form-field>
-                                                <mat-option *ngFor="let user of userList |filter:searchUser"
+                                                <mat-option *ngFor="let user of userList |listFilter : 'fullName' :searchUser : 'emailAddress'"
                                                     [value]="user.id">
                                                     {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
@@ -513,10 +513,10 @@
                                                     placeholder="select account" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                        <input matInput [(ngModel)]="searchUser" name="searchUser"
+                                                        <input matInput [(ngModel)]="searchUser" name="searchUser" (keydown)="$event.stopPropagation()"
                                                             #inputSearch placeholder="search">{{inputSearch.focus()}}
                                                     </mat-form-field>
-                                                    <mat-option *ngFor="let user of userList |filter:searchUser"
+                                                    <mat-option *ngFor="let user of userList |listFilter: 'fullName' :searchUser : 'emailAddress'"
                                                         [value]="user.id">
                                                         {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                 </mat-select>

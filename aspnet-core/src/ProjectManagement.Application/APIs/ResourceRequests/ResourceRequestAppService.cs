@@ -58,7 +58,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             Status = x.Status,
                             StatusName = x.Status.ToString(),
                             PMNote = x.PMNote,
-                            DMNote =  x.DMNote,
+                            DMNote = x.DMNote,
                             TimeNeed = x.TimeNeed,
                             TimeDone = x.TimeDone.Value
                         });
@@ -67,10 +67,18 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest,
-            PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
-        public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(GridParam input)
+        PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
+        public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(GridParam input, string order = "PROJECT")
         {
             var projectUser = WorkScope.GetAll<ProjectUser>();
+            var SumSkillByResourceRequest = WorkScope.GetAll<ResourceRequestSkill>()
+                .GroupBy(x => x.ResourceRequestId)
+                .Select(x => new
+                {
+                    ResourceRequestId = x.Key,
+                    Sum = x.Sum(y => y.Quantity)
+                });
+
             var query = WorkScope.GetAll<ResourceRequest>().Select(x => new GetResourceRequestDto
             {
 
@@ -84,12 +92,50 @@ namespace ProjectManagement.APIs.ResourceRequests
                 TimeDone = x.TimeDone.Value,
                 PMNote = x.PMNote,
                 DMNote = x.DMNote,
+                UserSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).Select(z => new GetSkillDetailDto
+                {
+                    SkillId=z.SkillId,
+                    SkillName=z.Skill.Name,
+                    Quantity = z.Quantity,
+                    ResourceRequestId=z.ResourceRequestId,
+                    ResourceRequestName = z.ResourceRequest.Name
+                }).OrderBy(x=>x.SkillName).ToList(),
+                SumSkill = SumSkillByResourceRequest.Where(h => h.ResourceRequestId == x.Id).FirstOrDefault().Sum,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
+            if (order == "TIMENEED")
+            {
+                query = query.OrderByDescending(x => x.TimeNeed);
+            }
+            else if (order == "SKILL")
+            {
+            }
+            else
+            {
+                query = query.OrderByDescending(x => x.SumSkill);
+            }
+
 
             return await query.GetGridResult(query, input);
         }
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail,
+            PermissionNames.PmManager_ResourceRequest_GetSkillDetail)]
+        public async Task<List<GetSkillDetailDto>> GetSkillDetail(long resourceRequestId)
+        {
+            var query = WorkScope.GetAll<ResourceRequestSkill>().Where(x => x.ResourceRequestId == resourceRequestId)
+                                    .Select(x => new GetSkillDetailDto
+                                    {
+                                        Id = x.Id,
+                                        ResourceRequestId = x.ResourceRequestId,
+                                        ResourceRequestName = x.ResourceRequest.Name,
+                                        SkillId = x.SkillId,
+                                        SkillName = x.Skill.Name,
+                                        Quantity = x.Quantity
 
+                                    });
+            return await query.ToListAsync();
+        }
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest,
             PermissionNames.PmManager_ResourceRequest_ViewDetailResourceRequest)]
@@ -183,7 +229,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.UserId,
                                     AllocatePercentage = x.AllocatePercentage
                                 });
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive&& x.UserType != UserType.FakeUser)
+            var users = WorkScope.GetAll<User>().Where(x => x.IsActive && x.UserType != UserType.FakeUser)
                                 .Select(x => new ResourceRequestUserDto
                                 {
                                     UserId = x.Id,
@@ -232,7 +278,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         ProjectId = x.ProjectId,
                                         ProjectName = x.ProjectName,
                                     }).ToList(),
-                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)>0)? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage):0,
+                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
                                     ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
                                     {
                                         ProjectName = p.Project.Name,
@@ -244,7 +290,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Id = uk.SkillId,
                                         Name = uk.Skill.Name
                                     }).ToList(),
-                                }).Where(x=> !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
+                                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
             return await users.GetGridResult(users, input);
         }
 
@@ -440,7 +486,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ResourceRequestDto, ResourceRequest>(input, resourceRequest));
             //Komu bot nhắn tin đến nhóm
-            if (input.Status == ResourceRequestStatus.DONE|| input.Status == ResourceRequestStatus.CANCELLED)
+            if (input.Status == ResourceRequestStatus.DONE || input.Status == ResourceRequestStatus.CANCELLED)
             {
                 var login = new LoginDto
                 {
@@ -492,7 +538,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                     await _komuService.Logout(DecryptContent.data);
                 }
             }
-            
+
             return input;
         }
 
@@ -505,6 +551,26 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("Resource Request can not delete !");
 
             await WorkScope.DeleteAsync<ResourceRequest>(resourceRequestId);
+        }
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_CreateSkill, PermissionNames.PmManager_ResourceRequest_CreateSkill)]
+        public async Task<ResourceRequestSkillDto> CreateSkill(ResourceRequestSkillDto input)
+        {
+            var isExist = await WorkScope.GetAll<ResourceRequestSkill>().AnyAsync(x => x.SkillId == input.SkillId && x.ResourceRequestId == input.ResourceRequestId);
+            if (isExist)
+                throw new UserFriendlyException("Can not create !");
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequestSkill>(input));
+            return input;
+        }
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_DeleteSkill, PermissionNames.PmManager_ResourceRequest_DeleteSkill)]
+        public async Task DeleteSkill(long resourceRequestSkillId)
+        {
+            var resourceRequestSkill = await WorkScope.GetAll<ResourceRequestSkill>().AnyAsync(x => x.Id == resourceRequestSkillId);
+            if (!resourceRequestSkill)
+                throw new UserFriendlyException("Resource Request Skill can not delete !");
+
+            await WorkScope.DeleteAsync<ResourceRequestSkill>(resourceRequestSkillId);
         }
     }
 }

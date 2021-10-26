@@ -41,7 +41,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
         {
             var query = WorkScope.GetAll<PMReportProject>()
-                .Where(x => x.PMReportId == pmReportId)
+                .Where(x => x.PMReportId == pmReportId&&x.Project.ProjectType!=ProjectType.NoBill)
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,

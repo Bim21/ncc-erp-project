@@ -53,6 +53,7 @@ export class projectUserBillDto {
     isActive: boolean;
     createMode?: boolean;
     id: number;
+    timesheetId:number;
 }
 export class MilestoneDto {
     projectId: number;

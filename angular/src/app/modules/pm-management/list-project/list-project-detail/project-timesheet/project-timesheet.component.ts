@@ -90,7 +90,34 @@ export class ProjectTimesheetComponent extends AppComponentBase implements OnIni
     for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
     return buf;
   }
-  
+  // downloadFile(projectTimesheet:any){
+  //   const zip = new JSZip();  
+
+  //   this.timesheetProjectService.GetTimesheetFile(projectTimesheet.id).subscribe(data=>{
+  //     const file = new Blob([this.s2ab(atob(data.result.data))], {
+  //       type: "application/vnd.ms-excel;charset=utf-8"
+  //     })
+      // FileSaver.saveAs(file, data.result.fileName);
+      // zip.folder("test");
+      // zip.generateAsync({ type: 'blob' }).then((content) => {  
+      //   if (content) {  
+      //     FileSaver.saveAs(file, data.result.fileName);  
+      //   }  
+      // }); 
+      // this.createZip(file,"test")
+
+      // zip.file(data.result.fileName, file);
+
+      // var img = zip.folder("test");
+      // img.file("smile.gif", file, {base64: true});
+
+
+      // zip.generateAsync({type:"blob"}).then(function(content) {
+        // see FileSaver.js
+  //       FileSaver.saveAs(content, "example.zip");
+  //   });
+  //   })
+  // }
 
 
 }

@@ -19,7 +19,7 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   public editUser={} as planUserDto;
   public listProject:ProjectDto[]=[];
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole);
-
+  public searchProject:string =""
   constructor(@Inject(MAT_DIALOG_DATA) public data:any,
     private listProjectService:ListProjectService,
     private availableResourceService: DeliveryResourceRequestService,

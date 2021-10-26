@@ -62,6 +62,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
 import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
 import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { ListFilterPipe } from './pipes/list-filter.pipe';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -123,7 +124,8 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
         PercentageMaskDirective,
         UserInfoComponent,
         RadioDropdownComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        ListFilterPipe
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -171,7 +173,8 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
         PercentageMaskDirective,
         UserInfoComponent,
         RadioDropdownComponent,
-        FileUploadComponent
+        FileUploadComponent,
+        ListFilterPipe
     ]
 })
 export class SharedModule {
