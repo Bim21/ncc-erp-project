@@ -1,13 +1,17 @@
 ﻿using Abp.Authorization;
 using Abp.Authorization.Users;
+using Abp.Configuration;
 using Abp.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ProjectManagement.APIs.HRM.Dto;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants.Enum;
+using ProjectManagement.Services.Komu;
+using ProjectManagement.Services.Komu.KomuDto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,11 +23,15 @@ namespace ProjectManagement.APIs.HRM
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly RoleManager _roleManager;
-
-        public HRMAppService(IHttpContextAccessor httpContextAccessor, RoleManager roleManager)
+        private ISettingManager _settingManager;
+        private KomuService _komuService;
+        public HRMAppService(IHttpContextAccessor httpContextAccessor, RoleManager roleManager, KomuService komuService,
+            ISettingManager settingManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _roleManager = roleManager;
+            _komuService = komuService;
+            _settingManager = settingManager;
         }
 
         [AbpAllowAnonymous]
@@ -60,7 +68,30 @@ namespace ProjectManagement.APIs.HRM
                 RoleId = roleEmployee.Id
             };
             await WorkScope.InsertAndGetIdAsync(userRole);
+                var login = new LoginDto
+                {
+                    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+                    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+                };
+                var response = await _komuService.Login(login);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+                    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+                    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+                    var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là {input.Surname+" "+ input.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào. ";
+                    var alias = "Nhắc việc NCC";
+                    var postMessage = new PostMessage
+                    {
+                        channel = room,
+                        text = message.ToString(),
+                        alias = alias
+                    };
+                    await _komuService.PostMessage(postMessage, DecryptContent.data);
 
+                    await _komuService.Logout(DecryptContent.data);
+                }
             return input;
         }
 
