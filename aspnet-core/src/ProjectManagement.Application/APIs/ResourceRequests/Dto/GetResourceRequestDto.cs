@@ -14,7 +14,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public long ProjectId { get; set; }
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
-        [ApplySearchAttribute]
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }
         public string StatusName { get; set; }
