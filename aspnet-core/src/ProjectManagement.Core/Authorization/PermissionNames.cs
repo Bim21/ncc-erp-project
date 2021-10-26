@@ -447,6 +447,9 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_ResourceRequest_Create,
                     PermissionNames.PmManager_ResourceRequest_Update,
                     PermissionNames.PmManager_ResourceRequest_Delete,
+                    PermissionNames.PmManager_ResourceRequest_CreateSkill,
+                    PermissionNames.PmManager_ResourceRequest_DeleteSkill,
+                    PermissionNames.PmManager_ResourceRequest_GetSkillDetail,
 
                     //PMReportProjectIssues
                     PermissionNames.PmManager_PMReportProjectIssue,
@@ -834,6 +837,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_CreateSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Skill Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_DeleteSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.PmManager_ResourceRequest_GetSkillDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "GetSkillDetail Resource Request" },
 
                  //PMReportProjectIssues by PM
                  new SystemPermission{ Name =  PermissionNames.PmManager_PMReportProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PMReport Project Issues" },
