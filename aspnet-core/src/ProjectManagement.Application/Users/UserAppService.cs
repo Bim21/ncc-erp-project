@@ -588,7 +588,7 @@ namespace ProjectManagement.Users
                     var list = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
                     foreach (var item in list)
                     {
-                        listUser += item.Name+",";
+                        listUser += item.FullName+",";
                     }
                     listUser = listUser.Remove(listUser.Length - 1);
                     var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào. ";
