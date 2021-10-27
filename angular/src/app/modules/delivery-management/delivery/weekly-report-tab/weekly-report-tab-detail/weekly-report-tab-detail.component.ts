@@ -126,7 +126,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
   }
   public startTimmer(){
-    if(!this.isTimmerCounting && ! this.isStopCounting ){
+    if((!this.isTimmerCounting && ! this.isStopCounting) || this.isRefresh){
       this.timmerCount.start()
       this.isTimmerCounting=true
       this.isStopCounting = false
@@ -144,7 +144,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public refreshTimmer(){
     this.timmerCount.reset()
     this.isTimmerCounting=false
-    this.isStopCounting =true
+    // this.isStopCounting =true
     this.isRefresh =true
     this.isStart =false
 

@@ -118,7 +118,7 @@
                             </table>
                             <div class="col-3 text-right" style="display: flex;">
                                 <div class="count-timer" (click)="startTimmer()"
-                                    [ngClass]="!isTimmerCounting&&!isStopCounting?'pointer':''">
+                                    [ngClass]="(!this.isTimmerCounting && ! this.isStopCounting) || this.isRefresh?'pointer':''">
                                     <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
                                     <button *ngIf="(!isTimmerCounting && !isStopCounting) || isRefresh"
                                         class="btn btn-sm  mb-2 pr-0">
