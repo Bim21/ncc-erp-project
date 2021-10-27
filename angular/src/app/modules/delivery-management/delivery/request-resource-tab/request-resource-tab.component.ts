@@ -49,11 +49,13 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     })
   }
   compareSkill(a, b) {
-    if (a.userSkills[0]?.skillName < b.userSkills[0]?.skillName && a.userSkills[0]?.quantity < b.userSkills[0]?.quantity) {
-      return -1;
-    }
-    if (a.userSkills[0]?.skillName > b.userSkills[0]?.skillName &&  a.userSkills[0]?.quantity > b.userSkills[0]?.quantity) {
-      return 1;
+    if(a.userSkills[0]?.skillName){
+      if (a.userSkills[0]?.skillName < b.userSkills[0]?.skillName && a.userSkills[0]?.quantity < b.userSkills[0]?.quantity ) {
+        return -1;
+      }
+      if (a.userSkills[0]?.skillName > b.userSkills[0]?.skillName &&  a.userSkills[0]?.quantity > b.userSkills[0]?.quantity) {
+        return 1;
+      }
     }
     return 0;
   }
