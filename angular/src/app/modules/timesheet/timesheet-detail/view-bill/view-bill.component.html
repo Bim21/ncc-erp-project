@@ -4,6 +4,7 @@
     <div class="modal-body">
         <button class="btn btn-success ml-2" (click)="syncProjectBill()"><i class="fas fa-sync-alt mr-1"></i>Sync
             project bill</button>
+        <button class="btn btn-primary ml-2" [hidden] ="isCreate || isEdit"(click)="create()"><i class="fa fa-plus-square mr-1"></i>Create</button>
         <div class="table-responsive mb-1 p-2">
             <div class="fixTableHead">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
@@ -36,7 +37,7 @@
 
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="bill.userId" name="userBill"
-                                            placeholder="select an user" required #userBill="ngModel">
+                                            placeholder="select an user" #userBill="ngModel">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                 <input matInput [(ngModel)]="searchUserBill" placeholder="search"
@@ -49,10 +50,10 @@
                                                 {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                    <mat-error class="mt-1" *ngIf="userBill.hasError('required') && userBill.touched"
+                                    <!-- <mat-error class="mt-1" *ngIf="userBill.hasError('required') && userBill.touched"
                                         style="font-size: 13px;">
                                         This field is required
-                                    </mat-error>
+                                    </mat-error> -->
                                 </div>
                             </td>
                             <td class="text-center">
@@ -109,7 +110,7 @@
                                 <div *ngIf="bill.createMode">
                                     <mat-form-field appearance="outline" style="width: 150px;">
                                         <input matInput [matDatepicker]="billStarttimePicker" placeholder="chose a date"
-                                            [(ngModel)]="bill.startTime" name="billStarttime" required>
+                                            [(ngModel)]="bill.startTime" name="billStarttime" >
                                         <mat-datepicker-toggle matSuffix [for]="billStarttimePicker">
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #billStarttimePicker></mat-datepicker>
@@ -159,7 +160,7 @@
                             </td>
                             <td class="text-center">
                                 <div *ngIf="!bill.createMode">
-                                    <button [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
+                                    <button [disabled]="userBillProcess"  [disabled]="isEdit" class="btn btn-sm bg-secondary mr-1"
                                         (click)="editUserBill(bill)"><i class="fas fa-pencil-alt"></i>Edit</button>
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1">

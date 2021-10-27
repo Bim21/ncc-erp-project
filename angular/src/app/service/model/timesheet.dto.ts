@@ -60,4 +60,5 @@ export class TimesheetProjectBill {
     branch: number
     workingTime: number
     id: number
+    createMode?: boolean
 }
