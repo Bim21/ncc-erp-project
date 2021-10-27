@@ -81,11 +81,13 @@ namespace ProjectManagement.APIs.TimeSheets
                 throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
             }
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
+            var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
             var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge).ToListAsync();
             foreach (var item in project)
             {
                 var billInfomation = new StringBuilder();
-                var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x=>x.User).Where(x => x.ProjectId == item.Id && x.isActive && x.Project.IsCharge);
+                var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x=>x.User)
+                    .Where(x => x.ProjectId == item.Id && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)));
                                     //.Select(x => new
                                     //{
                                     //    FullName = x.User.FullName,
