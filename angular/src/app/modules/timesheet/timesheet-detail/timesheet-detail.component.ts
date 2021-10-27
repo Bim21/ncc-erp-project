@@ -207,6 +207,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
+
   exportInvoice() {
     const show = this.dialog.open(CreateInvoiceComponent, {
       data: {
@@ -223,6 +224,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
+  
   public reloadComponent() {
     this.router.navigate(['app/timesheetDetail'], {
       queryParams: {
