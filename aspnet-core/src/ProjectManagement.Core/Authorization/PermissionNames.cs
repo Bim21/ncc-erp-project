@@ -163,6 +163,7 @@ namespace ProjectManagement.Authorization
         public const string Timesheet_TimesheetProject_DownloadFileTimesheetProject = "Timesheet.TimesheetProject.DownloadFileTimesheetProject";
         public const string Timesheet_TimesheetProject_ViewInvoice = "Timesheet.TimesheetProject.ViewInvoice";
         public const string Timesheet_TimesheetProject_CreateInvoice = "Timesheet.TimesheetProject.CreateInvoice";
+        public const string Timesheet_TimesheetProject_ExportInvoice = "Timesheet.TimesheetProject.ExportInvoice";
 
             //TimeSheetProjectBill
             public const string Timesheet_TimesheetProject_TimesheetProjectBill = "Timesheet.TimesheetProject.TimesheetProjectBill";
@@ -397,6 +398,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject,
                     PermissionNames.Timesheet_TimesheetProject_ViewInvoice,
                     PermissionNames.Timesheet_TimesheetProject_CreateInvoice,
+                    PermissionNames.Timesheet_TimesheetProject_ExportInvoice,
 
                     //Timesheet Project Bill
                     PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill,
@@ -685,6 +687,7 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View info Invoice" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_CreateInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Invoice To Finance" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ExportInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Export Invoice Timesheet For One Project" },
 
                  //Timesheet Project Bill
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project Bill" },
@@ -1234,6 +1237,7 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Download File TimeSheet Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View info Invoice" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_CreateInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Invoice To Finance" },
+                                    new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ExportInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Export Invoice Timesheet For One Project" },
                                     new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project Bill",
                                     Childrens = new List<SystemPermission>()
                                     {
