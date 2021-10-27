@@ -12,8 +12,8 @@
                             <th class="stt">#</th>
                             <th>Nhân viên</th>
                             <th>Charge Role</th>
-                            <th>Rate</th>
-                            <th>Working time</th>
+                            <th *ngIf="data.projectBillInfomation != ''">Rate</th>
+                            <th>Working time(Hour)</th>
                             <th>Bắt đầu charge</th>
                             <th>Kết thúc charge</th>
                             <th>is Active</th>
@@ -66,7 +66,7 @@
                                     </abp-validation-summary>
                                 </div>
                             </td>
-                            <td>
+                            <td *ngIf="data.projectBillInfomation != ''">
                                 <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
                                 </span>
                                 <div *ngIf="bill.createMode">
