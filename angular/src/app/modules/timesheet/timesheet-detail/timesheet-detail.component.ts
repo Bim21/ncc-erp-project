@@ -72,6 +72,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
   Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
   Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
+  Timesheet_TimesheetProject_ExportInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ExportInvoice
 
 
   constructor(
@@ -249,4 +250,15 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   mouseLeave(item){
     item.showIcon =false
   }
+
+  exportInvocie(item:any){
+    this.timesheetProjectService.exportInvoice(this.timesheetId,item.projectId).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data=>{
+      const file = new Blob([this.s2ab(atob(data.result.base64))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      FileSaver.saveAs(file, data.result.fileName);
+    })
+  }
+
+
 }
