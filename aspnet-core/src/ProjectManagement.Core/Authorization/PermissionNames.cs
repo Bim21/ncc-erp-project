@@ -167,6 +167,7 @@ namespace ProjectManagement.Authorization
             //TimeSheetProjectBill
             public const string Timesheet_TimesheetProject_TimesheetProjectBill = "Timesheet.TimesheetProject.TimesheetProjectBill";
             public const string Timesheet_TimesheetProject_TimesheetProjectBill_GetAll = "Timesheet.TimesheetProject.TimesheetProjectBill.GetAll";
+            public const string Timesheet_TimesheetProject_TimesheetProjectBill_Create = "Timesheet.TimesheetProject.TimesheetProjectBill.Create";
             public const string Timesheet_TimesheetProject_TimesheetProjectBill_Update = "Timesheet.TimesheetProject.TimesheetProjectBill.Update";
             public const string Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill = "Timesheet.TimesheetProject.TimesheetProjectBill.UpdateFromProjectUserBill";
 
@@ -400,6 +401,7 @@ namespace ProjectManagement.Authorization
                     //Timesheet Project Bill
                     PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill,
                     PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll,
+                    PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Create,
                     PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update,
                     PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill,
 
@@ -687,6 +689,7 @@ namespace ProjectManagement.Authorization
                  //Timesheet Project Bill
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project Bill" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All TimeSheet Project Bill" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New TimeSheet Project Bill" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Working Time For User" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update From Project User Bill" },
 
@@ -1235,6 +1238,7 @@ namespace ProjectManagement.Authorization
                                     Childrens = new List<SystemPermission>()
                                     {
                                           new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All TimeSheet Project Bill" },
+                                          new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New TimeSheet Project Bill" },
                                           new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Working Time For User" },
                                           new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update From Project User Bill" },
 

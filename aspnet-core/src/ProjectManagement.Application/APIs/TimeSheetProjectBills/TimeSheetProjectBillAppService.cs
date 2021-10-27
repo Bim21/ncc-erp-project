@@ -51,6 +51,16 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                         });
             return await query.ToListAsync();
         }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
+        public async Task<TimeSheetProjectBillDto> Create(TimeSheetProjectBillDto input)
+        {
+            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(input));
+            await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
+            return input;
+        }
+
         [HttpPut]
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
         public async Task<TimeSheetProjectBillDto> Update(TimeSheetProjectBillDto input)
@@ -114,7 +124,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 }
 
             }
-            await UpdateProjectBillInfomation(projectId, timesheetId);
+            await UpdateProjectBillInformation(projectId, timesheetId);
             return new
             {
                 successList,
@@ -122,7 +132,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             };
         }
 
-        private async Task UpdateProjectBillInfomation(long projectId, long timesheetId)
+        private async Task UpdateProjectBillInformation(long projectId, long timesheetId)
         {
             try
             {
