@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using NccCore.Uitls;
+using OfficeOpenXml;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
@@ -14,6 +15,7 @@ using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
+using ProjectManagement.Net.MimeTypes;
 using ProjectManagement.Services.Finance;
 using ProjectManagement.Services.Finance.Dto;
 using ProjectManagement.Services.Komu;
@@ -35,8 +37,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
         private readonly FinanceService _financeService;
         private ISettingManager _settingManager;
         private KomuService _komuService;
+        private readonly string templateFolder = Path.Combine("wwwroot", "template");
 
-        public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService, 
+        public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService,
             KomuService komuService, ISettingManager settingManager)
         {
             _hostingEnvironment = environment;
@@ -180,7 +183,100 @@ namespace ProjectManagement.APIs.TimesheetProjects
             await WorkScope.UpdateAsync(timesheet);
             return input;
         }
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_ExportInvoice)]
 
+        public async Task<FileBase64Dto> ExportInvoice(long timesheetId, long projectId)
+        {
+            try
+            {
+                var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplate.xlsx");
+                var project = await WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Include(x => x.Currency).Include(x=>x.Currency).FirstOrDefaultAsync();
+
+                var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
+
+                var timesheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>()
+                                            .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
+                                            .Select(x => new TimeSheetProjectBillExcelDto
+                                            {
+                                                FullName = x.User.FullName,
+                                                BillRate = x.BillRate,
+                                                WorkingTime = x.WorkingTime,
+                                            });
+
+                foreach (var item in timesheetProjectBills)
+                {
+                    invoiceUserBilling.Add(new TimeSheetProjectBillExcelDto
+                    {
+                        FullName = item.FullName,
+                        WorkingTime = item.WorkingTime,
+                        BillRate = item.BillRate
+                    });
+                }
+                using (var memoryStream = new MemoryStream(File.ReadAllBytes(templateFilePath)))
+                {
+                    using (var excelPackageIn = new ExcelPackage(memoryStream))
+                    {
+                        var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
+                        var companySetupSheet = excelPackageIn.Workbook.Worksheets[1];
+
+                        invoiceSheet.Cells["E2"].Value = project.Client != null ? project.Client.Name : "";
+                        invoiceSheet.Names["TenProject"].Value = project.Name;
+                        //invoiceSheet.Names["DiaChiKhachHang"].Value = project.Client.Country;
+                        var invoiceDetailTable = invoiceSheet.Tables.First();
+                        var invoiceDetailTableStart = invoiceDetailTable.Address.Start;
+
+                        if (invoiceUserBilling.Count > 0)
+                        {
+                            invoiceSheet.InsertRow(invoiceDetailTableStart.Row + 1, invoiceUserBilling.Count - 1, invoiceDetailTableStart.Row + invoiceUserBilling.Count);
+                            invoiceSheet.Names["InvoiceNetTotal"].Formula = "=SUM(InvoiceDetails[LINE TOTAL])-Discount";
+
+                            int d = 0;
+                            for (int i = invoiceDetailTableStart.Row + 1; i <= invoiceDetailTable.Address.End.Row; i++)
+                            {
+                                for (int j = invoiceDetailTable.Address.Start.Column; j <= invoiceDetailTable.Address.End.Column; j++)
+                                {
+                                    //add the cell data to the List
+                                    switch (j)
+                                    {
+                                        case 2:
+                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].FullName;
+                                            break;
+                                        case 3:
+                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].WorkingTime;
+                                            break;
+                                        case 4:
+                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].BillRate;
+                                            break;
+                                        default:
+                                            invoiceSheet.Cells[i, j].Formula = invoiceSheet.Cells[i, 3] + "*" + invoiceSheet.Cells[i, 4];
+                                            break;
+                                    }
+                                }
+                                d++;
+                            }
+                        }
+                        #region Fill dat into Company Setup sheet
+                        companySetupSheet.Cells["C14"].Value = project.Currency != null ? project.Currency.Name : "";
+                        #endregion
+
+                        var fileBytes = excelPackageIn.GetAsByteArray();
+                        string fileBase64 = Convert.ToBase64String(fileBytes);
+                      
+                        return new FileBase64Dto
+                        {
+                            FileName = $"{project.Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}.xlsx",
+                            FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
+                            Base64 = fileBase64
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new UserFriendlyException("Không thể xuất ra file excel");
+            }
+        }
+       
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
         {
@@ -207,8 +303,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet, 
-            PermissionNames.Timesheet_TimesheetProject_ViewOnlyme, 
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet,
+            PermissionNames.Timesheet_TimesheetProject_ViewOnlyme,
             PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject,
             PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
@@ -217,36 +313,45 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
+            var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId).OrderByDescending(x => x.CreationTime);
+            foreach (var item in timsheetProjectBills)
+            {
+
+            }
+            //var projectBillInfomation = 
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
-                        join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
-                        //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
-                        join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
-                        join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
-                        where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
-                        select new GetTimesheetDetailDto
-                        {
-                            Id = tsp.Id,
-                            ProjectId = tsp.ProjectId,
-                            TimesheetId = tsp.TimesheetId,
-                            ProjectName = p.Name,
-                            PmId = u.Id,
-                            PmUserType = u.UserType,
-                            PmAvatarPath = "/avatars/" + u.AvatarPath,
-                            PmBranch = u.Branch,
-                            PmEmailAddress = u.EmailAddress,
-                            PmFullName = u.Name + " " + u.Surname,
-                            PmUserName = u.UserName,
-                            ClientId = c.Id,
-                            ClientName = c.Name,
-                            File = tsp.FilePath,
-                            ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
-                            Note = tsp.Note,
-                            //IsSendReport = pr.Status,
-                            HistoryFile = tsp.HistoryFile,
-                            HasFile = !string.IsNullOrEmpty(tsp.FilePath)
-                        }).OrderByDescending(x => x.ClientId);
-
+                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
+                         //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
+                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
+                         join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
+                         where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
+                         select new GetTimesheetDetailDto
+                         {
+                             Id = tsp.Id,
+                             ProjectId = tsp.ProjectId,
+                             TimesheetId = tsp.TimesheetId,
+                             ProjectName = p.Name,
+                             PmId = u.Id,
+                             PmUserType = u.UserType,
+                             PmAvatarPath = "/avatars/" + u.AvatarPath,
+                             PmBranch = u.Branch,
+                             PmEmailAddress = u.EmailAddress,
+                             PmFullName = u.Name + " " + u.Surname,
+                             PmUserName = u.UserName,
+                             ClientId = c.Id,
+                             ClientName = c.Name,
+                             File = tsp.FilePath,
+                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
+                             Note = tsp.Note,
+                             //IsSendReport = pr.Status,
+                             HistoryFile = tsp.HistoryFile,
+                             HasFile = !string.IsNullOrEmpty(tsp.FilePath)
+                         }).OrderByDescending(x => x.ClientId);
+            //foreach (var item in query)
+            //{
+            //    item.ProjectBillInfomation
+            //}
             return await query.GetGridResult(query, input);
         }
 
@@ -321,7 +426,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 throw new UserFriendlyException("Timesheet not active !");
             }
 
-            if(string.IsNullOrEmpty(input.ProjectBillInfomation))
+            if (string.IsNullOrEmpty(input.ProjectBillInfomation))
                 input.ProjectBillInfomation = timeSheetProject.ProjectBillInfomation;
             ObjectMapper.Map<TimesheetProjectDto, TimesheetProject>(input, timeSheetProject);
             await WorkScope.GetRepo<TimesheetProject, long>().UpdateAsync(timeSheetProject);
@@ -359,11 +464,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x => x.Timesheet)
                                         .Where(x => x.Id == input.TimesheetProjectId).FirstOrDefaultAsync();
 
-            if(!timesheetProject.Timesheet.IsActive)
+            if (!timesheetProject.Timesheet.IsActive)
             {
                 throw new UserFriendlyException("Timesheet not active !");
             }
-            
+
             var now = DateTimeUtils.GetNow();
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
             var historyFile = new StringBuilder();
@@ -373,7 +478,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
             var komuUserNameSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames);
             var komuUserNames = komuUserNameSetting.Split(";").ToList();
-            komuUserNames.RemoveAt(komuUserNames.Count-1);
+            komuUserNames.RemoveAt(komuUserNames.Count - 1);
 
             if (input != null && input.File != null && input.File.Length > 0)
             {
@@ -414,7 +519,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 });
             }
             else
-            {                        
+            {
                 historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} delete {timesheetProject.FilePath}<br>");
                 message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} delete {timesheetProject.FilePath} vào project " +
                             $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
