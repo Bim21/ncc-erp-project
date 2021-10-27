@@ -69,62 +69,77 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Create)]
         public async Task<TimesheetDto> Create(TimesheetDto input)
         {
-            var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
-            if (nameExist)
+            try
             {
-                throw new UserFriendlyException("Name is already exist !");
-            }
-
-            var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
-            if (alreadyCreated)
-            {
-                throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
-            }
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
-            var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
-            var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge).ToListAsync();
-            foreach (var item in project)
-            {
-                var billInfomation = new StringBuilder();
-                var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x=>x.User)
-                    .Where(x => x.ProjectId == item.Id && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)));
-                                    //.Select(x => new
-                                    //{
-                                    //    FullName = x.User.FullName,
-                                    //    BillRole = x.BillRole,
-                                    //    BillRate = x.BillRate,
-                                    //    Note = x.Note,
-                                    //    ShadowNote = x.shadowNote
-                                    //});
-
-                foreach (var b in projectUserBills)
+                var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
+                if (nameExist)
                 {
-                    billInfomation.Append($"<b>{b.User.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} - {b.shadowNote} <br>");
-                    var timesheetProjectBill = new TimeSheetProjectBillDto
-                    {
-                        ProjectId = b.ProjectId,
-                        TimeSheetId = input.Id,
-                        UserId = b.UserId,
-                        BillRole = b.BillRole,
-                        BillRate = b.BillRate,
-                        StartTime = b.StartTime,
-                        EndTime = b.EndTime,
-                        Note = b.Note,
-                        ShadowNote = b.shadowNote,
-                        IsActive = b.isActive
-                    };
-                    await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
+                    throw new UserFriendlyException("Name is already exist !");
                 }
 
-                var timesheetProject = new TimesheetProject
+                var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
+                if (alreadyCreated)
                 {
-                    ProjectId = item.Id,
-                    TimesheetId = input.Id,
-                    ProjectBillInfomation = $"{billInfomation}"
-                };
-                await WorkScope.InsertAndGetIdAsync(timesheetProject);
+                    throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
+                }
+                input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
+                var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
+                var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge).ToListAsync();
+                foreach (var item in project)
+                {
+                    var billInfomation = new StringBuilder();
+                    var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x => x.User)
+                        .Where(x => x.ProjectId == item.Id && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)));
+                    //.Select(x => new
+                    //{
+                    //    FullName = x.User.FullName,
+                    //    BillRole = x.BillRole,
+                    //    BillRate = x.BillRate,
+                    //    Note = x.Note,
+                    //    ShadowNote = x.shadowNote
+                    //});
+
+                    foreach (var b in projectUserBills)
+                    {
+                        try
+                        {
+                            billInfomation.Append($"<b>{b.User.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} - {b.shadowNote} <br>");
+                            var timesheetProjectBill = new TimeSheetProjectBillDto
+                            {
+                                ProjectId = b.ProjectId,
+                                TimeSheetId = input.Id,
+                                UserId = b.UserId,
+                                BillRole = b.BillRole,
+                                BillRate = b.BillRate,
+                                StartTime = b.StartTime,
+                                EndTime = b.EndTime,
+                                Note = b.Note,
+                                ShadowNote = b.shadowNote,
+                                IsActive = b.isActive
+                            };
+                            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
+                        }
+                        catch (Exception e)
+                        {
+                            throw new UserFriendlyException($"error UserId = {b.UserId}" + e.Message);
+                        }
+                    }
+
+                    var timesheetProject = new TimesheetProject
+                    {
+                        ProjectId = item.Id,
+                        TimesheetId = input.Id,
+                        ProjectBillInfomation = $"{billInfomation}"
+                    };
+                    await WorkScope.InsertAndGetIdAsync(timesheetProject);
+                }
+                return input;
             }
-            return input;
+            catch(Exception e)
+            {
+                throw new UserFriendlyException("error: " + e.Message);
+            }
+            
         }
 
         [HttpPut]
