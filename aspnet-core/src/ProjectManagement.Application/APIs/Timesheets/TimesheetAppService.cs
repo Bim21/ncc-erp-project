@@ -67,10 +67,11 @@ namespace ProjectManagement.APIs.TimeSheets
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Create)]
-        public async Task<TimesheetDto> Create(TimesheetDto input)
+        public async Task<object> Create(TimesheetDto input)
         {
             try
             {
+                var failList = new List<string>();
                 var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
                 if (nameExist)
                 {
@@ -121,7 +122,7 @@ namespace ProjectManagement.APIs.TimeSheets
                         }
                         catch (Exception e)
                         {
-                            throw new UserFriendlyException($"error UserId = {b.UserId}" + e.Message);
+                            failList.Add($"error UserId = {b.UserId}" + e.Message);
                         }
                     }
 
@@ -133,7 +134,7 @@ namespace ProjectManagement.APIs.TimeSheets
                     };
                     await WorkScope.InsertAndGetIdAsync(timesheetProject);
                 }
-                return input;
+                return new { failList, input};
             }
             catch(Exception e)
             {
