@@ -238,9 +238,12 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.createdInvoice = true;
   }
   public viewBillDetail(bill){
-    this.dialog.open(ViewBillComponent,{
+    const show= this.dialog.open(ViewBillComponent,{
       width: "95%",
       data: bill
+    })
+    show.afterClosed().subscribe((res)=>{
+      this.refresh();
     })
   }
   mouseEnter(item){
