@@ -146,7 +146,9 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         clientId: item.clientId,
         isCharge: item.isCharge,
         pmId: item.pmId,
-        id: item.id
+        id: item.id,
+        currencyId: item.currencyId
+      
       }
     }
     const dialogRef = this.dialog.open(CreateEditListProjectComponent, {
