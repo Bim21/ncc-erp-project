@@ -122,6 +122,7 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
     this.pageSizeType =100
     this.changePageSize();
     this.getAllSkills();
+   
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {

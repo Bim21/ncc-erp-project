@@ -11,6 +11,7 @@ export interface ProjectDto {
     pmId: number;
     pmName?:string;
     id: number;
+    currencyId: string;
 }
 
 export interface ClientDto {
