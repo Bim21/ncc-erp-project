@@ -47,8 +47,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              EmailAddress = x.User.EmailAddress,
                              UserType = x.User.UserType,
                              WorkingTime = x.WorkingTime,
-                            //ProjectBillInfomation = $"<b>{x.User.FullName}</b> - {x.BillRole} - {x.BillRate} - {x.Note} - {x.ShadowNote} <br>"
-                        });
+                             //ProjectBillInfomation = $"<b>{x.User.FullName}</b> - {x.BillRole} - {x.BillRate} - {x.Note} - {x.ShadowNote} <br>"
+                         });
             return await query.ToListAsync();
         }
 
@@ -133,25 +133,30 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             };
         }
 
-        private async Task UpdateProjectBillInformation(long projectId, long timesheetId)
+        private async Task<List<string>> UpdateProjectBillInformation(long projectId, long timesheetId)
         {
-            try
-            {
-                var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Include(x => x.User).Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).ToListAsync();
-                var billInfomation = new StringBuilder();
+            var failList = new List<string>();
 
-                foreach (var item in timesheetProjectBills)
+            var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Include(x => x.User).Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).ToListAsync();
+            var billInfomation = new StringBuilder();
+
+            foreach (var item in timesheetProjectBills)
+            {
+                try
                 {
                     var timesheetProjects = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).FirstOrDefaultAsync();
                     billInfomation.Append($"<b>{item.User.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} - {item.ShadowNote} <br>");
                     timesheetProjects.ProjectBillInfomation = $"{billInfomation}";
                     await WorkScope.UpdateAsync(timesheetProjects);
                 }
+                catch (Exception ex)
+                {
+                    failList.Add($"error UserId = {item.UserId} : " + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new UserFriendlyException($"error: " + ex.Message);
-            }
+            return failList;
         }
+       
+
     }
 }

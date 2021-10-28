@@ -195,7 +195,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
 
                 var timesheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>()
-                                            .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
+                                            .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId && x.IsActive)
                                             .Select(x => new TimeSheetProjectBillExcelDto
                                             {
                                                 FullName = x.User.FullName,
