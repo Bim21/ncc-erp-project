@@ -190,7 +190,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             try
             {
                 var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplate.xlsx");
-                var project = await WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Include(x => x.Currency).Include(x=>x.Currency).FirstOrDefaultAsync();
+                var project = await WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Include(x => x.Client).Include(x=>x.Currency).FirstOrDefaultAsync();
 
                 var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
 
@@ -218,9 +218,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     {
                         var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
                         var companySetupSheet = excelPackageIn.Workbook.Worksheets[1];
+                        var clientName = project.Client != null ? project.Client.Name : "";
+                        invoiceSheet.Cells["E2"].Value = $"{clientName}";
 
-                        invoiceSheet.Cells["E2"].Value = project.Client != null ? project.Client.Name : "";
+                        //invoiceSheet.Names["TenKhachHang"].Value = project.Client != null ? project.Client.Name : "";
                         invoiceSheet.Names["TenProject"].Value = project.Name;
+                        invoiceSheet.Cells["B3"].Value = DateTime.Now.Date;
+                        invoiceSheet.Cells["B4"].Value = $"BILLING PERIOD: {DateTime.Now.Month}/{DateTime.Now.Year}";
                         //invoiceSheet.Names["DiaChiKhachHang"].Value = project.Client.Country;
                         var invoiceDetailTable = invoiceSheet.Tables.First();
                         var invoiceDetailTableStart = invoiceDetailTable.Address.Start;
@@ -264,7 +268,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                       
                         return new FileBase64Dto
                         {
-                            FileName = $"{project.Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}.xlsx",
+                            FileName = $"{project.Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
                             FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
                             Base64 = fileBase64
                         };
@@ -273,7 +277,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             catch (Exception ex)
             {
-                throw new UserFriendlyException("Không thể xuất ra file excel");
+                throw new UserFriendlyException($"error: " + ex.Message);
             }
         }
        

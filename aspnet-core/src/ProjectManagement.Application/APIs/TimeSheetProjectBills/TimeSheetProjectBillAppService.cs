@@ -71,6 +71,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(input, timesheetProjectBill));
+            await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
 
             return input;
         }

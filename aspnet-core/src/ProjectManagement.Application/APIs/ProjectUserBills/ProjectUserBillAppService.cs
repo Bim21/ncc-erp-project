@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
+using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
@@ -83,14 +84,29 @@ namespace ProjectManagement.APIs.ProjectUserBills
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
 
             var currentTimesheetProject = await WorkScope.GetAll<TimesheetProject>()
+                .Include(x => x.Timesheet)
                 .Where(x => x.ProjectId == input.ProjectId)
                 .OrderByDescending(x => x.CreationTime)
                 .FirstOrDefaultAsync();
-            if(currentTimesheetProject != default)
+            if(currentTimesheetProject != default && (!input.EndTime.HasValue || input.EndTime > currentTimesheetProject.CreationTime || input.EndTime.Value.Month == currentTimesheetProject.Timesheet.Month))
             {
                 var user = await WorkScope.GetAsync<User>(input.UserId);
                 currentTimesheetProject.ProjectBillInfomation += $"<b>{user.FullName}</b> - {input.BillRole} - {input.BillRate} <br>";
                 await WorkScope.UpdateAsync(currentTimesheetProject);
+                var timesheetProjectBill = new TimeSheetProjectBillDto
+                {
+                    ProjectId = input.ProjectId,
+                    TimeSheetId = input.Id,
+                    UserId = input.UserId,
+                    BillRole = input.BillRole,
+                    BillRate = input.BillRate,
+                    StartTime = input.StartTime,
+                    EndTime = input.EndTime,
+                    Note = input.Note,
+                    ShadowNote = input.shadowNote,
+                    IsActive = input.isActive
+                };
+                await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
             }
 
             return input;
