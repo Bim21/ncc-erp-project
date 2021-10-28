@@ -2,9 +2,11 @@
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
+using ProjectManagement.APIs.TimeSheetProjectBills;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
@@ -21,6 +23,11 @@ namespace ProjectManagement.APIs.ProjectUserBills
     [AbpAuthorize]
     public class ProjectUserBillAppService : ProjectManagementAppServiceBase
     {
+        private readonly ILogger<ProjectUserBillAppService> logger;
+        public ProjectUserBillAppService(ILogger<ProjectUserBillAppService> logger)
+        {
+            this.logger = logger;
+        }
         [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_GetAllPaging)]
         public async Task<GridResult<GetProjectUserBillDto>> GetAllPaging(GridParam input)
@@ -90,25 +97,31 @@ namespace ProjectManagement.APIs.ProjectUserBills
                 .FirstOrDefaultAsync();
             if(currentTimesheetProject != default && (!input.EndTime.HasValue || input.EndTime > currentTimesheetProject.CreationTime || input.EndTime.Value.Month == currentTimesheetProject.Timesheet.Month))
             {
-                var user = await WorkScope.GetAsync<User>(input.UserId);
-                currentTimesheetProject.ProjectBillInfomation += $"<b>{user.FullName}</b> - {input.BillRole} - {input.BillRate} <br>";
-                await WorkScope.UpdateAsync(currentTimesheetProject);
-                var timesheetProjectBill = new TimeSheetProjectBillDto
+                try
                 {
-                    ProjectId = input.ProjectId,
-                    TimeSheetId = input.Id,
-                    UserId = input.UserId,
-                    BillRole = input.BillRole,
-                    BillRate = input.BillRate,
-                    StartTime = input.StartTime,
-                    EndTime = input.EndTime,
-                    Note = input.Note,
-                    ShadowNote = input.shadowNote,
-                    IsActive = input.isActive
-                };
-                await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
+                    var user = await WorkScope.GetAsync<User>(input.UserId);
+                    currentTimesheetProject.ProjectBillInfomation += $"<b>{user.FullName}</b> - {input.BillRole} - {input.BillRate} <br>";
+                    await WorkScope.UpdateAsync(currentTimesheetProject);
+                    var timesheetProjectBill = new TimeSheetProjectBillDto
+                    {
+                        ProjectId = input.ProjectId,
+                        TimeSheetId = currentTimesheetProject.TimesheetId,
+                        UserId = input.UserId,
+                        BillRole = input.BillRole,
+                        BillRate = input.BillRate,
+                        StartTime = input.StartTime,
+                        EndTime = input.EndTime,
+                        Note = input.Note,
+                        ShadowNote = input.shadowNote,
+                        IsActive = input.isActive
+                    };
+                    await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
+                }
+                catch (Exception ex)
+                {
+                    logger.LogInformation($"error: " + ex.Message);
+                }
             }
-
             return input;
         }
 

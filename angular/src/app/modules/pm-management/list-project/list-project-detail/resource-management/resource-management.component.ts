@@ -1,5 +1,3 @@
-import { CurrencyDto } from './../../../../../service/model/currency.dto';
-import { CurrencyService } from './../../../../../service/api/currency.service';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 import { UserDto } from './../../../../../../shared/service-proxies/service-proxies';
@@ -65,12 +63,12 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userBillProcess: boolean = false;
   public panelOpenState: boolean = false;
   public isShowUserBill: boolean = false;
-  public currencyList: CurrencyDto[]=[];
+  
 
 
   PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
-    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private currencyService: CurrencyService) { super(injector) }
+    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
   ];
@@ -81,7 +79,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getUserBill();
     this.getAllUser();
     this.getAllFakeUser();
-    this.getAllCurrency();
+    
   }
   // get data
   private getProjectUser() {
@@ -136,13 +134,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       }
     }
   }
-  public getAllCurrency(){
-    this.currencyService.getAll().pipe(catchError(this.currencyService.handleError)).subscribe(data => {
-      this.currencyList = data.result;
-    })
-    
-  }
-
+ 
   saveProjectUser(user: projectUserDto) {
     if (!this.isEditUserProject) {
       let newUser: projectUserDto = this.projectUserList[0]
@@ -355,13 +347,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   getPercentage(user, data) {
     user.allocatePercentage = data
   }
-  getCurrencyName(arr: any[], id){
-    const currency= arr.find((item)=>{
-      return item.id==id;
-    })
-    return currency? currency.name:'';
 
-  }
 
 
 }

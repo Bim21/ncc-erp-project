@@ -1,3 +1,5 @@
+import { CurrencyService } from './../../../../service/api/currency.service';
+import { CurrencyDto } from './../../../../service/model/currency.dto';
 import { UserDto } from './../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../service/api/user.service';
 import { DialogDataDto } from './../../../../service/model/common-DTO';
@@ -8,6 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ListProjectService } from '@app/service/api/list-project.service';
 import { ProjectDto } from '@app/service/model/list-project.dto';
 import { AppComponentBase } from '@shared/app-component-base';
+
 
 
 import { catchError } from 'rxjs/operators';
@@ -26,14 +29,16 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
   public pmList: UserDto;
   public isEditStatus = false;
   public searchPM: string = "";
-  public title =""
+  public title ="";
+  public currencyList: CurrencyDto[]=[];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     injector: Injector,
     public projectService: ListProjectService,
     public dialogRef: MatDialogRef<CreateEditListProjectComponent>,
     private clientService: ClientService,
-    private userService: UserService
+    private userService: UserService,
+    private currencyService: CurrencyService
   ) {
     super(injector);
     this.projectTypeList = Object.keys(this.APP_ENUM.ProjectType)
@@ -41,6 +46,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
 
   ngOnInit(): void {
     this.getAllPM();
+    this.getAllCurrency();
     if (this.data.command == "edit") {
       this.project = this.data.dialogData
       // this.project.projectType = this.APP_ENUM.ProjectType[this.project.projectType]
@@ -48,10 +54,17 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       this.isEditStatus = true
     }
     this.getAllClient()
-    this.title = this.project.name
+    this.title = this.project.name;
+    
   }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
+  }
+  public getAllCurrency(){
+    this.currencyService.getAll().pipe(catchError(this.currencyService.handleError)).subscribe(data => {
+      this.currencyList = data.result;
+    })
+    
   }
 
   public saveAndClose(): void {
