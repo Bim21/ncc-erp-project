@@ -37,28 +37,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     },
       () => { this.isLoading = false })
   }
-  public syncProjectBill() {
-    abp.message.confirm(
-      "Sync data from project Bill" + "?",
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.isLoading = true
-          this.projectBillService.UpdateFromProjectUserBill(this.data.projectId,this.data.timesheetId).subscribe(rs => {
-            this.isLoading = false;
-            this.isCreate= false;
-            this.isEdit= false;
-            abp.notify.success("Sync data sucessful")
-            this.getProjectBill()
-          },
-            () => this.isLoading = false)
-        }
-       
-      }
-    );
-    
 
-  }
 
   public saveUserBill(userBill: projectUserBillDto): void {
     delete userBill["createMode"]
@@ -67,8 +46,6 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
     }
     userBill.timesheetId = this.data.timesheetId;
-    
-
     if(this.isCreate){
    
       userBill.projectId= this.data.projectId;
@@ -79,9 +56,10 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       },
         () => {
           userBill.createMode = true;
-        
         })
-      this.isCreate= false;
+        this.isCreate= false;
+        this.isEdit= false;
+     
       
       
     }else{
@@ -102,11 +80,14 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.getProjectBill();
     this.searchUserBill = "";
     this.isEdit= false;
-    this.isCreate= false;
+
   }
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;
-    this.isEdit=true;
+    this.isEdit= true;
+
+  
+
 
   }
   private getAllFakeUser() {
@@ -121,7 +102,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     let bill= {} as TimesheetProjectBill;
     this.billDetail.unshift(bill)
     bill.createMode= true;
-    this.isCreate= true;
     this.isEdit= true;
+    this.isCreate= true;
   }
 }
