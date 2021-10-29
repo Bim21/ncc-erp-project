@@ -163,7 +163,9 @@ export const PERMISSIONS_CONSTANT = {
     PmManager_ResourceRequest_Create: "PmManager.ResourceRequest.Create",
     PmManager_ResourceRequest_Update: "PmManager.ResourceRequest.Update",
     PmManager_ResourceRequest_Delete: "PmManager.ResourceRequest.Delete",
-
+    PmManager_ResourceRequest_CreateSkill: "PmManager.ResourceRequest.CreateSkill",
+    PmManager_ResourceRequest_DeleteSkill: "PmManager.ResourceRequest.DeleteSkill",
+    PmManager_ResourceRequest_GetSkillDetail: "PmManager.ResourceRequest.GetSkillDetail",
     //PMReportProjectIssues
     PmManager_PMReportProjectIssue: "PmManager.PMReportProjectIssue",
     PmManager_PMReportProjectIssue_ProblemsOfTheWeek: "PmManager.PMReportProjectIssue.ProblemsOfTheWeek",
