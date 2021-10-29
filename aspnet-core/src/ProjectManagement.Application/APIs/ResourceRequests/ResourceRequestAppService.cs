@@ -100,6 +100,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                     ResourceRequestId=z.ResourceRequestId,
                     ResourceRequestName = z.ResourceRequest.Name
                 }).OrderBy(x=>x.SkillName).ToList(),
+                KeySkill = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).OrderBy(z => z.Skill.Name).FirstOrDefault().Skill.Name,
+                KeyQuantity = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).OrderBy(z => z.Skill.Name).FirstOrDefault().Quantity,
                 SumSkill = SumSkillByResourceRequest.Where(h => h.ResourceRequestId == x.Id).FirstOrDefault().Sum,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
@@ -109,10 +111,12 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
             else if (order == "SKILL")
             {
+                //query = (query.Where(x => x.KeyQuantity > 0).OrderBy(x => x.KeySkill).ThenByDescending(x=>x.KeyQuantity).AsEnumerable().Union(query.Where(x => x.KeyQuantity == null))).AsQueryable();
+                query = query.OrderBy(x => x.KeySkill == null).ThenBy(x => x.KeySkill).ThenByDescending(x => x.KeyQuantity);
             }
             else
             {
-                query = query.OrderByDescending(x => x.SumSkill);
+                query = query.OrderByDescending(x => x.ProjectName);
             }
 
 
