@@ -9,6 +9,7 @@ using NccCore.Paging;
 using NccCore.Uitls;
 using OfficeOpenXml;
 using ProjectManagement.APIs.Projects.Dto;
+using ProjectManagement.APIs.TimeSheetProjectBills;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
@@ -38,14 +39,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
         private ISettingManager _settingManager;
         private KomuService _komuService;
         private readonly string templateFolder = Path.Combine("wwwroot", "template");
+        private TimeSheetProjectBillAppService _timeSheetProjectBillAppService;
 
         public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService,
-            KomuService komuService, ISettingManager settingManager)
+            KomuService komuService, ISettingManager settingManager, TimeSheetProjectBillAppService timeSheetProjectBillAppService)
         {
             _hostingEnvironment = environment;
             _financeService = financeService;
             _komuService = komuService;
             _settingManager = settingManager;
+            _timeSheetProjectBillAppService = timeSheetProjectBillAppService;
         }
 
         [HttpGet]
@@ -375,22 +378,25 @@ namespace ProjectManagement.APIs.TimesheetProjects
             if (isExist)
                 throw new UserFriendlyException($"TimesheetProject with ProjectId {input.ProjectId} already exist in Timesheet !");
 
-            var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == input.ProjectId && x.isActive && x.Project.IsCharge)
-                                .Select(x => new
-                                {
-                                    FullName = x.User.FullName,
-                                    BillRole = x.BillRole,
-                                    BillRate = x.BillRate,
-                                    Note = x.Note
-                                });
-
-            foreach (var b in projectUserBills)
-            {
-                billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} <br>");
-            }
-
-            input.ProjectBillInfomation = $"{billInfomation}";
+            //input.ProjectBillInfomation = $"{billInfomation}";
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProject>(input));
+
+            await _timeSheetProjectBillAppService.UpdateFromProjectUserBill(input.ProjectId, input.TimesheetId);
+
+            //var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == input.ProjectId && x.isActive && x.Project.IsCharge)
+            //                    .Select(x => new
+            //                    {
+            //                        FullName = x.User.FullName,
+            //                        BillRole = x.BillRole,
+            //                        BillRate = x.BillRate,
+            //                        Note = x.Note
+            //                    });
+
+            //foreach (var b in projectUserBills)
+            //{
+            //    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} <br>");
+            //}
+
 
             return input;
         }
