@@ -51,7 +51,7 @@
   <ItemGroup>
     <Folder Include="Uploads\" />
     <Folder Include="wwwroot\avatars\" />
-    <Folder Include="wwwroot\template\" />
+    <!--<Folder Include="wwwroot\template\" />-->
   </ItemGroup>
   <ItemGroup> 
       <Content Include="Uploads\**"> 
