@@ -63,7 +63,7 @@
                                     </abp-validation-summary>
                                 </div>
                             </td>
-                            <td *ngIf=" isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != ''  ">
+                            <td  class="text-center" *ngIf=" isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != ''  ">
                                 <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
                                 </span>
                                 <div *ngIf="bill.createMode">
