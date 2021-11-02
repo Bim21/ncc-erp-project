@@ -377,26 +377,22 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var isExist = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId);
             if (isExist)
                 throw new UserFriendlyException($"TimesheetProject with ProjectId {input.ProjectId} already exist in Timesheet !");
+            var projectUserBills = WorkScope.GetAll<ProjectUserBill>()
+                .Include(x => x.User)
+                .Where(x => x.ProjectId == input.ProjectId && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)));
+            var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(x => x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId)
+                .ToListAsync();
 
+            var deleteTimesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.ProjectId == input.ProjectId && x.TimesheetId ==  input.TimesheetId && !projectUserBills.Select(x => x.UserId).Contains(x.UserId)).ToListAsync();
+            foreach (var item in deleteTimesheetProjectBills)
+            {
+                await WorkScope.DeleteAsync<TimesheetProjectBill>(item.Id);
+            }
             //input.ProjectBillInfomation = $"{billInfomation}";
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProject>(input));
 
             await _timeSheetProjectBillAppService.UpdateFromProjectUserBill(input.ProjectId, input.TimesheetId);
-
-            //var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == input.ProjectId && x.isActive && x.Project.IsCharge)
-            //                    .Select(x => new
-            //                    {
-            //                        FullName = x.User.FullName,
-            //                        BillRole = x.BillRole,
-            //                        BillRate = x.BillRate,
-            //                        Note = x.Note
-            //                    });
-
-            //foreach (var b in projectUserBills)
-            //{
-            //    billInfomation.Append($"<b>{b.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} <br>");
-            //}
-
 
             return input;
         }

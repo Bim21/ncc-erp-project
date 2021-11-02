@@ -135,64 +135,11 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                     }
                 }
             }
+
+            //delete
             return new { sucessList, failList };
         }
-        //public async Task<object> UpdateFromProjectUserBill(long projectId, long timesheetId)
-        //{
-        //    var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
-        //    var projectUserBills = WorkScope.GetAll<ProjectUserBill>()
-        //        .Include(x => x.User)
-        //        .Where(x => x.ProjectId == projectId && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)));
-        //    var updateUserIds = projectUserBills.Select(x => x.UserId).ToList();
-
-        //    var currentTimesheetProject = await WorkScope.GetAll<TimesheetProject>()
-        //        .Where(x => x.ProjectId == projectId)
-        //        .OrderByDescending(x => x.CreationTime)
-        //        .FirstOrDefaultAsync();
-
-        //    var timesheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId);
-        //    var currentUserIds = timesheetProjectBills.Select(x => x.UserId).ToList();
-
-        //    var insertUserIds = updateUserIds.Except(currentUserIds).ToList();
-        //    var insertUsers = projectUserBills.Include(x => x.User).Where(x => insertUserIds.Contains(x.UserId)).ToList();
-        //    var successList = new List<string>();
-        //    var failList = new List<string>();
-
-        //    foreach (var item in insertUsers)
-        //    {
-        //        try
-        //        {
-        //            var timesheetProjectBill = new TimeSheetProjectBillDto
-        //            {
-        //                UserId = item.UserId,
-        //                ProjectId = item.ProjectId,
-        //                TimeSheetId = timesheetId,
-        //                BillRole = item.BillRole,
-        //                BillRate = item.BillRate,
-        //                StartTime = item.StartTime.Date,
-        //                EndTime = item.EndTime.GetValueOrDefault().Date,
-        //                Note = item.Note,
-        //                ShadowNote = item.shadowNote,
-        //                IsActive = item.isActive,
-        //                Currency = CurrencyCode.VND
-        //            };
-        //            timesheetProjectBill.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
-        //            successList.Add(timesheetProjectBill.UserId.ToString());
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            failList.Add($"error: {item.UserId} " + ex.Message);
-        //        }
-
-        //    }
-        //    await UpdateProjectBillInformation(projectId, timesheetId);
-        //    return new
-        //    {
-        //        successList,
-        //        failList
-        //    };
-        //}
-
+        
         private async Task<List<string>> UpdateProjectBillInformation(long projectId, long timesheetId)
         {
             var failList = new List<string>();
@@ -205,9 +152,12 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 try
                 {
                     var timesheetProjects = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).FirstOrDefaultAsync();
-                    billInfomation.Append($"<b>{item.User.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} - {item.ShadowNote} <br>");
-                    timesheetProjects.ProjectBillInfomation = $"{billInfomation}";
-                    await WorkScope.UpdateAsync(timesheetProjects);
+                    if(timesheetProjects != null)
+                    {
+                        billInfomation.Append($"<b>{item.User.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} - {item.ShadowNote} <br>");
+                        timesheetProjects.ProjectBillInfomation = $"{billInfomation}";
+                        await WorkScope.UpdateAsync(timesheetProjects);
+                    }    
                 }
                 catch (Exception ex)
                 {
