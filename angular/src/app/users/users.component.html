@@ -93,7 +93,7 @@
                 <td class="text-center">{{ user.userName }}</td>
                 <td class="text-center">{{user.userCode}}</td>
                 <td class="text-center">{{getByEnum(user.userLevel, APP_ENUM.UserLevel)}}</td>
-                <td class="text-center"><span
+                <td class="text-center" style="white-space: normal; max-width: 300px;"><span
                     *ngFor="let skill of user.userSkills; let i=index">{{skill.skillName}}<span
                       *ngIf="i < user.userSkills.length-1">, </span> </span></td>
                 <td class="text-center">
