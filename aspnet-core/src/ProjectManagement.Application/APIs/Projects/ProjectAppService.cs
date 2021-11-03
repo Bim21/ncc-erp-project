@@ -75,7 +75,7 @@ namespace ProjectManagement.APIs.Projects
         {
             var query = WorkScope.GetAll<Project>()
                 .Include(x => x.Currency)
-                .Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+                //.Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,
