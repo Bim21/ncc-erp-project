@@ -21,8 +21,8 @@ export class ListFilterPipe implements PipeTransform {
         let name = item[property].split(" ")
         return this.removeAccents(item[property].toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, ""))) ||
           this.removeAccents(item[property2].toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, ""))) ||
-          this.removeAccents((name[name.length - 1] + ' ' + name[0])).toLowerCase().replace(/\s/g, "").includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, ""))) ||
-          this.removeAccents((item?.surname.toLowerCase().replace(/\s/g, "") + ' ' + item?.name.toLowerCase().replace(/\s/g, ""))).includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, "")))
+          this.removeAccents((name[name.length - 1] + name[0])).toLowerCase().replace(/\s/g, "").includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, ""))) ||
+          this.removeAccents((item?.surname.toLowerCase().replace(/\s/g, "") + item?.name.toLowerCase().replace(/\s/g, ""))).includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, "")))
       });
     }
     else {
