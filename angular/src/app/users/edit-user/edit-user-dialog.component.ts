@@ -29,6 +29,7 @@ export class EditUserDialogComponent extends AppComponentBase
   roles: RoleDto[] = [];
   checkedRolesMap: { [key: string]: boolean } = {};
   id: number;
+  action:string
   skillList:UserSkillDto[] = [];
   userLevelList = Object.keys(this.APP_ENUM.UserLevel);
   userBranchList = Object.keys(this.APP_ENUM.Branch);
@@ -58,9 +59,10 @@ export class EditUserDialogComponent extends AppComponentBase
         this.roles = result2.items;
         this.setInitialRolesStatus();
       });
+   
     });
 
-    if(this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )){
+    if((this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )) || this.action){
       this.isviewOnlyMe =true
     }
   }

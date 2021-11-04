@@ -2,16 +2,16 @@
     <div class="container-fluid">
         <div class="row mb-4 card">
             <div class="col-12">
-                <nav mat-tab-nav-bar style="">
+                <nav mat-tab-nav-bar>
                     <a [ngClass]="currentUrl.includes('pool')?'active':''"  mat-tab-link (click)="routingPlanResourceTab()">
                        Pool
                     </a>
                     <a [ngClass]="currentUrl.includes('all-resource')?'active':''"  mat-tab-link (click)="routingAllResourceTab()">
                         All Resource
                     </a>
-                    <a [ngClass]="currentUrl.includes('future-resource')?'active':''"  mat-tab-link (click)="routingFutureResourceTab()">
+                    <!-- <a [ngClass]="currentUrl.includes('future-resource')?'active':''"  mat-tab-link (click)="routingFutureResourceTab()">
                         Future Resource
-                    </a>
+                    </a> -->
                 </nav>
                 <router-outlet></router-outlet>
             </div>
