@@ -90,9 +90,9 @@ border: none;
   padding-bottom: 0;
 }
 
-.modal-header {
-  padding-top: 0;
-}
+// .modal-header {
+//   padding-top: 0;
+// }
 .mat-form-field-label-wrapper .mat-form-field-label {
   font-weight: normal;
   font-size: 14px;
@@ -181,4 +181,19 @@ th {
 
 .modal , .modal-backdrop {
   z-index: 998;
+}
+body.modal-open {
+  overflow: hidden;
+    position:fixed;
+    width: 100%;
+    height: 100%;
+}
+.modal-dialog {
+  height: 100vh !important;
+  display: flex;
+}
+
+.modal-content {
+  margin: auto !important;
+  height: fit-content !important;
 }

@@ -4,14 +4,14 @@
   #editUserModal="ngForm"
   (ngSubmit)="save()"
 >
-  <abp-modal-header
-    [title]="'EditUser' | localize"
+  <abp-modal-header 
+    [title]="'Edit user: ' + user.fullName| localize"
     (onCloseClick)="bsModalRef.hide()"
   ></abp-modal-header>
   <div class="modal-body">
     <tabset>
       <tab [heading]="'UserDetails' | localize" class="pt-3 px-2">
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label" for="name">
             {{ "Name" | localize }}
           </label>
@@ -33,7 +33,7 @@
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label" for="surname">
             {{ "Surname" | localize }}
           </label>
@@ -55,7 +55,7 @@
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label" for="userName">
             {{ "UserName" | localize }}
           </label>
@@ -83,7 +83,7 @@
 
 
 
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label" for="userCode">
             {{ "userCode" | localize }}
           </label>
@@ -111,7 +111,7 @@
 
 
     
-      <div class="form-group row required">
+      <div class="form-group row required" *ngIf="!isviewOnlyMe">
         <label class="col-md-3 col-form-label" for="branch">Branch:</label>
         <div class="col-md-9 ">
             <mat-form-field class="w-100" appearance="outline">
@@ -127,7 +127,7 @@
             </mat-error>
         </div>
     </div>
-    <div class="form-group row required">
+    <div class="form-group row required" *ngIf="!isviewOnlyMe">
       <label class="col-md-3 col-form-label" for="userType">User type:</label>
       <div class="col-md-9 ">
           <mat-form-field class="w-100" appearance="outline">
@@ -144,7 +144,7 @@
       </div>
   </div>
 
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label" for="userLevel">Level:</label>
           <div class="col-md-9 ">
               <mat-form-field class="w-100" appearance="outline">
@@ -162,7 +162,7 @@
       </div>
 
         <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="userSkills">Skill:</label>
+          <label class="col-md-3 col-form-label" for="userSkills">User skills:</label>
           <div class="col-md-9 ">
               <mat-form-field class="w-100" appearance="outline">
                   <mat-select multiple  [(ngModel)]="user.userSkills" name="projectPM" placeholder="select skill" required
@@ -177,7 +177,7 @@
               </mat-error>
           </div>
       </div>
-        <div class="form-group row required">
+        <div class="form-group row required" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label" for="emailAddress">
             {{ "EmailAddress" | localize }}
           </label>
@@ -200,7 +200,7 @@
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row mb-0">
+        <div class="form-group row mb-0" *ngIf="!isviewOnlyMe">
           <label class="col-md-3 col-form-label">
             {{ "IsActive" | localize }}
           </label>
@@ -218,7 +218,7 @@
           </div>
         </div>
       </tab>
-      <tab [heading]="'UserRoles' | localize" class="pt-3 px-2">
+      <tab [heading]="'UserRoles' | localize" class="pt-3 px-2" *ngIf="!isviewOnlyMe">
         <div class="form-group row mb-0">
           <ng-container *ngFor="let role of roles; let i = index">
             <div class="col-md-6">

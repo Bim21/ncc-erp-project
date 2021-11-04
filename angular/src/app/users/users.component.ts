@@ -69,21 +69,25 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   users: UserDto[] = [];
   keyword = '';
   isActive: boolean | null;
-  skillsParam:DropDownDataDto[]=[]
-  skill=""
+  skillsParam: DropDownDataDto[] = []
+  skill = ""
+  isviewOnlyMe: boolean = false
   advancedFiltersVisible = false;
   Pages_Users_Create = PERMISSIONS_CONSTANT.Pages_Users_Create;
   Pages_Users_Delete = PERMISSIONS_CONSTANT.Pages_Users_Delete;
   Pages_Users_ImportUserFromFile = PERMISSIONS_CONSTANT.Pages_Users_ImportUserFromFile;
   Pages_Users_Update = PERMISSIONS_CONSTANT.Pages_Users_Update;
   Pages_Users_UpdateAvatar = PERMISSIONS_CONSTANT.Pages_Users_UpdateAvatar;
+  Pages_Users_UpdateMySkills = PERMISSIONS_CONSTANT.Pages_Users_UpdateMySkills
+  Pages_Users_ViewOnlyMe = PERMISSIONS_CONSTANT.Pages_Users_ViewOnlyMe
+  Pages_Users_AutoUpdateUserFromHRM = PERMISSIONS_CONSTANT.Pages_Users_AutoUpdateUserFromHRM
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,
     private _modalService: BsModalService,
     private userInfoService: UserService,
     private dialog: MatDialog,
-    private skillService:SkillService
+    private skillService: SkillService
   ) {
     super(injector);
   }
@@ -111,15 +115,15 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     pageNumber: number,
     finishedCallback: Function
   ): void {
-    let check =false
+    let check = false
     request.keyword = this.keyword;
     request.isActive = this.isActive;
     this.isLoading = true
-    request.filterItems.forEach(item=>{
-      if(item.filterType==4){
-        request.filterItems = this.clearFilter(request,"skill",0)
+    request.filterItems.forEach(item => {
+      if (item.filterType == 4) {
+        request.filterItems = this.clearFilter(request, "skill", 0)
         this.skill = item.value
-        check =true
+        check = true
       }
     })
     this.userInfoService
@@ -135,11 +139,11 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         this.users = result.result.items;
         this.showPaging(result.result, pageNumber);
         this.isLoading = false
-        if(check==true){
-          request.filterItems.push( { propertyName: 'skill', comparision:0, value: this.skill ,filterType: 4, dropdownData:this.skillsParam})
-          this.skill =''
+        if (check == true) {
+          request.filterItems.push({ propertyName: 'skill', comparision: 0, value: this.skill, filterType: 4, dropdownData: this.skillsParam })
+          this.skill = ''
         }
-        
+
       },
         () => {
           this.isLoading = false
@@ -163,6 +167,9 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   ngOnInit() {
     this.refresh()
     this.getAllSkills()
+    if (this.permission.isGranted(this.Pages_Users_ViewOnlyMe)) {
+      this.isviewOnlyMe = true
+    }
   }
 
   private showResetPasswordUserDialog(id?: number): void {
