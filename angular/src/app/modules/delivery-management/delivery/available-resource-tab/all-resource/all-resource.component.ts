@@ -171,13 +171,13 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     arr = arr.map((item) => {
       return item.name;
     })
-    return arr.join(',')
+    return arr.join(', ')
   }
   projectsCommas(arr) {
     arr = arr.map((item) => {
       return item.projectName;
     })
-    return arr.join(',')
+    return arr.join(', ')
   }
 
   showProjectDetail(projectId, projectName) {
