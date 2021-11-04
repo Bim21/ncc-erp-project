@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../constant/permission.constant';
 import { SkillService } from './../../service/api/skill.service';
 import { UserSkillDto } from './../../service/model/skill.dto';
 import {
@@ -31,8 +32,11 @@ export class EditUserDialogComponent extends AppComponentBase
   userLevelList = Object.keys(this.APP_ENUM.UserLevel);
   userBranchList = Object.keys(this.APP_ENUM.Branch);
   userTypeList = Object.keys(this.APP_ENUM.UserType);
-
+  isviewOnlyMe:boolean =false
   @Output() onSave = new EventEmitter<any>();
+
+  Pages_Users_UpdateMySkills = PERMISSIONS_CONSTANT.Pages_Users_UpdateMySkills
+  Pages_Users_ViewOnlyMe = PERMISSIONS_CONSTANT.Pages_Users_ViewOnlyMe
 
   constructor(
     injector: Injector,
@@ -55,6 +59,10 @@ export class EditUserDialogComponent extends AppComponentBase
         this.setInitialRolesStatus();
       });
     });
+
+    if(this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )){
+      this.isviewOnlyMe =true
+    }
   }
   getAllSkill(){
     this.skillService.getAll().subscribe(data =>{
