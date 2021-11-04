@@ -19,7 +19,8 @@ import {
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
-  templateUrl: './edit-user-dialog.component.html'
+  templateUrl: './edit-user-dialog.component.html',
+  styleUrls: ['./edit-user-dialog.component.css']
 })
 export class EditUserDialogComponent extends AppComponentBase
   implements OnInit {
@@ -51,7 +52,6 @@ export class EditUserDialogComponent extends AppComponentBase
     this.getAllSkill();
     this._userService.get(this.id).subscribe((result) => {
       this.user = result;
-      console.log(this.user);
       this.user.userSkills = this.user.userSkills.map(item=>item.skillId)
 
       this._userService.getRoles().subscribe((result2) => {
@@ -115,8 +115,9 @@ export class EditUserDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
         this.bsModalRef.hide();
+        this.notify.info(this.l('SavedSuccessfully'));
+        
         this.onSave.emit();
       });
   }
