@@ -14,8 +14,10 @@ namespace ProjectManagement.Authorization
         //User
         public const string Pages_Users = "Pages.Users";
         public const string Pages_Users_ViewAll = "Pages.Users.ViewAll";
+        public const string Pages_Users_ViewOnlyMe = "Pages.Users.ViewOnlyMe";
         public const string Pages_Users_Create = "Pages.Users.Create";
         public const string Pages_Users_Update = "Pages.Users.Update";
+        public const string Pages_Users_UpdateMySkills = "Pages.Users.UpdateMySkills";
         public const string Pages_Users_Delete = "Pages.Users.Delete";
         public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
         public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
@@ -328,8 +330,10 @@ namespace ProjectManagement.Authorization
                         //User
                         PermissionNames.Pages_Users,
                             PermissionNames.Pages_Users_ViewAll,
+                            PermissionNames.Pages_Users_ViewOnlyMe,
                             PermissionNames.Pages_Users_Create,
                             PermissionNames.Pages_Users_Update,
+                            PermissionNames.Pages_Users_UpdateMySkills,
                             PermissionNames.Pages_Users_Delete,
                             PermissionNames.Pages_Users_ImportUserFromFile,
                             PermissionNames.Pages_Users_UpdateAvatar,
@@ -618,8 +622,10 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Pages_Tenants, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tenants" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All User" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewOnlyMe, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Me" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateMySkills, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update My Skills" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
@@ -873,9 +879,11 @@ namespace ProjectManagement.Authorization
                          new SystemPermission { Name =  PermissionNames.Pages_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "User",
                             Childrens = new List<SystemPermission>()
                             {
-                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All User" },
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All User"},
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_ViewOnlyMe, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only Me" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new User" },
-                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User" },
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update User"},
+                                 new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateMySkills, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update My Skills" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete User" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
