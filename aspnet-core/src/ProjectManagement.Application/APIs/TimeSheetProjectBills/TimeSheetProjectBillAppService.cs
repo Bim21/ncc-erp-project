@@ -114,7 +114,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                         //var timesheetProjectBill = await WorkScope.GetAsync<TimesheetProjectBill>(timesheetProjectBillId);
                         await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(pUserBill, timesheetProjectBill));
                         sucessList.Add($"{pUserBill.UserId}");
-                        await UpdateProjectBillInformation(projectId, timesheetId);
+                        //await UpdateProjectBillInformation(projectId, timesheetId);
                     }
                     catch (Exception ex)
                     {
@@ -125,9 +125,15 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 {
                     try
                     {
-                        await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(pUserBill));
-                        sucessList.Add($"{pUserBill.UserId}");
-                        await UpdateProjectBillInformation(projectId, timesheetId);
+                        var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
+                            .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)
+                            .AnyAsync(x => x.UserId == pUserBill.UserId);
+                        if(!isExist)
+                        {
+                            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(pUserBill));
+                            sucessList.Add($"{pUserBill.UserId}");
+                            //await UpdateProjectBillInformation(projectId, timesheetId);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -136,7 +142,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 }
             }
 
-            //delete
+            await UpdateProjectBillInformation(projectId, timesheetId);
+
             return new { sucessList, failList };
         }
         
