@@ -105,7 +105,6 @@ namespace ProjectManagement.APIs.ProjectUserBills
                 try
                 {
                     await timeSheetProjectBillAppService.UpdateFromProjectUserBill(input.ProjectId, timesheetId);
-
                 }
                 catch (Exception ex)
                 {
