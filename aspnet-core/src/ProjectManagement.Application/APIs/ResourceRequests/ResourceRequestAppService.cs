@@ -107,7 +107,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             });
             if (order == "TIMENEED")
             {
-                query = query.OrderByDescending(x => x.TimeNeed);
+                query = query.OrderBy(x => x.TimeNeed);
             }
             else if (order == "SKILL")
             {
@@ -295,7 +295,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Name = uk.Skill.Name
                                     }).ToList(),
                                 }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-            return await users.GetGridResult(users, input);
+                   
+           
+             return await users.GetGridResult(users, input);
         }
 
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM,
