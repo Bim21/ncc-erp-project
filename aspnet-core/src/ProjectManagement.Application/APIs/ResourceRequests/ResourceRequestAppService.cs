@@ -266,6 +266,8 @@ namespace ProjectManagement.APIs.ResourceRequests
             var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
             var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
+            var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
+            var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
 
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
                                 .Select(x => new AvailableResourceDto
@@ -295,9 +297,21 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Name = uk.Skill.Name
                                     }).ToList(),
                                 }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-                   
-           
-             return await users.GetGridResult(users, input);
+            if(filterProjectName != null)
+            {
+                string searchByProject = filterProjectName.Value.ToString();
+                input.FilterItems.Remove(filterProjectName);
+                var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
+                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
+            }
+            if (filterprojectUserPlans != null)
+            {
+                string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
+                input.FilterItems.Remove(filterprojectUserPlans);
+                var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
+                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
+            }
+            return await users.GetGridResult(users, input);
         }
 
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM,

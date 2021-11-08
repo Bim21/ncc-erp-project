@@ -103,7 +103,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
     { propertyName: 'userType', comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam },
-    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam }
+    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
+    { propertyName: 'projectName', comparisions: [0,6,7,8], displayName: "Project Name" },
+    { propertyName: 'projectUserPlans', comparisions: [0,6,7,8], displayName: "Project User Plans" }
   ];
 
   public availableResourceList: availableResourceDto[] = [];
