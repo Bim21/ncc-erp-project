@@ -4,19 +4,20 @@
   #editUserModal="ngForm"
   (ngSubmit)="save()"
 >
-  <abp-modal-header
-    [title]="'EditUser' | localize"
+  <abp-modal-header 
+    [title]="'Edit user: ' + user.fullName| localize"
     (onCloseClick)="bsModalRef.hide()"
   ></abp-modal-header>
   <div class="modal-body">
     <tabset>
       <tab [heading]="'UserDetails' | localize" class="pt-3 px-2">
-        <div class="form-group row required">
+        <div class="form-group row required"  *ngIf="!action">
           <label class="col-md-3 col-form-label" for="name">
             {{ "Name" | localize }}
           </label>
           <div class="col-md-9">
             <input
+            [disabled]="isviewOnlyMe"
               type="text"
               class="form-control"
               name="name"
@@ -33,12 +34,13 @@
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row required">
+        <div class="form-group row required"  *ngIf="!action" >
           <label class="col-md-3 col-form-label" for="surname">
             {{ "Surname" | localize }}
           </label>
           <div class="col-md-9">
             <input
+            [disabled]="isviewOnlyMe"
               type="text"
               class="form-control"
               name="surname"
@@ -55,12 +57,13 @@
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row required">
+        <div class="form-group row required"  *ngIf="!action">
           <label class="col-md-3 col-form-label" for="userName">
             {{ "UserName" | localize }}
           </label>
           <div class="col-md-9">
             <input
+            [disabled]="isviewOnlyMe"
               type="text"
               class="form-control"
               name="userName"
@@ -83,12 +86,13 @@
 
 
 
-        <div class="form-group row required">
+        <div class="form-group row required"  *ngIf="!action">
           <label class="col-md-3 col-form-label" for="userCode">
             {{ "userCode" | localize }}
           </label>
           <div class="col-md-9">
             <input
+            [disabled]="isviewOnlyMe"
               type="text"
               class="form-control"
               name="userCode"
@@ -111,11 +115,11 @@
 
 
     
-      <div class="form-group row required">
+      <div class="form-group row required" *ngIf="!action" >
         <label class="col-md-3 col-form-label" for="branch">Branch:</label>
         <div class="col-md-9 ">
             <mat-form-field class="w-100" appearance="outline">
-                <mat-select [(ngModel)]="user.branch" name="branch" placeholder="select branch" required
+                <mat-select [(ngModel)]="user.branch" name="branch" placeholder="select branch" required [disabled]="isviewOnlyMe"
                     #branch="ngModel">
                     <mat-option *ngFor="let branch of userBranchList" [value]="APP_ENUM.Branch[branch]">
                         {{branch}}</mat-option>
@@ -127,11 +131,11 @@
             </mat-error>
         </div>
     </div>
-    <div class="form-group row required">
+    <div class="form-group row required"  *ngIf="!action">
       <label class="col-md-3 col-form-label" for="userType">User type:</label>
       <div class="col-md-9 ">
           <mat-form-field class="w-100" appearance="outline">
-              <mat-select [(ngModel)]="user.userType" name="userType" placeholder="select user Type" required
+              <mat-select [(ngModel)]="user.userType" name="userType" placeholder="select user Type" required [disabled]="isviewOnlyMe"
                   #userType="ngModel">
                   <mat-option *ngFor="let userType of userTypeList" [value]="APP_ENUM.UserType[userType]">
                       {{userType}}</mat-option>
@@ -144,11 +148,11 @@
       </div>
   </div>
 
-        <div class="form-group row required">
+        <div class="form-group row required"  *ngIf="!action">
           <label class="col-md-3 col-form-label" for="userLevel">Level:</label>
           <div class="col-md-9 ">
               <mat-form-field class="w-100" appearance="outline">
-                  <mat-select [(ngModel)]="user.userLevel" name="userLevel" placeholder="select level" required
+                  <mat-select [(ngModel)]="user.userLevel" name="userLevel" placeholder="select level" required [disabled]="isviewOnlyMe"
                       #userLevel="ngModel">
                       <mat-option *ngFor="let level of userLevelList" [value]="APP_ENUM.UserLevel[level]">
                           {{level}}</mat-option>
@@ -162,7 +166,7 @@
       </div>
 
         <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="userSkills">Skill:</label>
+          <label class="col-md-3 col-form-label" for="userSkills">User skills:</label>
           <div class="col-md-9 ">
               <mat-form-field class="w-100" appearance="outline">
                   <mat-select multiple  [(ngModel)]="user.userSkills" name="projectPM" placeholder="select skill" required
@@ -177,12 +181,13 @@
               </mat-error>
           </div>
       </div>
-        <div class="form-group row required">
+        <div class="form-group row required"  *ngIf="!action">
           <label class="col-md-3 col-form-label" for="emailAddress">
             {{ "EmailAddress" | localize }}
           </label>
           <div class="col-md-9">
             <input
+            [disabled]="isviewOnlyMe"
               type="email"
               class="form-control"
               name="emailAddress"
@@ -200,13 +205,14 @@
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row mb-0">
+        <div class="form-group row mb-0"  *ngIf="!action">
           <label class="col-md-3 col-form-label">
             {{ "IsActive" | localize }}
           </label>
           <div class="col-md-9">
             <div class="custom-control custom-checkbox">
               <input
+              [disabled]="isviewOnlyMe"
                 type="checkbox"
                 class="custom-control-input"
                 name="isActive"
@@ -218,12 +224,13 @@
           </div>
         </div>
       </tab>
-      <tab [heading]="'UserRoles' | localize" class="pt-3 px-2">
+      <tab [heading]="'UserRoles' | localize" class="pt-3 px-2"  *ngIf="!isviewOnlyMe">
         <div class="form-group row mb-0">
           <ng-container *ngFor="let role of roles; let i = index">
             <div class="col-md-6">
               <div class="custom-control custom-checkbox">
                 <input
+                [disabled]="isviewOnlyMe"
                   type="checkbox"
                   class="custom-control-input"
                   [id]="'role_' + i"

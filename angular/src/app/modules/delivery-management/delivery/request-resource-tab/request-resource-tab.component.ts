@@ -38,9 +38,6 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
       this.tempListRequest = data.result.items;
-      if (this.selectedOption == "SKILL") {
-        this.listRequest.sort(this.compareSkill)
-      }
       this.showPaging(data.result, pageNumber);
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "")
@@ -48,20 +45,6 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       this.isLoading = false;
     })
   }
-  compareSkill(a, b) {
-    if(a.userSkills[0]?.skillName){
-      if (a.userSkills[0]?.skillName < b.userSkills[0]?.skillName && a.userSkills[0]?.quantity < b.userSkills[0]?.quantity ) {
-        return -1;
-      }
-      if (a.userSkills[0]?.skillName > b.userSkills[0]?.skillName &&  a.userSkills[0]?.quantity > b.userSkills[0]?.quantity) {
-        return 1;
-      }
-    }
-    return 0;
-  }
-
-
-
   protected delete(item: RequestResourceDto): void {
     abp.message.confirm(
       "Delete request: " + item.name + "?",

@@ -34,9 +34,9 @@
                                             (click)="addFilter()"></i>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                         </div>
                     </form>
                     <!-- <div class="col-4">
@@ -50,75 +50,82 @@
                             </mat-form-field>
                         </div>
                     </div> -->
-                    
-                    
+
+
                 </div>
             </div>
             <div class=" table-responsive py-4">
                 <div class="fixTableHead">
-                <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                    <thead class="bg-light">
-                        <tr style="border: none;">
-                            <th>STT</th>
-                            <th>Nhân viên</th>
-                            <th>Dự án</th>
-                            <th>Plan sử dụng</th>
-                            <th>Kĩ năng</th>
-                            <th>Sử dụng hiện tại</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of availableResourceList |paginate
+                    <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                        <thead class="bg-light">
+                            <tr style="border: none;">
+                                <th class="stt">#</th>
+                                <th>Nhân viên</th>
+                                <th>Dự án</th>
+                                <th>Tạm thời sử dụng</th>
+                                <th>Kĩ năng</th>
+                                <th>Sử dụng hiện tại</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of availableResourceList |paginate
                             : {
                                 id: 'server',
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
                               }; let i = index">
-                            <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td  style="white-space: normal; max-width: 200px;"class="">
-                                <div>
-                                    <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                    userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}"></app-user-info>
-                                </div>
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
-                                <!-- <strong *ngFor="let project of item.projects;let i =index">
+                                <td class="text-center"><span>{{ i +1 }}</span></td>
+                                <td style="white-space: normal; max-width: 200px;" class="">
+                                    <div>
+                                        <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
+                                    userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}">
+                                        </app-user-info>
+                                    </div>
+                                </td>
+                                <td style="white-space: normal; max-width: 200px;">
+                                    <!-- <strong *ngFor="let project of item.projects;let i =index">
                                     {{project.projectName}} <span *ngIf="i < item.projects.length-1">,</span>
                                 </strong> -->
-                                <ng-container *ngFor="let project of item.projects">
-                                    <div><strong class="hyperlink" (click)="showProjectDetail(project.projectId,project.projectName)">-{{project.projectName}}</strong></div>
-                                </ng-container>
-                                
-                            
-                                    
-                             
-                                
-                                
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
-                                <div *ngFor="let i of item.projectUserPlans">
-                                    <span><strong>Tham gia dự án:</strong>  {{i.projectName}}</span><br>
-                                    <span><strong>Từ ngày :</strong> {{i.startTime | date: "dd/MM/yyyy"}}</span><br>
-                                    <span><strong>Sử dụng:</strong> {{i.allocatePercentage}}%</span><br><br>
-                                </div>
-                            </td>
-                            <td>
-                                
-                                    {{skillsCommas(item.listSkills)}}
+                                    <ng-container *ngFor="let project of item.projects">
+                                        <div><strong class="hyperlink"
+                                                (click)="showProjectDetail(project.projectId,project.projectName)">-{{project.projectName}}</strong>
+                                        </div>
+                                    </ng-container>
 
-                                
-                            </td>
-                            <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
-                                <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
-                                    Plan
-                                </button>
-                            </td>
 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
+
+
+
+                                </td>
+                                <td style="white-space: normal; max-width: 200px;">
+                                    <div *ngFor="let i of item.projectUserPlans">
+                                        <span><strong>Tham gia dự án:</strong> {{i.projectName}}</span><br>
+                                        <span><strong>Từ ngày :</strong> {{i.startTime | date: "dd/MM/yyyy"}}</span><br>
+                                        <span><strong>Sử dụng:</strong> {{i.allocatePercentage}}%</span><br><br>
+                                    </div>
+                                </td>
+                                <td style="white-space: normal; max-width: 200px;">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            {{skillsCommas(item.listSkills)}}
+                                        </div>
+                                        <div class="col-2">
+                                            <i class="fas fa-edit fa-lg" (click)="updateUserSkill(item.userId)"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
+                                    <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
+                                        Plan
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="bg-light border-top pt-2">
                 <div class="row">

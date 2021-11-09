@@ -100,19 +100,23 @@ namespace ProjectManagement.APIs.ResourceRequests
                     ResourceRequestId=z.ResourceRequestId,
                     ResourceRequestName = z.ResourceRequest.Name
                 }).OrderBy(x=>x.SkillName).ToList(),
+                KeySkill = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).OrderBy(z => z.Skill.Name).FirstOrDefault().Skill.Name,
+                KeyQuantity = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).OrderBy(z => z.Skill.Name).FirstOrDefault().Quantity,
                 SumSkill = SumSkillByResourceRequest.Where(h => h.ResourceRequestId == x.Id).FirstOrDefault().Sum,
                 PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
             });
             if (order == "TIMENEED")
             {
-                query = query.OrderByDescending(x => x.TimeNeed);
+                query = query.OrderBy(x => x.TimeNeed);
             }
             else if (order == "SKILL")
             {
+                //query = (query.Where(x => x.KeyQuantity > 0).OrderBy(x => x.KeySkill).ThenByDescending(x=>x.KeyQuantity).AsEnumerable().Union(query.Where(x => x.KeyQuantity == null))).AsQueryable();
+                query = query.OrderBy(x => x.KeySkill == null).ThenBy(x => x.KeySkill).ThenByDescending(x => x.KeyQuantity);
             }
             else
             {
-                query = query.OrderByDescending(x => x.SumSkill);
+                query = query.OrderByDescending(x => x.ProjectName);
             }
 
 
@@ -262,6 +266,8 @@ namespace ProjectManagement.APIs.ResourceRequests
             var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
             var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
+            var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
+            var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
 
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
                                 .Select(x => new AvailableResourceDto
@@ -291,6 +297,20 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Name = uk.Skill.Name
                                     }).ToList(),
                                 }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
+            if(filterProjectName != null)
+            {
+                string searchByProject = filterProjectName.Value.ToString();
+                input.FilterItems.Remove(filterProjectName);
+                var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
+                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
+            }
+            if (filterprojectUserPlans != null)
+            {
+                string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
+                input.FilterItems.Remove(filterprojectUserPlans);
+                var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
+                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
+            }
             return await users.GetGridResult(users, input);
         }
 

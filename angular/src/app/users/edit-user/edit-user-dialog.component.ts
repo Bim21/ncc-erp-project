@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../constant/permission.constant';
 import { SkillService } from './../../service/api/skill.service';
 import { UserSkillDto } from './../../service/model/skill.dto';
 import {
@@ -18,7 +19,8 @@ import {
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
-  templateUrl: './edit-user-dialog.component.html'
+  templateUrl: './edit-user-dialog.component.html',
+  styleUrls: ['./edit-user-dialog.component.css']
 })
 export class EditUserDialogComponent extends AppComponentBase
   implements OnInit {
@@ -27,12 +29,16 @@ export class EditUserDialogComponent extends AppComponentBase
   roles: RoleDto[] = [];
   checkedRolesMap: { [key: string]: boolean } = {};
   id: number;
+  action:string
   skillList:UserSkillDto[] = [];
   userLevelList = Object.keys(this.APP_ENUM.UserLevel);
   userBranchList = Object.keys(this.APP_ENUM.Branch);
   userTypeList = Object.keys(this.APP_ENUM.UserType);
-
+  isviewOnlyMe:boolean =false
   @Output() onSave = new EventEmitter<any>();
+
+  Pages_Users_UpdateMySkills = PERMISSIONS_CONSTANT.Pages_Users_UpdateMySkills
+  Pages_Users_ViewOnlyMe = PERMISSIONS_CONSTANT.Pages_Users_ViewOnlyMe
 
   constructor(
     injector: Injector,
@@ -47,14 +53,18 @@ export class EditUserDialogComponent extends AppComponentBase
     this.getAllSkill();
     this._userService.get(this.id).subscribe((result) => {
       this.user = result;
-      console.log(this.user);
       this.user.userSkills = this.user.userSkills.map(item=>item.skillId)
 
       this._userService.getRoles().subscribe((result2) => {
         this.roles = result2.items;
         this.setInitialRolesStatus();
       });
+   
     });
+
+    if((this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )) || this.action){
+      this.isviewOnlyMe =true
+    }
   }
   getAllSkill(){
     this.skillService.getAll().subscribe(data =>{
@@ -107,8 +117,9 @@ export class EditUserDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
         this.bsModalRef.hide();
+        this.notify.info(this.l('SavedSuccessfully'));
+        
         this.onSave.emit();
       });
   }

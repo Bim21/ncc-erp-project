@@ -357,7 +357,7 @@
                                                     <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput (keydown)="$event.stopPropagation()"
                                                         placeholder="search">{{myInput.focus()}}
                                                 </mat-form-field>
-                                                <mat-option *ngFor="let user of userList |listFilter : 'fullName' :searchUser : 'emailAddress'"
+                                                <mat-option *ngFor="let user of userList |listFilter : 'fullName' :searchUser : 'emailAddress' : 'surname' : 'name'"
                                                     [value]="user.id">
                                                     {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
@@ -516,7 +516,7 @@
                                                         <input matInput [(ngModel)]="searchUser" name="searchUser" (keydown)="$event.stopPropagation()"
                                                             #inputSearch placeholder="search">{{inputSearch.focus()}}
                                                     </mat-form-field>
-                                                    <mat-option *ngFor="let user of userList |listFilter: 'fullName' :searchUser : 'emailAddress'"
+                                                    <mat-option *ngFor="let user of userList |listFilter: 'fullName' :searchUser : 'emailAddress' : 'surname' : 'name'"
                                                         [value]="user.id">
                                                         {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                 </mat-select>

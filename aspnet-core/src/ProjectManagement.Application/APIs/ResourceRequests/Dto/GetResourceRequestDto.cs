@@ -23,5 +23,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public int PlannedNumberOfPersonnel { get; set; }
         public List<GetSkillDetailDto> UserSkills { get; set; }
         public long  SumSkill { get; set; }
+        public string KeySkill { get; set; }
+        public long KeyQuantity { get; set; }
     }
 }

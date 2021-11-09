@@ -11,7 +11,7 @@
                             <th class="stt">#</th>
                             <th>Nhân viên</th>
                             <th>Charge Role</th>
-                            <th *ngIf="data.projectBillInfomation != ''">Rate</th>
+                            <th *ngIf=" isCreate || billDetail[0]?.billRate || isEdit  ||data.projectBillInfomation != ''  " >Rate</th>
                             <th>Working time(Day)</th>
                             <th>is Active</th>
                             <th>Note</th>
@@ -41,7 +41,7 @@
                                                     #search>{{search.focus()}}
                                             </mat-form-field>
                                             <mat-option
-                                                *ngFor="let user of userForUserBill | listFilter: 'fullName' : searchUserBill : 'emailAddress'"
+                                                *ngFor="let user of userForUserBill | listFilter: 'fullName' : searchUserBill : 'emailAddress' : 'surname' : 'name'"
                                                 [value]="user.id">
                                                 {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                         </mat-select>
@@ -63,7 +63,7 @@
                                     </abp-validation-summary>
                                 </div>
                             </td>
-                            <td *ngIf="data.projectBillInfomation != ''">
+                            <td  class="text-center" *ngIf=" isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != ''  ">
                                 <span *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
                                 </span>
                                 <div *ngIf="bill.createMode">

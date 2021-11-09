@@ -86,32 +86,36 @@ namespace ProjectManagement.Users
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Pages_Users_ViewAll)]
+        [AbpAuthorize(PermissionNames.Pages_Users_ViewAll, PermissionNames.Pages_Users_ViewOnlyMe)]
         public async Task<GridResult<UserDto>> GetAllPaging(GridParam input, long? skillId)
         {
+            bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Pages_Users_ViewAll);
+
             var userSkills = _workScope.GetAll<UserSkill>();
-            var users = _workScope.GetAll<User>().Select(x => new UserDto
-            {
-                Id = x.Id,
-                UserName = x.UserName,
-                Name = x.Name,
-                Surname = x.Surname,
-                EmailAddress = x.EmailAddress,
-                UserCode = x.UserCode,
-                AvatarPath = "/avatars/" + x.AvatarPath,
-                UserType = x.UserType,
-                UserLevel = x.UserLevel,
-                Branch = x.Branch,
-                IsActive = x.IsActive,
-                FullName = x.Name + " " + x.Surname,
-                UserSkills = userSkills.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
+            var users = _workScope.GetAll<User>()
+                .Where(x => isViewAll || x.Id == AbpSession.UserId.Value)
+                .Select(x => new UserDto
                 {
-                    UserId = s.UserId,
-                    SkillId = s.SkillId,
-                    SkillName = s.Skill.Name
-                }).ToList(),
-                RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
-            }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.Id).Select(y => y.SkillId).Contains(skillId.Value));
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Name = x.Name,
+                    Surname = x.Surname,
+                    EmailAddress = x.EmailAddress,
+                    UserCode = x.UserCode,
+                    AvatarPath = "/avatars/" + x.AvatarPath,
+                    UserType = x.UserType,
+                    UserLevel = x.UserLevel,
+                    Branch = x.Branch,
+                    IsActive = x.IsActive,
+                    FullName = x.Name + " " + x.Surname,
+                    UserSkills = userSkills.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
+                    {
+                        UserId = s.UserId,
+                        SkillId = s.SkillId,
+                        SkillName = s.Skill.Name
+                    }).ToList(),
+                    RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
+                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.Id).Select(y => y.SkillId).Contains(skillId.Value));
 
             return await users.GetGridResult(users, input);
         }
@@ -153,20 +157,26 @@ namespace ProjectManagement.Users
             return MapToEntityDto(user);
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
+        [AbpAuthorize(PermissionNames.Pages_Users_Update, PermissionNames.Pages_Users_UpdateMySkills)]
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
+            bool isUpdateAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Pages_Users_Update);
+
             CheckUpdatePermission();
 
-            var user = await _userManager.GetUserByIdAsync(input.Id);
-
-            MapToEntity(input, user);
-
-            CheckErrors(await _userManager.UpdateAsync(user));
-
-            if (input.RoleNames != null)
+            if (isUpdateAll)
             {
-                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+
+                var user = await _userManager.GetUserByIdAsync(input.Id);
+
+                MapToEntity(input, user);
+
+                CheckErrors(await _userManager.UpdateAsync(user));
+
+                if (input.RoleNames != null)
+                {
+                    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+                }
             }
 
             var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.Id).ToListAsync();

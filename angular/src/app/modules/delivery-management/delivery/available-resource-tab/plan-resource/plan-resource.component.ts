@@ -1,3 +1,5 @@
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
 import { ProjectDetailComponent } from './plan-user/project-detail/project-detail.component';
 import { SkillService } from './../../../../../service/api/skill.service';
 import { InputFilterDto } from './../../../../../../shared/filter/filter.component';
@@ -105,12 +107,14 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
     { propertyName: 'userType', comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam },
-    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam }
+    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
+    { propertyName: 'projectName', comparisions: [0,6,7,8], displayName: "Project Name" },
+    { propertyName: 'projectUserPlans', comparisions: [0,6,7,8], displayName: "Project User Plans" }
   ];
 
   public availableResourceList: availableResourceDto[] = [];
 
-  constructor(public injector: Injector,
+  constructor(public injector: Injector, private _modalService: BsModalService,
     private availableRerourceService: DeliveryResourceRequestService,
     private dialog: MatDialog,
     private skillService: SkillService,
@@ -174,13 +178,13 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
     arr = arr.map((item) => {
       return item.name;
     })
-    return arr.join(',')
+    return arr.join(', ')
   }
   projectsCommas(arr) {
     arr = arr.map((item) => {
       return item.projectName;
     })
-    return arr.join(',')
+    return arr.join(', ')
   }
 
   showProjectDetail(projectId, projectName) {
@@ -195,6 +199,23 @@ export class PlanResourceComponent extends PagedListingComponentBase<PlanResourc
   }
 
 
+  updateUserSkill(id){
+    console.log("aaaa",id)
+    let createOrEditUserDialog: BsModalRef;
+    createOrEditUserDialog = this._modalService.show(
+      EditUserDialogComponent,
+      {
+        class: 'modal-lg',
+        initialState: {
+          id: id,
+          action:"pmUpdate"
+        },
+      }
+    );
+    createOrEditUserDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
+  }
 
 
 
