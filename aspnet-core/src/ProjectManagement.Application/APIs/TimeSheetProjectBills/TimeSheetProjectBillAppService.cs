@@ -68,12 +68,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         {
             var timesheetProjectBill = await WorkScope.GetAsync<TimesheetProjectBill>(input.Id);
 
-            var isExist = await WorkScope.GetAll<TimesheetProjectBill>().AnyAsync(x => x.UserId == input.UserId);
-            //if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
-            //    throw new UserFriendlyException($"Start date cannot be greater than end date !");
-            if (isExist)
-                throw new UserFriendlyException($"User has exist!");
-
             await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(input, timesheetProjectBill));
             CurrentUnitOfWork.SaveChanges();
             await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
