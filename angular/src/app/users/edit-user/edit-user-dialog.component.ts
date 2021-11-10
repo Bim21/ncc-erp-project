@@ -39,6 +39,7 @@ export class EditUserDialogComponent extends AppComponentBase
 
   Pages_Users_UpdateMySkills = PERMISSIONS_CONSTANT.Pages_Users_UpdateMySkills
   Pages_Users_ViewOnlyMe = PERMISSIONS_CONSTANT.Pages_Users_ViewOnlyMe
+  Pages_Users_ViewAll = PERMISSIONS_CONSTANT.Pages_Users_ViewAll
 
   constructor(
     injector: Injector,
@@ -62,7 +63,8 @@ export class EditUserDialogComponent extends AppComponentBase
    
     });
 
-    if((this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )) || this.action){
+    if((this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )
+    && !this.permission.isGranted(this.Pages_Users_ViewAll)) || this.action){
       this.isviewOnlyMe =true
     }
   }

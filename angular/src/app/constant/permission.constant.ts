@@ -95,7 +95,7 @@ export const PERMISSIONS_CONSTANT = {
     Pages_Users_UpdateMySkills: "Pages.Users.UpdateMySkills",
     Pages_Users_ViewOnlyMe: "Pages.Users.UpdateMySkills",
     Pages_Users_AutoUpdateUserFromHRM: "Pages.Users.AutoUpdateUserFromHRM",
-
+    Pages_Users_ViewAll: "Pages.Users.ViewAll",
     PmManager: "PmManager",
     PmManager_Project: "PmManager.Project",
     PmManager_Project_Create: "PmManager.Project.Create",
