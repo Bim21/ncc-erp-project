@@ -67,8 +67,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         {
             var timesheetProjectBill = await WorkScope.GetAsync<TimesheetProjectBill>(input.Id);
 
-            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
-                throw new UserFriendlyException($"Start date cannot be greater than end date !");
+            //if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
+            //    throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(input, timesheetProjectBill));
             await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
@@ -82,7 +82,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
             var projectUserBills = WorkScope.GetAll<ProjectUserBill>()
                 .Include(x => x.User)
-                .Where(x => x.ProjectId == projectId && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)));
+                .Where(x => x.ProjectId == projectId && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month >= timesheet.Month)));
 
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)
