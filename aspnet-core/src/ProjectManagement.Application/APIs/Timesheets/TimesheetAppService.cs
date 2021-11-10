@@ -90,7 +90,8 @@ namespace ProjectManagement.APIs.TimeSheets
                 {
                     var billInfomation = new StringBuilder();
                     var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x => x.User)
-                        .Where(x => x.ProjectId == item.Id && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month >= timesheet.Month)));
+                        .Where(x => x.ProjectId == item.Id && (!x.EndTime.HasValue || x.EndTime.Value.Date > timesheet.CreationTime.Date || (x.EndTime.Value.Month >= timesheet.Month && x.EndTime.Value.Year >= timesheet.Year)));
+                    ;
                     //.Select(x => new
                     //{
                     //    FullName = x.User.FullName,

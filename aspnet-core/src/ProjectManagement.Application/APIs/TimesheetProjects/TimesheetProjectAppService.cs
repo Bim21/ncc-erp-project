@@ -379,7 +379,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 throw new UserFriendlyException($"TimesheetProject with ProjectId {input.ProjectId} already exist in Timesheet !");
             var projectUserBills = WorkScope.GetAll<ProjectUserBill>()
                 .Include(x => x.User)
-                .Where(x => x.ProjectId == input.ProjectId && (!x.EndTime.HasValue || x.EndTime.Value.Date > timesheet.CreationTime.Date || (x.EndTime.Value.Month >= timesheet.Month)));
+                .Where(x => x.ProjectId == input.ProjectId && (!x.EndTime.HasValue || x.EndTime.Value.Date > timesheet.CreationTime.Date || (x.EndTime.Value.Month >= timesheet.Month && x.EndTime.Value.Year >= timesheet.Year)));
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId)
                 .ToListAsync();
