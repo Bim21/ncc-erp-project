@@ -7,6 +7,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -62,15 +63,13 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
         public async Task<TimeSheetProjectBillDto> Update(TimeSheetProjectBillDto input)
         {
             var timesheetProjectBill = await WorkScope.GetAsync<TimesheetProjectBill>(input.Id);
 
-            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
-                throw new UserFriendlyException($"Start date cannot be greater than end date !");
-
             await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(input, timesheetProjectBill));
+            CurrentUnitOfWork.SaveChanges();
             await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
 
             return input;
@@ -82,21 +81,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
             var projectUserBills = WorkScope.GetAll<ProjectUserBill>()
                 .Include(x => x.User)
-                .Where(x => x.ProjectId == projectId && (!x.EndTime.HasValue || x.EndTime > timesheet.CreationTime || (x.EndTime.Value.Month == timesheet.Month)))
-                .Select(x => new TimeSheetProjectBillDto
-                {
-                    UserId = x.UserId,
-                    ProjectId = x.ProjectId,
-                    TimeSheetId = timesheetId,
-                    BillRole = x.BillRole,
-                    BillRate = x.BillRate,
-                    StartTime = x.StartTime.Date,
-                    EndTime = x.EndTime.GetValueOrDefault().Date,
-                    Note = x.Note,
-                    ShadowNote = x.shadowNote,
-                    IsActive = x.isActive,
-                    Currency = CurrencyCode.VND
-                });
+                .Where(x => x.ProjectId == projectId && (!x.EndTime.HasValue || x.EndTime.Value.Date > timesheet.CreationTime.Date || (x.EndTime.Value.Month >= timesheet.Month && x.EndTime.Value.Year >= timesheet.Year)));
+            ;
 
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)
@@ -109,12 +95,26 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 {
                     try
                     {
-                        var timesheetProjectBill = await WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.UserId == pUserBill.UserId).FirstOrDefaultAsync();
-                        pUserBill.Id = timesheetProjectBill.Id;
-                        //var timesheetProjectBill = await WorkScope.GetAsync<TimesheetProjectBill>(timesheetProjectBillId);
-                        await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(pUserBill, timesheetProjectBill));
+                        var timesheetProjectBill = await WorkScope.GetAll<TimesheetProjectBill>()
+                            .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId && x.UserId == pUserBill.UserId).FirstOrDefaultAsync();
+                        var timesheetProjectBillInput = new TimeSheetProjectBillDto
+                        {
+                            Id = timesheetProjectBill.Id,
+                            UserId = pUserBill.UserId,
+                            ProjectId = pUserBill.ProjectId,
+                            TimeSheetId = timesheetId,
+                            BillRole = pUserBill.BillRole,
+                            BillRate = pUserBill.BillRate,
+                            StartTime = pUserBill.StartTime.Date,
+                            EndTime = pUserBill.EndTime.GetValueOrDefault().Date,
+                            Note = pUserBill.Note,
+                            ShadowNote = pUserBill.shadowNote,
+                            IsActive = pUserBill.isActive,
+                            Currency = CurrencyCode.VND
+                        };
+                        await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(timesheetProjectBillInput, timesheetProjectBill));
                         sucessList.Add($"{pUserBill.UserId}");
-                        //await UpdateProjectBillInformation(projectId, timesheetId);
+                        CurrentUnitOfWork.SaveChanges();
                     }
                     catch (Exception ex)
                     {
@@ -128,11 +128,28 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                         var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
                             .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)
                             .AnyAsync(x => x.UserId == pUserBill.UserId);
-                        if(!isExist)
+                        if (!isExist)
                         {
-                            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(pUserBill));
+                            var timesheetProjectBillInput = new TimeSheetProjectBillDto
+                            {
+                                UserId = pUserBill.UserId,
+                                ProjectId = pUserBill.ProjectId,
+                                TimeSheetId = timesheetId,
+                                BillRole = pUserBill.BillRole,
+                                BillRate = pUserBill.BillRate,
+                                StartTime = pUserBill.StartTime.Date,
+                                EndTime = pUserBill.EndTime.GetValueOrDefault().Date,
+                                Note = pUserBill.Note,
+                                ShadowNote = pUserBill.shadowNote,
+                                IsActive = pUserBill.isActive,
+                                Currency = CurrencyCode.VND
+                            };
+                            await WorkScope.InsertAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBillInput));
                             sucessList.Add($"{pUserBill.UserId}");
-                            //await UpdateProjectBillInformation(projectId, timesheetId);
+                            CurrentUnitOfWork.SaveChanges();
+                            var timesheetProjectBillssss = await WorkScope.GetAll<TimesheetProjectBill>()
+                            .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId).Select(x => x.UserId)
+                            .ToListAsync();
                         }
                     }
                     catch (Exception ex)
@@ -141,17 +158,25 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                     }
                 }
             }
-
             await UpdateProjectBillInformation(projectId, timesheetId);
-
             return new { sucessList, failList };
         }
-        
+
         private async Task<List<string>> UpdateProjectBillInformation(long projectId, long timesheetId)
         {
             var failList = new List<string>();
 
-            var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Include(x => x.User).Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).ToListAsync();
+            var timesheetProjectBills = await (from tspb in WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
+                                               join u in WorkScope.GetAll<User>() on tspb.UserId equals u.Id
+                                               select new
+                                               {
+                                                   FullName = u.FullName,
+                                                   BillRole = tspb.BillRole,
+                                                   BillRate = tspb.BillRate,
+                                                   Note = tspb.Note,
+                                                   ShadowNote = tspb.ShadowNote
+                                               }).ToListAsync();
+
             var billInfomation = new StringBuilder();
 
             foreach (var item in timesheetProjectBills)
@@ -159,21 +184,21 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 try
                 {
                     var timesheetProjects = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).FirstOrDefaultAsync();
-                    if(timesheetProjects != null)
+                    if (timesheetProjects != null)
                     {
-                        billInfomation.Append($"<b>{item.User.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} - {item.ShadowNote} <br>");
+                        billInfomation.Append($"<b>{item.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} - {item.ShadowNote} <br>");
                         timesheetProjects.ProjectBillInfomation = $"{billInfomation}";
                         await WorkScope.UpdateAsync(timesheetProjects);
-                    }    
+                    }
                 }
                 catch (Exception ex)
                 {
-                    failList.Add($"error UserId = {item.UserId} : " + ex.Message);
+                    failList.Add($"error UserId = {item.FullName} : " + ex.Message);
                 }
             }
             return failList;
         }
-       
+
 
     }
 }
