@@ -120,6 +120,7 @@ import { CdTimerModule } from 'angular-cd-timer';
 import { ViewBillComponent } from './modules/timesheet/timesheet-detail/view-bill/view-bill.component';
 import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
 import { TrainingProjectsComponent } from './modules/pm-management/training-projects/training-projects.component';
+import { ProductProjectsComponent } from './modules/pm-management/product-projects/product-projects.component';
 
 
 
@@ -233,6 +234,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ViewBillComponent,
     AllResourceComponent,
     TrainingProjectsComponent,
+    ProductProjectsComponent,
 
     
   ],

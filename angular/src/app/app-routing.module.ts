@@ -1,3 +1,4 @@
+import { ProductProjectsComponent } from './modules/pm-management/product-projects/product-projects.component';
 import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
 import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
 import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
@@ -141,6 +142,11 @@ import { TrainingProjectsComponent } from './modules/pm-management/training-proj
           {
             path: "training-projects",
             component: TrainingProjectsComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "product-projects",
+            component: ProductProjectsComponent,
             canActivate: [AppRouteGuard],
           },
           {

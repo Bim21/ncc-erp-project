@@ -29,7 +29,7 @@ namespace ProjectManagement.APIs.AuditSessions
             }
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditSession>(input));
             var activeProject = await WorkScope.GetAll<Project>()
-                                .Where(x => x.Status != ProjectStatus.Closed && x.Status != ProjectStatus.Potential)
+                                .Where(x => x.Status != ProjectStatus.Closed )
                                 .ToListAsync();
             //auto thêm các project active
             foreach (var p in activeProject)
