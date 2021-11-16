@@ -46,6 +46,7 @@ import { SkillComponent } from './modules/admin/skill/skill.component';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
 import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
+import { TrainingProjectsComponent } from './modules/pm-management/training-projects/training-projects.component';
 
 
 @NgModule({
@@ -135,6 +136,11 @@ import { AllResourceComponent } from './modules/delivery-management/delivery/ava
           {
             path: "list-project",
             component: ListProjectComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "training-projects",
+            component: TrainingProjectsComponent,
             canActivate: [AppRouteGuard],
           },
           {
