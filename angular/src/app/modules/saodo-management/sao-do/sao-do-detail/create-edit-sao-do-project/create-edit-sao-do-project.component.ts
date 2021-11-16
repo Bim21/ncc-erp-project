@@ -53,7 +53,7 @@ export class CreateEditSaoDoProjectComponent extends AppComponentBase implements
   }
   getAllProject() {
     this.projectService.getAll().subscribe(data => {
-      this.projectList = data.result.filter(item =>!this.projectName.includes(item.name) && item.status=="InProgress");
+      this.projectList = data.result.filter(item =>!this.projectName.includes(item.name) && item.status!=2);
     })
   }
   getAllUser() {
