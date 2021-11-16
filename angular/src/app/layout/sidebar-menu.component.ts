@@ -66,10 +66,16 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         "fas fa-user-tie",
         "PmManager.CanViewMenu", [
         new MenuItem(
-          this.l("List Project"),
+          this.l("Outsourcing Projects"),
           "/app/list-project",
           "fas fa-project-diagram",
           "PmManager.Project"
+        ),
+        new MenuItem(
+          this.l("Training Projects"),
+          "/app/training-projects",
+          "fas fa-project-diagram",
+          ""
         )
 
       ]
