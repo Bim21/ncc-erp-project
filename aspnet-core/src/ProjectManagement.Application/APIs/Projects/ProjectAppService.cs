@@ -38,6 +38,7 @@ namespace ProjectManagement.APIs.Projects
             }
             var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
                         .Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
+                        .Where(x => x.ProjectType != ProjectType.TRANING && x.ProjectType != ProjectType.PRODUCT)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
                         from l in lst.DefaultIfEmpty()
@@ -243,5 +244,44 @@ namespace ProjectManagement.APIs.Projects
 
             await WorkScope.DeleteAsync(project);
         }
+        #region PAGE TRANING PROJECT
+        [HttpPost]
+        public async Task<GridResult<GetProjectDto>> GetAllTraningPaging(GridParam input)
+        {
+            var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
+            int valueStatus = -1;
+            if (filterStatus != null)
+            {
+                valueStatus = Convert.ToInt32(filterStatus.Value);
+                input.FilterItems.Remove(filterStatus);
+            }
+            var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
+                        .Where(x => x.ProjectType == ProjectType.TRANING)
+                        .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
+                        join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
+                        from l in lst.DefaultIfEmpty()
+                        select new GetProjectDto
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            Code = p.Code,
+                            StartTime = p.StartTime.Date,
+                            EndTime = p.EndTime.Value.Date,
+                            Status = p.Status,
+                            PmId = p.PMId,
+                            PmName = p.PM.Name,
+                            PmFullName = p.PM.FullName,
+                            PmAvatarPath = "/avatars/" + p.PM.AvatarPath,
+                            PmEmailAddress = p.PM.EmailAddress,
+                            PmUserName = p.PM.UserName,
+                            PmUserType = p.PM.UserType,
+                            PmBranch = p.PM.Branch,
+                            IsSent = l.Status,
+                            TimeSendReport = l.TimeSendReport,
+                            DateSendReport = l.TimeSendReport.Value.Date
+                        };
+            return await query.GetGridResult(query, input);
+        }
+        #endregion
     }
 }
