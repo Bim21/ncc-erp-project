@@ -1,0 +1,37 @@
+<section class="content px-2 pt-2">
+    <div class="container-fluid">
+        <div class="row mb-4 card">
+            <div class="col-12">
+                <nav mat-tab-nav-bar style="position: sticky; z-index: 2; top: 56px; background: white;">
+                    <a  [ngClass]="currentUrl.includes('list-project-general')?'active':''" mat-tab-link (click)="routingGeneralTab()">
+                        General
+                    </a>
+                    <a  [ngClass]="currentUrl.includes('training-resource-management')?'active':''" mat-tab-link (click)="routingResourceTab()">
+                        Resource Management 
+                    </a>
+                    <a  [ngClass]="currentUrl.includes('training-milestone')?'active':''" mat-tab-link (click)="routingMilestoneTab()">
+                        Milestone
+                    </a>
+                    <a  [ngClass]="currentUrl.includes('training-weekly-report')?'active':''" mat-tab-link (click)="routingWeeklyReportTab()">
+                        Weekly Report
+                    </a>
+                    <a [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
+                        Project Checklist
+                    </a>
+                    <a [ngClass]="currentUrl.includes('timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
+                        Timesheet
+                    </a>
+                    <a  [ngClass]="currentUrl.includes('description-tab')?'active':''" mat-tab-link (click)="routingDescriptionTab()">
+                        Project Description 
+                    </a>
+                    
+                </nav>
+                <router-outlet></router-outlet>
+            </div>
+            
+            
+
+
+        </div>
+    </div>
+</section>
