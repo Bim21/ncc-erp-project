@@ -18,7 +18,7 @@ import { SaodoProjectUserDto } from '@app/service/model/saodo.dto';
   styleUrls: ['./sao-do-project-detail.component.css']
 })
 export class SaoDoProjectDetailComponent extends AppComponentBase implements OnInit {
-  
+  public examinationName='';
   public projectName='';
   public projectId:any;
   public auditSessionId='';
@@ -41,6 +41,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     private auditProjectResultService: AuditResultPeopleService,
     private auditResultService: AuditResultService) {super(injector) }
   ngOnInit(): void {
+    this.examinationName=this.route.snapshot.queryParamMap.get('examinationName');
     this.projectName=this.route.snapshot.queryParamMap.get('projectName');
     this.projectId=Number(this.route.snapshot.queryParamMap.get('projectId'));
     this.auditSessionId=this.route.snapshot.queryParamMap.get('saodoId');
@@ -53,7 +54,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
   getAllCheckList(){
     this.projectChecklistService.GetCheckListItemByProject(this.projectId,this.auditSessionId).subscribe(data=>{
       this.listCheckList=data.result;
-      
+
     })
     this.isEditing=false;
   }
@@ -74,10 +75,10 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
       userId: this.projectUser.userId,
       curatorId: this.projectUser.curatorId,
       auditResultId:this.auditResultId
-    } 
+    }
     this.auditProjectResultService.create(requestBody).pipe(catchError(this.auditProjectResultService.handleError)).subscribe((res) => {
       this.projectUser={};
-      
+
       abp.notify.success("Created successfully");
       this.isEditing=false;
       this.getAllCheckList();
@@ -86,7 +87,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
   editPeople(item){
     item.createMode=true;
     this.isEditing=true;
-    
+
   }
 
   save(id,form){
@@ -96,12 +97,12 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
       curatorId: form.curatorId,
       id: form.id,
       auditResultId:this.auditResultId
-    } 
+    }
     delete form.createMode
     this.auditProjectResultService.update(requestBody).pipe(catchError(this.auditProjectResultService.handleError)).subscribe((res) => {
       abp.notify.success("Created successfully");
       this.getAllCheckList();
-      this.isEditing=false; 
+      this.isEditing=false;
     },()=>{form.createMode=true});
   }
 
@@ -114,7 +115,7 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
           this.auditProjectResultService.delete(form.id).pipe(catchError(this.auditProjectResultService.handleError)).subscribe(() => {
             abp.notify.success("Deleted Audit ");
             this.getAllCheckList();
-          
+
           });
         }
       }
