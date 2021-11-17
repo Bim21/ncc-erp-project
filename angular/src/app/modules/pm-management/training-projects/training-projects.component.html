@@ -5,6 +5,7 @@
                 <h1>{{'Training Projects' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
+                <button mat-button class="btn btn-primary" (click)="create()">Create</button>
             </div>
         </div>
     </div>
@@ -56,25 +57,74 @@
             <div class="card-body table-responsive px-4 pb-2">
                 <div class="fixTableHead">
 
-                
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
-                    >
-                    <thead class="bg-light">
-                        <tr style="border: none;">
-                            <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
-                            <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
-                            <th>{{'PM' | localize}}</th>
-                            <th>Đánh giá chung</th>
-                            <th>{{'Trạng thái' | localize}}</th>
-                            <th>{{'Weekly Report' | localize}}</th>
-                            <th>Thời gian gửi</th> 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
+
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100">
+                        <thead class="bg-light">
+                            <tr style="border: none;">
+                                <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
+                                <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
+                                <th>{{'PM' | localize}}</th>
+                                <th>Đánh giá chung</th>
+                                <th>{{'Trạng thái' | localize}}</th>
+                                <th>{{'Weekly Report' | localize}}</th>
+                                <th>Thời gian gửi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let project of listTrainingProjects  |paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }; let i = index">
+                                <td class="text-center">
+                                    <button  mat-button [matMenuTriggerFor]="menu">
+                                        <i class="fas fa-bars fa-lg"></i>
+                                    </button>
+                                    <mat-menu #menu="matMenu" class="p-2">
+                                        <button
+                                            (click)="edit(project)"
+                                            class="mat-menu-item  w-100 " >
+                                            <i class="fas fa-pencil-alt mr-1"></i>
+                                            Edit
+                                        </button>
+                                        <button
+                                           (click)="delete(project)"
+                                            class="mat-menu-item  w-100 " >
+                                            <i class="fas fa-eye mr-1"></i>
+                                            Delete
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                                <td style="min-width: 220px;  white-space: normal;"><span class="hyperlink"
+                                        (click)="showDetail(project.id)">{{ project.name }}</span></td>
+                                <td>
+                                    <div style="width: 300px;">
+                                        <app-user-info
+                                            [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                            userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarPath:project.pmAvatarPath}">
+                                        </app-user-info>
+                                    </div>
+                                </td>
+                                <td>{{project.name}}</td>
+                                <td class="text-center"> <span
+                                        [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{
+                                        getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
+                                <td class="text-center">
+                                    <span
+                                        [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{project.timeSendReport| date:"dd/MM/yyyy hh:mm a"}}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
             <div class="card-footer bg-light border-top">
@@ -104,7 +154,7 @@
                             </mat-select>
                         </mat-form-field>
                     </div> -->
-                    <!-- <div class="col-sm-4 col-12 text-center">
+                <!-- <div class="col-sm-4 col-12 text-center">
                         <p class="mb-0 my-2">
                             {{ "TotalRecordsCount" | localize: totalItems }}
                         </p>

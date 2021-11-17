@@ -121,6 +121,17 @@ import { ViewBillComponent } from './modules/timesheet/timesheet-detail/view-bil
 import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
 import { TrainingProjectsComponent } from './modules/pm-management/training-projects/training-projects.component';
 import { ProductProjectsComponent } from './modules/pm-management/product-projects/product-projects.component';
+import { CreateEditTrainingProjectComponent } from './modules/pm-management/training-projects/create-edit-training-project/create-edit-training-project.component';
+import { TrainingProjectDetailComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-detail.component';
+import { TrainingProjectGeneralComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-general/training-project-general.component';
+import { TrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/training-project-checklist.component';
+import { TrainingProjectDescriptionComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-description/training-project-description.component';
+import { TrainingProjectTimesheetComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-timesheet/training-project-timesheet.component';
+import { TrainingResourceManagementComponent } from './modules/pm-management/training-projects/training-project-detail/training-resource-management/training-resource-management.component';
+import { TrainingWeeklyReportComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-weekly-report.component';
+import { TrainingApprovedDialogComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-approved-dialog/training-approved-dialog.component';
+import { TrainingMilestoneComponent } from './modules/pm-management/training-projects/training-project-detail/training-milestone/training-milestone.component';
+import { CreateEditTrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/create-edit-training-project-checklist/create-edit-training-project-checklist.component';
 
 
 
@@ -235,6 +246,17 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AllResourceComponent,
     TrainingProjectsComponent,
     ProductProjectsComponent,
+    CreateEditTrainingProjectComponent,
+    TrainingProjectDetailComponent,
+    TrainingProjectGeneralComponent,
+    TrainingProjectChecklistComponent,
+    TrainingProjectDescriptionComponent,
+    TrainingProjectTimesheetComponent,
+    TrainingResourceManagementComponent,
+    TrainingWeeklyReportComponent,
+    TrainingApprovedDialogComponent,
+    TrainingMilestoneComponent,
+    CreateEditTrainingProjectChecklistComponent,
 
     
   ],

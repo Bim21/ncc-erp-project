@@ -1,4 +1,9 @@
+import { TrainingMilestoneComponent } from './modules/pm-management/training-projects/training-project-detail/training-milestone/training-milestone.component';
+import { TrainingProjectTimesheetComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-timesheet/training-project-timesheet.component';
+import { TrainingWeeklyReportComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-weekly-report.component';
+import { TrainingResourceManagementComponent } from './modules/pm-management/training-projects/training-project-detail/training-resource-management/training-resource-management.component';
 import { ProductProjectsComponent } from './modules/pm-management/product-projects/product-projects.component';
+import { TrainingProjectGeneralComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-general/training-project-general.component';
 import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
 import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
 import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
@@ -48,6 +53,9 @@ import { ConfigurationComponent } from './modules/admin/configuration/configurat
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
 import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
 import { TrainingProjectsComponent } from './modules/pm-management/training-projects/training-projects.component';
+import { TrainingProjectDetailComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-detail.component';
+import { TrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/training-project-checklist.component';
+import { TrainingProjectDescriptionComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-description/training-project-description.component';
 
 
 @NgModule({
@@ -195,6 +203,47 @@ import { TrainingProjectsComponent } from './modules/pm-management/training-proj
                 canActivate: [AppRouteGuard]
               }
             ],
+          },
+          {
+            path: "training-project-detail",
+            component: TrainingProjectDetailComponent,
+            canActivate: [AppRouteGuard],
+            children: [
+              {
+                path: "training-project-general",
+              component: TrainingProjectGeneralComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-resource-management",
+              component: TrainingResourceManagementComponent
+            },
+            {
+              path: "training-milestone",
+              component: TrainingMilestoneComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-weekly-report",
+              component: TrainingWeeklyReportComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-project-checklist",
+              component: TrainingProjectChecklistComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-timesheet-tab",
+              component: TrainingProjectTimesheetComponent,
+              canActivate: [AppRouteGuard]
+            },
+            {
+              path: "training-description-tab",
+              component: TrainingProjectDescriptionComponent,
+              canActivate: [AppRouteGuard]
+            }
+          ],
           },
           {
             path: "weekly-report",
