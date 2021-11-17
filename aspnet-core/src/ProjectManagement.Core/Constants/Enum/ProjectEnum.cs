@@ -73,7 +73,8 @@ namespace ProjectManagement.Constants.Enum
             TimeAndMaterials = 1,
             FIXPRICE = 2,
             PRODUCT = 3,
-            NoBill = 4
+            NoBill = 4,
+            TRANING = 5
         }
         public enum ProjectUserStatus
         {

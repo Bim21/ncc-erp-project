@@ -19,12 +19,12 @@ namespace ProjectManagement.APIs.Projects.Dto
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }
         //public string Status { get; set; }
-        public long ClientId { get; set; }
+        public long? ClientId { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
         public long? CurrencyId { get; set; }
         public string CurrencyName { get; set; }
-        public bool IsCharge { get; set; }
+        public bool? IsCharge { get; set; }
         public long PmId { get; set; }
         public string PmName { get; set; }
         public string PmFullName { get; set; }
