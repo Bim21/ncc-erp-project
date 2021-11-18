@@ -283,5 +283,67 @@ namespace ProjectManagement.APIs.Projects
             return await query.GetGridResult(query, input);
         }
         #endregion
+
+        #region PAGE PRODUCT PROJECT
+        [HttpPost]
+        public async Task<GridResult<ProductProjectDto>> GetAllProductProjectPaging(GridParam input)
+        {
+            var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
+            int valueStatus = -1;
+            if (filterStatus != null)
+            {
+                valueStatus = Convert.ToInt32(filterStatus.Value);
+                input.FilterItems.Remove(filterStatus);
+            }
+            var query = from p in WorkScope.GetAll<Project>()
+                        .Where(x => x.ProjectType == ProjectType.PRODUCT)
+                        .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
+                        join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
+                        from l in lst.DefaultIfEmpty()
+                        select new ProductProjectDto
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            Code = p.Code,
+                            StartTime = p.StartTime.Date,
+                            EndTime = p.EndTime.Value.Date,
+                            Status = p.Status,
+                            PmId = p.PMId,
+                            PmName = p.PM.Name,
+                            PmFullName = p.PM.FullName,
+                            PmAvatarPath = "/avatars/" + p.PM.AvatarPath,
+                            PmEmailAddress = p.PM.EmailAddress,
+                            PmUserName = p.PM.UserName,
+                            PmUserType = p.PM.UserType,
+                            PmBranch = p.PM.Branch,
+                            IsSent = l.Status,
+                            TimeSendReport = l.TimeSendReport,
+                            DateSendReport = l.TimeSendReport.Value.Date
+                        };
+            return await query.GetGridResult(query, input);
+        }
+        public async Task<ProductProjectDto> GetDetailProductProject(long projectId)
+        {
+            var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.PRODUCT)
+                                .Select(x => new ProductProjectDto
+                                {
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    Code = x.Code,
+                                    StartTime = x.StartTime.Date,
+                                    EndTime = x.EndTime.Value.Date,
+                                    Status = x.Status,
+                                    PmId = x.PMId,
+                                    PmName = x.PM.Name,
+                                    PmFullName = x.PM.FullName,
+                                    PmUserName = x.PM.UserName,
+                                    PmEmailAddress = x.PM.EmailAddress,
+                                    PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                    PmBranch = x.PM.Branch,
+                                    PmUserType = x.PM.UserType,
+                                });
+            return await query.FirstOrDefaultAsync();
+        }
+        #endregion
     }
 }
