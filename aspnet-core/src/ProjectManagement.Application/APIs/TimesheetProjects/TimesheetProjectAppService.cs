@@ -288,7 +288,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
         {
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId).ToListAsync();
-
             var query = WorkScope.GetAll<Project>().Where(x => !timesheetProject.Contains(x.Id))
                 .Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
@@ -321,10 +320,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
             var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId).OrderByDescending(x => x.CreationTime);
-            foreach (var item in timsheetProjectBills)
-            {
+            //foreach (var item in timsheetProjectBills)
+            //{
 
-            }
+            //}
             //var projectBillInfomation = 
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
