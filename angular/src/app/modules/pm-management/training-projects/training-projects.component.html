@@ -13,15 +13,15 @@
 <section class="content px-2">
     <div class="container-fluid">
         <div class="card">
-            <!-- <div class="card-header row">
+            <div class="card-header row">
                 <div class="input-group col-8 pt-1">
                     <div class="input-group-prepend">
-                        <button type="button" class="btn bg-blue" >
+                        <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
                     <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-                         />
+                        (keyup.enter)="getDataPage(1)" />
                     <div class="input-group-append">
                         <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                             <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
@@ -30,10 +30,21 @@
                     </div>
 
                 </div>
+                <div class="col-4 row">
+                    <label class="ml-5 mr-2 mt-3">Trạng thái:</label>
+                    <mat-form-field  appearance="outline" style="width: 250px;">
+                        <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"  (selectionChange)="refresh()"
+                           >
+                           <mat-option value="-1">All</mat-option>
+                            <mat-option *ngFor="let item of statusFilterList" [value]="item.value">{{item.displayName}}</mat-option>
+                          
+                        </mat-select>
+                    </mat-form-field>
+                   
+                </div>
                 
-                
-            </div> -->
-            <!-- <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
+            </div>
+            <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
                 <div class="card-body">
                     <form class="form-horizontal">
                         <div class="row">
@@ -53,7 +64,7 @@
                         </div>
                     </form>
                 </div>
-            </div> -->
+            </div>
             <div class="card-body table-responsive px-4 pb-2">
                 <div class="fixTableHead">
 
@@ -79,19 +90,15 @@
                             totalItems: totalItems
                           }; let i = index">
                                 <td class="text-center">
-                                    <button  mat-button [matMenuTriggerFor]="menu">
+                                    <button mat-button [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
-                                        <button
-                                            (click)="edit(project)"
-                                            class="mat-menu-item  w-100 " >
+                                        <button (click)="edit(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-pencil-alt mr-1"></i>
                                             Edit
                                         </button>
-                                        <button
-                                           (click)="delete(project)"
-                                            class="mat-menu-item  w-100 " >
+                                        <button (click)="delete(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-eye mr-1"></i>
                                             Delete
                                         </button>
@@ -107,7 +114,7 @@
                                         </app-user-info>
                                     </div>
                                 </td>
-                                <td>{{project.name}}</td>
+                                <td></td>
                                 <td class="text-center"> <span
                                         [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{
                                         getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
@@ -128,7 +135,7 @@
 
             </div>
             <div class="card-footer bg-light border-top">
-                <!-- <div class="row">
+                <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
                         <button class="btn btn-secondary mb-2" (click)="refresh()">
                             <i class="fas fa-redo-alt"></i>
@@ -153,8 +160,8 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div> -->
-                <!-- <div class="col-sm-4 col-12 text-center">
+                    </div>
+                    <div class="col-sm-4 col-12 text-center">
                         <p class="mb-0 my-2">
                             {{ "TotalRecordsCount" | localize: totalItems }}
                         </p>
@@ -164,8 +171,8 @@
                             <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
                             </abp-pagination-controls>
                         </div>
-                    </div> -->
-                <!-- </div> -->
+                    </div>
+                </div>
             </div>
 
         </div>
