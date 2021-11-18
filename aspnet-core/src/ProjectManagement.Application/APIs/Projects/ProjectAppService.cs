@@ -38,7 +38,7 @@ namespace ProjectManagement.APIs.Projects
             }
             var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
                         .Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
-                        .Where(x => x.ProjectType != ProjectType.TRANING && x.ProjectType != ProjectType.PRODUCT)
+                        .Where(x => x.ProjectType != ProjectType.TRAINING && x.ProjectType != ProjectType.PRODUCT)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
                         from l in lst.DefaultIfEmpty()
@@ -244,9 +244,9 @@ namespace ProjectManagement.APIs.Projects
 
             await WorkScope.DeleteAsync(project);
         }
-        #region PAGE TRANING PROJECT
+        #region PAGE TRAINING PROJECT
         [HttpPost]
-        public async Task<GridResult<GetProjectDto>> GetAllTraningPaging(GridParam input)
+        public async Task<GridResult<GetTrainingProjectDto>> GetAllTrainingProjectPaging(GridParam input)
         {
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             int valueStatus = -1;
@@ -256,11 +256,11 @@ namespace ProjectManagement.APIs.Projects
                 input.FilterItems.Remove(filterStatus);
             }
             var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
-                        .Where(x => x.ProjectType == ProjectType.TRANING)
+                        .Where(x => x.ProjectType == ProjectType.TRAINING)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
                         from l in lst.DefaultIfEmpty()
-                        select new GetProjectDto
+                        select new GetTrainingProjectDto
                         {
                             Id = p.Id,
                             Name = p.Name,
@@ -278,9 +278,96 @@ namespace ProjectManagement.APIs.Projects
                             PmBranch = p.PM.Branch,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
-                            DateSendReport = l.TimeSendReport.Value.Date
+                            DateSendReport = l.TimeSendReport.Value.Date,
+                            Evaluation = p.Evaluation,
                         };
             return await query.GetGridResult(query, input);
+        }
+        [HttpPost]
+        public async Task<TrainingProjectDto> CreateTrainingProject(TrainingProjectDto input)
+        {
+            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.Id == input.Id);
+
+            if (isExist)
+                throw new UserFriendlyException("Name or Code already exist !");
+
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
+            {
+                throw new UserFriendlyException("Start time cannot be greater than end time !");
+            }
+            input.ProjectType = ProjectType.TRAINING;
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
+
+            var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
+                                .Where(x => x.ProjectType == ProjectType.TRAINING)
+                                .Select(x => new ProjectCheckList
+                                {
+                                    ProjectId = input.Id,
+                                    CheckListItemId = x.CheckListItemId,
+                                    IsActive = true,    
+                                }).ToListAsync();
+
+            foreach (var i in projectCheckLists)
+            {
+                await WorkScope.InsertAsync(i);
+            }
+
+            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            if (pmReportActive == null)
+                throw new UserFriendlyException("Can't find any active reports !");
+
+            var pmReportProject = new PMReportProject
+            {
+                PMReportId = pmReportActive.Id,
+                ProjectId = input.Id,
+                Status = PMReportProjectStatus.Draft,
+                ProjectHealth = ProjectHealth.Green,
+                PMId = input.PmId,
+                Note = null
+            };
+            await WorkScope.InsertAsync(pmReportProject);
+
+            return input;
+        }
+        [HttpPut]
+        public async Task<TrainingProjectDto> UpdateTrainingProject(TrainingProjectDto input)
+        {
+            input.ProjectType = ProjectType.TRAINING;
+            var project = await WorkScope.GetAsync<Project>(input.Id);
+
+            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
+
+            if (isExist)
+                throw new UserFriendlyException("Name or Code already exist !");
+
+            if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
+            {
+                throw new UserFriendlyException("Start time cannot be greater than end time !");
+            }
+            await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Project>(input, project));
+            return input;
+        }
+        public async Task<GetTrainingProjectDto> GetDetailTrainingProject(long projectId)
+        {
+            var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.TRAINING)
+                                .Select(x => new GetTrainingProjectDto
+                                {
+                                    Id = x.Id,
+                                    Name = x.Name,
+                                    Code = x.Code,
+                                    StartTime = x.StartTime.Date,
+                                    EndTime = x.EndTime.Value.Date,
+                                    Status = x.Status,
+                                    PmId = x.PMId,
+                                    PmName = x.PM.Name,
+                                    PmFullName = x.PM.FullName,
+                                    PmUserName = x.PM.UserName,
+                                    PmEmailAddress = x.PM.EmailAddress,
+                                    PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                    PmBranch = x.PM.Branch,
+                                    PmUserType = x.PM.UserType,
+                                });
+            return await query.FirstOrDefaultAsync();
         }
         #endregion
 

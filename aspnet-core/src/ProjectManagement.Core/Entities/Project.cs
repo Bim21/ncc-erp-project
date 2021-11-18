@@ -39,5 +39,6 @@ namespace ProjectManagement.Entities
         public string TechnicalProblems { get; set; }
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
+        public string Evaluation { get; set; }
     }
 }

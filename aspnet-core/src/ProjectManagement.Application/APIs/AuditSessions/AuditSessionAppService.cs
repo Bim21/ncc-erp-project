@@ -127,7 +127,7 @@ namespace ProjectManagement.APIs.AuditSessions
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Delete)]
         public async Task Delete(long id)
         {
-            var delAuditResult = await WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == id).ToListAsync();
+            var delAuditResult = await WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == id && x.Status != AuditResultStatus.New).ToListAsync();
             if (delAuditResult.Count > 0)
             {
                 throw new UserFriendlyException("Audit Session with '" + id + "' has Audit result. Please delete them before deleting.");
