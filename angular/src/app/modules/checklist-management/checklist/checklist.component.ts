@@ -14,7 +14,7 @@ import { ChecklistDto } from '@app/service/model/checklist.dto';
   styleUrls: ['./checklist.component.css']
 })
 export class ChecklistComponent extends PagedListingComponentBase<any> implements OnInit {
-  
+
   CheckList_CheckListItem = PERMISSIONS_CONSTANT.CheckList_CheckListItem;
   CheckList_CheckListItem_Create = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Create;
   CheckList_CheckListItem_Delete = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Delete;
@@ -53,7 +53,7 @@ export class ChecklistComponent extends PagedListingComponentBase<any> implement
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'code', comparisions: [0, 6, 7, 8], displayName: "Code" },
     { propertyName: 'title', comparisions: [0, 6, 7, 8], displayName: "Title" },
-    { propertyName: 'mandatorys', comparisions: [0, 6, 7, 8], displayName: "mandatorys" },
+    { propertyName: 'mandatory', comparisions: [0, 6, 7, 8], displayName: "Mandatory" },
     { propertyName: 'personInCharge', comparisions: [0, 6, 7, 8], displayName: "Person in Charge" },
     { propertyName: 'auditTarget', comparisions: [0, 6, 7, 8], displayName: "auditTarget" },
     { propertyName: 'note', comparisions: [0, 6, 7, 8], displayName: "note" },
