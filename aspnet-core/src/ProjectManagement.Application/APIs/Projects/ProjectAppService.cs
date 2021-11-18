@@ -278,7 +278,8 @@ namespace ProjectManagement.APIs.Projects
                             PmBranch = p.PM.Branch,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
-                            DateSendReport = l.TimeSendReport.Value.Date
+                            DateSendReport = l.TimeSendReport.Value.Date,
+                            Evaluation = p.Evaluation,
                         };
             return await query.GetGridResult(query, input);
         }
