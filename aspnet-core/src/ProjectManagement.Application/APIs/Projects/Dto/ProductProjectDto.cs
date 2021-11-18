@@ -10,7 +10,9 @@ namespace ProjectManagement.APIs.Projects.Dto
 {
     public class ProductProjectDto : EntityDto<long>
     {
+        [ApplySearchAttribute]
         public string Name { get; set; }
+        [ApplySearchAttribute]
         public string Code { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
