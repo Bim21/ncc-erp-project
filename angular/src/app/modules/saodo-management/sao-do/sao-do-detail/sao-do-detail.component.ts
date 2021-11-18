@@ -115,10 +115,10 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
       }
     })
   }
-  searchName(name){
-      this.listSaoDoDetail= this.tempListSaoDoDetail.filter((item)=>{
-        return item.name?.toLowerCase().includes(name?.toLowerCase()) || item.pmName?.toLowerCase().includes(name?.toLowerCase())
-      })
-  }
+  // searchName(name){
+  //     this.listSaoDoDetail= this.tempListSaoDoDetail.filter((item)=>{
+  //       return item.name?.toLowerCase().includes(name?.toLowerCase()) || item.pmName?.toLowerCase().includes(name?.toLowerCase())
+  //     })
+  // }
 
 }

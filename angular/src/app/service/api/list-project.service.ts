@@ -27,8 +27,13 @@ public getProjectDetail(id: any): Observable<any> {
 public UpdateProjectDetail(requestBody): Observable<any> {
   return this.http.put<any>(this.rootUrl + '/UpdateProjectDetail',requestBody);
 }
-public GetAllTraningPaging(request: PagedRequestDto): Observable<any> {
+public GetAllTrainingPaging(request: PagedRequestDto): Observable<any> {
   return this.http.post<any>(this.rootUrl + '/GetAllTraningPaging', request);
 }
-
+public GetAllProductPaging(request: PagedRequestDto): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/GetAllProductProjectPaging', request);
+}
+public GetDetailProductProject(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetDetailProductProject?projectId=' + id);
+}
 }

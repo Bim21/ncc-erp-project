@@ -1,3 +1,9 @@
+import { ProductProjectDetailComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-detail.component';
+import { ProductProjectDescriptionComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-description/product-project-description.component';
+import { ProductProjectTimesheetComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-timesheet/product-project-timesheet.component';
+import { ProductWeeklyReportComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-weekly-report.component';
+import { ProductResourceManagementComponent } from './modules/pm-management/product-projects/product-project-detail/product-resource-management/product-resource-management.component';
+import { ProductProjectGeneralComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-general/product-project-general.component';
 import { TrainingMilestoneComponent } from './modules/pm-management/training-projects/training-project-detail/training-milestone/training-milestone.component';
 import { TrainingProjectTimesheetComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-timesheet/training-project-timesheet.component';
 import { TrainingWeeklyReportComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-weekly-report.component';
@@ -56,6 +62,8 @@ import { TrainingProjectsComponent } from './modules/pm-management/training-proj
 import { TrainingProjectDetailComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-detail.component';
 import { TrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/training-project-checklist.component';
 import { TrainingProjectDescriptionComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-description/training-project-description.component';
+import { ProductProjectMilestoneComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-milestone/product-project-milestone.component';
+import { ProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/product-project-checklist.component';
 
 
 @NgModule({
@@ -241,6 +249,47 @@ import { TrainingProjectDescriptionComponent } from './modules/pm-management/tra
             {
               path: "training-description-tab",
               component: TrainingProjectDescriptionComponent,
+              canActivate: [AppRouteGuard]
+            }
+          ],
+          },
+          {
+            path: "product-project-detail",
+            component: ProductProjectDetailComponent,
+            canActivate: [AppRouteGuard],
+            children: [
+              {
+                path: "product-project-general",
+              component: ProductProjectGeneralComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-resource-management",
+              component: ProductResourceManagementComponent
+            },
+            {
+              path: "product-milestone",
+              component: ProductProjectMilestoneComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-weekly-report",
+              component: ProductWeeklyReportComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-project-checklist",
+              component: ProductProjectChecklistComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-timesheet-tab",
+              component: ProductProjectTimesheetComponent,
+              canActivate: [AppRouteGuard]
+            },
+            {
+              path: "product-description-tab",
+              component: ProductProjectDescriptionComponent,
               canActivate: [AppRouteGuard]
             }
           ],
