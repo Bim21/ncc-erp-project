@@ -84,7 +84,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                 .Where(x =>(!auditSessionId.HasValue || x.AuditSessionId == auditSessionId) && x.ProjectId == projectId)
                                 .Select(x => x.Id).ToListAsync();
             var checkListItemIds = await WorkScope.GetAll<ProjectCheckList>().Where(x => x.ProjectId == projectId)
-                                    .Select(x => x.CheckListItemId).ToListAsync();
+                .Select(x => x.CheckListItemId).ToListAsync();
             var auditResultPeople = WorkScope.GetAll<AuditResultPeople>()
                                     .Where(x => auditResultIds.Contains(x.AuditResultId) && checkListItemIds.Contains(x.CheckListItemId))
                                     .Select(x => new GetAuditResultPeopleDto
@@ -103,21 +103,23 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                         FullName = x.User.FullName,
                                         UserType = x.User.UserType
                                     });
-            return await WorkScope.GetAll<CheckListItem>()
-                    .Where(x => checkListItemIds.Contains(x.Id))
+
+            var checkListInProjects = await WorkScope.GetAll<ProjectCheckList>().Include(x => x.CheckListItem)
+                    .Where(x => x.ProjectId == projectId)
                     .Select(x => new CheckListItemByProjectDto
                     {
-                        Id = x.Id,
-                        AuditTarget = x.AuditTarget,
-                        CategoryName = x.CheckListCategory.Name,
-                        Code = x.Code,
-                        Description = x.Description,
-                        Name = x.Name,
-                        Note = x.Note,
-                        PersonInCharge = x.PersonInCharge,
+                        Id = x.CheckListItemId,
+                        AuditTarget = x.CheckListItem.AuditTarget,
+                        CategoryName = x.CheckListItem.CheckListCategory.Name,
+                        Code = x.CheckListItem.Code,
+                        Description = x.CheckListItem.Description,
+                        Name = x.CheckListItem.Name,
+                        Note = x.CheckListItem.Note,
+                        PersonInCharge = x.CheckListItem.PersonInCharge,
                         RegistrationDate = x.CreationTime,
-                        people = auditResultPeople.Where(y=>y.CheckListItemId == x.Id).ToList(),
+                        people = auditResultPeople.Where(y => y.CheckListItemId == x.CheckListItemId).ToList(),
                     }).ToListAsync();
+            return checkListInProjects;
         }
 
         [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_AddCheckListItemByProject)]
