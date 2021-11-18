@@ -66,21 +66,13 @@ namespace ProjectManagement.Roles
         public override async Task<RoleDto> UpdateAsync(RoleDto input)
         {
             CheckUpdatePermission();
-
             var role = await _roleManager.GetRoleByIdAsync(input.Id);
 
             ObjectMapper.Map(input, role);
 
             CheckErrors(await _roleManager.UpdateAsync(role));
 
-            var grantedPermissions = PermissionManager
-                .GetAllPermissions()
-                .Where(p => input.GrantedPermissions.Contains(p.Name))
-                .ToList();
-
-            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
-
-            return MapToEntityDto(role);
+            return input;
         }
 
         public override async Task DeleteAsync(EntityDto<int> input)
