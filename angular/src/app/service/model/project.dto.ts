@@ -98,6 +98,7 @@ export class TrainingProjectDto {
     isSent?: number;
     timeSendReport?: string;
     dateSendReport?: string;
+    evaluation?: string;
     id: number;
 }
 export class ProductProjectDto {

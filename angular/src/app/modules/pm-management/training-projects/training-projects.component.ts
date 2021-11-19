@@ -67,7 +67,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
       }
     );
   }
-  public listTrainningProjects: TrainingProjectDto[] = [];
+  public listTrainingProjects: TrainingProjectDto[] = [];
   public searchText: string = "";
   public projectStatus: any=3;
   constructor(public dialog: MatDialog,

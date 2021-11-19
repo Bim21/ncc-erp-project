@@ -31,7 +31,7 @@
                     <mat-select [(ngModel)]="project.projectType" name="projectType" placeholder="select a project type"
                         required #projectType="ngModel">
                         <ng-container *ngFor="let projectType of projectTypeList">
-                            <mat-option [value]="APP_ENUM.ProjectType[projectType]">
+                            <mat-option [value]="APP_ENUM.SubProjectType[projectType]">
                                 {{projectType}}</mat-option>
                         </ng-container>
                     </mat-select>
@@ -126,14 +126,14 @@
             <div class="col-md-9 datepick">
                 <mat-form-field appearance="outline">
                     <input matInput [matDatepicker]="picker" [(ngModel)]="project.startTime" placeholder="choose a date"
-                        required name="startTime">
+                        required name="startTime" #timeStart= "ngModel">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
-                <!-- <mat-error class="mt-1" *ngIf="picker.hasError('required') && picker.touched"
+                <mat-error class="mt-1" *ngIf="timeStart.hasError('required') && timeStart.touched"
                 style="font-size: 13px;">
-                This field is required
-            </mat-error> -->
+            This field is required
+        </mat-error>
             </div>
         </div>
         <div class="form-group row ">
