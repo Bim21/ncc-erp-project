@@ -136,7 +136,11 @@ namespace ProjectManagement.APIs.ProjectUsers
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
-
+            var userIsActive = await WorkScope.GetAll<User>().AnyAsync(x => x.Id == input.UserId && x.IsActive);
+            if (!userIsActive)
+            {
+                throw new UserFriendlyException("Can't add people is inactive !");
+            }
             input.IsFutureActive = true;
             input.PMReportId = pmReportActive.Id;
             input.Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
