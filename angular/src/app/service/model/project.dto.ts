@@ -52,6 +52,9 @@ export class projectUserBillDto {
     currency: number;
     isActive: boolean;
     createMode?: boolean;
+    note: string;
+    shadowNote : string;
+    workingTime : string;
     id: number;
     timesheetId: number;
 }

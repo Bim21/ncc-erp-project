@@ -61,4 +61,6 @@ export class TimesheetProjectBill {
     workingTime: number
     id: number
     createMode?: boolean
+    timesheetId: number
+    currency: string
 }
