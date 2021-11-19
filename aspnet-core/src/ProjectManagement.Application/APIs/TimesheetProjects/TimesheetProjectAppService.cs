@@ -352,7 +352,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              Note = tsp.Note,
                              //IsSendReport = pr.Status,
                              HistoryFile = tsp.HistoryFile,
-                             HasFile = !string.IsNullOrEmpty(tsp.FilePath)
+                             HasFile = !string.IsNullOrEmpty(tsp.FilePath),
+                             IsComplete = tsp.IsComplete,
                          }).OrderByDescending(x => x.ClientId);
             //foreach (var item in query)
             //{
