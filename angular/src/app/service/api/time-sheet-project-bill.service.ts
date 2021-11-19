@@ -19,6 +19,9 @@ export class TimeSheetProjectBillService extends BaseApiService {
   public updateProjectBill(item: any): Observable<any> {
     return this.http.put<any>(this.rootUrl + '/Update', item);
   }
+  public updateListProjectBill(item: any): Observable<any> {
+    return this.http.put<any>(this.rootUrl + '/Update', item);
+  }
   public createProjectBill(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/Create', item);
   }

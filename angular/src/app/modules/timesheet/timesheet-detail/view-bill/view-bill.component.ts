@@ -20,6 +20,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   searchUserBill: string = "";
   public isCreate: boolean = false;
   public isEdit: boolean = false;
+  public isEdittingRows: boolean = false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
     super(injector)
@@ -40,15 +41,33 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
 
   public saveUserBill(userBill: projectUserBillDto): void {
-    delete userBill["createMode"]
+    delete userBill["createMode"];
+
+
     userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
     if (userBill.endTime) {
       userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
     }
     userBill.timesheetId = this.data.timesheetId;
+    let bill =
+      [{
+        "projectId": userBill.projectId,
+        "timeSheetId": userBill.timesheetId,
+        "userId": userBill.userId,
+        "billRole": userBill.billRole,
+        "billRate": userBill.billRate,
+        "startTime": userBill.startTime,
+        "endTime": userBill.endTime,
+        "currency": userBill.currency,
+        "note": userBill?.note,
+        "shadowNote": userBill.shadowNote,
+        "isActive": userBill.isActive,
+        "workingTime": userBill.workingTime,
+        "id": userBill.id
+      }]
     if (this.isCreate) {
       userBill.projectId = this.data.projectId;
-      this.projectBillService.createProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+      this.projectBillService.createProjectBill(bill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
         this.searchUserBill = "";
@@ -62,7 +81,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
 
     } else {
-      this.projectBillService.updateProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+      this.projectBillService.updateProjectBill(bill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Update successfull`)
         this.getProjectBill();
         this.searchUserBill = "";
@@ -73,6 +92,32 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       this.isEdit = false;
     }
 
+
+  }
+  saveUserBills() {
+    let arr=this.billDetail.map((userBill) => {
+      return {
+        projectId: userBill.projectId,
+        timeSheetId: this.data.timesheetId,
+        userId: userBill.userId,
+        billRole: userBill.billRole,
+        billRate: userBill.billRate,
+        startTime: userBill.startTime,
+        endTime: userBill.endTime,
+        currency: userBill.currency,
+        note: userBill?.note,
+        shadowNote: userBill.shadowNote,
+        isActive: userBill.isActive,
+        workingTime: userBill.workingTime,
+        id: userBill.id
+      }
+    })
+    this.projectBillService.updateProjectBill(arr).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+      abp.notify.success(`Update successfull`)
+      this.getProjectBill();
+      this.searchUserBill = "";
+      this.isEdittingRows=false;
+    })
 
   }
   public cancelUserBill(): void {
@@ -105,4 +150,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.isEdit = true;
     this.isCreate = true;
   }
+  editRows() {
+    this.isEdittingRows = true;
+  }
+
 }
