@@ -36,7 +36,7 @@ export class TrainingProjectGeneralComponent extends AppComponentBase implements
     }
   }
   public getProjectDetail(): void {
-    this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
+    this.projectService.GetDetailTrainingProject(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
       this.project = data.result
  
     })

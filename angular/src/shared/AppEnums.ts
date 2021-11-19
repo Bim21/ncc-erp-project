@@ -85,6 +85,12 @@ export const APP_ENUMS = {
         NoBill: 4,
         TRAINING: 5
     },
+    SubProjectType:{
+        ODC: 0,
+        TimeAndMaterials: 1,
+        FIXPRICE: 2,
+        NoBill: 4,
+    },
     ProjectUserStatus:
     {
         Present: 0,

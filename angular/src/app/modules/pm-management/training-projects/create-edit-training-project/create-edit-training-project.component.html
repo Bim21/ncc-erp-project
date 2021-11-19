@@ -53,10 +53,14 @@
                 <div class="col-md-9 datepick">
                     <mat-form-field appearance="outline">
                         <input matInput [matDatepicker]="picker" [(ngModel)]="project.startTime" placeholder="choose a date"
-                            name="endTime">
+                            name="startTime" #timeStart="ngModel" required>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
+                    <mat-error class="mt-1" *ngIf="timeStart.hasError('required') && timeStart.touched"
+                    style="font-size: 13px;">
+                This field is required
+            </mat-error>
                 </div>
                 
             </div>
