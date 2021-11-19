@@ -115,7 +115,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
-                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].Name : null,
+                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),

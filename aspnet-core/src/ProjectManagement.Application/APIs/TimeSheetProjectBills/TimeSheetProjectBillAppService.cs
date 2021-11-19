@@ -64,14 +64,22 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
-        public async Task<TimeSheetProjectBillDto> Update(TimeSheetProjectBillDto input)
+        public async Task<List<TimeSheetProjectBillDto>> Update(List<TimeSheetProjectBillDto> input)
         {
-            var timesheetProjectBill = await WorkScope.GetAsync<TimesheetProjectBill>(input.Id);
+            var timesheetProjectBillIds = input.Select(x => x.Id).ToList();
+            var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Where(x => timesheetProjectBillIds.Contains(x.Id)).ToListAsync();
+            foreach (var bill in input)
+            {
+                var timesheetProjectBill = timesheetProjectBills.Where(x => x.Id == bill.Id).FirstOrDefault();
+                await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(bill, timesheetProjectBill));
+                CurrentUnitOfWork.SaveChanges();
 
-            await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(input, timesheetProjectBill));
-            CurrentUnitOfWork.SaveChanges();
-            await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
+                await UpdateProjectBillInformation(bill.ProjectId, bill.TimeSheetId.Value);
+            }
+            //await WorkScope.UpdateRangeAsync(ObjectMapper.Map<List<TimeSheetProjectBillDto>, List<TimesheetProjectBill>>(input, timesheetProjectBills));
+            //CurrentUnitOfWork.SaveChanges();
 
+            //input.ForEach(async x => await UpdateProjectBillInformation(x.ProjectId, x.TimeSheetId.Value));
             return input;
         }
 
