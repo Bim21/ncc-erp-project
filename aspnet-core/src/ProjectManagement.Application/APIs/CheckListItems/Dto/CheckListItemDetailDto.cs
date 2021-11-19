@@ -1,6 +1,7 @@
 ﻿
 using Abp.AutoMapper;
 using Abp.Domain.Entities;
+using NccCore.Anotations;
 using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,10 +13,13 @@ namespace ProjectManagement.APIs.CheckListItems.Dto
     public class CheckListItemDetailDto : Entity<long>
     {
         [MaxLength(255)]
+        [ApplySearchAttribute]
         public string Name { get; set; }
+        [ApplySearchAttribute]
         public string Code { get; set; }
         public long CategoryId { get; set; }
         [MaxLength(1000)]
+        [ApplySearchAttribute]
         public string CategoryName { get; set; }
         [MaxLength(10000)]
         public string Description { get; set; }
