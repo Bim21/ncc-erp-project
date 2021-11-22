@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { TimesheetService } from '@app/service/api/timesheet.service';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ImportFileTimesheetDetailComponent } from './../../../../timesheet/timesheet-detail/import-file-timesheet-detail/import-file-timesheet-detail.component';
@@ -48,15 +49,30 @@ export class ProjectTimesheetComponent extends AppComponentBase implements OnIni
     }
   }
   importExcel(id: any) {
-    const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
+    const dialogRef = this.dialog.open(ImportFileTimesheetDetailComponent, {
       data: { id: id, width: '500px' }
     });
-    dialog.afterClosed().subscribe(result => {
-      this.getAllTimesheet();
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.reloadTimesheetFile(result);
+      }
+      
     });
   }
+  reloadTimesheetFile(id) {
+    this.timesheetSerivce.getAllByProject(this.projectId).pipe(catchError(this.timesheetSerivce.handleError)).subscribe((data) => {
+      this.listTimesheetByProject =data.result;
+        if (!this.listTimesheetByProject.filter(timesheet => timesheet.id == id)[0].timesheetFile) {
+          setTimeout(() => {
+            this.reloadTimesheetFile(id)
+          }, 1000)
+        }
+      })
+  }
+
   importFile(id:number){
     this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data=>{
+        this.getAllTimesheet();
     })
   }
   DeleteFile(item: any) {
