@@ -79,6 +79,7 @@
                                 <th>Note</th>
                                 <th>Thông tin Bill dự án</th>
                                 <th>File</th>
+                                <th>Done</th>
                                 <th *ngIf="isActive">Actions</th>
                             </tr>
                         </thead>
@@ -122,6 +123,9 @@
                                     <span *ngIf="item.file !==null" style="margin-left: 5px;">
                                         <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(item)"></i>
                                     </span>
+                                </td>
+                                <td>
+                                    <i *ngIf="item.isComplete" style="color: green;" class="fas fa-check fa-2x "></i>
                                 </td>
                                 <td *ngIf="isActive" class="text-center" style="vertical-align: middle;">
                                     <button

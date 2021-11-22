@@ -35,12 +35,25 @@ export class ProductProjectTimesheetComponent extends AppComponentBase implement
     })
   }
   importExcel(id: any) {
-    const dialog = this.dialog.open(ImportFileTimesheetDetailComponent, {
+    const dialogRef = this.dialog.open(ImportFileTimesheetDetailComponent, {
       data: { id: id, width: '500px' }
     });
-    dialog.afterClosed().subscribe(result => {
-      this.getAllTimesheet();
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.reloadTimesheetFile(result);
+      }
+      
     });
+  }
+  reloadTimesheetFile(id) {
+    this.timesheetSerivce.getAllByProject(this.projectId).pipe(catchError(this.timesheetSerivce.handleError)).subscribe((data) => {
+      this.listTimesheetByProject =data.result;
+        if (!this.listTimesheetByProject.filter(timesheet => timesheet.id == id)[0].timesheetFile) {
+          setTimeout(() => {
+            this.reloadTimesheetFile(id)
+          }, 1000)
+        }
+      })
   }
   importFile(id: number) {
     this.timesheetProjectService.DownloadFileTimesheetProject(id).subscribe(data => {

@@ -2,16 +2,21 @@
     <abp-modal-header title="Thông tin bill dự án: {{data.projectName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body row">
-        <button class="btn btn-primary ml-2" *ngIf="!isEdit"(click)="create()"><i class="fa fa-plus-square mr-1"></i>Create</button>
-        <button class="btn btn-secondary ml-2" *ngIf="!isEdittingRows"(click)="editRows()"><i class="fas fa-pencil-alt mr-1"></i>Edit</button>
-        <div *ngIf="isEdittingRows" class="pt-1 ml-4">
-            <button
-                class=" mr-3 submit-btn" style="background: none; border: none;"
-                (click)="saveUserBills()">
-                <i style="color: green;" class="fas fa-check fa-2x "></i>
-            </button>
-            <i style="color: red;" class="fas fa-times fa-2x" (click)="isEdittingRows = !isEdittingRows"></i>
+        <div class="col-11 row mb-1">
+            <button class="btn btn-primary ml-2" *ngIf="!isEdit" (click)="create()" [disabled]="this.data.isComplete"><i
+                    class="fa fa-plus-square mr-1"></i>Create</button>
+            <button class="btn btn-secondary ml-2" *ngIf="!isEdittingRows" (click)="editRows()"  [disabled]="this.data.isComplete"><i
+                    class="fas fa-pencil-alt mr-1"></i>Edit</button>
+            <div *ngIf="isEdittingRows" class="pt-1 ml-4">
+                <button class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
+                    <i style="color: green;" class="fas fa-check fa-2x "></i>
+                </button>
+                <i style="color: red;" class="fas fa-times fa-2x" (click)="isEdittingRows = !isEdittingRows"></i>
+            </div>
         </div>
+        <section class="example-section col-1 text-center">
+            <mat-checkbox class="example-margin" (change)="isComplete($event)" [checked]="data.isComplete">Done</mat-checkbox>
+        </section>
         <div class="table-responsive mb-1 p-2">
             <div class="fixTableHead">
                 <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
@@ -20,7 +25,9 @@
                             <th class="stt">#</th>
                             <th>Nhân viên</th>
                             <th>Charge Role</th>
-                            <th *ngIf=" isCreate || billDetail[0]?.billRate || isEdit  ||data.projectBillInfomation != ''  " >Rate</th>
+                            <th
+                                *ngIf=" isCreate || billDetail[0]?.billRate || isEdit  ||data.projectBillInfomation != ''  ">
+                                Rate</th>
                             <th>Working time(Day)</th>
                             <th>is Active</th>
                             <th>Note</th>
@@ -72,13 +79,16 @@
                                     </abp-validation-summary>
                                 </div>
                             </td>
-                            <td  class="text-center" *ngIf=" isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != ''  ">
-                                <span *ngIf="!bill.createMode && !isEdittingRows">{{bill.billRate | number:'1.0':'en-US'}}
+                            <td class="text-center"
+                                *ngIf=" isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != ''  ">
+                                <span *ngIf="!bill.createMode && !isEdittingRows">{{bill.billRate |
+                                    number:'1.0':'en-US'}}
                                 </span>
                                 <div *ngIf="bill.createMode || isEdittingRows">
-                                    <input style="min-width: 110px;" required class="form-control mt-1" [name]="i+'billrate'"
-                                        #billRate="ngModel" #billRateEl type="text" mask="separator"
-                                        thousandSeparator="." placeholder="number" [(ngModel)]="bill.billRate">
+                                    <input style="min-width: 110px;" required class="form-control mt-1"
+                                        [name]="i+'billrate'" #billRate="ngModel" #billRateEl type="text"
+                                        mask="separator" thousandSeparator="." placeholder="number"
+                                        [(ngModel)]="bill.billRate">
                                     <abp-validation-summary [control]="billRate" [controlEl]="billRateEl">
                                     </abp-validation-summary>
 
@@ -111,8 +121,9 @@
                                 </div>
                             </td>
                             <td class="text-center pt-3">
-                                <mat-checkbox [disabled]="!bill.createMode && !isEdittingRows" class="mt-1" name="isactive+{{i}}"
-                                    (change)="onActiveChange(active,bill)" #active [checked]="bill.isActive">
+                                <mat-checkbox [disabled]="!bill.createMode && !isEdittingRows" class="mt-1"
+                                    name="isactive+{{i}}" (change)="onActiveChange(active,bill)" #active
+                                    [checked]="bill.isActive">
                                 </mat-checkbox>
                             </td>
                             <td>
@@ -141,13 +152,12 @@
                             </td>
                             <td class="text-center">
                                 <div *ngIf="!bill.createMode">
-                                    <button [disabled]="userBillProcess || isEdit" class="btn btn-sm bg-secondary mr-1"
+                                    <button [disabled]="(userBillProcess || isEdit) || this.data.isComplete" class="btn btn-sm bg-secondary mr-1"
                                         (click)="editUserBill(bill)"><i class="fas fa-pencil-alt mr-1"></i>Edit</button>
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1">
-                                    <button [disabled]="!bill?.userId"
-                                        class=" mr-3 submit-btn" style="background: none; border: none;"
-                                        (click)="saveUserBill(bill)">
+                                    <button [disabled]="!bill?.userId" class=" mr-3 submit-btn" 
+                                        style="background: none; border: none;" (click)="saveUserBill(bill)">
                                         <i style="color: green;" class="fas fa-check fa-2x "></i>
                                     </button>
                                     <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill()"></i>

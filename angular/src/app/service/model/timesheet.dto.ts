@@ -20,7 +20,8 @@ export class TimesheetDetailDto {
     note: string;
     id: number;
     timesheetId: number;
-    projectBillInfomation: string
+    projectBillInfomation: string;
+    isComplete:boolean;
 }
 export class ProjectTimesheetDto {
     projectId: number;
@@ -29,6 +30,7 @@ export class ProjectTimesheetDto {
     id?: number;
     createMode?: boolean;
     projectBillInfomation: string;
+    timesheetFile:string;
 
 }
 export class UploadFileDto {

@@ -109,7 +109,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         projectName: Timesheet.projectName,
         note: Timesheet.note,
         id: Timesheet.id,
-        projectBillInfomation: Timesheet.projectBillInfomation
+        projectBillInfomation: Timesheet.projectBillInfomation,
+        
 
       }
 
