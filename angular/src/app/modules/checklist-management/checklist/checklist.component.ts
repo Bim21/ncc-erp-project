@@ -21,7 +21,8 @@ export class ChecklistComponent extends PagedListingComponentBase<any> implement
   CheckList_CheckListItem_Update = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Update;
   CheckList_CheckListItem_ViewAll = PERMISSIONS_CONSTANT.CheckList_CheckListItem_ViewAll;
   checklistList: ChecklistDto[] = []
-  public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
+  public projectTypeList: any[] = Object.keys(this.APP_ENUM.ProjectType);
+  
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.isTLoading = true
     this.checklistService.getAllPaging(request).pipe(finalize(() => {
@@ -49,16 +50,23 @@ export class ChecklistComponent extends PagedListingComponentBase<any> implement
       }
     );
   }
+
+  public projectTypeForFilter = 
+  [{ displayName: "ODC", value: 0 },
+  { displayName: "TimeAndMaterials", value: 1 }, { displayName: "FIXPRICE", value: 2 },
+  { displayName: "PRODUCT", value: 3 },{ displayName: "NoBill", value: 4 },{ displayName: "TRAINING", value: 5 }
+
+  ]
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'code', comparisions: [0, 6, 7, 8], displayName: "Code" },
     { propertyName: 'title', comparisions: [0, 6, 7, 8], displayName: "Title" },
-    { propertyName: 'mandatory', comparisions: [0, 6, 7, 8], displayName: "Mandatory" },
+    { propertyName: 'mandatory', comparisions: [3], displayName: "Mandatory" , filterType : 3 , dropdownData: this.projectTypeForFilter },
     { propertyName: 'personInCharge', comparisions: [0, 6, 7, 8], displayName: "Person in Charge" },
     { propertyName: 'auditTarget', comparisions: [0, 6, 7, 8], displayName: "auditTarget" },
     { propertyName: 'note', comparisions: [0, 6, 7, 8], displayName: "note" },
-
   ];
+  
 
   constructor(injector: Injector, public dialog: MatDialog, private checklistService: ChecklistService) {
     super(injector);
