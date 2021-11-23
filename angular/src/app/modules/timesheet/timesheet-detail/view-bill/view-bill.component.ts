@@ -173,7 +173,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.isEdit = true;
     this.isCreate = true;
   }
-  editRows() {
+  editMultiRows() {
     this.isEdittingRows = true;
   }
 
