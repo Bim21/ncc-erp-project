@@ -30,7 +30,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.getProjectBill();
-    this.getAllFakeUser()
+    this.getAllFakeUser();
+    console.log(this.data)
   }
   public getProjectBill() {
     this.isLoading = true
@@ -51,6 +52,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
     }
     userBill.timesheetId = this.data.timesheetId;
+    userBill.projectId = this.data.projectId;
     let bill =
       [{
         "projectId": userBill.projectId,
@@ -59,7 +61,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         "billRole": userBill.billRole,
         "billRate": userBill.billRate,
         "startTime": userBill.startTime,
-        "endTime": userBill.endTime,
+        "endTime": userBill.endTime? userBill.endTime : null,
         "currency": userBill.currency,
         "note": userBill?.note,
         "shadowNote": userBill.shadowNote,
