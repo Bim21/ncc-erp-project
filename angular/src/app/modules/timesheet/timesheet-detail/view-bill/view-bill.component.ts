@@ -61,7 +61,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         "billRole": userBill.billRole,
         "billRate": userBill.billRate,
         "startTime": userBill.startTime,
-        "endTime": userBill.endTime? userBill.endTime : null,
+        "endTime": userBill.endTime,
         "currency": userBill.currency,
         "note": userBill?.note,
         "shadowNote": userBill.shadowNote,
@@ -71,7 +71,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       }]
     if (this.isCreate) {
       userBill.projectId = this.data.projectId;
-      this.projectBillService.createProjectBill(bill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+      this.projectBillService.createProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
         this.searchUserBill = "";
