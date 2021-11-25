@@ -114,7 +114,8 @@
                                         </app-user-info>
                                     </div>
                                 </td>
-                                <td>{{project.evaluation}}</td>
+                                <td style="word-break: break-word;
+                                white-space: normal; max-width: 300px;">{{project.evaluation}}</td>
                                 <td class="text-center"> <span
                                         [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{
                                         getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
