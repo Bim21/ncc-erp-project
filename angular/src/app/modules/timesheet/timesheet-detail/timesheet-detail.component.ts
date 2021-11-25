@@ -66,6 +66,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType: 2 },
+    { propertyName: 'isComplete', displayName: "Status", comparisions: [0], filterType: 5 },
 
   ];
 

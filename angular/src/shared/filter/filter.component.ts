@@ -70,6 +70,8 @@ export class FilterComponent {
             break;
             case 4: this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
             break;
+            case 5: this.item.value =true
+            break;
 
           }
         }
