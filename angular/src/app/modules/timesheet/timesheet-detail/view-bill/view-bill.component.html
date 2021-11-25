@@ -16,7 +16,7 @@
             </div>
         </div>
         <section class="example-section col-1 text-center">
-            <mat-checkbox class="example-margin" (change)="isComplete($event)" [disabled]="isEdittingRows"
+            <mat-checkbox class="example-margin" (change)="isComplete($event)" [disabled]="isEdittingRows || isEdit"
                 [checked]="data.isComplete">Done</mat-checkbox>
         </section>
         <div class="table-responsive mb-1 p-2">
