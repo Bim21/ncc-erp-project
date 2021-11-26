@@ -22,13 +22,19 @@ namespace ProjectManagement.APIs.CheckListItems.Dto
         [ApplySearchAttribute]
         public string CategoryName { get; set; }
         [MaxLength(10000)]
+        [ApplySearch]
         public string Description { get; set; }
         [MaxLength(255)]
+        [ApplySearch]
         public string AuditTarget { get; set; }
         [MaxLength(255)]
+        [ApplySearch]
         public string PersonInCharge { get; set; }
         [MaxLength(10000)]
+        [ApplySearch]
         public string Note { get; set; }
+        [ApplySearch]
+        public ProjectType ProjectType { get; set; }
         public List<ProjectType> mandatorys { get; set; }
     }
 }
