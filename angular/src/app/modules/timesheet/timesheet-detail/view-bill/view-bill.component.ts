@@ -22,6 +22,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isCreate: boolean = false;
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
+  tempUserList= []
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
@@ -75,13 +76,17 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
         this.searchUserBill = "";
+        this.getAllFakeUser()
       },
         () => {
           userBill.createMode = true;
         })
       this.isCreate = false;
       this.isEdit = false;
-
+// this.userForUserBill.forEach((element,index) => {
+//   if(element.id==userBill.userId)
+//   this.userForUserBill.splice(index, 1);
+// });
 
 
     } else {
@@ -89,6 +94,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         abp.notify.success(`Update successfull`)
         this.getProjectBill();
         this.searchUserBill = "";
+        this.getAllFakeUser()
+
       },
         () => {
           userBill.createMode = true;
@@ -150,19 +157,30 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.searchUserBill = "";
     this.isEdit = false;
     this.isCreate = false
+    this.getAllFakeUser()
 
   }
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;
     this.isEdit = true;
+    this.getAllFakeUser(userBill.userId)
 
 
 
 
   }
-  private getAllFakeUser() {
+  private getAllFakeUser(userId?) {
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userForUserBill = data.result;
+      this.tempUserList = data.result
+      this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(rs => {
+        let temp = rs.result.map(item=>item.userId)
+        if(userId){
+          temp.splice(temp.indexOf(userId),1)
+          temp = new Set(temp)
+        }
+        this.userForUserBill = data.result.filter(item=> !temp.includes(item.id))
+      })
     })
   }
   public onActiveChange(active, userBill) {
@@ -174,9 +192,17 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     bill.createMode = true;
     this.isEdit = true;
     this.isCreate = true;
+
   }
   editMultiRows() {
     this.isEdittingRows = true;
+    // this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    //   this.userForUserBill = data.result;})
+
+  }
+  onUserSelect(user){
+// console.log(user)
+// this.getAllFakeUser()
   }
 
 }

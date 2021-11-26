@@ -51,7 +51,7 @@
 
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="bill.userId" [name]="i+'userBill'"
-                                            placeholder="select an user" #userBill="ngModel" required>
+                                            placeholder="select an user" #userBill="ngModel" required    (click)="onUserSelect(userBill.value)">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                 <input matInput [(ngModel)]="searchUserBill" placeholder="search"
@@ -129,7 +129,7 @@
                                 </mat-checkbox>
                             </td>
                             <td>
-                                <pre class="mb-0 p-0  ml-2" *ngIf="!bill.createMode && !isEdittingRows" style=" white-space: pre-line; word-wrap: break-word; 
+                                <pre class="mb-0 p-0  ml-2" *ngIf="!bill.createMode && !isEdittingRows" style=" white-space: pre-line; word-wrap: break-word;
                         font-family: sans-serif; align-self:flex-start; width: 150px;">
                            {{bill.note}}
                       </pre>
