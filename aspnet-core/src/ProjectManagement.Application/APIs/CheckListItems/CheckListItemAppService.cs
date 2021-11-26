@@ -23,8 +23,8 @@ namespace ProjectManagement.APIs.CheckListItems
         [AbpAuthorize(PermissionNames.CheckList_CheckListItem_ViewAll)]
         public async Task<GridResult<CheckListItemDetailDto>> GetAllPaging(GridParam input)
         {
-            
-            var listMan = WorkScope.GetAll<CheckListItemMandatory>();
+
+            var checkListMandatories = WorkScope.GetAll<CheckListItemMandatory>().Select(x => new { x.CheckListItemId, x.ProjectType });
             var query = from i in WorkScope.GetAll<CheckListItem>()
                         select new CheckListItemDetailDto
                         {
@@ -37,7 +37,7 @@ namespace ProjectManagement.APIs.CheckListItems
                             AuditTarget = i.AuditTarget,
                             PersonInCharge = i.PersonInCharge,
                             Note = i.Note,
-                            mandatorys = listMan.Where(x => x.CheckListItemId == i.Id).Select(x=>x.ProjectType).ToList()
+                            mandatorys = checkListMandatories.Where(x => x.CheckListItemId == i.Id).Select(x=>x.ProjectType).ToList()
                         };
             var filterMandatory = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "mandatory") : null;
             if (filterMandatory != null)
@@ -45,7 +45,7 @@ namespace ProjectManagement.APIs.CheckListItems
                 string searchByMandatory = filterMandatory.Value.ToString();
                 input.FilterItems.Remove(filterMandatory);
                 Enum.TryParse(searchByMandatory, out ProjectType Mandatory);
-                var listIdContainsProjectName = listMan.Where(x => x.ProjectType== Mandatory);
+                var listIdContainsProjectName = checkListMandatories.Where(x => x.ProjectType== Mandatory);
                 query = query.Where(x => listIdContainsProjectName.Where(y => y.CheckListItemId == x.Id).Any());
             }
             return await query.GetGridResult(query, input);

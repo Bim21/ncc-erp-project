@@ -315,6 +315,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
             PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
+            var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
+            if (filterItem != null)
+            {
+                input.FilterItems.Remove(filterItem);
+            }
             var viewAll = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet);
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
@@ -322,11 +327,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId).OrderByDescending(x => x.CreationTime);
             //foreach (var item in timsheetProjectBills)
             //{
-
             //}
             //var projectBillInfomation = 
 
-            var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+            var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
+                                              .Where(x => x.TimesheetId == timesheetId)
+                                              .Where(x => filterItem == null || x.IsComplete != true)
                          join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
                          //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
                          join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
