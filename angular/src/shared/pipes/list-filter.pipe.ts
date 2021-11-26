@@ -4,18 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'listFilter'
 })
 export class ListFilterPipe implements PipeTransform {
-
   transform(value: any[], property: string, searchText: string, property2?: string, surname?: string, name?: string): any {
-
-    // if(property2){
-    //   return value.filter(item=> {
-    //     let name = item[property].split(" ")
-    //     return item[property].toLowerCase().includes(searchText.toLowerCase()) ||
-    //      item[property2].toLowerCase().includes(searchText.toLowerCase()) || 
-    //      (name[name.length-1] + ' ' + name[0]).toLowerCase().includes(searchText.toLowerCase()) 
-    //   });
-    // }
-    // else 
     if (surname && name) {
       return value.filter(item => {
         let name = item[property].split(" ")
@@ -25,16 +14,18 @@ export class ListFilterPipe implements PipeTransform {
           this.removeAccents((item?.surname.toLowerCase().replace(/\s/g, "") + item?.name.toLowerCase().replace(/\s/g, ""))).includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, "")))
       });
     }
-    else {
+    else if (property2) {
       if (value) {
-        console.log("hihii")
         return value?.filter(item => {
           return this.removeAccents(item[property]?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText?.toLowerCase().replace(/\s/g, ""))) ||
-          this.removeAccents(item[property2]?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText?.toLowerCase().replace(/\s/g, ""))) 
-          
+            this.removeAccents(item[property2]?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText?.toLowerCase().replace(/\s/g, "")))
         });
       }
-
+    }
+    else {
+      return value?.filter(item => {
+        return this.removeAccents(item[property]?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText?.toLowerCase().replace(/\s/g, "")))
+      });
     }
   }
   removeAccents(str) {
