@@ -1,3 +1,15 @@
+import { ProductProjectDetailComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-detail.component';
+import { ProductProjectDescriptionComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-description/product-project-description.component';
+import { ProductProjectTimesheetComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-timesheet/product-project-timesheet.component';
+import { ProductWeeklyReportComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-weekly-report.component';
+import { ProductResourceManagementComponent } from './modules/pm-management/product-projects/product-project-detail/product-resource-management/product-resource-management.component';
+import { ProductProjectGeneralComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-general/product-project-general.component';
+import { TrainingMilestoneComponent } from './modules/pm-management/training-projects/training-project-detail/training-milestone/training-milestone.component';
+import { TrainingProjectTimesheetComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-timesheet/training-project-timesheet.component';
+import { TrainingWeeklyReportComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-weekly-report.component';
+import { TrainingResourceManagementComponent } from './modules/pm-management/training-projects/training-project-detail/training-resource-management/training-resource-management.component';
+import { ProductProjectsComponent } from './modules/pm-management/product-projects/product-projects.component';
+import { TrainingProjectGeneralComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-general/training-project-general.component';
 import { ProjectDescriptionComponent } from './modules/pm-management/list-project/list-project-detail/project-description/project-description.component';
 import { ReviewYourselfComponent } from './modules/checkpoint/review-yourself/review-yourself.component';
 import { ReviewUserComponent } from './modules/checkpoint/review-user/review-user.component';
@@ -46,6 +58,12 @@ import { SkillComponent } from './modules/admin/skill/skill.component';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
 import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
+import { TrainingProjectsComponent } from './modules/pm-management/training-projects/training-projects.component';
+import { TrainingProjectDetailComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-detail.component';
+import { TrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/training-project-checklist.component';
+import { TrainingProjectDescriptionComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-description/training-project-description.component';
+import { ProductProjectMilestoneComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-milestone/product-project-milestone.component';
+import { ProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/product-project-checklist.component';
 
 
 @NgModule({
@@ -138,6 +156,16 @@ import { AllResourceComponent } from './modules/delivery-management/delivery/ava
             canActivate: [AppRouteGuard],
           },
           {
+            path: "training-projects",
+            component: TrainingProjectsComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "product-projects",
+            component: ProductProjectsComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
             path: "timesheetDetail",
             component: TimesheetDetailComponent,
             canActivate: [AppRouteGuard],
@@ -183,6 +211,88 @@ import { AllResourceComponent } from './modules/delivery-management/delivery/ava
                 canActivate: [AppRouteGuard]
               }
             ],
+          },
+          {
+            path: "training-project-detail",
+            component: TrainingProjectDetailComponent,
+            canActivate: [AppRouteGuard],
+            children: [
+              {
+                path: "training-project-general",
+              component: TrainingProjectGeneralComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-resource-management",
+              component: TrainingResourceManagementComponent
+            },
+            {
+              path: "training-milestone",
+              component: TrainingMilestoneComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-weekly-report",
+              component: TrainingWeeklyReportComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-project-checklist",
+              component: TrainingProjectChecklistComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "training-timesheet-tab",
+              component: TrainingProjectTimesheetComponent,
+              canActivate: [AppRouteGuard]
+            },
+            {
+              path: "training-description-tab",
+              component: TrainingProjectDescriptionComponent,
+              canActivate: [AppRouteGuard]
+            }
+          ],
+          },
+          {
+            path: "product-project-detail",
+            component: ProductProjectDetailComponent,
+            canActivate: [AppRouteGuard],
+            children: [
+              {
+                path: "product-project-general",
+              component: ProductProjectGeneralComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-resource-management",
+              component: ProductResourceManagementComponent
+            },
+            {
+              path: "product-milestone",
+              component: ProductProjectMilestoneComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-weekly-report",
+              component: ProductWeeklyReportComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-project-checklist",
+              component: ProductProjectChecklistComponent,
+              canActivate: [AppRouteGuard],
+            },
+            {
+              path: "product-timesheet-tab",
+              component: ProductProjectTimesheetComponent,
+              canActivate: [AppRouteGuard]
+            },
+            {
+              path: "product-description-tab",
+              component: ProductProjectDescriptionComponent,
+              canActivate: [AppRouteGuard]
+            }
+          ],
           },
           {
             path: "weekly-report",

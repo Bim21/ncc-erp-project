@@ -29,7 +29,7 @@ namespace ProjectManagement.APIs.AuditSessions
             }
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditSession>(input));
             var activeProject = await WorkScope.GetAll<Project>()
-                                .Where(x => x.Status != ProjectStatus.Closed && x.Status != ProjectStatus.Potential)
+                                .Where(x => x.Status != ProjectStatus.Closed )
                                 .ToListAsync();
             //auto thêm các project active
             foreach (var p in activeProject)
@@ -74,7 +74,7 @@ namespace ProjectManagement.APIs.AuditSessions
         
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_ViewAll)]
         [HttpPost]
-        public async Task<GridResult<AuditSessionDetailDto>> GetAllPaging(GridParam input)
+        public async Task<GridResult<AuditSessionResultDto>> GetAllPaging(GridParam input)
         {
             //trong 1 audit result => list
             var listSessionPeople = WorkScope.GetAll<AuditResultPeople>()
@@ -88,7 +88,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               };
             //trong 1 auditsession => list
             var query = from a in WorkScope.GetAll<AuditSession>()
-                        select new AuditSessionDetailDto
+                        select new AuditSessionResultDto
                         {
                             Id = a.Id,
                             Name = a.Name,
@@ -96,7 +96,7 @@ namespace ProjectManagement.APIs.AuditSessions
                             StartTime = a.StartTime,
                             CountFail = listSessionPeople.Where(x => x.AuditSessionId == a.Id && !x.IsPass).Count(),
                             CountProjectCheck = countStatus.Count(x => x.AuditSessionId == a.Id && x.status == AuditResultStatus.Done),
-                            CountProjectCreate = countStatus.Count(x=>x.AuditSessionId == a.Id)
+                            CountProjectCreate = countStatus.Count(x=>x.AuditSessionId == a.Id),
                         };
             return await query.GetGridResult(query, input);
         }
@@ -115,7 +115,7 @@ namespace ProjectManagement.APIs.AuditSessions
                               Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
-                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].Name : null,
+                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
@@ -127,7 +127,7 @@ namespace ProjectManagement.APIs.AuditSessions
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Delete)]
         public async Task Delete(long id)
         {
-            var delAuditResult = await WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == id).ToListAsync();
+            var delAuditResult = await WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == id && x.Status != AuditResultStatus.New).ToListAsync();
             if (delAuditResult.Count > 0)
             {
                 throw new UserFriendlyException("Audit Session with '" + id + "' has Audit result. Please delete them before deleting.");

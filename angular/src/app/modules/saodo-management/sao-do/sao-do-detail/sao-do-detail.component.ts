@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AuditResultService } from './../../../../service/api/auditresult.service';
 import { CreateEditSaoDoProjectComponent } from './create-edit-sao-do-project/create-edit-sao-do-project.component';
@@ -19,6 +20,7 @@ import { Component, OnInit,Input, Injector } from '@angular/core';
 })
 export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
   public listSaoDoDetail:SaodoDetailDto[]=[];
+  public tempListSaoDoDetail: SaodoDetailDto []= [];
   public saodoProject={} as SaodoDetailDto;
   public searchText='';
   public saodoId:any;
@@ -28,9 +30,9 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
   SaoDo_AuditResultPeople_Create = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Create;
   SaoDo_AuditResultPeople_Update = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Update;
   SaoDo_AuditResultPeople_Delete = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Delete;
-  
-  
-  
+
+
+
 
   constructor(injector: Injector,private saodoService : SaodoService,private saodoDetailService:AuditResultService,
     private route: ActivatedRoute,private dialog: MatDialog
@@ -45,6 +47,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
   protected getSaodoDetail(): void {
     this.saodoService.getById(this.saodoId).subscribe(data=>{
       this.listSaoDoDetail= data.result;
+      this.tempListSaoDoDetail = data.result;
       this.projectName=data.result.map(el=>el.projectName)
     })
   }
@@ -57,7 +60,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
           this.saodoDetailService.delete(item.id).pipe(catchError(this.saodoService.handleError)).subscribe(() => {
             abp.notify.success("Deleted Audit " + item.name);
             this.getSaodoDetail();
-          
+
           });
         }
       }
@@ -93,25 +96,29 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
 
   }
 
-  
+
   public createSaodoDetail(){
     this.showDialog("create",{});
   }
   public editSaodoDetail(saodo:SaodoDetailDto){
     this.showDialog("edit",saodo);
-  
+
   }
   showDetail(saodoDetail:any){
     this.router.navigate(['app/saodoProjectDetail'], {
       queryParams: {
+        examinationName: this.saodoName,
         projectId: saodoDetail.projectId,
         saodoId:this.saodoId,
         projectName:saodoDetail.projectName,
         id:saodoDetail.id
-
-        
       }
     })
   }
+  // searchName(name){
+  //     this.listSaoDoDetail= this.tempListSaoDoDetail.filter((item)=>{
+  //       return item.name?.toLowerCase().includes(name?.toLowerCase()) || item.pmName?.toLowerCase().includes(name?.toLowerCase())
+  //     })
+  // }
 
 }

@@ -1,3 +1,4 @@
+import { PagedRequestDto } from './../../../shared/paged-listing-component-base';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
@@ -26,5 +27,23 @@ public getProjectDetail(id: any): Observable<any> {
 public UpdateProjectDetail(requestBody): Observable<any> {
   return this.http.put<any>(this.rootUrl + '/UpdateProjectDetail',requestBody);
 }
+public GetAllTrainingPaging(request: PagedRequestDto): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/GetAllTrainingProjectPaging', request);
+}
+public GetDetailTrainingProject(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetDetailTrainingProject?projectId=' + id);
+}
+public GetAllProductPaging(request: PagedRequestDto): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/GetAllProductProjectPaging', request);
+}
+public GetDetailProductProject(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetDetailProductProject?projectId=' + id);
+}
+public UpdateTrainingProject(item: any): Observable<any> {
+  return this.http.put<any>(this.rootUrl + '/UpdateTrainingProject', item);
+}
 
+public CreateTrainingProject(item: any): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/CreateTrainingProject', item);
+}
 }

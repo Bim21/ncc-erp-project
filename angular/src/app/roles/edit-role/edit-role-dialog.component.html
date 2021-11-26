@@ -33,9 +33,17 @@
             </textarea>
           </div>
         </div>
-        <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!editRoleForm.form.valid || saving"
+        <!-- <abp-modal-footer [cancelDisabled]="saving"
           (onCancelClick)="bsModalRef.hide()" (onSaveClick)="onSaveClick()">
-        </abp-modal-footer>
+        </abp-modal-footer> -->
+        <div class="text-right mt-3">
+          <button class="btn btn-default mr-3" (click)="bsModalRef.hide()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" (click)="onSaveClick()" [disabled]="!editRoleForm.valid">
+            save
+          </button>
+        </div>
       </tab>
       <!-- TAB PERMISSIONS -->
       <tab [heading]="'Permissions' | localize" class="pt-3 px-2 test">
@@ -49,8 +57,8 @@
                   <div class="spinner" *ngIf="node.isLoading">
                     <mat-spinner [diameter]="16" style="margin-right: 8px;"></mat-spinner>{{node.displayName}}
                   </div>
-                  <mat-checkbox [ngClass]="node.childrens == null?'noChild':''" color="primary" *ngIf="!node.isLoading" [disabled]="isStatic "
-                    [checked]="isSelected(node)" (change)="todoLeafItemSelectionToggle(node)">
+                  <mat-checkbox [ngClass]="node.childrens == null?'noChild':''" color="primary" *ngIf="!node.isLoading"
+                    [disabled]="isStatic " [checked]="isSelected(node)" (change)="todoLeafItemSelectionToggle(node)">
                     {{node.displayName}}</mat-checkbox>
                 </li>
               </mat-tree-node>
@@ -62,7 +70,8 @@
                         
                         {{!treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
                       </mat-icon> -->
-                      <i class="nav-icon {{!treeControl.isExpanded(node) ? 'fas fa-chevron-down' : 'fas fa-chevron-right' }}"></i>
+                      <i
+                        class="nav-icon {{!treeControl.isExpanded(node) ? 'fas fa-chevron-down' : 'fas fa-chevron-right' }}"></i>
                     </button>
                     <div class="spinner" *ngIf="node.isLoading">
                       <mat-spinner [diameter]="16" style="margin-right: 8px;"></mat-spinner>{{node.displayName}}

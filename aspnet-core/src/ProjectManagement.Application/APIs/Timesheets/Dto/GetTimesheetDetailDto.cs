@@ -31,5 +31,6 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public string Note { get; set; }
         public PMReportProjectStatus IsSendReport { get; set; }
         public bool HasFile { get; set; }
+        public bool? IsComplete { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 export class ProjectDto {
     name: string;
     code: string;
-    projectType: 0;
+    projectType?: 0;
     startTime: string;
     endTime: string;
-    status: number;
-    clientId: number;
-    isCharge: boolean;
+    status?: number;
+    clientId?: number;
+    isCharge?: boolean;
     pmId: number;
     id?: number;
 }
@@ -52,8 +52,11 @@ export class projectUserBillDto {
     currency: number;
     isActive: boolean;
     createMode?: boolean;
+    note: string;
+    shadowNote : string;
+    workingTime : string;
     id: number;
-    timesheetId:number;
+    timesheetId: number;
 }
 export class MilestoneDto {
     projectId: number;
@@ -73,5 +76,50 @@ export class ProjectInfoDto {
     pmName: string
     totalBill: number
     totalResource: number;
-    
+
+}
+export class TrainingProjectDto {
+    name: string;
+    code: string;
+    projectType?: number;
+    startTime: string;
+    endTime: string;
+    status?: number;
+    clientId?: number;
+    clientName?: string;
+    currencyId?: number;
+    currencyName?: string;
+    isCharge?: true;
+    pmId: number;
+    pmName?: string;
+    pmFullName?: string;
+    pmEmailAddress?: string;
+    pmUserName?: string;
+    pmAvatarPath?: string;
+    pmUserType?: number;
+    pmBranch?: number;
+    isSent?: number;
+    timeSendReport?: string;
+    dateSendReport?: string;
+    evaluation?: string;
+    id: number;
+}
+export class ProductProjectDto {
+    name: string;
+    code: string;
+    startTime: string;
+    endTime: string;
+    status: number;
+    pmId: number;
+    pmName: string;
+    pmFullName: string;
+    pmEmailAddress: string;
+    pmUserName: string;
+    pmAvatarPath: string;
+    pmUserType: number;
+    pmBranch: number;
+    isSent: number;
+    timeSendReport: string;
+    dateSendReport: string;
+    id: number
 }

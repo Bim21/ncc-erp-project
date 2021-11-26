@@ -18,7 +18,9 @@ export class CreateChecklistItemComponent extends AppComponentBase implements On
   public checklistTitleList: ChecklistTitleComponent[] = []
   public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
   public searchTitle: string = "";
-  
+  public submitted: boolean = false;
+  public setManda: boolean = false;
+
   constructor(injector: Injector, private checkListService: ChecklistService, @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     private checklisttitleService: ChecklistCategoryService,
     public dialogRef: MatDialogRef<CreateChecklistItemComponent>) {
@@ -29,27 +31,39 @@ export class CreateChecklistItemComponent extends AppComponentBase implements On
     this.getChecklistTitle()
     if (this.data.command == "edit") {
       this.checklist = this.data.dialogData
+    };
+    console.log(this.data)
+  }
+  selectProjectType(e) {
+    if (this.setManda && !(this.checklist.mandatorys.length > 0)) {
+      this.submitted = true;
+    } else {
+      this.submitted = false;
     }
+
   }
   public saveAndClose(): void {
     this.isLoading = true;
-    if (this.data.command == "create") {
-      if(!this.checklist.mandatorys){
-        this.checklist.mandatorys=[]
+    if (this.setManda && !(this.checklist?.mandatorys?.length > 0)) {
+      this.submitted = true;
+      abp.notify.error("Nhập đầy đủ các trường!")
+    }
+    if (!this.submitted)
+      if (this.data.command == "create") {
+        if (!this.checklist.mandatorys) {
+          this.checklist.mandatorys = [];
+        }
+        this.checkListService.create(this.checklist).pipe(catchError(this.checkListService.handleError)).subscribe(res => {
+          abp.notify.success(`create checklist ${this.checklist.name}`);
+          this.dialogRef.close(this.checklist);
+        });
       }
-      this.checkListService.create(this.checklist).pipe(catchError(this.checkListService.handleError)).subscribe(res => {
-        abp.notify.success(`create checklist ${this.checklist.name}`);
-        this.dialogRef.close(this.checklist);
-      }, () => {
-        this.isLoading = false;
-      });
-    }
-    else if (this.data.command == "edit") {
-      this.checkListService.update(this.checklist).pipe(catchError(this.checkListService.handleError)).subscribe(res => {
-        abp.notify.success(`edited checklist ${this.checklist.name}`);
-        this.dialogRef.close(this.checklist);
-      }, () => this.isLoading = false);
-    }
+      else if (this.data.command == "edit") {
+        this.checkListService.update(this.checklist).pipe(catchError(this.checkListService.handleError)).subscribe(res => {
+          abp.notify.success(`edited checklist ${this.checklist.name}`);
+          this.dialogRef.close(this.checklist);
+        });
+      }
   }
   private getChecklistTitle(): void {
     this.checklisttitleService.getAll().subscribe(data => {
@@ -58,7 +72,10 @@ export class CreateChecklistItemComponent extends AppComponentBase implements On
   }
   public setMandatory(event): void {
     if (event.checked == false) {
-      this.checklist.mandatorys = []
+      this.checklist.mandatorys = [];
+
+    } else {
+      this.setManda = true;
     }
   }
 }

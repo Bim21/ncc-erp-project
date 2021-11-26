@@ -26,9 +26,15 @@ export class ListFilterPipe implements PipeTransform {
       });
     }
     else {
-      return value.filter(item => {
-        return this.removeAccents(item[property].toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText.toLowerCase().replace(/\s/g, "")))
-      });
+      if (value) {
+        console.log("hihii")
+        return value?.filter(item => {
+          return this.removeAccents(item[property]?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText?.toLowerCase().replace(/\s/g, ""))) ||
+          this.removeAccents(item[property2]?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(searchText?.toLowerCase().replace(/\s/g, ""))) 
+          
+        });
+      }
+
     }
   }
   removeAccents(str) {

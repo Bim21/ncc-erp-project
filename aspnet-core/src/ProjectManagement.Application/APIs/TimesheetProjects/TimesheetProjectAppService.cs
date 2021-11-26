@@ -288,7 +288,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
         {
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId).ToListAsync();
-
             var query = WorkScope.GetAll<Project>().Where(x => !timesheetProject.Contains(x.Id))
                 .Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
@@ -316,18 +315,24 @@ namespace ProjectManagement.APIs.TimesheetProjects
             PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
+            var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
+            if (filterItem != null)
+            {
+                input.FilterItems.Remove(filterItem);
+            }
             var viewAll = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet);
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
             var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId).OrderByDescending(x => x.CreationTime);
-            foreach (var item in timsheetProjectBills)
-            {
-
-            }
+            //foreach (var item in timsheetProjectBills)
+            //{
+            //}
             //var projectBillInfomation = 
 
-            var query = (from tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId)
+            var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
+                                              .Where(x => x.TimesheetId == timesheetId)
+                                              .Where(x => filterItem == null || x.IsComplete != true)
                          join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
                          //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
                          join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
@@ -353,7 +358,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              Note = tsp.Note,
                              //IsSendReport = pr.Status,
                              HistoryFile = tsp.HistoryFile,
-                             HasFile = !string.IsNullOrEmpty(tsp.FilePath)
+                             HasFile = !string.IsNullOrEmpty(tsp.FilePath),
+                             IsComplete = tsp.IsComplete,
                          }).OrderByDescending(x => x.ClientId);
             //foreach (var item in query)
             //{

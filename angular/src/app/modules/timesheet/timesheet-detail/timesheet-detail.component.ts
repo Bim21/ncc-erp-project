@@ -23,7 +23,11 @@ import { CreateInvoiceComponent } from './create-invoice/create-invoice.componen
   styleUrls: ['./timesheet-detail.component.css']
 })
 export class TimesheetDetailComponent extends PagedListingComponentBase<TimesheetDetailDto> implements OnInit {
+  requestBody: PagedRequestDto
+  pageNum: number
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.requestBody = request
+    this.pageNum = pageNumber
     this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
       .subscribe((data: PagedResultResultDto) => {
         this.TimesheetDetaiList = data.result.items;
@@ -61,7 +65,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
-    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType:2 },
+    { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType: 2 },
+    { propertyName: 'isComplete', displayName: "Status", comparisions: [0], filterType: 5 },
 
   ];
 
@@ -105,7 +110,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         projectName: Timesheet.projectName,
         note: Timesheet.note,
         id: Timesheet.id,
-        projectBillInfomation: Timesheet.projectBillInfomation
+        projectBillInfomation: Timesheet.projectBillInfomation,
+        
 
       }
 
@@ -122,15 +128,36 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     });
     show.afterClosed().subscribe(res => {
       if (res) {
-        this.refresh();
+      this.refresh()
       }
     })
   }
+
+
+
+  reloadTimesheetFile(id) {
+    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, this.requestBody).pipe(catchError(this.timesheetProjectService.handleError))
+      .subscribe((data: PagedResultResultDto) => {
+        this.TimesheetDetaiList = data.result.items;
+        if (!this.TimesheetDetaiList.filter(timesheet => timesheet.id == id)[0].file) {
+          setTimeout(() => {
+            this.reloadTimesheetFile(id)
+          }, 1000)
+        }
+        else{
+          this.showPaging(data.result, this.pageNum);
+          this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
+          abp.notify.success("import file successfull")
+        }
+      })
+  }
+
+
+
   createTimeSheet() {
     this.showDialog('create', {})
   }
   editTimesheet(timesheet: TimesheetDetailDto) {
-    //ProjectDto
     this.showDialog("edit", timesheet);
   }
 
@@ -143,7 +170,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.refresh();
+        this.reloadTimesheetFile(result)
+        
       }
     });
   }
@@ -154,8 +182,10 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       (result: boolean) => {
         if (result) {
           this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted File  " + item.file);
-            this.refresh();
+            setTimeout(()=>{
+              abp.notify.success("Deleted File  " + item.file);
+              this.refresh();
+            },1000)
           });
         }
       }
@@ -196,7 +226,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     const show = this.dialog.open(CreateInvoiceComponent, {
       data: {
         timeSheetId: this.timesheetId,
-        title:"Create Invoice"
+        title: "Create Invoice"
       },
       width: "700px",
       disableClose: true,
@@ -213,7 +243,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     const show = this.dialog.open(CreateInvoiceComponent, {
       data: {
         timeSheetId: this.timesheetId,
-        title:"Export Invoice"
+        title: "Export Invoice"
       },
       width: "700px",
       disableClose: true,
@@ -225,7 +255,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
-  
+
   public reloadComponent() {
     this.router.navigate(['app/timesheetDetail'], {
       queryParams: {
@@ -237,25 +267,25 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.isActive = false;
     this.createdInvoice = true;
   }
-  public viewBillDetail(bill){
-    const show= this.dialog.open(ViewBillComponent,{
+  public viewBillDetail(bill) {
+    const show = this.dialog.open(ViewBillComponent, {
       width: "95%",
       data: bill
     })
-    show.afterClosed().subscribe((res)=>{
+    show.afterClosed().subscribe((res) => {
       this.refresh();
     })
   }
-  mouseEnter(item){
-    item.showIcon =true
+  mouseEnter(item) {
+    item.showIcon = true
 
   }
-  mouseLeave(item){
-    item.showIcon =false
+  mouseLeave(item) {
+    item.showIcon = false
   }
 
-  exportInvocie(item:any){
-    this.timesheetProjectService.exportInvoice(this.timesheetId,item.projectId).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data=>{
+  exportInvocie(item: any) {
+    this.timesheetProjectService.exportInvoice(this.timesheetId, item.projectId).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
       const file = new Blob([this.s2ab(atob(data.result.base64))], {
         type: "application/vnd.ms-excel;charset=utf-8"
       });

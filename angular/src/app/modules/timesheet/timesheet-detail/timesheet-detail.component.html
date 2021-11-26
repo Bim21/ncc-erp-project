@@ -79,6 +79,7 @@
                                 <th>Note</th>
                                 <th>Thông tin Bill dự án</th>
                                 <th>File</th>
+                                <th>Done</th>
                                 <th *ngIf="isActive">Actions</th>
                             </tr>
                         </thead>
@@ -108,45 +109,45 @@
                                        {{item.note}}
                                   </pre>
                                 </td>
-                                <td style="cursor: pointer;" class="text-left bill" (click)="viewBillDetail(item)" >
+                                <td style="cursor: pointer; width: 300px !important;" class="text-left bill" (click)="viewBillDetail(item)">
                                     <div class="row">
                                         <div class="col col-11" style="white-space: normal;">
                                             <div [innerHtml]="item.projectBillInfomation"></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td style="white-space: normal;   max-width: 230px;">
+                                <td class="text-center" style="white-space: normal;max-width: 230px;">
                                     <span class="file-download">
                                         <span (click)="downloadFile(item)">{{item.file}}</span>
                                     </span>
                                     <span *ngIf="item.file !==null" style="margin-left: 5px;">
                                         <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(item)"></i>
                                     </span>
+
+                                    <button
+                                        *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject) && item.file == null"
+                                        class="btn btn-secondary btn-sm" (click)="importExcel(item.id)" #importFileBtn>
+                                        <i class="fas fa-upload mr-1"></i> Upload file
+                                    </button>
+                                </td>
+                                <td>
+                                    <i *ngIf="item.isComplete" style="color: green;" class="fas fa-check fa-2x "></i>
                                 </td>
                                 <td *ngIf="isActive" class="text-center" style="vertical-align: middle;">
-                                    <button
-                                        
-                                        class="btn btn-sm bg-primary" (click)="viewBillDetail(item)"
-                                        #importFileBtn>
+                                    <button class="btn btn-sm bg-primary" (click)="viewBillDetail(item)" #importFileBtn>
                                         <i class="fas fa-edit"></i>
                                         Update Bill
                                     </button>
-                                
-                              
+
+
                                     <button mat-button [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
-                                        <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"  (click)="exportInvocie(item)" class="btn  mat-menu-item w-100">
+                                        <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
+                                            (click)="exportInvocie(item)" class="btn  mat-menu-item w-100">
                                             <i class="fas fa-file-invoice-dollar mr-1"></i>
                                             Export Invoice
-                                        </button>
-                                        <button
-                                            *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject)"
-                                            class="btn  mat-menu-item w-100" (click)="importExcel(item.id)"
-                                            #importFileBtn>
-                                            <i class="fas fa-upload mr-1"></i>
-                                            Import File
                                         </button>
                                         <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Update)"
                                             class="btn   mat-menu-item w-100"
@@ -155,13 +156,13 @@
                                             Note
                                         </button>
                                         <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Delete)"
-                                            class="btn  mat-menu-item w-100" (click)="delete(item);$event.stopPropagation()"
-                                            #deleteBtn>
+                                            class="btn  mat-menu-item w-100"
+                                            (click)="delete(item);$event.stopPropagation()" #deleteBtn>
                                             <i class="fas fa-trash mr-1"></i>
                                             Delete
                                         </button>
                                     </mat-menu>
-                                    
+
 
                                 </td>
                             </tr>
@@ -172,7 +173,7 @@
             <div class="card-footer bg-light border-top">
                 <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
-                        <button class="btn btn-secondary mb-2" (click)="refresh()">
+                        <button class="btn btn-secondary mb-2" (click)="getDataPage(1)">
                             <i class="fas fa-redo-alt"></i>
                         </button>
                         <mat-form-field style="width: 20%;margin-left: 30px;">

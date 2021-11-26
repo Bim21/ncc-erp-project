@@ -2531,7 +2531,7 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("BriefDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ClientId")
+                    b.Property<long?>("ClientId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -2559,7 +2559,10 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsCharge")
+                    b.Property<string>("Evaluation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsCharge")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
@@ -3139,6 +3142,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<string>("HistoryFile")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsComplete")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3732,9 +3738,7 @@ namespace ProjectManagement.Migrations
                 {
                     b.HasOne("ProjectManagement.Entities.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
                     b.HasOne("ProjectManagement.Entities.Currency", "Currency")
                         .WithMany()

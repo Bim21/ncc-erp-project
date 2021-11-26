@@ -119,6 +119,30 @@ import { CreateEditCurrencyComponent } from './modules/admin/currency/create-edi
 import { CdTimerModule } from 'angular-cd-timer';
 import { ViewBillComponent } from './modules/timesheet/timesheet-detail/view-bill/view-bill.component';
 import { AllResourceComponent } from './modules/delivery-management/delivery/available-resource-tab/all-resource/all-resource.component';
+import { TrainingProjectsComponent } from './modules/pm-management/training-projects/training-projects.component';
+import { ProductProjectsComponent } from './modules/pm-management/product-projects/product-projects.component';
+import { CreateEditTrainingProjectComponent } from './modules/pm-management/training-projects/create-edit-training-project/create-edit-training-project.component';
+import { TrainingProjectDetailComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-detail.component';
+import { TrainingProjectGeneralComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-general/training-project-general.component';
+import { TrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/training-project-checklist.component';
+import { TrainingProjectDescriptionComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-description/training-project-description.component';
+import { TrainingProjectTimesheetComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-timesheet/training-project-timesheet.component';
+import { TrainingResourceManagementComponent } from './modules/pm-management/training-projects/training-project-detail/training-resource-management/training-resource-management.component';
+import { TrainingWeeklyReportComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-weekly-report.component';
+import { TrainingApprovedDialogComponent } from './modules/pm-management/training-projects/training-project-detail/training-weekly-report/training-approved-dialog/training-approved-dialog.component';
+import { TrainingMilestoneComponent } from './modules/pm-management/training-projects/training-project-detail/training-milestone/training-milestone.component';
+import { CreateEditTrainingProjectChecklistComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-checklist/create-edit-training-project-checklist/create-edit-training-project-checklist.component';
+import { CreateEditProductProjectComponent } from './modules/pm-management/product-projects/create-edit-product-project/create-edit-product-project.component';
+import { ProductProjectDetailComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-detail.component';
+import { ProductProjectGeneralComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-general/product-project-general.component';
+import { ProductProjectMilestoneComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-milestone/product-project-milestone.component';
+import { ProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/product-project-checklist.component';
+import { ProductProjectDescriptionComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-description/product-project-description.component';
+import { ProductProjectTimesheetComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-timesheet/product-project-timesheet.component';
+import { ProductResourceManagementComponent } from './modules/pm-management/product-projects/product-project-detail/product-resource-management/product-resource-management.component';
+import { ProductWeeklyReportComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-weekly-report.component';
+import { ProductApprovedDialogComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-approved-dialog/product-approved-dialog.component';
+import { CreateEditProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/create-edit-product-project-checklist/create-edit-product-project-checklist.component';
 
 
 
@@ -231,6 +255,30 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CreateEditCurrencyComponent,
     ViewBillComponent,
     AllResourceComponent,
+    TrainingProjectsComponent,
+    ProductProjectsComponent,
+    CreateEditTrainingProjectComponent,
+    TrainingProjectDetailComponent,
+    TrainingProjectGeneralComponent,
+    TrainingProjectChecklistComponent,
+    TrainingProjectDescriptionComponent,
+    TrainingProjectTimesheetComponent,
+    TrainingResourceManagementComponent,
+    TrainingWeeklyReportComponent,
+    TrainingApprovedDialogComponent,
+    TrainingMilestoneComponent,
+    CreateEditTrainingProjectChecklistComponent,
+    CreateEditProductProjectComponent,
+    ProductProjectDetailComponent,
+    ProductProjectGeneralComponent,
+    ProductProjectMilestoneComponent,
+    ProductProjectChecklistComponent,
+    ProductProjectDescriptionComponent,
+    ProductProjectTimesheetComponent,
+    ProductResourceManagementComponent,
+    ProductWeeklyReportComponent,
+    ProductApprovedDialogComponent,
+    CreateEditProductProjectChecklistComponent,
 
     
   ],

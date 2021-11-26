@@ -23,13 +23,13 @@ namespace ProjectManagement.Entities
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }
-        public long ClientId { get; set; }
+        public long? ClientId { get; set; }
         [ForeignKey(nameof(ClientId))]
         public Client Client { get; set; }
         public long? CurrencyId { get; set; }
         [ForeignKey(nameof(CurrencyId))]
         public Currency Currency { get; set; }
-        public bool IsCharge { get; set; }
+        public bool? IsCharge { get; set; }
         public long PMId { get; set; }
         [ForeignKey(nameof(PMId))]
         public User PM { get; set; }
@@ -39,5 +39,6 @@ namespace ProjectManagement.Entities
         public string TechnicalProblems { get; set; }
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
+        public string Evaluation { get; set; }
     }
 }

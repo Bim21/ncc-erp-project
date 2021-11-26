@@ -125,7 +125,7 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
             this.pageNumber = 1;
         }
         this.pageSize = this.pageSizeType;
-        this.refresh();
+        this.getDataPage(1);
     }
     AddFilterItem(request: PagedRequestDto, propertyName: string, value: any) {
         let filterList = request.filterItems

@@ -45,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let saodo of listSaoDoDetail  let i = index">
+                        <tr *ngFor="let saodo of listSaoDoDetail | listFilter: 'projectName' : searchText : 'pmName'; let i = index">
                             <td>{{i+1}}</td>
                             <td><span
                                 class="hyperlink" (click)="showDetail(saodo)">{{saodo.projectName}}</span></td>

@@ -1,0 +1,187 @@
+<section class="content-header pb-1">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h1>{{'Product Projects' | localize}}</h1>
+            </div>
+            <div class="col-6 text-right">
+                <button type="button" class="btn bg-blue" (click)="createProject()">
+                    <i class="fa fa-plus-square"></i>
+                    {{ 'Create' | localize }}
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content px-2">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header row">
+                <div class="input-group col-8 pt-1">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
+                        (keyup.enter)="getDataPage(1)" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+                            <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                                [class.fa-angle-down]="!advancedFiltersVisible"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="col-4 row">
+                    <label class="ml-5 mr-2 mt-3">Trạng thái:</label>
+                    <mat-form-field  appearance="outline" style="width: 250px;">
+                        <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"  (selectionChange)="refresh()"
+                           >
+                           <mat-option value="-1">All</mat-option>
+                            <mat-option *ngFor="let item of statusFilterList" [value]="item.value">{{item.displayName}}</mat-option>
+                          
+                        </mat-select>
+                    </mat-form-field>
+                   
+                </div>
+                
+            </div>
+            <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
+                <div class="card-body">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-12">
+                                <div class="mb-0">
+                                    <div>
+                                        <div *ngFor="let item of filterItems; let i = index">
+                                            <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
+                                                (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
+                                            </app-filter>
+                                        </div>
+                                        <i style="padding: 0;" class="fas fa-plus-circle ml-3"
+                                            (click)="addFilter()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-body table-responsive px-4 pb-2">
+                <div class="fixTableHead">
+
+
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100">
+                        <thead class="bg-light">
+                            <tr style="border: none;">
+                                <th class="stt">#</th>
+                                <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
+                                <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
+                                <th>{{'PM' | localize}}</th>
+                                <th>Thời gian bắt đầu</th>
+                                <th>Thời gian kết thúc</th>
+                                <th>{{'Trạng thái' | localize}}</th>
+                                <th>{{'Weekly Report' | localize}}</th>
+                                <th>Thời gian gửi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let project of listProductProjects  |paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }; let i = index">
+                                <td>{{i+1}}</td>
+                                <td class="text-center">
+                                    <button mat-button [matMenuTriggerFor]="menu">
+                                        <i class="fas fa-bars fa-lg"></i>
+                                    </button>
+                                    <mat-menu #menu="matMenu" class="p-2">
+                                        <button (click)="editProject(project)" class="mat-menu-item  w-100 ">
+                                            <i class="fas fa-pencil-alt mr-1"></i>
+                                            Edit
+                                        </button>
+                                        <button (click)="delete(project)" class="mat-menu-item  w-100 ">
+                                            <i class="fas fa-trash fa-lg mr-1"></i>
+                                            Delete
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                                <td style="min-width: 220px;  white-space: normal;"><span class="hyperlink"
+                                        (click)="showDetail(project.id)">{{ project.name }}</span></td>
+                                <td>
+                                    <div style="width: 300px;">
+                                        <app-user-info
+                                            [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                            userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarPath:project.pmAvatarPath}">
+                                        </app-user-info>
+                                    </div>
+                                </td>
+                                <td class="text-center">{{project.startTime | date:"dd/MM/yyyy"}}</td>
+                                <td class="text-center">{{project.endTime | date:"dd/MM/yyyy"}}</td>
+                                <td class="text-center"> <span
+                                        [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{
+                                        getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
+                                <td class="text-center">
+                                    <span
+                                        [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{project.timeSendReport| date:"dd/MM/yyyy hh:mm a"}}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="card-footer bg-light border-top">
+                <div class="row">
+                    <div class="col-sm-4 col-12 text-sm-left text-center">
+                        <button class="btn btn-secondary mb-2" (click)="refresh()">
+                            <i class="fas fa-redo-alt"></i>
+                        </button>
+                        <mat-form-field style="width: 20%;margin-left: 30px;">
+                            <mat-label>Number items</mat-label>
+                            <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">
+                                <mat-option [value]="5">
+                                    5
+                                </mat-option>
+                                <mat-option [value]="10">
+                                    10
+                                </mat-option>
+                                <mat-option [value]="20">
+                                    20
+                                </mat-option>
+                                <mat-option [value]="50">
+                                    50
+                                </mat-option>
+                                <mat-option [value]="100">
+                                    100
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-4 col-12 text-center">
+                        <p class="mb-0 my-2">
+                            {{ "TotalRecordsCount" | localize: totalItems }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4 col-12">
+                        <div class="float-sm-right m-auto">
+                            <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
+                            </abp-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
