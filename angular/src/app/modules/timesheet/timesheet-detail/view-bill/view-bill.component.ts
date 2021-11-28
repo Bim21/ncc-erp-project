@@ -181,7 +181,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     })
   }
   searchUser(bill) {
-    bill.userList = this.tempUserList.filter(item => this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, ""))))
+    bill.userList = this.tempUserList.filter(item => ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId    )
 
   }
   removeAccents(str) {
