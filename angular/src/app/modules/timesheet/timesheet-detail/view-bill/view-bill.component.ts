@@ -39,6 +39,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(data => {
       this.billDetail = data.result
       this.isLoading = false
+      this.getAllFakeUser()
     },
       () => { this.isLoading = false })
   }
@@ -157,7 +158,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.searchUserBill = "";
     this.isEdit = false;
     this.isCreate = false
-    this.getAllFakeUser()
+    this.isEdittingRows = false
 
   }
   public editUserBill(userBill: projectUserBillDto): void {
@@ -170,18 +171,18 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   }
   private getAllFakeUser(userId?) {
+    this.isLoading = true
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
-      this.userForUserBill = data.result;
+      // this.userForUserBill = data.result;
+      this.billDetail.forEach(item=>item.userList = data.result)
       this.tempUserList = data.result
-      this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(rs => {
-        let temp = rs.result.map(item=>item.userId)
-        if(userId){
-          temp.splice(temp.indexOf(userId),1)
-          temp = new Set(temp)
-        }
-        this.userForUserBill = data.result.filter(item=> !temp.includes(item.id))
-      })
+      console.log(this.billDetail)
+     
     })
+  }
+  searchUser(bill){
+    bill.userList = this.tempUserList.filter(item=>item?.fullName.toLowerCase().includes(this.searchUserBill.toLowerCase()) || item.emailAddress?.toLowerCase().includes(this.searchUserBill.toLowerCase()))
+    
   }
   public onActiveChange(active, userBill) {
     userBill.isActive = active.checked
@@ -192,6 +193,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     bill.createMode = true;
     this.isEdit = true;
     this.isCreate = true;
+    this.getAllFakeUser()
 
   }
   editMultiRows() {
