@@ -65,4 +65,5 @@ export class TimesheetProjectBill {
     createMode?: boolean
     timesheetId: number
     currency: string
+    userList:any[]
 }

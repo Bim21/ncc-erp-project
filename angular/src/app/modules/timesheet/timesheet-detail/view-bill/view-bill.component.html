@@ -12,7 +12,7 @@
                 <button class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
                     <i style="color: green;" class="fas fa-check fa-2x "></i>
                 </button>
-                <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill();isEdittingRows = !isEdittingRows"></i>
+                <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill();"></i>
             </div>
         </div>
         <section class="example-section col-1 text-center">
@@ -21,7 +21,7 @@
         </section>
         <div class="table-responsive mb-1 p-2">
             <div class="fixTableHead">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" >
                     <thead class="bg-light">
                         <tr>
                             <th class="stt">#</th>
@@ -55,13 +55,14 @@
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                 <input matInput [(ngModel)]="searchUserBill" placeholder="search"
-                                                    (keydown)="$event.stopPropagation()" name="searchBillUser"
+                                                    (keydown)="$event.stopPropagation();searchUser(bill)" name="searchBillUser"
                                                     #search>{{search.focus()}}
                                             </mat-form-field>
                                             <mat-option
-                                                *ngFor="let user of userForUserBill | listFilter: 'fullName' : searchUserBill : 'emailAddress' : 'surname' : 'name'"
+                                                *ngFor="let user of bill.userList "
                                                 [value]="user.id">
-                                                {{user.fullName}} - ({{user.emailAddress}})</mat-option>
+                                                {{user.fullName}} - ({{user.emailAddress}})
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <mat-error class="mt-1" *ngIf="userBill.hasError('required') && userBill.touched"
