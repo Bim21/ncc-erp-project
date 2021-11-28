@@ -59,11 +59,9 @@
                                                     (keydown)="$event.stopPropagation();searchUser(bill)"
                                                     name="searchBillUser" #search>{{search.focus()}}
                                             </mat-form-field>
-                                            <ng-container *ngFor="let user of bill.userList ">
-                                                <mat-option *ngIf="bill.userId != user.id" [value]="user.id">
-                                                    {{user.fullName}} - ({{user.emailAddress}})
-                                                </mat-option>
-                                            </ng-container>
+                                            <mat-option *ngFor="let user of bill.userList " [value]="user.id">
+                                                {{user.fullName}} - ({{user.emailAddress}})
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                     <mat-error class="mt-1" *ngIf="userBill.hasError('required') && userBill.touched"
