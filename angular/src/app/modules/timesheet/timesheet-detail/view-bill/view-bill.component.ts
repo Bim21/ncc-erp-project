@@ -174,14 +174,17 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.isLoading = true
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
       // this.userForUserBill = data.result;
-      this.billDetail.forEach(item => item.userList = data.result)
+      this.billDetail.forEach(item => {
+        item.userList = data.result
+        item.searchText = ""
+      } )
       this.tempUserList = data.result
       console.log(this.billDetail)
 
     })
   }
   searchUser(bill) {
-    bill.userList = this.tempUserList.filter(item => ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId    )
+    bill.userList = this.tempUserList.filter(item => ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId    )
 
   }
   removeAccents(str) {
@@ -225,9 +228,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     //   this.userForUserBill = data.result;})
 
   }
-  onUserSelect(user) {
-    // console.log(user)
-    // this.getAllFakeUser()
+  onUserSelect(bill) {
+    bill.searchText = ""
   }
 
 }
