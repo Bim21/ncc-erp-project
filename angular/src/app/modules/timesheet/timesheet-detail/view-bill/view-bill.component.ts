@@ -22,7 +22,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isCreate: boolean = false;
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
-  tempUserList= []
+  tempUserList = []
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
@@ -84,10 +84,10 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         })
       this.isCreate = false;
       this.isEdit = false;
-// this.userForUserBill.forEach((element,index) => {
-//   if(element.id==userBill.userId)
-//   this.userForUserBill.splice(index, 1);
-// });
+      // this.userForUserBill.forEach((element,index) => {
+      //   if(element.id==userBill.userId)
+      //   this.userForUserBill.splice(index, 1);
+      // });
 
 
     } else {
@@ -174,15 +174,38 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.isLoading = true
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
       // this.userForUserBill = data.result;
-      this.billDetail.forEach(item=>item.userList = data.result)
+      this.billDetail.forEach(item => item.userList = data.result)
       this.tempUserList = data.result
       console.log(this.billDetail)
-     
+
     })
   }
-  searchUser(bill){
-    bill.userList = this.tempUserList.filter(item=>item?.fullName.toLowerCase().includes(this.searchUserBill.toLowerCase()) || item.emailAddress?.toLowerCase().includes(this.searchUserBill.toLowerCase()))
-    
+  searchUser(bill) {
+    bill.userList = this.tempUserList.filter(item => this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(this.searchUserBill.toLowerCase().replace(/\s/g, ""))))
+
+  }
+  removeAccents(str) {
+    var AccentsMap = [
+      "aàảãáạăằẳẵắặâầẩẫấậ",
+      "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+      "dđ", "DĐ",
+      "eèẻẽéẹêềểễếệ",
+      "EÈẺẼÉẸÊỀỂỄẾỆ",
+      "iìỉĩíị",
+      "IÌỈĨÍỊ",
+      "oòỏõóọôồổỗốộơờởỡớợ",
+      "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+      "uùủũúụưừửữứự",
+      "UÙỦŨÚỤƯỪỬỮỨỰ",
+      "yỳỷỹýỵ",
+      "YỲỶỸÝỴ"
+    ];
+    for (var i = 0; i < AccentsMap.length; i++) {
+      var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+      var char = AccentsMap[i][0];
+      str = str.replace(re, char);
+    }
+    return str;
   }
   public onActiveChange(active, userBill) {
     userBill.isActive = active.checked
@@ -202,9 +225,9 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     //   this.userForUserBill = data.result;})
 
   }
-  onUserSelect(user){
-// console.log(user)
-// this.getAllFakeUser()
+  onUserSelect(user) {
+    // console.log(user)
+    // this.getAllFakeUser()
   }
 
 }
