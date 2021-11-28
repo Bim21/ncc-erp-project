@@ -66,4 +66,5 @@ export class TimesheetProjectBill {
     timesheetId: number
     currency: string
     userList:any[]
+    searchText:string
 }

@@ -52,10 +52,10 @@
                                     <mat-form-field class="w-100" appearance="outline">
                                         <mat-select [(ngModel)]="bill.userId" [name]="i+'userBill'"
                                             placeholder="select an user" #userBill="ngModel" required
-                                            (click)="onUserSelect(userBill.value)">
+                                            (selectionChange)="onUserSelect(bill)">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchUserBill" placeholder="search"
+                                                <input matInput [(ngModel)]="bill.searchText" placeholder="search"
                                                     (keydown)="$event.stopPropagation();searchUser(bill)"
                                                     name="searchBillUser" #search>{{search.focus()}}
                                             </mat-form-field>
