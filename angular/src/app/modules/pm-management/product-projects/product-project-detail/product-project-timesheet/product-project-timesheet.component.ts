@@ -1,3 +1,5 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
+import { AppSessionService } from './../../../../../../shared/session/app-session.service';
 import { TimesheetService } from './../../../../../service/api/timesheet.service';
 import { ProjectTimesheetDto } from './../../../../../service/model/timesheet.dto';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -15,10 +17,19 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./product-project-timesheet.component.css']
 })
 export class ProductProjectTimesheetComponent extends AppComponentBase implements OnInit {
-
+  Timesheet_TimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject;
+  Timesheet_TimesheetProject_Create= PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
+  Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
+  Timesheet_TimesheetProject_Delete = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
+  Timesheet_TimesheetProject_DownloadFileTimesheetProject =PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
+  Timesheet_TimesheetProject_GetAllByProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_GetAllByProject;
+  Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet;
+  Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Update;
+  Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
+  Timesheet_TimesheetProject_ViewInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewInvoice;
   public listTimesheetByProject: ProjectTimesheetDto[] = [];
   private projectId: number;
-  constructor(injector: Injector,
+  constructor(injector: Injector,public sessionService:AppSessionService,
     public timesheetProjectService: TimesheetProjectService,
     private timesheetService: TimesheetService,
     private timesheetSerivce: TimesheetProjectService, private route: ActivatedRoute, private dialog: MatDialog) {

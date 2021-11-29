@@ -9,7 +9,7 @@
                 (click)="editMultiRows()" [disabled]="this.data.isComplete"><i
                     class="fas fa-pencil-alt mr-1"></i>Edit</button>
             <div *ngIf="isEdittingRows" class="pt-1 ml-4">
-                <button class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
+                <button [disabled]="!timesheetDetailForm.valid" class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
                     <i style="color: green;" class="fas fa-check fa-2x "></i>
                 </button>
                 <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill();"></i>
@@ -27,8 +27,7 @@
                             <th class="stt">#</th>
                             <th>Nhân viên</th>
                             <th>Charge Role</th>
-                            <th
-                                *ngIf=" (isCreate || billDetail[0]?.billRate || isEdit  ||data.projectBillInfomation != '') && billDetail[0]?.billRate!= -1 && billDetail[0]?.billRate  ">
+                            <th *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
                                 Rate</th>
                             <th>Working time(Day)</th>
                             <th>Is Charge</th>
@@ -56,10 +55,10 @@
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                 <input matInput [(ngModel)]="bill.searchText" placeholder="search"
-                                                    (keydown)="$event.stopPropagation();searchUser(bill)"
+                                                    (keydown)="$event.stopPropagation();" (ngModelChange)="searchUser(bill)"
                                                     name="searchBillUser" #search>{{search.focus()}}
                                             </mat-form-field>
-                                            <mat-option *ngFor="let user of bill.userList " [value]="user.id">
+                                            <mat-option *ngFor="let user of bill.userList" [value]="user.id">
                                                 {{user.fullName}} - ({{user.emailAddress}})
                                             </mat-option>
                                         </mat-select>
@@ -82,7 +81,7 @@
                                 </div>
                             </td>
                             <td class="text-center"
-                                *ngIf="( isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != '' ) && bill.billRate != -1 && bill.billRate ">
+                                *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
                                 <span *ngIf="!bill.createMode && !isEdittingRows">{{bill.billRate |
                                     number:'1.0':'en-US'}}
                                 </span>
@@ -160,7 +159,7 @@
                                             class="fas fa-pencil-alt mr-1"></i>Edit</button>
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1 mt-1">
-                                    <button [disabled]="!bill?.userId" class=" mr-3 submit-btn"
+                                    <button [disabled]="!bill?.userId || !timesheetDetailForm.valid" class=" mr-3 submit-btn"
                                         style="background: none; border: none;" (click)="saveUserBill(bill)">
                                         <i style="color: green;" class="fas fa-check fa-2x "></i>
                                     </button>

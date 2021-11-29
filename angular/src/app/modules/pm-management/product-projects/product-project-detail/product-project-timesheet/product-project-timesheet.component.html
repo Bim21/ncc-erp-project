@@ -34,7 +34,7 @@
                                 </div>
                             </td>
                             <td>
-                                <span style="color: #007bff" (click)="downloadFile(timesheet)"
+                                <span *ngIf="permission.isGranted(Timesheet_TimesheetProject_DownloadFileTimesheetProject)" style="color: #007bff" (click)="downloadFile(timesheet)"
                                     class="file-download">{{timesheet.timesheetFile}}</span>
                                 <span *ngIf="timesheet.timesheetFile !==null" style="margin-left: 5px;">
                                     <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(timesheet)"></i>
@@ -47,7 +47,8 @@
                               </pre>
                             </td>
                             <td>
-                                <button class="btn btn-sm bg-success" (click)="importExcel(timesheet.id)"
+                                <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject)"
+                                 class="btn btn-sm bg-success" (click)="importExcel(timesheet.id)"
                                     #importFileBtn>
                                     <i class="fas fa-upload"></i>
                                     Import File

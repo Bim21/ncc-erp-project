@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { catchError } from 'rxjs/operators';
 import { ListProjectService } from '@app/service/api/list-project.service';
 import { UserService } from './../../../../../service/api/user.service';
@@ -14,6 +15,7 @@ import * as moment from 'moment';
   styleUrls: ['./training-project-general.component.css']
 })
 export class TrainingProjectGeneralComponent extends AppComponentBase implements OnInit {
+  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
   public readMode: boolean = true;
   public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus);
   public pmList: UserDto[] = [];

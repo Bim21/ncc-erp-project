@@ -15,7 +15,8 @@ export class FilterComponent {
   @Output() deleteDataFilter = new EventEmitter<any>();
   value: any;
   dropdownData:any[]=[]
-  filterType:number=0
+  filterType:number=0;
+  search: any = "";
 // filterType:
 // 0: text
 // 1: Date
@@ -71,6 +72,8 @@ export class FilterComponent {
             case 4: this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
             break;
             case 5: this.item.value =true
+            break;
+            case 6: this.dropdownData = item.dropdownData,this.item.dropdownData= item.dropdownData
             break;
 
           }

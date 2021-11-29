@@ -22,20 +22,11 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
 {
     public class TimeSheetProjectBillAppService : ProjectManagementAppServiceBase
     {
-        private readonly UserManager _userManager;
-        private readonly IAbpSession _abpSession;
-        public TimeSheetProjectBillAppService( UserManager userManager, IAbpSession abpSession)
-        {
-            _userManager = userManager;
-            _abpSession = abpSession;
-        }
         [HttpGet]
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll)]
         public async Task<List<GetTimeSheetProjectBillDto>> GetAll(long timesheetId, long projectId)
         {
-            long currentUserId = _abpSession.UserId.Value;
-            var currentUser = await _userManager.GetUserByIdAsync(currentUserId);
-            var roles = await _userManager.GetRolesAsync(currentUser);
+            var permissionViewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
             var tenantId = WorkScope.GetAll<TimesheetProjectBill>().Select(x => x.TenantId).FirstOrDefault();
             var ass = WorkScope.GetAll<TimesheetProjectBill>().ToList();
             var aass = ass.Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId);
@@ -48,7 +39,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              ProjectId = x.ProjectId,
                              ProjectName = x.Project.Name,
                              BillRole = x.BillRole,
-                             BillRate = roles.Contains(StaticRoleNames.Tenants.Admin) ? x.BillRate : -1,
+                             BillRate = permissionViewProjectBillInfo ? x.BillRate : -1,
                              StartTime = x.StartTime.Date,
                              EndTime = x.EndTime.Value.Date,
                              Note = x.Note,
@@ -69,6 +60,10 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
         public async Task<TimeSheetProjectBillDto> Create(TimeSheetProjectBillDto input)
         {
+            if (string.IsNullOrWhiteSpace(input.BillRole) || string.IsNullOrWhiteSpace(input.BillRate.ToString()))
+            {
+                throw new UserFriendlyException("You must complete all required fields");
+            }
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(input));
             await UpdateProjectBillInformation(input.ProjectId, input.TimeSheetId.Value);
             return input;
@@ -78,6 +73,13 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
         public async Task<List<TimeSheetProjectBillDto>> Update(List<TimeSheetProjectBillDto> input)
         {
+            foreach (var bill in input)
+            {
+                if (string.IsNullOrWhiteSpace(bill.BillRole) || string.IsNullOrWhiteSpace(bill.BillRate.ToString()))
+                {
+                    throw new UserFriendlyException("You must complete all required fields");
+                }
+            } 
             var timesheetProjectBillIds = input.Select(x => x.Id).ToList();
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Where(x => timesheetProjectBillIds.Contains(x.Id)).ToListAsync();
             foreach (var bill in input)

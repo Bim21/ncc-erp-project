@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { UserDto } from './../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../service/api/user.service';
@@ -23,6 +24,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
   tempUserList = []
+  Timesheet_Timesheet_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
@@ -73,6 +75,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       }]
     if (this.isCreate) {
       userBill.projectId = this.data.projectId;
+      delete userBill['userList'];
       this.projectBillService.createProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
@@ -113,6 +116,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     } else {
       this.data.isComplete = false;
     }
+  
     let data = {
       projectId: this.data.projectId,
       timesheetId: this.data.timesheetId,
@@ -145,6 +149,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         id: userBill.id
       }
     })
+
     this.projectBillService.updateProjectBill(arr).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
       abp.notify.success(`Update successfull`)
       this.getProjectBill();
@@ -184,8 +189,11 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     })
   }
   searchUser(bill) {
-    bill.userList = this.tempUserList.filter(item => ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId    )
-
+    bill.userList = this.tempUserList.filter(item => 
+      ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId  ||
+      this.removeAccents((item?.name[item?.name?.length - 1] + item.name[0])).toLowerCase().replace(/\s/g, "").includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) ||
+    this.removeAccents((item.surname.toLowerCase().replace(/\s/g, "") + item?.name.toLowerCase().replace(/\s/g, ""))).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))  )
+    
   }
   removeAccents(str) {
     var AccentsMap = [

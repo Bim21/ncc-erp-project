@@ -1,3 +1,6 @@
+import { AppSessionService } from './../../../../shared/session/app-session.service';
+import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
+import { UserService } from './../../../service/api/user.service';
 import { InputFilterDto } from './../../../../shared/filter/filter.component';
 import { ListProjectService } from './../../../service/api/list-project.service';
 import { Router } from '@angular/router';
@@ -14,9 +17,15 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./product-projects.component.css']
 })
 export class ProductProjectsComponent extends PagedListingComponentBase<any> implements OnInit {
+  PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
+  PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
+  PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
+  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
+  PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
+  PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
-    { propertyName: 'pmName', comparisions: [0, 6, 7, 8], displayName: "Tên PM", },
     // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
@@ -24,31 +33,58 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
 
   ];
+  public pmId =  -1;
+  public searchPM: string = "";
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
 
   ]
+  
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    let check=false
-    request.filterItems.forEach(item =>{
-      if(item.propertyName == "status"){
-        check =true
+    let check = false
+    let checkFilterPM = false;
+    if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
+      this.pmId = this.sessionService.userId;  
+    }
+    request.filterItems.forEach(item => {
+      if (item.propertyName == "status") {
+        check = true
         item.value = this.projectStatus
       }
+      if (item.propertyName == "pmId") {
+        checkFilterPM = true;
+        item.value = this.pmId;
+      }
     })
-    if(check == false){
+    if (check == false) {
       request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
     }
-    if(this.projectStatus === -1){
-      request.filterItems = this.clearFilter(request, "status", "")
-      check =true
-      
+    if(!checkFilterPM){
+      request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
     }
+    
+    if (this.projectStatus === -1) {
+      request.filterItems = this.clearFilter(request, "status", "")
+      check = true
+
+    }
+    if (this.pmId == -1) {
+      request.filterItems = this.clearFilter(request, "pmId", "")
+      checkFilterPM = true
+
+    }
+
     this.projectService.GetAllProductPaging(request).pipe(finalize(() => {
       finishedCallback()
     })).subscribe(data => {
       this.listProductProjects = data.result.items;
+      if (check == false) {
+        request.filterItems = this.clearFilter(request, "status", "");
+      }
+      if (!checkFilterPM) {
+        request.filterItems = this.clearFilter(request, "pmId", "");
+      }
       this.showPaging(data.result, pageNumber);
     })
   }
@@ -67,14 +103,24 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     );
   }
   public listProductProjects: ProductProjectDto[] = [];
-  public projectStatus: any=3;
+  public projectStatus: any = 3;
+  public pmList: any[] = [];
   constructor(public injector: Injector,
     public dialog: MatDialog,
     public router: Router,
-    private projectService: ListProjectService) { super(injector) }
+    private userService: UserService,
+    private projectService: ListProjectService,
+    public sessionService: AppSessionService) { super(injector) }
 
   ngOnInit(): void {
     this.refresh();
+    this.getAllPM();
+  }
+  public getAllPM(): void {
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+      .subscribe(data => {
+        this.pmList = data.result;
+      })
   }
   createProject() {
     this.showDialogListProject('create');
@@ -114,7 +160,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   showDetail(id: any) {
     this.router.navigate(['app/product-project-detail/product-project-general'], {
       queryParams: {
-       id:id
+        id: id
       }
     })
   }

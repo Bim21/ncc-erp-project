@@ -23,7 +23,7 @@ import * as moment from 'moment';
 export class CreateEditListProjectComponent extends AppComponentBase implements OnInit {
   public project = {} as ProjectDto;
   public checked: boolean;
-  public projectTypeList: string[] = Object.keys(this.APP_ENUM.SubProjectType)
+  public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
   public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus)
   public clientList: ClientDto[] = []
   public pmList: UserDto;
@@ -41,7 +41,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     private currencyService: CurrencyService
   ) {
     super(injector);
-    this.projectTypeList = Object.keys(this.APP_ENUM.SubProjectType)
+    this.projectTypeList = Object.keys(this.APP_ENUM.ProjectType)
   }
 
   ngOnInit(): void {
@@ -99,4 +99,3 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
 
 
 }
-

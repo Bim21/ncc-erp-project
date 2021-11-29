@@ -1,3 +1,5 @@
+import { AppSessionService } from './../../../../shared/session/app-session.service';
+import { result } from 'lodash-es';
 import { UserDto } from './../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../service/api/user.service';
 import { InputFilterDto, DropDownDataDto } from './../../../../shared/filter/filter.component';
@@ -33,11 +35,17 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       value: item[1]
     }
   })
-
+  private userList: UserDto[] = [];
+  public projectStatus: any = 3;
+  projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
+  projectWeeklys: string[] = Object.keys(this.APP_ENUM.WeeklySent);
+  public pmList: any[] = [];
+  public tempPMList: any[] = [];
+  public pmId = -1;
+  public searchPM: string = "";
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
     { propertyName: 'clientName', comparisions: [0, 6, 7, 8], displayName: "Tên khách hàng", },
-    { propertyName: 'pmName', comparisions: [0, 6, 7, 8], displayName: "Tên PM", },
     // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
     { propertyName: 'isCharge', comparisions: [0], displayName: "Charge khách hàng", filterType: 2 },
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
@@ -45,12 +53,8 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'projectType', comparisions: [0], displayName: "Loại dự án", filterType: 3, dropdownData: this.projectTypeParam },
-   
+
   ];
-  private userList: UserDto[] = [];
-  public projectStatus: any = 3;
-  projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
-  projectWeeklys: string[] = Object.keys(this.APP_ENUM.WeeklySent);
 
   setValueProjectType(projectType, enumObject) {
     for (const key in enumObject) {
@@ -76,41 +80,53 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   constructor(injector: Injector, public dialog: MatDialog, private userService: UserService,
-    public listProjectService: ListProjectService) {
+    public listProjectService: ListProjectService , 
+    public sessionService:AppSessionService) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.getAllUser();
     this.refresh();
+    this.getAllPM();
   }
-
 
   protected list(
     request: PagedRequestDto,
     pageNumber: number,
     finishedCallback: Function
   ): void {
-    // if (this.projectStatus !== "" || this.projectStatus == 0) {
-    //   request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
-    // }
-    // if (this.projectStatus === "") {
-    //   request.filterItems = this.clearFilter(request, "status", this.projectStatus)
-    // }
-    let check=false
-    request.filterItems.forEach(item =>{
-      if(item.propertyName == "status"){
-        check =true
+    let check = false;
+    let checkFilterPM = false;
+    if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
+      this.pmId = Number(this.sessionService.userId);
+    }
+    
+    request.filterItems.forEach(item => {
+      if (item.propertyName == "status") {
+        check = true
         item.value = this.projectStatus
       }
+      if (item.propertyName == "pmId") {
+        checkFilterPM = true;
+        item.value = this.pmId;
+      }
     })
-    if(check == false){
-      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
+    if (check == false) {
+      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)  
     }
-    if(this.projectStatus === -1){
+    if(!checkFilterPM){
+      request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
+    }
+    if (this.projectStatus == -1) {
       request.filterItems = this.clearFilter(request, "status", "")
-      check =true
-      
+      check = true
+
+    }
+    if (this.pmId == -1) {
+      request.filterItems = this.clearFilter(request, "pmId", "")
+      checkFilterPM = true
+
     }
     this.listProjectService
       .getAllPaging(request)
@@ -121,12 +137,20 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         this.listProjects = result.result.items;
         this.showPaging(result.result, pageNumber);
         // request.filterItems = this.clearFilter(request, "status", this.projectStatus)
-        if(check ==false){
-          request.filterItems = this.clearFilter(request, "status", "")
+        if (check == false) {
+          request.filterItems = this.clearFilter(request, "status", "");
+        }
+        if(!checkFilterPM){  
+          request.filterItems = this.clearFilter(request, "pmId", "");
         }
       });
   }
-
+  public getAllPM(): void {
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+      .subscribe(data => {
+        this.pmList = data.result;
+      })
+  }
   createProject() {
     this.showDialogListProject('create');
   }
@@ -148,7 +172,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         pmId: item.pmId,
         id: item.id,
         currencyId: item.currencyId
-      
+
       }
     }
     const dialogRef = this.dialog.open(CreateEditListProjectComponent, {

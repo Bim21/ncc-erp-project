@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { TrainingApprovedDialogComponent } from './training-approved-dialog/training-approved-dialog.component';
 import { ApproveDialogComponent } from './../../../list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
 import { projectUserDto } from './../../../../../service/model/project.dto';
@@ -25,6 +26,22 @@ import * as moment from 'moment';
 })
 export class TrainingWeeklyReportComponent extends AppComponentBase implements OnInit {
 
+  PmManager_PMReportProject_Create = PERMISSIONS_CONSTANT.PmManager_PMReportProject_Create;
+  PmManager_PMReportProject_Delete = PERMISSIONS_CONSTANT.PmManager_PMReportProject_Delete;
+  PmManager_PMReportProject_Update = PERMISSIONS_CONSTANT.PmManager_PMReportProject_Update;
+  PmManager_PMReportProject_GetAllByPmProject = PERMISSIONS_CONSTANT.PmManager_PMReportProject_GetAllByPmReport;
+  PmManager_PMReportProject_ResourceChangesDuringTheWeek = PERMISSIONS_CONSTANT.PmManager_PMReportProject_ResourceChangesDuringTheWeek;
+  PmManager_PMReportProject_ResourceChangesInTheFuture = PERMISSIONS_CONSTANT.PmManager_PMReportProject_ResourceChangesInTheFuture;
+  PmManager_PMReportProject_SendReport = PERMISSIONS_CONSTANT.PmManager_PMReportProject_SendReport;
+  PmManager_PMReportProjectIssue = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue;
+  PmManager_PMReportProjectIssue_Create = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_Create;
+  PmManager_PMReportProjectIssue_Delete = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_Delete;
+  PmManager_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_ProblemsOfTheWeek;
+  PmManager_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.PmManager_PMReportProjectIssue_Update;
+  PmManager_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ApproveUser;
+  PmManager_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_RejectUser;
+  PmManager_PMReportProject_UpdatePmReportProjectHealth= PERMISSIONS_CONSTANT.PmManager_PMReportProject_UpdatePmReportProjectHealth
+  PmManager_PMReportProject_UpdateNote = PERMISSIONS_CONSTANT.PmManager_PMReportProject_UpdateNote
   public itemPerPage: number = 50;
   public searchUser: string = "";
   public weeklyCurrentPage: number = 1;
