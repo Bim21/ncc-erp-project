@@ -45,7 +45,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     let checkFilterPM = false;
     if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
       this.pmId = this.sessionService.userId;
-      alert("hi")
+      
     }
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
