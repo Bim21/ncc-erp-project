@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { UserDto } from './../../../../../shared/service-proxies/service-proxies';
 import { UserService } from './../../../../service/api/user.service';
@@ -23,6 +24,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
   tempUserList = []
+  Timesheet_Timesheet_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
