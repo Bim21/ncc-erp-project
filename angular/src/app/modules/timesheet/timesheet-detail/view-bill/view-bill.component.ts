@@ -22,7 +22,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isCreate: boolean = false;
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
-  tempUserList= []
+  tempUserList = []
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
@@ -39,6 +39,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(data => {
       this.billDetail = data.result
       this.isLoading = false
+      this.getAllFakeUser()
     },
       () => { this.isLoading = false })
   }
@@ -83,10 +84,10 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         })
       this.isCreate = false;
       this.isEdit = false;
-// this.userForUserBill.forEach((element,index) => {
-//   if(element.id==userBill.userId)
-//   this.userForUserBill.splice(index, 1);
-// });
+      // this.userForUserBill.forEach((element,index) => {
+      //   if(element.id==userBill.userId)
+      //   this.userForUserBill.splice(index, 1);
+      // });
 
 
     } else {
@@ -157,7 +158,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.searchUserBill = "";
     this.isEdit = false;
     this.isCreate = false
-    this.getAllFakeUser()
+    this.isEdittingRows = false
 
   }
   public editUserBill(userBill: projectUserBillDto): void {
@@ -170,18 +171,44 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   }
   private getAllFakeUser(userId?) {
+    this.isLoading = true
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
-      this.userForUserBill = data.result;
+      // this.userForUserBill = data.result;
+      this.billDetail.forEach(item => {
+        item.userList = data.result
+        item.searchText = ""
+      } )
       this.tempUserList = data.result
-      this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(rs => {
-        let temp = rs.result.map(item=>item.userId)
-        if(userId){
-          temp.splice(temp.indexOf(userId),1)
-          temp = new Set(temp)
-        }
-        this.userForUserBill = data.result.filter(item=> !temp.includes(item.id))
-      })
+      console.log(this.billDetail)
+
     })
+  }
+  searchUser(bill) {
+    bill.userList = this.tempUserList.filter(item => ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId    )
+
+  }
+  removeAccents(str) {
+    var AccentsMap = [
+      "aàảãáạăằẳẵắặâầẩẫấậ",
+      "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+      "dđ", "DĐ",
+      "eèẻẽéẹêềểễếệ",
+      "EÈẺẼÉẸÊỀỂỄẾỆ",
+      "iìỉĩíị",
+      "IÌỈĨÍỊ",
+      "oòỏõóọôồổỗốộơờởỡớợ",
+      "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+      "uùủũúụưừửữứự",
+      "UÙỦŨÚỤƯỪỬỮỨỰ",
+      "yỳỷỹýỵ",
+      "YỲỶỸÝỴ"
+    ];
+    for (var i = 0; i < AccentsMap.length; i++) {
+      var re = new RegExp('[' + AccentsMap[i].substr(1) + ']', 'g');
+      var char = AccentsMap[i][0];
+      str = str.replace(re, char);
+    }
+    return str;
   }
   public onActiveChange(active, userBill) {
     userBill.isActive = active.checked
@@ -192,6 +219,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     bill.createMode = true;
     this.isEdit = true;
     this.isCreate = true;
+    this.getAllFakeUser()
 
   }
   editMultiRows() {
@@ -200,9 +228,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     //   this.userForUserBill = data.result;})
 
   }
-  onUserSelect(user){
-// console.log(user)
-// this.getAllFakeUser()
+  onUserSelect(bill) {
+    bill.searchText = ""
   }
 
 }
