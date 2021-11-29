@@ -1,16 +1,25 @@
+import { AppComponentBase } from '@shared/app-component-base';
+import { PERMISSIONS_CONSTANT } from './../../../../constant/permission.constant';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 
 @Component({
   selector: 'app-training-project-detail',
   templateUrl: './training-project-detail.component.html',
   styleUrls: ['./training-project-detail.component.css']
 })
-export class TrainingProjectDetailComponent implements OnInit {
+export class TrainingProjectDetailComponent extends AppComponentBase implements OnInit {
+  PmManager_CanViewMenu_Milestone=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Milestone;
+  PmManager_CanViewMenu_ProjectChecklist=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectChecklist;
+  PmManager_CanViewMenu_ResourceManagement=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ResourceManagement;
+  PmManager_CanViewMenu_Timesheet=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Timesheet;
+  PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
+  PmManager_Project_ViewProjectInfor=PERMISSIONS_CONSTANT.PmManager_Project_ViewProjectInfor
   currentUrl: string = "";
   requestId: string = "";
   constructor(public router : Router,
-    private route: ActivatedRoute) { }
+    public injector : Injector,
+    private route: ActivatedRoute) { super(injector)}
 
   ngOnInit(): void {
     this.currentUrl =this.router.url

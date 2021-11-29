@@ -31,7 +31,7 @@
                     <mat-select [(ngModel)]="project.projectType" name="projectType" placeholder="select a project type"
                         required #projectType="ngModel">
                         <ng-container *ngFor="let projectType of projectTypeList">
-                            <mat-option [value]="APP_ENUM.SubProjectType[projectType]">
+                            <mat-option [value]="APP_ENUM.ProjectType[projectType]">
                                 {{projectType}}</mat-option>
                         </ng-container>
                     </mat-select>

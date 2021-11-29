@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectChecklistService } from './../../../../../service/api/project-checklist.service';
@@ -12,6 +13,7 @@ import { CreateEditProductProjectChecklistComponent } from './create-edit-produc
   styleUrls: ['./product-project-checklist.component.css']
 })
 export class ProductProjectChecklistComponent extends AppComponentBase implements OnInit {
+  CheckList_ProjectChecklist_AddCheckListItemByProject=PERMISSIONS_CONSTANT.CheckList_ProjectChecklist_AddCheckListItemByProject;
   public listCheckList: projectChecklistDto[] = [];
   public projectId: any;
 

@@ -58,7 +58,7 @@
                                                     (keydown)="$event.stopPropagation();searchUser(bill)"
                                                     name="searchBillUser" #search>{{search.focus()}}
                                             </mat-form-field>
-                                            <mat-option *ngFor="let user of bill.userList " [value]="user.id">
+                                            <mat-option *ngFor="let user of bill.userList" [value]="user.id">
                                                 {{user.fullName}} - ({{user.emailAddress}})
                                             </mat-option>
                                         </mat-select>
