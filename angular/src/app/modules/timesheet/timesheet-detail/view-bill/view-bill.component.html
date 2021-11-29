@@ -9,7 +9,7 @@
                 (click)="editMultiRows()" [disabled]="this.data.isComplete"><i
                     class="fas fa-pencil-alt mr-1"></i>Edit</button>
             <div *ngIf="isEdittingRows" class="pt-1 ml-4">
-                <button class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
+                <button [disabled]="!timesheetDetailForm.valid" class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
                     <i style="color: green;" class="fas fa-check fa-2x "></i>
                 </button>
                 <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill();"></i>
@@ -159,7 +159,7 @@
                                             class="fas fa-pencil-alt mr-1"></i>Edit</button>
                                 </div>
                                 <div *ngIf="bill.createMode" class="pt-1 mt-1">
-                                    <button [disabled]="!bill?.userId" class=" mr-3 submit-btn"
+                                    <button [disabled]="!bill?.userId || !timesheetDetailForm.valid" class=" mr-3 submit-btn"
                                         style="background: none; border: none;" (click)="saveUserBill(bill)">
                                         <i style="color: green;" class="fas fa-check fa-2x "></i>
                                     </button>
