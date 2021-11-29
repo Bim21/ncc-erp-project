@@ -4,3 +4,9 @@ tr, th, td{
 button{
     height: fit-content;
 }
+::ng-deep .search-pm .mat-form-field{
+    width: 270px !important;
+}
+::ng-deep .search-status .mat-form-field{
+    width: 150px !important;
+}

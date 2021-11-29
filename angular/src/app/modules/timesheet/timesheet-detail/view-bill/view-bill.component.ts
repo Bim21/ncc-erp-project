@@ -75,6 +75,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       }]
     if (this.isCreate) {
       userBill.projectId = this.data.projectId;
+      delete userBill['userList'];
       this.projectBillService.createProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
@@ -115,6 +116,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     } else {
       this.data.isComplete = false;
     }
+  
     let data = {
       projectId: this.data.projectId,
       timesheetId: this.data.timesheetId,
@@ -147,6 +149,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         id: userBill.id
       }
     })
+
     this.projectBillService.updateProjectBill(arr).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
       abp.notify.success(`Update successfull`)
       this.getProjectBill();
@@ -186,8 +189,11 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     })
   }
   searchUser(bill) {
-    bill.userList = this.tempUserList.filter(item => ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId    )
-
+    bill.userList = this.tempUserList.filter(item => 
+      ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId  ||
+      this.removeAccents((item?.name[item?.name?.length - 1] + item.name[0])).toLowerCase().replace(/\s/g, "").includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) ||
+    this.removeAccents((item.surname.toLowerCase().replace(/\s/g, "") + item?.name.toLowerCase().replace(/\s/g, ""))).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))  )
+    
   }
   removeAccents(str) {
     var AccentsMap = [

@@ -3,11 +3,11 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel [expanded]="isShowProjectUser">
+            <mat-expansion-panel [expanded]="isShowProjectUser" *ngIf="permission.isGranted(PmManager_ProjectUser)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <h4 class="d-inline">Danh sách nhân viên</h4>
-                        <button *ngIf="!projectUserProcess"
+                        <button *ngIf="!projectUserProcess && permission.isGranted(PmManager_ProjectUser_Create)"
                             [hidden]="projectUserProcess || !isShowProjectUser"
                             (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate"
                             class="btn bg-blue ml-3">
@@ -154,11 +154,11 @@
                                     </td>
                                     <td>
                                         <div *ngIf="!user.createMode">
-                                            <button 
+                                            <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)"
                                                 [disabled]="projectUserProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editProjectUser(user)"> <i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button
+                                            <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)"
                                                 [disabled]="projectUserProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeUser(user)"> <i class="fas fa-trash"></i>delete</button>
 
@@ -205,10 +205,12 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel expanded=false>
+            <mat-expansion-panel expanded=false 
+            *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <h4 class="d-inline">Request nhân sự</h4>
-                    <button *ngIf="!requestProcess"
+                    <button 
+                    *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)"
                         [hidden]="!isShowRequest"
                         (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                         class="btn bg-blue ml-3">
@@ -301,11 +303,11 @@
                                     </td>
                                     <td>
                                         <div *ngIf="!request.createMode">
-                                            <button 
+                                            <button *ngIf="permission.isGranted(PmManager_ResourceRequest_Update)"
                                                 [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editProjectRerequest(request)"> <i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button 
+                                            <button *ngIf="permission.isGranted(PmManager_ResourceRequest_Delete)"
                                                 [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeProjectRerequest(request)"> <i
                                                     class="fas fa-trash"></i>delete</button>
@@ -348,10 +350,11 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel expanded=false>
+            <mat-expansion-panel expanded=false *ngIf="permission.isGranted(PmManager_ProjectUserBill)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Danh sách Bill Dự án</h4>
-                    <button *ngIf="!userBillProcess"
+                    <button 
+                    *ngIf="!userBillProcess && permission.isGranted(PmManager_ProjectUserBill_Create)"
                         [hidden]="!isShowUserBill" style="border: none;" class="btn bg-blue ml-3"
                         (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
                         <i class="fa fa-plus-square mr-1"></i>Create
@@ -496,11 +499,11 @@
                                     </td>
                                     <td>
                                         <div *ngIf="!bill.createMode">
-                                            <button 
+                                            <button *ngIf="permission.isGranted(PmManager_ProjectUserBill_Update)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editUserBill(bill)"><i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button
+                                            <button *ngIf="permission.isGranted(PmManager_ProjectUserBill_Delete)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeUserBill(bill)"><i
                                                     class="fas fa-trash"></i>delete</button>

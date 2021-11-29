@@ -11,7 +11,8 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="col-lg-2 col-sm-2" *ngIf="!(filterType == 2 ||filterType == 3 || filterType ==4 || filterType == 5)">
+    <div class="col-lg-2 col-sm-2"
+      *ngIf="!(filterType == 2 ||filterType == 3 || filterType ==4 || filterType == 5 || filterType ==6)">
       <mat-form-field appearance="outline" style="width: 100%;">
         <mat-select placeholder="Comparision" id="comparision" [value]="item.comparision"
           (valueChange)="onChange($event, 'comparision')">
@@ -66,7 +67,20 @@
         </mat-select>
       </mat-form-field>
     </div>
-
+    <div class="col-lg-2 col-sm-2" *ngIf="filterType == 6">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-select [placeholder]="'select '" [(ngModel)]="item.value"
+          (selectionChange)="onDropdownChange(dropdown.value)" #dropdown>
+          <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
+            <input matInput [(ngModel)]="search" name="searchPMName" placeholder="Search" #searchText
+              (keydown)="$event.stopPropagation()">{{searchText.focus()}}
+          </mat-form-field>
+          <mat-option *ngFor="let data of dropdownData  | listFilter:  'displayName' : search" [value]="data.value">
+            {{data.displayName |translate}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="col-lg-1 col-sm-1 " style="padding-top: 13px;">
       <i class="fas fa-times" (click)="deleteFilter()"></i>
     </div>

@@ -1,3 +1,6 @@
+import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
+import { AppSessionService } from './../../../../shared/session/app-session.service';
+import { UserService } from './../../../service/api/user.service';
 import { InputFilterDto } from './../../../../shared/filter/filter.component';
 import { TrainingProjectDto } from './../../../service/model/project.dto';
 import { finalize, catchError } from 'rxjs/operators';
@@ -15,9 +18,15 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./training-projects.component.css']
 })
 export class TrainingProjectsComponent extends PagedListingComponentBase<TrainingProjectsComponent> implements OnInit {
+  PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
+  PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
+  PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
+  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
+  PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
+  PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
-    { propertyName: 'pmName', comparisions: [0, 6, 7, 8], displayName: "Tên PM", },
     // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
@@ -30,26 +39,52 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   { displayName: "Closed", value: 2 },
 
   ]
+  public pmId =  -1;
+  public searchPM: string = "";
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    let check=false
-    request.filterItems.forEach(item =>{
-      if(item.propertyName == "status"){
-        check =true
+    let check = false
+    let checkFilterPM = false;
+    if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
+      this.pmId = this.sessionService.userId;
+    }
+    request.filterItems.forEach(item => {
+      if (item.propertyName == "status") {
+        check = true
         item.value = this.projectStatus
       }
+      if (item.propertyName == "pmId") {
+        checkFilterPM = true;
+        item.value = this.pmId;
+      }
     })
-    if(check == false){
+    if (check == false) {
       request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
     }
-    if(this.projectStatus === -1){
+    if (!checkFilterPM) {
+      request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
+    }
+    if (this.projectStatus === -1) {
       request.filterItems = this.clearFilter(request, "status", "")
-      check =true
-      
+      check = true
+
+    }
+
+
+    if (this.pmId == -1) {
+      request.filterItems = this.clearFilter(request, "pmId", "")
+      checkFilterPM = true
+
     }
     this.projectService.GetAllTrainingPaging(request).pipe(finalize(() => {
       finishedCallback()
     })).subscribe(data => {
       this.listTrainingProjects = data.result.items;
+      if (check == false) {
+        request.filterItems = this.clearFilter(request, "status", "");
+      }
+      if(!checkFilterPM){  
+        request.filterItems = this.clearFilter(request, "pmId", "");
+      }
       this.showPaging(data.result, pageNumber);
     })
   }
@@ -69,16 +104,27 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   }
   public listTrainingProjects: TrainingProjectDto[] = [];
   public searchText: string = "";
-  public projectStatus: any=3;
+  public projectStatus: any = 3;
+  public pmList: any[] = [];
+
   constructor(public dialog: MatDialog,
+    public sessionService: AppSessionService,
     public injector: Injector,
     public router: Router,
-    private projectService: ListProjectService) {
+    private projectService: ListProjectService,
+    private userService: UserService) {
     super(injector)
   }
 
   ngOnInit(): void {
     this.refresh();
+    this.getAllPM();
+  }
+  public getAllPM(): void {
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+      .subscribe(data => {
+        this.pmList = data.result;
+      })
   }
   showDialog(command: string, item?: TrainingProjectDto): void {
     let project = {} as TrainingProjectDto

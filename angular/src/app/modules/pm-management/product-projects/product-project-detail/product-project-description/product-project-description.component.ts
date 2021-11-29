@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { catchError } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
@@ -11,6 +12,7 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./product-project-description.component.css']
 })
 export class ProductProjectDescriptionComponent extends AppComponentBase {
+  PmManager_Project_UpdateProjectDetail = PERMISSIONS_CONSTANT.PmManager_Project_UpdateProjectDetail
   public projectId
   projectDetail = {} as ProjectdetailDto
   constructor(public injector: Injector, private projectService: ListProjectService, private router: Router, private route: ActivatedRoute) {
