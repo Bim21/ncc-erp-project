@@ -42,19 +42,15 @@ namespace ProjectManagement.APIs.TimesheetProjects
         private KomuService _komuService;
         private readonly string templateFolder = Path.Combine("wwwroot", "template");
         private TimeSheetProjectBillAppService _timeSheetProjectBillAppService;
-        private readonly UserManager _userManager;
-        private readonly IAbpSession _abpSession;
 
         public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService,
-            KomuService komuService, ISettingManager settingManager, TimeSheetProjectBillAppService timeSheetProjectBillAppService, UserManager userManager, IAbpSession abpSession )
+            KomuService komuService, ISettingManager settingManager, TimeSheetProjectBillAppService timeSheetProjectBillAppService)
         {
             _hostingEnvironment = environment;
             _financeService = financeService;
             _komuService = komuService;
             _settingManager = settingManager;
             _timeSheetProjectBillAppService = timeSheetProjectBillAppService;
-            _userManager = userManager;
-            _abpSession = abpSession;
         }
 
         [HttpGet]
