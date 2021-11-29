@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using NccCore.Paging;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using System;
@@ -20,14 +22,24 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
 {
     public class TimeSheetProjectBillAppService : ProjectManagementAppServiceBase
     {
+        private readonly UserManager _userManager;
+        private readonly IAbpSession _abpSession;
+        public TimeSheetProjectBillAppService( UserManager userManager, IAbpSession abpSession)
+        {
+            _userManager = userManager;
+            _abpSession = abpSession;
+        }
         [HttpGet]
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll)]
         public async Task<List<GetTimeSheetProjectBillDto>> GetAll(long timesheetId, long projectId)
         {
+            long currentUserId = _abpSession.UserId.Value;
+            var currentUser = await _userManager.GetUserByIdAsync(currentUserId);
+            var roles = await _userManager.GetRolesAsync(currentUser);
             var tenantId = WorkScope.GetAll<TimesheetProjectBill>().Select(x => x.TenantId).FirstOrDefault();
             var ass = WorkScope.GetAll<TimesheetProjectBill>().ToList();
             var aass = ass.Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId);
-            ; var query = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).OrderByDescending(x => x.CreationTime)
+            var query = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).OrderByDescending(x => x.CreationTime)
                          .Select(x => new GetTimeSheetProjectBillDto
                          {
                              Id = x.Id,
@@ -36,7 +48,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              ProjectId = x.ProjectId,
                              ProjectName = x.Project.Name,
                              BillRole = x.BillRole,
-                             BillRate = x.BillRate,
+                             BillRate = roles.Contains(StaticRoleNames.Tenants.Admin) ? x.BillRate : -1,
                              StartTime = x.StartTime.Date,
                              EndTime = x.EndTime.Value.Date,
                              Note = x.Note,
