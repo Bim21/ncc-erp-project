@@ -81,6 +81,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   Pages_Users_UpdateMySkills = PERMISSIONS_CONSTANT.Pages_Users_UpdateMySkills
   Pages_Users_ViewOnlyMe = PERMISSIONS_CONSTANT.Pages_Users_ViewOnlyMe
   Pages_Users_AutoUpdateUserFromHRM = PERMISSIONS_CONSTANT.Pages_Users_AutoUpdateUserFromHRM
+  Pages_Users_ViewAll = PERMISSIONS_CONSTANT.Pages_Users_ViewAll
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,
