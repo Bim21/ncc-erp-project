@@ -1,3 +1,4 @@
+import { AppSessionService } from './../../../../shared/session/app-session.service';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { UserService } from './../../../service/api/user.service';
 import { InputFilterDto } from './../../../../shared/filter/filter.component';
@@ -44,8 +45,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     let check = false
     let checkFilterPM = false;
     if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
-      this.pmId = this.sessionService.userId;
-      
+      this.pmId = this.sessionService.userId;  
     }
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
@@ -109,7 +109,8 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     public dialog: MatDialog,
     public router: Router,
     private userService: UserService,
-    private projectService: ListProjectService) { super(injector) }
+    private projectService: ListProjectService,
+    public sessionService: AppSessionService) { super(injector) }
 
   ngOnInit(): void {
     this.refresh();

@@ -89,7 +89,8 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
         CreateRoleDialogComponent,
         {
           class: 'modal-lg',
-        }
+          
+        },
       );
     } else {
       createOrEditRoleDialog = this._modalService.show(
@@ -99,6 +100,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
           initialState: {
             id: id,
           },
+          
         }
       );
     }

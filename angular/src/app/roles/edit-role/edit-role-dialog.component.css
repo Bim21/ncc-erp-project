@@ -137,6 +137,9 @@
   ::ng-deep .modal-backdrop {
     z-index: 120;
   }
+  ::ng-deep .modal.fade.show{
+    overflow-y: hidden !important;
+  }
   .left {
     float: left;
     cursor: pointer;
@@ -147,5 +150,15 @@
   }
   .noChild {
     margin-left: 20px;
+  }
+  .modal-body{
+    max-height: 82vh !important;
+    overflow: auto;
+  }
+  .modal-open .modal {
+    overflow-x: hidden;
+  }
+  ::ng-deep .modal-content{
+    
   }
   
