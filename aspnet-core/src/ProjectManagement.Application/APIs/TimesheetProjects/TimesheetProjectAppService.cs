@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using Abp.Configuration;
+using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using ProjectManagement.APIs.TimeSheetProjectBills;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
@@ -40,15 +42,19 @@ namespace ProjectManagement.APIs.TimesheetProjects
         private KomuService _komuService;
         private readonly string templateFolder = Path.Combine("wwwroot", "template");
         private TimeSheetProjectBillAppService _timeSheetProjectBillAppService;
+        private readonly UserManager _userManager;
+        private readonly IAbpSession _abpSession;
 
         public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService,
-            KomuService komuService, ISettingManager settingManager, TimeSheetProjectBillAppService timeSheetProjectBillAppService)
+            KomuService komuService, ISettingManager settingManager, TimeSheetProjectBillAppService timeSheetProjectBillAppService, UserManager userManager, IAbpSession abpSession )
         {
             _hostingEnvironment = environment;
             _financeService = financeService;
             _komuService = komuService;
             _settingManager = settingManager;
             _timeSheetProjectBillAppService = timeSheetProjectBillAppService;
+            _userManager = userManager;
+            _abpSession = abpSession;
         }
 
         [HttpGet]
@@ -324,7 +330,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
             var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
-            var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId).OrderByDescending(x => x.CreationTime);
+            //var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId);
+
             //foreach (var item in timsheetProjectBills)
             //{
             //}
@@ -354,7 +361,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              ClientId = c.Id,
                              ClientName = c.Name,
                              File = tsp.FilePath,
-                             ProjectBillInfomation = !viewProjectBillInfo ? "" : tsp.ProjectBillInfomation,
+                             ProjectBillInfomation = viewProjectBillInfo ? tsp.ProjectBillInfomation : "" ,
                              Note = tsp.Note,
                              //IsSendReport = pr.Status,
                              HistoryFile = tsp.HistoryFile,
