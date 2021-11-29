@@ -28,7 +28,7 @@
                             <th>Nhân viên</th>
                             <th>Charge Role</th>
                             <th
-                                *ngIf=" isCreate || billDetail[0]?.billRate || isEdit  ||data.projectBillInfomation != ''  ">
+                                *ngIf=" (isCreate || billDetail[0]?.billRate || isEdit  ||data.projectBillInfomation != '') && billDetail[0]?.billRate!= -1 && billDetail[0]?.billRate  ">
                                 Rate</th>
                             <th>Working time(Day)</th>
                             <th>Is Charge</th>
@@ -82,7 +82,7 @@
                                 </div>
                             </td>
                             <td class="text-center"
-                                *ngIf=" isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != ''  ">
+                                *ngIf="( isCreate || billDetail[0]?.billRate || isEdit ||data.projectBillInfomation != '' ) && bill.billRate != -1 && bill.billRate ">
                                 <span *ngIf="!bill.createMode && !isEdittingRows">{{bill.billRate |
                                     number:'1.0':'en-US'}}
                                 </span>
