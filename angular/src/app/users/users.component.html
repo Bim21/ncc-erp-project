@@ -129,7 +129,7 @@
                       {{ "Upload Avatar" | localize }}
                     </button>
 
-                    <button *ngIf="!isviewOnlyMe" type="button" class="mat-menu-item  w-100" (click)="resetPassword(user)">
+                    <button *ngIf="this.permission.isGranted(Pages_Users_ViewAll)" type="button" class="mat-menu-item  w-100" (click)="resetPassword(user)">
                       <i class="fas fa-lock fa-lg mr-1"></i>
                       {{ "ResetPassword" | localize }}
                     </button>
