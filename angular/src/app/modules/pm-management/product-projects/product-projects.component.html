@@ -5,8 +5,8 @@
                 <h1>{{'Product Projects' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(PmManager_Project_Create)"
-                 type="button" class="btn bg-blue" (click)="createProject()">
+                <button *ngIf="permission.isGranted(PmManager_Project_Create)" type="button" class="btn bg-blue"
+                    (click)="createProject()">
                     <i class="fa fa-plus-square"></i>
                     {{ 'Create' | localize }}
                 </button>
@@ -34,40 +34,45 @@
                     </div>
 
                 </div>
-                <div class="col-7 row" style = "justify-content: end;">
+                <div class="col-7 row" style="justify-content: end;">
                     <div class="col-6 row search-pm text-right">
-                        <label class="col-2 mt-3 ">PM:</label>
-                        <mat-form-field class="w-75 col-10" appearance="outline">
-                            <mat-select  [(ngModel)]="pmId" name="projectPM" placeholder="select a PM" (selectionChange)="refresh()"
-                              [disabled]="permission.isGranted( PmManager_Project_ViewOnlyMe) && !permission.isGranted(PmManager_Project_ViewAll)"  >
+                        <label class=" mt-3 label-pm pr-2">PM:</label>
+                        <mat-form-field class="w-75 listPM" appearance="outline">
+                            <mat-select [(ngModel)]="pmId" name="projectPM" placeholder="select a PM"
+                                (selectionChange)="refresh()"
+                                [disabled]="permission.isGranted( PmManager_Project_ViewOnlyMe) && !permission.isGranted(PmManager_Project_ViewAll)">
                                 <mat-form-field class="w-100 px-3 "
-                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
-                            </mat-form-field>
-                            <mat-option [value] = "-1">All</mat-option>
-                            <mat-option *ngFor="let data of pmList  | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'" [value]="data.id">
-                                {{data.fullName}} - ({{data.emailAddress}})
-                              </mat-option>
+                                    style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                    <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"
+                                        #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                                </mat-form-field>
+                                <mat-option [value]="-1">All</mat-option>
+                                <mat-option
+                                    *ngFor="let data of pmList  | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'"
+                                    [value]="data.id">
+                                    {{data.fullName}} - ({{data.emailAddress}})
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
-                       
+
                     </div>
-                    <div class="col-6 row search-status row">
-                        <label class="ml-5  mt-3 col-3">Trạng thái:</label>
-                        <mat-form-field  appearance="outline" class="col-7">
-                            <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"  (selectionChange)="refresh()"
-                               >
-                               <mat-option value="-1">All</mat-option>
-                                <mat-option *ngFor="let item of statusFilterList" [value]="item.value">{{item.displayName}}</mat-option>
-                              
+                    <div class="col-6 row search-status ml-3 row">
+                        <label class="mt-3 label-status"><span class="pr-2">Trạng thái:</span></label>
+                        <mat-form-field appearance="outline" class="listStatus">
+                            <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"
+                                (selectionChange)="refresh()">
+                                <mat-option value="-1">All</mat-option>
+                                <mat-option *ngFor="let item of statusFilterList" [value]="item.value">
+                                    {{item.displayName}}</mat-option>
+
                             </mat-select>
                         </mat-form-field>
-                       
+
                     </div>
-                   
-                    
+
+
                 </div>
-                
+
             </div>
             <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
                 <div class="card-body">
@@ -120,12 +125,13 @@
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
-                                        <button *ngIf="permission.isGranted(PmManager_Project_Update)" (click)="editProject(project)" class="mat-menu-item  w-100 ">
+                                        <button *ngIf="permission.isGranted(PmManager_Project_Update)"
+                                            (click)="editProject(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-pencil-alt mr-1"></i>
                                             Edit
                                         </button>
                                         <button *ngIf="permission.isGranted(PmManager_Project_Delete)"
-                                         (click)="delete(project)" class="mat-menu-item  w-100 ">
+                                            (click)="delete(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
                                         </button>
