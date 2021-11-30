@@ -156,12 +156,13 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     });
   }
   showDetail(id) {
-    this.router.navigate(['/app/training-project-detail/training-project-general'], {
-      queryParams: {
-        id: id
-      }
-    })
-
+    if (this.permission.isGranted(this.PmManager_Project_ViewDetail)){
+      this.router.navigate(['/app/training-project-detail/training-project-general'], {
+        queryParams: {
+          id: id
+        }
+      })
+    }
   }
   create() {
     this.showDialog('create',);
