@@ -158,11 +158,14 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     });
   }
   showDetail(id: any) {
-    this.router.navigate(['app/product-project-detail/product-project-general'], {
-      queryParams: {
-        id: id
-      }
-    })
+    if (this.permission.isGranted(this.PmManager_Project_ViewDetail)){
+      this.router.navigate(['app/product-project-detail/product-project-general'], {
+        queryParams: {
+          id: id
+        }
+      })
+    }
+   
   }
 
 

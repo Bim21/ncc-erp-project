@@ -4,9 +4,55 @@ tr, th, td{
 button{
     height: fit-content;
 }
-::ng-deep .search-pm .mat-form-field{
+/* ::ng-deep .search-pm .mat-form-field{
     width: 270px !important;
 }
 ::ng-deep .search-status .mat-form-field{
     width: 150px !important;
-}
+} */
+@media only screen and (min-width: 1546px){
+    .label-pm{
+      width: 20%;
+    }
+    .list-status{
+        width: 30%;
+      }
+
+    .listPM {
+      width: 80% !important ;
+    }
+    .listStatus{
+        width: 70% !important ;
+    }
+  }
+  @media only screen and (min-width: 1349px)  and (max-width: 1545px){
+    .label-pm{
+      width: 20%;
+    }
+    .list-status{
+        width: 40%;
+      }
+
+    .listPM {
+      width: 80% !important ;
+    }
+    .listStatus{
+        width: 60% !important ;
+    }
+  }
+
+  @media only screen and (min-width: 768px) and (max-width: 1348px){
+    .label-pm{
+      width: 20%;
+    }
+    .list-status{
+        width: 50%;
+      }
+
+    .listPM {
+      width: 80% !important ;
+    }
+    .listStatus{
+        width: 50% !important ;
+    }
+  }
