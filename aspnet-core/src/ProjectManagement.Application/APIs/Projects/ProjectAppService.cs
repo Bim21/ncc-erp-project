@@ -290,7 +290,7 @@ namespace ProjectManagement.APIs.Projects
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
-                            Evaluation = p.Evaluation,
+                            Evaluation = l.Note,
                         };
             return await query.GetGridResult(query, input);
         }
