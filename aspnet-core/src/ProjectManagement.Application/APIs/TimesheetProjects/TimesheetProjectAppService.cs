@@ -338,7 +338,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                               .Where(x => filterItem == null || x.IsComplete != true)
                          join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
                          //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
-                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
+                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id into ps
+                         from c in ps.DefaultIfEmpty()
                          join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
                          where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
                          select new GetTimesheetDetailDto
