@@ -377,7 +377,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
         {
             var billInfomation = new StringBuilder();
-
+            var projectType = await WorkScope.GetAsync<Project>(input.ProjectId);
+            if(projectType.ProjectType==ProjectType.TRAINING) throw new UserFriendlyException("The training project is not suitable !");
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             if (!timesheet.IsActive)
             {
