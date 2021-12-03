@@ -65,6 +65,7 @@
                                 <th>Tạm thời sử dụng</th>
                                 <th>Kĩ năng</th>
                                 <th>Sử dụng hiện tại</th>
+                                <th>Total Free Day</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,12 +77,14 @@
                                 totalItems: totalItems
                               }; let i = index">
                                 <td class="text-center"><span>{{ i +1 }}</span></td>
-                                <td style="white-space: normal; max-width: 200px;" class="">
-                                    <div>
+                                <td style="white-space: normal; max-width: 300px;" class="">
+                                    <div style="display: flex;">
                                         <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                     userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}">
                                         </app-user-info>
+                                        <ngx-stars style="z-index: 1 !important;" [readonly]="true" [wholeStars]="true" [size]="1"  [initialStars]="item.starRate" [maxStars]="5" (ratingOutput)="onRatingSet($event)"></ngx-stars>
                                     </div>
+
                                 </td>
                                 <td style="white-space: normal; max-width: 200px;">
                                     <!-- <strong *ngFor="let project of item.projects;let i =index">
@@ -121,6 +124,7 @@
                                         Plan
                                     </button>
                                 </td>
+                                <td class="text-center">{{item.totalFreeDay !== 0? item.totalFreeDay:''}}</td>
 
                             </tr>
                         </tbody>

@@ -1,3 +1,6 @@
 td{
     vertical-align: middle;
 }
+::ng-deep .stars-line{
+    z-index: 0;
+}

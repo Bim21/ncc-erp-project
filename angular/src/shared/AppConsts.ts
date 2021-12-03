@@ -58,10 +58,11 @@ export class AppConsts {
     }
     static readonly ProjectTypeStyle = {
         ODC: "badge badge-primary",
-        TimeAndMaterials: "badge badge-success",
+        TAM: "badge badge-success",
         FIXPRICE: "badge badge-danger",
         PRODUCT: "badge badge-warning",
-        NoBill: "badge badge-info"
+        NoBill: "badge badge-info",
+        TRAINING: "badge bg-secondary"
     }
     static readonly ProjectMilestoneStatus = {
         Paid: "badge badge-pill badge-secondary",
@@ -97,6 +98,16 @@ export class AppConsts {
         0: "badge  badge-success",
         1: "badge  badge-warning",
         2: "badge  badge-danger"
+    }
+    static readonly projectHealthBGStyle = {
+        0: "badge  bg-success",
+        1: "badge  bg-warning",
+        2: "badge  bg-danger"
+    }
+    static readonly projectHealthStyle = {
+        0: "text-success",
+        1: "text-warning",
+        2: "text-danger"
     }
     static readonly  PMReportProjectIssueStatus =
     {

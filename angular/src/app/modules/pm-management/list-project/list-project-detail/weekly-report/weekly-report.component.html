@@ -10,7 +10,7 @@
                         <div class="mr-3 pt-2">
                             <div class="row w-100">
                                 <div class="col-2">
-                                    <label  for="" class="mt-2" >PM report:</label>
+                                    <label for="" class="mt-2">PM report:</label>
                                 </div>
                                 <div class="col-10">
                                     <mat-form-field class="ml-3" style="width: 205px;" appearance="outline">
@@ -19,15 +19,17 @@
                                             #projectEmployee="ngModel">
                                             <mat-form-field class="w-100 px-3 "
                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReportName" (keydown)="$event.stopPropagation()"
-                                                    placeholder="search">
+                                                <input matInput [(ngModel)]="searchPmReport" name="searchPmReportName"
+                                                    (keydown)="$event.stopPropagation()" placeholder="search">
                                             </mat-form-field>
-                                            <mat-option *ngFor="let report of pmReportList |listFilter: 'pmReportName' :searchPmReport"
+                                            <mat-option
+                                                *ngFor="let report of pmReportList |listFilter: 'pmReportName' :searchPmReport"
                                                 [value]="report">
                                                 <div class="row">
                                                     <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
                                                     <div class="col-2"> <i class="fas fa-circle float-right mt-3"
-                                                            [ngClass]="report.isActive==true?'active':'inActive'"></i></div>
+                                                            [ngClass]="report.isActive==true?'active':'inActive'"></i>
+                                                    </div>
                                                 </div>
                                             </mat-option>
                                         </mat-select>
@@ -37,9 +39,9 @@
                                         *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport  ">
                                         <i class="fas fa-paper-plane ml-2"></i> Send report
                                     </button>
-                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive" 
-                                    matTooltip="Cần nhập đánh giá chung để có thể gửi report"
-                                    ><i class="fas fa-question-circle text-danger fa-lg"></i></span>
+                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive"
+                                        matTooltip="Cần nhập đánh giá chung để có thể gửi report"><i
+                                            class="fas fa-question-circle text-danger fa-lg"></i></span>
                                 </div>
                             </div>
                         </div>
@@ -50,19 +52,25 @@
                     <td class="send-block">
                         <div class="row">
                             <div class="col-2">
-                                <label  for="" class="mt-2" >Status:</label>
-                                
+                                <label for="" class="mt-2">Status:</label>
                             </div>
                             <div class="col-10">
-                                <mat-form-field style="margin-left: 10px !important;" class="myFilter ml-3" appearance="outline">
-                                    <mat-select [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)" name="flag" 
-                                        placeholder="Project health" [(ngModel)]="projectHealth">
-                                        <ng-container *ngFor="let flag of problemIssueList">
-                                            <mat-option [value]="APP_ENUM.ProjectHealth[flag]"  (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
-                                                {{
-                                                flag
-                                                }}
-    
+                                <!-- Example split danger button -->
+                                <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" style="margin-left: 10px !important;" class="ml-3" appearance="outline">
+                                    <mat-select 
+                                        [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"
+                                        name="flag" placeholder="Project health" [(ngModel)]="projectHealth"
+                                        >
+                                        <ng-container *ngFor="let flag of problemIssueList"
+                                            >
+                                            <mat-option
+                                                [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
+                                                [value]="APP_ENUM.ProjectHealth[flag]"
+                                                (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
+                                                <span style="font-weight: 100 !important;">
+                                                    {{flag}}
+                                                </span>
+
                                             </mat-option>
                                         </ng-container>
                                     </mat-select>
@@ -87,8 +95,9 @@
                                 {{generalNote}}
                             </pre>
                         <div class="text-left pt-2 ml-2" style="max-width: 9%;">
-                            <button *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_UpdateNote)" class="btn bg-secondary mt-2"
-                                (click)="isEditingNote = true">
+                            <button
+                                *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_UpdateNote)"
+                                class="btn bg-secondary mt-2" (click)="isEditingNote = true">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
                         </div>
@@ -178,14 +187,14 @@
 
                                 <td>
 
-                                 
-                                        <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
+
+                                    <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.description}}
                                   </pre>
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="description"
                                                 [(ngModel)]="problem.description" matInput></textarea>
                                         </mat-form-field>
@@ -198,10 +207,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.impact}}
                                   </pre>
-                                    
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
                                                 matInput></textarea>
                                         </mat-form-field>
@@ -214,10 +223,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.solution}}
                                   </pre>
-                                   
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="solution"
                                                 [(ngModel)]="problem.solution" matInput></textarea>
                                         </mat-form-field>
@@ -229,10 +238,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.meetingSolution}}
                                   </pre>
-                                   
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="meetingSolution"
                                                 [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                         </mat-form-field>
@@ -267,15 +276,13 @@
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
-                                        <button
-                                            *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Update)"
+                                        <button *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Update)"
                                             (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
 
-                                        <button
-                                            *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Delete)"
+                                        <button *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Delete)"
                                             (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
                                             Delete
@@ -345,8 +352,10 @@
                                 <td><span>{{ i +1 }}</span></td>
                                 <td>
                                     <div *ngIf="!report.createMode">
-                                        <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
-                                    userType:report.userType,emailAddress:report.emailAddress,avatarPath:report.avatarPath}"></app-user-info>
+                                        <app-user-info
+                                            [userData]="{fullName:report.fullName,branch:report.branch,
+                                    userType:report.userType,emailAddress:report.emailAddress,avatarPath:report.avatarPath}">
+                                        </app-user-info>
                                     </div>
                                     <div *ngIf="report.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
@@ -354,10 +363,12 @@
                                                 placeholder="select a role" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput (keydown)="$event.stopPropagation()"
+                                                    <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput
+                                                        (keydown)="$event.stopPropagation()"
                                                         placeholder="search">{{myInput.focus()}}
                                                 </mat-form-field>
-                                                <mat-option *ngFor="let user of userList |listFilter : 'fullName' :searchUser : 'emailAddress' : 'surname' : 'name'"
+                                                <mat-option
+                                                    *ngFor="let user of userList |listFilter : 'fullName' :searchUser : 'emailAddress' : 'surname' : 'name'"
                                                     [value]="user.id">
                                                     {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                             </mat-select>
@@ -402,16 +413,17 @@
                                         </mat-form-field>
                                     </div>
                                 </td>
-                                <td style="width: 150px;" >
+                                <td style="width: 150px;">
 
                                     <p class="text-center" *ngIf="!report.createMode"> <strong>
                                             {{report.allocatePercentage}}%</strong></p>
                                     <div *ngIf="report.createMode">
-                                        <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
+                                        <mat-radio-group [(ngModel)]="report.allocatePercentage"
+                                            aria-label="Select an option" name="allocatePercentage">
                                             <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
-                                            <br/>
+                                            <br />
                                             <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
-                                          </mat-radio-group>
+                                        </mat-radio-group>
                                     </div>
 
                                 </td>
@@ -420,7 +432,7 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{report.note}}
                                   </pre>
-                                  
+
                                     <div *ngIf="report.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -468,8 +480,7 @@
                 </pagination-controls>
             </div>
             <div>
-                <div class="card"
-                    *ngIf="permission.isGranted(PmManager_PMReportProject_ResourceChangesInTheFuture)">
+                <div class="card" *ngIf="permission.isGranted(PmManager_PMReportProject_ResourceChangesInTheFuture)">
                     <div class="card-header">
                         <div class="row">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
@@ -504,8 +515,10 @@
                                     <td><span>{{ i +1 }}</span></td>
                                     <td>
                                         <div *ngIf="!report.createMode">
-                                            <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
-                                        userType:report.userType,emailAddress:report.emailAddress,avatarPath:report.avatarPath}"></app-user-info>
+                                            <app-user-info
+                                                [userData]="{fullName:report.fullName,branch:report.branch,
+                                        userType:report.userType,emailAddress:report.emailAddress,avatarPath:report.avatarPath}">
+                                            </app-user-info>
                                         </div>
                                         <div *ngIf="report.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
@@ -513,10 +526,12 @@
                                                     placeholder="select account" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                        <input matInput [(ngModel)]="searchUser" name="searchUser" (keydown)="$event.stopPropagation()"
-                                                            #inputSearch placeholder="search">{{inputSearch.focus()}}
+                                                        <input matInput [(ngModel)]="searchUser" name="searchUser"
+                                                            (keydown)="$event.stopPropagation()" #inputSearch
+                                                            placeholder="search">{{inputSearch.focus()}}
                                                     </mat-form-field>
-                                                    <mat-option *ngFor="let user of userList |listFilter: 'fullName' :searchUser : 'emailAddress' : 'surname' : 'name'"
+                                                    <mat-option
+                                                        *ngFor="let user of userList |listFilter: 'fullName' :searchUser : 'emailAddress' : 'surname' : 'name'"
                                                         [value]="user.id">
                                                         {{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                 </mat-select>
@@ -568,11 +583,12 @@
                                         <div *ngIf="report.createMode">
                                             <!-- <radio-dropdown (outputData)="getFuturePercentage(report,$event)"
                                                 [data]="report.allocatePercentage"></radio-dropdown> -->
-                                                <mat-radio-group [(ngModel)]="report.allocatePercentage" aria-label="Select an option" name="allocatePercentage2">
-                                                    <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
-                                                    <br/>
-                                                    <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
-                                                  </mat-radio-group>
+                                            <mat-radio-group [(ngModel)]="report.allocatePercentage"
+                                                aria-label="Select an option" name="allocatePercentage2">
+                                                <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
+                                                <br />
+                                                <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
+                                            </mat-radio-group>
                                         </div>
                                     </td>
                                     <td style="white-space: normal;max-width: 200px;">
@@ -608,8 +624,7 @@
                                                 <i class="fas fa-times mr-2 fa-lg"></i>
                                                 Từ chối
                                             </button>
-                                            <button
-                                                *ngIf="permission.isGranted(PmManager_PMReportProject_Update)"
+                                            <button *ngIf="permission.isGranted(PmManager_PMReportProject_Update)"
                                                 (click)="updateRequest(report)" class="mat-menu-item  w-100">
                                                 <i class="fas fa-edit mr-2 fa-lg"></i>
 

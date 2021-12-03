@@ -1,3 +1,4 @@
+import { MatMenuTrigger } from '@angular/material/menu';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { AppSessionService } from './../../../../shared/session/app-session.service';
 import { UserService } from './../../../service/api/user.service';
@@ -9,7 +10,7 @@ import { ListProjectService } from '@app/service/api/list-project.service';
 import { Router } from '@angular/router';
 import { CreateEditTrainingProjectComponent } from './create-edit-training-project/create-edit-training-project.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 
 
 @Component({
@@ -41,6 +42,9 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   ]
   public pmId =  -1;
   public searchPM: string = "";
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger
+  contextMenuPosition = {x: '0', y: '0'}
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
@@ -163,6 +167,13 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
         }
       })
     }
+  }
+  showActions(e){
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu();
+
   }
   create() {
     this.showDialog('create',);
