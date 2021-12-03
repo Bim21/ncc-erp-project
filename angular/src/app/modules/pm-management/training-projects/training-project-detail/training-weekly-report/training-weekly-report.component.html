@@ -54,15 +54,21 @@
                                 
                             </div>
                             <div class="col-10">
-                                <mat-form-field style="margin-left: 10px !important;" class="myFilter ml-3" appearance="outline">
-                                    <mat-select  [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"  name="flag" 
-                                        placeholder="Project health" [(ngModel)]="projectHealth">
-                                        <ng-container *ngFor="let flag of problemIssueList">
-                                            <mat-option [value]="APP_ENUM.ProjectHealth[flag]"  (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
-                                                {{
-                                                flag
-                                                }}
-    
+                                <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" style="margin-left: 10px !important;" class="ml-3" appearance="outline">
+                                    <mat-select 
+                                        [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"
+                                        name="flag" placeholder="Project health" [(ngModel)]="projectHealth"
+                                        >
+                                        <ng-container *ngFor="let flag of problemIssueList"
+                                            >
+                                            <mat-option
+                                                [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
+                                                [value]="APP_ENUM.ProjectHealth[flag]"
+                                                (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
+                                                <span style="font-weight: 100 !important;">
+                                                    {{flag}}
+                                                </span>
+
                                             </mat-option>
                                         </ng-container>
                                     </mat-select>

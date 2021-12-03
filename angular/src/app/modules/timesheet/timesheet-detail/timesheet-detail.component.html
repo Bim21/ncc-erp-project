@@ -80,7 +80,7 @@
                                 <th>Thông tin Bill dự án</th>
                                 <th>File</th>
                                 <th>Done</th>
-                                
+
                                 <th *ngIf="isActive">Actions</th>
                             </tr>
                         </thead>
@@ -91,7 +91,7 @@
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index">
+                              }; let i = index" (contextmenu)="showActions($event, item)">
                                 <td class="text-center"><span>{{ i +1 }}</span></td>
                                 <td style="white-space: normal; min-width: 150px;">{{item.projectName}}</td>
                                 <td class="text-left">
@@ -111,14 +111,16 @@
                                   </pre>
                                 </td>
                                 <td style="cursor: pointer;" class="text-left bill" (click)="viewBillDetail(item)">
-                                    <div  *ngIf="item.projectBillInfomation" style="word-break: break-all; white-space: pre-line; min-width: 290px;" [innerHtml]="item.projectBillInfomation"></div>
+                                    <div *ngIf="item.projectBillInfomation"
+                                        style="word-break: break-all; white-space: pre-line; min-width: 290px;"
+                                        [innerHtml]="item.projectBillInfomation"></div>
                                     <!-- <div class="text-center" *ngIf="!item.projectBillInfomation">
                                         <i class="fas fa-search fa-lg" ></i>
 
                                     </div> -->
                                 </td>
-                               
-                                
+
+
                                 <td class="" style="white-space: normal;max-width: 230px;">
                                     <span class="file-download">
                                         <span (click)="downloadFile(item)">{{item.file}}</span>
@@ -128,12 +130,13 @@
                                     </span>
                                     <div class="text-center">
                                         <button
-                                        *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject) && item.file == null"
-                                        class="btn btn-secondary btn-sm" (click)="importExcel(item.id)" #importFileBtn>
-                                        <i class="fas fa-upload mr-1"></i> Upload
-                                    </button>
+                                            *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject) && item.file == null"
+                                            class="btn btn-secondary btn-sm" (click)="importExcel(item.id)"
+                                            #importFileBtn>
+                                            <i class="fas fa-upload mr-1"></i> Upload
+                                        </button>
                                     </div>
-                                   
+
                                 </td>
                                 <td>
                                     <i *ngIf="item.isComplete" style="color: green;" class="fas fa-check fa-2x "></i>
@@ -143,31 +146,35 @@
                                         <i class="fas fa-edit"></i>
                                         Update Bill
                                     </button>
-
-
-                                    <button mat-button [matMenuTriggerFor]="menu">
-                                        <i class="fas fa-bars fa-lg"></i>
-                                    </button>
-                                    <mat-menu #menu="matMenu" class="p-2">
-                                        <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
-                                            (click)="exportInvocie(item)" class="btn  mat-menu-item w-100">
-                                            <i class="fas fa-file-invoice-dollar mr-1"></i>
-                                            Export Invoice
+                                    <div class="mt-2">
+                                        <div style="visibility: hidden; position: fixed"
+                                                        [style.left]="contextMenuPosition.x"
+                                                        [style.top]="contextMenuPosition.y"
+                                                        [matMenuTriggerFor]="menu"></div>
+                                        <button mat-button [matMenuTriggerFor]="menu">
+                                            <i class="fas fa-bars fa-lg"></i>
                                         </button>
-                                        <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Update)"
-                                            class="btn   mat-menu-item w-100"
-                                            (click)="editTimesheet(item);$event.stopPropagation()">
-                                            <i class="fas fa-pencil-alt mr-1"></i>
-                                            Note
-                                        </button>
-                                        <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Delete)"
-                                            class="btn  mat-menu-item w-100"
-                                            (click)="delete(item);$event.stopPropagation()" #deleteBtn>
-                                            <i class="fas fa-trash mr-1"></i>
-                                            Delete
-                                        </button>
-                                    </mat-menu>
-
+                                        <mat-menu #menu="matMenu" class="p-2">
+                                            <button
+                                                *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
+                                                (click)="exportInvocie(item)" class="btn  mat-menu-item w-100">
+                                                <i class="fas fa-file-invoice-dollar mr-1"></i>
+                                                Export Invoice
+                                            </button>
+                                            <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Update)"
+                                                class="btn   mat-menu-item w-100"
+                                                (click)="editTimesheet(item);$event.stopPropagation()">
+                                                <i class="fas fa-pencil-alt mr-1"></i>
+                                                Note
+                                            </button>
+                                            <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_Delete)"
+                                                class="btn  mat-menu-item w-100"
+                                                (click)="delete(item);$event.stopPropagation()" #deleteBtn>
+                                                <i class="fas fa-trash mr-1"></i>
+                                                Delete
+                                            </button>
+                                        </mat-menu>
+                                    </div>
 
                                 </td>
                             </tr>

@@ -57,6 +57,7 @@ export class projectUserBillDto {
     workingTime : string;
     id: number;
     timesheetId: number;
+    userList?: any[];
 }
 export class MilestoneDto {
     projectId: number;

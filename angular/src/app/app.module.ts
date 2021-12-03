@@ -143,6 +143,7 @@ import { ProductResourceManagementComponent } from './modules/pm-management/prod
 import { ProductWeeklyReportComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-weekly-report.component';
 import { ProductApprovedDialogComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-approved-dialog/product-approved-dialog.component';
 import { CreateEditProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/create-edit-product-project-checklist/create-edit-product-project-checklist.component';
+import { NgxStarsModule } from 'ngx-stars';
 
 
 
@@ -301,6 +302,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     Ng2SearchPipeModule,
     ImageCropperModule,
     CdTimerModule,
+    NgxStarsModule,
 
 
     TranslateModule.forRoot({

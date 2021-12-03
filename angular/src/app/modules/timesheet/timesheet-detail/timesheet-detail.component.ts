@@ -1,3 +1,4 @@
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
 import { result } from 'lodash-es';
@@ -8,7 +9,7 @@ import { TimesheetProjectService } from '@app/service/api/timesheet-project.serv
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto } from './../../../service/model/timesheet.dto';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError } from 'rxjs/operators';
@@ -61,6 +62,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public timesheetId: any;
   public isActive: boolean;
   public createdInvoice: boolean;
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger
+  contextMenuPosition = {x: '0', y: '0'}
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
@@ -255,7 +259,12 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
-
+  showActions(e){
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu();
+  }
   public reloadComponent() {
     this.router.navigate(['app/timesheetDetail'], {
       queryParams: {

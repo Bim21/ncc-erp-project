@@ -79,7 +79,7 @@ export const APP_ENUMS = {
     ProjectType:
     {
         ODC: 0,
-        TimeAndMaterials: 1,
+        TAM: 1,
         FIXPRICE: 2,
         PRODUCT: 3,
         NoBill: 4,
@@ -87,7 +87,7 @@ export const APP_ENUMS = {
     },
     SubProjectType:{
         ODC: 0,
-        TimeAndMaterials: 1,
+        TAM: 1,
         FIXPRICE: 2,
         NoBill: 4,
     },

@@ -416,6 +416,20 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
     })
 
   }
+  getProjectHealthByEnum(enumValue: string, enumObject: any){
+    for (const value in enumObject) {
+      if (enumObject[enumValue] == value) {
+        return value;
+      }
+    }
+  }
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
+  }
 
   // getWeekPercentage(report, data) {
   //   report.allocatePercentage = data

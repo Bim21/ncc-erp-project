@@ -1,3 +1,4 @@
+import { MatMenuTrigger } from '@angular/material/menu';
 import { AppSessionService } from './../../../../shared/session/app-session.service';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { UserService } from './../../../service/api/user.service';
@@ -9,7 +10,7 @@ import { CreateEditProductProjectComponent } from './create-edit-product-project
 import { MatDialog } from '@angular/material/dialog';
 import { ProductProjectDto, ProjectDto } from './../../../service/model/project.dto';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-product-projects',
@@ -105,6 +106,9 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   public listProductProjects: ProductProjectDto[] = [];
   public projectStatus: any = 3;
   public pmList: any[] = [];
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger
+  contextMenuPosition = {x: '0', y: '0'}
   constructor(public injector: Injector,
     public dialog: MatDialog,
     public router: Router,
@@ -156,6 +160,12 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
         this.refresh();
       }
     });
+  }
+  showActions(e){
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu();
   }
   showDetail(id: any) {
     if (this.permission.isGranted(this.PmManager_Project_ViewDetail)){

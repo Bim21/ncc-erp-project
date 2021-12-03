@@ -115,8 +115,12 @@
                             itemsPerPage: pageSize,
                             currentPage: pageNumber,
                             totalItems: totalItems
-                          }; let i = index">
+                          }; let i = index" (contextmenu)= "showActions($event, project)">
                                 <td class="text-center">
+                                    <div style="visibility: hidden; position: fixed"
+                                                        [style.left]="contextMenuPosition.x"
+                                                        [style.top]="contextMenuPosition.y"
+                                                        [matMenuTriggerFor]="menu"></div>
                                     <button mat-button [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
@@ -154,7 +158,8 @@
                                     </span>
                                 </td>
                                 <td class="text-center">
-                                    {{project.timeSendReport| date:"dd/MM/yyyy hh:mm a"}}
+                                    <p class="mb-0">{{project.timeSendReport| date:"dd/MM/yyyy"}}</p>
+                                    <p>{{project.timeSendReport| date:"hh:mm a"}}</p>
                                 </td>
 
                             </tr>
