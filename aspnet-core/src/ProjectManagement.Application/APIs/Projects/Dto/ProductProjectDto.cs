@@ -18,8 +18,10 @@ namespace ProjectManagement.APIs.Projects.Dto
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }
         public long PmId { get; set; }
+        [ApplySearch]
         public string PmName { get; set; }
         public string PmFullName { get; set; }
+        [ApplySearch]
         public string PmEmailAddress { get; set; }
         public string PmUserName { get; set; }
         public string PmAvatarPath { get; set; }

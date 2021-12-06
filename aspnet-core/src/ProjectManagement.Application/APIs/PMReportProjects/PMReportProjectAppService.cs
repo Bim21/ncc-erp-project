@@ -368,6 +368,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                         join pp in WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == projectId)
                         on p.Id equals pp.PMReportId into lst
                         from l in lst.DefaultIfEmpty()
+                        orderby p.IsActive descending
+                        orderby p.CreationTime descending
                         select new GetAllByProjectDto
                         {
                             ReportId = p.Id,
@@ -378,6 +380,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                             Note = l.Note,
                             ProjectHealth = l.ProjectHealth.ToString()
                         };
+                        
 
             return await query.ToListAsync();
         }

@@ -621,6 +621,22 @@ namespace ProjectManagement.Users
                 failedListUpdate,
             };
         }
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Pages_Users_UpdateStarRateFromTimesheet)]
+        public async Task<List<UpdateStarRateFromTimesheetDto>> UpdateStarRateFromTimesheet(List<UpdateStarRateFromTimesheetDto> input)
+        {
+            foreach (var item in input)
+            {
+                var user = await _workScope.GetAll<User>().Where(x => x.UserCode == item.UserCode || x.EmailAddress == item.EmailAddress).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    user.StarRate = item.StarRate;
+                    await _workScope.UpdateAsync(user);
+                }
+            }
+            CurrentUnitOfWork.SaveChanges();
+            return input;
+        }
         private async Task<CreateUserDto> InsertUserFromHRM(AutoUpdateUserDto user)
         {
             var createUser = new CreateUserDto

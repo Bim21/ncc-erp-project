@@ -21,6 +21,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public List<ProjectUserPlan> ProjectUserPlans { get; set; }
         public List<SkillDto> ListSkills { get; set; }
         public List<long> ListSkillIds { get; set; }
+        public int? StarRate { get; set; }
         public int TotalFreeDay { get; set; }
     }
 

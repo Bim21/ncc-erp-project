@@ -296,6 +296,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Id = uk.SkillId,
                                         Name = uk.Skill.Name
                                     }).ToList(),
+                                    StarRate = x.StarRate,
                                     TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
                                     0 : 
                                     WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
