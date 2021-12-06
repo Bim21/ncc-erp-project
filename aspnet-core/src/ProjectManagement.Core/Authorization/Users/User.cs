@@ -38,5 +38,6 @@ namespace ProjectManagement.Authorization.Users
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
+        public int? StarRate { get; set; }
     }
 }
