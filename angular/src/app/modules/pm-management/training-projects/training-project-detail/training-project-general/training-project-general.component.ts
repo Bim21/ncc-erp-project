@@ -40,7 +40,7 @@ export class TrainingProjectGeneralComponent extends AppComponentBase implements
   public getProjectDetail(): void {
     this.projectService.GetDetailTrainingProject(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
       this.project = data.result
- 
+
     })
   }
   public editRequest(): void {
@@ -53,6 +53,7 @@ export class TrainingProjectGeneralComponent extends AppComponentBase implements
   }
   public saveAndClose(): void {
     this.isLoading=true;
+    this.project.projectType=5;
     this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");
     if (this.project.endTime) {
       this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
@@ -66,6 +67,6 @@ export class TrainingProjectGeneralComponent extends AppComponentBase implements
         this.getProjectDetail();
       }, () => this.isLoading = false);
   }
-  
+
 
 }

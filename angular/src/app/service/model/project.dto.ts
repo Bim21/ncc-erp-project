@@ -117,6 +117,7 @@ export class ProductProjectDto {
     pmUserName: string;
     pmAvatarPath: string;
     pmUserType: number;
+    projectType: number;
     pmBranch: number;
     isSent: number;
     timeSendReport: string;
