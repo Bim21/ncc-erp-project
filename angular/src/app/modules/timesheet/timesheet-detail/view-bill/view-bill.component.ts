@@ -33,7 +33,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.getProjectBill();
-    this.getAllFakeUser();
+    this.getAllFakeUser(false);
     console.log(this.data)
   }
   public getProjectBill() {
@@ -41,7 +41,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(data => {
       this.billDetail = data.result
       this.isLoading = false
-      this.getAllFakeUser()
+      this.getAllFakeUser(false)
     },
       () => { this.isLoading = false })
   }
@@ -80,7 +80,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
         this.searchUserBill = "";
-        this.getAllFakeUser()
+        this.getAllFakeUser(false)
       },
         () => {
           userBill.createMode = true;
@@ -98,7 +98,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         abp.notify.success(`Update successfull`)
         this.getProjectBill();
         this.searchUserBill = "";
-        this.getAllFakeUser()
+        this.getAllFakeUser(true)
 
       },
         () => {
@@ -116,7 +116,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     } else {
       this.data.isComplete = false;
     }
-  
+
     let data = {
       projectId: this.data.projectId,
       timesheetId: this.data.timesheetId,
@@ -169,31 +169,23 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;
     this.isEdit = true;
-    this.getAllFakeUser(userBill.userId)
-
-
-
-
+    this.getAllFakeUser(true)
   }
-  private getAllFakeUser(userId?) {
+  private getAllFakeUser(isEdited) {
     this.isLoading = true
-    this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    this.projectBillService.getAllUserUnused(this.data.projectId, this.data.timesheetId, isEdited).pipe(catchError(this.userService.handleError)).subscribe(data => {
       // this.userForUserBill = data.result;
       this.billDetail.forEach(item => {
         item.userList = data.result
         item.searchText = ""
-      } )
+      })
       this.tempUserList = data.result
-      console.log(this.billDetail)
 
     })
   }
   searchUser(bill) {
-    bill.userList = this.tempUserList.filter(item => 
-      ( this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.emailAddress?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))) || item.id == bill.userId  ||
-      this.removeAccents((item?.name[item?.name?.length - 1] + item.name[0])).toLowerCase().replace(/\s/g, "").includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) ||
-    this.removeAccents((item.surname.toLowerCase().replace(/\s/g, "") + item?.name.toLowerCase().replace(/\s/g, ""))).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))  )
-    
+    bill.userList = this.tempUserList.filter(item =>
+      (this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.email?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))))
   }
   removeAccents(str) {
     var AccentsMap = [
@@ -227,11 +219,12 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     bill.createMode = true;
     this.isEdit = true;
     this.isCreate = true;
-    this.getAllFakeUser()
+    this.getAllFakeUser(false)
 
   }
   editMultiRows() {
     this.isEdittingRows = true;
+    this.getAllFakeUser(true)
     // this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
     //   this.userForUserBill = data.result;})
 

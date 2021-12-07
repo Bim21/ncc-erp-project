@@ -234,14 +234,14 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             return failList;
         }
 
-        public async Task<List<GetUserForTimesheetProjectBillDto>> GetUserForTimesheetProjectBill(long timesheetId, long projectId)
+        public async Task<List<GetUserForTimesheetProjectBillDto>> GetUserForTimesheetProjectBill(long timesheetId, long projectId, bool isEdited)
         {
             var currentUserIds = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.TimesheetId == timesheetId && x.ProjectId ==  projectId)
                 .Select(x => x.UserId).ToListAsync();
         
             var users = WorkScope.GetAll<User>()
-                                .Where(x => x.IsActive && !currentUserIds.Contains(x.Id))
+                                .Where(x => x.IsActive && ( !isEdited ? !currentUserIds.Contains(x.Id) : true))
                                 .Select(x => new GetUserForTimesheetProjectBillDto
                                 {
                                     UserId = x.Id,
