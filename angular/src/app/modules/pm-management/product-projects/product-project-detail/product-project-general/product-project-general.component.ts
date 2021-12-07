@@ -41,7 +41,7 @@ export class ProductProjectGeneralComponent extends AppComponentBase implements 
   public getProjectDetail(): void {
     this.projectService.GetDetailProductProject(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
       this.project = data.result
- 
+
     })
   }
   public editRequest(): void {
@@ -54,6 +54,7 @@ export class ProductProjectGeneralComponent extends AppComponentBase implements 
   }
   public saveAndClose(): void {
     this.isLoading=true;
+    this.project.projectType=3;
     this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");
     if (this.project.endTime) {
       this.project.endTime = moment(this.project.endTime).format("YYYY-MM-DD");
@@ -67,6 +68,6 @@ export class ProductProjectGeneralComponent extends AppComponentBase implements 
         this.getProjectDetail();
       }, () => this.isLoading = false);
   }
-  
+
 
 }
