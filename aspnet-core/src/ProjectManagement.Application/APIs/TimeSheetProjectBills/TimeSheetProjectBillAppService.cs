@@ -60,6 +60,12 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
         public async Task<TimeSheetProjectBillDto> Create(TimeSheetProjectBillDto input)
         {
+            var user = await WorkScope.GetAsync<User>(input.UserId);
+            var isExist = await WorkScope.GetAll<TimesheetProjectBill>().AnyAsync(x => x.UserId == input.UserId);
+            if (isExist)
+            {
+                throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+            }
             if (string.IsNullOrWhiteSpace(input.BillRole) || string.IsNullOrWhiteSpace(input.BillRate.ToString()))
             {
                 throw new UserFriendlyException("You must complete all required fields");
@@ -75,11 +81,18 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         {
             foreach (var bill in input)
             {
+                var user = await WorkScope.GetAsync<User>(bill.UserId);
+
+                var isExist = await WorkScope.GetAll<TimesheetProjectBill>().AnyAsync(x => x.UserId == bill.UserId);
+                if (isExist)
+                {
+                    throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+                }
                 if (string.IsNullOrWhiteSpace(bill.BillRole) || string.IsNullOrWhiteSpace(bill.BillRate.ToString()))
                 {
                     throw new UserFriendlyException("You must complete all required fields");
                 }
-            } 
+            }
             var timesheetProjectBillIds = input.Select(x => x.Id).ToList();
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Where(x => timesheetProjectBillIds.Contains(x.Id)).ToListAsync();
             foreach (var bill in input)
@@ -221,6 +234,21 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             return failList;
         }
 
-
+        public async Task<List<GetUserForTimesheetProjectBillDto>> GetUserForTimesheetProjectBill(long timesheetId, long projectId)
+        {
+            var currentUserIds = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(x => x.TimesheetId == timesheetId && x.ProjectId ==  projectId)
+                .Select(x => x.UserId).ToListAsync();
+        
+            var users = WorkScope.GetAll<User>()
+                                .Where(x => x.IsActive && !currentUserIds.Contains(x.Id))
+                                .Select(x => new GetUserForTimesheetProjectBillDto
+                                {
+                                    UserId = x.Id,
+                                    FullName = x.FullName,
+                                    Email = x.FullName
+                                }).ToList();
+            return users;
+        }
     }
 }
