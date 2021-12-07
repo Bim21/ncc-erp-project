@@ -61,7 +61,9 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         public async Task<TimeSheetProjectBillDto> Create(TimeSheetProjectBillDto input)
         {
             var user = await WorkScope.GetAsync<User>(input.UserId);
-            var isExist = await WorkScope.GetAll<TimesheetProjectBill>().AnyAsync(x => x.UserId == input.UserId);
+            var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(x => x.TimesheetId == input.TimeSheetId && x.ProjectId == input.ProjectId)
+                .AnyAsync(x => x.UserId == input.UserId);
             if (isExist)
             {
                 throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
@@ -83,7 +85,9 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             {
                 var user = await WorkScope.GetAsync<User>(bill.UserId);
 
-                var isExist = await WorkScope.GetAll<TimesheetProjectBill>().AnyAsync(x => x.UserId == bill.UserId);
+                var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
+                    .Where(x => x.TimesheetId == bill.TimeSheetId && x.ProjectId == bill.ProjectId)
+                    .AnyAsync(x => x.UserId == bill.UserId);
                 if (isExist)
                 {
                     throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
