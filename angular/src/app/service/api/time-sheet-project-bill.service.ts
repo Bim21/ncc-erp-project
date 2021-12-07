@@ -13,7 +13,7 @@ export class TimeSheetProjectBillService extends BaseApiService {
   constructor(http: HttpClient) {
     super(http);
   }
-  public getProjectBill(projectId: any,timesheetId:any): Observable<any> {
+  public getProjectBill(projectId: any, timesheetId: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/GetAll?timesheetId=${timesheetId}&projectId=${projectId}`)
   }
   public updateProjectBill(item: any): Observable<any> {
@@ -26,7 +26,10 @@ export class TimeSheetProjectBillService extends BaseApiService {
     return this.http.post<any>(this.rootUrl + '/Create', item);
   }
 
-  public UpdateFromProjectUserBill(projectId: any,timesheetId:any): Observable<any> {
+  public UpdateFromProjectUserBill(projectId: any, timesheetId: any): Observable<any> {
     return this.http.put<any>(this.rootUrl + `/UpdateFromProjectUserBill?projectId=${projectId}&timesheetId=${timesheetId}`, {});
+  }
+  public getAllUserUnused(projectId: any, timesheetId: any, isEdited: boolean): Observable<any> {
+    return this.http.get(this.rootUrl + `/GetUserForTimesheetProjectBill?projectId=${projectId}&timesheetId=${timesheetId}&isEdited=${isEdited}`);
   }
 }

@@ -1,103 +1,211 @@
-<form class="form-horizontal" autocomplete="off" #timesheetDetailForm="ngForm" novalidate>
-    <abp-modal-header title="Thông tin bill dự án: {{data.projectName}}" (onCloseClick)="dialogRef.close()">
-    </abp-modal-header>
-    <div class="modal-body row">
-        <div class="col-11 row mb-1">
-            <button class="btn btn-primary ml-2" [disabled]="isEdittingRows" *ngIf="!isEdit" (click)="create()"
-                [disabled]="this.data.isComplete"><i class="fa fa-plus-square mr-1"></i>Create</button>
-            <button class="btn btn-secondary ml-2" *ngIf="!isEdittingRows && billDetail.length && !isEdit"
-                (click)="editMultiRows()" [disabled]="this.data.isComplete"><i
-                    class="fas fa-pencil-alt mr-1"></i>Edit</button>
-            <div *ngIf="isEdittingRows" class="pt-1 ml-4">
-                <button [disabled]="!timesheetDetailForm.valid" class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveUserBills()">
-                    <i style="color: green;" class="fas fa-check fa-2x "></i>
-                </button>
-                <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill();"></i>
-            </div>
-        </div>
-        <section class="example-section col-1 text-center">
-            <mat-checkbox class="example-margin" (change)="isComplete($event)" [disabled]="isEdittingRows || isEdit"
-                [checked]="data.isComplete">Done</mat-checkbox>
-        </section>
-        <div class="table-responsive mb-1 p-2">
-            <div class="fixTableHead">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="stt">#</th>
-                            <th>Nhân viên</th>
-                            <th>Charge Role</th>
-                            <th *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
-                                Rate</th>
-                            <th>Working time(Day)</th>
-                            <th>Is Charge</th>
-                            <th>Note</th>
-                            <th>Shadow note</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <h5 *ngIf="billDetail.length==0" class="text-center mt-2">No data!</h5>
-                    <tbody *ngIf="billDetail.length>0">
-                        <tr *ngFor="let bill of billDetail  ; let i = index">
-                            <td><span>{{ i +1 }}</span></td>
-                            <td class="text-left" style="min-width: 200px;">
-                                <span *ngIf="!bill.createMode && !isEdittingRows">
-                                    <app-user-info [userData]="{fullName:bill.fullName,branch:bill.branch,
-                                userType:bill.userType,emailAddress:bill.emailAddress, avatarPath:bill.avatarPath}">
-                                    </app-user-info>
-                                </span>
-                                <div *ngIf="bill.createMode || isEdittingRows">
+<form
+  class="form-horizontal"
+  autocomplete="off"
+  #timesheetDetailForm="ngForm"
+  novalidate
+>
+  <abp-modal-header
+    title="Thông tin bill dự án: {{ data.projectName }}"
+    (onCloseClick)="dialogRef.close()"
+  >
+  </abp-modal-header>
+  <div class="modal-body row">
+    <div class="col-11 row mb-1">
+      <button
+        class="btn btn-primary ml-2"
+        [disabled]="isEdittingRows"
+        *ngIf="!isEdit"
+        (click)="create()"
+        [disabled]="this.data.isComplete"
+      >
+        <i class="fa fa-plus-square mr-1"></i>Create
+      </button>
+      <button
+        class="btn btn-secondary ml-2"
+        *ngIf="!isEdittingRows && billDetail.length && !isEdit"
+        (click)="editMultiRows()"
+        [disabled]="this.data.isComplete"
+      >
+        <i class="fas fa-pencil-alt mr-1"></i>Edit
+      </button>
+      <div *ngIf="isEdittingRows" class="pt-1 ml-4">
+        <button
+          [disabled]="!timesheetDetailForm.valid"
+          class="mr-3 submit-btn"
+          style="background: none; border: none"
+          (click)="saveUserBills()"
+        >
+          <i style="color: green" class="fas fa-check fa-2x"></i>
+        </button>
+        <i
+          style="color: red"
+          class="fas fa-times fa-2x"
+          (click)="cancelUserBill()"
+        ></i>
+      </div>
+    </div>
+    <section class="example-section col-1 text-center">
+      <mat-checkbox
+        class="example-margin"
+        (change)="isComplete($event)"
+        [disabled]="isEdittingRows || isEdit"
+        [checked]="data.isComplete"
+        >Done</mat-checkbox
+      >
+    </section>
+    <div class="table-responsive mb-1 p-2">
+      <div class="fixTableHead">
+        <table
+          style="border-collapse: collapse"
+          class="table table-hover text-nowrap"
+        >
+          <thead class="bg-light">
+            <tr>
+              <th class="stt">#</th>
+              <th>Nhân viên</th>
+              <th>Charge Role</th>
+              <th
+                *ngIf="
+                  permission.isGranted(
+                    Timesheet_Timesheet_ViewProjectBillInfomation
+                  )
+                "
+              >
+                Rate
+              </th>
+              <th>Working time(Day)</th>
+              <th>Is Charge</th>
+              <th>Note</th>
+              <th>Shadow note</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <h5 *ngIf="billDetail.length == 0" class="text-center mt-2">
+            No data!
+          </h5>
+          <tbody *ngIf="billDetail.length > 0">
+            <tr *ngFor="let bill of billDetail; let i = index">
+              <td>
+                <span>{{ i + 1 }}</span>
+              </td>
+              <td class="text-left" style="min-width: 200px">
+                <span *ngIf="!bill.createMode && !isEdittingRows">
+                  <app-user-info
+                    [userData]="{
+                      fullName: bill.fullName,
+                      branch: bill.branch,
+                      userType: bill.userType,
+                      emailAddress: bill.emailAddress,
+                      avatarPath: bill.avatarPath
+                    }"
+                  >
+                  </app-user-info>
+                </span>
+                <div *ngIf="bill.createMode || isEdittingRows">
+                  <mat-form-field class="w-100" appearance="outline">
+                    <mat-select
+                      [(ngModel)]="bill.userId"
+                      [name]="i + 'userBill'"
+                      placeholder="select an user"
+                      #userBill="ngModel"
+                      required
+                      (selectionChange)="onUserSelect(bill)"
+                    >
+                      <mat-form-field
+                        class="w-100 px-3"
+                        style="
+                          position: sticky;
+                          top: 0;
+                          z-index: 2;
+                          background-color: white;
+                        "
+                      >
+                        <input
+                          matInput
+                          [(ngModel)]="bill.searchText"
+                          placeholder="search"
+                          (keydown)="$event.stopPropagation()"
+                          (ngModelChange)="searchUser(bill)"
+                          name="searchBillUser"
+                          #search
+                        />{{ search.focus() }}
+                      </mat-form-field>
+                      <mat-option
+                        *ngFor="let user of bill.userList"
+                        [value]="user.userId"
+                      >
+                        {{ user.fullName }} - ({{ user.email }})
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error
+                    class="mt-1"
+                    *ngIf="userBill.hasError('required') && userBill.touched"
+                    style="font-size: 13px"
+                  >
+                    This field is required
+                  </mat-error>
+                </div>
+              </td>
+              <td class="text-center">
+                <span *ngIf="!bill.createMode && !isEdittingRows">{{
+                  bill.billRole
+                }}</span>
+                <div *ngIf="bill.createMode || isEdittingRows">
+                  <input
+                    style="min-width: 110px"
+                    required
+                    class="form-control mt-1"
+                    #billRole="ngModel"
+                    #billRoleEl
+                    type="text"
+                    placeholder="Charge role"
+                    [name]="i + 'billRole'"
+                    [(ngModel)]="bill.billRole"
+                  />
 
-                                    <mat-form-field class="w-100" appearance="outline">
-                                        <mat-select [(ngModel)]="bill.userId" [name]="i+'userBill'"
-                                            placeholder="select an user" #userBill="ngModel" required
-                                            (selectionChange)="onUserSelect(bill)">
-                                            <mat-form-field class="w-100 px-3 "
-                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                <input matInput [(ngModel)]="bill.searchText" placeholder="search"
-                                                    (keydown)="$event.stopPropagation();" (ngModelChange)="searchUser(bill)"
-                                                    name="searchBillUser" #search>{{search.focus()}}
-                                            </mat-form-field>
-                                            <mat-option *ngFor="let user of bill.userList" [value]="user.id">
-                                                {{user.fullName}} - ({{user.emailAddress}})
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-error class="mt-1" *ngIf="userBill.hasError('required') && userBill.touched"
-                                        style="font-size: 13px;">
-                                        This field is required
-                                    </mat-error>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <span *ngIf="!bill.createMode && !isEdittingRows">{{bill.billRole}}</span>
-                                <div *ngIf="bill.createMode || isEdittingRows">
-                                    <input style="min-width: 110px;" required class="form-control mt-1"
-                                        #billRole="ngModel" #billRoleEl type="text" placeholder="Charge role"
-                                        [name]="i+'billRole'" [(ngModel)]="bill.billRole" />
-
-                                    <abp-validation-summary [control]="billRole" [controlEl]="billRoleEl">
-                                    </abp-validation-summary>
-                                </div>
-                            </td>
-                            <td class="text-center"
-                                *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
-                                <span *ngIf="!bill.createMode && !isEdittingRows">{{bill.billRate |
-                                    number:'1.0':'en-US'}}
-                                </span>
-                                <div *ngIf="bill.createMode || isEdittingRows">
-                                    <input style="min-width: 110px;" required class="form-control mt-1"
-                                        [name]="i+'billrate'" #billRate="ngModel" #billRateEl type="text"
-                                        mask="separator" thousandSeparator="." placeholder="number"
-                                        [(ngModel)]="bill.billRate">
-                                    <abp-validation-summary [control]="billRate" [controlEl]="billRateEl">
-                                    </abp-validation-summary>
-
-                                </div>
-                            </td>
-                            <!-- <td> -->
-                            <!-- <span *ngIf="!bill.createMode">{{getCurrencyName(currencyList, bill.currency)}}</span> -->
-                            <!-- <div *ngIf="bill.createMode"  class="col-md-5 ">
+                  <abp-validation-summary
+                    [control]="billRole"
+                    [controlEl]="billRoleEl"
+                  >
+                  </abp-validation-summary>
+                </div>
+              </td>
+              <td
+                class="text-center"
+                *ngIf="
+                  permission.isGranted(
+                    Timesheet_Timesheet_ViewProjectBillInfomation
+                  )
+                "
+              >
+                <span *ngIf="!bill.createMode && !isEdittingRows"
+                  >{{ bill.billRate | number: "1.0":"en-US" }}
+                </span>
+                <div *ngIf="bill.createMode || isEdittingRows">
+                  <input
+                    style="min-width: 110px"
+                    required
+                    class="form-control mt-1"
+                    [name]="i + 'billrate'"
+                    #billRate="ngModel"
+                    #billRateEl
+                    type="text"
+                    mask="separator"
+                    thousandSeparator="."
+                    placeholder="number"
+                    [(ngModel)]="bill.billRate"
+                  />
+                  <abp-validation-summary
+                    [control]="billRate"
+                    [controlEl]="billRateEl"
+                  >
+                  </abp-validation-summary>
+                </div>
+              </td>
+              <!-- <td> -->
+              <!-- <span *ngIf="!bill.createMode">{{getCurrencyName(currencyList, bill.currency)}}</span> -->
+              <!-- <div *ngIf="bill.createMode"  class="col-md-5 ">
                                     <mat-form-field appearance="outline">
                                         <mat-select [(ngModel)]="bill.currency" name="currency" placeholder="select currency" required
                                             #currency="ngModel">
@@ -110,68 +218,127 @@
                                     </mat-error>
                                 </div> -->
 
+              <!-- </td> -->
+              <td class="text-center">
+                <span *ngIf="!bill.createMode && !isEdittingRows">
+                  {{ bill.workingTime }}
+                </span>
+                <div *ngIf="bill.createMode || isEdittingRows">
+                  <input
+                    type="number"
+                    billrate
+                    [name]="i + 'workTime'"
+                    id=""
+                    class="form-control mt-1"
+                    [(ngModel)]="bill.workingTime"
+                  />
+                </div>
+              </td>
+              <td class="text-center pt-3">
+                <mat-checkbox
+                  [disabled]="!bill.createMode && !isEdittingRows"
+                  class="mt-1"
+                  name="isactive+{{ i }}"
+                  (change)="onActiveChange(active, bill)"
+                  #active
+                  [checked]="bill.isActive"
+                >
+                </mat-checkbox>
+              </td>
+              <td>
+                <pre
+                  class="mb-0 p-0 ml-2"
+                  *ngIf="!bill.createMode && !isEdittingRows"
+                  style="
+                    white-space: pre-line;
+                    word-wrap: break-word;
+                    font-family: sans-serif;
+                    align-self: flex-start;
+                    width: 150px;
+                  "
+                >
+                           {{ bill.note }}
+                      </pre
+                >
+                <div *ngIf="bill.createMode || isEdittingRows">
+                  <textarea
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    rows="2"
+                    style="min-width: 150px"
+                    class="form-control mt-1"
+                    #billRole="ngModel"
+                    placeholder="Note"
+                    [name]="i + 'billNote'"
+                    [(ngModel)]="bill.note"
+                  ></textarea>
+                </div>
+              </td>
+              <td style="white-space: normal; text-align: left">
+                <pre
+                  class="mb-0 p-0 ml-2"
+                  *ngIf="!bill.createMode && !isEdittingRows"
+                  style="
+                    white-space: pre-line;
+                    word-wrap: break-word;
+                    width: 150px;
+                    font-family: sans-serif;
+                    align-self: flex-start;
+                  "
+                >
+                                   {{ bill.shadowNote }}
+                              </pre
+                >
 
-                            <!-- </td> -->
-                            <td class="text-center">
-                                <span *ngIf="!bill.createMode && !isEdittingRows">
-                                    {{bill.workingTime}}
-                                </span>
-                                <div *ngIf="bill.createMode || isEdittingRows">
-                                    <input type="number" billrate [name]="i+'workTime'" id="" class="form-control mt-1"
-                                        [(ngModel)]="bill.workingTime">
-                                </div>
-                            </td>
-                            <td class="text-center pt-3">
-                                <mat-checkbox [disabled]="!bill.createMode && !isEdittingRows" class="mt-1"
-                                    name="isactive+{{i}}" (change)="onActiveChange(active,bill)" #active
-                                    [checked]="bill.isActive">
-                                </mat-checkbox>
-                            </td>
-                            <td>
-                                <pre class="mb-0 p-0  ml-2" *ngIf="!bill.createMode && !isEdittingRows" style=" white-space: pre-line; word-wrap: break-word;
-                        font-family: sans-serif; align-self:flex-start; width: 150px;">
-                           {{bill.note}}
-                      </pre>
-                                <div *ngIf="bill.createMode || isEdittingRows">
-                                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                        style="min-width: 150px;" class="form-control mt-1" #billRole="ngModel"
-                                        placeholder="Note" [name]="i+'billNote'" [(ngModel)]="bill.note"></textarea>
-                                </div>
-                            </td>
-                            <td style="white-space: normal; text-align: left;">
-                                <pre class="mb-0 p-0  ml-2" *ngIf="!bill.createMode && !isEdittingRows" style=" white-space: pre-line; word-wrap: break-word;  width: 150px;
-                                font-family: sans-serif; align-self:flex-start; ">
-                                   {{bill.shadowNote}}
-                              </pre>
-
-                                <div *ngIf="bill.createMode || isEdittingRows">
-                                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                        style="min-width: 150px;" class="form-control mt-1" #shadowNote="ngModel"
-                                        placeholder="Shadow note" [name]="i+'shadowNote'"
-                                        [(ngModel)]="bill.shadowNote"></textarea>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div *ngIf="!bill.createMode">
-                                    <button
-                                        [disabled]="(userBillProcess || isEdit) || this.data.isComplete || isEdittingRows"
-                                        class="btn btn-sm bg-secondary mr-1 mt-3" (click)="editUserBill(bill)"><i
-                                            class="fas fa-pencil-alt mr-1"></i>Edit</button>
-                                </div>
-                                <div *ngIf="bill.createMode" class="pt-1 mt-1">
-                                    <button [disabled]="!bill?.userId || !timesheetDetailForm.valid" class=" mr-3 submit-btn"
-                                        style="background: none; border: none;" (click)="saveUserBill(bill)">
-                                        <i style="color: green;" class="fas fa-check fa-2x "></i>
-                                    </button>
-                                    <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelUserBill()"></i>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+                <div *ngIf="bill.createMode || isEdittingRows">
+                  <textarea
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    rows="2"
+                    style="min-width: 150px"
+                    class="form-control mt-1"
+                    #shadowNote="ngModel"
+                    placeholder="Shadow note"
+                    [name]="i + 'shadowNote'"
+                    [(ngModel)]="bill.shadowNote"
+                  ></textarea>
+                </div>
+              </td>
+              <td class="text-center">
+                <div *ngIf="!bill.createMode">
+                  <button
+                    [disabled]="
+                      userBillProcess ||
+                      isEdit ||
+                      this.data.isComplete ||
+                      isEdittingRows
+                    "
+                    class="btn btn-sm bg-secondary mr-1 mt-3"
+                    (click)="editUserBill(bill)"
+                  >
+                    <i class="fas fa-pencil-alt mr-1"></i>Edit
+                  </button>
+                </div>
+                <div *ngIf="bill.createMode" class="pt-1 mt-1">
+                  <button
+                    [disabled]="!bill?.userId || !timesheetDetailForm.valid"
+                    class="mr-3 submit-btn"
+                    style="background: none; border: none"
+                    (click)="saveUserBill(bill)"
+                  >
+                    <i style="color: green" class="fas fa-check fa-2x"></i>
+                  </button>
+                  <i
+                    style="color: red"
+                    class="fas fa-times fa-2x"
+                    (click)="cancelUserBill()"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
+  </div>
 </form>
