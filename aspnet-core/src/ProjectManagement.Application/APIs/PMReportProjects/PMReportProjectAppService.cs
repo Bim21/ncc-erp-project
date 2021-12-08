@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Linq.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,10 +39,13 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport,
             PermissionNames.PmManager_PMReportProject_GetAllByPmReport)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId)
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId,string projectType="OUTSOURCING")
         {
             var query = WorkScope.GetAll<PMReportProject>()
-                .Where(x => x.PMReportId == pmReportId&&x.Project.ProjectType!=ProjectType.NoBill)
+                .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill)
+                .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
+                .WhereIf(projectType == "TRAINING",x => x.Project.ProjectType == ProjectType.TRAINING)
+                .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT)
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -63,8 +67,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     Seen = x.Seen,
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                     TotalOverTime = x.TotalOverTime
-                }).OrderBy(x => x.PmFullName);
-
+                }).OrderBy(x => x.PmFullName); 
             return await query.ToListAsync();
         }
 

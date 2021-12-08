@@ -627,7 +627,7 @@ namespace ProjectManagement.Users
         {
             foreach (var item in input)
             {
-                var user = await _workScope.GetAll<User>().Where(x => x.UserCode == item.UserCode || x.EmailAddress == item.EmailAddress).FirstOrDefaultAsync();
+                var user = await _workScope.GetAll<User>().Where(x => x.EmailAddress == item.EmailAddress).FirstOrDefaultAsync();
                 if (user != null)
                 {
                     user.StarRate = item.StarRate;
