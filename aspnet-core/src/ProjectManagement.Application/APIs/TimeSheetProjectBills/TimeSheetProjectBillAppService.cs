@@ -81,17 +81,40 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
         public async Task<List<TimeSheetProjectBillDto>> Update(List<TimeSheetProjectBillDto> input)
         {
+            //đếm số lượng user trùng
+            if(input.Count() > 1)
+            {
+                var existCount = (from i in input
+                                  group i by i.UserId into g
+                                  select new
+                                  {
+                                      UserId = g.Key,
+                                      Count = g.Count()
+                                  }).ToList();
+                foreach (var item in existCount)
+                {
+                    if (item.Count >= 2)
+                    {
+                        var user = await WorkScope.GetAsync<User>(item.UserId);
+                        throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+                    }
+                };
+            }    
+           
             foreach (var bill in input)
             {
-                var user = await WorkScope.GetAsync<User>(bill.UserId);
-
-                var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
-                    .Where(x => x.TimesheetId == bill.TimeSheetId && x.ProjectId == bill.ProjectId)
-                    .AnyAsync(x => x.UserId == bill.UserId);
-                if (isExist)
+                if(input.Count() <= 1)
                 {
-                    throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+                    var user = await WorkScope.GetAsync<User>(bill.UserId);
+                    var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
+                        .Where(x => x.TimesheetId == bill.TimeSheetId && x.ProjectId == bill.ProjectId)
+                        .AnyAsync(x => x.UserId == bill.UserId);
+                    if(isExist)
+                    {
+                        throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+                    }
                 }
+
                 if (string.IsNullOrWhiteSpace(bill.BillRole) || string.IsNullOrWhiteSpace(bill.BillRate.ToString()))
                 {
                     throw new UserFriendlyException("You must complete all required fields");
