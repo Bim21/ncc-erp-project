@@ -59,13 +59,14 @@ export class ChecklistComponent extends PagedListingComponentBase<any> implement
   ]
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
-    { propertyName: 'code', comparisions: [0, 6, 7, 8], displayName: "Code" },
     { propertyName: 'categoryName', comparisions: [0, 6, 7, 8], displayName: "Category Name" },
+    { propertyName: 'code', comparisions: [0, 6, 7, 8], displayName: "Code" },
     { propertyName: 'mandatory', comparisions: [3], displayName: "Mandatory" , filterType : 3 , dropdownData: this.projectTypeForFilter },
     { propertyName: 'personInCharge', comparisions: [0, 6, 7, 8], displayName: "Person in Charge" },
     { propertyName: 'auditTarget', comparisions: [0, 6, 7, 8], displayName: "auditTarget" },
-    { propertyName: 'note', comparisions: [0, 6, 7, 8], displayName: "note" },
     { propertyName: 'description', comparisions: [0, 6, 7, 8], displayName: "description" },
+    { propertyName: 'note', comparisions: [0, 6, 7, 8], displayName: "note" },
+   
 
   ];
   
