@@ -48,8 +48,6 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'year', comparisions: [0, 1, 3], displayName: "Year" },
-    { propertyName: 'pmReportName', comparisions: [0, 6, 7, 8], displayName: "pmReport Name" },
-    { propertyName: 'projectHealth', comparisions: [0, 6, 7, 8], displayName: "Project Health" },
   ];
 
   constructor(public router:Router,
