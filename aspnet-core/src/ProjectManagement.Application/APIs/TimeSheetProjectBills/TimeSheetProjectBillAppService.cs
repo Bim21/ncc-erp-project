@@ -105,9 +105,10 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             {
                 if(input.Count() <= 1)
                 {
+                    var currentBill = await WorkScope.GetAsync<TimesheetProjectBill>(bill.Id);
                     var user = await WorkScope.GetAsync<User>(bill.UserId);
                     var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
-                        .Where(x => x.TimesheetId == bill.TimeSheetId && x.ProjectId == bill.ProjectId)
+                        .Where(x => x.TimesheetId == bill.TimeSheetId && x.ProjectId == bill.ProjectId && x.UserId != currentBill.UserId)
                         .AnyAsync(x => x.UserId == bill.UserId);
                     if(isExist)
                     {
