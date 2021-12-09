@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, OnInit, Injector } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, Injector, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, ActivationEnd, NavigationEnd, NavigationStart, Router, Event as NavigationEvent } from '@angular/router';
 import { AddReportNoteComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
 import { PmReportService } from '@app/service/api/pm-report.service';
@@ -20,8 +21,15 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   isShowReportBar: boolean = false;
   currentUrl: string = "";
   pmReportList: pmReportDto[] = [];
-  pmReport = {} as pmReportDto
-  reportId:any
+  pmReport = {} as pmReportDto;
+  projectType = "OUTSOURCING";
+  reportId:any;
+  projectTypeList=[
+    "ALL",
+    "OUTSOURCING",
+    "TRAINING",
+    "PRODUCT"
+  ]
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, private reportService: PmReportService) {
@@ -79,20 +87,12 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     })
   }
   routingReportDetail(){
-    // this.router.navigate(['weeklyReportTabDetail'], {
-    //   relativeTo: this.route, queryParams: {
-    //     id: this.pmReport.id,
-    //     isActive: this.pmReport.isActive
-    //   },
-    // })
-
-
-
     this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/app/weeklyReportTabDetail'],{
         relativeTo: this.route, queryParams: {
           id: this.pmReport.id,
-          isActive: this.pmReport.isActive
+          projectType: this.projectType,
+          isActive: this.pmReport.isActive,
         },
       });
     });
