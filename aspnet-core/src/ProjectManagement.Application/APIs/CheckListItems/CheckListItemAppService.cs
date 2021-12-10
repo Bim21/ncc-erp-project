@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -24,7 +25,7 @@ namespace ProjectManagement.APIs.CheckListItems
         public async Task<GridResult<CheckListItemDetailDto>> GetAllPaging(GridParam input)
         {
 
-            var checkListMandatories = WorkScope.GetAll<CheckListItemMandatory>().Select(x => new { x.CheckListItemId, x.ProjectType });
+            var checkListMandatories = WorkScope.GetAll<CheckListItemMandatory>();
             var query = from i in WorkScope.GetAll<CheckListItem>()
                         select new CheckListItemDetailDto
                         {
@@ -39,14 +40,19 @@ namespace ProjectManagement.APIs.CheckListItems
                             Note = i.Note,
                             mandatorys = checkListMandatories.Where(x => x.CheckListItemId == i.Id).Select(x=>x.ProjectType).ToList()
                         };
-            var filterMandatory = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "mandatory") : null;
-            if (filterMandatory != null)
+
+            var filterMandatory = input.FilterItems != null ? input.FilterItems.Where(x => x.PropertyName == "mandatory").ToList() : null;
+            if (filterMandatory.Count > 0)
             {
-                string searchByMandatory = filterMandatory.Value.ToString();
-                input.FilterItems.Remove(filterMandatory);
-                Enum.TryParse(searchByMandatory, out ProjectType Mandatory);
-                var listIdContainsProjectName = checkListMandatories.Where(x => x.ProjectType== Mandatory);
-                query = query.Where(x => listIdContainsProjectName.Where(y => y.CheckListItemId == x.Id).Any());
+                foreach (var item in filterMandatory)
+                {
+                    string searchByMandatory = item.Value.ToString();
+                    input.FilterItems.Remove(item);
+                    Enum.TryParse(searchByMandatory, out ProjectType Mandatory);
+                    var listContainsProjectName = checkListMandatories.Where(x => x.ProjectType == Mandatory);
+                    query = query.Where(x => listContainsProjectName.Any(y => y.CheckListItemId == x.Id));
+                }
+                
             }
             return await query.GetGridResult(query, input);
         }
