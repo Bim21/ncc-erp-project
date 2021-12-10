@@ -31,7 +31,7 @@
       </mat-form-field>
     </div>
   </li>
-  <li>
+  <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
     <div class="form-froup row header-report-nav"  style="margin-left: 67px;">
       <label style="margin-top: 11px;">Project Type: </label>
       <mat-form-field appearance="outline" class="ml-2">
