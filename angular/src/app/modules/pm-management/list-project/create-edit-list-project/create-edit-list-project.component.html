@@ -96,7 +96,7 @@
             </div>
         </div>
         <div class="form-group row " >
-            <label class="col-md-3 col-form-label" for="projectType">Currency:</label>
+            <label class="col-md-3 col-form-label" for="currency">Currency:</label>
             <div class="col-md-9 ">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-select [(ngModel)]="project.currencyId" name="currency" placeholder="Select currency"  #currency="ngModel">
@@ -111,12 +111,24 @@
         <div class="form-group row">
             <label class="col-md-3 col-form-label" for="ischarge"></label>
             <div class="col-md-9 pt-2">
-                <mat-checkbox [(ngModel)]="project.isCharge" name="ischarge">
+                <mat-checkbox [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge">
                     is Charge
                     <span class="ml-2" 
                     matTooltip="Charge vào timesheet tháng này!"
                     ><i class="fas fa-question-circle "></i></span>
                 </mat-checkbox>
+            </div>
+        </div>
+        <div class="form-group row" *ngIf="project.isCharge">
+            <label class="col-md-3 col-form-label mt-2" for="chargeType">Charge Type: </label>
+            <div class="col-md-9 pt-2">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-select [(ngModel)]="project.chargeType" name="chargeType" placeholder="Select currency"  #chargeType="ngModel">
+                        <mat-option *ngFor="let type of chargeTypeList" [value]="APP_ENUM.ChargeType[type]">
+                            {{type}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
         </div>
         <div class="form-group row required">

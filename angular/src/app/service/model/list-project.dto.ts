@@ -8,6 +8,7 @@ export interface ProjectDto {
     clientId: number;
     clientName?: string;
     isCharge: boolean;
+    chargeType?: number;
     pmId: number;
     pmName?:string;
     id: number;
