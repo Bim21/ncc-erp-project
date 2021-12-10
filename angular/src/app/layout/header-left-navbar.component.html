@@ -35,7 +35,7 @@
     <div class="form-froup row header-report-nav"  style="margin-left: 67px;">
       <label style="margin-top: 11px;">Project Type: </label>
       <mat-form-field appearance="outline" class="ml-2">
-        <mat-select #projectTypeChange [(ngModel)]="projectType" (selectionChange)="routingReportDetail()">
+        <mat-select [(ngModel)]="projectType" (selectionChange)="newMessage($event.value)">
           <mat-option *ngFor="let type of projectTypeList" [value] = "type">
                 {{type}}  
           </mat-option>

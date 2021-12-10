@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { BaseApiService } from './base-api.service';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export class PmReportService extends BaseApiService {
   changeUrl() {
     return 'PmReport';
   }
+  public messageSource = new BehaviorSubject('OUTSOURCING');
+  currentMessage = this.messageSource.asObservable();
 
   constructor(http: HttpClient) { super(http) }
   public closeReport(id: any): Observable<any> {
@@ -30,6 +33,9 @@ export class PmReportService extends BaseApiService {
     id: pmReportId
   }
     return this.http.put<any>(this.rootUrl + `/UpdateNote`,requestBody);
+  }
+  changeMessage(message: string) {
+    this.messageSource.next(message);
   }
 
 

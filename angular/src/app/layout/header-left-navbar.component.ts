@@ -1,6 +1,5 @@
-import { Component, ChangeDetectionStrategy, OnInit, Injector, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSelect } from '@angular/material/select';
+import { Component,OnInit, Injector} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ActivationEnd, NavigationEnd, NavigationStart, Router, Event as NavigationEvent } from '@angular/router';
 import { AddReportNoteComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
 import { PmReportService } from '@app/service/api/pm-report.service';
@@ -22,20 +21,20 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   currentUrl: string = "";
   pmReportList: pmReportDto[] = [];
   pmReport = {} as pmReportDto;
-  projectType = "OUTSOURCING";
-  reportId:any;
-  projectTypeList=[
+  reportId: any;
+  projectTypeList = [
     "ALL",
     "OUTSOURCING",
     "TRAINING",
     "PRODUCT"
   ]
 
+
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
-    private dialog: MatDialog, private route: ActivatedRoute, private reportService: PmReportService) {
+    private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService) {
     super(injector)
   }
-
+  projectType = this.reportService.messageSource.getValue();
   ngOnInit(): void {
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
@@ -63,9 +62,14 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
           }
           else {
             this.isShowReportBar = false;
+            this.projectType = this.reportService.messageSource.getValue();
+            this.reportService.changeMessage("OUTSOURCING")
           }
         }
       )
+  }
+  newMessage(type) {
+    this.reportService.changeMessage(type)
   }
   getPmReportList() {
     this.reportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
@@ -86,17 +90,14 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
       width: "700px",
     })
   }
-  routingReportDetail(){
+  routingReportDetail() {
     this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/app/weeklyReportTabDetail'],{
+      this.router.navigate(['/app/weeklyReportTabDetail'], {
         relativeTo: this.route, queryParams: {
           id: this.pmReport.id,
-          projectType: this.projectType,
           isActive: this.pmReport.isActive,
         },
       });
     });
-    
   }
-  
 }
