@@ -66,7 +66,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
   public isActive: boolean;
-  public projectType= "OUTSOURCING";
+  public projectType= "";
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
@@ -82,8 +82,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public processFuture:boolean = false;
   public processProblem:boolean=false
   public processWeekly:boolean =false;
-  // public minDate = new Date();
-  // public maxDate= new Date();
   public createdDate = new Date();
   public projectId: number;
   public projectIdReport: number;
@@ -115,19 +113,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private _layoutStore: LayoutStoreService,
   ) {
     super(injector)
-    
   }
-
   ngOnInit(): void {
+    this.pmReportService.currentMessage.subscribe(message => {
+      this.projectType = message;
+      if(this.pmReportId){
+        this.getPmReportProject();
+      }
+    }
+    
+    );
+    
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
-    if(!this.route.snapshot.queryParamMap.get('projectType')){
-      this.projectType ="OUTSOURCING"
-    }else{
-      this.projectType = this.route.snapshot.queryParamMap.get('projectType');
-    }
-   
-    console.log( this.route.snapshot.queryParamMap)
     this.getPmReportProject();
     this.getUser();
     this._layoutStore.sidebarExpanded.subscribe((value) => {
