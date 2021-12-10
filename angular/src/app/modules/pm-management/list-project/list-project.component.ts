@@ -175,6 +175,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         status: item.status,
         clientId: item.clientId,
         isCharge: item.isCharge,
+        chargeType : item.chargeType,
         pmId: item.pmId,
         id: item.id,
         currencyId: item.currencyId

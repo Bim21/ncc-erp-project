@@ -85,7 +85,7 @@ export const APP_ENUMS = {
         NoBill: 4,
         TRAINING: 5
     },
-    SubProjectType:{
+    SubProjectType: {
         ODC: 0,
         TAM: 1,
         FIXPRICE: 2,
@@ -102,7 +102,7 @@ export const APP_ENUMS = {
         PENDING: 0,
         DONE: 1,
         CANCELLED: 2,
-        APPROVED:3,
+        APPROVED: 3,
     },
     ProjectIssueSource:
     {
@@ -134,14 +134,14 @@ export const APP_ENUMS = {
         "Hà Nội": 0,
         "Đà Nẵng": 1,
         "Hồ Chí Minh": 2,
-        "Vinh":3,
-         Other: 4
+        "Vinh": 3,
+        Other: 4
     },
     UserBranch: {
         "Hà Nội": 0,
         "Đà Nẵng": 1,
         "Hồ Chí Minh": 2,
-        "Vinh":3,
+        "Vinh": 3,
     },
     UserLevel:
     {
@@ -167,40 +167,46 @@ export const APP_ENUMS = {
         Collaborators: 1,
         Staff: 2,
         ProbationaryStaff: 3,
-        FakeUser:4,
-        
+        FakeUser: 4,
+
     },
-    WeeklySent:{
+    WeeklySent: {
         Unsent: 0,
-        Sent:1
+        Sent: 1
     },
-    TypePhase:{
-        Main:0,
-        Sub:1
+    TypePhase: {
+        Main: 0,
+        Sub: 1
     },
     CheckPointUserType:
     {
-        PM : 0,
-        Team :1,
-        Client : 2,
-        Self : 3,
-        Exam : 4
+        PM: 0,
+        Team: 1,
+        Client: 2,
+        Self: 3,
+        Exam: 4
     },
     CheckPointUserStatus:
     {
-        Draft : 0,
-        Reviewed : 1
+        Draft: 0,
+        Reviewed: 1
     },
-    CheckpointUserResult:{
-        Draft : 0,
-        UserDone : 1,
-        PMDone : 2,
-        FinalDone :3,
+    CheckpointUserResult: {
+        Draft: 0,
+        UserDone: 1,
+        PMDone: 2,
+        FinalDone: 3,
 
     },
-    checkpointUserTags:{
-        Up:1,
-        
+    checkpointUserTags: {
+        Up: 1,
+
+    },
+    ChargeType:
+    {
+        Daily : 0,
+        Monthly : 1,
+        Hours : 2
     }
   
 

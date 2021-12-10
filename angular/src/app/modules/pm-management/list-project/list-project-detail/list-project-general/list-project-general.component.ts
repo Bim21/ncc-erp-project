@@ -27,6 +27,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public pmList: UserDto[] = [];
   public project = {} as ProjectDto;
   public currencyList: CurrencyDto[]=[];
+  public chargeTypeList : string[]= Object.keys(this.APP_ENUM.ChargeType)
   PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
   constructor(injector: Injector, private userService: UserService, private clientService: ClientService,
      private projectService: ListProjectService, private route: ActivatedRoute, private currencyService: CurrencyService) {
@@ -48,8 +49,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   }
   public getProjectDetail(): void {
     this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
-      this.project = data.result
- 
+      this.project = data.result;
     })
   }
   public editRequest(): void {
@@ -86,6 +86,11 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
         this.isLoading=false;
         this.getProjectDetail();
       }, () => this.isLoading = false);
+  }
+  checkValue(e){
+    if(e.checked == true){
+      this.project.chargeType = 0;
+    }
   }
   
 

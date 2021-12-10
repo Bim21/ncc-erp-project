@@ -31,6 +31,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
   public searchPM: string = "";
   public title ="";
   public currencyList: CurrencyDto[]=[];
+  public chargeTypeList : string[]= Object.keys(this.APP_ENUM.ChargeType)
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     injector: Injector,
@@ -54,6 +55,8 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       // this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
       this.isEditStatus = true
     }
+    
+    console.log(this.project.chargeType)
     this.getAllClient()
     this.title = this.project.name;
     
@@ -95,6 +98,11 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     this.clientService.getAll().pipe(catchError(this.clientService.handleError)).subscribe(data => {
       this.clientList = data.result
     })
+  }
+  checkValue(e){
+    if(e.checked == true){
+      this.project.chargeType = 0;
+    }
   }
 
 
