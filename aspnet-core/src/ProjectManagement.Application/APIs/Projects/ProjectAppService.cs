@@ -34,7 +34,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
-        {
+         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
@@ -68,6 +68,7 @@ namespace ProjectManagement.APIs.Projects
                             CurrencyId = p.CurrencyId,
                             CurrencyName = p.Currency.Name,
                             IsCharge = p.IsCharge,
+                            ChargeType=p.ChargeType,
                             PmId = p.PMId,
                             PmName = p.PM.Name,
                             PmFullName = p.PM.FullName,
@@ -103,6 +104,7 @@ namespace ProjectManagement.APIs.Projects
                     CurrencyId = x.CurrencyId,
                     CurrencyName = x.Currency.Name,
                     IsCharge = x.IsCharge,
+                    ChargeType=x.ChargeType,
                     PmId = x.PMId,
                     PmName = x.PM.Name,
                 });
@@ -126,6 +128,7 @@ namespace ProjectManagement.APIs.Projects
                                     ClientId = x.ClientId,
                                     ClientName = x.Client.Name,
                                     IsCharge = x.IsCharge,
+                                    ChargeType=x.ChargeType,
                                     PmId = x.PMId,
                                     PmName = x.PM.Name,
                                     PmFullName = x.PM.FullName,

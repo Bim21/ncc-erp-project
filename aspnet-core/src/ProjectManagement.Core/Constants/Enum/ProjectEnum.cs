@@ -82,6 +82,12 @@ namespace ProjectManagement.Constants.Enum
             Past = 1,
             Future = 2
         }
+        public enum ChargeType
+        {
+            Daily=0, 
+            Monthly=1, 
+            Hours=2
+        }
         public enum ResourceRequestStatus
         {
             PENDING = 0,
