@@ -389,9 +389,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
-            if (input.StartTime.Date <= DateTime.Now.Date)
-                throw new UserFriendlyException("The start date must be greater than the current time !");
-
             var isExist = projectUsers.Any(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.StartTime == input.StartTime);
             if (isExist)
             {
