@@ -26,6 +26,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
   PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
   PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
   PmManager_ProjectUserBill = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
+  PmManager_ProjectUserBill_GetAllbyProject = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_GetAllbyProject;
   PmManager_ProjectUserBill_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
   PmManager_ProjectUserBill_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
   PmManager_ProjectUserBill_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
@@ -80,19 +81,27 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
   }
   // get data
   private getProjectUser() {
+    if (this.permission.isGranted(this.PmManager_ProjectUser)) {
       this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         this.projectUserList = data.result;
       })
+    }
+
   }
   private getResourceRequestList(): void {
+    if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
       this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
+    }
   }
   private getUserBill(): void {
+    if (this.permission.isGranted(this.PmManager_ProjectUserBill_GetAllbyProject)) {
       this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
         this.userBillList = data.result
       })
+    }
+
   }
   private getAllUser() {
     this.userService.GetAllUserActive(false,false).pipe(catchError(this.userService.handleError)).subscribe(data => {
