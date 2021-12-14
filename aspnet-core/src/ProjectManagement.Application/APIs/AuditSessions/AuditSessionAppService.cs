@@ -109,13 +109,14 @@ namespace ProjectManagement.APIs.AuditSessions
                                      .Select(x => new { x.AuditResultId, x.IsPass });
             var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
 
-            return await (from ar in WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == Id)
+            return await (from ar in WorkScope.GetAll<AuditResult>().Include(x => x.PM).Where(x => x.AuditSessionId == Id)
                           select new AuditSessionDetailDto
                           {
                               Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
                               PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
+                              PmNameNormal = ar.PM.Surname + " " + ar.PM.Name,
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),

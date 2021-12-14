@@ -13,6 +13,8 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string EmailAddress { get; set; }
         [ApplySearchAttribute]
         public string FullName { get; set; }
+        [ApplySearchAttribute]
+        public string FullNameNormal { get; set; }
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }

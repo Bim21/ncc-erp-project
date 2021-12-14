@@ -108,6 +108,7 @@ namespace ProjectManagement.Users
                     Branch = x.Branch,
                     IsActive = x.IsActive,
                     FullName = x.Name + " " + x.Surname,
+                    FullNameNormal = x.Surname + " " + x.Name,
                     UserSkills = userSkills.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
                     {
                         UserId = s.UserId,

@@ -275,6 +275,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.Id,
                                     UserType = x.UserType,
                                     FullName = x.Name + " " + x.Surname,
+                                    FullNameNormal = x.Surname + " " + x.Name,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,

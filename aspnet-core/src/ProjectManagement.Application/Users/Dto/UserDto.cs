@@ -40,6 +40,8 @@ namespace ProjectManagement.Users.Dto
         public bool IsActive { get; set; }
         [ApplySearchAttribute]
         public string FullName { get; set; }
+        [ApplySearchAttribute]
+        public string FullNameNormal { get; set; }
 
         public DateTime? LastLoginTime { get; set; }
 
