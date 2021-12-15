@@ -40,7 +40,7 @@ namespace ProjectManagement.APIs.HRM
         {
             if (!CheckSecurityCode())
             {
-                throw new UserFriendlyException("SecretKey does not match!");
+                throw new UserFriendlyException("SecretCode does not match!");
             }
 
             var roleEmployee = _roleManager.GetRoleByName(RoleConstants.ROLE_EMPLOYEE);
@@ -97,7 +97,7 @@ namespace ProjectManagement.APIs.HRM
 
         private bool CheckSecurityCode()
         {
-            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecretCode);
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
             var header = _httpContextAccessor.HttpContext.Request.Headers;
             var securityCodeHeader = header["X-Secret-Key"];
             if (secretCode == securityCodeHeader)

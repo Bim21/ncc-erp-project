@@ -34,8 +34,8 @@ namespace ProjectManagement.Services.Finance
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinaceUri));
-                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretKey));
+                httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceUri));
+                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretCode));
                 HttpResponseMessage response = new HttpResponseMessage();
                 try { response = await httpClient.GetAsync(Url); }
                 catch (Exception ex)
@@ -59,8 +59,8 @@ namespace ProjectManagement.Services.Finance
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.BaseAddress = new System.Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinaceUri));
-                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretKey));
+                httpClient.BaseAddress = new System.Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceUri));
+                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretCode));
                 var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = new HttpResponseMessage();
                 try { response = await httpClient.PostAsync(Url, contentString); }

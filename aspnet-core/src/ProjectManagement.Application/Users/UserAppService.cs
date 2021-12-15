@@ -40,11 +40,13 @@ using Abp.Configuration;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Configuration;
 using ProjectManagement.Services.Komu.KomuDto;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectManagement.Users
 {
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
         private readonly IRepository<Role> _roleRepository;
@@ -69,7 +71,8 @@ namespace ProjectManagement.Users
             IWebHostEnvironment webHostEnvironment,
             HrmService hrmService,
             KomuService komuService,
-            ISettingManager settingManager)
+            ISettingManager settingManager,
+            IHttpContextAccessor httpContextAccessor)
             : base(repository)
         {
             _userManager = userManager;
@@ -83,6 +86,7 @@ namespace ProjectManagement.Users
             _hrmService = hrmService;
             _komuService = komuService;
             _settingManager = settingManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -623,9 +627,14 @@ namespace ProjectManagement.Users
             };
         }
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Pages_Users_UpdateStarRateFromTimesheet)]
+        //[AbpAuthorize(PermissionNames.Pages_Users_UpdateStarRateFromTimesheet)]
+        [AbpAllowAnonymous]
         public async Task<List<UpdateStarRateFromTimesheetDto>> UpdateStarRateFromTimesheet(List<UpdateStarRateFromTimesheetDto> input)
         {
+            if (!CheckSecurityCode())
+            {
+                throw new UserFriendlyException("SecretCode does not match!");
+            }
             foreach (var item in input)
             {
                 var user = await _workScope.GetAll<User>().Where(x => x.EmailAddress == item.EmailAddress).FirstOrDefaultAsync();
@@ -708,6 +717,15 @@ namespace ProjectManagement.Users
                 Name = name,
                 SurName = surName
             };
+        }
+        private bool CheckSecurityCode()
+        {
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
+            var header = _httpContextAccessor.HttpContext.Request.Headers;
+            var securityCodeHeader = header["X-Secret-Key"];
+            if (secretCode == securityCodeHeader)
+                return true;
+            return false;
         }
 
     }
