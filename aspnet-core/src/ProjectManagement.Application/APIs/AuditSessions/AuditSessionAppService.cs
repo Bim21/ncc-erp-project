@@ -12,6 +12,7 @@ using ProjectManagement.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -102,27 +103,31 @@ namespace ProjectManagement.APIs.AuditSessions
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_View)]
-        public async Task<List<AuditSessionDetailDto>> Get(long Id)
+        public async Task<List<AuditSessionDetailDto>> Get(long Id, string searchText)
         {
             var checkExist = await WorkScope.GetAsync<AuditSession>(Id);
             var listSessionPeople = WorkScope.GetAll<AuditResultPeople>()
                                      .Select(x => new { x.AuditResultId, x.IsPass });
-            var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
-
+            //var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
+            //string cleanSearchText = searchText.EmptyIfNull().Trim().ToLower();
+            var cleanSearchText = Regex.Replace(searchText.EmptyIfNull().Trim().ToLower(), @"\s+", " ");
             return await (from ar in WorkScope.GetAll<AuditResult>().Include(x => x.PM).Where(x => x.AuditSessionId == Id)
                           select new AuditSessionDetailDto
                           {
                               Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
-                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
+                              //PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
+                              PmName = ar.PM.Name + " " + ar.PM.Surname,
                               PmNameNormal = ar.PM.Surname + " " + ar.PM.Name,
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
                               CountFail = listSessionPeople.Where(x => x.AuditResultId == ar.Id && !x.IsPass).Count(),
                               Status = ar.Status.ToString()
-                          }).ToListAsync();
+                          })
+                          .Where(x => x.PmName.ToLower().Contains(cleanSearchText) || x.PmNameNormal.ToLower().Contains(cleanSearchText) || x.ProjectName.ToLower().Contains(cleanSearchText))
+                          .ToListAsync();
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Delete)]
