@@ -44,8 +44,8 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
     this.saodoName=this.route.snapshot.queryParamMap.get('name');
     this.getSaodoDetail()
   }
-  protected getSaodoDetail(): void {
-    this.saodoService.getById(this.saodoId).subscribe(data=>{
+  public getSaodoDetail(): void {
+    this.saodoService.getDetailById(this.saodoId , this.searchText).subscribe(data=>{
       this.listSaoDoDetail= data.result;
       this.tempListSaoDoDetail = data.result;
       this.projectName=data.result.map(el=>el.projectName)
