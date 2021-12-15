@@ -183,6 +183,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getFuturereport();
       this.getProjectProblem();
       this.getCurrentResourceOfProject();
+      this.search()
     }))
   }
   getProjectInfo() {
@@ -268,7 +269,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
 
 
-    this.projectId = this.pmReportProjectList[0].projectId
+    this.projectId = this.pmReportProjectList[0]?.projectId
     this.generalNote = this.pmReportProjectList[0].note
     this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime

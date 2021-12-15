@@ -17,7 +17,11 @@ export class SaodoService extends BaseApiService {
   public deleteAuditSession(id: any): Observable<any> {
     return this.http.delete<any>(this.rootUrl + '/Delete', {
         params: new HttpParams().set('id', id)
-    })
+  })
+  
+}
+public getDetailById(id: any , searchText : string): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/Get?id=' + id+"&searchText="+searchText);
 }
 
 
