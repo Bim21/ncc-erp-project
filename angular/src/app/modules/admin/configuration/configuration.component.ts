@@ -29,7 +29,8 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditExpiredDay: boolean = false
   public isEditExpiredHour: boolean = false
   public isEditGoogleKey: boolean = false
-  public isEditHRM:boolean =false
+  public isEditHRM:boolean = false
+  public isEditHRMSecretKey:boolean = false;
   public listDays: any[] = [
     {value:"2", text: "Monday"},
     {value:"3", text: "Tuesday"},
@@ -66,19 +67,20 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
 export class ConfigurationDto {
   clientAppId: string;
   projectUri: string;
-  secretCode: string;
+  securityCode: string;
   userBot: string;
   passwordBot: string;
   komuUrl: string;
   komuUserNames: string;
   financeUri: string;
-  financeSecretKey: string;
+  financeSecretCode: string;
   timesheetUri: string;
-  timesheetSecretKey: string;
+  timesheetSecretCode: string;
   canSendDay: string;
   canSendHour: string;
   expiredDay: string;
   expiredHour: string;
   hrmUri:string;
+  hrmSecretCode:string
 }
 

@@ -80,6 +80,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
         year: Timesheet.year,
         status: Timesheet.status,
         isActive: Timesheet.isActive,
+        totalWorkingDay : Timesheet.totalWorkingDay,
         id: Timesheet.id
       }
     }
@@ -89,7 +90,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
         item: timesheet,
         command: command,
       },
-      width: "700px",
+      width: "800px",
       disableClose: true,
     });
     show.afterClosed().subscribe(result => {

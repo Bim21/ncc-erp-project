@@ -137,14 +137,14 @@
                 <div class="col col-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Secret Code</h4>
+                            <h4>Security Code</h4>
                         </div>
 
                         <div class="card-body">
 
                             <mat-form-field class="w-75">
                                 <input [readonly]="!isEditSecretCode" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.secretCode" #secretCode />
+                                    [(ngModel)]="configuration.securityCode" #secretCode />
                             </mat-form-field>
                         </div>
                     </div>
@@ -160,42 +160,56 @@
                 <h4>HRM Setting</h4>
             </div>
 
-            <div class="card-body">
-                <div class="col-12 ml-1">
+            <div class="card-body row">
+                <div class="col-12 mb-4 ml-1">
                     <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditHRM = !isEditHRM;
+                        (click)="isEditHRM = !isEditHRM; isEditHRMSecretKey = !isEditHRMSecretKey;
                         hrmUri.focus() ;" [hidden]="isEditHRM">
                         <i class="fas fa-edit"></i>
                         Edit
                     </a>
                     <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditHRM = !isEditHRM;"
+                        (click)="saveConfiguration();isEditHRM = !isEditHRM;; isEditHRMSecretKey = !isEditHRMSecretKey;"
                         [hidden]="!isEditHRM">
                         Save
                     </a>
 
                     <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditHRM = !isEditHRM;
+                        (click)="isEditHRM = !isEditHRM;; isEditHRMSecretKey = !isEditHRMSecretKey;
                         getSetting()" [hidden]="!isEditHRM">
                         Cancel
                     </a>
                 </div>
 
 
-                <div class="">
-                    <div class="card-body">
-
-                        <mat-form-field class="w-75">
-                            <input [readonly]="!isEditHRM" class="w-100" type="text" matInput
-                                [(ngModel)]="configuration.hrmUri" #hrmUri />
-                        </mat-form-field>
+                <div class="col col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>HRM URL</h4>
+                        </div>
+                        <div class="card-body">
+                            <mat-form-field class="w-75">
+                                <input [readonly]="!isEditHRM" class="w-100" type="text" matInput
+                                    [(ngModel)]="configuration.hrmUri" #hrmUri />
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
+                <div class="col col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Secret Code</h4>
+                        </div>
 
+                        <div class="card-body">
 
-
-
-                
+                            <mat-form-field class="w-75">
+                                <input [readonly]="!isEditHRMSecretKey" class="w-100" type="text" matInput
+                                    [(ngModel)]="configuration.hrmSecretCode" #HRMSecretKey />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>             
             </div>
         </div>
 
@@ -253,14 +267,14 @@
                 <div class="col col-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Secret Key</h4>
+                            <h4>Secret Code</h4>
                         </div>
 
                         <div class="card-body">
 
                             <mat-form-field class="w-75">
                                 <input [readonly]="!isEditTimesheetSecretKey" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.timesheetSecretKey" #timesheetSecretKey />
+                                    [(ngModel)]="configuration.timesheetSecretCode" #timesheetSecretKey />
                             </mat-form-field>
                         </div>
                     </div>
@@ -311,14 +325,14 @@
                 <div class="col col-6">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Secret Key</h4>
+                            <h4>Secret Code</h4>
                         </div>
 
                         <div class="card-body">
 
                             <mat-form-field class="w-75">
                                 <input [readonly]="!isEditFinanceSecretKey" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.financeSecretKey" #financeSecretKey />
+                                    [(ngModel)]="configuration.financeSecretCode" #financeSecretKey />
                             </mat-form-field>
                         </div>
                     </div>
