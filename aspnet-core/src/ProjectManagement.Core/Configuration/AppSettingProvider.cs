@@ -28,6 +28,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.ProjectUri,"http://project.dev.nccsoft.vn/",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuUserNames,"hang.buithidiem.ncc;trung.do.trong;lam.buihoang.ncc;",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuRoom,"erp-team-ncc",scopes:SettingScopes.Application |SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.DefaultWorkingHours,"8",scopes:SettingScopes.Application |SettingScopes.Tenant),
             };
         }
     }
