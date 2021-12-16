@@ -93,7 +93,7 @@
                                 totalItems: totalItems
                               }; let i = index" (contextmenu)="showActions($event, item)">
                                 <td class="text-center"><span>{{ i +1 }}</span></td>
-                                <td style="white-space: normal; min-width: 150px;">{{item.projectName}}</td>
+                                <td style="white-space: normal; min-width: 165px;">{{item.projectName}}</td>
                                 <td class="text-left">
                                     <div style="width: 300px;">
                                         <app-user-info
@@ -103,12 +103,11 @@
                                     </div>
 
                                 </td>
-                                <td class="text-center">{{item.clientName}}</td>
-                                <td style="white-space: normal;  max-width: 350px;">
-                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                    font-family: sans-serif; align-self:flex-start; ">
+                                <td style="min-width: 170px; white-space: pre-line; " >{{item.clientName}}</td>
+                                <td style="white-space: pre-line; word-wrap: break-word; min-width: 190px;  max-width: 350px;">
+                                    
                                        {{item.note}}
-                                  </pre>
+                                  
                                 </td>
                                 <td style="cursor: pointer;" class="text-left bill" (click)="viewBillDetail(item)">
                                     <div *ngIf="item.projectBillInfomation"
@@ -121,7 +120,7 @@
                                 </td>
 
 
-                                <td class="" style="white-space: normal;max-width: 230px;">
+                                <td class="" style="white-space: normal;max-width: 230px; min-width: 200px;">
                                     <span class="file-download">
                                         <span (click)="downloadFile(item)">{{item.file}}</span>
                                     </span>
@@ -139,14 +138,17 @@
 
                                 </td>
                                 <td>
-                                    <i *ngIf="item.isComplete" style="color: green;" class="fas fa-check fa-2x "></i>
+                                    <button class="btn">
+                                        <i *ngIf="item.isComplete" style="color: green;" class="fas fa-check fa-2x "></i>
+                                    </button>
+                                    
                                 </td>
                                 <td *ngIf="isActive" class="text-center" style="vertical-align: middle;">
                                     <button class="btn btn-sm bg-primary" (click)="viewBillDetail(item)" #importFileBtn>
                                         <i class="fas fa-edit"></i>
                                         Update Bill
                                     </button>
-                                    <div class="mt-2">
+                                   
                                         <div style="visibility: hidden; position: fixed"
                                                         [style.left]="contextMenuPosition.x"
                                                         [style.top]="contextMenuPosition.y"
@@ -174,7 +176,7 @@
                                                 Delete
                                             </button>
                                         </mat-menu>
-                                    </div>
+                                   
 
                                 </td>
                             </tr>

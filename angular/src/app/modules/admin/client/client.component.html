@@ -106,9 +106,9 @@
               <td class="text-center stt">
                 <span>{{ i + 1 }}</span>
               </td>
-              <td class="text-center">{{ item.name }}</td>
+              <td >{{ item.name }}</td>
               <td class="text-center">{{ item.code }}</td>
-              <td class="text-center">{{ item.address }}</td>
+              <td >{{ item.address }}</td>
               <td *ngIf="permission.isGranted(Admin_Client_Edit) || permission.isGranted(Admin_Client_Delete)" style="width: 200px" class="text-center">
                 <button *ngIf="permission.isGranted(Admin_Client_Edit)"
                   class="btn btn-sm bg-secondary mr-1"

@@ -8,7 +8,7 @@
     title="{{
       data.command == 'create'
         ? 'Add new client'
-        : 'Edit client: ' + client.name
+        : 'Edit client: ' + title
     }}"
     (onCloseClick)="dialogRef.close()"
   >
@@ -53,14 +53,14 @@
     <div class="form-group row">
       <label class="col-md-3 col-form-label" for="pm"> Address: </label>
       <div class="col-md-9">
-        <input
+        <textarea
           class="form-control mt-1"
-          type="text"
           placeholder="Address"
           name="address"
           [(ngModel)]="client.address"
           maxlength="1000"
-        />
+          rows="2"
+        ></textarea>
       </div>
     </div>
   </div>

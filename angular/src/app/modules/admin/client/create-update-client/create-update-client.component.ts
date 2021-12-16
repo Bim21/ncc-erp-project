@@ -11,7 +11,7 @@ import { Component, OnInit, Injector, Inject } from '@angular/core';
   styleUrls: ['./create-update-client.component.css']
 })
 export class CreateUpdateClientComponent extends AppComponentBase implements OnInit {
-
+  title:string =""
   public client = {} as ClientDto;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,
@@ -19,8 +19,10 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
     public dialogRef: MatDialogRef<CreateUpdateClientComponent>,) { super(injector) }
 
   ngOnInit(): void {
-    this.client = this.data.item;
-    console.log(this.client)
+    if(this.data.command == "update"){
+      this.client = this.data.item;
+      this.title = this.data.item.name ? this.data.item.name : ''
+    }
   }
   SaveAndClose() {
     if (this.data.command == "create") {
