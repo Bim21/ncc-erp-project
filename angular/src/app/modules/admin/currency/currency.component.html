@@ -5,7 +5,7 @@
                 <h1>Currency</h1>
             </div>
             <div class="col-6 text-right">
-                <button (click)="createCurrency()" class="btn bg-blue">
+                <button *ngIf="permission.isGranted(Admin_Currency_Create)" (click)="createCurrency()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                     Create
                 </button>
@@ -62,7 +62,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
-                            <th >Actions</th>
+                            <th *ngIf="permission.isGranted(Admin_Currency_Edit) || permission.isGranted(Admin_Currency_Delete)">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,8 +75,8 @@
                               }; let i = index"  >
                             <td class="text-center stt"><span>{{ i +1 }}</span></td>
                             <td class="text-center">{{item.name}}</td>
-                            <td style="width: 200px;" class="text-center">
-                                <button
+                            <td style="width: 200px;" class="text-center" *ngIf="permission.isGranted(Admin_Currency_Edit) || permission.isGranted(Admin_Currency_Delete)">
+                                <button  *ngIf="permission.isGranted(Admin_Currency_Edit)"
 
                                 class="btn btn-sm bg-secondary mr-1"
                                 (click)="editCurrency(item);$event.stopPropagation()" >
@@ -84,7 +84,7 @@
 
                                 Edit
                             </button>
-                            <button
+                            <button  *ngIf="permission.isGranted(Admin_Currency_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(item);$event.stopPropagation()"
                                  #deleteBtn>

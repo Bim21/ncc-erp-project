@@ -5,12 +5,14 @@ export const PERMISSIONS_CONSTANT = {
     Pages_Home: "Pages.Home",
 
 
-    Admin: "true",
-    Admin_Client: "true",
-    Admin_Client_Create: "true",
-    Admin_Client_Delete: "true",
-    Admin_Client_Edit: "true",
-    Admin_Client_ViewAll: "true",
+
+
+    Admin: "Admin",
+    Admin_Client: "Admin.Client",
+    Admin_Client_Create: "Admin.Client.Create",
+    Admin_Client_Delete: "Admin.Client.Delete",
+    Admin_Client_Edit: "Admin.Client.Edit",
+    Admin_Client_ViewAll: "Admin.Client.ViewAll",
     Admin_Configuration: "Admin.Configuration",
     Admin_Configuration_Edit: "Admin.Configuration.Edit",
     Admin_Configuration_ViewAll: "Admin.Configuration.ViewAll",
@@ -19,6 +21,11 @@ export const PERMISSIONS_CONSTANT = {
     Admin_Currency_Delete: "Admin.Currency.Delete",
     Admin_Currency_Edit: "Admin.Currency.Edit",
     Admin_Currency_ViewAll: "Admin.Currency.ViewAll",
+    Admin_Skill: "Admin.Skill",
+    Admin_Skill_Create: "Admin.Skill.Create",
+    Admin_Skill_Delete: "Admin.Skill.Delete",
+    Admin_Skill_Update: "Admin.Skill.Update",
+    Admin_Skill_ViewAll: "Admin.Skill.ViewAll",
     CheckList: "CheckList",
     CheckList_CheckListCategory: "CheckList.CheckListCategory",
     CheckList_CheckListCategory_Create: "CheckList.CheckListCategory.Create",

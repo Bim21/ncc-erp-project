@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { CreateUpdateClientComponent } from './create-update-client/create-update-client.component';
 import { MatDialog } from '@angular/material/dialog';
 import { result } from 'lodash-es';
@@ -14,6 +15,7 @@ import { InputFilterDto } from '@shared/filter/filter.component';
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.css']
 })
+
 export class ClientComponent extends PagedListingComponentBase<ClientComponent> implements OnInit {
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [6, 0, 7, 8], displayName: "Tên", },
@@ -44,6 +46,10 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
   }
 
   public clientList: ClientDto[] = [];
+  Admin_Client_Create = PERMISSIONS_CONSTANT.Admin_Client_Create;
+  Admin_Client_Delete = PERMISSIONS_CONSTANT.Admin_Client_Delete;
+  Admin_Client_Edit = PERMISSIONS_CONSTANT.Admin_Client_Edit;
+  Admin_Client_ViewAll = PERMISSIONS_CONSTANT.Admin_Client_ViewAll;
   constructor(private clientService: ClientService,
     injector: Injector,
     private dialog: MatDialog) { super(injector) }
