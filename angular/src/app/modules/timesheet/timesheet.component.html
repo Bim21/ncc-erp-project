@@ -67,7 +67,7 @@
                             <th style="width : 150px">Number of project</th>
                             <th style="width : 150px">Number of timesheet</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th style="width: 100px;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,7 +79,7 @@
                                 totalItems: totalItems
                               }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td class="text-center"><span class="hyperlink" (click)="showDetail(item)">{{ item.name
+                            <td ><span class="hyperlink" (click)="showDetail(item)">{{ item.name
                                     }}</span></td>
                             <td class="text-center">{{item.month}}/{{item.year}}</td>
                             <td class="text-center">{{item.totalWorkingDay}}</td>
