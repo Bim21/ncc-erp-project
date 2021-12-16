@@ -62,9 +62,10 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
-                            <th>Date</th>
-                            <th>Number of project</th>
-                            <th>Number of timesheet</th>
+                            <th style="width : 150px">Date</th>
+                            <th style="width : 150px">Total of Working day</th>
+                            <th style="width : 150px">Number of project</th>
+                            <th style="width : 150px">Number of timesheet</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -81,6 +82,7 @@
                             <td class="text-center"><span class="hyperlink" (click)="showDetail(item)">{{ item.name
                                     }}</span></td>
                             <td class="text-center">{{item.month}}/{{item.year}}</td>
+                            <td class="text-center">{{item.totalWorkingDay}}</td>
                             <td class="text-center">{{item.totalProject}}</td>
                             <td class="text-center">{{item.totalTimesheet}}</td>
                             <td class="text-center">
