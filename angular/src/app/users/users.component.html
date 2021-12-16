@@ -71,7 +71,10 @@
                 <th>userLevel</th>
                 <th>userSkills</th>
                 <th>{{ "IsActive" | localize }}</th>
-                <th class="col-action-menu">{{ "Actions" | localize }}</th>
+                <th *ngIf="(permission.isGranted(Pages_Users_Update) && !permission.isGranted(Pages_Users_UpdateMySkills)) ||
+                permission.isGranted(Pages_Users_UpdateMySkills) || permission.isGranted(Pages_Users_Delete) ||
+                permission.isGranted(Pages_Users_UpdateAvatar) || this.permission.isGranted(Pages_Users_ViewAll)
+                " class="col-action-menu">{{ "Actions" | localize }}</th>
               </tr>
             </thead>
             <tbody>
@@ -104,7 +107,10 @@
                   </div>
                   <span *ngIf="!user.isActive">Đã nghỉ việc</span>
                 </td>
-                <td class="text-center">
+                <td class="text-center" *ngIf="(permission.isGranted(Pages_Users_Update) && !permission.isGranted(Pages_Users_UpdateMySkills)) ||
+                permission.isGranted(Pages_Users_UpdateMySkills) || permission.isGranted(Pages_Users_Delete) ||
+                permission.isGranted(Pages_Users_UpdateAvatar) || this.permission.isGranted(Pages_Users_ViewAll)
+                ">
                   <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                     <i class="fas fa-bars fa-lg"></i>
                   </button>
@@ -124,7 +130,7 @@
                       <i class="fas fa-trash fa-lg mr-1"></i>
                       {{ "Delete" | localize }}
                     </button>
-                    <button class="mat-menu-item  w-100" (click)="upLoadAvatar(user)">
+                    <button *ngIf="permission.isGranted(Pages_Users_UpdateAvatar)" class="mat-menu-item  w-100" (click)="upLoadAvatar(user)">
                       <i class="fas fa-upload fa-lg mr-1"></i>
                       {{ "Upload Avatar" | localize }}
                     </button>
