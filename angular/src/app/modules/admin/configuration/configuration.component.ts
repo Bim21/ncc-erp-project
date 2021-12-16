@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
-import {AppConfigurationService} from "../../../service/api/app-configuration.service"
+import { AppConfigurationService } from "../../../service/api/app-configuration.service"
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
@@ -29,25 +29,26 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditExpiredDay: boolean = false
   public isEditExpiredHour: boolean = false
   public isEditGoogleKey: boolean = false
-  public isEditHRM:boolean = false
-  public isEditHRMSecretKey:boolean = false;
+  public isEditHRM: boolean = false
+  public isEditHRMSecretKey: boolean = false;
+  public isEditDefaultWorkingHours: boolean = false
   public listDays: any[] = [
-    {value:"2", text: "Monday"},
-    {value:"3", text: "Tuesday"},
-    {value:"4", text: "Wednesday"},
-    {value:"5", text: "Thursday"},
-    {value:"6", text: "Friday"},
-    {value:"7", text: "Saturday"},
-    {value:"8", text: "Sunday"},
+    { value: "2", text: "Monday" },
+    { value: "3", text: "Tuesday" },
+    { value: "4", text: "Wednesday" },
+    { value: "5", text: "Thursday" },
+    { value: "6", text: "Friday" },
+    { value: "7", text: "Saturday" },
+    { value: "8", text: "Sunday" },
   ]
   public listHours = [];
-  constructor(private settingService: AppConfigurationService, injector:Injector) { 
+  constructor(private settingService: AppConfigurationService, injector: Injector) {
     super(injector)
   }
 
   ngOnInit(): void {
     for (let index = 0; index < 24; index++) {
-      let hour = {value: index.toString(), text: index.toString()+"h"}
+      let hour = { value: index.toString(), text: index.toString() + "h" }
       this.listHours.push(hour)
     }
     this.getSetting()
@@ -80,7 +81,8 @@ export class ConfigurationDto {
   canSendHour: string;
   expiredDay: string;
   expiredHour: string;
-  hrmUri:string;
-  hrmSecretCode:string
+  hrmUri: string;
+  hrmSecretCode: string
+  defaultWorkingHours: string
 }
 
