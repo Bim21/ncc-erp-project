@@ -71,9 +71,9 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Create)]
         public async Task<object> Create(TimesheetDto input)
         {
-            if (input.TotalWorkingDay == null)
+            if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
             {
-                throw new UserFriendlyException("Total Of Working Day field is required !");
+                throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
             }
             try
             {
@@ -154,9 +154,9 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Update)]
         public async Task<TimesheetDto> Update(TimesheetDto input)
         {
-            if (input.TotalWorkingDay == null)
+            if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
             {
-                throw new UserFriendlyException("Total Of Working Day field is required !");
+                throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
             }
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
 

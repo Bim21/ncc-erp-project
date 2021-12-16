@@ -22,5 +22,6 @@
         public const string KomuUrl = "KomuUrl";
         public const string KomuUserNames = "KomuUsernames";
         public const string KomuRoom = "KomuRoom";
+        public const string DefaultWorkingHours = "App.DefaultWorkingHours";
     }
 }

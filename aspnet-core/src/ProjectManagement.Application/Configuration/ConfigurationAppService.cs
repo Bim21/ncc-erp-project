@@ -42,7 +42,8 @@ namespace ProjectManagement.Configuration
                 ProjectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri),
                 HRMUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri),
                 HRMSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode),
-                KomuRoom=await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
+                KomuRoom = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
+                DefaultWorkingHours = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours),
             };
         }
 
@@ -64,9 +65,10 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.UserBot) ||
                 string.IsNullOrEmpty(input.PasswordBot) ||
                 string.IsNullOrEmpty(input.ProjectUri) ||
-                string.IsNullOrEmpty(input.HRMUri)||
+                string.IsNullOrEmpty(input.HRMUri) ||
                 string.IsNullOrEmpty(input.HRMSecretCode) ||
-                string.IsNullOrEmpty(input.KomuRoom)
+                string.IsNullOrEmpty(input.KomuRoom) ||
+                string.IsNullOrEmpty(input.DefaultWorkingHours)
                 )
             {
                 throw new UserFriendlyException("All setting values need to be completed");
@@ -90,6 +92,7 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMUri, input.HRMUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMSecretCode, input.HRMSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuRoom, input.KomuRoom);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.DefaultWorkingHours, input.DefaultWorkingHours);
             return input;
         }
 
