@@ -103,7 +103,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                         FullName = x.User.FullName,
                                         UserType = x.User.UserType
                                     });
-
+            var checkListMandatories = WorkScope.GetAll<CheckListItemMandatory>();
             var checkListInProjects = await WorkScope.GetAll<ProjectCheckList>().Include(x => x.CheckListItem)
                     .Where(x => x.ProjectId == projectId)
                     .Select(x => new CheckListItemByProjectDto
@@ -118,6 +118,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                         PersonInCharge = x.CheckListItem.PersonInCharge,
                         RegistrationDate = x.CreationTime,
                         people = auditResultPeople.Where(y => y.CheckListItemId == x.CheckListItemId).ToList(),
+                        Mandatories = checkListMandatories.Where(s => s.CheckListItemId == x.CheckListItemId).Select(x => x.ProjectType).ToList(),
                     }).ToListAsync();
             return checkListInProjects;
         }
