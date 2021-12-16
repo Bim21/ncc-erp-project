@@ -17,5 +17,6 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public int Year { get; set; }
         public bool IsActive { get; set; }
         public bool CreatedInvoice { get; set; }
+        public float? TotalWorkingDay { get; set; }
     }
 }
