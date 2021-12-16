@@ -18,5 +18,6 @@ namespace ProjectManagement.APIs.Clients.Dto
         public string Name { get; set; }
         [ApplySearchAttribute]
         public string Code { get; set; }
+        public string Address { get; set; }
     }
 }

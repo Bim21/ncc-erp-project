@@ -27,7 +27,9 @@ namespace ProjectManagement.APIs.Clients
                 {
                     Id = s.Id,
                     Name = s.Name,
-                    Code = s.Code
+                    Code = s.Code,
+                    Address = s.Address,
+                    
                 });
             return await query.GetGridResult(query, input);
         }
@@ -40,7 +42,8 @@ namespace ProjectManagement.APIs.Clients
               {
                   Id = s.Id,
                   Name = s.Name,
-                  Code = s.Code
+                  Code = s.Code,
+                  Address = s.Address,
               });
             return await query.ToListAsync();
         }
