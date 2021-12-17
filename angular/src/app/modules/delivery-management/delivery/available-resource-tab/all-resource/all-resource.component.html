@@ -77,14 +77,14 @@
                               }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
                             <td style=" border:none" class="row">
-                                <div class="col-11 col-sm-9" style="white-space: normal; border:none">
+                                <div class="w-infor" style="white-space: normal; border:none">
                                     <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                 userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}">
                                     </app-user-info>
                 
                                 </div>
-                                <div class="col-1 col-sm-3">
-                                    <ngx-stars style="z-index: 1 !important;" [readonly]="true" [wholeStars]="true" [size]="1"  [initialStars]="item.starRate" [maxStars]="item.starRate?item.starRate:0" [color]="'gold'" (ratingOutput)="onRatingSet($event)"></ngx-stars>
+                                <div class="w-review">
+                                    <ngx-stars style="z-index: 1 !important;" [readonly]="true" [wholeStars]="true" [size]="1" [color]="'gold'"  [initialStars]="item.starRate" [maxStars]="item.starRate?item.starRate:0" (ratingOutput)="onRatingSet($event)"></ngx-stars>
                                 </div>
 
                             </td>
