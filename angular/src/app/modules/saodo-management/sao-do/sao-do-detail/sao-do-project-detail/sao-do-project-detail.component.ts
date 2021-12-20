@@ -139,6 +139,11 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
     this.isEditing=false;
 
   }
+  cancelNote(){
+    this.isEditingNote=false;
+    this.getNote();
+    this.getAllCheckList();
+  }
 
 
 
