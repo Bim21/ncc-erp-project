@@ -59,7 +59,7 @@ export class CreateEditSaoDoProjectComponent extends AppComponentBase implements
   getAllUser() {
     this.userService.GetAllUserActive(true).subscribe(data => {
       this.pmList = data.result;
-      this.saodoProject.pmId=this.pmList.filter(el=>el.name == this.saodoProject.pmName)[0].id;
+      this.saodoProject.pmId=this.pmList.filter(el=>el.name == this.saodoProject.pmName)[0]?.id;
     })
   }
 

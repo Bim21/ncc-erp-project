@@ -66,7 +66,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
       }
     );
   }
-
+    
   showDialog(command: String, saodoProject:any): void {
      let project={};
     if (command == "edit") {
@@ -87,6 +87,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
       },
       width: "700px",
       disableClose: true,
+      autoFocus: false
     });
     show.afterClosed().subscribe(result => {
       if(result){
