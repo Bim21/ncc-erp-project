@@ -63,7 +63,6 @@ namespace ProjectManagement.Services.Komu
                 logger.LogInformation(responseContent);
                 return response;
             }
-
             return response;
         }
         public async Task ProcessKomu(List<attachment> ListAttach, string message, string alias, List<string> komuUserNames)

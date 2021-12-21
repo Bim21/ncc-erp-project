@@ -454,47 +454,47 @@ namespace ProjectManagement.APIs.ResourceRequests
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(input));
             //Komu bot nhắn tin đến nhóm
 
-            var login = new LoginDto
-            {
-                password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-            };
-            var response = await _komuService.Login(login);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-                //get name project
-                var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
-                                    .Select(x => new GetProjectDto
-                                    {
-                                        Name = x.Name,
-                                    });
-                var result = await query.FirstOrDefaultAsync();
-                var nameProject = result.Name;
-                //
-                var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-                var message = $"PM {admin.UserName} đã tạo mới request {input.Name} cho dự án {nameProject}.";
-                var alias = "Nhắc việc NCC";
-                var ListAttach = new List<attachment>();
-                ListAttach.Add(new attachment
-                {
-                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                    titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request"
-                });
-                var postMessage = new PostMessage
-                {
-                    channel = room,
-                    text = message.ToString(),
-                    alias = alias,
-                    attachments = ListAttach
-                };
-                await _komuService.PostMessage(postMessage, DecryptContent.data);
+            //var login = new LoginDto
+            //{
+            //    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+            //    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+            //};
+            //var response = await _komuService.Login(login);
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var responseContent = await response.Content.ReadAsStringAsync();
+            //    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+            //    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+            //    //get name project
+            //    var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
+            //                        .Select(x => new GetProjectDto
+            //                        {
+            //                            Name = x.Name,
+            //                        });
+            //    var result = await query.FirstOrDefaultAsync();
+            //    var nameProject = result.Name;
+            //    //
+            //    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+            //    var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            //    var message = $"PM {admin.UserName} đã tạo mới request {input.Name} cho dự án {nameProject}.";
+            //    var alias = "Nhắc việc NCC";
+            //    var ListAttach = new List<attachment>();
+            //    ListAttach.Add(new attachment
+            //    {
+            //        title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+            //        titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request"
+            //    });
+            //    var postMessage = new PostMessage
+            //    {
+            //        channel = room,
+            //        text = message.ToString(),
+            //        alias = alias,
+            //        attachments = ListAttach
+            //    };
+            //    await _komuService.PostMessage(postMessage, DecryptContent.data);
 
-                await _komuService.Logout(DecryptContent.data);
-            }
+            //    await _komuService.Logout(DecryptContent.data);
+            //}
             return input;
         }
 
@@ -506,58 +506,58 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ResourceRequestDto, ResourceRequest>(input, resourceRequest));
             //Komu bot nhắn tin đến nhóm
-            if (input.Status == ResourceRequestStatus.DONE || input.Status == ResourceRequestStatus.CANCELLED)
-            {
-                var login = new LoginDto
-                {
-                    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-                };
-                var response = await _komuService.Login(login);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-                    //get name project
-                    var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
-                                        .Select(x => new GetProjectDto
-                                        {
-                                            Name = x.Name,
-                                        });
-                    var result = await query.FirstOrDefaultAsync();
-                    var nameProject = result.Name;
-                    //
-                    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                    var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-                    var message = string.Empty;
-                    if (input.Status == ResourceRequestStatus.DONE)
-                    {
-                        message = $"Request {input.Name} cho dự án {nameProject} đã được {admin.UserName} chuyển sang trạng thái hoàn thành.";
-                    }
-                    else if (input.Status == ResourceRequestStatus.CANCELLED)
-                    {
-                        message = $"Request {input.Name} cho dự án {nameProject} đã được huỷ bởi {admin.UserName}.";
-                    }
-                    var alias = "Nhắc việc NCC";
-                    var ListAttach = new List<attachment>();
-                    ListAttach.Add(new attachment
-                    {
-                        title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                        titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request"
-                    });
-                    var postMessage = new PostMessage
-                    {
-                        channel = room,
-                        text = message.ToString(),
-                        alias = alias,
-                        attachments = ListAttach
-                    };
-                    await _komuService.PostMessage(postMessage, DecryptContent.data);
+            //if (input.Status == ResourceRequestStatus.DONE || input.Status == ResourceRequestStatus.CANCELLED)
+            //{
+            //    var login = new LoginDto
+            //    {
+            //        password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
+            //        user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
+            //    };
+            //    var response = await _komuService.Login(login);
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        var responseContent = await response.Content.ReadAsStringAsync();
+            //        var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
+            //        var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+            //        //get name project
+            //        var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
+            //                            .Select(x => new GetProjectDto
+            //                            {
+            //                                Name = x.Name,
+            //                            });
+            //        var result = await query.FirstOrDefaultAsync();
+            //        var nameProject = result.Name;
+            //        //
+            //        var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
+            //        var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            //        var message = string.Empty;
+            //        if (input.Status == ResourceRequestStatus.DONE)
+            //        {
+            //            message = $"Request {input.Name} cho dự án {nameProject} đã được {admin.UserName} chuyển sang trạng thái hoàn thành.";
+            //        }
+            //        else if (input.Status == ResourceRequestStatus.CANCELLED)
+            //        {
+            //            message = $"Request {input.Name} cho dự án {nameProject} đã được huỷ bởi {admin.UserName}.";
+            //        }
+            //        var alias = "Nhắc việc NCC";
+            //        var ListAttach = new List<attachment>();
+            //        ListAttach.Add(new attachment
+            //        {
+            //            title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
+            //            titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request"
+            //        });
+            //        var postMessage = new PostMessage
+            //        {
+            //            channel = room,
+            //            text = message.ToString(),
+            //            alias = alias,
+            //            attachments = ListAttach
+            //        };
+            //        await _komuService.PostMessage(postMessage, DecryptContent.data);
 
-                    await _komuService.Logout(DecryptContent.data);
-                }
-            }
+            //        await _komuService.Logout(DecryptContent.data);
+            //    }
+            //}
 
             return input;
         }

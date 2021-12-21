@@ -555,7 +555,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 timesheetProject.FilePath = null;
             }
 
-            await _komuService.ProcessKomu(ListAttach, message, alias, komuUserNames);
+            //await _komuService.ProcessKomu(ListAttach, message, alias, komuUserNames);
             timesheetProject.HistoryFile += historyFile;
             await WorkScope.UpdateAsync(timesheetProject);
         }
