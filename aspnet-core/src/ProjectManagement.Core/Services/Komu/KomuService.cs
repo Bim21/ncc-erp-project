@@ -54,7 +54,7 @@ namespace ProjectManagement.Services.Komu
                 contentString.Headers.Add("X-Auth-Token", header.AuthToken);
                 contentString.Headers.Add("X-User-Id", header.userId);
             }
-            //HttpClient.DefaultRequestHeaders.Host = "komu.vn";
+            HttpClient.DefaultRequestHeaders.Host = "komu.vn";
             var uri = await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUrl) + url;
             var response = await HttpClient.PostAsync(uri, contentString);
             if (response.IsSuccessStatusCode)
@@ -63,7 +63,6 @@ namespace ProjectManagement.Services.Komu
                 logger.LogInformation(responseContent);
                 return response;
             }
-
             return response;
         }
         public async Task ProcessKomu(List<attachment> ListAttach, string message, string alias, List<string> komuUserNames)
