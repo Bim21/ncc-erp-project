@@ -17,6 +17,7 @@ using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
+using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.Net.MimeTypes;
 using ProjectManagement.Services.Finance;
@@ -579,8 +580,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} upload {timesheetProject.FilePath}<br>");
                 message.AppendLine($"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} upload {timesheetProject.FilePath} vào project " +
                             $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".");
-
-
             }
             else
             {
@@ -590,12 +589,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 File.Delete(Path.Combine(path, timesheetProject.FilePath));
                 timesheetProject.FilePath = null;
             }
-            await _komuService.NotifyPMChannel(new KomuMessage
+            await _komuService.NotifyToChannel(new KomuMessage
             {
                 UserName = user.UserName,
                 Message = message.ToString(),
                 CreateDate = DateTime.Now
-            });
+            }, ChannelTypeConstant.PM_CHANNEL);
             timesheetProject.HistoryFile += historyFile;
             await WorkScope.UpdateAsync(timesheetProject);
         }

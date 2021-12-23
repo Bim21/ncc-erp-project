@@ -599,11 +599,11 @@ namespace ProjectManagement.Users
                 var message = new StringBuilder();
                 message.AppendLine(alias);
                 message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-                await _komuService.NotifyPMChannel(new KomuMessage
+                await _komuService.NotifyToChannel(new KomuMessage
                 {
                     Message = message.ToString(),
                     CreateDate = DateTime.Now,
-                });
+                }, ChannelTypeConstant.PM_CHANNEL);
             }    
              return new
             {

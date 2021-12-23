@@ -3,12 +3,9 @@ using Abp.Configuration;
 using Abp.UI;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Services.Komu.KomuDto;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,13 +22,9 @@ namespace ProjectManagement.Services.Komu
             this.logger = logger;
             this.settingManager = settingManager;
         }
-        public async Task<HttpResponseMessage> NotifyPMChannel(KomuMessage input)
+        public async Task<HttpResponseMessage> NotifyToChannel(KomuMessage input, string channelType)
         {
-            return await PostAsync($"{ChannelTypeConstant.PM_CHANNEL}", input);
-        }
-        public async Task<HttpResponseMessage> NotifyGeneralChannel(KomuMessage input)
-        {
-            return await PostAsync($"{ChannelTypeConstant.GENERAL_CHANNEL}", input);
+            return await PostAsync(channelType, input);
         }
         private async Task<HttpResponseMessage> PostAsync(string url, KomuMessage input)
         {

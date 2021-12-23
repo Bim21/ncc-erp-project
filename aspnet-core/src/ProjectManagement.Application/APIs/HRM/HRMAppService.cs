@@ -36,41 +36,38 @@ namespace ProjectManagement.APIs.HRM
 
         [AbpAllowAnonymous]
         [HttpPost]
-        public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto input)
+        public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto model)
         {
             if (!CheckSecurityCode())
             {
                 throw new UserFriendlyException("SecretCode does not match!");
             }
-
-            var roleEmployee = _roleManager.GetRoleByName(RoleConstants.ROLE_EMPLOYEE);
-
             var user = new User
             {
-                UserName = input.UserName,
-                Name = input.Name,
-                Surname = input.Surname,
-                EmailAddress = input.EmailAddress,
-                NormalizedEmailAddress = input.EmailAddress.ToUpper(),
-                NormalizedUserName = input.UserName.ToUpper(),
-                UserType = input.UserType,
-                UserLevel = input.UserLevel,
-                Branch = input.Branch,
+                UserName = model.UserName,
+                Name = model.Name,
+                Surname = model.Surname,
+                EmailAddress = model.EmailAddress,
+                NormalizedEmailAddress = model.EmailAddress.ToUpper(),
+                NormalizedUserName = model.UserName.ToUpper(),
+                UserType = model.UserType,
+                UserLevel = model.UserLevel,
+                Branch = model.Branch,
                 IsActive = true,
                 Password = "123qwe",
-                UserCode = input.UserCode
+                UserCode = model.UserCode
             };
-            input.Id = await WorkScope.InsertAndGetIdAsync(user);
+            model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var alias = "Nhắc việc NCC";
             var message = new StringBuilder();
             message.AppendLine(alias);
-            message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {input.Surname + " " + input.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-            await _komuService.NotifyPMChannel(new KomuMessage
+            message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {model.Surname + " " + model.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+            await _komuService.NotifyToChannel(new KomuMessage
             {
                 Message = message.ToString(),
                 CreateDate = DateTime.Now,
-            });
-            return input;
+            }, ChannelTypeConstant.PM_CHANNEL);
+            return model;
         }
 
         private bool CheckSecurityCode()
