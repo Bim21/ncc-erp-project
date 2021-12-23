@@ -315,7 +315,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         #endregion
                         var fileBytes = excelPackageIn.GetAsByteArray();
                         string fileBase64 = Convert.ToBase64String(fileBytes);
-                      
+
                         return new FileBase64Dto
                         {
                             FileName = $"{listProject[0].Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
@@ -330,7 +330,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 throw new UserFriendlyException(ex.Message);
             }
         }
-       
+
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
         {
@@ -423,7 +423,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var billInfomation = new StringBuilder();
             var projectType = await WorkScope.GetAsync<Project>(input.ProjectId);
-            if(projectType.ProjectType==ProjectType.TRAINING) throw new UserFriendlyException("The training project is not suitable !");
+            if (projectType.ProjectType == ProjectType.TRAINING) throw new UserFriendlyException("The training project is not suitable !");
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             if (!timesheet.IsActive)
             {
@@ -513,7 +513,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.TimesheetId == timeSheetProject.TimesheetId && x.ProjectId == timeSheetProject.ProjectId)
                 .ToListAsync();
-            foreach(var tsProjectBill in timesheetProjectBills)
+            foreach (var tsProjectBill in timesheetProjectBills)
             {
                 await WorkScope.DeleteAsync(tsProjectBill);
             }
@@ -540,13 +540,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var now = DateTimeUtils.GetNow();
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
             var historyFile = new StringBuilder();
-            string message;
-            string alias;
-            var ListAttach = new List<attachment>();
+            var message = new StringBuilder();
             var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-            var komuUserNameSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames);
-            var komuUserNames = komuUserNameSetting.Split(";").ToList();
-            komuUserNames.RemoveAt(komuUserNames.Count - 1);
+            string alias = "Nhắc việc NCC";
+            var title = "Mời bạn click vào đây để xem chi tiết công việc nhé.";
+            var titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}";
+            message.AppendLine(alias);
+            message.AppendLine(title);
+            message.AppendLine(titlelink);
 
             if (input != null && input.File != null && input.File.Length > 0)
             {
@@ -576,33 +577,25 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
                 // thêm history upload file
                 historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} upload {timesheetProject.FilePath}<br>");
-                // nhắc nhở komu
-                message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} upload {timesheetProject.FilePath} vào project " +
-                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
-                alias = "Nhắc việc NCC";
-                ListAttach.Add(new attachment
-                {
-                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                    titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}"
-                });
+                message.AppendLine($"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} upload {timesheetProject.FilePath} vào project " +
+                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".");
+
+
             }
             else
             {
                 historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} delete {timesheetProject.FilePath}<br>");
-                message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} delete {timesheetProject.FilePath} vào project " +
-                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
-                alias = "Nhắc việc NCC";
-                ListAttach.Add(new attachment
-                {
-                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                    titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}"
-                });
-
+                message.AppendLine($"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} delete {timesheetProject.FilePath} vào project " +
+                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".");
                 File.Delete(Path.Combine(path, timesheetProject.FilePath));
                 timesheetProject.FilePath = null;
             }
-
-            await _komuService.ProcessKomu(ListAttach, message, alias, komuUserNames);
+            await _komuService.NotifyPMChannel(new KomuMessage
+            {
+                UserName = user.UserName,
+                Message = message.ToString(),
+                CreateDate = DateTime.Now
+            });
             timesheetProject.HistoryFile += historyFile;
             await WorkScope.UpdateAsync(timesheetProject);
         }

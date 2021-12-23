@@ -156,51 +156,30 @@ namespace ProjectManagement.APIs.ProjectUsers
                 }
 
             }
-            //Komu bot nhắn tin đến nhóm
-            
-            var login = new LoginDto
+            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == input.ProjectId);
+            if (project == null)
             {
-                password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-            };
-            var response = await _komuService.Login(login);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                //get name project
-                var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
-                                    .Select(x => new GetProjectDto
-                                    {
-                                        Name = x.Name,
-                                    });
-                var result = await query.FirstOrDefaultAsync();
-                var nameProject = result.Name;
-                var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                var now = DateTimeUtils.GetNow();
-                var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-                var user = await WorkScope.GetAsync<User>(input.UserId);
-                var message=string.Empty;
-                var startTime = $"{input.StartTime.Day}/{input.StartTime.Month}/{input.StartTime.Year}";
-                if (input.AllocatePercentage==0)
-                {
-                    message= $"Từ ngày {startTime}, PM {admin.UserName} release {user.UserName} ra khỏi dự án {nameProject}."; 
-                }
-                else
-                {
-                    message = $"Từ ngày {startTime}, PM {admin.UserName} request {user.UserName} làm việc ở dự án {nameProject}.";
-                }  
-                var alias = "Nhắc việc NCC";
-                var postMessage = new PostMessage
-                {
-                    channel = room,
-                    text = message.ToString(),
-                    alias = alias
-                };
-                await _komuService.PostMessage(postMessage, DecryptContent.data);
-
-                await _komuService.Logout(DecryptContent.data);
+                throw new UserFriendlyException("Project doesn't exist");
             }
+            var pm = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            var user = await WorkScope.GetAsync<User>(input.UserId);
+            var alias = "Nhắc việc NCC";
+            var message = new StringBuilder();
+            message.AppendLine(alias);
+            if (input.AllocatePercentage == 0)
+            {
+                message.AppendLine($"Từ ngày {input.StartTime:dd/MM/yyyy}, PM {pm.UserName} release {user.UserName} ra khỏi dự án {project.Name}.");
+            }
+            else
+            {
+                message.AppendLine($"Từ ngày {input.StartTime:dd/MM/yyyy}, PM {pm.UserName} request {user.UserName} làm việc ở dự án {project.Name}.");
+            }
+            await _komuService.NotifyPMChannel(new KomuMessage
+            {
+                UserName = pm.UserName,
+                Message = message.ToString(),
+                CreateDate = DateTime.Now,
+            });
             return input;
         }
 
