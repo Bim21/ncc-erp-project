@@ -36,63 +36,38 @@ namespace ProjectManagement.APIs.HRM
 
         [AbpAllowAnonymous]
         [HttpPost]
-        public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto input)
+        public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto model)
         {
             if (!CheckSecurityCode())
             {
                 throw new UserFriendlyException("SecretCode does not match!");
             }
-
-            var roleEmployee = _roleManager.GetRoleByName(RoleConstants.ROLE_EMPLOYEE);
-
             var user = new User
             {
-                UserName = input.UserName,
-                Name = input.Name,
-                Surname = input.Surname,
-                EmailAddress = input.EmailAddress,
-                NormalizedEmailAddress = input.EmailAddress.ToUpper(),
-                NormalizedUserName = input.UserName.ToUpper(),
-                UserType = input.UserType,
-                UserLevel = input.UserLevel,
-                Branch = input.Branch,
+                UserName = model.UserName,
+                Name = model.Name,
+                Surname = model.Surname,
+                EmailAddress = model.EmailAddress,
+                NormalizedEmailAddress = model.EmailAddress.ToUpper(),
+                NormalizedUserName = model.UserName.ToUpper(),
+                UserType = model.UserType,
+                UserLevel = model.UserLevel,
+                Branch = model.Branch,
                 IsActive = true,
                 Password = "123qwe",
-                UserCode = input.UserCode
+                UserCode = model.UserCode
             };
-            input.Id = await WorkScope.InsertAndGetIdAsync(user);
-
-            var userRole = new UserRole
+            model.Id = await WorkScope.InsertAndGetIdAsync(user);
+            var alias = "Nhắc việc NCC";
+            var message = new StringBuilder();
+            message.AppendLine(alias);
+            message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {model.Surname + " " + model.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+            await _komuService.NotifyToChannel(new KomuMessage
             {
-                UserId = input.Id,
-                RoleId = roleEmployee.Id
-            };
-            await WorkScope.InsertAndGetIdAsync(userRole);
-                var login = new LoginDto
-                {
-                    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-                };
-                var response = await _komuService.Login(login);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-                    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                    var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là {input.Surname+" "+ input.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào. ";
-                    var alias = "Nhắc việc NCC";
-                    var postMessage = new PostMessage
-                    {
-                        channel = room,
-                        text = message.ToString(),
-                        alias = alias
-                    };
-                    await _komuService.PostMessage(postMessage, DecryptContent.data);
-
-                    await _komuService.Logout(DecryptContent.data);
-                }
-            return input;
+                Message = message.ToString(),
+                CreateDate = DateTime.Now,
+            }, ChannelTypeConstant.PM_CHANNEL);
+            return model;
         }
 
         private bool CheckSecurityCode()

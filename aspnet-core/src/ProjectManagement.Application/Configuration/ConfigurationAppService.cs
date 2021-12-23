@@ -36,6 +36,7 @@ namespace ProjectManagement.Configuration
                 ExpiredDay = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ExpiredDay),
                 ExpiredHour = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ExpiredHour),
                 KomuUrl = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUrl),
+                KomuSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuSecretCode),
                 KomuUserNames = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames),
                 UserBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot),
                 PasswordBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
@@ -62,6 +63,7 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.ExpiredHour) ||
                 string.IsNullOrEmpty(input.KomuUserNames) ||
                 string.IsNullOrEmpty(input.KomuUrl) ||
+                string.IsNullOrEmpty(input.KomuSecretCode) ||
                 string.IsNullOrEmpty(input.UserBot) ||
                 string.IsNullOrEmpty(input.PasswordBot) ||
                 string.IsNullOrEmpty(input.ProjectUri) ||
@@ -85,6 +87,7 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ExpiredDay, input.ExpiredDay);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ExpiredHour, input.ExpiredHour);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuUrl, input.KomuUrl);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuSecretCode, input.KomuSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuUserNames, input.KomuUserNames);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.UserBot, input.UserBot);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.PasswordBot, input.PasswordBot);

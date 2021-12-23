@@ -41,6 +41,7 @@ using ProjectManagement.Services.Komu;
 using ProjectManagement.Configuration;
 using ProjectManagement.Services.Komu.KomuDto;
 using Microsoft.AspNetCore.Http;
+using System.Text;
 
 namespace ProjectManagement.Users
 {
@@ -587,36 +588,22 @@ namespace ProjectManagement.Users
             }
             if(successListInsert.Count>0)
             {
-                var login = new LoginDto
+                var listUser = string.Empty;
+                var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
+                foreach (var item in users)
                 {
-                    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-                };
-                var response = await _komuService.Login(login);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-                    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                    var listUser = string.Empty;
-                    var list = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
-                    foreach (var item in list)
-                    {
-                        listUser += item.FullName+",";
-                    }
-                    listUser = listUser.Remove(listUser.Length - 1);
-                    var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào. ";
-                    var alias = "Nhắc việc NCC";
-                    var postMessage = new PostMessage
-                    {
-                        channel = room,
-                        text = message.ToString(),
-                        alias = alias };
-                    await _komuService.PostMessage(postMessage, DecryptContent.data);
-
-                    await _komuService.Logout(DecryptContent.data);
+                    listUser += item.FullName + ",";
                 }
+                listUser = listUser.Remove(listUser.Length - 1);
+                var alias = "Nhắc việc NCC";
+                var message = new StringBuilder();
+                message.AppendLine(alias);
+                message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    Message = message.ToString(),
+                    CreateDate = DateTime.Now,
+                }, ChannelTypeConstant.PM_CHANNEL);
             }    
              return new
             {

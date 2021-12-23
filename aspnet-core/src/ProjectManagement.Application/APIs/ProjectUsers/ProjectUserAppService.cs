@@ -122,108 +122,76 @@ namespace ProjectManagement.APIs.ProjectUsers
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create, PermissionNames.DeliveryManagement_ProjectUser_Create)]
-        public async Task<ProjectUserDto> Create(ProjectUserDto input)
+        public async Task<ProjectUserDto> Create(ProjectUserDto model)
         {
-            var isExist = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId
-                                    && x.Status == input.Status && x.StartTime.Date == input.StartTime.Date && x.ProjectRole == x.ProjectRole
-                                    && x.AllocatePercentage == input.AllocatePercentage);
-            if (isExist)
+            var isExistProjectUser = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == model.ProjectId && x.UserId == model.UserId
+                                    && x.Status == model.Status && x.StartTime.Date == model.StartTime.Date && x.ProjectRole == x.ProjectRole
+                                    && x.AllocatePercentage == model.AllocatePercentage);
+            if (isExistProjectUser)
                 throw new UserFriendlyException("User already exist in project !");
-
-            if (input.Status == ProjectUserStatus.Past)
+            if (model.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't add people to the past !");
-
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
-            var userIsActive = await WorkScope.GetAll<User>().AnyAsync(x => x.Id == input.UserId && x.IsActive);
+            var userIsActive = await WorkScope.GetAll<User>().AnyAsync(x => x.Id == model.UserId && x.IsActive);
             if (!userIsActive)
-            {
                 throw new UserFriendlyException("Can't add people is inactive !");
-            }
-            input.IsFutureActive = true;
-            input.PMReportId = pmReportActive.Id;
-            input.Status = input.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
+            model.IsFutureActive = true;
+            model.PMReportId = pmReportActive.Id;
+            model.Status = model.StartTime.Date > DateTime.Now.Date ? ProjectUserStatus.Future : ProjectUserStatus.Present;
+            model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(model));
 
-            if (input.Status == ProjectUserStatus.Present)
+            if (model.Status == ProjectUserStatus.Present)
             {
-                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
+                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != model.Id && x.ProjectId == model.ProjectId && x.UserId == model.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
                 foreach (var item in projectUsers)
                 {
                     item.Status = ProjectUserStatus.Past;
                     await WorkScope.UpdateAsync(item);
                 }
-
             }
-            //Komu bot nhắn tin đến nhóm
-            
-            var login = new LoginDto
+            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
+            if (project == null)
+                throw new UserFriendlyException("Project doesn't exist");
+            var pm = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            var user = await WorkScope.GetAsync<User>(model.UserId);
+            var alias = "Nhắc việc NCC";
+            var message = new StringBuilder();
+            message.AppendLine(alias);
+            if (model.AllocatePercentage == 0)
+                message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} release {user.UserName} ra khỏi dự án {project.Name}.");
+            else
+                message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} request {user.UserName} làm việc ở dự án {project.Name}.");
+            await _komuService.NotifyToChannel(new KomuMessage
             {
-                password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-            };
-            var response = await _komuService.Login(login);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                //get name project
-                var query = WorkScope.GetAll<Project>().Where(x => x.Id == input.ProjectId)
-                                    .Select(x => new GetProjectDto
-                                    {
-                                        Name = x.Name,
-                                    });
-                var result = await query.FirstOrDefaultAsync();
-                var nameProject = result.Name;
-                var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                var now = DateTimeUtils.GetNow();
-                var admin = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-                var user = await WorkScope.GetAsync<User>(input.UserId);
-                var message=string.Empty;
-                var startTime = $"{input.StartTime.Day}/{input.StartTime.Month}/{input.StartTime.Year}";
-                if (input.AllocatePercentage==0)
-                {
-                    message= $"Từ ngày {startTime}, PM {admin.UserName} release {user.UserName} ra khỏi dự án {nameProject}."; 
-                }
-                else
-                {
-                    message = $"Từ ngày {startTime}, PM {admin.UserName} request {user.UserName} làm việc ở dự án {nameProject}.";
-                }  
-                var alias = "Nhắc việc NCC";
-                var postMessage = new PostMessage
-                {
-                    channel = room,
-                    text = message.ToString(),
-                    alias = alias
-                };
-                await _komuService.PostMessage(postMessage, DecryptContent.data);
-
-                await _komuService.Logout(DecryptContent.data);
-            }
-            return input;
+                UserName = pm.UserName,
+                Message = message.ToString(),
+                CreateDate = DateTime.Now,
+            }, ChannelTypeConstant.PM_CHANNEL);
+            return model;
         }
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Update, PermissionNames.DeliveryManagement_ProjectUser_Update)]
-        public async Task<ProjectUserDto> Update(ProjectUserDto input)
+        public async Task<ProjectUserDto> Update(ProjectUserDto model)
         {
-            var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
+            var projectUser = await WorkScope.GetAsync<ProjectUser>(model.Id);
 
             if (projectUser.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people in the past !");
 
-            if (input.Status == ProjectUserStatus.Past)
+            if (model.Status == ProjectUserStatus.Past)
                 throw new UserFriendlyException("Can't edit people to the past !");
 
-            if (input.ResourceRequestId != null && input.StartTime.Date < DateTime.Now.Date)
+            if (model.ResourceRequestId != null && model.StartTime.Date < DateTime.Now.Date)
             {
                 throw new UserFriendlyException("Can't add user at past time !");
             }
 
-            if (projectUser.Status == ProjectUserStatus.Future && input.Status == ProjectUserStatus.Present)
+            if (projectUser.Status == ProjectUserStatus.Future && model.Status == ProjectUserStatus.Present)
             {
-                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
+                var projectUsers = await WorkScope.GetAll<ProjectUser>().Where(x => x.Id != model.Id && x.ProjectId == model.ProjectId && x.UserId == model.UserId && x.Status == ProjectUserStatus.Present).ToListAsync();
                 foreach (var item in projectUsers)
                 {
                     item.Status = ProjectUserStatus.Past;
@@ -235,11 +203,11 @@ namespace ProjectManagement.APIs.ProjectUsers
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
-            input.IsFutureActive = true;
-            input.PMReportId = pmReportActive.Id;
-            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserDto, ProjectUser>(input, projectUser));
+            model.IsFutureActive = true;
+            model.PMReportId = pmReportActive.Id;
+            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectUserDto, ProjectUser>(model, projectUser));
 
-            return input;
+            return model;
         }
 
         [HttpDelete]
