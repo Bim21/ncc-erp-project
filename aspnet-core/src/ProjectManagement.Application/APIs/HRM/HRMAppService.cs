@@ -56,15 +56,15 @@ namespace ProjectManagement.APIs.HRM
                 UserCode = model.UserCode
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
-            var alias = "Nhắc việc NCC";
-            var message = new StringBuilder();
-            message.AppendLine(alias);
-            message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {model.Surname + " " + model.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-            await _komuService.NotifyToChannel(new KomuMessage
-            {
-                Message = message.ToString(),
-                CreateDate = DateTimeUtils.GetNow(),
-            }, ChannelTypeConstant.PM_CHANNEL);
+            //var alias = "Nhắc việc NCC";
+            //var message = new StringBuilder();
+            //message.AppendLine(alias);
+            //message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {model.Surname + " " + model.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+            //await _komuService.NotifyToChannel(new KomuMessage
+            //{
+            //    Message = message.ToString(),
+            //    CreateDate = DateTimeUtils.GetNow(),
+            //}, ChannelTypeConstant.PM_CHANNEL);
             return model;
         }
 
