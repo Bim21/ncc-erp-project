@@ -41,6 +41,7 @@ using ProjectManagement.Services.Komu.KomuDto;
 using System.Text;
 using ProjectManagement.Constants;
 using NccCore.Uitls;
+using ProjectManagement.NccCore.Helper;
 
 namespace ProjectManagement.Users
 {
@@ -583,22 +584,20 @@ namespace ProjectManagement.Users
             }
             if (successListInsert.Count > 0)
             {
-                //var listUser = string.Empty;
-                //var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
-                //foreach (var item in users)
-                //{
-                //    listUser += item.FullName + ",";
-                //}
-                //listUser = listUser.Remove(listUser.Length - 1);
-                //var alias = "Nhắc việc NCC";
-                //var message = new StringBuilder();
-                //message.AppendLine(alias);
-                //message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-                //await _komuService.NotifyToChannel(new KomuMessage
-                //{
-                //    Message = message.ToString(),
-                //    CreateDate = DateTimeUtils.GetNow(),
-                //}, ChannelTypeConstant.PM_CHANNEL);
+                var listUser = string.Empty;
+                var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
+                foreach (var user in users)
+                {
+                    listUser += UserHelper.GetUserName(user.EmailAddress) ?? user.UserName + ",";
+                }
+                listUser = listUser.Remove(listUser.Length - 1);
+                var message = new StringBuilder();
+                message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{listUser}**. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    Message = message.ToString(),
+                    CreateDate = DateTimeUtils.GetNow(),
+                }, ChannelTypeConstant.PM_CHANNEL);
             }
             return new
             {
