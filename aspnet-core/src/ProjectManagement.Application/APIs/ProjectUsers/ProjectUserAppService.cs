@@ -152,24 +152,24 @@ namespace ProjectManagement.APIs.ProjectUsers
                     await WorkScope.UpdateAsync(item);
                 }
             }
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
-            if (project == null)
-                throw new UserFriendlyException("Project doesn't exist");
-            var pm = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-            var user = await WorkScope.GetAsync<User>(model.UserId);
-            var alias = "Nhắc việc NCC";
-            var message = new StringBuilder();
-            message.AppendLine(alias);
-            if (model.AllocatePercentage == 0)
-                message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} release {user.UserName} ra khỏi dự án {project.Name}.");
-            else
-                message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} request {user.UserName} làm việc ở dự án {project.Name}.");
-            await _komuService.NotifyToChannel(new KomuMessage
-            {
-                UserName = pm.UserName,
-                Message = message.ToString(),
-                CreateDate = DateTimeUtils.GetNow(),
-            }, ChannelTypeConstant.PM_CHANNEL);
+            //var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
+            //if (project == null)
+            //    throw new UserFriendlyException("Project doesn't exist");
+            //var pm = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            //var user = await WorkScope.GetAsync<User>(model.UserId);
+            //var alias = "Nhắc việc NCC";
+            //var message = new StringBuilder();
+            //message.AppendLine(alias);
+            //if (model.AllocatePercentage == 0)
+            //    message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} release {user.UserName} ra khỏi dự án {project.Name}.");
+            //else
+            //    message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} request {user.UserName} làm việc ở dự án {project.Name}.");
+            //await _komuService.NotifyToChannel(new KomuMessage
+            //{
+            //    UserName = pm.UserName,
+            //    Message = message.ToString(),
+            //    CreateDate = DateTimeUtils.GetNow(),
+            //}, ChannelTypeConstant.PM_CHANNEL);
             return model;
         }
 
