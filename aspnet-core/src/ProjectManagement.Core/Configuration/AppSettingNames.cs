@@ -17,6 +17,7 @@
         public const string UserBot = "UserBot";
         public const string PasswordBot = "PasswordBot";
         public const string KomuUrl = "KomuUrl";
+        public const string KomuSecretCode = "KomuSecretCode";
         public const string ProjectUri = "ProjectUri";
         public const string KomuUserNames = "KomuUsernames";
         public const string HRMUri = "HRMUri";
