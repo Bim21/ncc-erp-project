@@ -26,7 +26,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using OfficeOpenXml;
-using Newtonsoft.Json;
 using NccCore.IoC;
 using Abp.Authorization.Users;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -38,8 +37,10 @@ using ProjectManagement.Services.HRM;
 using ProjectManagement.Services.HRM.Dto;
 using Abp.Configuration;
 using ProjectManagement.Services.Komu;
-using ProjectManagement.Configuration;
 using ProjectManagement.Services.Komu.KomuDto;
+using System.Text;
+using ProjectManagement.Constants;
+using NccCore.Uitls;
 
 namespace ProjectManagement.Users
 {
@@ -534,9 +535,9 @@ namespace ProjectManagement.Users
             var failedListInsert = new List<string>();
             var successListUpdate = new List<string>();
             var failedListUpdate = new List<string>();
-          
+
             var updatefakeUsers = currentUsers.Where(x => !userFromHRMEmails.Contains(x.EmailAddress)).ToList();
-            foreach(var user in updatefakeUsers)
+            foreach (var user in updatefakeUsers)
             {
                 try
                 {
@@ -580,40 +581,26 @@ namespace ProjectManagement.Users
                     }
                 }
             }
-            if(successListInsert.Count>0)
+            if (successListInsert.Count > 0)
             {
-                //var login = new LoginDto
-                //{
-                //    password = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                //    user = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot)
-                //};
-                //var response = await _komuService.Login(login);
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var responseContent = await response.Content.ReadAsStringAsync();
-                //    var DecryptContent = JsonConvert.DeserializeObject<LoginJsonPrase>(responseContent);
-                //    var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-                //    var room = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom);
-                //    var listUser = string.Empty;
-                //    var list = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
-                //    foreach (var item in list)
-                //    {
-                //        listUser += item.FullName+",";
-                //    }
-                //    listUser = listUser.Remove(listUser.Length - 1);
-                //    var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào. ";
-                //    var alias = "Nhắc việc NCC";
-                //    var postMessage = new PostMessage
-                //    {
-                //        channel = room,
-                //        text = message.ToString(),
-                //        alias = alias };
-                //    await _komuService.PostMessage(postMessage, DecryptContent.data);
-
-                //    await _komuService.Logout(DecryptContent.data);
-                //}
-            }    
-             return new
+                var listUser = string.Empty;
+                var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
+                foreach (var item in users)
+                {
+                    listUser += item.FullName + ",";
+                }
+                listUser = listUser.Remove(listUser.Length - 1);
+                var alias = "Nhắc việc NCC";
+                var message = new StringBuilder();
+                message.AppendLine(alias);
+                message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    Message = message.ToString(),
+                    CreateDate = DateTimeUtils.GetNow(),
+                }, ChannelTypeConstant.PM_CHANNEL);
+            }
+            return new
             {
                 successListInsert,
                 failedListInsert,

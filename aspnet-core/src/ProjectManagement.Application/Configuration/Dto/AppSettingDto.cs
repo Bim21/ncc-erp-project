@@ -23,5 +23,6 @@ namespace ProjectManagement.Configuration.Dto
         public string ProjectUri { get; set; }
         public string HRMUri { get; set; }
         public string KomuRoom { get; set; }
+        public string KomuSecretCode { get; set; }
     }
 }

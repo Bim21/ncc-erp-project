@@ -17,6 +17,7 @@ using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
+using ProjectManagement.Constants;
 using ProjectManagement.Entities;
 using ProjectManagement.Net.MimeTypes;
 using ProjectManagement.Services.Finance;
@@ -493,13 +494,15 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var now = DateTimeUtils.GetNow();
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
             var historyFile = new StringBuilder();
-            string message;
-            string alias;
-            var ListAttach = new List<attachment>();
+            var message = new StringBuilder();
             var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-            var komuUserNameSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames);
-            var komuUserNames = komuUserNameSetting.Split(";").ToList();
-            komuUserNames.RemoveAt(komuUserNames.Count - 1);
+            string alias = "Nhắc việc NCC";
+            var title = "Mời bạn click vào đây để xem chi tiết công việc nhé.";
+            var titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}";
+            message.AppendLine(alias);
+            message.AppendLine(title);
+            message.AppendLine(titlelink);
+            
 
             if (input != null && input.File != null && input.File.Length > 0)
             {
@@ -529,33 +532,30 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
                 // thêm history upload file
                 historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} upload {timesheetProject.FilePath}<br>");
-                // nhắc nhở komu
-                message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} upload {timesheetProject.FilePath} vào project " +
-                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
-                alias = "Nhắc việc NCC";
-                ListAttach.Add(new attachment
-                {
-                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                    titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}"
-                });
+                message.AppendLine($"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} upload {timesheetProject.FilePath} vào project " +
+                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".");
             }
             else
             {
                 historyFile.Append($"{now.ToString("yyyy/MM/dd HH:mm")} {user.UserName} delete {timesheetProject.FilePath}<br>");
-                message = $"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} delete {timesheetProject.FilePath} vào project " +
-                            $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".";
-                alias = "Nhắc việc NCC";
-                ListAttach.Add(new attachment
-                {
-                    title = "Mời bạn click vào đây để xem chi tiết công việc nhé.",
-                    titlelink = $"{projectUri}/app/list-project-detail/timesheet-tab?id={timesheetProject.ProjectId}"
-                });
+                message.AppendLine($"Chào bạn lúc {now.ToString("yyyy/MM/dd HH:mm")} có {user.UserName} delete {timesheetProject.FilePath} vào project " +
+                           $"\"{timesheetProject.Project.Name}\" trong đợt timesheet \"{timesheetProject.Timesheet.Name}\".");
 
                 File.Delete(Path.Combine(path, timesheetProject.FilePath));
                 timesheetProject.FilePath = null;
             }
 
-            //await _komuService.ProcessKomu(ListAttach, message, alias, komuUserNames);
+            var komuUserNameSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames);
+            var komuUserNames = komuUserNameSetting.Split(";").ToList();
+            komuUserNames.RemoveAt(komuUserNames.Count - 1);
+            foreach (var username in komuUserNames)
+            {
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    UserName = username,
+                    Message = message.ToString(),
+                }, ChannelTypeConstant.USER_ONLY);
+            }
             timesheetProject.HistoryFile += historyFile;
             await WorkScope.UpdateAsync(timesheetProject);
         }
