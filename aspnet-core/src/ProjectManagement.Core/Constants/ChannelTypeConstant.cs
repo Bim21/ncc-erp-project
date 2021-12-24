@@ -9,5 +9,6 @@ namespace ProjectManagement.Constants
         public const string PM_CHANNEL = "sendMessageToThongBaoPM";
         public const string GENERAL_CHANNEL = "sendMessageToThongBao";
         public const string USER_ONLY = "sendMessageToUser";
+        public const string KOMU_USER = "getUserIdByUsername";
     }
 }

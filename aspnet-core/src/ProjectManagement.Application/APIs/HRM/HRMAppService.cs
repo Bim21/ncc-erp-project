@@ -9,6 +9,7 @@ using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
+using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using System;
@@ -40,7 +41,7 @@ namespace ProjectManagement.APIs.HRM
             {
                 throw new UserFriendlyException("SecretCode does not match!");
             }
-            var user = new User
+            var userDto = new User
             {
                 UserName = model.UserName,
                 Name = model.Name,
@@ -55,19 +56,20 @@ namespace ProjectManagement.APIs.HRM
                 Password = "123qwe",
                 UserCode = model.UserCode
             };
-            model.Id = await WorkScope.InsertAndGetIdAsync(user);
-            //var alias = "Nhắc việc NCC";
-            //var message = new StringBuilder();
-            //message.AppendLine(alias);
-            //message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {model.Surname + " " + model.Name}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-            //await _komuService.NotifyToChannel(new KomuMessage
-            //{
-            //    Message = message.ToString(),
-            //    CreateDate = DateTimeUtils.GetNow(),
-            //}, ChannelTypeConstant.PM_CHANNEL);
+            model.Id = await WorkScope.InsertAndGetIdAsync(userDto);
+            var user = await WorkScope.GetAsync<User>(model.Id);
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+            var message = new StringBuilder();
+            message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{userName ?? user.UserName}**.\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+            await _komuService.NotifyToChannel(new KomuMessage
+            {
+                UserName = userName ?? user.UserName,
+                Message = message.ToString(),
+                CreateDate = DateTimeUtils.GetNow(),
+            }, ChannelTypeConstant.PM_CHANNEL);
             return model;
         }
-
+        #region API HELPER
         private bool CheckSecurityCode()
         {
             var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecretCode);
@@ -77,5 +79,6 @@ namespace ProjectManagement.APIs.HRM
                 return true;
             return false;
         }
+        #endregion
     }
 }
