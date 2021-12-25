@@ -160,16 +160,16 @@ namespace ProjectManagement.APIs.ProjectUsers
             var user = await WorkScope.GetAsync<User>(model.UserId);
             var pmUserName = UserHelper.GetUserName(pm.EmailAddress);
             var userName = UserHelper.GetUserName(user.EmailAddress);
-            if (pm != null && string.IsNullOrEmpty(pm.KomuUserId.ToString()))
+            if (pm != null && !pm.KomuUserId.HasValue)
             {
                 pm.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = pmUserName ?? pm.UserName }, ChannelTypeConstant.KOMU_USER);
                 await WorkScope.UpdateAsync<User>(pm);
             }
             var message = new StringBuilder();
             if (model.AllocatePercentage == 0)
-                message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(!string.IsNullOrEmpty(pm.KomuUserId.ToString()) ? "<@" + pm.KomuUserId + ">" : "**" + pmUserName ?? pm.UserName + "**")} release **{userName ?? user.UserName}** ra khỏi dự án **{project.Name}**.");
+                message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(pm.KomuUserId.HasValue ? "<@" + pm.KomuUserId + ">" : "**" + (pmUserName ?? pm.UserName) + "**")} release **{userName ?? user.UserName}** ra khỏi dự án **{project.Name}**.");
             else
-                message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(!string.IsNullOrEmpty(pm.KomuUserId.ToString()) ? "<@" + pm.KomuUserId + ">" : "**" + pmUserName ?? pm.UserName + "**")} request **{userName ?? user.UserName}** làm việc ở dự án **{project.Name}**.");
+                message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(pm.KomuUserId.HasValue ? "<@" + pm.KomuUserId + ">" : "**" + (pmUserName ?? pm.UserName) + "**")} request **{userName ?? user.UserName}** làm việc ở dự án **{project.Name}**.");
             await _komuService.NotifyToChannel(new KomuMessage
             {
                 UserName = pmUserName ?? pm.UserName,
