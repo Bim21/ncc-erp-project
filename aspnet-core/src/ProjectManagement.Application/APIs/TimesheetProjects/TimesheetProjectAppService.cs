@@ -495,7 +495,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var now = DateTimeUtils.GetNow();
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
             var userName = UserHelper.GetUserName(user.EmailAddress);
-            if (user != null && string.IsNullOrEmpty(userName))
+            if (user != null && !user.KomuUserId.HasValue)
             {
                 user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
                 await WorkScope.UpdateAsync(user);

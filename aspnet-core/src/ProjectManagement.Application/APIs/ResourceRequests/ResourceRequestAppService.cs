@@ -469,7 +469,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
             var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
             var message = new StringBuilder();
-            message.AppendLine($"PM {(!string.IsNullOrEmpty(user.KomuUserId.ToString()) ? "<@" + user.KomuUserId.ToString() + ">" : "**" + userName ?? user.UserName + "**")} đã tạo mới request **{model.Name}** cho dự án **{project.Name}**.");
+            message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{model.Name}** cho dự án **{project.Name}**.");
             message.AppendLine(link);
             await _komuService.NotifyToChannel(new KomuMessage
             {
@@ -500,9 +500,9 @@ namespace ProjectManagement.APIs.ResourceRequests
             var titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
             var message = new StringBuilder();
             if (model.Status == ResourceRequestStatus.DONE)
-                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + userName ?? user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
+                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} chuyển sang trạng thái hoàn thành.");
             else if (model.Status == ResourceRequestStatus.CANCELLED)
-                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được huỷ bởi {( user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" +  userName ?? user.UserName + "**")}.");
+                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được huỷ bởi {( user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" +  (userName ?? user.UserName) + "**")}.");
             message.AppendLine(titlelink);
             await _komuService.NotifyToChannel(new KomuMessage
             {
