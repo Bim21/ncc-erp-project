@@ -14,14 +14,16 @@ namespace ProjectManagement.Services.Komu
     public class KomuService
     {
         private ILogger<KomuService> logger;
-        private ISettingManager settingManager;
         private HttpClient httpClient;
+        private string _baseUrl;
+        private string _secretCode;
 
         public KomuService(HttpClient httpClient, ILogger<KomuService> logger, ISettingManager settingManager)
         {
             this.logger = logger;
-            this.settingManager = settingManager;
             this.httpClient = httpClient;
+            _baseUrl = settingManager.GetSettingValueForApplication(AppSettingNames.KomuUrl);
+            _secretCode = settingManager.GetSettingValueForApplication(AppSettingNames.KomuSecretCode);
         }
         public async Task<long?> GetKomuUserId(KomuUserDto komuUserDto, string url)
         {
@@ -43,9 +45,9 @@ namespace ProjectManagement.Services.Komu
         private async Task<HttpResponseMessage> PostAsync(string url, StringContent contentString)
         {
             logger.LogInformation($"Komu: {url}");
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.BaseAddress = new System.Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUrl));
-            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", $"{await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuSecretCode)}");
+            url = _baseUrl + url;
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", _secretCode);
             HttpResponseMessage httpResponse = new HttpResponseMessage();
             try
             {
@@ -53,14 +55,13 @@ namespace ProjectManagement.Services.Komu
             }
             catch (Exception e)
             {
-                logger.LogError($"Komu:{httpClient.BaseAddress}{url} Response() => {httpResponse.StatusCode}/Error() => {e.Message}");
+                logger.LogError($"Komu: {url} Response() => {httpResponse.StatusCode}/Error() => {e.Message}");
                 //throw new UserFriendlyException("Connection to KOMU failed!");
             }
             if (httpResponse.IsSuccessStatusCode)
             {
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                logger.LogInformation($"Komu:{httpClient.BaseAddress}{url} Response() => {httpResponse.StatusCode}: {responseContent}");
-                return httpResponse;
+                logger.LogInformation($"Komu: {url} Response() => {httpResponse.StatusCode}: {responseContent}");
             }
             return httpResponse;
         }
