@@ -588,7 +588,7 @@ namespace ProjectManagement.Users
                 var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
                 foreach (var user in users)
                 {
-                    listUser += UserHelper.GetUserName(user.EmailAddress) ?? user.UserName + ",";
+                    listUser += (UserHelper.GetUserName(user.EmailAddress) ?? user.UserName) + ",";
                 }
                 listUser = listUser.Remove(listUser.Length - 1);
                 var message = new StringBuilder();
