@@ -66,7 +66,7 @@ namespace ProjectManagement.APIs.HRM
                 UserName = userName ?? user.UserName,
                 Message = message.ToString(),
                 CreateDate = DateTimeUtils.GetNow(),
-            }, ChannelTypeConstant.PM_CHANNEL);
+            }, ChannelTypeConstant.GENERAL_CHANNEL);
             return model;
         }
         #region API HELPER

@@ -588,16 +588,16 @@ namespace ProjectManagement.Users
                 var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
                 foreach (var user in users)
                 {
-                    listUser += (UserHelper.GetUserName(user.EmailAddress) ?? user.UserName) + ",";
+                    listUser += (UserHelper.GetUserName(user.EmailAddress) ?? user.UserName) + ", ";
                 }
-                listUser = listUser.Remove(listUser.Length - 1);
+                listUser = listUser.Remove(listUser.Length - 2, 2);
                 var message = new StringBuilder();
                 message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{listUser}**. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
                 await _komuService.NotifyToChannel(new KomuMessage
                 {
                     Message = message.ToString(),
                     CreateDate = DateTimeUtils.GetNow(),
-                }, ChannelTypeConstant.PM_CHANNEL);
+                }, ChannelTypeConstant.GENERAL_CHANNEL);
             }
             return new
             {
