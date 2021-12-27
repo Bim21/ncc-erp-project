@@ -30,13 +30,17 @@ namespace ProjectManagement.Services.HRM
         {
             return await GetAsync<List<AutoUpdateUserDto>>($"/api/services/app/ProjectManagement/GetAllUser");
         }
+        public async Task<AutoUpdateUserDto> GetUserFromHRMByEmail(string email)
+        {
+            return await GetAsync<AutoUpdateUserDto>($"/api/services/app/ProjectManagement/GetUserByEmail?email={email}");
+        }
 
         private async Task<T> GetAsync<T>(string Url)
         {
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri));
+                httpClient.BaseAddress = new Uri("http://10.10.40.16:21024/");
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode));
                 HttpResponseMessage response = new HttpResponseMessage();
                 try 

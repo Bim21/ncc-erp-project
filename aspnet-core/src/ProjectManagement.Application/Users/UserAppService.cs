@@ -221,6 +221,12 @@ namespace ProjectManagement.Users
             if (string.IsNullOrEmpty(email)) return null;
             var user = await _workScope.GetAll<User>().FirstOrDefaultAsync(u => u.EmailAddress == email);
             if (user == null) return null;
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+            {
+                var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
+                user.PhoneNumber = userFromHRM?.Phone;
+                await _workScope.UpdateAsync(user);
+            }
             var projectUsers = await (from pu in _workScope.GetAll<ProjectUser>().Include(x => x.Project).Include(x => x.Project.PM).Where(x => x.UserId == user.Id)
                                       select new
                                       {
@@ -236,8 +242,6 @@ namespace ProjectManagement.Users
                 EmailAddress = user.EmailAddress,
                 EmployeeName = user.Surname.Trim() + " " + user.Name.Trim(),
                 PhoneNumber = user.PhoneNumber,
-                WorkingTime = string.Empty,
-                Location = string.Empty,
                 Branch = Enum.GetName(typeof(Branch), user.Branch),
                 RoleType = Enum.GetName(typeof(UserType), user.UserType),
                 ProjectDtos = new List<ProjectDTO>()
