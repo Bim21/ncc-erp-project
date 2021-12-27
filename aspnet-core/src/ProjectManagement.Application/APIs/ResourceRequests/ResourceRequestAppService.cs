@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -257,6 +258,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             PermissionNames.PmManager_ResourceRequest_AvailableResource)]
         public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
         {
+            input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                .Select(x => new
@@ -278,7 +280,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.Id,
                                     UserType = x.UserType,
                                     FullName = x.Name + " " + x.Surname,
-                                    FullNameNormal = x.Surname + " " + x.Name,
+                                    NormalFullName = x.Surname + " " + x.Name,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
