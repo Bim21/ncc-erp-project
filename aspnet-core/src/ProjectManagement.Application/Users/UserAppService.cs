@@ -21,15 +21,12 @@ using ProjectManagement.Roles.Dto;
 using ProjectManagement.Users.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Constants.Enum;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using OfficeOpenXml;
-using Newtonsoft.Json;
 using NccCore.IoC;
 using Abp.Authorization.Users;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Microsoft.AspNetCore.Hosting;
 using ProjectManagement.Entities;
 using NccCore.Paging;
@@ -38,10 +35,15 @@ using ProjectManagement.Services.HRM;
 using ProjectManagement.Services.HRM.Dto;
 using Abp.Configuration;
 using ProjectManagement.Services.Komu;
-using ProjectManagement.Configuration;
 using ProjectManagement.Services.Komu.KomuDto;
-using Microsoft.AspNetCore.Http;
 using System.Text;
+using ProjectManagement.Constants;
+using NccCore.Uitls;
+using ProjectManagement.NccCore.Helper;
+using Microsoft.AspNetCore.Http;
+using ProjectManagement.Configuration;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Constants.Enum;
 
 namespace ProjectManagement.Users
 {
@@ -540,9 +542,9 @@ namespace ProjectManagement.Users
             var failedListInsert = new List<string>();
             var successListUpdate = new List<string>();
             var failedListUpdate = new List<string>();
-          
+
             var updatefakeUsers = currentUsers.Where(x => !userFromHRMEmails.Contains(x.EmailAddress)).ToList();
-            foreach(var user in updatefakeUsers)
+            foreach (var user in updatefakeUsers)
             {
                 try
                 {
@@ -586,26 +588,24 @@ namespace ProjectManagement.Users
                     }
                 }
             }
-            if(successListInsert.Count>0)
+            if (successListInsert.Count > 0)
             {
                 var listUser = string.Empty;
                 var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
-                foreach (var item in users)
+                foreach (var user in users)
                 {
-                    listUser += item.FullName + ",";
+                    listUser += (UserHelper.GetUserName(user.EmailAddress) ?? user.UserName) + ", ";
                 }
-                listUser = listUser.Remove(listUser.Length - 1);
-                var alias = "Nhắc việc NCC";
+                listUser = listUser.Remove(listUser.Length - 2, 2);
                 var message = new StringBuilder();
-                message.AppendLine(alias);
-                message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là {listUser}. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+                message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{listUser}**. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
                 await _komuService.NotifyToChannel(new KomuMessage
                 {
                     Message = message.ToString(),
-                    CreateDate = DateTime.Now,
-                }, ChannelTypeConstant.PM_CHANNEL);
-            }    
-             return new
+                    CreateDate = DateTimeUtils.GetNow(),
+                }, ChannelTypeConstant.GENERAL_CHANNEL);
+            }
+            return new
             {
                 successListInsert,
                 failedListInsert,

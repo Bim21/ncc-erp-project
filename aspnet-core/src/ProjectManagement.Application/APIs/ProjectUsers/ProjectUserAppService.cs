@@ -14,8 +14,10 @@ using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
+using ProjectManagement.Constants;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Users.Dto;
@@ -156,18 +158,23 @@ namespace ProjectManagement.APIs.ProjectUsers
                 throw new UserFriendlyException("Project doesn't exist");
             var pm = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
             var user = await WorkScope.GetAsync<User>(model.UserId);
-            var alias = "Nhắc việc NCC";
+            var pmUserName = UserHelper.GetUserName(pm.EmailAddress);
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+            if (pm != null && !pm.KomuUserId.HasValue)
+            {
+                pm.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = pmUserName ?? pm.UserName }, ChannelTypeConstant.KOMU_USER);
+                await WorkScope.UpdateAsync<User>(pm);
+            }
             var message = new StringBuilder();
-            message.AppendLine(alias);
             if (model.AllocatePercentage == 0)
-                message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} release {user.UserName} ra khỏi dự án {project.Name}.");
+                message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(pm.KomuUserId.HasValue ? "<@" + pm.KomuUserId + ">" : "**" + (pmUserName ?? pm.UserName) + "**")} release **{userName ?? user.UserName}** ra khỏi dự án **{project.Name}**.");
             else
-                message.AppendLine($"Từ ngày {model.StartTime:dd/MM/yyyy}, PM {pm.UserName} request {user.UserName} làm việc ở dự án {project.Name}.");
+                message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(pm.KomuUserId.HasValue ? "<@" + pm.KomuUserId + ">" : "**" + (pmUserName ?? pm.UserName) + "**")} request **{userName ?? user.UserName}** làm việc ở dự án **{project.Name}**.");
             await _komuService.NotifyToChannel(new KomuMessage
             {
-                UserName = pm.UserName,
+                UserName = pmUserName ?? pm.UserName,
                 Message = message.ToString(),
-                CreateDate = DateTime.Now,
+                CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.PM_CHANNEL);
             return model;
         }

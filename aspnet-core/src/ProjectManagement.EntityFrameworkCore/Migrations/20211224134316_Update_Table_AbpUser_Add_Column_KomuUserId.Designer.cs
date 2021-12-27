@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211224134316_Update_Table_AbpUser_Add_Column_KomuUserId")]
+    partial class Update_Table_AbpUser_Add_Column_KomuUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1493,9 +1495,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<int?>("StarRate")
-                        .HasColumnType("int");
-
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(64)")
@@ -2106,9 +2105,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
@@ -2539,9 +2535,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<string>("BriefDescription")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ChargeType")
-                        .HasColumnType("int");
 
                     b.Property<long?>("ClientId")
                         .HasColumnType("bigint");
@@ -3120,9 +3113,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
-
-                    b.Property<float?>("TotalWorkingDay")
-                        .HasColumnType("real");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");

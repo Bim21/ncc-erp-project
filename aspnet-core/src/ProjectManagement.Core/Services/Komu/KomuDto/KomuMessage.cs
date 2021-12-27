@@ -9,7 +9,7 @@ namespace ProjectManagement.Services.Komu.KomuDto
     {
         [JsonProperty("pathImage")]
         public string PathImage { get; set; }
-        [JsonProperty("userName")]
+        [JsonProperty("username")]
         public string UserName { get; set; }
         [JsonProperty("createDate")]
         public DateTime CreateDate { get; set; }

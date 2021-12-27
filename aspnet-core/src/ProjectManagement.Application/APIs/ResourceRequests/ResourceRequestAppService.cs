@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using NccCore.Uitls;
 using Newtonsoft.Json;
 using ProjectManagement.APIs.PMReportProjectIssues;
 using ProjectManagement.APIs.Projects.Dto;
@@ -14,8 +15,10 @@ using ProjectManagement.APIs.ResourceRequests.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
+using ProjectManagement.Constants;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using System;
@@ -463,19 +466,21 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (project == null)
                 throw new UserFriendlyException("Project doesn't exist");
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-            var alias = "Nhắc việc NCC";
-            var title = "Mời bạn click vào đây để xem chi tiết công việc nhé.";
-            var titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+            if (user != null && !user.KomuUserId.HasValue)
+            {
+                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
+                await WorkScope.UpdateAsync<User>(user);
+            }
+            var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
             var message = new StringBuilder();
-            message.AppendLine(alias);
-            message.AppendLine($"PM {user.UserName} đã tạo mới request {model.Name} cho dự án {project.Name}.");
-            message.AppendLine(title);
-            message.AppendLine(titlelink);
+            message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{model.Name}** cho dự án **{project.Name}**.");
+            message.AppendLine(link);
             await _komuService.NotifyToChannel(new KomuMessage
             {
-                UserName = user.UserName,
+                UserName = userName ?? user.UserName,
                 Message = message.ToString(),
-                CreateDate = DateTime.Now,
+                CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.PM_CHANNEL);
             return model;
         }
@@ -491,22 +496,24 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (project == null)
                 throw new UserFriendlyException("Project doesn't exist");
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-            var alias = "Nhắc việc NCC";
-            var title = "Mời bạn click vào đây để xem chi tiết công việc nhé.";
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+            if (user != null && !user.KomuUserId.HasValue)
+            {
+                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
+                await WorkScope.UpdateAsync<User>(user);
+            }
             var titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
             var message = new StringBuilder();
             if (model.Status == ResourceRequestStatus.DONE)
-                message.AppendLine($"Request {model.Name} cho dự án {project.Name} đã được {user.UserName} chuyển sang trạng thái hoàn thành.");
+                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} chuyển sang trạng thái hoàn thành.");
             else if (model.Status == ResourceRequestStatus.CANCELLED)
-                message.AppendLine($"Request {model.Name} cho dự án {project.Name} đã được huỷ bởi {user.UserName}.");
-            message.AppendLine(alias);
-            message.AppendLine(title);
+                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được huỷ bởi {( user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" +  (userName ?? user.UserName) + "**")}.");
             message.AppendLine(titlelink);
             await _komuService.NotifyToChannel(new KomuMessage
             {
-                UserName = user.UserName,
+                UserName = userName ?? user.UserName,
                 Message = message.ToString(),
-                CreateDate = DateTime.Now,
+                CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.PM_CHANNEL);
             return model;
         }
