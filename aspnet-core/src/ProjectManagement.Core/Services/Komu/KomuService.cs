@@ -19,7 +19,7 @@ namespace ProjectManagement.Services.Komu
         private string _baseUrl;
         private string _secretCode;
 
-        public KomuService(ILogger<KomuService> logger, ISettingManager settingManager)
+        public KomuService(HttpClient httpClient, ILogger<KomuService> logger, ISettingManager settingManager)
         {
             this.logger = logger;
             this.httpClient = httpClient;
