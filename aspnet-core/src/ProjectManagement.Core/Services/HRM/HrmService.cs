@@ -40,7 +40,7 @@ namespace ProjectManagement.Services.HRM
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.BaseAddress = new Uri("http://10.10.40.16:21024/");
+                httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri));
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode));
                 HttpResponseMessage response = new HttpResponseMessage();
                 try 
