@@ -13,5 +13,6 @@ namespace ProjectManagement.Users
         Task ChangeLanguage(ChangeUserLanguageDto input);
 
         Task<bool> ChangePassword(ChangePasswordDto input);
+        Task<EmployeeInformationDto> GetEmployeeInformation(string email);
     }
 }

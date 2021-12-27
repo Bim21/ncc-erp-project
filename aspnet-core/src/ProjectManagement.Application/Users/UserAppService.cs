@@ -212,6 +212,54 @@ namespace ProjectManagement.Users
             return await GetAsync(input);
         }
 
+        [AbpAllowAnonymous]
+        [HttpGet]
+        public async Task<EmployeeInformationDto> GetEmployeeInformation(string email)
+        {
+            if (!CheckSecurityCode())
+                throw new UserFriendlyException("SecretCode does not match!");
+            if (string.IsNullOrEmpty(email)) return null;
+            var user = await _workScope.GetAll<User>().FirstOrDefaultAsync(u => u.EmailAddress == email);
+            if (user == null) return null;
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+            {
+                var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
+                user.PhoneNumber = userFromHRM?.Phone;
+                await _workScope.UpdateAsync(user);
+            }
+            var projectUsers = await (from pu in _workScope.GetAll<ProjectUser>().Include(x => x.Project).Include(x => x.Project.PM).Where(x => x.UserId == user.Id)
+                                      select new
+                                      {
+                                          ProjectId = pu.ProjectId,
+                                          ProjectName = pu.Project.Name,
+                                          PmName = pu.Project.PM != null ? pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() : string.Empty,
+                                          StartTime = pu.StartTime,
+                                          ProjectRole = pu.ProjectRole
+                                      }).OrderByDescending(x => x.StartTime).ToListAsync();
+            var employeeInfo = new EmployeeInformationDto()
+            {
+                EmployeeId = user.Id,
+                EmailAddress = user.EmailAddress,
+                EmployeeName = user.Surname.Trim() + " " + user.Name.Trim(),
+                PhoneNumber = user.PhoneNumber,
+                Branch = Enum.GetName(typeof(Branch), user.Branch),
+                RoleType = Enum.GetName(typeof(UserType), user.UserType),
+                ProjectDtos = new List<ProjectDTO>()
+            };
+            if (projectUsers.Any())
+            {
+                employeeInfo.ProjectDtos.AddRange(projectUsers.Select(x => new ProjectDTO()
+                {
+                    ProjectId = x.ProjectId,
+                    ProjectName = x.ProjectName,
+                    PmName = x.PmName,
+                    StartTime = x.StartTime,
+                    ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole)
+                }));
+            }
+            return employeeInfo;
+        }
+
         [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
         public override async Task DeleteAsync(EntityDto<long> input)
         {
