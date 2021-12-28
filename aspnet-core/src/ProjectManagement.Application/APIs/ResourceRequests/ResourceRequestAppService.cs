@@ -459,9 +459,6 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Create, PermissionNames.PmManager_ResourceRequest_Create)]
         public async Task<ResourceRequestDto> Create(ResourceRequestDto model)
         {
-            var isExistResourceRequest = await WorkScope.GetAll<ResourceRequest>().AnyAsync(x => x.Name == model.Name && x.ProjectId == model.ProjectId && x.TimeNeed == model.TimeNeed);
-            if (!isExistResourceRequest)
-                throw new UserFriendlyException($"Resource Request has name {model.Name} doesn't exist");
             model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(model));
             var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
