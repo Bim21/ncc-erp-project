@@ -26,5 +26,8 @@ export class ProjectChecklistService extends BaseApiService{
   public addCheckListItemByProject(projectId:any,item:any):Observable<any>{
     return this.http.post<any>(this.rootUrl+'/AddCheckListItemByProject?projectId='+projectId,item);
   }
+  public DeleteByProject(projectId: any , checkListItemId : any){
+    return this.http.delete<any>(this.rootUrl + `/Delete?ProjectId=${projectId}&CheckListItemId=${checkListItemId}`)
+  }
  
 }

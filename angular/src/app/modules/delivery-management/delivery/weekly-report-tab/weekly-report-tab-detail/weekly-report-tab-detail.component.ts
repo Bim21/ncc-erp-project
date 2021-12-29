@@ -66,6 +66,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
   public isActive: boolean;
+  public projectType= "";
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
@@ -81,8 +82,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public processFuture:boolean = false;
   public processProblem:boolean=false
   public processWeekly:boolean =false;
-  // public minDate = new Date();
-  // public maxDate= new Date();
   public createdDate = new Date();
   public projectId: number;
   public projectIdReport: number;
@@ -115,8 +114,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   ) {
     super(injector)
   }
-
   ngOnInit(): void {
+    this.pmReportService.currentMessage.subscribe(message => {
+      this.projectType = message;
+      if(this.pmReportId){
+        this.getPmReportProject();
+      }
+    }
+    
+    );
+    
     this.pmReportId = this.route.snapshot.queryParamMap.get('id');
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
     this.getPmReportProject();
@@ -159,30 +166,35 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
   public getPmReportProject(): void {
-    this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId,this.projectType).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
-      this.projectId = this.pmReportProjectList[0].projectId
-      this.generalNote = this.pmReportProjectList[0].note
-      this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
-      this.totalOverTime = this.pmReportProjectList[0].totalOverTime
-      this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0].projectHealth]
-      this.pmReportProjectId = this.pmReportProjectList[0].id
-      this.pmReportProjectList[0].setBackground = true
+      this.projectId = this.pmReportProjectList[0]?.projectId
+      this.generalNote = this.pmReportProjectList[0]?.note
+      this.totalNormalWorkingTime = this.pmReportProjectList[0]?.totalNormalWorkingTime
+      this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
+      this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
+      this.pmReportProjectId = this.pmReportProjectList[0]?.id
+      if(this.pmReportProjectList[0]){
+        this.pmReportProjectList[0].setBackground = true
+      }
       this.getProjectInfo();
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
       this.getCurrentResourceOfProject();
+      this.search()
     }))
   }
   getProjectInfo() {
     this.isLoading=true;
-    this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-      this.projectInfo = data.result
-      this.isLoading =false;
-    },
-    ()=>{this.isLoading =false})
+    if(this.pmReportProjectId){
+      this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+        this.projectInfo = data.result
+        this.isLoading =false;
+      },
+      ()=>{this.isLoading =false})
+    }
   }
   public view(projectReport) {
     this.pmReportProjectId = projectReport.id
@@ -217,31 +229,37 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
 
   public getWeeklyReport() {
-    this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-      this.weeklyReportList = data.result;
-      this.isShowWeeklyList = this.weeklyReportList.length == 0 ? false : true;
-    })
+    if(this.projectId){
+      this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+        this.weeklyReportList = data.result;
+        this.isShowWeeklyList = this.weeklyReportList.length == 0 ? false : true;
+      })
+    }
   }
   public getFuturereport() {
-    this.pmReportProjectService.getChangesInFuture(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-      this.futureReportList = data.result;
-      this.isShowFutureList = this.futureReportList.length == 0 ? false : true;
-    })
+    if(this.projectId){
+      this.pmReportProjectService.getChangesInFuture(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+        this.futureReportList = data.result;
+        this.isShowFutureList = this.futureReportList.length == 0 ? false : true;
+      })
+    }
+    
   }
   public getProjectProblem() {
-    this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
-      if (data.result) {
-        this.problemList = data.result.result;
-
-        this.projectHealth = data.result.projectHealth;
-
-      } else {
-        this.problemList = [];
-
-      }
-      this.isShowProblemList = this.problemList.length == 0 ? false : true;
-    })
-
+    if(this.projectId){
+      this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
+        if (data.result) {
+          this.problemList = data.result.result;
+  
+          this.projectHealth = data.result.projectHealth;
+  
+        } else {
+          this.problemList = [];
+  
+        }
+        this.isShowProblemList = this.problemList.length == 0 ? false : true;
+      })
+    }
   }
   public search() {
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
@@ -251,7 +269,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
 
 
-    this.projectId = this.pmReportProjectList[0].projectId
+    this.projectId = this.pmReportProjectList[0]?.projectId
     this.generalNote = this.pmReportProjectList[0].note
     this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
@@ -566,10 +584,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     report.allocatePercentage = data
   }
   getCurrentResourceOfProject() {
-    this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
+    if(this.projectId){  
+      this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
       .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectCurrentResource = data.result
       })
+    }
   }
 
  getTimesheetWorking(){
@@ -582,12 +602,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   });
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      this.pmReportProjectService.GetAllByPmReport(this.pmReportId).subscribe((data => {
+      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
        let report =  data.result.filter(item=>item.id == this.pmReportProjectId)[0]
        this.totalNormalWorkingTime = report.totalNormalWorkingTime
        this.totalOverTime = report.totalOverTime
       }))
     }
   });
- }
+ } 
 }

@@ -20,5 +20,6 @@ namespace ProjectManagement.Entities
         public bool IsActive { get; set; }
         [DefaultValue(false)]
         public bool CreatedInvoice { get; set; }
+        public float? TotalWorkingDay { get; set; }
     }
 }

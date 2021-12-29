@@ -192,47 +192,90 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_ExportInvoice)]
 
-        public async Task<FileBase64Dto> ExportInvoice(long timesheetId, long projectId)
+        public async Task<FileBase64Dto> ExportInvoice(InvoiceExcelDto invoiceExcelDto)
         {
             try
             {
                 var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplate.xlsx");
-                var project = await WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Include(x => x.Client).Include(x=>x.Currency).FirstOrDefaultAsync();
-
+                var listProject = await WorkScope.GetAll<Project>().Where(x => invoiceExcelDto.ProjectId.Contains(x.Id)).Include(x => x.Client).Include(x=>x.Currency).ToListAsync();
+                var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
                 var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
 
-                var timesheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>()
-                                            .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId && x.IsActive)
-                                            .Select(x => new TimeSheetProjectBillExcelDto
-                                            {
-                                                FullName = x.User.FullName,
-                                                BillRate = x.BillRate,
-                                                WorkingTime = x.WorkingTime,
-                                            });
+                string allProjectName = "";
+                IDictionary<long, string> allCurrencyDic = new Dictionary<long, string>();
+                string allCurrency = "";
 
-                foreach (var item in timesheetProjectBills)
+                foreach (var project in listProject)
                 {
-                    invoiceUserBilling.Add(new TimeSheetProjectBillExcelDto
+                    var listUserBillProject = new List<TimeSheetProjectBillExcelDto>();
+                    switch (project?.ChargeType)
                     {
-                        FullName = item.FullName,
-                        WorkingTime = item.WorkingTime,
-                        BillRate = item.BillRate
-                    });
+                        case ChargeType.Daily:
+                             listUserBillProject = await WorkScope.GetAll<TimesheetProjectBill>()
+                                                                .Where(x => x.TimesheetId == invoiceExcelDto.TimesheetId && x.ProjectId == project.Id && x.IsActive)
+                                                                .OrderByDescending(x => x.CreationTime)
+                                                                .Select(x => new TimeSheetProjectBillExcelDto
+                                                                {
+                                                                    FullName = x.User.FullName,
+                                                                    WorkingTime = x.WorkingTime,
+                                                                    BillRate = x.BillRate,
+                                                                    LineTotal = x.WorkingTime * x.BillRate
+                                                                }).ToListAsync();
+                            break;
+                        case ChargeType.Monthly:
+                             listUserBillProject = await WorkScope.GetAll<TimesheetProjectBill>()
+                                                                .Include(x => x.TimeSheet)
+                                                                .Where(x => x.TimesheetId == invoiceExcelDto.TimesheetId && x.ProjectId == project.Id && x.IsActive)
+                                                                .OrderByDescending(x => x.CreationTime)
+                                                                .Select(x => new TimeSheetProjectBillExcelDto
+                                                                {
+                                                                    FullName = x.User.FullName,
+                                                                    WorkingTime = x.WorkingTime,
+                                                                    BillRate = (double)(x.BillRate / x.TimeSheet.TotalWorkingDay),
+                                                                    LineTotal = x.WorkingTime * (double)(x.BillRate / x.TimeSheet.TotalWorkingDay)
+                                                                }).ToListAsync();
+                            break;
+                        case ChargeType.Hours:
+                            listUserBillProject = await WorkScope.GetAll<TimesheetProjectBill>()
+                                                                .Include(x => x.TimeSheet)
+                                                                .Where(x => x.TimesheetId == invoiceExcelDto.TimesheetId && x.ProjectId == project.Id && x.IsActive)
+                                                                .OrderByDescending(x => x.CreationTime)
+                                                                .Select(x => new TimeSheetProjectBillExcelDto
+                                                                {
+                                                                    FullName = x.User.FullName,
+                                                                    WorkingTime = x.WorkingTime,
+                                                                    BillRate = x.BillRate * defaultWorkingHours,
+                                                                    LineTotal = x.WorkingTime * x.BillRate * defaultWorkingHours
+                                                                }).ToListAsync();
+                            break;
+                    }
+                    invoiceUserBilling.AddRange(listUserBillProject);
                 }
+
+                
                 using (var memoryStream = new MemoryStream(File.ReadAllBytes(templateFilePath)))
                 {
                     using (var excelPackageIn = new ExcelPackage(memoryStream))
                     {
                         var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
                         var companySetupSheet = excelPackageIn.Workbook.Worksheets[1];
-                        var clientName = project.Client != null ? project.Client.Name : "";
-                        invoiceSheet.Cells["E2"].Value = $"{clientName}";
 
-                        //invoiceSheet.Names["TenKhachHang"].Value = project.Client != null ? project.Client.Name : "";
-                        invoiceSheet.Names["TenProject"].Value = project.Name;
+                        invoiceSheet.PrinterSettings.FitToHeight = 0;
+
+                        invoiceSheet.Cells["E2"].Value = listProject[0].Client?.Name;
+                        foreach(var project in listProject)
+                        {
+                            allProjectName += project.Name + "\n";
+                            if(project.Currency != null)
+                            {
+                                allCurrencyDic[project.CurrencyId.Value] = project.Currency.Name;
+                            }
+                        }
+                        invoiceSheet.Cells["D6:E6"].Value = allProjectName;
+                        invoiceSheet.Cells["D6:E6"].Style.WrapText = true;
+                        invoiceSheet.Cells["D7:E7"].Value = listProject[0].Client?.Address;
                         invoiceSheet.Cells["B3"].Value = DateTime.Now.Date;
                         invoiceSheet.Cells["B4"].Value = $"BILLING PERIOD: {DateTime.Now.Month}/{DateTime.Now.Year}";
-                        //invoiceSheet.Names["DiaChiKhachHang"].Value = project.Client.Country;
                         var invoiceDetailTable = invoiceSheet.Tables.First();
                         var invoiceDetailTableStart = invoiceDetailTable.Address.Start;
 
@@ -259,7 +302,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                             invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].BillRate;
                                             break;
                                         default:
-                                            invoiceSheet.Cells[i, j].Formula = invoiceSheet.Cells[i, 3] + "*" + invoiceSheet.Cells[i, 4];
+                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].LineTotal;
                                             break;
                                     }
                                 }
@@ -267,15 +310,17 @@ namespace ProjectManagement.APIs.TimesheetProjects
                             }
                         }
                         #region Fill dat into Company Setup sheet
-                        companySetupSheet.Cells["C14"].Value = project.Currency != null ? project.Currency.Name : "";
+                        foreach (KeyValuePair<long, string> kvp in allCurrencyDic)
+                            allCurrency += kvp.Value + "\n";
+                        companySetupSheet.Cells["C14"].Value = allCurrency;
+                        invoiceSheet.Cells["C14"].Style.WrapText = true;
                         #endregion
-
                         var fileBytes = excelPackageIn.GetAsByteArray();
                         string fileBase64 = Convert.ToBase64String(fileBytes);
-                      
+
                         return new FileBase64Dto
                         {
-                            FileName = $"{project.Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
+                            FileName = $"{listProject[0].Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
                             FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
                             Base64 = fileBase64
                         };
@@ -284,10 +329,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
             catch (Exception ex)
             {
-                throw new UserFriendlyException($"error: " + ex.Message);
+                throw new UserFriendlyException(ex.Message);
             }
         }
-       
+
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
         {
@@ -340,7 +385,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                               .Where(x => filterItem == null || x.IsComplete != true)
                          join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
                          //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
-                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id
+                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id into ps
+                         from c in ps.DefaultIfEmpty()
                          join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
                          where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
                          select new GetTimesheetDetailDto
@@ -378,7 +424,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
         {
             var billInfomation = new StringBuilder();
-
+            var projectType = await WorkScope.GetAsync<Project>(input.ProjectId);
+            if (projectType.ProjectType == ProjectType.TRAINING) throw new UserFriendlyException("The training project is not suitable !");
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             if (!timesheet.IsActive)
             {
@@ -468,7 +515,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.TimesheetId == timeSheetProject.TimesheetId && x.ProjectId == timeSheetProject.ProjectId)
                 .ToListAsync();
-            foreach(var tsProjectBill in timesheetProjectBills)
+            foreach (var tsProjectBill in timesheetProjectBills)
             {
                 await WorkScope.DeleteAsync(tsProjectBill);
             }
@@ -580,5 +627,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 Data = data
             };
         }
+
     }
 }

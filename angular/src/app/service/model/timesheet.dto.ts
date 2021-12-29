@@ -5,6 +5,7 @@ export class TimesheetDto {
     year: Date;
     totalProject?: number;
     totalTimesheet?: number;
+    totalWorkingDay: number;
     status: number;
     isActive: boolean;
     id?: number;
@@ -22,6 +23,7 @@ export class TimesheetDetailDto {
     timesheetId: number;
     projectBillInfomation: string;
     isComplete:boolean;
+    
 }
 export class ProjectTimesheetDto {
     projectId: number;

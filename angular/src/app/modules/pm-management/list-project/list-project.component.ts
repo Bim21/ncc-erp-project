@@ -6,11 +6,12 @@ import { InputFilterDto, DropDownDataDto } from './../../../../shared/filter/fil
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { ListProjectService } from './../../../service/api/list-project.service';
 import { ProjectDto } from './../../../service/model/list-project.dto';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PagedListingComponentBase, PagedRequestDto, PagedResultResultDto } from '@shared/paged-listing-component-base';
 import { finalize, catchError } from 'rxjs/operators';
 import { CreateEditListProjectComponent } from './create-edit-list-project/create-edit-list-project.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
   selector: 'app-list-project',
   templateUrl: './list-project.component.html',
@@ -43,16 +44,21 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   public tempPMList: any[] = [];
   public pmId = -1;
   public searchPM: string = "";
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger;
+  contextMenuPosition = { x: '0px', y: '0px' };
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
+    { propertyName: 'projectType', comparisions: [0], displayName: "Loại dự án", filterType: 3, dropdownData: this.projectTypeParam },
     { propertyName: 'clientName', comparisions: [0, 6, 7, 8], displayName: "Tên khách hàng", },
     // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
     { propertyName: 'isCharge', comparisions: [0], displayName: "Charge khách hàng", filterType: 2 },
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
+    { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-    { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
-    { propertyName: 'projectType', comparisions: [0], displayName: "Loại dự án", filterType: 3, dropdownData: this.projectTypeParam },
+    
+    
 
   ];
 
@@ -169,6 +175,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         status: item.status,
         clientId: item.clientId,
         isCharge: item.isCharge,
+        chargeType : item.chargeType,
         pmId: item.pmId,
         id: item.id,
         currencyId: item.currencyId
@@ -200,6 +207,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       })
     }
 
+  }
+  showActions(e , item){
+    e.preventDefault(); 
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu();
   }
   getAllUser() {
     this.userService.GetAllUserActive(false).subscribe(data => {

@@ -8,8 +8,9 @@ export interface ProjectDto {
     clientId: number;
     clientName?: string;
     isCharge: boolean;
+    chargeType?: number;
     pmId: number;
-    pmName?:string;
+    pmName?: string;
     id: number;
     currencyId: string;
 }
@@ -18,13 +19,14 @@ export interface ClientDto {
     name: string;
     code: string;
     id: number;
+    address: string;
 }
 
 export interface SkillDto {
     name: string;
     id: number;
 }
-export class projectForDM{
+export class projectForDM {
     projectName: string;
     pmName: string;
     listUsers: [];

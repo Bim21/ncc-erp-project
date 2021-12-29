@@ -16,6 +16,8 @@ namespace ProjectManagement.APIs.AuditSessions.Dto
         public string ProjectName { get; set; }
         [ApplySearchAttribute]
         public string PmName { get; set; }
+        [ApplySearchAttribute]
+        public string PmNameNormal { get; set; }
         public string AuditResultStatus { get; set; }
         public long CountProjectCreate { get; set; }
         public long CountProjectCheck { get; set; }

@@ -26,11 +26,11 @@ namespace ProjectManagement.Configuration
             return new AppSettingDto
             {
                 ClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId),
-                SecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecretCode),
-                FinanceUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinaceUri),
-                FinanceSecretKey = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretKey),
+                SecurityCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecurityCode),
+                FinanceUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceUri),
+                FinanceSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretCode),
                 TimesheetUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri),
-                TimesheetSecretKey = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretKey),
+                TimesheetSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretCode),
                 CanSendDay = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.CanSendDay),
                 CanSendHour = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.CanSendHour),
                 ExpiredDay = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ExpiredDay),
@@ -42,7 +42,9 @@ namespace ProjectManagement.Configuration
                 PasswordBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
                 ProjectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri),
                 HRMUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri),
-                KomuRoom=await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
+                HRMSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode),
+                KomuRoom = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
+                DefaultWorkingHours = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours),
             };
         }
 
@@ -50,11 +52,11 @@ namespace ProjectManagement.Configuration
         public async Task<AppSettingDto> Change(AppSettingDto input)
         {
             if (string.IsNullOrEmpty(input.ClientAppId) ||
-                string.IsNullOrEmpty(input.SecretCode) ||
+                string.IsNullOrEmpty(input.SecurityCode) ||
                 string.IsNullOrEmpty(input.FinanceUri) ||
-                string.IsNullOrEmpty(input.FinanceSecretKey) ||
+                string.IsNullOrEmpty(input.FinanceSecretCode) ||
                 string.IsNullOrEmpty(input.TimesheetUri) ||
-                string.IsNullOrEmpty(input.TimesheetSecretKey) ||
+                string.IsNullOrEmpty(input.TimesheetSecretCode) ||
                 string.IsNullOrEmpty(input.CanSendDay) ||
                 string.IsNullOrEmpty(input.CanSendHour) ||
                 string.IsNullOrEmpty(input.ExpiredDay) ||
@@ -65,19 +67,21 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.UserBot) ||
                 string.IsNullOrEmpty(input.PasswordBot) ||
                 string.IsNullOrEmpty(input.ProjectUri) ||
-                string.IsNullOrEmpty(input.HRMUri)||
-                string.IsNullOrEmpty(input.KomuRoom)
+                string.IsNullOrEmpty(input.HRMUri) ||
+                string.IsNullOrEmpty(input.HRMSecretCode) ||
+                string.IsNullOrEmpty(input.KomuRoom) ||
+                string.IsNullOrEmpty(input.DefaultWorkingHours)
                 )
             {
                 throw new UserFriendlyException("All setting values need to be completed");
 
             }
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ClientAppId, input.ClientAppId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecretCode, input.SecretCode);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinaceUri, input.FinanceUri);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceSecretKey, input.FinanceSecretKey);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceUri, input.FinanceUri);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceSecretCode, input.FinanceSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimesheetUri, input.TimesheetUri);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimesheetSecretKey, input.TimesheetSecretKey);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimesheetSecretCode, input.TimesheetSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.CanSendDay, input.CanSendDay);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.CanSendHour, input.CanSendHour);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ExpiredDay, input.ExpiredDay);
@@ -89,7 +93,9 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.PasswordBot, input.PasswordBot);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ProjectUri, input.ProjectUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMUri, input.HRMUri);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMSecretCode, input.HRMSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuRoom, input.KomuRoom);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.DefaultWorkingHours, input.DefaultWorkingHours);
             return input;
         }
 

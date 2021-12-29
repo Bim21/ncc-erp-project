@@ -22,6 +22,7 @@ namespace ProjectManagement.Authorization
         public const string Pages_Users_ImportUserFromFile = "Pages.Users.ImportUserFromFile";
         public const string Pages_Users_UpdateAvatar = "Pages.Users.UpdateAvatar";
         public const string Pages_Users_AutoUpdateUserFromHRM = "Pages.Users.AutoUpdateUserFromHRM";
+        public const string Pages_Users_UpdateStarRateFromTimesheet = "Pages.Users.UpdateStarRateFromTimesheet";
 
         //Config
         public const string Admin_Configuration = "Admin.Configuration";
@@ -339,6 +340,7 @@ namespace ProjectManagement.Authorization
                             PermissionNames.Pages_Users_ImportUserFromFile,
                             PermissionNames.Pages_Users_UpdateAvatar,
                             PermissionNames.Pages_Users_AutoUpdateUserFromHRM,
+                            PermissionNames.Pages_Users_UpdateStarRateFromTimesheet,
 
                     PermissionNames.Pages_Tenants,
                     PermissionNames.Pages_Roles,
@@ -632,6 +634,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_ImportUserFromFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Import User From File" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateAvatar, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Avatar" },
                  new SystemPermission{ Name =  PermissionNames.Pages_Users_AutoUpdateUserFromHRM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update All User From HRM" },
+                 new SystemPermission{ Name =  PermissionNames.Pages_Users_UpdateStarRateFromTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Star Rating From Timesheet" },
 
                  //Configuration
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuration, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuration" },

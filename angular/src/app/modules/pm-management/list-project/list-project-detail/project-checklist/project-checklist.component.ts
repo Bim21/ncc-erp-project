@@ -53,6 +53,21 @@ export class ProjectChecklistComponent extends AppComponentBase implements OnIni
   createProjectChecklist(){
     this.showDialog("create",{});
   }
+  delete(item){
+    abp.message.confirm(
+      "Delete project checklist " + item.name + " ?",
+      "",
+      (result) => {
+        this.projectChecklistService.DeleteByProject(this.projectId , item.id).subscribe((res)=>{
+          if(res){
+            abp.notify.success("Delete" + item.name + "successfully!");
+            this.getAllCheckList();
+          }
+        })
+      }
+    )
+    
+  }
   
 
 }

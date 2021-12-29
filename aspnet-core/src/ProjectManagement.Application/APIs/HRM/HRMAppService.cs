@@ -72,7 +72,7 @@ namespace ProjectManagement.APIs.HRM
         #region API HELPER
         private bool CheckSecurityCode()
         {
-            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecretCode);
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
             var header = _httpContextAccessor.HttpContext.Request.Headers;
             var securityCodeHeader = header["X-Secret-Key"];
             if (secretCode == securityCodeHeader)

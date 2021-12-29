@@ -44,8 +44,8 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
     this.saodoName=this.route.snapshot.queryParamMap.get('name');
     this.getSaodoDetail()
   }
-  protected getSaodoDetail(): void {
-    this.saodoService.getById(this.saodoId).subscribe(data=>{
+  public getSaodoDetail(): void {
+    this.saodoService.getDetailById(this.saodoId , this.searchText).subscribe(data=>{
       this.listSaoDoDetail= data.result;
       this.tempListSaoDoDetail = data.result;
       this.projectName=data.result.map(el=>el.projectName)
@@ -66,7 +66,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
       }
     );
   }
-
+    
   showDialog(command: String, saodoProject:any): void {
      let project={};
     if (command == "edit") {
@@ -87,6 +87,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
       },
       width: "700px",
       disableClose: true,
+      autoFocus: false
     });
     show.afterClosed().subscribe(result => {
       if(result){

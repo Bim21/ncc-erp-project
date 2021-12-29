@@ -21,14 +21,12 @@ using ProjectManagement.Roles.Dto;
 using ProjectManagement.Users.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Constants.Enum;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using OfficeOpenXml;
 using NccCore.IoC;
 using Abp.Authorization.Users;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Microsoft.AspNetCore.Hosting;
 using ProjectManagement.Entities;
 using NccCore.Paging;
@@ -42,11 +40,16 @@ using System.Text;
 using ProjectManagement.Constants;
 using NccCore.Uitls;
 using ProjectManagement.NccCore.Helper;
+using Microsoft.AspNetCore.Http;
+using ProjectManagement.Configuration;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Constants.Enum;
 
 namespace ProjectManagement.Users
 {
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
         private readonly IRepository<Role> _roleRepository;
@@ -71,7 +74,8 @@ namespace ProjectManagement.Users
             IWebHostEnvironment webHostEnvironment,
             HrmService hrmService,
             KomuService komuService,
-            ISettingManager settingManager)
+            ISettingManager settingManager,
+            IHttpContextAccessor httpContextAccessor)
             : base(repository)
         {
             _userManager = userManager;
@@ -85,6 +89,7 @@ namespace ProjectManagement.Users
             _hrmService = hrmService;
             _komuService = komuService;
             _settingManager = settingManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -110,6 +115,7 @@ namespace ProjectManagement.Users
                     Branch = x.Branch,
                     IsActive = x.IsActive,
                     FullName = x.Name + " " + x.Surname,
+                    FullNameNormal = x.Surname + " " + x.Name,
                     UserSkills = userSkills.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
                     {
                         UserId = s.UserId,
@@ -204,6 +210,54 @@ namespace ProjectManagement.Users
             }
 
             return await GetAsync(input);
+        }
+
+        [AbpAllowAnonymous]
+        [HttpGet]
+        public async Task<EmployeeInformationDto> GetEmployeeInformation(string email)
+        {
+            if (!CheckSecurityCode())
+                throw new UserFriendlyException("SecretCode does not match!");
+            if (string.IsNullOrEmpty(email)) return null;
+            var user = await _workScope.GetAll<User>().FirstOrDefaultAsync(u => u.EmailAddress == email);
+            if (user == null) return null;
+            if (string.IsNullOrEmpty(user.PhoneNumber))
+            {
+                var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
+                user.PhoneNumber = userFromHRM?.Phone;
+                await _workScope.UpdateAsync(user);
+            }
+            var projectUsers = await (from pu in _workScope.GetAll<ProjectUser>().Include(x => x.Project).Include(x => x.Project.PM).Where(x => x.UserId == user.Id)
+                                      select new
+                                      {
+                                          ProjectId = pu.ProjectId,
+                                          ProjectName = pu.Project.Name,
+                                          PmName = pu.Project.PM != null ? pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() : string.Empty,
+                                          StartTime = pu.StartTime,
+                                          ProjectRole = pu.ProjectRole
+                                      }).OrderByDescending(x => x.StartTime).ToListAsync();
+            var employeeInfo = new EmployeeInformationDto()
+            {
+                EmployeeId = user.Id,
+                EmailAddress = user.EmailAddress,
+                EmployeeName = user.Surname.Trim() + " " + user.Name.Trim(),
+                PhoneNumber = user.PhoneNumber,
+                Branch = Enum.GetName(typeof(Branch), user.Branch),
+                RoleType = Enum.GetName(typeof(UserType), user.UserType),
+                ProjectDtos = new List<ProjectDTO>()
+            };
+            if (projectUsers.Any())
+            {
+                employeeInfo.ProjectDtos.AddRange(projectUsers.Select(x => new ProjectDTO()
+                {
+                    ProjectId = x.ProjectId,
+                    ProjectName = x.ProjectName,
+                    PmName = x.PmName,
+                    StartTime = x.StartTime,
+                    ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole)
+                }));
+            }
+            return employeeInfo;
         }
 
         [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
@@ -607,6 +661,27 @@ namespace ProjectManagement.Users
                 failedListUpdate,
             };
         }
+        [HttpPost]
+        //[AbpAuthorize(PermissionNames.Pages_Users_UpdateStarRateFromTimesheet)]
+        [AbpAllowAnonymous]
+        public async Task<List<UpdateStarRateFromTimesheetDto>> UpdateStarRateFromTimesheet(List<UpdateStarRateFromTimesheetDto> input)
+        {
+            if (!CheckSecurityCode())
+            {
+                throw new UserFriendlyException("SecretCode does not match!");
+            }
+            foreach (var item in input)
+            {
+                var user = await _workScope.GetAll<User>().Where(x => x.EmailAddress == item.EmailAddress).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    user.StarRate = item.StarRate;
+                    await _workScope.UpdateAsync(user);
+                }
+            }
+            CurrentUnitOfWork.SaveChanges();
+            return input;
+        }
         private async Task<CreateUserDto> InsertUserFromHRM(AutoUpdateUserDto user)
         {
             var createUser = new CreateUserDto
@@ -677,6 +752,15 @@ namespace ProjectManagement.Users
                 Name = name,
                 SurName = surName
             };
+        }
+        private bool CheckSecurityCode()
+        {
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
+            var header = _httpContextAccessor.HttpContext.Request.Headers;
+            var securityCodeHeader = header["X-Secret-Key"];
+            if (secretCode == securityCodeHeader)
+                return true;
+            return false;
         }
 
     }

@@ -1,445 +1,730 @@
 <section class="content-header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-6">
-                <h1>Configuration</h1>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h1>Configuration</h1>
+      </div>
     </div>
+  </div>
 </section>
 <section class="content px-2">
-    <div class="container-fluid">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <h4>Komu setting</h4>
+      </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h4>Komu setting</h4>
-            </div>
-
-            <div class="card-body row">
-                <div class="col-12 mb-4 ml-1">
-                    <button  class="btn bg-blue mr-3" (click)="isEditUserBot = !isEditUserBot; isEditKomuUrl=!isEditKomuUrl;
-                    isEditPassBot= !isEditPassBot; isEditKomuUserNames = !isEditKomuUserNames;
-                    userBot.focus()" [hidden]="isEditUserBot">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </button>
-                    <button class="btn bg-red mr-3" (click)="saveConfiguration();isEditUserBot = !isEditUserBot;
-                    isEditKomuUserNames = !isEditKomuUserNames;"
-                        [hidden]="!isEditUserBot">
-                        Save
-                    </button>
-                    <button class="btn bg-secondary" (click)="isEditUserBot = !isEditUserBot; isEditKomuUrl= !isEditKomuUrl;
-                    isEditPassBot= !isEditPassBot; isEditKomuUserNames = !isEditKomuUserNames;
-                    getSetting()" [hidden]="!isEditUserBot">
-                        Cancel
-                    </button>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>User Bot</h4>
-                        </div>
-
-                        <div class="card-body">
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditUserBot" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.userBot" #userBot />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Password Bot</h4>
-                        </div>
-                        <div class="card-body">
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditPassBot" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.passwordBot" #passBot />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Komu URL</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditKomuUrl" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.komuUrl" #komuUrl />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Komu Usernames</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditKomuUserNames" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.komuUserNames" #komuUserNames />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="card-body row">
+        <div class="col-12 mb-4 ml-1">
+          <button
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditUserBot = !isEditUserBot;
+              isEditKomuUrl = !isEditKomuUrl;
+              isEditPassBot = !isEditPassBot;
+              isEditKomuUserNames = !isEditKomuUserNames;
+              userBot.focus()
+            "
+            [hidden]="isEditUserBot"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </button>
+          <button
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditUserBot = !isEditUserBot;
+              isEditKomuUserNames = !isEditKomuUserNames
+            "
+            [hidden]="!isEditUserBot"
+          >
+            Save
+          </button>
+          <button
+            class="btn bg-secondary"
+            (click)="
+              isEditUserBot = !isEditUserBot;
+              isEditKomuUrl = !isEditKomuUrl;
+              isEditPassBot = !isEditPassBot;
+              isEditKomuUserNames = !isEditKomuUserNames;
+              getSetting()
+            "
+            [hidden]="!isEditUserBot"
+          >
+            Cancel
+          </button>
         </div>
-
-        <div class="card">
+        <div class="col col-6">
+          <div class="card">
             <div class="card-header">
-                <h4>Project Setting</h4>
-            </div>
-
-            <div class="card-body row">
-                <div class="col-12 mb-4 ml-1">
-                    <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditSecretCode = !isEditSecretCode; isEditProjectUri = !isEditProjectUri;
-                        projectUri.focus() ;" [hidden]="isEditProjectUri">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditSecretCode =! isEditSecretCode; isEditProjectUri = !isEditProjectUri;"
-                        [hidden]="!isEditProjectUri">
-                        Save
-                    </a>
-
-                    <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditSecretCode =! isEditSecretCode; isEditProjectUri = !isEditProjectUri;
-                        getSetting()" [hidden]="!isEditProjectUri">
-                        Cancel
-                    </a>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Project URI</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditProjectUri" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.projectUri" #projectUri />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Secret Code</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditSecretCode" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.secretCode" #secretCode />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <div class="card">
-            <div class="card-header">
-                <h4>HRM Setting</h4>
+              <h4>User Bot</h4>
             </div>
 
             <div class="card-body">
-                <div class="col-12 ml-1">
-                    <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditHRM = !isEditHRM;
-                        hrmUri.focus() ;" [hidden]="isEditHRM">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditHRM = !isEditHRM;"
-                        [hidden]="!isEditHRM">
-                        Save
-                    </a>
-
-                    <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditHRM = !isEditHRM;
-                        getSetting()" [hidden]="!isEditHRM">
-                        Cancel
-                    </a>
-                </div>
-
-
-                <div class="">
-                    <div class="card-body">
-
-                        <mat-form-field class="w-75">
-                            <input [readonly]="!isEditHRM" class="w-100" type="text" matInput
-                                [(ngModel)]="configuration.hrmUri" #hrmUri />
-                        </mat-form-field>
-                    </div>
-                </div>
-
-
-
-
-                
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditUserBot"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.userBot"
+                  #userBot
+                />
+              </mat-form-field>
             </div>
+          </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="card">
+        <div class="col col-6">
+          <div class="card">
             <div class="card-header">
-                <h4>Timesheet Setting</h4>
-            </div>
-
-            <div class="card-body row">
-                <div class="col-12 mb-4 ml-1">
-                    <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditTimesheetSecretKey = !isEditTimesheetSecretKey; isEditTimesheetUri = !isEditTimesheetUri;
-                        timesheetUri.focus() ;" [hidden]="isEditTimesheetUri">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditTimesheetSecretKey =! isEditTimesheetSecretKey; isEditTimesheetUri = !isEditTimesheetUri;"
-                        [hidden]="!isEditTimesheetUri">
-                        Save
-                    </a>
-
-                    <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditTimesheetSecretKey =! isEditTimesheetSecretKey; isEditTimesheetUri = !isEditTimesheetUri;
-                        getSetting()" [hidden]="!isEditTimesheetUri">
-                        Cancel
-                    </a>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Timesheet URI</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditTimesheetUri" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.timesheetUri" #timesheetUri />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Secret Key</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditTimesheetSecretKey" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.timesheetSecretKey" #timesheetSecretKey />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h4>Finance Setting</h4>
-            </div>
-
-            <div class="card-body row">
-                <div class="col-12 mb-4 ml-1">
-                    <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditFinanceSecretKey = !isEditFinanceSecretKey; isEditFinanceUri = !isEditFinanceUri;
-                        financeUri.focus() ;" [hidden]="isEditFinanceUri">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditFinanceSecretKey =! isEditFinanceSecretKey; isEditFinanceUri = !isEditFinanceUri;"
-                        [hidden]="!isEditFinanceUri">
-                        Save
-                    </a>
-
-                    <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditFinanceSecretKey =! isEditFinanceSecretKey; isEditFinanceUri = !isEditFinanceUri;
-                        getSetting()" [hidden]="!isEditFinanceUri">
-                        Cancel
-                    </a>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Timesheet URI</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditFinanceUri" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.financeUri" #financeUri />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Secret Key</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75">
-                                <input [readonly]="!isEditFinanceSecretKey" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.financeSecretKey" #financeSecretKey />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h4>Send Report Setting</h4>
-            </div>
-
-            <div class="card-body row">
-                <div class="col-12 mb-4 ml-1">
-                    <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditCanSendDay = !isEditCanSendDay; isEditCanSendHour = !isEditCanSendHour;
-                        isEditExpiredDay = !isEditExpiredDay; isEditExpiredHour = !isEditExpiredHour;
-                        canSendDay.focus() ;" [hidden]="isEditCanSendDay">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditCanSendDay = !isEditCanSendDay; isEditCanSendHour = !isEditCanSendHour;
-                        isEditExpiredDay = !isEditExpiredDay; isEditExpiredHour = !isEditExpiredHour;"
-                        [hidden]="!isEditCanSendDay">
-                        Save
-                    </a>
-
-                    <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditCanSendDay = !isEditCanSendDay; isEditCanSendHour = !isEditCanSendHour;
-                        isEditExpiredDay = !isEditExpiredDay; isEditExpiredHour = !isEditExpiredHour;
-                        getSetting()" [hidden]="!isEditCanSendDay">
-                        Cancel
-                    </a>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Can Send Time</h4>
-                        </div>
-
-                        <div class="card-body">
-                            
-                            <mat-form-field class="w-75" appearance="legacy">
-                                <!-- <input [readonly]="!isEditCanSendDay" class="w-100" type="text" matInput
-                                    [(ngModel)]="configuration.canSendDay" #canSendDay /> -->
-                                <mat-select [disabled]="!isEditCanSendDay" class="w-100" [(ngModel)]="configuration.canSendDay" #canSendDay>
-                                    <mat-option *ngFor="let day of listDays" [value]="day.value">
-                                        {{day.text}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="card-body">
-                            
-                            <mat-form-field class="w-75" appearance="legacy">
-                                <mat-select [disabled]="!isEditCanSendHour" class="w-100" [(ngModel)]="configuration.canSendHour" #canSendHour>
-                                    <mat-option *ngFor="let hour of listHours" [value]="hour.value">
-                                        {{hour.text}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Expired Time</h4>
-                        </div>
-
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75" appearance="legacy">
-                                <mat-select [disabled]="!isEditExpiredDay" class="w-100" [(ngModel)]="configuration.expiredDay" #expiredDay>
-                                    <mat-option *ngFor="let day of listDays" [value]="day.value">
-                                        {{day.text}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="card-body">
-
-                            <mat-form-field class="w-75" appearance="legacy">
-                                <mat-select [disabled]="!isEditExpiredHour" class="w-100" [(ngModel)]="configuration.expiredHour" #expiredHour>
-                                    <mat-option *ngFor="let hour of listHours" [value]="hour.value">
-                                        {{hour.text}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h4>GoogleClient App</h4>
+              <h4>Password Bot</h4>
             </div>
             <div class="card-body">
-                <div class="col-6">
-                    <a  href="javascript:;" class="btn bg-blue mr-3"
-                        (click)="isEditClientId = !isEditClientId ; clientId.focus()" [hidden]="isEditClientId">
-                        <i class="fas fa-edit"></i>
-                        Edit
-                    </a>
-                    <a href="javascript:;" class="btn bg-red mr-3"
-                        (click)="saveConfiguration();isEditClientId =! isEditClientId" [hidden]="!isEditClientId">
-                        Save
-                    </a>
-                    <a href="javascript:;" class="btn bg-secondary"
-                        (click)="isEditClientId =! isEditClientId; getSetting()" [hidden]="!isEditClientId">
-                        Cancel
-                    </a>
-                </div>
-                <mat-form-field class="w-50 ml-1">
-                    <input [readonly]="!isEditClientId" class="w-100" type="text" matInput
-                        [(ngModel)]="configuration.clientAppId" #clientId />
-                </mat-form-field>
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditPassBot"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.passwordBot"
+                  #passBot
+                />
+              </mat-form-field>
             </div>
+          </div>
         </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Komu URL</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditKomuUrl"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.komuUrl"
+                  #komuUrl
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Komu Usernames</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditKomuUserNames"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.komuUserNames"
+                  #komuUserNames
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Project Setting</h4>
+      </div>
+
+      <div class="card-body row">
+        <div class="col-12 mb-4 ml-1">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditSecretCode = !isEditSecretCode;
+              isEditProjectUri = !isEditProjectUri;
+              projectUri.focus()
+            "
+            [hidden]="isEditProjectUri"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditSecretCode = !isEditSecretCode;
+              isEditProjectUri = !isEditProjectUri
+            "
+            [hidden]="!isEditProjectUri"
+          >
+            Save
+          </a>
+
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="
+              isEditSecretCode = !isEditSecretCode;
+              isEditProjectUri = !isEditProjectUri;
+              getSetting()
+            "
+            [hidden]="!isEditProjectUri"
+          >
+            Cancel
+          </a>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Project URI</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditProjectUri"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.projectUri"
+                  #projectUri
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Security Code</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditSecretCode"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.securityCode"
+                  #secretCode
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>HRM Setting</h4>
+      </div>
+
+      <div class="card-body row">
+        <div class="col-12 mb-4 ml-1">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditHRM = !isEditHRM;
+              isEditHRMSecretKey = !isEditHRMSecretKey;
+              hrmUri.focus()
+            "
+            [hidden]="isEditHRM"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditHRM = !isEditHRM;
+              isEditHRMSecretKey = !isEditHRMSecretKey
+            "
+            [hidden]="!isEditHRM"
+          >
+            Save
+          </a>
+
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="
+              isEditHRM = !isEditHRM;
+              isEditHRMSecretKey = !isEditHRMSecretKey;
+              getSetting()
+            "
+            [hidden]="!isEditHRM"
+          >
+            Cancel
+          </a>
+        </div>
+
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>HRM URL</h4>
+            </div>
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditHRM"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.hrmUri"
+                  #hrmUri
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Secret Code</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditHRMSecretKey"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.hrmSecretCode"
+                  #HRMSecretKey
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Timesheet Setting</h4>
+      </div>
+
+      <div class="card-body row">
+        <div class="col-12 mb-4 ml-1">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditTimesheetSecretKey = !isEditTimesheetSecretKey;
+              isEditTimesheetUri = !isEditTimesheetUri;
+              timesheetUri.focus()
+            "
+            [hidden]="isEditTimesheetUri"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditTimesheetSecretKey = !isEditTimesheetSecretKey;
+              isEditTimesheetUri = !isEditTimesheetUri
+            "
+            [hidden]="!isEditTimesheetUri"
+          >
+            Save
+          </a>
+
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="
+              isEditTimesheetSecretKey = !isEditTimesheetSecretKey;
+              isEditTimesheetUri = !isEditTimesheetUri;
+              getSetting()
+            "
+            [hidden]="!isEditTimesheetUri"
+          >
+            Cancel
+          </a>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Timesheet URI</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditTimesheetUri"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.timesheetUri"
+                  #timesheetUri
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Secret Code</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditTimesheetSecretKey"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.timesheetSecretCode"
+                  #timesheetSecretKey
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Finance Setting</h4>
+      </div>
+
+      <div class="card-body row">
+        <div class="col-12 mb-4 ml-1">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditFinanceSecretKey = !isEditFinanceSecretKey;
+              isEditFinanceUri = !isEditFinanceUri;
+              financeUri.focus()
+            "
+            [hidden]="isEditFinanceUri"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditFinanceSecretKey = !isEditFinanceSecretKey;
+              isEditFinanceUri = !isEditFinanceUri
+            "
+            [hidden]="!isEditFinanceUri"
+          >
+            Save
+          </a>
+
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="
+              isEditFinanceSecretKey = !isEditFinanceSecretKey;
+              isEditFinanceUri = !isEditFinanceUri;
+              getSetting()
+            "
+            [hidden]="!isEditFinanceUri"
+          >
+            Cancel
+          </a>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Finance URI</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditFinanceUri"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.financeUri"
+                  #financeUri
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Secret Code</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75">
+                <input
+                  [readonly]="!isEditFinanceSecretKey"
+                  class="w-100"
+                  type="text"
+                  matInput
+                  [(ngModel)]="configuration.financeSecretCode"
+                  #financeSecretKey
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Send Report Setting</h4>
+      </div>
+
+      <div class="card-body row">
+        <div class="col-12 mb-4 ml-1">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditCanSendDay = !isEditCanSendDay;
+              isEditCanSendHour = !isEditCanSendHour;
+              isEditExpiredDay = !isEditExpiredDay;
+              isEditExpiredHour = !isEditExpiredHour;
+              canSendDay.focus()
+            "
+            [hidden]="isEditCanSendDay"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditCanSendDay = !isEditCanSendDay;
+              isEditCanSendHour = !isEditCanSendHour;
+              isEditExpiredDay = !isEditExpiredDay;
+              isEditExpiredHour = !isEditExpiredHour
+            "
+            [hidden]="!isEditCanSendDay"
+          >
+            Save
+          </a>
+
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="
+              isEditCanSendDay = !isEditCanSendDay;
+              isEditCanSendHour = !isEditCanSendHour;
+              isEditExpiredDay = !isEditExpiredDay;
+              isEditExpiredHour = !isEditExpiredHour;
+              getSetting()
+            "
+            [hidden]="!isEditCanSendDay"
+          >
+            Cancel
+          </a>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Can Send Time</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75" appearance="legacy">
+                <!-- <input [readonly]="!isEditCanSendDay" class="w-100" type="text" matInput
+                                    [(ngModel)]="configuration.canSendDay" #canSendDay /> -->
+                <mat-select
+                  [disabled]="!isEditCanSendDay"
+                  class="w-100"
+                  [(ngModel)]="configuration.canSendDay"
+                  #canSendDay
+                >
+                  <mat-option *ngFor="let day of listDays" [value]="day.value">
+                    {{ day.text }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="card-body">
+              <mat-form-field class="w-75" appearance="legacy">
+                <mat-select
+                  [disabled]="!isEditCanSendHour"
+                  class="w-100"
+                  [(ngModel)]="configuration.canSendHour"
+                  #canSendHour
+                >
+                  <mat-option
+                    *ngFor="let hour of listHours"
+                    [value]="hour.value"
+                  >
+                    {{ hour.text }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col col-6">
+          <div class="card">
+            <div class="card-header">
+              <h4>Expired Time</h4>
+            </div>
+
+            <div class="card-body">
+              <mat-form-field class="w-75" appearance="legacy">
+                <mat-select
+                  [disabled]="!isEditExpiredDay"
+                  class="w-100"
+                  [(ngModel)]="configuration.expiredDay"
+                  #expiredDay
+                >
+                  <mat-option *ngFor="let day of listDays" [value]="day.value">
+                    {{ day.text }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="card-body">
+              <mat-form-field class="w-75" appearance="legacy">
+                <mat-select
+                  [disabled]="!isEditExpiredHour"
+                  class="w-100"
+                  [(ngModel)]="configuration.expiredHour"
+                  #expiredHour
+                >
+                  <mat-option
+                    *ngFor="let hour of listHours"
+                    [value]="hour.value"
+                  >
+                    {{ hour.text }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>GoogleClient App</h4>
+      </div>
+      <div class="card-body">
+        <div class="col-6">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="isEditClientId = !isEditClientId; clientId.focus()"
+            [hidden]="isEditClientId"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="saveConfiguration(); isEditClientId = !isEditClientId"
+            [hidden]="!isEditClientId"
+          >
+            Save
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="isEditClientId = !isEditClientId; getSetting()"
+            [hidden]="!isEditClientId"
+          >
+            Cancel
+          </a>
+        </div>
+        <mat-form-field class="w-50 ml-1">
+          <input
+            [readonly]="!isEditClientId"
+            class="w-100"
+            type="text"
+            matInput
+            [(ngModel)]="configuration.clientAppId"
+            #clientId
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Default working hours per day</h4>
+      </div>
+      <div class="card-body">
+        <div class="col-6">
+          <a
+            href="javascript:;"
+            class="btn bg-blue mr-3"
+            (click)="
+              isEditDefaultWorkingHours = !isEditDefaultWorkingHours;
+              clientId.focus()
+            "
+            [hidden]="isEditDefaultWorkingHours"
+          >
+            <i class="fas fa-edit"></i>
+            Edit
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-red mr-3"
+            (click)="
+              saveConfiguration();
+              isEditDefaultWorkingHours = !isEditDefaultWorkingHours
+            "
+            [hidden]="!isEditDefaultWorkingHours"
+          >
+            Save
+          </a>
+          <a
+            href="javascript:;"
+            class="btn bg-secondary"
+            (click)="
+              isEditDefaultWorkingHours = !isEditDefaultWorkingHours;
+              getSetting()
+            "
+            [hidden]="!isEditDefaultWorkingHours"
+          >
+            Cancel
+          </a>
+        </div>
+        <mat-form-field class="w-50 ml-1">
+          <input
+            [readonly]="!isEditDefaultWorkingHours"
+            class="w-100"
+            type="text"
+            matInput
+            [(ngModel)]="configuration.defaultWorkingHours"
+            #clientId
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
 </section>

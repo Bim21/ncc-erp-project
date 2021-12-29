@@ -26,6 +26,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
   PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
   PmManager_ProjectUserBill = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
+  PmManager_ProjectUserBill_GetAllbyProject = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_GetAllbyProject;
   PmManager_ProjectUserBill_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
   PmManager_ProjectUserBill_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
   PmManager_ProjectUserBill_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
@@ -98,7 +99,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     }
   }
   private getUserBill(): void {
-    if (this.permission.isGranted(this.PmManager_ProjectUserBill)) {
+    if (this.permission.isGranted(this.PmManager_ProjectUserBill_GetAllbyProject)) {
       this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
         this.userBillList = data.result
       })

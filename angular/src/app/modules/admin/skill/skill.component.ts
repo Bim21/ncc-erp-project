@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from './../../../service/model/list-project.dto';
 import { SkillService } from './../../../service/api/skill.service';
@@ -18,12 +19,12 @@ export class SkillComponent extends PagedListingComponentBase<SkillComponent> im
    
   ];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.skillService.getAllPaging(request).pipe(finalize(()=>{
-      finishedCallback();
-    }),catchError(this.skillService.handleError)).subscribe(data=>{
-      this.skillList=data.result.items;
-      this.showPaging(data.result, pageNumber)
-    })
+      this.skillService.getAllPaging(request).pipe(finalize(()=>{
+        finishedCallback();
+      }),catchError(this.skillService.handleError)).subscribe(data=>{
+        this.skillList=data.result.items;
+        this.showPaging(data.result, pageNumber)
+      })
   }
 
   protected delete(skill: SkillComponent): void {
@@ -41,6 +42,10 @@ export class SkillComponent extends PagedListingComponentBase<SkillComponent> im
     )
   }
   public skillList:SkillDto[]=[];
+  Admin_Skill_Create = PERMISSIONS_CONSTANT.Admin_Skill_Create;
+  Admin_Skill_Delete = PERMISSIONS_CONSTANT.Admin_Skill_Delete;
+  Admin_Skill_Update = PERMISSIONS_CONSTANT.Admin_Skill_Update;
+  Admin_Skill_ViewAll = PERMISSIONS_CONSTANT.Admin_Skill_ViewAll;
 
   constructor(private skillService:SkillService,
     injector:Injector,

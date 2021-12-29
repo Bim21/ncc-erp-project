@@ -25,9 +25,12 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long? CurrencyId { get; set; }
         public string CurrencyName { get; set; }
         public bool? IsCharge { get; set; }
+        public ChargeType? ChargeType { get; set; }
         public long PmId { get; set; }
+        [ApplySearch]
         public string PmName { get; set; }
         public string PmFullName { get; set; }
+        [ApplySearch]
         public string PmEmailAddress { get; set; }
         public string PmUserName { get; set; }
         public string PmAvatarPath { get; set; }

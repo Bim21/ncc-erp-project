@@ -30,6 +30,10 @@ namespace ProjectManagement.Services.HRM
         {
             return await GetAsync<List<AutoUpdateUserDto>>($"/api/services/app/ProjectManagement/GetAllUser");
         }
+        public async Task<AutoUpdateUserDto> GetUserFromHRMByEmail(string email)
+        {
+            return await GetAsync<AutoUpdateUserDto>($"/api/services/app/ProjectManagement/GetUserByEmail?email={email}");
+        }
 
         private async Task<T> GetAsync<T>(string Url)
         {
@@ -37,7 +41,7 @@ namespace ProjectManagement.Services.HRM
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri));
-                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecretCode));
+                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode));
                 HttpResponseMessage response = new HttpResponseMessage();
                 try 
                 { 
@@ -70,7 +74,7 @@ namespace ProjectManagement.Services.HRM
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri));
-                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecretCode));
+                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode));
                 var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = new HttpResponseMessage();
                 try 

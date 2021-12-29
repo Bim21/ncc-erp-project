@@ -32,11 +32,13 @@ namespace ProjectManagement.APIs.AuditResults
         {
             var isExist = await WorkScope.GetAll<AuditResult>()
                             .AnyAsync(x => x.AuditSessionId == input.AuditSessionId && x.ProjectId == input.ProjectId && x.Id != input.Id);
+            var auditResult = await WorkScope.GetAsync<AuditResult>(input.Id);
+            auditResult.Status = input.status;
             if (isExist)
             {
                 throw new UserFriendlyException("Audit Result already exists.");
             }
-            await WorkScope.UpdateAsync(ObjectMapper.Map<AuditResult>(input));
+            await WorkScope.UpdateAsync(auditResult);
             return input;
         }
         [AbpAuthorize(PermissionNames.SaoDo_AuditResult_Delete)]

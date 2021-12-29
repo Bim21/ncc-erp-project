@@ -5,10 +5,9 @@
                 <h1>Skill</h1>
             </div>
             <div class="col-6 text-right">
-                <button   (click)="createSkill()"
-                    class="btn bg-blue">
+                <button *ngIf="permission.isGranted(Admin_Skill_Create)" (click)="createSkill()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
-                   Create
+                    Create
                 </button>
             </div>
         </div>
@@ -62,7 +61,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
-                            <th >Actions</th>
+                            <th *ngIf="permission.isGranted(Admin_Skill_Update) || permission.isGranted(Admin_Skill_Delete)">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,25 +71,23 @@
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index"  >
+                              }; let i = index">
                             <td class="text-center stt"><span>{{ i +1 }}</span></td>
                             <td class="text-center">{{item.name}}</td>
-                            <td style="width: 200px;" class="text-center">
-                                <button
+                            <td style="width: 200px;" class="text-center" *ngIf="permission.isGranted(Admin_Skill_Update) || permission.isGranted(Admin_Skill_Delete)">
+                                <button *ngIf="permission.isGranted(Admin_Skill_Update)"
+                                    class="btn btn-sm bg-secondary mr-1"
+                                    (click)="editSkill(item);$event.stopPropagation()">
+                                    <i class="fas fa-pencil-alt"></i>
 
-                                class="btn btn-sm bg-secondary mr-1"
-                                (click)="editSkill(item);$event.stopPropagation()" >
-                                <i class="fas fa-pencil-alt"></i>
-
-                                Edit
-                            </button>
-                            <button
-                                class="btn btn-sm bg-danger ml-1"
-                                (click)="delete(item);$event.stopPropagation()"
-                                 #deleteBtn>
-                                <i class="fas fa-trash"></i>
-                                Delete
-                            </button>
+                                    Edit
+                                </button>
+                                <button *ngIf="permission.isGranted(Admin_Skill_Delete)"
+                                    class="btn btn-sm bg-danger ml-1" (click)="delete(item);$event.stopPropagation()"
+                                    #deleteBtn>
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     </tbody>

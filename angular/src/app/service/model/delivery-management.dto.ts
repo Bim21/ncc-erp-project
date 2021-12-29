@@ -54,6 +54,8 @@ export class availableResourceDto{
   ];
   used:number;
   listSkills:any[];
+  totalFreeDay:any;
+  starRate : number
 }
 export class planUserDto{
   projectId: number;

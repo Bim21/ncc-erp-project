@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20190111071724_Upgraded_To_Abp_v4_1_0.cs" />
     <Compile Remove="Migrations\20210810103146_add-TimeSendReport-PMReportProject.cs" />
     <Compile Remove="Migrations\20210810103146_add-TimeSendReport-PMReportProject.Designer.cs" />
+    <Compile Remove="Migrations\20211203032757_update_table_AbpUser_add_column_StarRate.cs" />
+    <Compile Remove="Migrations\20211203032757_update_table_AbpUser_add_column_StarRate.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />

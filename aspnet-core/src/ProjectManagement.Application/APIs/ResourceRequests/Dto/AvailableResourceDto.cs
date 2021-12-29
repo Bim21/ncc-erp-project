@@ -10,9 +10,12 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
     {
         public long UserId { get; set; }
         public string UserName { get; set; }
+        [ApplySearchAttribute]
         public string EmailAddress { get; set; }
         [ApplySearchAttribute]
         public string FullName { get; set; }
+        [ApplySearchAttribute]
+        public string NormalFullName { get; set; }
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
@@ -21,6 +24,8 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public List<ProjectUserPlan> ProjectUserPlans { get; set; }
         public List<SkillDto> ListSkills { get; set; }
         public List<long> ListSkillIds { get; set; }
+        public int? StarRate { get; set; }
+        public int TotalFreeDay { get; set; }
     }
 
     public class ProjectUserPlan

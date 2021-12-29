@@ -164,10 +164,27 @@
 
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 pt-2">
-                            <mat-checkbox [(ngModel)]="project.isCharge" name="ischarge" class="mt-1">is Charge
+                            <mat-checkbox [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge" class="mt-1">is Charge
                             </mat-checkbox>
                     <span><i class="fas fa-question-circle showText ml-1 mb-1"></i></span>
 
+                        </div>
+                    </div>
+                    <div class="form-group row detail mb-1" *ngIf="project.isCharge">
+                        <label class="col-md-2 col-form-label" for="requestName">
+                            Charge Type :
+                        </label>
+                        <div *ngIf="readMode" class="col-md-4 mt-2">
+                            <p>{{getByEnum(project.chargeType , APP_ENUM.ChargeType)}}</p>
+                        </div>
+                        <div *ngIf="!readMode" class="col-md-5 pt-2">
+                            <mat-form-field class="w-100" appearance="outline">
+                                <mat-select [(ngModel)]="project.chargeType" name="chargeType" placeholder="Select charge type"  #currency="ngModel">
+                                    <mat-option *ngFor="let type of chargeTypeList" [value]="APP_ENUM.ChargeType[type]">
+                                        {{type}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>                           
                         </div>
                     </div>
                     <div class="form-group row detail ">

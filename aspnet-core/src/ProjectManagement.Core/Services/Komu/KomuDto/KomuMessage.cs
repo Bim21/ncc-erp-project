@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ProjectManagement.Services.Komu.KomuDto
 {

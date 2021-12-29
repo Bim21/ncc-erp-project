@@ -1,3 +1,4 @@
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
 import { result } from 'lodash-es';
@@ -8,7 +9,7 @@ import { TimesheetProjectService } from '@app/service/api/timesheet-project.serv
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto } from './../../../service/model/timesheet.dto';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError } from 'rxjs/operators';
@@ -61,12 +62,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public timesheetId: any;
   public isActive: boolean;
   public createdInvoice: boolean;
+  public listExportInvoice: any[] = [];
+  public clientId: number = 0;
+
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger
+  contextMenuPosition = { x: '0', y: '0' }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
-    { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType: 2 },
     { propertyName: 'isComplete', displayName: "Status", comparisions: [0], filterType: 5 },
+    { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
 
   ];
 
@@ -111,7 +118,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         note: Timesheet.note,
         id: Timesheet.id,
         projectBillInfomation: Timesheet.projectBillInfomation,
-        
+
 
       }
 
@@ -128,7 +135,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     });
     show.afterClosed().subscribe(res => {
       if (res) {
-      this.refresh()
+        this.refresh()
       }
     })
   }
@@ -144,7 +151,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
             this.reloadTimesheetFile(id)
           }, 1000)
         }
-        else{
+        else {
           this.showPaging(data.result, this.pageNum);
           this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
           abp.notify.success("import file successfull")
@@ -171,7 +178,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.reloadTimesheetFile(result)
-        
+
       }
     });
   }
@@ -182,10 +189,10 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       (result: boolean) => {
         if (result) {
           this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(() => {
-            setTimeout(()=>{
+            setTimeout(() => {
               abp.notify.success("Deleted File  " + item.file);
               this.refresh();
-            },1000)
+            }, 1000)
           });
         }
       }
@@ -255,7 +262,12 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
-
+  showActions(e) {
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu();
+  }
   public reloadComponent() {
     this.router.navigate(['app/timesheetDetail'], {
       queryParams: {
@@ -293,5 +305,34 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
   }
 
-
+  addProjectToExport(event) {
+    if (!event.checked) {
+      let index = this.listExportInvoice.indexOf(event.source.value.projectId);
+      if (index > -1)
+        this.listExportInvoice.splice(index, 1);
+    }
+    else {
+      let checkClientId = event.source.value.clientId;
+      if (this.listExportInvoice.length > 0 && this.clientId != checkClientId) {
+        abp.notify.warn("Không thể export invoice cho các clients khác nhau!")
+        event.checked = false;
+        event.source._checked = false
+        return;
+      }
+      this.clientId = checkClientId;
+      this.listExportInvoice.push(event.source.value.projectId);
+    }
+  }
+  exportInvoiceClient() {
+    let invoiceExcelDto = {
+      timesheetId: this.timesheetId,
+      projectId: this.listExportInvoice
+    }
+    this.timesheetProjectService.exportInvoiceClient(invoiceExcelDto).subscribe((res) => {
+      const file = new Blob([this.s2ab(atob(res.result.base64))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      FileSaver.saveAs(file, res.result.fileName);
+    })
+  }
 }

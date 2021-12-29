@@ -62,7 +62,8 @@
                               }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
                             <td ><app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                userType:item.userType,emailAddress:item.emailAddress, avatarPath:item.avatarPath}"></app-user-info></td>
+                                userType:item.userType,emailAddress:item.emailAddress, avatarPath:item.avatarPath}"></app-user-info>
+                            </td>
                             <td class="text-center">{{item.projectName}}</td>
                             <td class="text-center">{{item.startDate | date:"dd/MM/yyyy"}}</td>
                             <td class="text-center"><strong class="mr-2">{{item.use}}%</strong></td>

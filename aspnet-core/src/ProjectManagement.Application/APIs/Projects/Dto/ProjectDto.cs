@@ -21,6 +21,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long? ClientId { get; set; }
         public long? CurrencyId { get; set; }
         public bool? IsCharge { get; set; }
+        public ChargeType? ChargeType { get; set; }
         public long PmId { get; set; }
         public string BriefDescription { get; set; }
         public string DetailDescription { get; set; }

@@ -9,6 +9,7 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
         public string FullName { get; set; }
         public float WorkingTime { get; set; }
         public double BillRate { get; set; }
+        public double LineTotal { get; set; }
     }
     public class FileBase64Dto
     {

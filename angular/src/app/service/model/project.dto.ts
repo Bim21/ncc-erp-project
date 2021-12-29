@@ -57,6 +57,7 @@ export class projectUserBillDto {
     workingTime : string;
     id: number;
     timesheetId: number;
+    userList?: any[];
 }
 export class MilestoneDto {
     projectId: number;
@@ -117,6 +118,7 @@ export class ProductProjectDto {
     pmUserName: string;
     pmAvatarPath: string;
     pmUserType: number;
+    projectType: number;
     pmBranch: number;
     isSent: number;
     timeSendReport: string;

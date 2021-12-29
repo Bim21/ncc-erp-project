@@ -9,9 +9,11 @@ using ProjectManagement.APIs.AuditSessions.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
+using ProjectManagement.Helper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -102,26 +104,34 @@ namespace ProjectManagement.APIs.AuditSessions
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_View)]
-        public async Task<List<AuditSessionDetailDto>> Get(long Id)
+        public async Task<List<AuditSessionDetailDto>> Get(long Id, string searchText)
         {
             var checkExist = await WorkScope.GetAsync<AuditSession>(Id);
             var listSessionPeople = WorkScope.GetAll<AuditResultPeople>()
                                      .Select(x => new { x.AuditResultId, x.IsPass });
-            var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
-
-            return await (from ar in WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == Id)
+            //var namePM = await WorkScope.GetAll<User>().ToDictionaryAsync(x => x.Id);
+            //string cleanSearchText = searchText.EmptyIfNull().Trim().ToLower();
+            var cleanSearchText = Regex.Replace(XoaDauHelper.RemoveSign4VietnameseString(searchText.EmptyIfNull().Trim().ToLower()), @"\s+", " ");
+            var qAuditResults = await (from ar in WorkScope.GetAll<AuditResult>().Include(x => x.PM).Where(x => x.AuditSessionId == Id)
                           select new AuditSessionDetailDto
                           {
                               Id = ar.Id,
                               StartTime = checkExist.StartTime,
                               EndTime = checkExist.EndTime,
-                              PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
+                              //PmName = namePM.ContainsKey(ar.PMId) ? namePM[ar.PMId].FullName : null,
+                              PmName = ar.PM.Name + " " + ar.PM.Surname,
+                              PmNameNormal = ar.PM.Surname + " " + ar.PM.Name,
+                              //PmNameNormalUnsign = XoaDauHelper.RemoveSign4VietnameseString($"{ar.PM.Surname} {ar.PM.Name}").ToLower(),
                               ProjectId = ar.Project.Id,
                               ProjectName = ar.Project.Name,
                               AuditResultStatus = ar.Status.ToString(),
                               CountFail = listSessionPeople.Where(x => x.AuditResultId == ar.Id && !x.IsPass).Count(),
                               Status = ar.Status.ToString()
                           }).ToListAsync();
+            var AuditResults = qAuditResults.Where(x => XoaDauHelper.RemoveSign4VietnameseString(x.PmName).ToLower().Contains(cleanSearchText) 
+                                                        || XoaDauHelper.RemoveSign4VietnameseString(x.PmNameNormal).ToLower().Contains(cleanSearchText) 
+                                                        || XoaDauHelper.RemoveSign4VietnameseString(x.ProjectName).ToLower().Contains(cleanSearchText)).ToList();
+            return AuditResults;
         }
 
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Delete)]

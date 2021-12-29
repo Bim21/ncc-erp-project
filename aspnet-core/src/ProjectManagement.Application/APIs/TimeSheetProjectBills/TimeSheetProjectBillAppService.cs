@@ -60,6 +60,14 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
         public async Task<TimeSheetProjectBillDto> Create(TimeSheetProjectBillDto input)
         {
+            var user = await WorkScope.GetAsync<User>(input.UserId);
+            var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(x => x.TimesheetId == input.TimeSheetId && x.ProjectId == input.ProjectId)
+                .AnyAsync(x => x.UserId == input.UserId);
+            if (isExist)
+            {
+                throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+            }
             if (string.IsNullOrWhiteSpace(input.BillRole) || string.IsNullOrWhiteSpace(input.BillRate.ToString()))
             {
                 throw new UserFriendlyException("You must complete all required fields");
@@ -73,13 +81,46 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
         public async Task<List<TimeSheetProjectBillDto>> Update(List<TimeSheetProjectBillDto> input)
         {
+            //đếm số lượng user trùng
+            if(input.Count() > 1)
+            {
+                var existCount = (from i in input
+                                  group i by i.UserId into g
+                                  select new
+                                  {
+                                      UserId = g.Key,
+                                      Count = g.Count()
+                                  }).ToList();
+                foreach (var item in existCount)
+                {
+                    if (item.Count >= 2)
+                    {
+                        var user = await WorkScope.GetAsync<User>(item.UserId);
+                        throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+                    }
+                };
+            }    
+           
             foreach (var bill in input)
             {
+                if(input.Count() <= 1)
+                {
+                    var currentBill = await WorkScope.GetAsync<TimesheetProjectBill>(bill.Id);
+                    var user = await WorkScope.GetAsync<User>(bill.UserId);
+                    var isExist = await WorkScope.GetAll<TimesheetProjectBill>()
+                        .Where(x => x.TimesheetId == bill.TimeSheetId && x.ProjectId == bill.ProjectId && x.UserId != currentBill.UserId)
+                        .AnyAsync(x => x.UserId == bill.UserId);
+                    if(isExist)
+                    {
+                        throw new UserFriendlyException($"User has name: {user.FullName} is already existed");
+                    }
+                }
+
                 if (string.IsNullOrWhiteSpace(bill.BillRole) || string.IsNullOrWhiteSpace(bill.BillRate.ToString()))
                 {
                     throw new UserFriendlyException("You must complete all required fields");
                 }
-            } 
+            }
             var timesheetProjectBillIds = input.Select(x => x.Id).ToList();
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>().Where(x => timesheetProjectBillIds.Contains(x.Id)).ToListAsync();
             foreach (var bill in input)
@@ -221,6 +262,21 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             return failList;
         }
 
-
+        public async Task<List<GetUserForTimesheetProjectBillDto>> GetUserForTimesheetProjectBill(long timesheetId, long projectId, bool isEdited)
+        {
+            var currentUserIds = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(x => x.TimesheetId == timesheetId && x.ProjectId ==  projectId)
+                .Select(x => x.UserId).ToListAsync();
+        
+            var users = WorkScope.GetAll<User>()
+                                .Where(x => x.IsActive && ( !isEdited ? !currentUserIds.Contains(x.Id) : true))
+                                .Select(x => new GetUserForTimesheetProjectBillDto
+                                {
+                                    UserId = x.Id,
+                                    FullName = x.FullName,
+                                    Email = x.FullName
+                                }).ToList();
+            return users;
+        }
     }
 }

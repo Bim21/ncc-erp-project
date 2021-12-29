@@ -30,6 +30,7 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(CurrencyId))]
         public Currency Currency { get; set; }
         public bool? IsCharge { get; set; }
+        public ChargeType? ChargeType { get; set; }
         public long PMId { get; set; }
         [ForeignKey(nameof(PMId))]
         public User PM { get; set; }

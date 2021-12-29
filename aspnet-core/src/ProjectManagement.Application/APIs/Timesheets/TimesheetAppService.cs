@@ -42,7 +42,8 @@ namespace ProjectManagement.APIs.TimeSheets
                     IsActive = x.IsActive,
                     CreatedInvoice = x.CreatedInvoice,
                     TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
-                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Count()
+                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Count(),
+                    TotalWorkingDay = x.TotalWorkingDay
                 });
 
             return await query.GetGridResult(query, input);
@@ -60,7 +61,8 @@ namespace ProjectManagement.APIs.TimeSheets
                                     Month = x.Month,
                                     Year = x.Year,
                                     IsActive = x.IsActive,
-                                    CreatedInvoice = x.CreatedInvoice
+                                    CreatedInvoice = x.CreatedInvoice,
+                                    TotalWorkingDay = x.TotalWorkingDay
                                 });
             return await query.FirstOrDefaultAsync();
         }
@@ -69,6 +71,10 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Create)]
         public async Task<object> Create(TimesheetDto input)
         {
+            if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
+            {
+                throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
+            }
             try
             {
                 var failList = new List<string>();
@@ -148,6 +154,10 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Update)]
         public async Task<TimesheetDto> Update(TimesheetDto input)
         {
+            if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
+            {
+                throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
+            }
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
 
             if (!timesheet.IsActive)

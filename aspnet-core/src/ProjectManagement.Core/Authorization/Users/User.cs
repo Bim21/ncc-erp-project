@@ -39,5 +39,6 @@ namespace ProjectManagement.Authorization.Users
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
         public long? KomuUserId { get; set; }
+        public int? StarRate { get; set; }
     }
 }

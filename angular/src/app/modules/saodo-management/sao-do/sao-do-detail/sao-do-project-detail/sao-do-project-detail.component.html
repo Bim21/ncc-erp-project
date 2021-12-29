@@ -16,19 +16,13 @@
                     <div class="col-9 row">
                         <div class="col-2"> <strong>Đánh giá chung: </strong></div>
                         <div class="col-10">
-
-
                             <pre *ngIf="!isEditingNote" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                  font-family: sans-serif; align-self:flex-start; line-height: initial;"
                                      >
                                    {{note}}
                                </pre>
-                               <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" [(ngModel)]="note" [hidden]="!isEditingNote" style="height: 50px;"
-                                type="text" class="form-control" name="notePM" placeholder="Đánh giá chung"></textarea>
-
-
-
-
+                               <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" [(ngModel)]="note" [hidden]="!isEditingNote" 
+                                type="text" class="form-control" style="padding-bottom: 20px;"  rows="2" cdkTextareaAutosize  name="notePM" placeholder="Đánh giá chung"></textarea>
                         </div>
 
 
@@ -44,7 +38,7 @@
                                 style="margin-right: 20px;" class="btn bg-blue">
                                 Save
                             </button>
-                            <button *ngIf="isEditingNote" (click)="getAllCheckList();isEditingNote=false"
+                            <button *ngIf="isEditingNote" (click)="cancelNote();"
                                 class="btn btn-default">Cancel</button>
 
                         </div>

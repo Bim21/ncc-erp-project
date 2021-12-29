@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { InputFilterDto } from './../../../../shared/filter/filter.component';
 import { CreateEditCurrencyComponent } from './create-edit-currency/create-edit-currency.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,12 +19,12 @@ export class CurrencyComponent extends PagedListingComponentBase<CurrencyCompone
    
   ];
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.currencyService.getAllPaging(request).pipe(finalize(()=>{
-      finishedCallback();
-    }),catchError(this.currencyService.handleError)).subscribe(data=>{
-      this.listCurrency=data.result.items;
-      this.showPaging(data.result, pageNumber)
-    })
+      this.currencyService.getAllPaging(request).pipe(finalize(()=>{
+        finishedCallback();
+      }),catchError(this.currencyService.handleError)).subscribe(data=>{
+        this.listCurrency=data.result.items;
+        this.showPaging(data.result, pageNumber)
+      })
   }
   protected delete(currency: CurrencyComponent): void {
     abp.message.confirm(
@@ -39,7 +40,10 @@ export class CurrencyComponent extends PagedListingComponentBase<CurrencyCompone
       }
     )
   }
-
+  public Admin_Currency_Create = PERMISSIONS_CONSTANT.Admin_Currency_Create;
+  public Admin_Currency_Delete = PERMISSIONS_CONSTANT.Admin_Currency_Delete;
+  public Admin_Currency_Edit =  PERMISSIONS_CONSTANT.Admin_Currency_Edit;
+  public Admin_Currency_ViewAll = PERMISSIONS_CONSTANT.Admin_Currency_ViewAll;
   public searchText="";
   public listCurrency: CurrencyDto[]=[];
   constructor(public injector:Injector, private currencyService: CurrencyService , 

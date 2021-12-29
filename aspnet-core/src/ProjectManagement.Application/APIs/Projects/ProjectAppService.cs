@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.Projects.Dto;
+using ProjectManagement.APIs.ProjectUsers;
+using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
@@ -24,10 +26,15 @@ namespace ProjectManagement.APIs.Projects
     [AbpAuthorize]
     public class ProjectAppService : ProjectManagementAppServiceBase
     {
+        private readonly IProjectUserAppService _projectUserAppService;
+        public ProjectAppService(IProjectUserAppService projectUserAppService)
+        {
+            _projectUserAppService = projectUserAppService;
+        }
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
-        {
+         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
@@ -61,6 +68,7 @@ namespace ProjectManagement.APIs.Projects
                             CurrencyId = p.CurrencyId,
                             CurrencyName = p.Currency.Name,
                             IsCharge = p.IsCharge,
+                            ChargeType=p.ChargeType,
                             PmId = p.PMId,
                             PmName = p.PM.Name,
                             PmFullName = p.PM.FullName,
@@ -96,6 +104,7 @@ namespace ProjectManagement.APIs.Projects
                     CurrencyId = x.CurrencyId,
                     CurrencyName = x.Currency.Name,
                     IsCharge = x.IsCharge,
+                    ChargeType=x.ChargeType,
                     PmId = x.PMId,
                     PmName = x.PM.Name,
                 });
@@ -119,6 +128,7 @@ namespace ProjectManagement.APIs.Projects
                                     ClientId = x.ClientId,
                                     ClientName = x.Client.Name,
                                     IsCharge = x.IsCharge,
+                                    ChargeType=x.ChargeType,
                                     PmId = x.PMId,
                                     PmName = x.PM.Name,
                                     PmFullName = x.PM.FullName,
@@ -225,6 +235,33 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
 
+            
+            if (input.Status == ProjectStatus.Closed)
+            {
+                var getProjectUserbyId = await _projectUserAppService.GetAllByProject(input.Id, false);
+                foreach (var item in getProjectUserbyId)
+                {
+                    if (item.Status == "Present")
+                    {
+                        ProjectUserRole role;
+                        Enum.TryParse(item.ProjectRole, out role);
+                        var projectUser = new ProjectUserDto()
+                        {
+                            UserId = item.UserId,
+                            ProjectId = item.ProjectId,
+                            ProjectRole = role,
+                            AllocatePercentage = 0,
+                            StartTime = DateTime.Now,
+                            Status = ProjectUserStatus.Present,
+                            IsExpense = true,
+                            PMReportId = item.PMReportId,
+                            IsFutureActive = true,
+                        };
+                        await _projectUserAppService.Create(projectUser);
+                    }
+                }
+                
+            }
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
             return input;
         }
@@ -316,7 +353,7 @@ namespace ProjectManagement.APIs.Projects
                                 {
                                     ProjectId = input.Id,
                                     CheckListItemId = x.CheckListItemId,
-                                    IsActive = true,    
+                                    IsActive = true,
                                 }).ToListAsync();
 
             foreach (var i in projectCheckLists)

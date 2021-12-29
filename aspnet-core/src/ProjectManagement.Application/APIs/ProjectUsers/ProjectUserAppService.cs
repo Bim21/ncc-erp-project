@@ -31,12 +31,12 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 namespace ProjectManagement.APIs.ProjectUsers
 {
     [AbpAuthorize]
-    public class ProjectUserAppService : ProjectManagementAppServiceBase
+    public class ProjectUserAppService : ProjectManagementAppServiceBase, IProjectUserAppService
     {
         private ISettingManager _settingManager;
         private KomuService _komuService;
         public ProjectUserAppService(
-            KomuService komuService, ISettingManager settingManager)
+            KomuService komuService, ISettingManager settingManager):base()
         {
             _komuService = komuService;
             _settingManager = settingManager;

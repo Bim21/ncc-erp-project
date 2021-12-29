@@ -35,39 +35,44 @@
                     </div>
 
                 </div>
-                <div class="col-7 row" style = "justify-content: end;">
+                <div class="col-7 row" style="justify-content: end;">
                     <div class="col-6 row search-pm text-right">
                         <label class="label-pm pr-2 mt-3 ">PM:</label>
                         <mat-form-field class="w-75 listPM" appearance="outline">
-                            <mat-select  [(ngModel)]="pmId" name="projectPM" placeholder="select a PM" (selectionChange)="refresh()"
-                              [disabled]="permission.isGranted( PmManager_Project_ViewOnlyMe) && !permission.isGranted(PmManager_Project_ViewAll)"  >
+                            <mat-select [(ngModel)]="pmId" name="projectPM" placeholder="select a PM"
+                                (selectionChange)="refresh()"
+                                [disabled]="permission.isGranted( PmManager_Project_ViewOnlyMe) && !permission.isGranted(PmManager_Project_ViewAll)">
                                 <mat-form-field class="w-100 px-3 "
-                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
-                            </mat-form-field>
-                            <mat-option [value] = "-1">All</mat-option>
-                            <mat-option *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'" [value]="data.id">
-                                {{data.fullName}} - ({{data.emailAddress}})
-                              </mat-option>
+                                    style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                    <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"
+                                        #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                                </mat-form-field>
+                                <mat-option [value]="-1">All</mat-option>
+                                <mat-option
+                                    *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'"
+                                    [value]="data.id">
+                                    {{data.fullName}} - ({{data.emailAddress}})
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="col-6 row ml-3 search-status">
                         <label class="mt-3 label-status"><span class="pr-2">Trạng thái:</span></label>
-                        <mat-form-field  appearance="outline" class="listStatus">
-                            <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"  (selectionChange)="refresh()"
-                               >
-                               <mat-option value="-1">All</mat-option>
-                                <mat-option *ngFor="let item of statusFilterList" [value]="item.value">{{item.displayName}}</mat-option>
-                              
+                        <mat-form-field appearance="outline" class="listStatus">
+                            <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"
+                                (selectionChange)="refresh()">
+                                <mat-option value="-1">All</mat-option>
+                                <mat-option *ngFor="let item of statusFilterList" [value]="item.value">
+                                    {{item.displayName}}</mat-option>
+
                             </mat-select>
                         </mat-form-field>
-                       
+
                     </div>
-                   
-                    
+
+
                 </div>
-                </div>
+            </div>
             <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
                 <div class="card-body">
                     <form class="form-horizontal">
@@ -92,79 +97,96 @@
             <div class="card-body table-responsive px-4 pb-2">
                 <div class="fixTableHead">
 
-                
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
-                    [busy]="isLoading">
-                    <thead class="bg-light">
-                        <tr style="border: none;">
-                            <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
-                            <th>{{'Loại dự án' | localize}}</th>
-                            <th>khách hàng</th>
-                            <th>{{'PM' | localize}}</th>
 
-                            <th>{{'Thời gian bắt đầu' | localize}}</th>
-                            <th>{{'Thời gian kết thúc' | localize}}</th>
-                            <th>{{'Charge khách hàng' | localize}}</th>
-                            <th>{{'Trạng thái' | localize}}</th>
-                            <th>{{'Weekly Report' | localize}}</th>
-                            <th>Thời gian gửi</th>
-                            <th style="width: 200px;text-align: center;">{{ 'Hành động' | localize }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let project of listProjects  |paginate
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
+                        [busy]="isLoading">
+                        <thead class="bg-light">
+                            <tr style="border: none;">
+                                <th style="width: 200px;text-align: center;">Actions</th>
+                                <th style="width: 200px; ">{{'Tên dự án' | localize}}</th>
+                                <th>{{'Loại dự án' | localize}}</th>
+                                <th>Khách hàng</th>
+                                <th>{{'PM' | localize}}</th>
+
+                                <th>{{'Thời gian bắt đầu' | localize}}</th>
+                                <th>{{'Thời gian kết thúc' | localize}}</th>
+                                <th>{{'Charge khách hàng' | localize}}</th>
+                                <th>{{'Trạng thái' | localize}}</th>
+                                <th>{{'Weekly Report' | localize}}</th>
+                                <th>Thời gian gửi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let project of listProjects  |paginate
                 : {
                     id: 'server',
                     itemsPerPage: pageSize,
                     currentPage: pageNumber,
                     totalItems: totalItems
-                  }; let i = index">
-                            <td style="min-width: 220px;  white-space: normal;"><span class="hyperlink"
-                                    (click)="showDetail(project.id)">{{ project.name }}</span></td>
-                            <td class="text-center">{{ getByEnum(project.projectType,APP_ENUM.ProjectType)   }}</td>
-                            <td class="text-center">{{project.clientName}}</td>
-                            <td>
-                                <div style="width: 300px;">
-                                    <app-user-info
-                                        [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
+                  }; let i = index" style="position: relative;" (contextmenu)="showActions($event, project)">
+                                <td class="text-center">
+                                    <div style="visibility: hidden; position: fixed"
+                                        [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y"
+                                        [matMenuTriggerFor]="menu"></div>
+                                    <button mat-button [matMenuTriggerFor]="menu">
+                                        <i class="fas fa-bars fa-lg"></i>
+                                    </button>
+                                    <mat-menu #menu="matMenu" class="p-2">
+                                        <button (click)="editProject(project)"
+                                            *ngIf="permission.isGranted(PmManager_Project_Update)"
+                                            class="mat-menu-item  w-100 ">
+                                            <i class="fas fa-pencil-alt mr-1"></i>
+                                            Edit
+                                        </button>
+                                        <button (click)="delete(project)"
+                                            *ngIf="permission.isGranted(PmManager_Project_Delete)"
+                                            class="mat-menu-item  w-100 ">
+                                            <i class="fas fa-trash fa-lg mr-1"></i>
+                                            Delete
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                                <td style="min-width: 220px;  white-space: normal;"><span class="hyperlink"
+                                        (click)="showDetail(project.id)">{{ project.name }}</span></td>
+                                <td class="text-center">
+                                    <span
+                                        [ngClass]=" APP_CONST.ProjectTypeStyle[getByEnum(project.projectType,APP_ENUM.ProjectType)]">
+                                        {{ getByEnum(project.projectType,APP_ENUM.ProjectType) }}
+                                    </span>
+                                </td>
+                                <td class="text-center">{{project.clientName}}</td>
+                                <td>
+                                    <div style="width: 300px;">
+                                        <app-user-info
+                                            [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
                                 userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarPath:project.pmAvatarPath}">
-                                    </app-user-info>
-                                </div>
-                            </td>
+                                        </app-user-info>
+                                    </div>
+                                </td>
 
-                            <td class="text-center">{{project.startTime | date:"dd/MM/yyyy"}}</td>
-                            <td class="text-center">{{project.endTime | date:"dd/MM/yyyy"}}</td>
-                            <td class="text-center">
-                                <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge">
-                                </mat-checkbox>
-                            </td>
-                            <td class="text-center"> <span
-                                    [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{ getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
-                            <td class="text-center">
-                                <span
-                                    [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
-                                </span>
-                            </td>
-                            <td>
-                                {{project.timeSendReport| date:"dd/MM/yyyy hh:mm a"}}
-                            </td>
-                            <td class="text-center" style="padding: 12px;">
-                                <button type="button" class="btn btn-sm bg-secondary mr-1"
-                                    (click)="editProject(project)"
-                                    *ngIf="permission.isGranted(PmManager_Project_Update)">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    {{ 'edit' | translate }}
-                                </button>
-                                <button type="button" class="btn btn-sm bg-danger ml-1" (click)="delete(project)"
-                                    *ngIf="permission.isGranted(PmManager_Project_Delete)">
-                                    <i class="fas fa-trash"></i>
-                                    {{ 'delete' | translate }}
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <td class="text-center">{{project.startTime | date:"dd/MM/yyyy"}}</td>
+                                <td class="text-center">{{project.endTime | date:"dd/MM/yyyy"}}</td>
+                                <td class="text-center">
+                                    <mat-checkbox disabled class="example-margin" [(ngModel)]="project.isCharge">
+                                    </mat-checkbox>
+                                </td>
+                                <td class="text-center"> <span
+                                        [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{
+                                        getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>
+                                <td class="text-center">
+                                    <span
+                                        [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <p class="mb-0">{{project.timeSendReport| date:"dd/MM/yyyy"}}</p>
+                                    <p>{{project.timeSendReport| date:"hh:mm a"}}</p>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
             <div class="card-footer bg-light border-top">

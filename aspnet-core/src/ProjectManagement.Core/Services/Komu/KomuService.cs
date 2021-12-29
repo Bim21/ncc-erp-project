@@ -1,5 +1,7 @@
 ﻿
 using Abp.Configuration;
+using Abp.UI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ProjectManagement.Configuration;
@@ -17,11 +19,15 @@ namespace ProjectManagement.Services.Komu
         private HttpClient httpClient;
         private string _baseUrl;
         private string _secretCode;
+        private string channelUrl = string.Empty;
+        private string channelId = string.Empty;
 
-        public KomuService(HttpClient httpClient, ILogger<KomuService> logger, ISettingManager settingManager)
+        public KomuService(HttpClient httpClient, ILogger<KomuService> logger, ISettingManager settingManager, IConfiguration configuration)
         {
             this.logger = logger;
             this.httpClient = httpClient;
+            channelUrl = configuration.GetValue<string>("Channel:ChannelUrl");
+            channelId = configuration.GetValue<string>("Channel:ChannelId");
             _baseUrl = settingManager.GetSettingValueForApplication(AppSettingNames.KomuUrl);
             _secretCode = settingManager.GetSettingValueForApplication(AppSettingNames.KomuSecretCode);
         }
@@ -39,8 +45,16 @@ namespace ProjectManagement.Services.Komu
         }
         public async Task<HttpResponseMessage> NotifyToChannel(KomuMessage input, string channelType)
         {
-            var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
-            return await PostAsync(channelType, contentString);
+            if (!string.IsNullOrEmpty(channelUrl) && !string.IsNullOrEmpty(channelId))
+            {
+                var contentString = new StringContent(JsonConvert.SerializeObject(new { message = input.Message, channelid = channelId }), Encoding.UTF8, "application/json");
+                return await PostAsync(channelUrl, contentString);
+            }
+            else
+            {
+                var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
+                return await PostAsync(channelType, contentString);
+            } 
         }
         private async Task<HttpResponseMessage> PostAsync(string url, StringContent contentString)
         {

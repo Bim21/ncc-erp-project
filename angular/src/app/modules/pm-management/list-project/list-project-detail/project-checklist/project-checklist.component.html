@@ -30,6 +30,7 @@
                             <th>Audit Target</th>
                             <th>Person In Charge</th>
                             <th>Lịch sử Audit</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,9 @@
                                 No audit history
                             </p>
                                
+                            </td>
+                            <td>
+                                <button [disabled]="item.people.length > 0" class="btn btn-danger" (click)="delete(item)">Xóa</button>
                             </td>
                         </tr>
                     </tbody>

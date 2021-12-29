@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -97,8 +98,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                 DMNote = x.DMNote,
                 UserSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).Select(z => new GetSkillDetailDto
                 {
-                    SkillId=z.SkillId,
-                    SkillName=z.Skill.Name,
+                    SkillId = z.SkillId,
+                    SkillName = z.Skill.Name,
                     Quantity = z.Quantity,
                     ResourceRequestId=z.ResourceRequestId,
                     ResourceRequestName = z.ResourceRequest.Name
@@ -257,6 +258,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             PermissionNames.PmManager_ResourceRequest_AvailableResource)]
         public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
         {
+            input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                .Select(x => new
@@ -278,6 +280,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     UserId = x.Id,
                                     UserType = x.UserType,
                                     FullName = x.Name + " " + x.Surname,
+                                    NormalFullName = x.Surname + " " + x.Name,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
@@ -299,8 +302,15 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Id = uk.SkillId,
                                         Name = uk.Skill.Name
                                     }).ToList(),
+                                    StarRate = x.StarRate,
+                                    TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
+                                    0 :
+                                    WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
+                                    (DateTime.Now- WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
+                                    : (DateTime.Now-x.CreationTime).Days //lấy ra ngày tạo
+                                    ,
                                 }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-            if(filterProjectName != null)
+            if (filterProjectName != null)
             {
                 string searchByProject = filterProjectName.Value.ToString();
                 input.FilterItems.Remove(filterProjectName);
@@ -384,9 +394,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
-
-            if (input.StartTime.Date <= DateTime.Now.Date)
-                throw new UserFriendlyException("The start date must be greater than the current time !");
 
             var isExist = projectUsers.Any(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.StartTime == input.StartTime);
             if (isExist)

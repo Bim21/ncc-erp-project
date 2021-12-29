@@ -14,5 +14,6 @@ namespace ProjectManagement.Entities
         public string Name { get; set; }
         [MaxLength(50)]
         public string Code { get; set; }
+        public string Address { get; set; }
     }
 }
