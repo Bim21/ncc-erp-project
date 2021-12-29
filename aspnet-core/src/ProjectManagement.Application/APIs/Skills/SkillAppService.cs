@@ -38,7 +38,7 @@ namespace ProjectManagement.APIs.Skills
             {
                 Id = x.Id,
                 Name = x.Name
-            });
+             }).OrderBy(x=>x.Name);
             return await query.ToListAsync();
         }
 
