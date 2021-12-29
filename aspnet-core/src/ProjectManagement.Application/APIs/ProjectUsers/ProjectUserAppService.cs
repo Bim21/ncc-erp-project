@@ -127,7 +127,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             PermissionNames.DeliveryManagement_ProjectUser_ViewDetailProjectUser)]
         public async Task<List<GetProjectUserDto>> GetProjectHistoryByUser(long UserId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.UserId == UserId)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.UserId == UserId & x.Status == ProjectUserStatus.Past)
                                 .Select(x => new GetProjectUserDto
                                 {
                                     Id = x.Id,
@@ -146,7 +146,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                                     PMReportName = x.PMReport.Name,
                                     IsFutureActive = x.IsFutureActive,
                                     Note = x.Note
-                                });
+                                }).OrderBy(x => x.StartTime);
             return await query.ToListAsync();
         }
 
