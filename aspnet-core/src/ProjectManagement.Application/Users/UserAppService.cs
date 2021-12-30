@@ -122,6 +122,7 @@ namespace ProjectManagement.Users
                         SkillId = s.SkillId,
                         SkillName = s.Skill.Name
                     }).ToList(),
+                    PoolNote = x.PoolNote,
                     RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
                 }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.Id).Select(y => y.SkillId).Contains(skillId.Value));
 
