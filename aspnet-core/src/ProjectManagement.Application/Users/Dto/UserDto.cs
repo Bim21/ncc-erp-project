@@ -48,5 +48,7 @@ namespace ProjectManagement.Users.Dto
         public DateTime CreationTime { get; set; }
 
         public string[] RoleNames { get; set; }
+
+        public string PoolNote { get; set; }
     }
 }

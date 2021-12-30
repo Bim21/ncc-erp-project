@@ -39,6 +39,9 @@ namespace ProjectManagement.Users.Dto
         public List<UserSkillDto> UserSkills { get; set; }
         public string[] RoleNames { get; set; }
 
+        [MaxLength(3000)]
+        public string PoolNote { get; set; }
+
         [Required]
         [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]

@@ -40,5 +40,8 @@ namespace ProjectManagement.Authorization.Users
         public Branch Branch { get; set; }
         public long? KomuUserId { get; set; }
         public int? StarRate { get; set; }
+
+        [MaxLength(3000)]
+        public string PoolNote { get; set; }
     }
 }
