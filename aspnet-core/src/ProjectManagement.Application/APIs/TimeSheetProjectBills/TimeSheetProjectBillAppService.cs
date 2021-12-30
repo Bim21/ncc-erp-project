@@ -126,6 +126,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             foreach (var bill in input)
             {
                 var timesheetProjectBill = timesheetProjectBills.Where(x => x.Id == bill.Id).FirstOrDefault();
+                if (bill.BillRate == -1)
+                    bill.BillRate = timesheetProjectBill.BillRate;
                 await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(bill, timesheetProjectBill));
                 CurrentUnitOfWork.SaveChanges();
 

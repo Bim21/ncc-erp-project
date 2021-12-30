@@ -122,6 +122,34 @@ namespace ProjectManagement.APIs.ProjectUsers
             return await query.FirstOrDefaultAsync();
         }
 
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewDetailProjectUser,
+            PermissionNames.DeliveryManagement_ProjectUser_ViewDetailProjectUser)]
+        public async Task<List<GetProjectUserDto>> GetProjectHistoryByUser(long UserId)
+        {
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.UserId == UserId & x.Status == ProjectUserStatus.Past)
+                                .Select(x => new GetProjectUserDto
+                                {
+                                    Id = x.Id,
+                                    UserId = x.UserId,
+                                    FullName = x.User.FullName,
+                                    ProjectId = x.ProjectId,
+                                    ProjectName = x.Project.Name,
+                                    ProjectRole = x.ProjectRole.ToString(),
+                                    AllocatePercentage = x.AllocatePercentage,
+                                    StartTime = x.StartTime.Date,
+                                    Status = x.Status.ToString(),
+                                    IsExpense = x.IsExpense,
+                                    ResourceRequestId = x.ResourceRequestId,
+                                    ResourceRequestName = x.ResourceRequest.Name,
+                                    PMReportId = x.PMReportId,
+                                    PMReportName = x.PMReport.Name,
+                                    IsFutureActive = x.IsFutureActive,
+                                    Note = x.Note
+                                }).OrderBy(x => x.StartTime);
+            return await query.ToListAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create, PermissionNames.DeliveryManagement_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto model)
