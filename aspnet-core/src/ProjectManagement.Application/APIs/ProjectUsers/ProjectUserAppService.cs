@@ -146,7 +146,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                                     PMReportName = x.PMReport.Name,
                                     IsFutureActive = x.IsFutureActive,
                                     Note = x.Note
-                                }).OrderBy(x => x.StartTime);
+                                }).OrderByDescending(x => x.StartTime);
             return await query.ToListAsync();
         }
 
