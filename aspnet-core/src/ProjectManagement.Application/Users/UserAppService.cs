@@ -235,7 +235,8 @@ namespace ProjectManagement.Users
                                           ProjectName = pu.Project.Name,
                                           PmName = pu.Project.PM != null ? pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() : string.Empty,
                                           StartTime = pu.StartTime,
-                                          ProjectRole = pu.ProjectRole
+                                          ProjectRole = pu.ProjectRole,
+                                          PmUsername = pu.Project.PM == null ? string.Empty : UserHelper.GetUserName(pu.Project.PM.EmailAddress) ?? pu.Project.PM.UserName,
                                       }).OrderByDescending(x => x.StartTime).ToListAsync();
             var employeeInfo = new EmployeeInformationDto()
             {
@@ -255,7 +256,8 @@ namespace ProjectManagement.Users
                     ProjectName = x.ProjectName,
                     PmName = x.PmName,
                     StartTime = x.StartTime,
-                    ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole)
+                    ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole),
+                    PmUsername = x.PmUsername
                 }));
             }
             return employeeInfo;
