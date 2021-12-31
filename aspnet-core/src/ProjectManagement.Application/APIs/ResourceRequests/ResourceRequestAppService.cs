@@ -286,7 +286,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
-                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime,
+                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ? 
+                                    projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime  : x.CreationTime,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
                                     .Select(x => new ProjectBaseDto
                                     {
