@@ -28,6 +28,8 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public int TotalFreeDay { get; set; }
 
         public string PoolNote { get; set; }
+
+        public DateTime  DateStartPool { get; set; }
     }
 
     public class ProjectUserPlan

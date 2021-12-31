@@ -266,14 +266,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                                    UserId = x.UserId,
                                    ProjectId = x.ProjectId,
                                    ProjectName = x.Project.Name,
-                                   AllocatePercentage = x.AllocatePercentage
+                                   AllocatePercentage = x.AllocatePercentage,
+                                   Status = x.Status,
+                                   StartTime = x.StartTime,
                                });
             var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
             var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
             var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
             var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-
+            var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
                                 .Select(x => new AvailableResourceDto
                                 {
@@ -284,6 +286,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
+                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
                                     .Select(x => new ProjectBaseDto
                                     {
