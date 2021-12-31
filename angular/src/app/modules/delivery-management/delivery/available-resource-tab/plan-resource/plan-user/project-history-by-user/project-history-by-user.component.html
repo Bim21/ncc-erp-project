@@ -1,30 +1,38 @@
-<abp-modal-header title="Lịch sử làm việc của {{emailAddress}}" (onCloseClick)="dialogRef.close()">
+<abp-modal-header
+  title="Lịch sử làm việc của {{ emailAddress }}"
+  (onCloseClick)="dialogRef.close()"
+>
 </abp-modal-header>
 <div class="modal-body">
-    <div class="fixTableHead">
-  <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap" *ngIf="projectsHistoryUser.length>0;else other_template">
-    <thead class="bg-light">
-        <tr style="border: none;">
-            <th>Thời gian bắt đầu</th>
-            <th>Tên dự án</th>
+  <div class="fixTableHead">
+    <table
+      [busy]="isLoading"
+      style="border-collapse: collapse"
+      class="table table-hover text-nowrap"
+      *ngIf="projectsHistoryUser.length > 0; else other_template"
+    >
+      <thead class="bg-light">
+        <tr style="border: none">
+          <th>Thời gian bắt đầu</th>
+          <th>Tên dự án</th>
         </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
         <tr *ngFor="let item of projectsHistoryUser">
-            <td class="text-center">
-              {{item.startTime|date: "dd/MM/yyyy"}}
-            </td>
-            <td class="text-center">{{item.projectName}}</td>
+          <td class="text-center">
+            {{ item.startTime | date: 'dd/MM/yyyy' }}
+          </td>
+          <td class="text-center">{{ item.projectName }}</td>
         </tr>
-    </tbody>
-</table>
-</div>
-<ng-template #other_template>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #other_template>
     <div>Chưa tham gia dự án nào</div>
-</ng-template>
+  </ng-template>
 </div>
 <div>
-<div align="end" class="row justify-content-end">
-    <button class="btn btn-primary " mat-dialog-close>Close</button>
-
+  <div align="end" class="row justify-content-end">
+    <button class="btn btn-primary" mat-dialog-close>Close</button>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-<form action="" #noteForm="ngForm" autocomplete="off" (submit)="SaveAndClose()">
+<form action="" autocomplete="off" (submit)="SaveAndClose()">
   <abp-modal-header
     [title]="'Edit user: ' + fullName | localize"
     (onCloseClick)="bsModalRef.hide()"
@@ -8,7 +8,7 @@
     <mat-form-field appearance="outline" class="w-100">
       <textarea
         matInput
-        name="note-for-user"
+        name="poolNote"
         maxlength="3000"
         rows="5"
         placeholder="Leave a comment..."
@@ -20,6 +20,6 @@
   <abp-modal-footer
     [cancelDisabled]="saving"
     (onCancelClick)="bsModalRef.hide()"
-    [saveDisabled]="!noteForm.valid || saving"
+    [saveDisabled]="saving"
   ></abp-modal-footer>
 </form>

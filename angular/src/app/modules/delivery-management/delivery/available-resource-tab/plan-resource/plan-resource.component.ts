@@ -1,3 +1,4 @@
+import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
 import { ProjectDetailComponent } from './plan-user/project-detail/project-detail.component';
@@ -20,6 +21,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { SkillDto } from '@app/service/model/list-project.dto';
 import { ProjectResourceRequestService } from '@app/service/api/project-resource-request.service';
 import { ProjectHistoryByUserComponent } from './plan-user/project-history-by-user/project-history-by-user.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-plan-resource',
@@ -278,6 +280,25 @@ export class PlanResourceComponent
       },
     });
     createOrEditUserDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
+  }
+
+  formatDateStartPool(date: string) {
+    return moment(date).format('DD/MM/YYYY');
+  }
+
+  updateNote(id, fullName) {
+    let addOrEditNoteDialog: BsModalRef;
+    addOrEditNoteDialog = this._modalService.show(AddNoteDialogComponent, {
+      class: 'modal',
+      initialState: {
+        id: id,
+        fullName: fullName,
+      },
+    });
+
+    addOrEditNoteDialog.content.onSave.subscribe(() => {
       this.refresh();
     });
   }
