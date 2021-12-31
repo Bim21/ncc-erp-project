@@ -61,7 +61,7 @@
                             <tr style="border: none;">
                                 <th class="stt">#</th>
                                 <th>Nhân viên</th>
-                                <th>Dự án</th>
+                                <th>Dự án trước đây</th>
                                 <th>Tạm thời sử dụng</th>
                                 <th>Kĩ năng</th>
                                 <th>Sử dụng hiện tại</th>
@@ -82,24 +82,26 @@
                                         <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
                                     userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}">
                                         </app-user-info>
-                    
+
                                     </div>
                                     <div class="w-review">
                                         <ngx-stars style="z-index: 1 !important;" [readonly]="true" [wholeStars]="true" [size]="1" [color]="'gold'"  [initialStars]="item.starRate" [maxStars]="item.starRate?item.starRate:0" (ratingOutput)="onRatingSet($event)"></ngx-stars>
                                     </div>
 
                                 </td>
-                                <td style="white-space: normal; max-width: 200px;">
+                                <td class="text-center" style="white-space: normal; max-width: 200px;">
                                     <!-- <strong *ngFor="let project of item.projects;let i =index">
                                     {{project.projectName}} <span *ngIf="i < item.projects.length-1">,</span>
                                 </strong> -->
-                                    <ng-container *ngFor="let project of item.projects">
+                                    <!-- <ng-container *ngFor="let project of item.projects">
                                         <div><strong class="hyperlink"
                                                 (click)="showProjectDetail(project.projectId,project.projectName)">-{{project.projectName}}</strong>
                                         </div>
-                                    </ng-container>
+                                    </ng-container> -->
 
-
+                                    <button class="btn btn-secondary btn-sm" (click)="projectHistorUser(item)">
+                                        Xem lịch sử
+                                    </button>
 
 
 
