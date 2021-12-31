@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from "@angular/core";
+import { Component, Inject, Injector, OnInit, OnDestroy } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 import { ProjectUserService } from "@app/service/api/project-user.service";
@@ -6,7 +6,7 @@ import { IProjectHistoryUser } from "@app/service/model/project.dto";
 import { AppComponentBase } from "@shared/app-component-base";
 import { catchError } from "rxjs/operators";
 import { PlanUserComponent } from "../plan-user.component";
-
+import { Subscription } from "rxjs";
 @Component({
   selector: "app-project-history-by-user",
   templateUrl: "./project-history-by-user.component.html",
@@ -14,11 +14,12 @@ import { PlanUserComponent } from "../plan-user.component";
 })
 export class ProjectHistoryByUserComponent
   extends AppComponentBase
-  implements OnInit
+  implements OnInit, OnDestroy
 {
   userId: number;
   emailAddress: string;
   projectsHistoryUser: IProjectHistoryUser[] = [];
+  subscription: Subscription[] = [];
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -45,5 +46,10 @@ export class ProjectHistoryByUserComponent
       .subscribe((data) => {
         this.projectsHistoryUser = data.result;
       });
+  }
+  ngOnDestroy() {
+    this.subscription.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }
