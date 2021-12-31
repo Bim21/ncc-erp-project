@@ -7,3 +7,7 @@ bin/
 aspnet-core/src/ProjectManagement.Web.Host/App_Data/Logs/
 aspnet-core/src/ProjectManagement.Web.Mvc/App_Data/Logs/
 aspnet-core/src/ProjectManagement.Migrator/Logs/Logs.txt
+ 
+angular/yarn.lock
+angular/.vscode/*
+angular/package-lock.json 
