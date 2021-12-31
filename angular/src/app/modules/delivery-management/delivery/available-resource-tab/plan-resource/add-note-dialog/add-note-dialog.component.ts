@@ -1,3 +1,7 @@
+import { UserService } from './../../../../../../service/api/user.service';
+import { IUser } from './../../../../../../service/model/user.inteface';
+// import { IUser } from '@app/service/model/user.inteface';
+
 import {
   Component,
   EventEmitter,
@@ -5,8 +9,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { UserService } from '@app/service/api/user.service';
-import { IUser } from '@shared/service-proxies/service-proxies';
+// import { UserService } from '@app/service/api/user.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';

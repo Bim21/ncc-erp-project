@@ -1,10 +1,10 @@
+import { IUser } from '@app/service/model/user.inteface';
 import { PagedRequestDto } from './../../../shared/paged-listing-component-base';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApiService } from './base-api.service';
 import { AppConsts } from '@shared/AppConsts';
-import { IUser } from '@shared/service-proxies/service-proxies';
 
 @Injectable({
   providedIn: 'root',

@@ -148,7 +148,7 @@ import { ProductWeeklyReportComponent } from './modules/pm-management/product-pr
 import { ProductApprovedDialogComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-approved-dialog/product-approved-dialog.component';
 import { CreateEditProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/create-edit-product-project-checklist/create-edit-product-project-checklist.component';
 import { NgxStarsModule } from 'ngx-stars';
-import { AddNoteDialogComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/add-note-dialog/add-note-dialog.component';
+import { ProjectHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-history-by-user/project-history-by-user.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -282,7 +282,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProductWeeklyReportComponent,
     ProductApprovedDialogComponent,
     CreateEditProductProjectChecklistComponent,
-    AddNoteDialogComponent,
+    ProjectHistoryByUserComponent,
   ],
   imports: [
     CommonModule,

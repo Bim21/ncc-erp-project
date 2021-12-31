@@ -1,24 +1,25 @@
-import { Component, Injector, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { AddNoteDialogComponent } from '@app/modules/delivery-management/delivery/available-resource-tab/plan-resource/add-note-dialog/add-note-dialog.component';
-import { SkillDto } from '@app/service/model/list-project.dto';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
+import { ProjectDetailComponent } from './plan-user/project-detail/project-detail.component';
+import { SkillService } from './../../../../../service/api/skill.service';
+import { InputFilterDto } from './../../../../../../shared/filter/filter.component';
+import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
+import { availableResourceDto } from './../../../../../service/model/delivery-management.dto';
+import { AppComponentBase } from '@shared/app-component-base';
+import { PlanUserComponent } from './plan-user/plan-user.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { result } from 'lodash-es';
+import { catchError, finalize, filter } from 'rxjs/operators';
 // import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
 // import { availableResourceDto } from './../../../../service/model/delivery-management.dto';
 import {
   PagedListingComponentBase,
   PagedRequestDto,
 } from '@shared/paged-listing-component-base';
-import * as moment from 'moment';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { InputFilterDto } from './../../../../../../shared/filter/filter.component';
-import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
-import { SkillService } from './../../../../../service/api/skill.service';
-import { availableResourceDto } from './../../../../../service/model/delivery-management.dto';
-import { PlanUserComponent } from './plan-user/plan-user.component';
-import { ProjectDetailComponent } from './plan-user/project-detail/project-detail.component';
+import { Component, OnInit, Injector } from '@angular/core';
+import { SkillDto } from '@app/service/model/list-project.dto';
+import { ProjectResourceRequestService } from '@app/service/api/project-resource-request.service';
+import { ProjectHistoryByUserComponent } from './plan-user/project-history-by-user/project-history-by-user.component';
 
 @Component({
   selector: 'app-plan-resource',
@@ -194,7 +195,29 @@ export class PlanResourceComponent
       }
     });
   }
+  showDialogProjectHistoryUser(user: availableResourceDto) {
+    let userInfo = {
+      userId: user.userId,
+      emailAddress: user.emailAddress,
+    };
 
+    const show = this.dialog.open(ProjectHistoryByUserComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {
+        item: userInfo,
+      },
+    });
+    show.afterClosed().subscribe((result) => {
+      if (result) {
+        this.refresh();
+      }
+    });
+  }
+
+  projectHistorUser(user: availableResourceDto) {
+    this.showDialogProjectHistoryUser(user);
+  }
   planUser(user: any) {
     this.showDialogPlanUser('plan', user);
   }
@@ -245,6 +268,7 @@ export class PlanResourceComponent
   }
 
   updateUserSkill(id) {
+    console.log('aaaa', id);
     let createOrEditUserDialog: BsModalRef;
     createOrEditUserDialog = this._modalService.show(EditUserDialogComponent, {
       class: 'modal-lg',
@@ -256,30 +280,5 @@ export class PlanResourceComponent
     createOrEditUserDialog.content.onSave.subscribe(() => {
       this.refresh();
     });
-  }
-
-  formatDateStartPool(date: string) {
-    return moment(date).format('DD/MM/YYYY');
-  }
-
-  updateNote(id, fullName) {
-    let addOrEditNoteDialog: BsModalRef;
-    addOrEditNoteDialog = this._modalService.show(AddNoteDialogComponent, {
-      class: 'modal',
-      initialState: {
-        id: id,
-        fullName: fullName,
-      },
-    });
-
-    addOrEditNoteDialog.content.onSave.subscribe(() => {
-      this.refresh();
-    });
-  }
-
-  testNoteBS: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  testNote$ = this.testNoteBS.asObservable();
-  handleUpdateNote(note: string) {
-    this.testNoteBS.next(note);
   }
 }

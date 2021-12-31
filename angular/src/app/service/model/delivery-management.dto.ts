@@ -47,8 +47,10 @@ export class userToRequestDto {
 export class availableResourceDto {
   userId: number;
   userName: string;
+  emailAddress: string;
   projects: [];
   used: number;
+  fullName: string;
   listSkills: any[];
   totalFreeDay: any;
   starRate: number;

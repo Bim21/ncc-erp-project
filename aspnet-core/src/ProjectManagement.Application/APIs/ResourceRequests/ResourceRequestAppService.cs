@@ -266,14 +266,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                                    UserId = x.UserId,
                                    ProjectId = x.ProjectId,
                                    ProjectName = x.Project.Name,
-                                   AllocatePercentage = x.AllocatePercentage
+                                   AllocatePercentage = x.AllocatePercentage,
+                                   Status = x.Status,
+                                   StartTime = x.StartTime,
                                });
             var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
             var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
             var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
             var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-
+            var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
             var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
                                 .Select(x => new AvailableResourceDto
                                 {
@@ -284,6 +286,8 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
+                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ? 
+                                    projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime  : x.CreationTime,
                                     Projects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
                                     .Select(x => new ProjectBaseDto
                                     {
@@ -302,6 +306,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                         Id = uk.SkillId,
                                         Name = uk.Skill.Name
                                     }).ToList(),
+                                    PoolNote = x.PoolNote,
                                     StarRate = x.StarRate,
                                     TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
                                     0 :
@@ -459,9 +464,6 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Create, PermissionNames.PmManager_ResourceRequest_Create)]
         public async Task<ResourceRequestDto> Create(ResourceRequestDto model)
         {
-            var isExistResourceRequest = await WorkScope.GetAll<ResourceRequest>().AnyAsync(x => x.Name == model.Name && x.ProjectId == model.ProjectId && x.TimeNeed == model.TimeNeed);
-            if (!isExistResourceRequest)
-                throw new UserFriendlyException($"Resource Request has name {model.Name} doesn't exist");
             model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(model));
             var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
