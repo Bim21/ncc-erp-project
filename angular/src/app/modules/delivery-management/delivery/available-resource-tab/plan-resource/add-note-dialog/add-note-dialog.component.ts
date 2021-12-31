@@ -1,37 +1,66 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import {
-  UserDto,
-  UserServiceProxy,
-} from "@shared/service-proxies/service-proxies";
-import { BsModalRef } from "ngx-bootstrap/modal";
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { UserService } from '@app/service/api/user.service';
+import { IUser } from '@shared/service-proxies/service-proxies';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: "app-add-note-dialog",
-  templateUrl: "./add-note-dialog.component.html",
-  styleUrls: ["./add-note-dialog.component.css"],
+  selector: 'app-add-note-dialog',
+  templateUrl: './add-note-dialog.component.html',
+  styleUrls: ['./add-note-dialog.component.css'],
 })
-export class AddNoteDialogComponent implements OnInit {
+export class AddNoteDialogComponent implements OnInit, OnDestroy {
   fullName: string;
   id: number;
-  note: string = "";
-  user = new UserDto();
+  poolNote: string = '';
+  user: IUser;
 
   saving = false;
-  @Output() onSave = new EventEmitter<any>();
-  constructor(
-    public bsModalRef: BsModalRef,
-    public _userService: UserServiceProxy
-  ) {}
+  @Output() onSave = new EventEmitter<null>();
+
+  subscription: Subscription[] = [];
+
+  constructor(public bsModalRef: BsModalRef, public userService: UserService) {}
 
   ngOnInit(): void {
-    this._userService.get(this.id).subscribe((result) => {
-      this.user = result;
-      console.log("test", this.user);
-    });
+    if (this.id) {
+      this.subscription.push(
+        this.userService.getOne(this.id).subscribe((response) => {
+          this.user = response.result;
+          this.poolNote = this.user.poolNote;
+        })
+      );
+    }
   }
 
   SaveAndClose() {
-    console.log("save and close", this.note);
-    this.bsModalRef.hide();
+    this.user = { ...this.user, poolNote: this.poolNote };
+    this.saving = true;
+    this.subscription.push(
+      this.userService
+        .updatePoolNote(this.user)
+        .pipe(
+          finalize(() => {
+            this.saving = false;
+          })
+        )
+        .subscribe(() => {
+          this.bsModalRef.hide();
+          this.onSave.emit();
+        })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }

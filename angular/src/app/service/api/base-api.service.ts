@@ -26,7 +26,7 @@ export abstract class BaseApiService {
     }
 
     public getOne(id: any, includes?: any): Observable<any> {
-        return this.http.get(this.rootUrl + '/Get?' + 'id=${id}');
+        return this.http.get(this.rootUrl + '/Get?' + `id=${id}`);
     }
 
     public filterAndPaging(request: FilterRequest): Observable<any> {
@@ -64,7 +64,7 @@ export abstract class BaseApiService {
     public save(data: object): Observable<any> {
         return this.http.post(this.rootUrl + '/Save', data);
     }
-    
+
     public handleError(error: any) {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {

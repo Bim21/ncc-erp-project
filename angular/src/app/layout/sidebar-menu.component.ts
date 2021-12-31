@@ -1,25 +1,25 @@
-import { Component, Injector, OnInit } from "@angular/core";
-import { AppComponentBase } from "@shared/app-component-base";
+import { Component, Injector, OnInit } from '@angular/core';
+import { AppComponentBase } from '@shared/app-component-base';
 import {
   Router,
   RouterEvent,
   NavigationEnd,
   PRIMARY_OUTLET,
-} from "@angular/router";
-import { BehaviorSubject } from "rxjs";
-import { filter } from "rxjs/operators";
-import { MenuItem } from "@shared/layout/menu-item";
+} from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { MenuItem } from '@shared/layout/menu-item';
 
 @Component({
-  selector: "sidebar-menu",
-  templateUrl: "./sidebar-menu.component.html",
+  selector: 'sidebar-menu',
+  templateUrl: './sidebar-menu.component.html',
 })
 export class SidebarMenuComponent extends AppComponentBase implements OnInit {
   menuItems: MenuItem[];
   menuItemsMap: { [key: number]: MenuItem } = {};
   activatedMenuItems: MenuItem[] = [];
   routerEvents: BehaviorSubject<RouterEvent> = new BehaviorSubject(undefined);
-  homeRoute = "/app/home";
+  homeRoute = '/app/home';
 
   constructor(injector: Injector, private router: Router) {
     super(injector);
@@ -32,117 +32,153 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
     this.routerEvents
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
-        const currentUrl = event.url !== "/" ? event.url : this.homeRoute;
-        const primaryUrlSegmentGroup = this.router.parseUrl(currentUrl).root
-          .children[PRIMARY_OUTLET];
+        const currentUrl = event.url !== '/' ? event.url : this.homeRoute;
+        const primaryUrlSegmentGroup =
+          this.router.parseUrl(currentUrl).root.children[PRIMARY_OUTLET];
         if (primaryUrlSegmentGroup) {
-          this.activateMenuItems("/" + primaryUrlSegmentGroup.toString());
+          this.activateMenuItems('/' + primaryUrlSegmentGroup.toString());
         }
       });
   }
 
   getMenuItems(): MenuItem[] {
     return [
-      new MenuItem(this.l("HomePage"), "/app/home", "fas fa-home"),
-
-      new MenuItem(this.l("Admin"), "", "fas fa-user-cog", "Admin.CanViewMenu", [
-        new MenuItem(
-          this.l("Tenants"),
-          "/app/tenants",
-          "fas fa-building",
-          "Pages.Tenants"
-        ),
-        new MenuItem(this.l("Clients"), "/app/clients", "fas fa-users", "Admin.Client"),
-        new MenuItem(this.l("Configurations"), "/app/configurations", "fas fa-cog", "Admin.Configuration"),
-        new MenuItem(this.l("Skills"), "/app/skills", "fas fa-users", "Admin.Skill"),
-        new MenuItem(this.l("Currency"), "/app/currency", "fas fa-money-check", "Admin.Currency"),
-        new MenuItem(this.l("Users"), "/app/users", "fas fa-users", "Pages.Users"),
-        new MenuItem(this.l("Roles"), "/app/roles", "fas fa-theater-masks", "Pages.Roles"),
-
-      ]),
-      new MenuItem(
-        this.l("PM Management"),
-        "",
-        "fas fa-user-tie",
-        "PmManager.CanViewMenu", [
-        new MenuItem(
-          this.l("Outsourcing Projects"),
-          "/app/list-project",
-          "fas fa-project-diagram",
-          "PmManager.Project"
-        ),
-        new MenuItem(
-          this.l("Training Projects"),
-          "/app/training-projects",
-          "fas fa-chalkboard",
-          "PmManager.Project"
-        ),
-        new MenuItem(
-          this.l("Product Projects"),
-          "/app/product-projects",
-          "fab fa-product-hunt",
-          "PmManager.Project"
-        )
-
-      ]
-      ),
+      new MenuItem(this.l('HomePage'), '/app/home', 'fas fa-home'),
 
       new MenuItem(
-        this.l("Sao đỏ"),
-        "/app/sao-do",
-        "fas fa-user-shield",
-        "SaoDo.CanViewMenu"
+        this.l('Admin'),
+        '',
+        'fas fa-user-cog',
+        'Admin.CanViewMenu',
+        [
+          new MenuItem(
+            this.l('Tenants'),
+            '/app/tenants',
+            'fas fa-building',
+            'Pages.Tenants'
+          ),
+          new MenuItem(
+            this.l('Clients'),
+            '/app/clients',
+            'fas fa-users',
+            'Admin.Client'
+          ),
+          new MenuItem(
+            this.l('Configurations'),
+            '/app/configurations',
+            'fas fa-cog',
+            'Admin.Configuration'
+          ),
+          new MenuItem(
+            this.l('Skills'),
+            '/app/skills',
+            'fas fa-users',
+            'Admin.Skill'
+          ),
+          new MenuItem(
+            this.l('Currency'),
+            '/app/currency',
+            'fas fa-money-check',
+            'Admin.Currency'
+          ),
+          new MenuItem(
+            this.l('Users'),
+            '/app/users',
+            'fas fa-users',
+            'Pages.Users'
+          ),
+          new MenuItem(
+            this.l('Roles'),
+            '/app/roles',
+            'fas fa-theater-masks',
+            'Pages.Roles'
+          ),
+        ]
       ),
       new MenuItem(
-        this.l("CheckList"),
-        "",
-        "fas fa-tasks",
-        "CheckList.CanviewMenu", [
-        new MenuItem(
-          this.l("Checklist Category"),
-          "/app/checklist-title",
-          "fas fa-clipboard-list",
-          "CheckList.CheckListCategory"
-        ),
-        new MenuItem(
-          this.l("Checklist Item"),
-          "/app/checklist",
-          "fas fa-calendar-check",
-          "CheckList.CheckListItem"
-        )
+        this.l('PM Management'),
+        '',
+        'fas fa-user-tie',
+        'PmManager.CanViewMenu',
+        [
+          new MenuItem(
+            this.l('Outsourcing Projects'),
+            '/app/list-project',
+            'fas fa-project-diagram',
+            'PmManager.Project'
+          ),
+          new MenuItem(
+            this.l('Training Projects'),
+            '/app/training-projects',
+            'fas fa-chalkboard',
+            'PmManager.Project'
+          ),
+          new MenuItem(
+            this.l('Product Projects'),
+            '/app/product-projects',
+            'fab fa-product-hunt',
+            'PmManager.Project'
+          ),
+        ]
+      ),
 
-      ]
+      new MenuItem(
+        this.l('Sao đỏ'),
+        '/app/sao-do',
+        'fas fa-user-shield',
+        'SaoDo.CanViewMenu'
       ),
       new MenuItem(
-        this.l("Weekly report"),
-        "/app/weekly-report",
-        "fas fa-chalkboard-teacher",
-        "Deliverymanagement.CanViewMenu.WeeklyReport",
+        this.l('CheckList'),
+        '',
+        'fas fa-tasks',
+        'CheckList.CanviewMenu',
+        [
+          new MenuItem(
+            this.l('Checklist Category'),
+            '/app/checklist-title',
+            'fas fa-clipboard-list',
+            'CheckList.CheckListCategory'
+          ),
+          new MenuItem(
+            this.l('Checklist Item'),
+            '/app/checklist',
+            'fas fa-calendar-check',
+            'CheckList.CheckListItem'
+          ),
+        ]
       ),
       new MenuItem(
-        this.l("Resource request"),
-        "/app/resource-request",
-        "fab fa-chromecast",
-        "Deliverymanagement.CanViewMenu.ResourceManagement",
+        this.l('Weekly report'),
+        '/app/weekly-report',
+        'fas fa-chalkboard-teacher',
+        'Deliverymanagement.CanViewMenu.WeeklyReport'
       ),
       new MenuItem(
-        this.l("Available resource"),
-        "/app/available-resource/pool",
-        "fas fa-hockey-puck",
-        "DeliveryManagement.ResourceRequest.AvailableResource",
+        this.l('Resource request'),
+        '/app/resource-request',
+        'fab fa-chromecast',
+        'Deliverymanagement.CanViewMenu.ResourceManagement'
       ),
       new MenuItem(
-        this.l("Timesheet"),
-        "",
-        "fas fa-calendar-alt",
-        "Timesheet.CanViewMenu", [
-        new MenuItem(
-          this.l("Timesheet"),
-          "/app/timesheet",
-          "fas fa-circle",
-          ""
-        ),
-      ]
+        this.l('Available resource'),
+        '/app/available-resource/pool',
+        'fas fa-hockey-puck',
+        'DeliveryManagement.ResourceRequest.AvailableResource'
+      ),
+      new MenuItem(
+        this.l('Timesheet'),
+        '',
+        'fas fa-calendar-alt',
+        'Timesheet.CanViewMenu',
+        [
+          new MenuItem(
+            this.l('Timesheet'),
+            '/app/timesheet',
+            'fas fa-circle',
+            ''
+          ),
+        ]
       ),
       // new MenuItem(
       //   this.l("CheckPoint"),
@@ -169,7 +205,6 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
       //   ]
       //   ),
-        
 
       //   new MenuItem(
       //     this.l("Đánh giá thành viên"),
@@ -192,7 +227,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       //     "fas fa-clipboard-list",
       //     "",
       //   ),
-        
+
       //   // new MenuItem(
       //   //   this.l("Setup đánh giá"),
       //   //   "/app/setup-reviewer",
@@ -210,19 +245,14 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
       //   // )
 
-        
-      
-
-
       // ]
       // ),
-
     ];
   }
 
   patchMenuItems(items: MenuItem[], parentId?: number): void {
     items.forEach((item: MenuItem, index: number) => {
-      item.id = parentId ? Number(parentId + "" + (index + 1)) : index + 1;
+      item.id = parentId ? Number(parentId + '' + (index + 1)) : index + 1;
       if (parentId) {
         item.parentId = parentId;
       }

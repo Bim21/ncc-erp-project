@@ -10,16 +10,16 @@
         matInput
         name="note-for-user"
         maxlength="3000"
-        rows="3"
+        rows="5"
         placeholder="Leave a comment..."
-        [(ngModel)]="note"
+        [(ngModel)]="poolNote"
       ></textarea>
     </mat-form-field>
   </div>
 
   <abp-modal-footer
     [cancelDisabled]="saving"
-    [saveDisabled]="!noteForm.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
+    [saveDisabled]="!noteForm.valid || saving"
   ></abp-modal-footer>
 </form>
