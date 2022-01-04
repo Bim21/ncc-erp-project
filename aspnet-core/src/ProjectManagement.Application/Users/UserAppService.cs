@@ -228,16 +228,18 @@ namespace ProjectManagement.Users
                 user.PhoneNumber = userFromHRM?.Phone;
                 await _workScope.UpdateAsync(user);
             }
-            var projectUsers = await (from pu in _workScope.GetAll<ProjectUser>().Include(x => x.Project).Include(x => x.Project.PM).Where(x => x.UserId == user.Id)
-                                      select new
-                                      {
-                                          ProjectId = pu.ProjectId,
-                                          ProjectName = pu.Project.Name,
-                                          PmName = pu.Project.PM != null ? pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() : string.Empty,
-                                          StartTime = pu.StartTime,
-                                          ProjectRole = pu.ProjectRole,
-                                          PmUsername = pu.Project.PM == null ? string.Empty : UserHelper.GetUserName(pu.Project.PM.EmailAddress) ?? pu.Project.PM.UserName,
-                                      }).OrderByDescending(x => x.StartTime).ToListAsync();
+            var qProjectUsers = from pu in _workScope.GetAll<ProjectUser>()
+                                .Where(x => x.UserId == user.Id && x.Project.Status != ProjectStatus.Closed)
+                                select new
+                                {
+                                    ProjectId = pu.ProjectId,
+                                    ProjectName = pu.Project.Name,
+                                    PmName = pu.Project.PM != null ? pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() : string.Empty,
+                                    StartTime = pu.StartTime,
+                                    ProjectRole = pu.ProjectRole,
+                                    PmUsername = pu.Project.PM != null ? (UserHelper.GetUserName(pu.Project.PM.EmailAddress) ?? pu.Project.PM.UserName) : string.Empty,
+                                };
+            var projectUsers = await qProjectUsers.OrderByDescending(x => x.StartTime).ToListAsync();
             var employeeInfo = new EmployeeInformationDto()
             {
                 EmployeeId = user.Id,
