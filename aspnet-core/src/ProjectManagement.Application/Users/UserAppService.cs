@@ -230,6 +230,7 @@ namespace ProjectManagement.Users
             }
             var qProjectUsers = from pu in _workScope.GetAll<ProjectUser>()
                                 .Where(x => x.UserId == user.Id && x.Project.Status != ProjectStatus.Closed)
+                                .Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 50)
                                 select new
                                 {
                                     ProjectId = pu.ProjectId,
