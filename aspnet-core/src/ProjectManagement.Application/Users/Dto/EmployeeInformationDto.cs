@@ -20,6 +20,7 @@ namespace ProjectManagement.Users.Dto
         public long ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string PmName { get; set; }
+        public string PmUsername{ get; set; }
         public DateTime StartTime { get; set; }
         public string ProjectRole { get; set; }
     }

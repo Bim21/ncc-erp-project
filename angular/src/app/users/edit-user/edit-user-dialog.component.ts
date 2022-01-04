@@ -60,7 +60,7 @@ export class EditUserDialogComponent extends AppComponentBase
         this.roles = result2.items;
         this.setInitialRolesStatus();
       });
-   
+
     });
 
     if((this.permission.isGranted( this.Pages_Users_UpdateMySkills) && this.permission.isGranted( this.Pages_Users_ViewOnlyMe )
@@ -121,7 +121,7 @@ export class EditUserDialogComponent extends AppComponentBase
       .subscribe(() => {
         this.bsModalRef.hide();
         this.notify.info(this.l('SavedSuccessfully'));
-        
+
         this.onSave.emit();
       });
   }

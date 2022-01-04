@@ -55,7 +55,11 @@ import { SidebarLogoComponent } from './layout/sidebar-logo.component';
 import { SidebarUserPanelComponent } from './layout/sidebar-user-panel.component';
 import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  SocialAuthServiceConfig,
+  SocialLoginModule,
+} from 'angularx-social-login';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
@@ -144,9 +148,8 @@ import { ProductWeeklyReportComponent } from './modules/pm-management/product-pr
 import { ProductApprovedDialogComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-approved-dialog/product-approved-dialog.component';
 import { CreateEditProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/create-edit-product-project-checklist/create-edit-product-project-checklist.component';
 import { NgxStarsModule } from 'ngx-stars';
-
-
-
+import { ProjectHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-history-by-user/project-history-by-user.component';
+import { AddNoteDialogComponent } from '@app/modules/delivery-management/delivery/available-resource-tab/plan-resource/add-note-dialog/add-note-dialog.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -183,7 +186,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     SidebarMenuComponent,
 
     FilterComponent,
-    
+
     TimesheetComponent,
 
     ChecklistTitleComponent,
@@ -280,8 +283,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProductWeeklyReportComponent,
     ProductApprovedDialogComponent,
     CreateEditProductProjectChecklistComponent,
-
-    
+    ProjectHistoryByUserComponent,
+    AddNoteDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -304,36 +307,34 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CdTimerModule,
     NgxStarsModule,
 
-
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
-      }
-    })
+      },
+    }),
   ],
-  exports: [
-    TranslateModule,
-  ],
+  exports: [TranslateModule],
   providers: [
-  {
+    {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: true,
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com'
+            provider: new GoogleLoginProvider(
+              '879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com'
             ),
           },
         ],
       } as SocialAuthServiceConfig,
     },
     {
-      provide: MAT_DATE_LOCALE, useValue: 'en-GB'
-    }
-
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB',
+    },
   ],
   entryComponents: [
     // tenants

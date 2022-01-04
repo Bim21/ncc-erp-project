@@ -4,53 +4,77 @@ import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DeliveryResourceRequestService extends BaseApiService {
   changeUrl() {
-    return 'ResourceRequest'
+    return 'ResourceRequest';
   }
   constructor(http: HttpClient) {
     super(http);
   }
   public getResourceRequestDetail(id: any): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/ResourceRequestDetail?resourceRequestId=' + id);
-    }
-  public searchAvailableUserForRequest(item:any, request:PagedRequestDto):Observable<any>{
-    return this.http.post<any>(this.rootUrl+'/SearchAvailableUserForRequest?startDate='+item,request)
+    return this.http.get<any>(
+      this.rootUrl + '/ResourceRequestDetail?resourceRequestId=' + id
+    );
   }
-  public AddUserToRequest(item:any):Observable<any>{
-    return this.http.post<any>(this.rootUrl + '/AddUserToRequest',item);
+  public searchAvailableUserForRequest(
+    item: any,
+    request: PagedRequestDto
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + '/SearchAvailableUserForRequest?startDate=' + item,
+      request
+    );
+  }
+  public AddUserToRequest(item: any): Observable<any> {
+    return this.http.post<any>(this.rootUrl + '/AddUserToRequest', item);
   }
   public delete(id: any): Observable<any> {
     return this.http.delete<any>(this.rootUrl + '/Delete', {
-        params: new HttpParams().set('resourceRequestId', id)
-    })
+      params: new HttpParams().set('resourceRequestId', id),
+    });
   }
-  public getAvailableResource(request:PagedRequestDto,skillId?:any):Observable<any>{
-      return this.http.post<any>(this.rootUrl+'/AvailableResource?skillId='+skillId,request);
+  public getAvailableResource(
+    request: PagedRequestDto,
+    skillId?: any
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + '/AvailableResource?skillId=' + skillId,
+      request
+    );
   }
-  public planUser(item:any):Observable<any>{
-    return this.http.post<any>(this.rootUrl+'/PlanUser',item);
+  public planUser(item: any): Observable<any> {
+    return this.http.post<any>(this.rootUrl + '/PlanUser', item);
   }
-  public availableResourceFuture(request:PagedRequestDto):Observable<any>{
-    return this.http.post<any>(this.rootUrl+'/AvailableResourceFuture',request);
+  public availableResourceFuture(request: PagedRequestDto): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + '/AvailableResourceFuture',
+      request
+    );
   }
-  public createSkill(skill):Observable<any>{
-    return this.http.post<any>(this.rootUrl+'/CreateSkill',skill);
+  public createSkill(skill): Observable<any> {
+    return this.http.post<any>(this.rootUrl + '/CreateSkill', skill);
   }
   public deleteSkill(resourceRequestSkillId: any): Observable<any> {
-    return this.http.delete<any>(this.rootUrl+`/DeleteSkill?resourceRequestSkillId=${resourceRequestSkillId}`);
-}
-  
-public GetSkillDetail(id: any): Observable<any> {
-  return this.http.get<any>(this.rootUrl + '/GetSkillDetail?resourceRequestId=' + id);
+    return this.http.delete<any>(
+      this.rootUrl +
+        `/DeleteSkill?resourceRequestSkillId=${resourceRequestSkillId}`
+    );
   }
-  public getResourcePaging(request: PagedRequestDto, option:string): Observable<any> {
-    return this.http.post<any>(this.rootUrl + `/GetAllPaging?order=${option}`, request);
-}
-   
-  
-  
 
+  public GetSkillDetail(id: any): Observable<any> {
+    return this.http.get<any>(
+      this.rootUrl + '/GetSkillDetail?resourceRequestId=' + id
+    );
+  }
+  public getResourcePaging(
+    request: PagedRequestDto,
+    option: string
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/GetAllPaging?order=${option}`,
+      request
+    );
+  }
 }
