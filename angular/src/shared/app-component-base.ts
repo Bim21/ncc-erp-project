@@ -29,6 +29,7 @@ export abstract class AppComponentBase {
     appSession: AppSessionService;
     elementRef: ElementRef;
     isLoading: boolean = false;
+    checkNull: boolean = false;
 
     constructor(injector: Injector) {
         this.localization = injector.get(LocalizationService);
@@ -66,5 +67,13 @@ export abstract class AppComponentBase {
             return key;
           }
         }
+    }
+    public enterName(name : string) : any{
+      const pattern = '^[_ ]*$';
+      if(name.match(pattern)){
+        this.checkNull = true;
+      }else{
+        this.checkNull = false;
       }
+    }
 }

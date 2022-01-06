@@ -55,8 +55,6 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       // this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
       this.isEditStatus = true
     }
-    
-    console.log(this.project.chargeType)
     this.getAllClient()
     this.title = this.project.name;
     
@@ -104,6 +102,4 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       this.project.chargeType = 0;
     }
   }
-
-
 }
