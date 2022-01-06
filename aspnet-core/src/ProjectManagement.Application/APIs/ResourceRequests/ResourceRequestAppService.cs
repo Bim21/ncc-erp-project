@@ -259,6 +259,12 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
         {
             input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
+            var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
+            if (skill != null)
+            {
+                skillId = long.Parse(skill.Value.ToString());
+                input.FilterItems.Remove(skill);
+            }
             var projectUsers = WorkScope.GetAll<ProjectUser>()
                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
                                .Select(x => new
