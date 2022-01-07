@@ -19,6 +19,8 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
   public searchPM: string = "";
   public project = {} as TrainingProjectDto;
   public title ="";
+  public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus)
+  public isEditStatus = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     private userService: UserService,
@@ -29,12 +31,13 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
     super(injector)
    }
 
-
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.getAllPM();
-    this.project = this.data.dialogData;
     this.title = this.project.name;
-    
+    if (this.data.command == "edit") {
+      this.project = this.data.dialogData
+      this.isEditStatus = true
+    }    
   }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
