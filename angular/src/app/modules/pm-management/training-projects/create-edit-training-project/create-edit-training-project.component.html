@@ -8,9 +8,12 @@
             </label>
             <div class="col-md-9">
                 <input type="text" class="form-control" name="projectName" id="projectName" 
-                    required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl />
-                <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
-                </abp-validation-summary>
+                    required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl 
+                    [ngClass]="(checkNull && projectNameModel.touched)?'is-check':''"
+                    (input)="enterName($event.target.value);"
+                    />
+                <span class="invalid" *ngIf="checkNull  && projectNameModel.touched && !projectNameModel.errors?.required">This field is invalid!</span>
+                <span class="invalid" *ngIf="projectNameModel.errors?.required  && projectNameModel.touched">This field is required!</span>
             </div>
         </div>
         <div class="form-group row required">
@@ -82,7 +85,7 @@
     <div style="background-color: white;" align="end" class="d-flex justify-content-between" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button class="btn btn-primary"
-            [disabled]="!bankForm.valid || isLoading" (click)='saveAndClose()'>Save</button>
+            [disabled]="!bankForm.valid || isLoading || checkNull" (click)='saveAndClose()'>Save</button>
     </div>
 </form>
 
