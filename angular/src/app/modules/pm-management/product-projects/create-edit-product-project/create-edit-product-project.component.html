@@ -29,7 +29,24 @@
                 </abp-validation-summary>
             </div>
         </div>
-
+        <div class="form-group row required" *ngIf="isEditStatus">
+            <label class="col-md-3 col-form-label" for="projectStatus">Project status:</label>
+            <div class="col-md-9 ">
+                <mat-form-field class="w-100" appearance="outline">
+                    <mat-select [(ngModel)]="project.status" name="projectStatus" placeholder="select a project status"
+                        required #projectStatus="ngModel">
+                        <ng-container *ngFor="let status of projectStatusList">
+                            <mat-option [value]="APP_ENUM.ProjectStatus[status]">
+                                {{status}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-error class="mt-1" *ngIf="projectStatus.hasError('required') && projectStatus.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
+            </div>
+        </div>
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="PM">PM:</label>
             <div class="col-md-9 ">
@@ -58,20 +75,17 @@
                 Start time:
             </label>
             <div class="col-md-9 datepick">
-                <div class="col-md-9 datepick">
-                    <mat-form-field appearance="outline">
-                        <input matInput [matDatepicker]="picker" [(ngModel)]="project.startTime"
-                            #productProjectTimeStart="ngModel" placeholder="choose a date" name="startTime" required>
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                    <mat-error class="mt-1"
-                        *ngIf="productProjectTimeStart.hasError('required') && productProjectTimeStart.touched"
-                        style="font-size: 13px;">
-                        This field is required
-                    </mat-error>
-                </div>
-
+                <mat-form-field appearance="outline">
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="project.startTime"
+                        #productProjectTimeStart="ngModel" placeholder="choose a date" name="startTime" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-error class="mt-1"
+                    *ngIf="productProjectTimeStart.hasError('required') && productProjectTimeStart.touched"
+                    style="font-size: 13px;">
+                    This field is required
+                </mat-error>
             </div>
         </div>
         <div class="form-group row ">

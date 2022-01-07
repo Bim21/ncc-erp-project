@@ -20,6 +20,8 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
   public searchPM: string = "";
   public project = {} as ProjectDto;
   public title ="";
+  public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus)
+  public isEditStatus = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto,
     private userService: UserService,
@@ -28,14 +30,15 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
     public projectService : ListProjectService
   ) {
     super(injector)
-   }
-
+  }
 
   ngOnInit(): void {
     this.getAllPM();
-    this.project = this.data.dialogData;
     this.title = this.project.name;
-    
+    if (this.data.command == "edit") {
+      this.project = this.data.dialogData
+      this.isEditStatus = true
+    }    
   }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
@@ -65,5 +68,4 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
       }, () => this.isLoading = false);
     }
   }
-
 }
