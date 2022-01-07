@@ -9,11 +9,12 @@
             <div class="col-md-9">
                 <input type="text" class="form-control" name="projectName" id="projectName" 
                     required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl 
-                    [ngClass]="((checkNull && projectNameModel.touched) || (projectNameModel.errors?.required  && projectNameModel.touched))?'is-check':''"
+                    [ngClass]="(checkNull && projectNameModel.touched)?'is-check':''"
                     (input)="enterName($event.target.value);"
                     />
                 <span class="invalid" *ngIf="checkNull  && projectNameModel.touched && !projectNameModel.errors?.required">This field is invalid!</span>
-                <span class="invalid" *ngIf="projectNameModel.errors?.required  && projectNameModel.touched">This field is required!</span>
+                <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
+                </abp-validation-summary>
             </div>
         </div>
         <div class="form-group row required">

@@ -1,4 +1,4 @@
-<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
+<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate [busy]="isDisable">
 
     <abp-modal-header [title]="data.command == 'edit'?'Edit Timesheet: '+timesheet.name:'Create new Timesheet'"
         (onCloseClick)="dialogRef.close()">
@@ -17,8 +17,8 @@
                 <span class="invalid"
                     *ngIf="checkNull  && timesheetNameModel.touched && !timesheetNameModel.errors?.required">This field
                     is invalid!</span>
-                <span class="invalid" *ngIf="timesheetNameModel.errors?.required  && timesheetNameModel.touched">This
-                    field is required!</span>
+                    <abp-validation-summary [control]="timesheetNameModel" [controlEl]="nameEl">
+                    </abp-validation-summary>
             </div>
         </div>
         <div class="form-group row required mt-4">
@@ -28,9 +28,9 @@
             <div class="col-md-9">
                 <input type="number" min=0 #totalWorking="ngModel" placeholder="Nhập số ngày làm việc"
                     class="form-control" name="workingDays" [(ngModel)]="timesheet.totalWorkingDay" required
-                    #workingDayEl [ngClass]="(totalWorking.errors?.required && totalWorking.touched)?'is-check':''" />
-                <span class="invalid" *ngIf="totalWorking.errors?.required  && totalWorking.touched">This field is
-                    required!</span>
+                    #totalWorkingEl/>
+                    <abp-validation-summary [control]="totalWorking" [controlEl]="totalWorkingEl">
+                    </abp-validation-summary>
             </div>
         </div>
         <div class="form-group row required">
