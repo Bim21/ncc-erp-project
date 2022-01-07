@@ -1,4 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AppComponentBase } from '@shared/app-component-base';
+import { Component, Inject, OnInit,Injector } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TimesheetDto } from '@app/service/model/timesheet.dto';
@@ -18,7 +19,7 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./create-edit-timesheet.component.css']
 })
 
-export class CreateEditTimesheetComponent implements OnInit {
+export class CreateEditTimesheetComponent extends AppComponentBase implements OnInit {
   public timesheet = {} as TimesheetDto;
   public isDisable = false;
   public listYear: number[] = [];
@@ -30,7 +31,8 @@ export class CreateEditTimesheetComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CreateEditTimesheetComponent>,
     private timesheetService: TimesheetService,
-    private router: Router) { }
+    private router: Router,
+    injector: Injector,){super(injector) }
 
   ngOnInit(): void {
     if (this.data.command == "edit") {
