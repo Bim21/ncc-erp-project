@@ -20,9 +20,8 @@
          </label>
          <div class="col-md-9">
              <input class="form-control mt-1"  type="text"  placeholder="Code" required
-                 name="code" [(ngModel)]="currency.code" #name="ngModel" #nameEl
-                 suffix="%"  />
-                 <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                 name="code" [(ngModel)]="currency.code" #code="ngModel" #codeEl suffix="%" />
+                 <abp-validation-summary [control]="code" [controlEl]="codeEl">
                  </abp-validation-summary>
          </div>
     </div>
