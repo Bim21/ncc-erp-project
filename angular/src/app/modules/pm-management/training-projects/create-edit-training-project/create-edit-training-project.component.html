@@ -9,7 +9,7 @@
             <div class="col-md-9">
                 <input type="text" class="form-control" name="projectName" id="projectName" 
                     required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl 
-                    [ngClass]="(checkNull && projectNameModel.touched)?'is-check':''"
+                    [ngClass]="((checkNull && projectNameModel.touched) || (projectNameModel.errors?.required  && projectNameModel.touched))?'is-check':''"
                     (input)="enterName($event.target.value);"
                     />
                 <span class="invalid" *ngIf="checkNull  && projectNameModel.touched && !projectNameModel.errors?.required">This field is invalid!</span>
