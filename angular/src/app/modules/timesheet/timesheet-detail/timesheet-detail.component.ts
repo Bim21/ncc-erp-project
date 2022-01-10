@@ -9,7 +9,7 @@ import { TimesheetProjectService } from '@app/service/api/timesheet-project.serv
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto } from './../../../service/model/timesheet.dto';
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError } from 'rxjs/operators';
@@ -51,9 +51,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     );
   }
 
-
-
-
+  @ViewChildren('checkboxExportInvoice') private elementRefCheckbox : QueryList<any>;
   public TimesheetDetaiList: TimesheetDetailDto[] = [];
   public tempTimesheetDetaiList: TimesheetDetailDto[] = [];
   public requestId: any;
@@ -93,7 +91,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector: Injector,
-
+    private ref: ChangeDetectorRef
 
   ) {
     super(injector)
@@ -105,7 +103,21 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
     this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
     this.refresh();
-
+  }
+  ngAfterContentChecked() {
+    this.ref.detectChanges();
+}
+  ngAfterViewInit(){
+    this.elementRefCheckbox.changes.subscribe(c => {
+      c.toArray().forEach(element => {
+        if(this.listExportInvoice.includes(element.value.projectId)){
+          element._checked = true
+        }
+        else{
+          element._checked = false
+        }
+      });
+    })
   }
   showDialog(command: String, Timesheet: any): void {
     let timesheetDetail = {};
@@ -118,8 +130,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         note: Timesheet.note,
         id: Timesheet.id,
         projectBillInfomation: Timesheet.projectBillInfomation,
-
-
       }
 
     }
@@ -140,8 +150,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
   }
 
-
-
   reloadTimesheetFile(id) {
     this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, this.requestBody).pipe(catchError(this.timesheetProjectService.handleError))
       .subscribe((data: PagedResultResultDto) => {
@@ -158,8 +166,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         }
       })
   }
-
-
 
   createTimeSheet() {
     this.showDialog('create', {})
@@ -204,8 +210,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.file?.toLowerCase().includes(this.searchText.toLowerCase());
     });
-
-
   }
 
   importFile(id: number) {
