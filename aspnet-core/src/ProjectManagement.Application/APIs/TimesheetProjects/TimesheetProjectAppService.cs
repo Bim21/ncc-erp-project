@@ -320,7 +320,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
                         return new FileBase64Dto
                         {
-                            FileName = $"{listProject[0].Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
+                            FileName = $"{listProject[0].Client.Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
                             FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
                             Base64 = fileBase64
                         };
