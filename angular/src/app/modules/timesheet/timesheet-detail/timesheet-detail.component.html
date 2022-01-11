@@ -245,6 +245,7 @@
 
                   <mat-checkbox
                     *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
+                    #checkboxExportInvoice
                     class="checkbox-exportInvoice"
                     [value]="item"
                     (change)="addProjectToExport($event)"
