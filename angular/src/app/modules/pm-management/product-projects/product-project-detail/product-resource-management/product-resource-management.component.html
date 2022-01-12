@@ -59,7 +59,7 @@
 
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="user.userId" name="projectEmployee"
-                                                    placeholder="select account" required #projectEmployee="ngModel">
+                                                    placeholder="select account *" required #projectEmployee="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUserName" placeholder="Search" (keydown)="$event.stopPropagation()"
@@ -85,7 +85,7 @@
                                         <div *ngIf="user.createMode">
                                             <mat-form-field style="width: 130px;" appearance="outline">
                                                 <mat-select [(ngModel)]="user.projectRole" name="projectrole"
-                                                    placeholder="select a role" required #projectRole="ngModel">
+                                                    placeholder="select a role *" required #projectRole="ngModel">
                                                     <mat-option *ngFor="let role of projectRoleList"
                                                         [value]="APP_ENUM.ProjectUserRole[role]">
                                                         {{role}}</mat-option>
@@ -103,7 +103,7 @@
                                         </span>
                                         <div *ngIf="user.createMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
-                                                <input matInput [matDatepicker]="picker" placeholder="chose a date"
+                                                <input matInput [matDatepicker]="picker" placeholder="chose a date *"
                                                     required [(ngModel)]="user.startTime" name="usercreateDate"
                                                     #projectDate="ngModel" #projectDateEl>
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -228,7 +228,7 @@
                                 <tr style="border: none;">
                                     <th class="stt">#</th>
                                     <th>Request name</th>
-                                    <th style="width: 120px;">Thời gian cần</th>
+                                    <th style="width: 160px;">Thời gian cần</th>
                                     <th>PM Note</th>
                                     <th>HPM note</th>
                                     <th style="width: 220px;">Status</th>
@@ -246,7 +246,7 @@
                                         <p style="white-space: normal; max-width: 300px;" *ngIf="!request.createMode">
                                             {{request.name}}</p>
                                         <div *ngIf="request.createMode" class="form-group row required">
-                                            <input required placeholder="text" class="form-control mt-2" type="text"
+                                            <input required placeholder="leave a comment *" class="form-control mt-2" type="text"
                                                 [(ngModel)]="request.name" #requestName="ngModel" #requestNameEl>
                                             <abp-validation-summary [control]="requestName" [controlEl]="requestNameEl">
                                             </abp-validation-summary>
@@ -257,8 +257,8 @@
                                     <td>
                                         <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
                                         <div style="margin-top: 7px;" *ngIf="request.createMode" class="form-group row required">
-                                            <mat-form-field style="width: 150px;" appearance="outline" class="w-100">
-                                                <input matInput [matDatepicker]="picker" placeholder="chose a date"
+                                            <mat-form-field class="w-100" appearance="outline">
+                                                <input matInput [matDatepicker]="picker" placeholder="chose a date *"
                                                     [(ngModel)]="request.timeNeed" name="requestTimeNeed" required>
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
@@ -399,7 +399,7 @@
 
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="bill.userId" name="userBill"
-                                                    placeholder="select an user" required #userBill="ngModel">
+                                                    placeholder="select an user *" required #userBill="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUserBill" placeholder="search" (keydown)="$event.stopPropagation()"
@@ -425,7 +425,7 @@
                                         <div *ngIf="bill.createMode">
 
                                             <input style="min-width: 150px;" required class="form-control mt-1"
-                                                #billRole="ngModel" #billRoleEl type="text" placeholder="Charge role"
+                                                #billRole="ngModel" #billRoleEl type="text" placeholder="Charge role *"
                                                 name="billRole" [(ngModel)]="bill.billRole" />
 
                                             <abp-validation-summary [control]="billRole" [controlEl]="billRoleEl">
@@ -439,7 +439,7 @@
                                         <div *ngIf="bill.createMode">
                                             <input style="min-width: 150px;" required class="form-control mt-1"
                                                 #billRate="ngModel" #billRateEl type="text" mask="separator"
-                                                thousandSeparator="." placeholder="number" [(ngModel)]="bill.billRate">
+                                                thousandSeparator="." placeholder="number *" [(ngModel)]="bill.billRate">
                                             <abp-validation-summary [control]="billRate" [controlEl]="billRateEl">
                                             </abp-validation-summary>
 
@@ -450,7 +450,7 @@
                                         <div *ngIf="bill.createMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
                                                 <input matInput [matDatepicker]="billStarttimePicker"
-                                                    placeholder="chose a date" [(ngModel)]="bill.startTime"
+                                                    placeholder="chose a date *" [(ngModel)]="bill.startTime"
                                                     name="billStarttime" required>
                                                 <mat-datepicker-toggle matSuffix [for]="billStarttimePicker">
                                                 </mat-datepicker-toggle>
