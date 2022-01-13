@@ -175,7 +175,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                             Note = pUserBill.Note,
                             ShadowNote = pUserBill.shadowNote,
                             IsActive = pUserBill.isActive,
-                            Currency = CurrencyCode.VND
+                            Currency = CurrencyCode.VND,
+                            WorkingTime = timesheetProjectBill.WorkingTime
                         };
                         await WorkScope.UpdateAsync(ObjectMapper.Map<TimeSheetProjectBillDto, TimesheetProjectBill>(timesheetProjectBillInput, timesheetProjectBill));
                         sucessList.Add($"{pUserBill.UserId}");
