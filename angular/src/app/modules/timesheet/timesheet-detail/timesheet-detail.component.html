@@ -172,12 +172,20 @@
                     Update Bill
                   </button>
 
-                  <mat-checkbox *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
-                    class="checkbox-exportInvoice" [value]="item" (change)="addProjectToExport($event)">
-                  </mat-checkbox>
-                  <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
-                    [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="menu"></div>
-                  <button mat-button [matMenuTriggerFor]="menu">
+                  <mat-checkbox
+                    *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
+                    #checkboxExportInvoice
+                    class="checkbox-exportInvoice"
+                    [value]="item"
+                    (change)="addProjectToExport($event)"
+                  ></mat-checkbox>
+                  <div
+                    style="visibility: hidden; position: fixed"
+                    [style.left]="contextMenuPosition.x"
+                    [style.top]="contextMenuPosition.y"
+                    [matMenuTriggerFor]="menu"
+                  ></div>
+                  <button *ngIf="isShowButtonAction" mat-button [matMenuTriggerFor]="menu">
                     <i class="fas fa-bars fa-lg"></i>
                   </button>
                   <mat-menu #menu="matMenu" class="p-2">

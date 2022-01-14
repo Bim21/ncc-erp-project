@@ -107,6 +107,7 @@ export class EditUserDialogComponent extends AppComponentBase
         skillId: item
       };
     })
+    var currentSkill =   this.user.userSkills;
     this.saving = true;
 
     this.user.roleNames = this.getCheckedRoles();
@@ -116,6 +117,7 @@ export class EditUserDialogComponent extends AppComponentBase
       .pipe(
         finalize(() => {
           this.saving = false;
+          this.user.userSkills = currentSkill.map(item=>item.skillId)
         })
       )
       .subscribe(() => {
