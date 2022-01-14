@@ -19,6 +19,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
 using ProjectManagement.Entities;
+using ProjectManagement.Helper;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Net.MimeTypes;
 using ProjectManagement.Services.Finance;
@@ -317,10 +318,18 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         #endregion
                         var fileBytes = excelPackageIn.GetAsByteArray();
                         string fileBase64 = Convert.ToBase64String(fileBytes);
-
+                        string fileName = string.Empty;
+                        if(listProject.Count() > 1)
+                        {
+                            fileName = FilesHelper.SetFileName(listProject[0].Client.Name);
+                        }
+                        else
+                        {
+                            fileName = FilesHelper.SetFileName(listProject[0].Name);
+                        }
                         return new FileBase64Dto
                         {
-                            FileName = $"{listProject[0].Client.Name.Replace("/", "").Replace(":", "").Replace(" ", "_")}_{DateTime.Now}_.xlsx",
+                            FileName = fileName,
                             FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
                             Base64 = fileBase64
                         };
