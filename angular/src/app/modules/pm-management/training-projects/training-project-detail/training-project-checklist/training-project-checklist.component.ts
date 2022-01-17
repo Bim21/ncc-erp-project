@@ -1,3 +1,4 @@
+import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { CreateEditTrainingProjectChecklistComponent } from './create-edit-training-project-checklist/create-edit-training-project-checklist.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,6 +17,7 @@ export class TrainingProjectChecklistComponent extends AppComponentBase implemen
   CheckList_ProjectChecklist_AddCheckListItemByProject=PERMISSIONS_CONSTANT.CheckList_ProjectChecklist_AddCheckListItemByProject;
   public listCheckList: projectChecklistDto[] = [];
   public projectId: any;
+  public projectType = APP_ENUMS.ProjectType.TRAINING;
 
   public listChecklistItem = [];
   constructor(private projectChecklistService: ProjectChecklistService,
@@ -29,6 +31,13 @@ export class TrainingProjectChecklistComponent extends AppComponentBase implemen
   getAllCheckList() {
     this.projectChecklistService.GetCheckListItemByProject(this.projectId).subscribe(data => {
       this.listCheckList = data.result;
+      this.listCheckList.map((item)=>{
+        item.mandatories.forEach((type)=>{
+          if(type == this.projectType){
+            item.checkType = true;
+          }
+        })
+      })
       this.listChecklistItem = this.listCheckList.map(el => el.id);
     })
   }
@@ -50,6 +59,21 @@ export class TrainingProjectChecklistComponent extends AppComponentBase implemen
   }
   createProjectChecklist() {
     this.showDialog("create", {});
+  }
+  delete(item){
+    abp.message.confirm(
+      "Delete project checklist " + item.name + " ?",
+      "",
+      (result) => {
+        this.projectChecklistService.DeleteByProject(this.projectId , item.id).subscribe((res)=>{
+          if(res){
+            abp.notify.success("Delete " + item.name + " successfully!");
+            this.getAllCheckList();
+          }
+        })
+      }
+    )
+    
   }
 
 

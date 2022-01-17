@@ -10,6 +10,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 })
 export class ListProjectDetailComponent extends AppComponentBase implements OnInit {
   requestId: any;
+  projectType: any;
   currentUrl: string = "";
   PmManager_CanViewMenu_Milestone=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Milestone;
   PmManager_CanViewMenu_ProjectChecklist=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectChecklist;
@@ -27,12 +28,13 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     this.currentUrl =this.router.url
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
     this.requestId = this.route.snapshot.queryParamMap.get("id");
+    this.projectType = this.route.snapshot.queryParamMap.get("type");
  
   }
   public routingGeneralTab(){
     this.router.navigate(['list-project-general'],{
       relativeTo:this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
       },
     })
   }
@@ -67,7 +69,8 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingProjectChecklistTab(){
     this.router.navigate(['projectchecklist'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id: this.requestId,
+        type: this.projectType
       },
       // replaceUrl: true
     })
