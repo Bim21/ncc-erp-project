@@ -150,6 +150,7 @@ import { CreateEditProductProjectChecklistComponent } from './modules/pm-managem
 import { NgxStarsModule } from 'ngx-stars';
 import { ProjectHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-history-by-user/project-history-by-user.component';
 import { AddNoteDialogComponent } from '@app/modules/delivery-management/delivery/available-resource-tab/plan-resource/add-note-dialog/add-note-dialog.component';
+import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -285,6 +286,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CreateEditProductProjectChecklistComponent,
     ProjectHistoryByUserComponent,
     AddNoteDialogComponent,
+    ProjectFileComponent,
   ],
   imports: [
     CommonModule,

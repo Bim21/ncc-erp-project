@@ -88,5 +88,12 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
       }
     })
   }
+  public routingFileTab(){
+    this.router.navigate(['project-file-tab'],{
+      relativeTo: this.route, queryParams:{
+        id:this.requestId
+      }
+    })
+  }
 
 }

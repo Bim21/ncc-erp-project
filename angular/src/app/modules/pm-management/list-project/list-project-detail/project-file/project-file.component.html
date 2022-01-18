@@ -1,0 +1,19 @@
+<div class="card-body">
+    <label class="upload-btn"><i class="fas fa-upload mr-1"></i> Upload file
+        <input type="file" size="60" type="file" multiple (change)="selectFile($event)">
+    </label>
+    <div class="table-responsive mt-1">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th style="width: 100px;">#</th>
+                <th>File</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let file of fileList; let i=index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td> <span class="hyperlink" (click)="downloadFile(file)">{{file.fileName}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
