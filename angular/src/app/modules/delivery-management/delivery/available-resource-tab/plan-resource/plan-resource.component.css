@@ -1,24 +1,16 @@
-td{
-    vertical-align: middle;
+td {
+  vertical-align: middle;
 }
-::ng-deep .stars-line{
-    z-index: 0;
+::ng-deep .stars-line {
+  z-index: 0;
 }
-@media screen and (max-width: 1260px) {
-    .w-infor{
-        width: 100% !important;
-    }
-    .w-review{
-        width: 100% !important;
-        margin-left: 25%;
-    }
+.pool-table i {
+  color: #686868;
+  font-size: 18px;
 }
-@media screen and (min-width: 1261px){
-    .w-infor{
-        width: 70% !important;
-    }
-    .w-review{
-        width: 30% !important;
-        
-    }
+::ng-deep .mat-tooltip {
+  font-size: 13px;
+}
+.pool-table i:hover {
+  color: black !important;
 }

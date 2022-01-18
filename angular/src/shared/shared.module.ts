@@ -63,6 +63,7 @@ import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdo
 import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ListFilterPipe } from './pipes/list-filter.pipe';
+import { NgxStarsModule } from 'ngx-stars';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -111,7 +112,8 @@ import { ListFilterPipe } from './pipes/list-filter.pipe';
         MatTreeModule,
         MatFormFieldModule,
         MatSelectModule,
-        FormsModule
+        FormsModule,
+        NgxStarsModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -174,7 +176,8 @@ import { ListFilterPipe } from './pipes/list-filter.pipe';
         UserInfoComponent,
         RadioDropdownComponent,
         FileUploadComponent,
-        ListFilterPipe
+        ListFilterPipe,
+        NgxStarsModule,
     ]
 })
 export class SharedModule {

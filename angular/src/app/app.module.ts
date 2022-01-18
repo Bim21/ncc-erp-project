@@ -147,7 +147,6 @@ import { ProductResourceManagementComponent } from './modules/pm-management/prod
 import { ProductWeeklyReportComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-weekly-report.component';
 import { ProductApprovedDialogComponent } from './modules/pm-management/product-projects/product-project-detail/product-weekly-report/product-approved-dialog/product-approved-dialog.component';
 import { CreateEditProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/create-edit-product-project-checklist/create-edit-product-project-checklist.component';
-import { NgxStarsModule } from 'ngx-stars';
 import { ProjectHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-history-by-user/project-history-by-user.component';
 import { AddNoteDialogComponent } from '@app/modules/delivery-management/delivery/available-resource-tab/plan-resource/add-note-dialog/add-note-dialog.component';
 
@@ -305,7 +304,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     Ng2SearchPipeModule,
     ImageCropperModule,
     CdTimerModule,
-    NgxStarsModule,
 
     TranslateModule.forRoot({
       loader: {
