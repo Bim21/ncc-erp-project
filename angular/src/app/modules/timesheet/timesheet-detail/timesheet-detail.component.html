@@ -6,10 +6,12 @@
       </div>
       <div class="col-6 text-right">
         <!-- <span *ngIf="createdInvoice==true" class="mr-2" style="color: red;font-weight: 800;">Timesheet đã được tạo Invoice</span> -->
-        <button *ngIf="
-            permission.isGranted(Timesheet_TimesheetProject_ExportInvoice) &&
-            listExportInvoice?.length > 0
-          " (click)="exportInvoiceClient()" class="btn bg-secondary mr-2">
+        <button 
+          *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
+          [disabled]="listExportInvoice?.length <= 0"
+          (click)="exportInvoiceClient()" 
+          class="btn bg-secondary mr-2"
+        >
           <i class="fa fa-file"></i>
           Export Invoice
         </button>
