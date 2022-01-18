@@ -15,38 +15,40 @@ import * as moment from 'moment';
   styleUrls: ['./plan-user.component.css']
 })
 export class PlanUserComponent extends AppComponentBase implements OnInit {
-  public planUser={} as planUserDto;
-  public editUser={} as planUserDto;
-  public listProject:ProjectDto[]=[];
+  public planUser = {} as planUserDto;
+  public editUser = {} as planUserDto;
+  public listProject: ProjectDto[] = [];
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole);
-  public searchProject:string =""
-  constructor(@Inject(MAT_DIALOG_DATA) public data:any,
-    private listProjectService:ListProjectService,
+  public searchProject: string = ""
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    private listProjectService: ListProjectService,
     private availableResourceService: DeliveryResourceRequestService,
-    public injector:Injector,
-    public dialogRef:MatDialogRef<PlanUserComponent>,
-    private projectUserService: ProjectUserService) {super(injector) }
+    public injector: Injector,
+    public dialogRef: MatDialogRef<PlanUserComponent>,
+    private projectUserService: ProjectUserService) { super(injector) }
 
   ngOnInit(): void {
     this.getAllProject();
-    this.planUser.userId=this.data.item.userId;
+    this.planUser.userId = this.data.item.userId;
     this.planUser.fullName = this.data.item.fullName;
   }
-  public SaveAndClose(){
-    if(this.data.command=="plan"){
-      this.planUser.startTime=moment(this.planUser.startTime).format("YYYY/MM/DD");
-      this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res)=>{
-      abp.notify.success("Planed Successfully!");
-      this.dialogRef.close(this.planUser);
+  public SaveAndClose() {
 
-    },()=>this.isLoading=false);
-  }
+    if (this.data.command == "plan") {
+      this.planUser.percentUsage = 100
+      this.planUser.startTime = moment(this.planUser.startTime).format("YYYY/MM/DD");
+      this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
+        abp.notify.success("Planed Successfully!");
+        this.dialogRef.close(this.planUser);
+
+      }, () => this.isLoading = false);
+    }
   }
 
-  public getAllProject(){
-    this.listProjectService.getAll().subscribe(data=>{
-      this.listProject=data.result;
-      
+  public getAllProject() {
+    this.listProjectService.getAll().subscribe(data => {
+      this.listProject = data.result;
+
     })
   }
   getPercentage(user, data) {

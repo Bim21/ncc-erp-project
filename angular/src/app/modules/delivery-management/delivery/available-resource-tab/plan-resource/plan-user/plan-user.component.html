@@ -2,14 +2,12 @@
     <abp-modal-header title="Plan for user: {{planUser.fullName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
-        <div class="form-group row required">
+        <!-- <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="pm">
                 Sử dụng nhân sự:
             </label>
             <div class="col-md-9">
                 <div style="max-width: 260px;">
-                    <!-- <radio-dropdown (outputData)="getPercentage(planUser,$event)" [data]="planUser.percentUsage">
-                    </radio-dropdown> -->
                     <mat-radio-group [(ngModel)]="planUser.percentUsage" aria-label="Select an option" name="allocatePercentageDropdown">
                         <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
                         <br/>
@@ -17,7 +15,7 @@
                       </mat-radio-group>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Project:
