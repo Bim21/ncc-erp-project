@@ -15,6 +15,8 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   PmManager_CanViewMenu_Timesheet=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Timesheet;
   PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
   PmManager_Project_ViewProjectInfor=PERMISSIONS_CONSTANT.PmManager_Project_ViewProjectInfor
+  PmManager_CanViewMenu_ProjectFile =PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectFile
+
   public currentUrl: string= '';
   requestId: string = "";
   constructor(public router : Router,

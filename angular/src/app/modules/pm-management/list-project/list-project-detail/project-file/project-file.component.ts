@@ -1,8 +1,11 @@
+import { AppComponentBase } from '@shared/app-component-base';
+import { extend } from 'lodash-es';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectFileDto } from './../../../../../service/model/projectFile.dto';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectFileService } from './../../../../../service/api/project-file.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { UploadFileDto } from '@app/service/model/timesheet.dto';
 import * as FileSaver from 'file-saver';
 
@@ -11,11 +14,19 @@ import * as FileSaver from 'file-saver';
   templateUrl: './project-file.component.html',
   styleUrls: ['./project-file.component.css']
 })
-export class ProjectFileComponent implements OnInit {
+export class ProjectFileComponent extends AppComponentBase implements OnInit {
   private projectId: number
   public fileList: any[] = []
   public isLoading: boolean = false
-  constructor(private projectFileService: ProjectFileService, private route: ActivatedRoute, private dialog: MatDialog) {
+
+  PmManager_ProjectFile = PERMISSIONS_CONSTANT.PmManager_ProjectFile
+  PmManager_ProjectFile_DeleteFile = PERMISSIONS_CONSTANT.PmManager_ProjectFile_DeleteFile
+  PmManager_ProjectFile_UploadNewFile = PERMISSIONS_CONSTANT.PmManager_ProjectFile_UploadNewFile
+  PmManager_ProjectFile_ViewAllFiles = PERMISSIONS_CONSTANT.PmManager_ProjectFile_ViewAllFiles
+
+
+  constructor(private projectFileService: ProjectFileService, private route: ActivatedRoute, injector: Injector) {
+    super(injector)
     this.projectId = Number(route.snapshot.queryParamMap.get("id"))
   }
 
@@ -66,6 +77,20 @@ export class ProjectFileComponent implements OnInit {
       type: ""
     });
     FileSaver.saveAs(file, projectFile.fileName);
+  }
+  removeFile(file: ProjectFileDto) {
+    abp.message.confirm(
+      "Remove file " + file.fileName + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectFileService.removeFile(file.fileName, this.projectId).subscribe(rs => {
+            abp.notify.success(`remove file ${file.fileName}`)
+            this.getAllFile()
+          })
+        }
+      }
+    )
   }
 
 }

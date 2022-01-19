@@ -30,4 +30,8 @@ export class ProjectFileService extends BaseApiService {
     });
     return this.http.post(this.rootUrl + '/UploadFiles', formData);
   }
+  
+  removeFile(fileName:string,projectId: number): Observable<any> {
+    return this.http.delete<any>(this.rootUrl + `/DeleteFile?fileName=${fileName}&projectId=${projectId}`);
+  }
 }
