@@ -6,6 +6,17 @@ export class AppTenantAvailabilityState {
     static InActive: number = TenantAvailabilityState._2;
     static NotFound: number = TenantAvailabilityState._3;
 }
+export const DATE_FORMATS = {
+    parse: {
+        dateInput: 'DD/MM/YYYY',
+    },
+    display: {
+        dateInput: 'DD/MM/YYYY',
+        monthYearLabel: 'DD MM YYYY',
+        dateA11yLabel: 'DD MM YYYY',
+        monthYearA11yLabel: 'DD MM YYYY',
+    },
+};
 export const APP_ENUMS = {
     // ProjectType: {
     //     ODC: 0,
