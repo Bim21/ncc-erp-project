@@ -16,7 +16,7 @@ export const PERMISSIONS_CONSTANT = {
     Admin_Configuration: "Admin.Configuration",
     Admin_Configuration_Edit: "Admin.Configuration.Edit",
     Admin_Configuration_ViewAll: "Admin.Configuration.ViewAll",
-    Admin_Currency : "Admin.Currency",
+    Admin_Currency: "Admin.Currency",
     Admin_Currency_Create: "Admin.Currency.Create",
     Admin_Currency_Delete: "Admin.Currency.Delete",
     Admin_Currency_Edit: "Admin.Currency.Edit",
@@ -144,6 +144,14 @@ export const PERMISSIONS_CONSTANT = {
     PmManager_CanViewMenu_ResourceManagement: "PmManager.CanViewMenu.ResourceManagement",
     PmManager_CanViewMenu_Timesheet: "PmManager.CanViewMenu.Timesheet",
     PmManager_CanViewMenu_WeeklyReport: "PmManager.CanViewMenu.WeeklyReport",
+    PmManager_CanViewMenu_ProjectFile: "PmManager.CanViewMenu.ProjectFile",
+
+
+    PmManager_ProjectFile: "PmManager.ProjectFile",
+    PmManager_ProjectFile_DeleteFile: "PmManager.ProjectFile.DeleteFile",
+    PmManager_ProjectFile_UploadNewFile: "PmManager.ProjectFile.UploadNewFile",
+    PmManager_ProjectFile_ViewAllFiles: "PmManager.ProjectFile.ViewAllFiles",
+
 
     PmManager_PMReportProject: "PmManager.PMReportProject",
     PmManager_PMReportProject_GetAllByPmReport: "PmManager.PMReportProject.GetAllByPmProject",
@@ -224,7 +232,7 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_Timesheet_ReverseActive: "Timesheet.Timesheet.ReverseActive",
     Timesheet_Timesheet_ViewProjectBillInfomation: "Timesheet.Timesheet.ViewProjectBillInfomation",
     PmManager_Project_UpdateProjectDetail: "PmManager.Project.UpdateProjectDetail",
-    PmManager_Project_ViewProjectInfor:"PmManager.Project.ViewProjectInfor",
+    PmManager_Project_ViewProjectInfor: "PmManager.Project.ViewProjectInfor",
 
-    Timesheet_TimesheetProject_ExportInvoice:"Timesheet.TimesheetProject.ExportInvoice"
+    Timesheet_TimesheetProject_ExportInvoice: "Timesheet.TimesheetProject.ExportInvoice"
 }
