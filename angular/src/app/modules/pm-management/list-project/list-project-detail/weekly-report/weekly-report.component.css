@@ -106,4 +106,12 @@ button{
  ::ng-deep .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
   opacity: 0.7;
 }
+.note{
+  font-size: 1.2em; 
+  font-family: sans-serif; 
+  white-space: pre-line; 
+  max-width: 91%;
+  max-height: 12.0em; 
+  line-height: 1.2em;                      
+}
 
