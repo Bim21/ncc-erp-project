@@ -436,16 +436,26 @@ namespace ProjectManagement.APIs.ResourceRequests
             PermissionNames.PmManager_ResourceRequest_PlanUser)]
         public async Task<ProjectUser> PlanUser(PlanUserDto input)
         {
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed &&
-                               x.Status == ProjectUserStatus.Future && x.IsFutureActive);
+            var projectUsers = WorkScope
+                .GetAll<ProjectUser>()
+                .Where(x => 
+                            x.Project.Status != ProjectStatus.Potential && 
+                            x.Project.Status != ProjectStatus.Closed &&
+                            x.Status == ProjectUserStatus.Future && 
+                            x.IsFutureActive);
 
-            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            var pmReportActive = await WorkScope
+                .GetAll<PMReport>()
+                .FirstOrDefaultAsync(x => x.IsActive);
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
-            var isExist = projectUsers.Any(x => x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.StartTime == input.StartTime);
-            if (isExist)
+            var isExistProjectUser = projectUsers
+                .Any(x => 
+                        x.ProjectId == input.ProjectId && 
+                        x.UserId == input.UserId && 
+                        x.StartTime == input.StartTime);
+            if (isExistProjectUser)
             {
                 throw new UserFriendlyException($"Project User already exist in {input.StartTime.Date} !");
             }
@@ -465,6 +475,27 @@ namespace ProjectManagement.APIs.ResourceRequests
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 
+            var pmKomuId = await _userAppService.UpdateKomuId(AbpSession.UserId.Value);
+            var pmUserName = string.Empty;
+            if (!pmKomuId.HasValue)
+            {
+                pmUserName = UserManager.GetUserById(AbpSession.UserId.Value).UserName;
+            }
+            var employee = UserManager.GetUserById(input.UserId);
+            employee.UserName = UserHelper.GetUserName(employee.EmailAddress) ?? employee.UserName;
+            var projectName = WorkScope.Get<Project>(input.ProjectId)?.Name;
+
+            var komuMessage = new StringBuilder();
+            komuMessage.Append($"Từ ngày **{input.StartTime:dd/MM/yyyy}**, ");
+            komuMessage.Append($"PM {(pmKomuId.HasValue ? "<@" + pmKomuId + ">" : "**" + pmUserName + "**")} request ");
+            komuMessage.Append($"**{employee.UserName}** làm việc ở dự án ");
+            komuMessage.Append($"**{projectName}**");
+            await _komuService.NotifyToChannel(new KomuMessage
+            {
+                CreateDate = DateTimeUtils.GetNow(),
+                Message = komuMessage.ToString(),
+            },
+            ChannelTypeConstant.PM_CHANNEL);
             return projectUser;
         }
 
