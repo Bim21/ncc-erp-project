@@ -226,7 +226,7 @@ namespace ProjectManagement.Users
             {
                 var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
                 user.PhoneNumber = userFromHRM?.Phone;
-                await _workScope.UpdateAsync(user);
+                    await _workScope.UpdateAsync(user);
             }
             var qProjectUsers = from pu in _workScope.GetAll<ProjectUser>()
                                 .Where(x => x.UserId == user.Id && x.Project.Status != ProjectStatus.Closed)
@@ -769,6 +769,33 @@ namespace ProjectManagement.Users
             return false;
         }
 
+        public async Task<long?> UpdateKomuId(long userId)
+        {
+            var user = await _userManager.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            if (user.KomuUserId.HasValue)
+            {
+                return user.KomuUserId;
+            }
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+            if (userName != null)
+            {
+                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto
+                {
+                    Username = userName ?? user.UserName,
+                },
+                ChannelTypeConstant.KOMU_USER);
+                if (user.KomuUserId.HasValue)
+                {
+                    await _userManager.UpdateAsync(user);
+                    return user.KomuUserId;
+                }
+            }
+            return null;
+        }
     }
 }
 
