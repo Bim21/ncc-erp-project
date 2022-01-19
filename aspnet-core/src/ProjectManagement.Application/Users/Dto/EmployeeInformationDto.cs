@@ -10,6 +10,7 @@ namespace ProjectManagement.Users.Dto
         public string EmployeeName { get; set; }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
+        public DateTime? DOB { get; set; }
         public string RoleType { get; set; }
         public string Branch { get; set; }
         public List<ProjectDTO> ProjectDtos { get; set; }
