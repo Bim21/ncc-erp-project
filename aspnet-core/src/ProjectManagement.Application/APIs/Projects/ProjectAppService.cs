@@ -30,12 +30,10 @@ namespace ProjectManagement.APIs.Projects
     public class ProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IProjectUserAppService _projectUserAppService;
-        private readonly IWebHostEnvironment _hostingEnvironment;
 
         public ProjectAppService(IProjectUserAppService projectUserAppService, IWebHostEnvironment hostingEnvironment)
         {
             _projectUserAppService = projectUserAppService;
-            _hostingEnvironment = hostingEnvironment;
         }
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
