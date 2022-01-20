@@ -60,7 +60,6 @@ import {
   SocialAuthServiceConfig,
   SocialLoginModule,
 } from 'angularx-social-login';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TimesheetComponent } from './modules/timesheet/timesheet.component';
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
@@ -150,7 +149,10 @@ import { CreateEditProductProjectChecklistComponent } from './modules/pm-managem
 import { ProjectHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/project-history-by-user/project-history-by-user.component';
 import { AddNoteDialogComponent } from '@app/modules/delivery-management/delivery/available-resource-tab/plan-resource/add-note-dialog/add-note-dialog.component';
 import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
-
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import {DateAdapter,MAT_DATE_FORMATS} from '@angular/material/core'
+import { DATE_FORMATS } from '@shared/AppEnums';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -335,6 +337,12 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
       provide: MAT_DATE_LOCALE,
       useValue: 'en-GB',
     },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
   ],
   entryComponents: [
     // tenants
