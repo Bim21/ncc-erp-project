@@ -62,6 +62,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public createdInvoice: boolean;
   public listExportInvoice: any[] = [];
   public clientId: number = 0;
+  public isShowButtonAction: boolean;
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -103,6 +104,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
     this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
     this.refresh();
+    this.showButtonAction();
   }
   ngAfterContentChecked() {
     this.ref.detectChanges();
@@ -336,7 +338,17 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       const file = new Blob([this.s2ab(atob(res.result.base64))], {
         type: "application/vnd.ms-excel;charset=utf-8"
       });
+      this.refresh();
+      this.listExportInvoice=[];
       FileSaver.saveAs(file, res.result.fileName);
     })
+  }
+  public showButtonAction(){
+    if(!this.permission.isGranted(this.Timesheet_TimesheetProject_Update)
+        && !this.permission.isGranted(this.Timesheet_TimesheetProject_ExportInvoice)
+          && !this.permission.isGranted(this.Timesheet_TimesheetProject_Delete))
+              this.isShowButtonAction = false;
+    else
+      this.isShowButtonAction = true
   }
 }

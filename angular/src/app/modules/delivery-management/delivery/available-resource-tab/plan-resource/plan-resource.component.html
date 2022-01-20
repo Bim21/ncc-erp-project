@@ -8,25 +8,12 @@
               <i class="fas fa-search"></i>
             </button>
           </div>
-          <input
-            type="text"
-            class="form-control"
-            name="keyword"
-            placeholder="Search"
-            [(ngModel)]="searchText"
-            (keyup.enter)="getDataPage(1)"
-          />
+          <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
+            (keyup.enter)="getDataPage(1)" />
           <div class="input-group-append">
-            <button
-              type="button"
-              class="btn btn-default"
-              (click)="checkAddFilter()"
-            >
-              <i
-                class="fas"
-                [class.fa-angle-up]="advancedFiltersVisible"
-                [class.fa-angle-down]="!advancedFiltersVisible"
-              ></i>
+            <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+              <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                [class.fa-angle-down]="!advancedFiltersVisible"></i>
             </button>
           </div>
         </div>
@@ -39,19 +26,11 @@
                 <div class="mb-0">
                   <div>
                     <div *ngFor="let item of filterItems; let i = index">
-                      <app-filter
-                        [item]="item"
-                        (emitChange)="onEmitChange($event, i)"
-                        (deleteDataFilter)="deleteFilterItem(i)"
-                        [inputFilters]="FILTER_CONFIG"
-                      >
+                      <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
+                        (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
                       </app-filter>
                     </div>
-                    <i
-                      style="padding: 0"
-                      class="fas fa-plus-circle ml-3"
-                      (click)="addFilter()"
-                    ></i>
+                    <i style="padding: 0" class="fas fa-plus-circle ml-3" (click)="addFilter()"></i>
                   </div>
                 </div>
               </div>
@@ -70,29 +49,23 @@
                     </div> -->
         </div>
       </div>
-      <div class="table-responsive py-4">
+      <div class="table-responsive py-4 pool-table">
         <div class="fixTableHead">
-          <table
-            [busy]="isLoading"
-            style="border-collapse: collapse"
-            class="table table-hover text-nowrap"
-          >
+          <table [busy]="isLoading" style="border-collapse: collapse" class="table table-hover text-nowrap">
             <thead class="bg-light">
               <tr style="border: none">
                 <th class="stt">#</th>
                 <th>Nhân viên</th>
-                <th>Dự án trước đây</th>
-                <th>Tạm thời sử dụng</th>
-                <th>Kĩ năng</th>
-                <th style="width: 100px">Note</th>
-                <th>Sử dụng hiện tại</th>
-                <th>Total Free Day</th>
-                <th>Date Start Pool</th>
+                <th style="width: 75px;">Lịch sử</th>
+                <th style="width: 300px;">Plan</th>
+                <th style="width: 200px;">Kĩ năng</th>
+                <th>Note</th>
+                <!-- <th>Sử dụng</th> -->
+                <th style="width: 100px;">Date Start Pool</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                *ngFor="
+              <tr *ngFor="
                   let item of availableResourceList
                     | paginate
                       : {
@@ -102,122 +75,98 @@
                           totalItems: totalItems
                         };
                   let i = index
-                "
-              >
+                ">
                 <td class="text-center">
                   <span>{{ i + 1 }}</span>
                 </td>
-                <td style="border: none" class="row">
-                  <div
-                    class="w-infor"
-                    style="white-space: normal; border: none"
-                  >
-                    <app-user-info
-                      [userData]="{
+                <td style="width: 350px;">
+                  <div style="width: 100%;">
+                    <app-user-info [userData]="{
                         fullName: item.fullName,
                         branch: item.branch,
                         userType: item.userType,
                         emailAddress: item.emailAddress,
-                        avatarPath: item.avatarPath
-                      }"
-                    >
+                        avatarPath: item.avatarPath,
+                        rateStar:item.starRate
+                      }">
                     </app-user-info>
                   </div>
-                  <div class="w-review">
-                    <ngx-stars
-                      style="z-index: 1 !important"
-                      [readonly]="true"
-                      [wholeStars]="true"
-                      [size]="1"
-                      [color]="'gold'"
-                      [initialStars]="item.starRate"
-                      [maxStars]="item.starRate ? item.starRate : 0"
-                      (ratingOutput)="onRatingSet($event)"
-                    ></ngx-stars>
-                  </div>
+                  <!-- <div class="w-review">
+                    <ngx-stars style="z-index: 1 !important" [readonly]="true" [wholeStars]="true" [size]="1"
+                      [color]="'gold'" [initialStars]="item.starRate" [maxStars]="item.starRate ? item.starRate : 0"
+                      (ratingOutput)="onRatingSet($event)"></ngx-stars>
+                  </div> -->
                 </td>
-                <td
-                  class="text-center"
-                  style="white-space: normal; max-width: 200px"
-                >
-                  <button
-                    class="btn btn-secondary btn-sm"
-                    (click)="projectHistorUser(item)"
-                  >
-                    Xem lịch sử
-                  </button>
+                <td class="text-center">
+                  <i class="fas fa-history fa-lg" (click)="projectHistorUser(item)"
+                    matTooltip="Xem dự án trước đây"></i>
                 </td>
 
                 <td style="white-space: normal; max-width: 200px">
-                  <div *ngFor="let i of item.projectUserPlans">
-                    <span
-                      ><strong>Tham gia dự án:</strong>
-                      {{ i.projectName }}</span
-                    ><br />
-                    <span
-                      ><strong>Từ ngày :</strong>
-                      {{ i.startTime | date: 'dd/MM/yyyy' }}</span
-                    ><br />
-                    <span
-                      ><strong>Sử dụng:</strong>
-                      {{ i.allocatePercentage }}%</span
-                    ><br /><br />
+                  <div class="d-flex " style="align-items: center;">
+                    <div style="width: 90%;">
+                      <div *ngFor="let i of item.projectUserPlans">
+                        <!-- <span><strong>Tham gia dự án:</strong>
+                          {{ i.projectName }}</span><br />
+                        <span><strong>Từ ngày :</strong>
+                          {{ i.startTime | date: 'dd/MM/yyyy' }}</span><br />
+                        <span><strong>Sử dụng:</strong>
+                          {{ i.allocatePercentage }}%</span><br /><br /> -->
+                        <strong>{{ i.projectName }}</strong> - {{ i.startTime | date: 'dd/MM/yyyy' }}
+                      </div>
+                    </div>
+                    <div style="width: 10%;" class="text-right">
+                      <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
+                      <!-- <mat-icon [matMenuTriggerFor]="menu">more_vert</mat-icon> -->
+                      <!-- <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
+                        Plan
+                      </button> -->
+                    </div>
                   </div>
+
                 </td>
                 <td style="white-space: normal; max-width: 200px">
-                  <div class="row">
-                    <div style="width: 75% !important">
-                      {{ skillsCommas(item.listSkills) }}
+                  <div class="d-flex" style="align-items: center;">
+                    <div style="width: 90%">
+                      <p class="m-0" *ngFor="let item of item.listSkills">
+                        - {{item.name}}
+
+                      </p>
+                      <!-- {{ skillsCommas(item.listSkills) }} -->
                     </div>
-                    <div
-                      style="width: 18% !important; margin-right: 7% !important"
-                    >
-                      <i
-                        class="fas fa-edit fa-lg"
-                        (click)="updateUserSkill(item.userId)"
-                      ></i>
+                    <div style="width: 10%; text-align: right;">
+                      <i class="fas fa-edit" (click)="updateUserSkill(item.userId)" matTooltip="Edit skill"></i>
                     </div>
                   </div>
                 </td>
-                <td
-                  style="
-                    white-space: pre-wrap;
+                <td style="
+                    white-space: pre-line;
+                    word-break: break-all;
                     max-width: 200px;
-                    min-width: 200px;
-                  "
-                >
-                  <div class="row" style="align-items: center">
-                    <div style="width: 75% !important">
-                      {{ item.poolNote }}
+                    min-width: 150px;
+                  ">
+                  <div class="d-flex" style="align-items: center">
+                    <div style="width: 90%">{{ item.poolNote }}
                     </div>
-                    <div
-                      style="width: 18% !important; margin-right: 7% !important"
-                    >
-                      <i
-                        class="fas fa-edit fa-lg"
-                        (click)="updateNote(item.userId, item.fullName)"
-                      ></i>
+                    <div style="width: 10%; text-align: right;">
+                      <i class="fas fa-edit " (click)="updateNote(item.userId, item.fullName)"
+                        matTooltip="Edit note"></i>
                     </div>
                   </div>
                 </td>
-                <td class="text-center">
+                <!-- <td class="text-center">
                   <strong class="mr-2">{{ item.used }}%</strong>
-                  <button
-                    class="btn btn-secondary btn-sm"
-                    (click)="planUser(item)"
-                  >
+                  <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
                     Plan
                   </button>
-                </td>
-                <td class="text-center">
-                  {{ item.totalFreeDay !== 0 ? item.totalFreeDay : '' }}
-                </td>
+                </td> -->
                 <td class="text-center">
                   {{
-                    item.dateStartPool !== 0
-                      ? formatDateStartPool(item.dateStartPool)
-                      : ''
+                  item.dateStartPool !== 0
+                  ? formatDateStartPool(item.dateStartPool)
+                  : ''
                   }}
+                  <p><strong>{{ item.totalFreeDay !== 0 ? item.totalFreeDay : '' }}</strong> days ago</p>
                 </td>
               </tr>
             </tbody>
@@ -232,10 +181,7 @@
             </button>
             <mat-form-field style="width: 20%; margin-left: 30px">
               <mat-label>Number items</mat-label>
-              <mat-select
-                [(ngModel)]="pageSizeType"
-                (ngModelChange)="changePageSize()"
-              >
+              <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">
                 <mat-option [value]="5"> 5 </mat-option>
                 <mat-option [value]="10"> 10 </mat-option>
                 <mat-option [value]="20"> 20 </mat-option>
@@ -251,10 +197,7 @@
           </div>
           <div class="col-sm-4 col-12">
             <div class="float-sm-right m-auto">
-              <abp-pagination-controls
-                id="server"
-                (pageChange)="getDataPage($event)"
-              >
+              <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
               </abp-pagination-controls>
             </div>
           </div>

@@ -14,5 +14,6 @@ namespace ProjectManagement.Users
 
         Task<bool> ChangePassword(ChangePasswordDto input);
         Task<EmployeeInformationDto> GetEmployeeInformation(string email);
+        Task<long?> UpdateKomuId(long userId);
     }
 }
