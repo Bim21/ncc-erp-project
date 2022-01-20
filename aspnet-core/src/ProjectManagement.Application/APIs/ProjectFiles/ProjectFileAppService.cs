@@ -113,10 +113,11 @@ namespace ProjectManagement.APIs.ProjectFiles
                         ReadProjectFileDto data = new ReadProjectFileDto();
                         data.Bytes = File.ReadAllBytes(path);
                         data.FileName = Path.GetFileName(path);
+                        data.CreationTime = item.CreationTime;
                         files.Add(data);
                     }
                 }
-                return new OkObjectResult(files);
+                return new OkObjectResult(files.OrderByDescending(x => x.CreationTime));
             }
             catch (Exception ex)
             {
