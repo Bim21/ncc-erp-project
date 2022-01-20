@@ -1,0 +1,3 @@
+.submit-btn:disabled i {
+  color: gray !important;
+}

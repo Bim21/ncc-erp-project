@@ -1,5 +1,6 @@
+
 <form class="form-horizontal" autocomplete="off" #approveForm="ngForm" novalidate>
-    <abp-modal-header title="Approve request for user: {{resourcerequest.fullName}}" (onCloseClick)="dialogRef.close()">
+    <abp-modal-header title="Approve request for user: {{resourceRequest.fullName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
@@ -8,7 +9,7 @@
             </label>
             <div class="col-9">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="resourcerequest.userId" name="projectEmployee" placeholder="select user"
+                    <mat-select [(ngModel)]="resourceRequest.userId" name="projectEmployee" placeholder="select user"
                         required #projectEmployee="ngModel">
                         <mat-form-field class="w-100 px-3 "
                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
@@ -30,7 +31,7 @@
             </label>
             <div class="col-9">
                 <mat-form-field class="w-100 mx-auto" appearance="outline">
-                    <mat-select [(ngModel)]="resourcerequest.projectRole" name="projectrole" placeholder="select a role"
+                    <mat-select [(ngModel)]="resourceRequest.projectRole" name="projectrole" placeholder="select a role"
                         required #projectPM="ngModel">
                         <mat-option *ngFor="let role of projectRoleList" [value]="APP_ENUM.ProjectUserRole[role]">
                             {{role}}</mat-option>
@@ -50,7 +51,7 @@
             <div class="col-9">
                 <mat-form-field appearance="outline">
                     <input matInput [matDatepicker]="picker" placeholder="chose a date" required
-                        [(ngModel)]="resourcerequest.startTime" name="usercreateDate">
+                        [(ngModel)]="resourceRequest.startTime" name="usercreateDate">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -61,14 +62,8 @@
                 allocatePercentage:
             </label>
             <div class="col-9">
-                <!-- <input class="form-control mt-1" placeholder="number" name="allocatePercentage" type="text" required
-                    mask="percent" suffix="%" [(ngModel)]="resourcerequest.allocatePercentage" #allocatePercentage="ngModel" #allocatePercentageEl/>
-                    <abp-validation-summary [control]="allocatePercentage" [controlEl]="allocatePercentageEl">
-                    </abp-validation-summary> -->
                     <div style="width: 250px;">
-                        <!-- <radio-dropdown (outputData)="getFuturePercentage(resourcerequest,$event)"
-                        [data]="resourcerequest.allocatePercentage"></radio-dropdown> -->
-                        <mat-radio-group [(ngModel)]="resourcerequest.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
+                        <mat-radio-group [(ngModel)]="resourceRequest.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
                             <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
                             <br/>
                             <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
@@ -83,4 +78,3 @@
         <button class="btn btn-primary" (click)="saveAndClose()" [disabled]="!approveForm.valid || isLoading">Save</button>
     </div>
 </form>
-

@@ -1,11 +1,11 @@
 import { catchError } from 'rxjs/operators';
-import { UserService } from './../../../../../../service/api/user.service';
+import { AppComponentBase } from '@shared/app-component-base';
 import { ProjectResourceRequestService } from './../../../../../../service/api/project-resource-request.service';
+import { UserService } from './../../../../../../service/api/user.service';
 import { DialogDataDto } from './../../../../../../service/model/common-DTO';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserDto } from './../../../../../../../shared/service-proxies/service-proxies';
 import { projectUserDto } from './../../../../../../service/model/project.dto';
-import { AppComponentBase } from '@shared/app-component-base';
 import { Component, Inject, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 
@@ -15,7 +15,8 @@ import * as moment from 'moment';
   styleUrls: ['./product-approved-dialog.component.css']
 })
 export class ProductApprovedDialogComponent extends AppComponentBase implements OnInit {
-  public resourcerequest = {} as projectUserDto;
+
+  public resourceRequest = {} as projectUserDto;
   public searchUser: string = "";
   public userList: UserDto[] = [];
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole)
@@ -28,23 +29,20 @@ export class ProductApprovedDialogComponent extends AppComponentBase implements 
 
   ngOnInit(): void {
     this.getAllUser();
-    this.resourcerequest = this.data.dialogData
-    this.resourcerequest.projectRole = this.APP_ENUM.ProjectUserRole[this.resourcerequest.projectRole]
+    this.resourceRequest = this.data.dialogData
+    this.resourceRequest.projectRole = this.APP_ENUM.ProjectUserRole[this.resourceRequest.projectRole]
   }
-  // public getAllUser(): void {
-  //   this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => this.userList = data.result);
-  // }
   public getAllUser(): void {
     this.userService.GetAllUserActive(false).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userList = data.result;
     })
   }
   public saveAndClose(): void{
-    this.resourcerequest.startTime = moment(this.resourcerequest.startTime).format("YYYY-MM-DD")
+    this.resourceRequest.startTime = moment(this.resourceRequest.startTime).format("YYYY-MM-DD")
     this.isLoading =true;
-    this.pmReportService.approveRequest(this.resourcerequest).pipe(catchError(this.pmReportService.handleError)).subscribe(res=>{
+    this.pmReportService.approveRequest(this.resourceRequest).pipe(catchError(this.pmReportService.handleError)).subscribe(res=>{
       abp.notify.success(`Approved!`);
-      this.dialogRef.close(this.resourcerequest);
+      this.dialogRef.close(this.resourceRequest);
       this.isLoading =false;
     },()=>{
       this.isLoading =false;

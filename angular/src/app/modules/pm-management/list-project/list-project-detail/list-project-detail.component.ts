@@ -18,7 +18,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   PmManager_CanViewMenu_Timesheet=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Timesheet;
   PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
   PmManager_Project_ViewProjectInfor=PERMISSIONS_CONSTANT.PmManager_Project_ViewProjectInfor
-
+  PmManager_CanViewMenu_ProjectFile =PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectFile
 
   constructor(private route: ActivatedRoute, private router: Router, injector:Injector) {
     super(injector)
@@ -86,6 +86,13 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   
   public routingDescriptionTab(){
     this.router.navigate(['description-tab'],{
+      relativeTo: this.route, queryParams:{
+        id:this.requestId
+      }
+    })
+  }
+  public routingFileTab(){
+    this.router.navigate(['project-file-tab'],{
       relativeTo: this.route, queryParams:{
         id:this.requestId
       }

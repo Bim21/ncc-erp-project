@@ -338,6 +338,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       const file = new Blob([this.s2ab(atob(res.result.base64))], {
         type: "application/vnd.ms-excel;charset=utf-8"
       });
+      this.refresh();
+      this.listExportInvoice=[];
       FileSaver.saveAs(file, res.result.fileName);
     })
   }

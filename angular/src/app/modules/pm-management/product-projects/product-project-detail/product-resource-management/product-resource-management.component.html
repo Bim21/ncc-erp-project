@@ -109,6 +109,11 @@
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
+                                            <mat-error class="mt-1"
+                                                *ngIf="projectDate.hasError('required') && projectDate.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
                                         </div>
                                     </td>
 
@@ -259,10 +264,15 @@
                                         <div style="margin-top: 7px;" *ngIf="request.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <input matInput [matDatepicker]="picker" placeholder="chose a date *"
-                                                    [(ngModel)]="request.timeNeed" name="requestTimeNeed" required>
+                                                    [(ngModel)]="request.timeNeed" name="requestTimeNeed" #requestTimeNeed = "ngModel" required>
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
+                                            <mat-error class="mt-1"
+                                                *ngIf="requestTimeNeed.hasError('required') && requestTimeNeed.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
 
                                         </div>
                                     </td>
@@ -451,11 +461,16 @@
                                             <mat-form-field appearance="outline" style="width: 150px;">
                                                 <input matInput [matDatepicker]="billStarttimePicker"
                                                     placeholder="chose a date *" [(ngModel)]="bill.startTime"
-                                                    name="billStarttime" required>
+                                                    name="billStarttime" #billStartTime="ngModel" required>
                                                 <mat-datepicker-toggle matSuffix [for]="billStarttimePicker">
                                                 </mat-datepicker-toggle>
                                                 <mat-datepicker #billStarttimePicker></mat-datepicker>
                                             </mat-form-field>
+                                            <mat-error class="mt-1"
+                                                *ngIf="billStartTime.hasError('required') && billStartTime.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
                                         </div>
                                     </td>
                                     <td>

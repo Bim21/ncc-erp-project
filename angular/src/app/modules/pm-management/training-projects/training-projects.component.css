@@ -56,3 +56,9 @@ tr, th, td{
         width: 50% !important ;
     }
   }
+  .projectEvaluation{
+    font-size: 1rem;
+    font-family: sans-serif; 
+    white-space: pre-line; 
+    line-height: initial;
+  }

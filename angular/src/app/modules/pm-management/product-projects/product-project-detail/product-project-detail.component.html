@@ -25,6 +25,9 @@
                     [ngClass]="currentUrl.includes('training-description-tab')?'active':''" mat-tab-link (click)="routingDescriptionTab()">
                         Project Description 
                     </a> 
+                    <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ProjectFile)" [ngClass]="currentUrl.includes('project-file-tab')?'active':''" mat-tab-link (click)="routingFileTab()">
+                        Project Files
+                    </a>
                 </nav>
                 <router-outlet></router-outlet>
             </div>
