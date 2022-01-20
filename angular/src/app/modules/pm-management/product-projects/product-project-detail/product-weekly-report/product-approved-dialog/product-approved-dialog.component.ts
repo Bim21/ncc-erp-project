@@ -6,7 +6,7 @@ import { DialogDataDto } from './../../../../../../service/model/common-DTO';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UserDto } from './../../../../../../../shared/service-proxies/service-proxies';
 import { projectUserDto } from './../../../../../../service/model/project.dto';
-import { Component, OnInit, Inject, Injector } from '@angular/core';
+import { Component, Inject, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
@@ -51,5 +51,4 @@ export class ProductApprovedDialogComponent extends AppComponentBase implements 
   getFuturePercentage(report, data) {
     report.allocatePercentage = data
   }
-
 }

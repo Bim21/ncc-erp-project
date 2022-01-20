@@ -63,7 +63,7 @@
                                
                             </td>
                             <td>
-                                <button [disabled]="item.people.length > 0" class="btn btn-danger" (click)="delete(item)">Xóa</button>
+                                <button [disabled]="item.people.length > 0 || item.checkType" class="btn btn-danger" (click)="delete(item)">Xóa</button>
                             </td>
                         </tr>
                     </tbody>

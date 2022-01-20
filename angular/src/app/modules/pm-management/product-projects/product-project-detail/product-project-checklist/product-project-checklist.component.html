@@ -30,6 +30,7 @@
                             <th>Audit Target</th>
                             <th>Person In Charge</th>
                             <th>Lịch sử Audit</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,8 +59,10 @@
                             </ng-container>
                             <p *ngIf="item.people.length==0" class="mt-2">
                                 No audit history
-                            </p>
-                               
+                            </p> 
+                            </td>
+                            <td>
+                                <button [disabled]="item.people.length > 0 || item.checkType" class="btn btn-danger" (click)="delete(item)">Xóa</button>
                             </td>
                         </tr>
                     </tbody>
