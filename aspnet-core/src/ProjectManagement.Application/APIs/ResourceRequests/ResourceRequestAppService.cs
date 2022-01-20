@@ -434,7 +434,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_PlanUser,
             PermissionNames.PmManager_ResourceRequest_PlanUser)]
-        public async Task<ProjectUser> PlanUser(PlanUserDto input)
+        public async Task<PlanUserDto> PlanUser(PlanUserDto input)
         {
             var projectUsers = WorkScope
                 .GetAll<ProjectUser>()
@@ -496,7 +496,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 Message = komuMessage.ToString(),
             },
             ChannelTypeConstant.PM_CHANNEL);
-            return projectUser;
+            return input;
         }
 
         [HttpPost]
@@ -568,32 +568,52 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Update, PermissionNames.PmManager_ResourceRequest_Update)]
         public async Task<ResourceRequestDto> Update(ResourceRequestDto model)
         {
-            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
-            await WorkScope.UpdateAsync(ObjectMapper.Map<ResourceRequestDto, ResourceRequest>(model, resourceRequest));
-            var projectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
-            if (project == null)
-                throw new UserFriendlyException("Project doesn't exist");
-            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-            var userName = UserHelper.GetUserName(user.EmailAddress);
-            if (user != null && !user.KomuUserId.HasValue)
+            var resourceRequest = await WorkScope
+                .GetAsync<ResourceRequest>(model.Id);
+            await WorkScope.UpdateAsync(ObjectMapper.Map(model, resourceRequest));
+
+            if (model.Status == ResourceRequestStatus.PENDING ||
+                    model.Status == ResourceRequestStatus.APPROVE)
             {
-                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
-                await WorkScope.UpdateAsync<User>(user);
+                return model;
             }
-            var titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
+
+            var projectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+            var project = await WorkScope
+                .GetAll<Project>()
+                .FirstOrDefaultAsync(x => x.Id == model.ProjectId);
+            if (project == null)
+            {
+                throw new UserFriendlyException("Project doesn't exist");
+            }
+            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+            user.KomuUserId = await _userAppService.UpdateKomuId(user.Id);
+            if (!user.KomuUserId.HasValue)
+            {
+                user.UserName = UserHelper.GetUserName(user.EmailAddress) ?? user.UserName;
+            }
+
             var message = new StringBuilder();
+            var titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
             if (model.Status == ResourceRequestStatus.DONE)
-                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} chuyển sang trạng thái hoàn thành.");
-            else if (model.Status == ResourceRequestStatus.CANCELLED)
-                message.AppendLine($"Request **{model.Name}** cho dự án **{project.Name}** đã được huỷ bởi {( user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" +  (userName ?? user.UserName) + "**")}.");
+            {
+                message.Append($"Request **{model.Name}** cho dự án **{project.Name}** ");
+                message.AppendLine($"đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
+            }
+            else
+            {
+                message.Append($"Request **{model.Name}** cho dự án **{project.Name}** ");
+                message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
+            }
+
             message.AppendLine(titlelink);
             await _komuService.NotifyToChannel(new KomuMessage
             {
-                UserName = userName ?? user.UserName,
+                UserName = user.UserName,
                 Message = message.ToString(),
                 CreateDate = DateTimeUtils.GetNow(),
-            }, ChannelTypeConstant.PM_CHANNEL);
+            },
+            ChannelTypeConstant.PM_CHANNEL);
             return model;
         }
 
