@@ -190,13 +190,16 @@
                                   </pre>
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-                                                placeholder="leave a comment" name="description"
-                                                [(ngModel)]="problem.description" matInput></textarea>
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
+                                                placeholder="leave a comment *" name="description"
+                                                [(ngModel)]="problem.description" #des="ngModel" matInput></textarea>
                                         </mat-form-field>
+                                        <mat-error class="mt-1"
+                                                *ngIf="des.hasError('required') && des.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
                                     </div>
-
-
                                 </td>
                                 <td>
                                     <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
@@ -206,10 +209,15 @@
                                     
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-                                                placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
+                                                placeholder="leave a comment *" #impact="ngModel" name="impact" [(ngModel)]="problem.impact"
                                                 matInput></textarea>
                                         </mat-form-field>
+                                        <mat-error class="mt-1"
+                                                *ngIf="impact.hasError('required') && impact.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
                                     </div>
 
                                 </td>
@@ -250,7 +258,7 @@
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select [(ngModel)]="problem.status" name="issueStatus"
-                                                placeholder="select a status" required #issueStatus="ngModel">
+                                                placeholder="select a status *" required #issueStatus="ngModel">
                                                 <mat-option *ngFor="let status of isssueStatusList"
                                                     [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
                                                     {{status}}</mat-option>
@@ -287,7 +295,7 @@
                                         </button>
                                     </mat-menu>
                                     <div *ngIf="problem.createMode" class="pt-2">
-                                        <button [disabled]=" !problem.description || !problem.impact"
+                                        <button [disabled]=" !problem.description || !problem.impact || !(problem.status.toString())"
                                             class=" mr-3 submit-btn" style="background: none; border: none;"
                                             (click)="saveProblemReport(problem)">
                                             <i style="color: green; ;" class="fas fa-check fa-2x"></i>
@@ -356,7 +364,7 @@
                                     <div *ngIf="report.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select autofocus [(ngModel)]="report.userId" name="projectEmployee"
-                                                placeholder="select a role" required #projectEmployee="ngModel">
+                                                placeholder="select a role *" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                     <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput (keydown)="$event.stopPropagation()"
@@ -382,7 +390,7 @@
                                     <div *ngIf="report.createMode">
                                         <mat-form-field style="width: 200px ;" appearance="outline">
                                             <mat-select [(ngModel)]="report.projectRole" name="projectrole"
-                                                placeholder="select a role" required #projectPM="ngModel">
+                                                placeholder="select a role *" required #projectPM="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
                                                     [value]="APP_ENUM.ProjectUserRole[role]">
                                                     {{role}}</mat-option>
@@ -400,11 +408,17 @@
                                     </span>
                                     <div *ngIf="report.createMode">
                                         <mat-form-field appearance="outline" style="width: 200px;">
-                                            <input matInput [matDatepicker]="picker" placeholder="chose a date" required
-                                                [(ngModel)]="report.startTime" name="usercreateDate">
+                                            <input matInput [matDatepicker]="picker" placeholder="chose a date *" required
+                                                [(ngModel)]="report.startTime" #startTime="ngModel" name="usercreateDate">
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                             <mat-datepicker #picker></mat-datepicker>
                                         </mat-form-field>
+                                        <mat-error class="mt-1"
+                                        *ngIf="startTime.hasError('required') && startTime.touched"
+                                        style="font-size: 13px;">
+                                        This field is required
+                                    </mat-error>
+
                                     </div>
                                 </td>
                                 <td style="width: 150px;" >
@@ -514,7 +528,7 @@
                                         <div *ngIf="report.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="report.userId" name="reportUser"
-                                                    placeholder="select account" required #reportUser="ngModel">
+                                                    placeholder="select account *" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUser" (keydown)="$event.stopPropagation()"
@@ -539,7 +553,7 @@
                                         <div *ngIf="report.createMode">
                                             <mat-form-field style="width: 180px;" appearance="outline">
                                                 <mat-select [(ngModel)]="report.projectRole" name="projectrole"
-                                                    placeholder="select account" required #projectPM="ngModel">
+                                                    placeholder="select account *" required #projectPM="ngModel">
                                                     <mat-option *ngFor="let role of projectRoleList"
                                                         [value]="APP_ENUM.ProjectUserRole[role]">
                                                         {{role}}</mat-option>
@@ -558,11 +572,16 @@
                                         <div *ngIf="report.createMode">
                                             <mat-form-field style="width: 180px;" appearance="outline">
                                                 <input [min]="minDate" matInput [matDatepicker]="picker"
-                                                    placeholder="chose a date" [(ngModel)]="report.startTime"
+                                                    placeholder="chose a date *"  #reportStartTime="ngModel"[(ngModel)]="report.startTime" required
                                                     name="usercreateDate">
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
+                                            <mat-error class="mt-1"
+                                            *ngIf="reportStartTime.hasError('required') && reportStartTime.touched"
+                                            style="font-size: 13px;">
+                                            This field is required
+                                        </mat-error>
                                         </div>
                                     </td>
 
