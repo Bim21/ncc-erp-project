@@ -37,7 +37,7 @@
                                         *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport  ">
                                         <i class="fas fa-paper-plane ml-2"></i> Send report
                                     </button>
-                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive" 
+                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive"
                                     matTooltip="Cần nhập đánh giá chung để có thể gửi report"
                                     ><i class="fas fa-question-circle text-danger fa-lg"></i></span>
                                 </div>
@@ -51,11 +51,11 @@
                         <div class="row">
                             <div class="col-2">
                                 <label  for="" class="mt-2" >Status:</label>
-                                
+
                             </div>
                             <div class="col-10">
                                 <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" style="margin-left: 10px !important;" class="ml-3" appearance="outline">
-                                    <mat-select 
+                                    <mat-select
                                         [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"
                                         name="flag" placeholder="Project health" [(ngModel)]="projectHealth"
                                         >
@@ -174,7 +174,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let problem of problemList |paginate:{ 
+                            <tr *ngFor="let problem of problemList |paginate:{
                                     id: 'problemPaging',
                                 itemsPerPage: itemPerPage,
                                 currentPage: problemCurrentPage
@@ -183,7 +183,7 @@
 
                                 <td>
 
-                                 
+
                                         <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.description}}
@@ -206,7 +206,7 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.impact}}
                                   </pre>
-                                    
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
@@ -227,10 +227,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.solution}}
                                   </pre>
-                                   
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="solution"
                                                 [(ngModel)]="problem.solution" matInput></textarea>
                                         </mat-form-field>
@@ -242,10 +242,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.meetingSolution}}
                                   </pre>
-                                   
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="meetingSolution"
                                                 [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                         </mat-form-field>
@@ -341,16 +341,16 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="stt">STT</th>
-                                <th class="account-info">Nhân viên</th>
-                                <th>Project Role</th>
-                                <th>Từ ngày</th>
-                                <th>% Sử dụng nhân sự</th>
+                                <th style="width: 300px;" class="account-info">Nhân viên</th>
+                                <th style="width: 180px;">Project Role</th>
+                                <th style="width: 180px;">Từ ngày</th>
+                                <th style="width: 200px;">% Sử dụng nhân sự</th>
                                 <th>Note</th>
-                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
+                                <th style="width: 90px;" class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let report of weeklyPeportList  |paginate:{ 
+                            <tr *ngFor="let report of weeklyPeportList  |paginate:{
                             id: 'projectUser',
                         itemsPerPage: itemPerPage,
                         currentPage: weeklyCurrentPage
@@ -439,7 +439,7 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{report.note}}
                                   </pre>
-                                  
+
                                     <div *ngIf="report.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -505,16 +505,16 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="stt">STT</th>
-                                    <th class="account-info">Nhân viên</th>
-                                    <th>Project role</th>
-                                    <th>Từ ngày</th>
-                                    <th>%Sử dụng nhân sự</th>
+                                    <th style="width: 300px;" class="account-info">Nhân viên</th>
+                                    <th style="width: 180px;">Project role</th>
+                                    <th style="width: 180px;">Từ ngày</th>
+                                    <th style="width: 200px;">%Sử dụng nhân sự</th>
                                     <th>Note</th>
-                                    <th *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
+                                    <th style="width: 90px;" *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let report of futureReportList |paginate:{ 
+                                <tr *ngFor="let report of futureReportList |paginate:{
                                     id: 'futurePaging',
                                 itemsPerPage: itemPerPage,
                                 currentPage: futureCurrentPage
@@ -613,7 +613,7 @@
                                         </div>
                                     </td>
                                     <td class="text-center" *ngIf="selectedReport.isActive">
-                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(PmManager_ResourceRequest_ApproveUser) || permission.isGranted(PmManager_ResourceRequest_RejectUser) 
+                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(PmManager_ResourceRequest_ApproveUser) || permission.isGranted(PmManager_ResourceRequest_RejectUser)
                                         || permission.isGranted(PmManager_PMReportProject_Update))"
                                             [disabled]="processFuture" mat-button [matMenuTriggerFor]="menu">
                                             <i class="fas fa-bars fa-lg"></i>
