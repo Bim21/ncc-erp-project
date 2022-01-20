@@ -32,7 +32,6 @@ namespace ProjectManagement.APIs.ProjectFiles
         {
             try
             {
-                //var x = 1;
                 var projectFilePaths = await WorkScope.GetAll<ProjectFile>().Where(x => x.ProjectId == input.ProjectId).Select(x => x.FilePath).ToListAsync();
 
                 if (input.Files == null)
@@ -124,6 +123,7 @@ namespace ProjectManagement.APIs.ProjectFiles
                 return new BadRequestObjectResult(ex);
             }
         }
+        [AbpAuthorize(PermissionNames.PmManager_ProjectFile_DeleteFile)]
         public async Task DeleteFile(string fileName, long projectId)
         {
             String pathFile = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "projects", fileName);
