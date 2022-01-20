@@ -20,5 +20,6 @@
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
     <PackageReference Include="EPPlus" Version="4.5.3.2" />
     <PackageReference Include="Google.Apis.Auth" Version="1.52.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
   </ItemGroup>
 </Project>
