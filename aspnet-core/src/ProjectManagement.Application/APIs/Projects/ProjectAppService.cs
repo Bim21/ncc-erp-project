@@ -1,7 +1,5 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +29,7 @@ namespace ProjectManagement.APIs.Projects
     {
         private readonly IProjectUserAppService _projectUserAppService;
 
-        public ProjectAppService(IProjectUserAppService projectUserAppService, IWebHostEnvironment hostingEnvironment)
+        public ProjectAppService(IProjectUserAppService projectUserAppService)
         {
             _projectUserAppService = projectUserAppService;
         }
@@ -496,6 +494,5 @@ namespace ProjectManagement.APIs.Projects
             return await query.FirstOrDefaultAsync();
         }
         #endregion
-        
     }
 }
