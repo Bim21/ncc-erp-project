@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220113045431_add_ProjectFile_table")]
+    partial class add_ProjectFile_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1415,9 +1417,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime2");
 
                     b.Property<long?>("DeleterUserId")
                         .HasColumnType("bigint");

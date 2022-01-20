@@ -49,7 +49,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Uploads\" />
+    <Folder Include="Uploads\projects\" />
     <Folder Include="wwwroot\avatars\" />
     <!--<Folder Include="wwwroot\template\" />-->
   </ItemGroup>
