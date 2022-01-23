@@ -272,7 +272,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 .Select(x => x.UserId).ToListAsync();
         
             var users = WorkScope.GetAll<User>()
-                                .Where(x => x.IsActive && ( !isEdited ? !currentUserIds.Contains(x.Id) : true))
+                                .Where(x => !isEdited ? !currentUserIds.Contains(x.Id) : true)
                                 .Select(x => new GetUserForTimesheetProjectBillDto
                                 {
                                     UserId = x.Id,
