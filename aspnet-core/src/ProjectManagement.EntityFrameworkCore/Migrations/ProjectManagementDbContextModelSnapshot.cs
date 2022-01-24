@@ -1416,6 +1416,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime?>("DOB")
+                        .HasColumnType("datetime2");
+
                     b.Property<long?>("DeleterUserId")
                         .HasColumnType("bigint");
 
@@ -2681,6 +2684,50 @@ namespace ProjectManagement.Migrations
                     b.ToTable("ProjectCheckLists");
                 });
 
+            modelBuilder.Entity("ProjectManagement.Entities.ProjectFile", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectFiles");
+                });
+
             modelBuilder.Entity("ProjectManagement.Entities.ProjectMilestone", b =>
                 {
                     b.Property<long>("Id")
@@ -3778,6 +3825,15 @@ namespace ProjectManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProjectManagement.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.ProjectFile", b =>
+                {
                     b.HasOne("ProjectManagement.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")

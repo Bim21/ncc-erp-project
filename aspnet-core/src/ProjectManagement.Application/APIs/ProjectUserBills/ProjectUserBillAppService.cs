@@ -94,7 +94,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUserBill>(input));
 
-            var timesheetId = await WorkScope.GetAll<Timesheet>().OrderByDescending(x => x.CreationTime).Select(x => x.Id).FirstOrDefaultAsync();
+            var timesheetId = await WorkScope.GetAll<Timesheet>()
+                .OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
+                .Select(x => x.Id).FirstOrDefaultAsync();
             //var currentTimesheetProject = await WorkScope.GetAll<TimesheetProject>()
             //    .Include(x => x.Timesheet)
             //    .Where(x => x.ProjectId == input.ProjectId)

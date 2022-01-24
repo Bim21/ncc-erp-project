@@ -15,7 +15,8 @@ import { result } from 'lodash-es';
 })
 export class ProjectChecklistComponent extends AppComponentBase implements OnInit {
   public listCheckList: projectChecklistDto[]= [];
-  public projectId:any;
+  public projectId: any;
+  public projectType: any;
   
   public listChecklistItem=[];
   CheckList_ProjectChecklist_AddCheckListItemByProject=PERMISSIONS_CONSTANT.CheckList_ProjectChecklist_AddCheckListItemByProject;
@@ -26,12 +27,21 @@ export class ProjectChecklistComponent extends AppComponentBase implements OnIni
     injector:Injector) {super(injector) }
   ngOnInit(): void {
     this.projectId= this.route.snapshot.queryParamMap.get('id');
+    this.projectType = this.route.snapshot.queryParamMap.get('type');
     this.getAllCheckList();
   }
   getAllCheckList(){
     this.projectChecklistService.GetCheckListItemByProject(this.projectId).subscribe(data=>{
       this.listCheckList=data.result;
+      this.listCheckList.map((item)=>{
+        item.mandatories.forEach((type)=>{
+          if(type == this.projectType){
+            item.checkType = true;
+          }
+        })
+      })
       this.listChecklistItem=this.listCheckList.map(el=>el.id);
+
     })
   }
   showDialog(command:string,projectChecklist:any){
@@ -44,6 +54,7 @@ export class ProjectChecklistComponent extends AppComponentBase implements OnIni
     })
     show.afterClosed().subscribe(result=>{
       if(result){
+        console.log(result)
         this.getAllCheckList();
       }
     })
@@ -60,7 +71,7 @@ export class ProjectChecklistComponent extends AppComponentBase implements OnIni
       (result) => {
         this.projectChecklistService.DeleteByProject(this.projectId , item.id).subscribe((res)=>{
           if(res){
-            abp.notify.success("Delete" + item.name + "successfully!");
+            abp.notify.success("Delete " + item.name + " successfully!");
             this.getAllCheckList();
           }
         })

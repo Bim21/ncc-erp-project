@@ -44,6 +44,7 @@ using Microsoft.AspNetCore.Http;
 using ProjectManagement.Configuration;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Constants.Enum;
+using NccCore.Helper;
 
 namespace ProjectManagement.Users
 {
@@ -218,26 +219,45 @@ namespace ProjectManagement.Users
         public async Task<EmployeeInformationDto> GetEmployeeInformation(string email)
         {
             if (!CheckSecurityCode())
-                throw new UserFriendlyException("SecretCode does not match!");
-            if (string.IsNullOrEmpty(email)) return null;
-            var user = await _workScope.GetAll<User>().FirstOrDefaultAsync(u => u.EmailAddress == email);
-            if (user == null) return null;
-            if (string.IsNullOrEmpty(user.PhoneNumber))
             {
-                var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
-                user.PhoneNumber = userFromHRM?.Phone;
-                await _workScope.UpdateAsync(user);
+                throw new UserFriendlyException("SecretCode does not match!");
             }
-            var qProjectUsers = from pu in _workScope.GetAll<ProjectUser>()
-                                .Where(x => x.UserId == user.Id && x.Project.Status != ProjectStatus.Closed)
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+
+            var user = await _workScope
+                .GetAll<User>()
+                .FirstOrDefaultAsync(u => u.EmailAddress == email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(user.PhoneNumber) || !user.DOB.HasValue)
+            {
+                await UpdatePhoneNumberAndDOB(user);
+            }
+
+            var qProjectUsers = from pu in _workScope
+                                .GetAll<ProjectUser>()
+                                .Where(x => x.UserId == user.Id &&
+                                            x.Project.Status != ProjectStatus.Closed &&
+                                            x.Status == ProjectUserStatus.Present &&
+                                            x.AllocatePercentage > 50)
                                 select new
                                 {
                                     ProjectId = pu.ProjectId,
                                     ProjectName = pu.Project.Name,
-                                    PmName = pu.Project.PM != null ? pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() : string.Empty,
+                                    PmName = pu.Project.PM != null ?
+                                        pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() :
+                                        string.Empty,
                                     StartTime = pu.StartTime,
                                     ProjectRole = pu.ProjectRole,
-                                    PmUsername = pu.Project.PM != null ? (UserHelper.GetUserName(pu.Project.PM.EmailAddress) ?? pu.Project.PM.UserName) : string.Empty,
+                                    PmUsername = pu.Project.PM != null ?
+                                        (UserHelper.GetUserName(pu.Project.PM.EmailAddress) ?? pu.Project.PM.UserName) :
+                                        string.Empty,
                                 };
             var projectUsers = await qProjectUsers.OrderByDescending(x => x.StartTime).ToListAsync();
             var employeeInfo = new EmployeeInformationDto()
@@ -246,21 +266,26 @@ namespace ProjectManagement.Users
                 EmailAddress = user.EmailAddress,
                 EmployeeName = user.Surname.Trim() + " " + user.Name.Trim(),
                 PhoneNumber = user.PhoneNumber,
+                DOB = user.DOB,
                 Branch = Enum.GetName(typeof(Branch), user.Branch),
                 RoleType = Enum.GetName(typeof(UserType), user.UserType),
                 ProjectDtos = new List<ProjectDTO>()
             };
+
             if (projectUsers.Any())
             {
-                employeeInfo.ProjectDtos.AddRange(projectUsers.Select(x => new ProjectDTO()
-                {
-                    ProjectId = x.ProjectId,
-                    ProjectName = x.ProjectName,
-                    PmName = x.PmName,
-                    StartTime = x.StartTime,
-                    ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole),
-                    PmUsername = x.PmUsername
-                }));
+                employeeInfo.ProjectDtos.
+                    AddRange(projectUsers.Select(x =>
+                        new ProjectDTO()
+                        {
+                            ProjectId = x.ProjectId,
+                            ProjectName = x.ProjectName,
+                            PmName = x.PmName,
+                            StartTime = x.StartTime,
+                            ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole),
+                            PmUsername = x.PmUsername
+                        })
+                    );
             }
             return employeeInfo;
         }
@@ -591,81 +616,97 @@ namespace ProjectManagement.Users
             var currentUsers = await _workScope.GetAll<User>().ToListAsync();
             var currentUserEmails = currentUsers.Select(x => x.EmailAddress).ToList();
 
-            var successListInsert = new List<string>();
-            var failedListInsert = new List<string>();
-            var successListUpdate = new List<string>();
-            var failedListUpdate = new List<string>();
+            var insertSuccessful = new List<string>();
+            var insertFailed = new List<string>();
+            var updateSuccessful = new List<string>();
+            var updateFakeUser = new List<string>();
+            var updateFailed = new List<string>();
+            var komuMessage = new StringBuilder();
+            komuMessage.Append("Welcome các nhân viên mới vào làm việc tại công ty, đó là ");
 
-            var updatefakeUsers = currentUsers.Where(x => !userFromHRMEmails.Contains(x.EmailAddress)).ToList();
-            foreach (var user in updatefakeUsers)
+            var fakeUsers = currentUsers
+                .Where(x => !userFromHRMEmails.Contains(x.EmailAddress))
+                .ToList();
+            foreach (var fakeUser in fakeUsers)
             {
+                if (fakeUser.UserType == UserType.FakeUser)
+                {
+                    continue;
+                }
                 try
                 {
-                    user.UserType = UserType.FakeUser;
-                    await _workScope.UpdateAsync(user);
-                    successListUpdate.Add(user.EmailAddress);
+                    fakeUser.UserType = UserType.FakeUser;
+                    await _workScope.UpdateAsync(fakeUser);
+                    updateFakeUser.Add(fakeUser.EmailAddress);
                 }
                 catch (Exception e)
                 {
-                    failedListUpdate.Add(user.EmailAddress + " error =>" + e.Message);
+                    updateFailed.Add(fakeUser.EmailAddress + " error =>" + e.Message);
                 }
             }
+            foreach (var user in userFromHRMs)
+            {
+                var userProject = currentUsers
+                    .FirstOrDefault(x => x.EmailAddress == user.EmailAddress);
+                currentUsers.Remove(userProject);
+                if (userProject == null && !user.IsActive)
+                {
+                    continue;
+                }
 
-            foreach (var user in userFromHRMs.OrderByDescending(x => x.UserLevel))
-            {
-                if (currentUserEmails.Contains(user.EmailAddress))
+                if (userProject != null)
                 {
                     try
                     {
-                        var updateUser = await UpdateUserFromHRM(user);
-                        successListUpdate.Add(user.EmailAddress);
-                    }
-                    catch (Exception e)
-                    {
-                        failedListUpdate.Add(user.EmailAddress + " error =>" + e.Message);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        if (user.IsActive)
+                        if (CompareUserHRM(user, userProject))
                         {
-                            var createUser = await InsertUserFromHRM(user);
-                            successListInsert.Add(user.EmailAddress);
+                            continue;
                         }
+                        await _workScope.UpdateAsync(ObjectMapper.Map(user, userProject));
+                        updateSuccessful.Add(user.EmailAddress);
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        failedListInsert.Add(user.EmailAddress + " error =>" + e.Message);
+                        updateFailed.Add($"Update Failed: {user.EmailAddress} => Error(): {ex.Message}");
                     }
+                    continue;
+                }
+
+                try
+                {
+                    var newUser = await InsertUserFromHRM(user);
+                    insertSuccessful.Add(user.EmailAddress);
+
+                    user.UserName = UserHelper.GetUserName(user.EmailAddress) ?? user.UserName;
+                    var userKomuId = await UpdateKomuId(newUser.Id);
+                    komuMessage.Append($"{(userKomuId.HasValue ? "<@" + userKomuId + ">" : "**" + user.UserName + "**")}, ");
+                }
+                catch (Exception ex)
+                {
+                    insertFailed.Add($"Insert Failed: {user.EmailAddress} => Error(): {ex.Message}");
                 }
             }
-            if (successListInsert.Count > 0)
+            if (insertSuccessful.Count > 0)
             {
-                var listUser = string.Empty;
-                var users = userFromHRMs.Where(x => successListInsert.Contains(x.EmailAddress)).ToList();
-                foreach (var user in users)
-                {
-                    listUser += (UserHelper.GetUserName(user.EmailAddress) ?? user.UserName) + ", ";
-                }
-                listUser = listUser.Remove(listUser.Length - 2, 2);
-                var message = new StringBuilder();
-                message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{listUser}**. Các PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+                komuMessage = komuMessage.Length >= 2 ? komuMessage.Remove(komuMessage.Length - 2, 2) : komuMessage;
+                komuMessage.Append("\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
                 await _komuService.NotifyToChannel(new KomuMessage
                 {
-                    Message = message.ToString(),
+                    Message = komuMessage.ToString(),
                     CreateDate = DateTimeUtils.GetNow(),
-                }, ChannelTypeConstant.GENERAL_CHANNEL);
+                },
+                ChannelTypeConstant.GENERAL_CHANNEL);
             }
             return new
             {
-                successListInsert,
-                failedListInsert,
-                successListUpdate,
-                failedListUpdate,
+                insertSuccessful,
+                insertFailed,
+                updateSuccessful,
+                updateFailed,
+                updateFakeUser
             };
         }
+
         [HttpPost]
         //[AbpAuthorize(PermissionNames.Pages_Users_UpdateStarRateFromTimesheet)]
         [AbpAllowAnonymous]
@@ -687,7 +728,35 @@ namespace ProjectManagement.Users
             CurrentUnitOfWork.SaveChanges();
             return input;
         }
-        private async Task<CreateUserDto> InsertUserFromHRM(AutoUpdateUserDto user)
+        public async Task<long?> UpdateKomuId(long userId)
+        {
+            var user = await _userManager.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            if (user.KomuUserId.HasValue)
+            {
+                return user.KomuUserId;
+            }
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+            if (userName != null)
+            {
+                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto
+                {
+                    Username = userName ?? user.UserName,
+                },
+                ChannelTypeConstant.KOMU_USER);
+                if (user.KomuUserId.HasValue)
+                {
+                    await _userManager.UpdateAsync(user);
+                    return user.KomuUserId;
+                }
+            }
+            return null;
+        }
+        #region PRIVATE API
+        private async Task<UserDto> InsertUserFromHRM(AutoUpdateUserDto user)
         {
             var createUser = new CreateUserDto
             {
@@ -700,44 +769,11 @@ namespace ProjectManagement.Users
                 UserLevel = user.UserLevel,
                 Branch = user.Branch.Value,
                 IsActive = user.IsActive,
-                Password = "123Abc123@",
+                Password = RandomPasswordHelper.CreateRandomPassword(),
                 RoleNames = new string[] { "EMPLOYEE" }
             };
-            await CreateAsync(createUser);
-            return createUser;
-        }
-        private async Task<UserDto> UpdateUserFromHRM(AutoUpdateUserDto user)
-        {
-            var currentUser = await _workScope.GetAll<User>().Where(x => x.EmailAddress == user.EmailAddress).FirstOrDefaultAsync();
-            var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == currentUser.Id).Select(x => new UserSkillDto
-            {
-                SkillId = x.SkillId,
-                SkillName = x.Skill.Name,
-                UserId = x.UserId
-            }).ToListAsync();
-            var userRoleIds = _workScope.GetAll<UserRole>().Where(x => x.UserId == currentUser.Id).Select(x => x.RoleId).ToArray();
-            var roles = _roleManager.Roles.Where(r => userRoleIds.Contains(r.Id)).Select(r => r.NormalizedName);
-            var updateUser = new UserDto
-            {
-                Id = currentUser.Id,
-                UserName = user.EmailAddress,
-                Name = user.Name,
-                Surname = user.Surname,
-                EmailAddress = user.EmailAddress,
-                UserCode = user.UserCode,
-                UserType = user.UserType,
-                UserLevel = user.UserLevel,
-                Branch = user.Branch.HasValue ? user.Branch.Value : currentUser.Branch,
-                FullName = user.FullName,
-                UserSkills = userSkills,
-                RoleNames = roles.ToArray(),
-                IsActive = user.IsActive,
-                AvatarPath = currentUser.AvatarPath,
-                CreationTime = currentUser.CreationTime,
-                LastLoginTime = currentUser.LastModificationTime
-            };
-            await UpdateAsync(updateUser);
-            return updateUser;
+
+            return await CreateAsync(createUser);
         }
         private NameSplitDto SplitUsername(string fullName)
         {
@@ -767,7 +803,77 @@ namespace ProjectManagement.Users
                 return true;
             return false;
         }
+        private async Task UpdatePhoneNumberAndDOB(User user)
+        {
+            var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
+            if (userFromHRM == null)
+            {
+                return;
+            }
 
+            if (string.IsNullOrEmpty(userFromHRM.PhoneNumber) && !userFromHRM.DOB.HasValue)
+            {
+                return;
+            }
+
+            user.PhoneNumber = userFromHRM.PhoneNumber;
+            user.DOB = userFromHRM.DOB;
+            await _workScope.UpdateAsync(user);
+        }
+
+        private bool CompareUserHRM(AutoUpdateUserDto user, User userProject)
+        {
+            if (!string.IsNullOrEmpty(user.PhoneNumber) &&
+                    string.IsNullOrEmpty(userProject.PhoneNumber))
+            {
+                return false;
+            }
+            if (string.IsNullOrEmpty(user.PhoneNumber) &&
+                    !string.IsNullOrEmpty(userProject.PhoneNumber))
+            {
+                return false;
+            }
+            if (!string.IsNullOrEmpty(user.PhoneNumber) &&
+                    !string.IsNullOrEmpty(userProject.PhoneNumber) &&
+                    !user.PhoneNumber.Equals(userProject.PhoneNumber))
+            {
+                return false;
+            }
+
+            if (user.DOB.HasValue &&
+                    !userProject.DOB.HasValue)
+            {
+                return false;
+            }
+            if (!user.DOB.HasValue &&
+                    userProject.DOB.HasValue)
+            {
+                return false;
+            }
+            if (user.DOB.HasValue &&
+                    user.DOB.HasValue &&
+                    !user.DOB.Equals(userProject.DOB))
+            {
+                return false;
+            }
+
+            if (
+                !user.UserName.Equals(userProject.UserName) ||
+                !user.Name.Equals(userProject.Name) ||
+                !user.Surname.Equals(userProject.Surname) ||
+                !user.UserCode.Equals(userProject.UserCode) ||
+                !user.UserType.Equals(userProject.UserType) ||
+                !user.UserLevel.Equals(userProject.UserLevel) ||
+                !user.Branch.Equals(userProject.Branch) ||
+                !user.FullName.Equals(userProject.FullName) ||
+                !user.IsActive.Equals(userProject.IsActive)
+               )
+            {
+                return false;
+            }
+            return true;
+        }
+        #endregion
     }
 }
 

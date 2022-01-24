@@ -115,12 +115,11 @@
                             itemsPerPage: pageSize,
                             currentPage: pageNumber,
                             totalItems: totalItems
-                          }; let i = index" (contextmenu)= "showActions($event, project)">
+                          }; let i = index" (contextmenu)="showActions($event, project)">
                                 <td class="text-center">
                                     <div style="visibility: hidden; position: fixed"
-                                                        [style.left]="contextMenuPosition.x"
-                                                        [style.top]="contextMenuPosition.y"
-                                                        [matMenuTriggerFor]="menu"></div>
+                                        [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y"
+                                        [matMenuTriggerFor]="menu"></div>
                                     <button mat-button [matMenuTriggerFor]="menu">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
@@ -148,7 +147,11 @@
                                     </div>
                                 </td>
                                 <td style="word-break: break-word;
-                                white-space: normal; max-width: 300px;">{{project.evaluation}}</td>
+                                white-space: normal; max-width: 400px;">
+                                    <pre class="projectEvaluation mb-0 p-0 mt-3">
+                                 {{project.evaluation}}
+                                 </pre>
+                                </td>
                                 <td class="text-center"> <span
                                         [ngClass]=" APP_CONST.statusStyle[getByEnum(project.status,APP_ENUM.ProjectStatus)]">{{
                                         getByEnum(project.status,APP_ENUM.ProjectStatus)}}</span></td>

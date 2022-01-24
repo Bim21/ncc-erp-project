@@ -169,7 +169,7 @@
           <label class="col-md-3 col-form-label" for="userSkills">User skills:</label>
           <div class="col-md-9 ">
               <mat-form-field class="w-100" appearance="outline">
-                  <mat-select multiple  [(ngModel)]="user.userSkills" name="projectPM" placeholder="select skill" required
+                  <mat-select multiple  [(ngModel)]="user.userSkills" name="userSkills" placeholder="select skill" required
                       #userSkills="ngModel">
                       <mat-option *ngFor="let skill of skillList" [value]="skill.id">
                           {{skill.name}}</mat-option>

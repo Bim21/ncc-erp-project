@@ -31,4 +31,6 @@ export class projectChecklistDto{
     
   ];
    id?: number;
+   mandatories : [];
+   checkType: boolean;
 }

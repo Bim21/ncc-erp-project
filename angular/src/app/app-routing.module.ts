@@ -64,6 +64,7 @@ import { TrainingProjectChecklistComponent } from './modules/pm-management/train
 import { TrainingProjectDescriptionComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-description/training-project-description.component';
 import { ProductProjectMilestoneComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-milestone/product-project-milestone.component';
 import { ProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/product-project-checklist.component';
+import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
 
 
 @NgModule({
@@ -209,6 +210,11 @@ import { ProductProjectChecklistComponent } from './modules/pm-management/produc
                 path: "description-tab",
                 component: ProjectDescriptionComponent,
                 canActivate: [AppRouteGuard]
+              },
+              {
+                path: "project-file-tab",
+                component: ProjectFileComponent,
+                canActivate: [AppRouteGuard]
               }
             ],
           },
@@ -250,6 +256,11 @@ import { ProductProjectChecklistComponent } from './modules/pm-management/produc
               path: "training-description-tab",
               component: TrainingProjectDescriptionComponent,
               canActivate: [AppRouteGuard]
+            },
+            {
+              path: "project-file-tab",
+              component: ProjectFileComponent,
+              canActivate: [AppRouteGuard]
             }
           ],
           },
@@ -290,6 +301,11 @@ import { ProductProjectChecklistComponent } from './modules/pm-management/produc
             {
               path: "product-description-tab",
               component: ProductProjectDescriptionComponent,
+              canActivate: [AppRouteGuard]
+            },
+            {
+              path: "project-file-tab",
+              component: ProjectFileComponent,
               canActivate: [AppRouteGuard]
             }
           ],

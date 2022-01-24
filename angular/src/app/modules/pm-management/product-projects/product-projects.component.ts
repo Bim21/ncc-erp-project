@@ -143,7 +143,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
         endTime: item.endTime,
         pmId: item.pmId,
         id: item.id,
-
+        status: item.status
       }
     }
     const dialogRef = this.dialog.open(CreateEditProductProjectComponent, {

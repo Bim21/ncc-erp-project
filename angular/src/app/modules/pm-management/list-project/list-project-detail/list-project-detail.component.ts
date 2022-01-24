@@ -10,6 +10,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 })
 export class ListProjectDetailComponent extends AppComponentBase implements OnInit {
   requestId: any;
+  projectType: any;
   currentUrl: string = "";
   PmManager_CanViewMenu_Milestone=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Milestone;
   PmManager_CanViewMenu_ProjectChecklist=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectChecklist;
@@ -17,7 +18,7 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   PmManager_CanViewMenu_Timesheet=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Timesheet;
   PmManager_CanViewMenu_WeeklyReport=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_WeeklyReport;
   PmManager_Project_ViewProjectInfor=PERMISSIONS_CONSTANT.PmManager_Project_ViewProjectInfor
-
+  PmManager_CanViewMenu_ProjectFile =PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectFile
 
   constructor(private route: ActivatedRoute, private router: Router, injector:Injector) {
     super(injector)
@@ -27,12 +28,13 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     this.currentUrl =this.router.url
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
     this.requestId = this.route.snapshot.queryParamMap.get("id");
+    this.projectType = this.route.snapshot.queryParamMap.get("type");
  
   }
   public routingGeneralTab(){
     this.router.navigate(['list-project-general'],{
       relativeTo:this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
       },
     })
   }
@@ -67,7 +69,8 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingProjectChecklistTab(){
     this.router.navigate(['projectchecklist'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id: this.requestId,
+        type: this.projectType
       },
       // replaceUrl: true
     })
@@ -83,6 +86,13 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   
   public routingDescriptionTab(){
     this.router.navigate(['description-tab'],{
+      relativeTo: this.route, queryParams:{
+        id:this.requestId
+      }
+    })
+  }
+  public routingFileTab(){
+    this.router.navigate(['project-file-tab'],{
       relativeTo: this.route, queryParams:{
         id:this.requestId
       }

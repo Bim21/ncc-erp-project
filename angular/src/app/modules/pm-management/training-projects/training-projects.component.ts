@@ -141,7 +141,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
         endTime: item.endTime,
         pmId: item.pmId,
         id: item.id,
-
+        status: item.status,
       }
     }
     const dialogRef = this.dialog.open(CreateEditTrainingProjectComponent, {

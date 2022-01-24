@@ -91,8 +91,8 @@ export class AppConsts {
     }
     static readonly SaodoStatusStyle = {
         New: "badge badge-pill  badge-primary",
-        InProcess: "badge badge-pill badge-success",
-        Done: "badge badge-pill badge-primary"
+        InProcess: "badge badge-pill badge-warning",
+        Done: "badge badge-pill badge-success"
     }
     static readonly projectHealth = {
         0: "badge  badge-success",

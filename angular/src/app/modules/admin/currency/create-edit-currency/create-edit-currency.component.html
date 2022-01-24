@@ -9,7 +9,9 @@
          <div class="col-md-9">
              <input class="form-control mt-1"  type="text"  placeholder="Name" required
                  name="name" [(ngModel)]="currency.name" #name="ngModel" #nameEl
-                 suffix="%"  />
+                 suffix="%" [ngClass]="(checkNull && name.touched)?'is-check':''"
+                 (input)="enterName($event.target.value);"/>
+                 <span class="invalid" *ngIf="checkNull  && name.touched && !name.errors?.required">This field is invalid!</span>
                  <abp-validation-summary [control]="name" [controlEl]="nameEl">
                  </abp-validation-summary>
          </div>
@@ -20,9 +22,8 @@
          </label>
          <div class="col-md-9">
              <input class="form-control mt-1"  type="text"  placeholder="Code" required
-                 name="code" [(ngModel)]="currency.code" #name="ngModel" #nameEl
-                 suffix="%"  />
-                 <abp-validation-summary [control]="name" [controlEl]="nameEl">
+                 name="code" [(ngModel)]="currency.code" #code="ngModel" #codeEl suffix="%" />
+                 <abp-validation-summary [control]="code" [controlEl]="codeEl">
                  </abp-validation-summary>
          </div>
     </div>
@@ -31,7 +32,7 @@
 <div align="end" class="row justify-content-between">
     <button class="btn btn-default" mat-dialog-close>Cancel</button>
     <button class="btn btn-primary"
-        [disabled]="!resourceRequestForm.valid || isLoading" (click)="SaveAndClose()">Save</button>
+        [disabled]="!resourceRequestForm.valid || checkNull || isLoading" (click)="SaveAndClose()">Save</button>
 </div>
 </form>
 

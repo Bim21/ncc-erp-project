@@ -37,7 +37,7 @@
                                         *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport  ">
                                         <i class="fas fa-paper-plane ml-2"></i> Send report
                                     </button>
-                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive" 
+                                    <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive"
                                     matTooltip="Cần nhập đánh giá chung để có thể gửi report"
                                     ><i class="fas fa-question-circle text-danger fa-lg"></i></span>
                                 </div>
@@ -51,11 +51,11 @@
                         <div class="row">
                             <div class="col-2">
                                 <label  for="" class="mt-2" >Status:</label>
-                                
+
                             </div>
                             <div class="col-10">
                                 <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" style="margin-left: 10px !important;" class="ml-3" appearance="outline">
-                                    <mat-select 
+                                    <mat-select
                                         [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"
                                         name="flag" placeholder="Project health" [(ngModel)]="projectHealth"
                                         >
@@ -88,8 +88,7 @@
                 <div class="col-lg-1 col-md-3 col-sm-3 pt-3"> <strong>Đánh giá chung: </strong></div>
                 <div class="col-lg-11 col-md-9 col-sm-9">
                     <div *ngIf="!isEditingNote" class="w-100 row">
-                        <pre style=" font-size: 1.2em; font-family: sans-serif; white-space: pre-line; max-width: 91%; line-height: initial;"
-                            class="mb-0 p-0 mt-3" *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
+                        <pre class="mb-0 p-0 mt-3 note" [ngClass]="{'w-100': generalNote}"  *ngIf="!isEditingNote" ng-bind-html="generalNote | lineBreak">
                                 {{generalNote}}
                             </pre>
                         <div class="text-left pt-2 ml-2" style="max-width: 9%;">
@@ -99,10 +98,10 @@
                             </button>
                         </div>
                     </div>
-                    <div *ngIf="isEditingNote" class="row ">
+                    <div *ngIf="isEditingNote" class="row">
                         <div class="col-lg-11 col-md-10 res-area">
                             <mat-form-field class="w-100" appearance="outline">
-                                <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                <textarea rows="2" cdkTextareaAutosize cdkAutosizeMaxRows="10" #autosize="cdkTextareaAutosize"
                                     style="padding-bottom: 20px;" id="message" matInput [(ngModel)]="generalNote"
                                     type="text" name="notePM" placeholder="Đánh giá chung">
                                 </textarea>
@@ -175,7 +174,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let problem of problemList |paginate:{ 
+                            <tr *ngFor="let problem of problemList |paginate:{
                                     id: 'problemPaging',
                                 itemsPerPage: itemPerPage,
                                 currentPage: problemCurrentPage
@@ -184,33 +183,41 @@
 
                                 <td>
 
-                                 
+
                                         <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.description}}
                                   </pre>
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-                                                placeholder="leave a comment" name="description"
-                                                [(ngModel)]="problem.description" matInput></textarea>
+                                            <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
+                                                placeholder="leave a comment *" name="description"
+                                                [(ngModel)]="problem.description" #des="ngModel" matInput></textarea>
                                         </mat-form-field>
+                                        <mat-error class="mt-1"
+                                                *ngIf="des.hasError('required') && des.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
                                     </div>
-
-
                                 </td>
                                 <td>
                                     <pre *ngIf="!problem.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.impact}}
                                   </pre>
-                                    
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
-                                                placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
+                                                placeholder="leave a comment *" #impact="ngModel" name="impact" [(ngModel)]="problem.impact"
                                                 matInput></textarea>
                                         </mat-form-field>
+                                        <mat-error class="mt-1"
+                                                *ngIf="impact.hasError('required') && impact.touched"
+                                                style="font-size: 13px;">
+                                                This field is required
+                                            </mat-error>
                                     </div>
 
                                 </td>
@@ -220,10 +227,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.solution}}
                                   </pre>
-                                   
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="solution"
                                                 [(ngModel)]="problem.solution" matInput></textarea>
                                         </mat-form-field>
@@ -235,10 +242,10 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{problem.meetingSolution}}
                                   </pre>
-                                   
+
                                     <div *ngIf="problem.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" 
+                                            <textarea  rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                                 placeholder="leave a comment" name="meetingSolution"
                                                 [(ngModel)]="problem.meetingSolution" matInput></textarea>
                                         </mat-form-field>
@@ -251,7 +258,7 @@
                                     <div class="form-group row required" *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select [(ngModel)]="problem.status" name="issueStatus"
-                                                placeholder="select a status" required #issueStatus="ngModel">
+                                                placeholder="select a status *" required #issueStatus="ngModel">
                                                 <mat-option *ngFor="let status of isssueStatusList"
                                                     [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
                                                     {{status}}</mat-option>
@@ -288,7 +295,7 @@
                                         </button>
                                     </mat-menu>
                                     <div *ngIf="problem.createMode" class="pt-2">
-                                        <button [disabled]=" !problem.description || !problem.impact"
+                                        <button [disabled]=" !problem.description || !problem.impact || !(problem.status.toString())"
                                             class=" mr-3 submit-btn" style="background: none; border: none;"
                                             (click)="saveProblemReport(problem)">
                                             <i style="color: green; ;" class="fas fa-check fa-2x"></i>
@@ -334,16 +341,16 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="stt">STT</th>
-                                <th class="account-info">Nhân viên</th>
-                                <th>Project Role</th>
-                                <th>Từ ngày</th>
-                                <th>% Sử dụng nhân sự</th>
+                                <th style="width: 300px;" class="account-info">Nhân viên</th>
+                                <th style="width: 180px;">Project Role</th>
+                                <th style="width: 180px;">Từ ngày</th>
+                                <th style="width: 200px;">% Sử dụng nhân sự</th>
                                 <th>Note</th>
-                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
+                                <th style="width: 90px;" class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let report of weeklyPeportList  |paginate:{ 
+                            <tr *ngFor="let report of weeklyPeportList  |paginate:{
                             id: 'projectUser',
                         itemsPerPage: itemPerPage,
                         currentPage: weeklyCurrentPage
@@ -357,7 +364,7 @@
                                     <div *ngIf="report.createMode" class="form-group row required">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <mat-select autofocus [(ngModel)]="report.userId" name="projectEmployee"
-                                                placeholder="select a role" required #projectEmployee="ngModel">
+                                                placeholder="select a role *" required #projectEmployee="ngModel">
                                                 <mat-form-field class="w-100 px-3 "
                                                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                     <input matInput [(ngModel)]="searchUser" name="searchUser" #myInput (keydown)="$event.stopPropagation()"
@@ -383,7 +390,7 @@
                                     <div *ngIf="report.createMode">
                                         <mat-form-field style="width: 200px ;" appearance="outline">
                                             <mat-select [(ngModel)]="report.projectRole" name="projectrole"
-                                                placeholder="select a role" required #projectPM="ngModel">
+                                                placeholder="select a role *" required #projectPM="ngModel">
                                                 <mat-option *ngFor="let role of projectRoleList"
                                                     [value]="APP_ENUM.ProjectUserRole[role]">
                                                     {{role}}</mat-option>
@@ -401,11 +408,17 @@
                                     </span>
                                     <div *ngIf="report.createMode">
                                         <mat-form-field appearance="outline" style="width: 200px;">
-                                            <input matInput [matDatepicker]="picker" placeholder="chose a date" required
-                                                [(ngModel)]="report.startTime" name="usercreateDate">
+                                            <input matInput [matDatepicker]="picker" placeholder="chose a date *" required
+                                                [(ngModel)]="report.startTime" #startTime="ngModel" name="usercreateDate">
                                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                             <mat-datepicker #picker></mat-datepicker>
                                         </mat-form-field>
+                                        <mat-error class="mt-1"
+                                        *ngIf="startTime.hasError('required') && startTime.touched"
+                                        style="font-size: 13px;">
+                                        This field is required
+                                    </mat-error>
+
                                     </div>
                                 </td>
                                 <td style="width: 150px;" >
@@ -426,7 +439,7 @@
                                     font-family: sans-serif; align-self:flex-start; ">
                                       {{report.note}}
                                   </pre>
-                                  
+
                                     <div *ngIf="report.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -492,16 +505,16 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="stt">STT</th>
-                                    <th class="account-info">Nhân viên</th>
-                                    <th>Project role</th>
-                                    <th>Từ ngày</th>
-                                    <th>%Sử dụng nhân sự</th>
+                                    <th style="width: 300px;" class="account-info">Nhân viên</th>
+                                    <th style="width: 180px;">Project role</th>
+                                    <th style="width: 180px;">Từ ngày</th>
+                                    <th style="width: 200px;">%Sử dụng nhân sự</th>
                                     <th>Note</th>
-                                    <th *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
+                                    <th style="width: 90px;" *ngIf="selectedReport.isActive" class="col-action-menu">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let report of futureReportList |paginate:{ 
+                                <tr *ngFor="let report of futureReportList |paginate:{
                                     id: 'futurePaging',
                                 itemsPerPage: itemPerPage,
                                 currentPage: futureCurrentPage
@@ -515,7 +528,7 @@
                                         <div *ngIf="report.createMode" class="form-group row required">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select [(ngModel)]="report.userId" name="reportUser"
-                                                    placeholder="select account" required #reportUser="ngModel">
+                                                    placeholder="select account *" required #reportUser="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUser" (keydown)="$event.stopPropagation()"
@@ -540,7 +553,7 @@
                                         <div *ngIf="report.createMode">
                                             <mat-form-field style="width: 180px;" appearance="outline">
                                                 <mat-select [(ngModel)]="report.projectRole" name="projectrole"
-                                                    placeholder="select account" required #projectPM="ngModel">
+                                                    placeholder="select account *" required #projectPM="ngModel">
                                                     <mat-option *ngFor="let role of projectRoleList"
                                                         [value]="APP_ENUM.ProjectUserRole[role]">
                                                         {{role}}</mat-option>
@@ -559,11 +572,16 @@
                                         <div *ngIf="report.createMode">
                                             <mat-form-field style="width: 180px;" appearance="outline">
                                                 <input [min]="minDate" matInput [matDatepicker]="picker"
-                                                    placeholder="chose a date" [(ngModel)]="report.startTime"
+                                                    placeholder="chose a date *"  #reportStartTime="ngModel"[(ngModel)]="report.startTime" required
                                                     name="usercreateDate">
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>
+                                            <mat-error class="mt-1"
+                                            *ngIf="reportStartTime.hasError('required') && reportStartTime.touched"
+                                            style="font-size: 13px;">
+                                            This field is required
+                                        </mat-error>
                                         </div>
                                     </td>
 
@@ -595,7 +613,7 @@
                                         </div>
                                     </td>
                                     <td class="text-center" *ngIf="selectedReport.isActive">
-                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(PmManager_ResourceRequest_ApproveUser) || permission.isGranted(PmManager_ResourceRequest_RejectUser) 
+                                        <button *ngIf="!report.createMode && selectedReport.isActive && (permission.isGranted(PmManager_ResourceRequest_ApproveUser) || permission.isGranted(PmManager_ResourceRequest_RejectUser)
                                         || permission.isGranted(PmManager_PMReportProject_Update))"
                                             [disabled]="processFuture" mat-button [matMenuTriggerFor]="menu">
                                             <i class="fas fa-bars fa-lg"></i>
