@@ -54,7 +54,7 @@
                                     <td>Total resource: <strong>{{projectInfo.totalResource}}</strong></td>
                                     <td>
                                         Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
-                                        <strong>{{totalOverTime}}h </strong>OT
+                                        <strong [ngClass]="totalOverTime>0?'text-danger':''">{{totalOverTime}}h </strong>OT
                                         <button class="btn btn-primary btn-sm ml-2 mb-1"
                                             (click)="getTimesheetWorking()">
                                             Get
