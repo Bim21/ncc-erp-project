@@ -8,3 +8,7 @@
         height: 64vh !important
     }
 }
+.line-break{
+  word-wrap: break-word;
+  white-space: pre-line;
+}

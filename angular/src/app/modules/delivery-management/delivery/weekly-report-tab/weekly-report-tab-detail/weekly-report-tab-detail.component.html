@@ -55,7 +55,7 @@
                                     <td>
                                         Timesheet working hour: <strong>{{totalNormalWorkingTime}}h </strong>Normal /
                                         <strong>{{totalOverTime}}h </strong>OT
-                                        <button class="btn btn-success btn-sm ml-2 mb-1"
+                                        <button class="btn btn-primary btn-sm ml-2 mb-1"
                                             (click)="getTimesheetWorking()">
                                             Get
                                         </button>
@@ -73,7 +73,7 @@
                                                 >
                                                 <ng-container *ngFor="let flag of problemIssueList"
                                                     >
-                                                    <mat-option
+                                                    <mat-option style="border:1px white solid;"
                                                         [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
                                                         [value]="APP_ENUM.ProjectHealth[flag]"
                                                         (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">

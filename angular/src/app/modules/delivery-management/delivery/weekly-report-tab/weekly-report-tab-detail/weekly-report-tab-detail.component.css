@@ -85,19 +85,20 @@ button {
   display: none;
   transition: 1s;
 }
-cd-timer{
+cd-timer {
   font-size: 33px;
   font-weight: bold;
 }
-.count-timer{
+.count-timer {
   background-color: #ffc107;
   height: 50px;
-  padding:0px 12px; border-radius: 5px;
+  padding: 0px 12px;
+  border-radius: 5px;
 }
-.pointer{
+.pointer {
   cursor: pointer;
 }
-::ng-deep .text-success .mat-form-field-outline  {
+::ng-deep .text-success .mat-form-field-outline {
   background: #28a745;
   border-radius: 5px;
 }
@@ -105,13 +106,13 @@ cd-timer{
   background: #ffc107;
   border-radius: 5px;
 }
-::ng-deep .text-danger .mat-form-field-outline  {
+::ng-deep .text-danger .mat-form-field-outline {
   background: #dc3545;
   border-radius: 5px;
 }
-::ng-deep .text-success .mat-select-value  {
-   color : #fff;
+::ng-deep .text-success .mat-select-value {
+  color: #fff;
 }
-::ng-deep .text-danger .mat-select-value  {
-  color : #fff;
+::ng-deep .text-danger .mat-select-value {
+  color: #fff;
 }
