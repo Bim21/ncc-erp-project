@@ -47,7 +47,7 @@ namespace ProjectManagement.Services.Timesheet
                 }
                 catch (Exception ex)
                 {
-                    throw new UserFriendlyException("Khong the ket noi Timesheet");
+                    throw new UserFriendlyException($"Khong the ket noi Timesheet {ex.Message}");
                 }
                 if (response.IsSuccessStatusCode)
                 {
