@@ -66,16 +66,21 @@
                                     <td>
                                         Total bill: <strong>{{projectInfo.totalBill}}</strong>
                                     </td>
-                                    <td>Status: <mat-form-field class="myFilter ml-5" appearance="outline">
+                                    <td>Status:
+                                        <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]"  class="myFilter ml-2" appearance="outline">
                                             <mat-select [disabled]="!isActive" name="flag" placeholder="Project health"
-                                                [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
-                                                <ng-container *ngFor="let flag of problemIssueList">
-                                                    <mat-option [value]="APP_ENUM.ProjectHealth[flag]"
+                                                name="flag" placeholder="Project health" [(ngModel)]="projectHealth" (click)="$event.stopPropagation()"
+                                                >
+                                                <ng-container *ngFor="let flag of problemIssueList"
+                                                    >
+                                                    <mat-option
+                                                        [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
+                                                        [value]="APP_ENUM.ProjectHealth[flag]"
                                                         (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);">
-                                                        {{
-                                                        flag
-                                                        }}
-
+                                                        <span style="font-weight: 100 !important;">
+                                                            {{flag}}
+                                                        </span>
+        
                                                     </mat-option>
                                                 </ng-container>
                                             </mat-select>

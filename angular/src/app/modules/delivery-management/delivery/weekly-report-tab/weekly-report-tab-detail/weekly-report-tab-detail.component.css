@@ -97,3 +97,21 @@ cd-timer{
 .pointer{
   cursor: pointer;
 }
+::ng-deep .text-success .mat-form-field-outline  {
+  background: #28a745;
+  border-radius: 5px;
+}
+::ng-deep .text-warning .mat-form-field-outline {
+  background: #ffc107;
+  border-radius: 5px;
+}
+::ng-deep .text-danger .mat-form-field-outline  {
+  background: #dc3545;
+  border-radius: 5px;
+}
+::ng-deep .text-success .mat-select-value  {
+   color : #fff;
+}
+::ng-deep .text-danger .mat-select-value  {
+  color : #fff;
+}
