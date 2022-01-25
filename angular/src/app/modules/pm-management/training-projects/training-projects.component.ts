@@ -49,9 +49,6 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
-    if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
-      this.pmId = this.sessionService.userId;
-    }
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -118,7 +115,8 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     public router: Router,
     private projectService: ListProjectService,
     private userService: UserService) {
-    super(injector)
+    super(injector);
+    this.pmId = Number(this.sessionService.userId);
   }
 
   ngOnInit(): void {
