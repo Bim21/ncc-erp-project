@@ -32,23 +32,20 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-   
+
 
   ];
-  public pmId =  -1;
+  public pmId = -1;
   public searchPM: string = "";
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
 
   ]
-  
+
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
-    if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
-      this.pmId = this.sessionService.userId;  
-    }
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -62,10 +59,10 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     if (check == false) {
       request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
     }
-    if(!checkFilterPM){
+    if (!checkFilterPM) {
       request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
     }
-    
+
     if (this.projectStatus === -1) {
       request.filterItems = this.clearFilter(request, "status", "")
       check = true
@@ -109,13 +106,16 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   public pmList: any[] = [];
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
-  contextMenuPosition = {x: '0', y: '0'}
+  contextMenuPosition = { x: '0', y: '0' }
   constructor(public injector: Injector,
     public dialog: MatDialog,
     public router: Router,
     private userService: UserService,
     private projectService: ListProjectService,
-    public sessionService: AppSessionService) { super(injector) }
+    public sessionService: AppSessionService) {
+    super(injector)
+    this.pmId = this.sessionService.userId
+  }
 
   ngOnInit(): void {
     this.refresh();
@@ -162,21 +162,21 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
       }
     });
   }
-  showActions(e){
+  showActions(e) {
     e.preventDefault();
     this.contextMenuPosition.x = e.clientX + 'px';
     this.contextMenuPosition.y = e.clientY + 'px';
     this.menu.openMenu();
   }
   showDetail(id: any) {
-    if (this.permission.isGranted(this.PmManager_Project_ViewDetail)){
+    if (this.permission.isGranted(this.PmManager_Project_ViewDetail)) {
       this.router.navigate(['app/product-project-detail/product-project-general'], {
         queryParams: {
           id: id
         }
       })
     }
-   
+
   }
 
 
