@@ -89,6 +89,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     public listProjectService: ListProjectService , 
     public sessionService:AppSessionService) {
     super(injector);
+    this.pmId = Number(this.sessionService.userId);
   }
 
   ngOnInit(): void {
@@ -104,9 +105,10 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ): void {
     let check = false;
     let checkFilterPM = false;
-    if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
-      this.pmId = Number(this.sessionService.userId);
-    }
+    // if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
+    //   this.pmId = Number(this.sessionService.userId);
+    // }
+  
     
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {

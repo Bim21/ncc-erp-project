@@ -17,6 +17,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Timesheet;
+using ProjectManagement.Services.Timesheet.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,9 +121,11 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet,
             PermissionNames.PmManager_PMReportProject_GetWorkingTimeFromTimesheet)]
-        public async Task GetWorkingTimeFromTimesheet(long pmReportProjectId, DateTime startTime, DateTime endTime)
+        public async Task<TotalWorkingTimeOfWeekDto> GetWorkingTimeFromTimesheet(long pmReportProjectId, DateTime startTime, DateTime endTime)
         {
-            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.Project).FirstOrDefaultAsync(x => x.Id == pmReportProjectId);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>()
+                .Include(x => x.Project)
+                .FirstOrDefaultAsync(x => x.Id == pmReportProjectId);
 
             var result = await _timesheetService.GetWorkingHourFromTimesheet(pmReportProject.Project.Code, startTime, endTime);
 
@@ -130,6 +133,12 @@ namespace ProjectManagement.APIs.PMReportProjects
             pmReportProject.TotalOverTime = result.OverTime;
 
             await WorkScope.UpdateAsync(pmReportProject);
+
+            return new TotalWorkingTimeOfWeekDto 
+            { 
+                NormalWorkingTime = result.NormalWorkingTime,
+                OverTime = result.OverTime 
+            };
         }
 
         [HttpGet]

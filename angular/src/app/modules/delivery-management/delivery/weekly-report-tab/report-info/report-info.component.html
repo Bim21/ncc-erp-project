@@ -55,10 +55,10 @@
                                             currentPage: problemCurrentPage
                                             }; let i=index">
                                                 <td>{{i+1}}</td>
-                                                <td>{{issue.projectName}}</td>
-                                                <td>{{issue.description}}</td>
-                                                <td>{{issue.impact}}</td>
-                                                <td>{{issue.solution}}</td>
+                                                <td class="line-break">{{issue.projectName}}</td>
+                                                <td class="line-break">{{issue.description}}</td>
+                                                <td class="line-break">{{issue.impact}}</td>
+                                                <td class="line-break">{{issue.solution}}</td>
                                                 <td class="text-center" style="width: 100px;">{{issue.createdAt |date:"dd/MM/yyyy"}}</td>
                                                 <td class="text-center" style="width: 100px;"><span
                                                         [ngClass]="APP_CONST.projectHealth[issue.projectHealth]">

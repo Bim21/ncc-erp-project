@@ -18,7 +18,7 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 import * as moment from 'moment';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
-import { GetTimesheetWorkingComponent } from './get-timesheet-working/get-timesheet-working.component';
+import { GetTimesheetWorkingComponent, WorkingTimeDto } from './get-timesheet-working/get-timesheet-working.component';
 
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -600,13 +600,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     width: "500px",
     disableClose: true,
   });
-  dialogRef.afterClosed().subscribe(result => {
+  dialogRef.afterClosed().subscribe((result:WorkingTimeDto) => {
     if (result) {
-      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
-       let report =  data.result.filter(item=>item.id == this.pmReportProjectId)[0]
-       this.totalNormalWorkingTime = report.totalNormalWorkingTime
-       this.totalOverTime = report.totalOverTime
-      }))
+      this.totalNormalWorkingTime = result.normalWorkingTime
+      this.totalOverTime = result.overTime
     }
   });
  } 
