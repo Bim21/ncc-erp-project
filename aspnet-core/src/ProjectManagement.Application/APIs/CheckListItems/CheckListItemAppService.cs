@@ -38,11 +38,14 @@ namespace ProjectManagement.APIs.CheckListItems
                             AuditTarget = i.AuditTarget,
                             PersonInCharge = i.PersonInCharge,
                             Note = i.Note,
-                            mandatorys = checkListMandatories.Where(x => x.CheckListItemId == i.Id).Select(x=>x.ProjectType).ToList()
+                            mandatorys = checkListMandatories
+                                .Where(x => x.CheckListItemId == i.Id)
+                                .Select(x=>x.ProjectType)
+                                .ToList()
                         };
 
             var filterMandatory = input.FilterItems != null ? input.FilterItems.Where(x => x.PropertyName == "mandatory").ToList() : null;
-            if (filterMandatory.Count > 0)
+            if (filterMandatory != null && filterMandatory.Count > 0)
             {
                 foreach (var item in filterMandatory)
                 {
