@@ -235,9 +235,9 @@ namespace ProjectManagement.Users
                 return null;
             }
 
-            if (string.IsNullOrEmpty(user.PhoneNumber) || !user.DOB.HasValue)
+            if (string.IsNullOrEmpty(user.PhoneNumber) || !user.DOB.HasValue || !user.Job.HasValue)
             {
-                await UpdatePhoneNumberAndDOB(user);
+                await UpdateInfomationFromHRM(user);
             }
 
             var qProjectUsers = from pu in _workScope
@@ -269,6 +269,7 @@ namespace ProjectManagement.Users
                 DOB = user.DOB,
                 Branch = Enum.GetName(typeof(Branch), user.Branch),
                 RoleType = Enum.GetName(typeof(UserType), user.UserType),
+                Position = Enum.GetName(typeof(Job), user.Job),
                 ProjectDtos = new List<ProjectDTO>()
             };
 
@@ -803,7 +804,7 @@ namespace ProjectManagement.Users
                 return true;
             return false;
         }
-        private async Task UpdatePhoneNumberAndDOB(User user)
+        private async Task UpdateInfomationFromHRM(User user)
         {
             var userFromHRM = await _hrmService.GetUserFromHRMByEmail(user.EmailAddress);
             if (userFromHRM == null)
@@ -811,13 +812,16 @@ namespace ProjectManagement.Users
                 return;
             }
 
-            if (string.IsNullOrEmpty(userFromHRM.PhoneNumber) && !userFromHRM.DOB.HasValue)
+            if (string.IsNullOrEmpty(userFromHRM.PhoneNumber) &&
+                    !userFromHRM.DOB.HasValue &&
+                    !userFromHRM.Job.HasValue)
             {
                 return;
             }
-
+            
             user.PhoneNumber = userFromHRM.PhoneNumber;
             user.DOB = userFromHRM.DOB;
+            user.Job = userFromHRM.Job;
             await _workScope.UpdateAsync(user);
         }
 

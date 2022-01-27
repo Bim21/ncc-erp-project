@@ -187,6 +187,15 @@ namespace ProjectManagement.Constants.Enum
             Vinh = 3,
             Other = 4
         }
+        public enum Job
+        {
+            DEV = 0,
+            TESTER = 1,
+            BACK_OFFICE = 2,
+            CORE = 3,
+            SIPDO = 4,
+            RENHONG = 5
+        }
         public enum InvoiceStatus
         {
             New = 0,
