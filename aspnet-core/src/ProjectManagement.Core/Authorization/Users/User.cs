@@ -41,6 +41,7 @@ namespace ProjectManagement.Authorization.Users
         public DateTime? DOB { get; set; }
         public long? KomuUserId { get; set; }
         public int? StarRate { get; set; }
+        public Job? Job { get; set; }
 
         [MaxLength(3000)]
         public string PoolNote { get; set; }
