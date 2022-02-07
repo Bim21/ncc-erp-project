@@ -22,5 +22,6 @@ namespace ProjectManagement.Services.HRM.Dto
         public bool IsActive { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime? DOB { get; set; }
+        public Job? Job { get; set; }
     }
 }

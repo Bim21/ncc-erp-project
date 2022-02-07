@@ -475,27 +475,31 @@ namespace ProjectManagement.APIs.ResourceRequests
             };
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 
-            var pmKomuId = await _userAppService.UpdateKomuId(AbpSession.UserId.Value);
-            var pmUserName = string.Empty;
-            if (!pmKomuId.HasValue)
+            var project = WorkScope.Get<Project>(input.ProjectId);
+            if (!project.Code.Equals("CHO_NGHI"))
             {
-                pmUserName = UserManager.GetUserById(AbpSession.UserId.Value).UserName;
-            }
-            var employee = UserManager.GetUserById(input.UserId);
-            employee.UserName = UserHelper.GetUserName(employee.EmailAddress) ?? employee.UserName;
-            var projectName = WorkScope.Get<Project>(input.ProjectId)?.Name;
+                var pmKomuId = await _userAppService.UpdateKomuId(AbpSession.UserId.Value);
+                var pmUserName = string.Empty;
+                if (!pmKomuId.HasValue)
+                {
+                    pmUserName = UserManager.GetUserById(AbpSession.UserId.Value).UserName;
+                }
+                var employee = UserManager.GetUserById(input.UserId);
+                employee.UserName = UserHelper.GetUserName(employee.EmailAddress) ?? employee.UserName;
 
-            var komuMessage = new StringBuilder();
-            komuMessage.Append($"Từ ngày **{input.StartTime:dd/MM/yyyy}**, ");
-            komuMessage.Append($"PM {(pmKomuId.HasValue ? "<@" + pmKomuId + ">" : "**" + pmUserName + "**")} request ");
-            komuMessage.Append($"**{employee.UserName}** làm việc ở dự án ");
-            komuMessage.Append($"**{projectName}**");
-            await _komuService.NotifyToChannel(new KomuMessage
-            {
-                CreateDate = DateTimeUtils.GetNow(),
-                Message = komuMessage.ToString(),
-            },
-            ChannelTypeConstant.PM_CHANNEL);
+
+                var komuMessage = new StringBuilder();
+                komuMessage.Append($"Từ ngày **{input.StartTime:dd/MM/yyyy}**, ");
+                komuMessage.Append($"PM {(pmKomuId.HasValue ? "<@" + pmKomuId + ">" : "**" + pmUserName + "**")} request ");
+                komuMessage.Append($"**{employee.UserName}** làm việc ở dự án ");
+                komuMessage.Append($"**{project.Name}**");
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    CreateDate = DateTimeUtils.GetNow(),
+                    Message = komuMessage.ToString(),
+                },
+                ChannelTypeConstant.PM_CHANNEL);
+            }
             return input;
         }
 
