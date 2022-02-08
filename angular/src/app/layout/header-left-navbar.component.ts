@@ -44,6 +44,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
       this.reportId = this.route.snapshot.queryParamMap.get("id")
       this.isShowReportBar = true
       this.getPmReportList();
+      this._layoutStore.setSidebarExpanded(true);
     }
     else {
       this.isShowReportBar = false;
@@ -57,8 +58,9 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
           this.currentUrl = this.router.url
           this.reportId = this.route.snapshot.queryParamMap.get("id")
           if (this.currentUrl.includes("weeklyReportTabDetail")) {
-            this.isShowReportBar = true
-            this.getPmReportList();
+            this.isShowReportBar = true;
+            this._layoutStore.setSidebarExpanded(true);
+
           }
           else {
             this.isShowReportBar = false;
