@@ -59,6 +59,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
           this.reportId = this.route.snapshot.queryParamMap.get("id")
           if (this.currentUrl.includes("weeklyReportTabDetail")) {
             this.isShowReportBar = true;
+            this.getPmReportList();
             this._layoutStore.setSidebarExpanded(true);
 
           }
