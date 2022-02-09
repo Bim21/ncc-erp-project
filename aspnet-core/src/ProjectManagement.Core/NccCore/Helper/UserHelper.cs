@@ -9,13 +9,16 @@ namespace ProjectManagement.NccCore.Helper
     {
         public static string GetUserName(string emailAddress)
         {
-            if (!string.IsNullOrEmpty(emailAddress))
+            if (string.IsNullOrEmpty(emailAddress))
             {
-                var gmailFormat = "@ncc.asia";
-                var userName = emailAddress.Contains(gmailFormat) ? emailAddress.Replace(gmailFormat, "") : null;
-                return userName;
+                return null;
             }
-            return null;
+            int index = emailAddress.IndexOf("@");
+            if (index < 0)
+            {
+                return emailAddress;
+            }
+            return emailAddress.Substring(0, index).ToLower();
 
         }
     }
