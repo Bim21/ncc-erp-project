@@ -7,15 +7,15 @@
                 {{ 'Name' | localize }}:
             </label>
             <div class="col-md-9">
-                <input type="text" class="form-control" name="projectName" id="projectName" 
-                    required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl 
+                <input type="text" class="form-control" name="projectName" id="projectName"
+                    required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl
                     [ngClass]="(checkNull && projectNameModel.touched)?'is-check':''"
                     (input)="enterName($event.target.value);"
                     />
                 <span class="invalid" *ngIf="checkNull  && projectNameModel.touched && !projectNameModel.errors?.required">This field is invalid!</span>
                 <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
                 </abp-validation-summary>
-            </div>        
+            </div>
         </div>
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="projectCode">
@@ -50,7 +50,7 @@
             <label class="col-md-3 col-form-label" for="PM">PM:</label>
             <div class="col-md-9 ">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select  [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required 
+                    <mat-select  [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required
                         #projectPM="ngModel">
                         <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
@@ -71,8 +71,12 @@
             <div class="col-md-9 ">
                 <mat-form-field class="w-100" appearance="outline">
                     <mat-select [(ngModel)]="project.clientId" name="client" placeholder="select customer" required
-                        #client="ngModel">
-                        <mat-option *ngFor="let client of clientList" [value]="client.id">
+                    #client="ngModel">
+                        <mat-form-field class="w-100 px-3 "
+                            style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                            <input matInput [(ngModel)]="searchClient" name="searchClientName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                        </mat-form-field>
+                        <mat-option *ngFor="let client of clientList | listFilter : 'name' : searchClient" [value]="client.id">
                             {{client.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -99,17 +103,19 @@
                 </mat-error>
             </div>
         </div>
-        <div class="form-group row " >
+        <div class="form-group row " [class.required] = "project.isCharge" >
             <label class="col-md-3 col-form-label" for="currency">Currency:</label>
             <div class="col-md-9 ">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="project.currencyId" name="currency" placeholder="Select currency"  #currency="ngModel">
+                    <mat-select [(ngModel)]="project.currencyId" name="currency" placeholder="Select currency"  #currency="ngModel" [required]="project.isCharge">
                         <mat-option *ngFor="let currency of currencyList" [value]="currency.id">
                             {{currency.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                
+                <mat-error class="mt-1" *ngIf="currency.hasError('required') && currency.touched" style="font-size: 13px;">
+                    This field is required
+                </mat-error>
             </div>
         </div>
         <div class="form-group row">
@@ -117,7 +123,7 @@
             <div class="col-md-9 pt-2">
                 <mat-checkbox [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge">
                     is Charge
-                    <span class="ml-2" 
+                    <span class="ml-2"
                     matTooltip="Charge vào timesheet tháng này!"
                     ><i class="fas fa-question-circle "></i></span>
                 </mat-checkbox>

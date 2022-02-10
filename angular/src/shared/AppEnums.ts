@@ -217,10 +217,10 @@ export const APP_ENUMS = {
     {
         Daily : 0,
         Monthly : 1,
-        Hours : 2
+        Hour : 2
     }
-  
 
-   
+
+
 
 }
