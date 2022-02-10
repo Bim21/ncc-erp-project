@@ -8,5 +8,6 @@ namespace ProjectManagement.APIs.ProjectFiles.Dto
     {
         public byte[] Bytes { get; set; }
         public string FileName { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 }

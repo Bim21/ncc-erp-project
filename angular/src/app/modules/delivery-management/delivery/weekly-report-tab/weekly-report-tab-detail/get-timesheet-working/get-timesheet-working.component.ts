@@ -23,12 +23,15 @@ export class GetTimesheetWorkingComponent extends AppComponentBase implements On
 
   ngOnInit(): void {
     this.timesheetWorking.pmReportProjectId = this.data.dialogData
-    this.timesheetWorking.timeSheetStartTime = new Date()
-    this.timesheetWorking.timeSheetStartTime = this.datePipe.transform(new Date(this.timesheetWorking.timeSheetStartTime.getTime() - 7 * 24 * 60 * 60 * 1000)
-      .toLocaleString(), "yyyy-MM-dd")
+    var d = new Date();
+    d.setDate(d.getDate() - (d.getDay() + 6) % 7);
+    d.setDate(d.getDate() - 7);
+    this.timesheetWorking.timeSheetStartTime = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    this.timesheetWorking.timeSheetEndTime = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 6);
 
   }
   SaveAndClose() {
+    let workingTime = {} as WorkingTimeDto
     this.timesheetWorking.timeSheetStartTime = moment(this.timesheetWorking.timeSheetStartTime).format("YYYY-MM-DD")
     if (this.timesheetWorking.timeSheetEndTime) {
       this.timesheetWorking.timeSheetEndTime = moment(this.timesheetWorking.timeSheetEndTime).format("YYYY-MM-DD")
@@ -37,7 +40,9 @@ export class GetTimesheetWorkingComponent extends AppComponentBase implements On
     this.isLoading = true
     this.pmReportProjectService.GetTimesheetWorking(this.timesheetWorking.pmReportProjectId, this.timesheetWorking.timeSheetStartTime, this.timesheetWorking.timeSheetEndTime)
       .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
-        this.dialogRef.close(this.timesheetWorking)
+        workingTime.normalWorkingTime = rs.result.normalWorkingTime
+        workingTime.overTime = rs.result.overTime
+        this.dialogRef.close(workingTime)
         this.isLoading = false
         abp.notify.success(`Get timesheet from ${this.timesheetWorking.timeSheetStartTime} to ${this.timesheetWorking.timeSheetEndTime}`)
       },
@@ -50,4 +55,8 @@ export class TimesheetWorkingDto {
   pmReportProjectId: number
   timeSheetStartTime: any
   timeSheetEndTime: any
+}
+export class WorkingTimeDto {
+  normalWorkingTime: number
+  overTime: number
 }

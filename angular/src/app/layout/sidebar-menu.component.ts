@@ -43,8 +43,6 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
   getMenuItems(): MenuItem[] {
     return [
-      new MenuItem(this.l('HomePage'), '/app/home', 'fas fa-home'),
-
       new MenuItem(
         this.l('Admin'),
         '',
@@ -122,32 +120,32 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         ]
       ),
 
-      new MenuItem(
-        this.l('Sao đỏ'),
-        '/app/sao-do',
-        'fas fa-user-shield',
-        'SaoDo.CanViewMenu'
-      ),
-      new MenuItem(
-        this.l('CheckList'),
-        '',
-        'fas fa-tasks',
-        'CheckList.CanviewMenu',
-        [
-          new MenuItem(
-            this.l('Checklist Category'),
-            '/app/checklist-title',
-            'fas fa-clipboard-list',
-            'CheckList.CheckListCategory'
-          ),
-          new MenuItem(
-            this.l('Checklist Item'),
-            '/app/checklist',
-            'fas fa-calendar-check',
-            'CheckList.CheckListItem'
-          ),
-        ]
-      ),
+      // new MenuItem(
+      //   this.l('Sao đỏ'),
+      //   '/app/sao-do',
+      //   'fas fa-user-shield',
+      //   'SaoDo.CanViewMenu'
+      // ),
+      // new MenuItem(
+      //   this.l('CheckList'),
+      //   '',
+      //   'fas fa-tasks',
+      //   'CheckList.CanviewMenu',
+      //   [
+      //     new MenuItem(
+      //       this.l('Checklist Category'),
+      //       '/app/checklist-title',
+      //       'fas fa-clipboard-list',
+      //       'CheckList.CheckListCategory'
+      //     ),
+      //     new MenuItem(
+      //       this.l('Checklist Item'),
+      //       '/app/checklist',
+      //       'fas fa-calendar-check',
+      //       'CheckList.CheckListItem'
+      //     ),
+      //   ]
+      // ),
       new MenuItem(
         this.l('Weekly report'),
         '/app/weekly-report',
@@ -161,7 +159,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         'Deliverymanagement.CanViewMenu.ResourceManagement'
       ),
       new MenuItem(
-        this.l('Available resource'),
+        this.l('Resources'),
         '/app/available-resource/pool',
         'fas fa-hockey-puck',
         'DeliveryManagement.ResourceRequest.AvailableResource'

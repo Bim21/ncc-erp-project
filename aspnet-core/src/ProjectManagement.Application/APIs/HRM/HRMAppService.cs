@@ -3,6 +3,7 @@ using Abp.Configuration;
 using Abp.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NccCore.Helper;
 using NccCore.Uitls;
 using ProjectManagement.APIs.HRM.Dto;
 using ProjectManagement.Authorization.Roles;
@@ -41,9 +42,9 @@ namespace ProjectManagement.APIs.HRM
             {
                 throw new UserFriendlyException("SecretCode does not match!");
             }
-            var userDto = new User
+            var user = new User
             {
-                UserName = model.UserName,
+                UserName = model.EmailAddress.ToLower(),
                 Name = model.Name,
                 Surname = model.Surname,
                 EmailAddress = model.EmailAddress,
@@ -53,18 +54,16 @@ namespace ProjectManagement.APIs.HRM
                 UserLevel = model.UserLevel,
                 Branch = model.Branch,
                 IsActive = true,
-                Password = "123qwe",
+                Password = RandomPasswordHelper.CreateRandomPassword(8),
                 UserCode = model.UserCode
             };
-            model.Id = await WorkScope.InsertAndGetIdAsync(userDto);
-            var user = await WorkScope.GetAsync<User>(model.Id);
+            model.Id = await WorkScope.InsertAndGetIdAsync(user);           
             var userName = UserHelper.GetUserName(user.EmailAddress);
-            var message = new StringBuilder();
-            message.AppendLine($"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{userName ?? user.UserName}**.\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
+            var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{userName ?? user.UserName}**.\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.";
             await _komuService.NotifyToChannel(new KomuMessage
             {
                 UserName = userName ?? user.UserName,
-                Message = message.ToString(),
+                Message = message,
                 CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.GENERAL_CHANNEL);
             return model;
@@ -74,9 +73,12 @@ namespace ProjectManagement.APIs.HRM
         {
             var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
             var header = _httpContextAccessor.HttpContext.Request.Headers;
-            var securityCodeHeader = header["X-Secret-Key"];
+            var securityCodeHeader = header["X-Secret-Key"].ToString();            
             if (secretCode == securityCodeHeader)
                 return true;
+
+            Logger.Error("secretCode: " + secretCode.Substring(0, secretCode.Length / 2));
+            Logger.Error("securityCodeHeader: " + securityCodeHeader.Substring(0, securityCodeHeader.Length / 2));
             return false;
         }
         #endregion

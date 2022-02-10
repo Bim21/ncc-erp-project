@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NccCore.Helper
 {
-    public static class RandomPasswordHelper
+    public class RandomPasswordHelper
     {
         public static string CreateRandomPassword(int length = 15)
         {

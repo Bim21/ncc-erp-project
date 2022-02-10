@@ -12,6 +12,7 @@ namespace ProjectManagement.Users.Dto
         public string PhoneNumber { get; set; }
         public DateTime? DOB { get; set; }
         public string RoleType { get; set; }
+        public string Position { get; set; }
         public string Branch { get; set; }
         public List<ProjectDTO> ProjectDtos { get; set; }
     }
