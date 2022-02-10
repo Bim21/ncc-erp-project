@@ -10,7 +10,7 @@ tr, th, td{
 ::ng-deep .search-status .mat-form-field{
     width: 150px !important;
 } */
-@media only screen and (min-width: 1546px){
+/* @media only screen and (min-width: 1546px){
     .label-pm{
       width: 20%;
     }
@@ -55,4 +55,53 @@ tr, th, td{
     .listStatus{
         width: 50% !important ;
     }
-  }
+  } */
+
+
+
+::ng-deep .filter-wrap .mat-form-field{
+  width: 100%;
+}
+
+::ng-deep .product-project .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.85em) scale(.75) ;
+}
+
+.product-project .search-status {
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.product-project .time-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-project .time-wrap .start-time {
+  color: var(--secondary);
+}
+
+.product-project .time-wrap .end-time {
+  margin-top: 4px;
+}
+
+.time-send-report-wrap.report-late {
+  color: var(--danger);
+}
+
+.product-project .sort-icon-wrap {
+  margin-left: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-project .sort-icon-wrap i {
+  opacity: 0.4;
+  line-height: 0px;
+  font-size: 20px;
+}
+
+.product-project .sort-icon-wrap i.active {
+  opacity: 1;
+}

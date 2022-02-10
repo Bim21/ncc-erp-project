@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { CreateEditTrainingProjectComponent } from './create-edit-training-project/create-edit-training-project.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 
 
 @Component({
@@ -33,14 +34,29 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-    
-
   ];
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-
   ]
+
+  public sortWeeklyReport: number = 0;
+  public weeklyReport: number = -1;
+  weeklyReportFilterList = [
+    {
+      displayName: "All",
+      value: -1,
+    },
+    {
+      displayName: "Penalized",
+      value: 0,
+    },
+    {
+      displayName: "Not Penalized",
+      value: 1,
+    },
+  ]
+
   public pmId =  -1;
   public searchPM: string = "";
   @ViewChild(MatMenuTrigger)
@@ -83,11 +99,19 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     this.projectService.GetAllTrainingPaging(request).pipe(finalize(() => {
       finishedCallback()
     })).subscribe(data => {
-      this.listTrainingProjects = data.result.items;
+      // this.listTrainingProjects = data.result.items;
+      this.listTrainingProjects = data.result.items.filter((project: TrainingProjectDto) => (
+        this.weeklyReport === 0
+        ? (!project.isSent) || (project.isSent && this.isReportLate(project.timeSendReport))
+        : this.weeklyReport === 1
+        ? project.isSent && !this.isReportLate(project.timeSendReport)
+        : project
+      ))
+
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "");
       }
-      if(!checkFilterPM){  
+      if(!checkFilterPM){
         request.filterItems = this.clearFilter(request, "pmId", "");
       }
       this.showPaging(data.result, pageNumber);
@@ -181,6 +205,43 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   }
   edit(project: TrainingProjectDto) {
     this.showDialog('edit', project)
+  }
+
+  isReportLate(time: string | null) {
+    if(!time) return false;
+    const timeSendReport = moment(new Date(time))
+    const penaltyTime = moment().day(2).hour(15).minute(0).second(0);
+    return timeSendReport.isAfter(penaltyTime)
+  }
+
+  handleSortWeeklyReportClick () {
+    this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
+    if(!this.sortWeeklyReport) {
+      this.refresh();
+      return;
+    }
+
+    this.listTrainingProjects.sort((project1: TrainingProjectDto, project2: TrainingProjectDto) => {
+      if(project1.timeSendReport && !project2.timeSendReport) {
+        return -1;
+      }
+
+      if(!project1.timeSendReport && project2.timeSendReport) {
+        return 1;
+      }
+
+      let time1: number = 0, time2: number = 0;
+      if(project1.timeSendReport && project2.timeSendReport) {
+        time1 = new Date(project1.timeSendReport).getTime();
+        time2 = new Date(project2.timeSendReport).getTime();
+      }
+
+      return this.sortWeeklyReport === 1
+      ? time1 - time2
+      : this.sortWeeklyReport === 2
+      ? time2 - time1
+      : 0;
+    })
   }
 
 }

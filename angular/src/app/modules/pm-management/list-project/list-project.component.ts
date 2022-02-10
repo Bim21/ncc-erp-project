@@ -12,6 +12,8 @@ import { PagedListingComponentBase, PagedRequestDto, PagedResultResultDto } from
 import { finalize, catchError } from 'rxjs/operators';
 import { CreateEditListProjectComponent } from './create-edit-list-project/create-edit-list-project.component';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { ProductProjectDto } from '@app/service/model/project.dto';
+import * as moment from 'moment';
 @Component({
   selector: 'app-list-project',
   templateUrl: './list-project.component.html',
@@ -28,14 +30,32 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-
   ]
+
+  weeklyReportFilterList = [
+    {
+      displayName: "All",
+      value: -1,
+    },
+    {
+      displayName: "Penalized",
+      value: 0,
+    },
+    {
+      displayName: "Not Penalized",
+      value: 1,
+    },
+  ]
+
   projectTypeParam = Object.entries(this.APP_ENUM.ProjectType).map(item => {
     return {
       displayName: item[0],
       value: item[1]
     }
   })
+
+  public sortWeeklyReport: number = 0;
+  public weeklyReport: number = -1;
   private userList: UserDto[] = [];
   public projectStatus: any = 3;
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
@@ -57,9 +77,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-    
-    
-
   ];
 
   setValueProjectType(projectType, enumObject) {
@@ -69,7 +86,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     }
   }
-  listProjects: ProjectDto[] = [];
+  listProjects: ProductProjectDto[] = [];
   protected delete(entity: any): void {
     abp.message.confirm(
       "Delete project: " + entity.name + "?",
@@ -86,7 +103,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   constructor(injector: Injector, public dialog: MatDialog, private userService: UserService,
-    public listProjectService: ListProjectService , 
+    public listProjectService: ListProjectService ,
     public sessionService:AppSessionService) {
     super(injector);
   }
@@ -104,10 +121,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ): void {
     let check = false;
     let checkFilterPM = false;
+    let checkFilterWeeklyReport = false;
+
     if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
       this.pmId = Number(this.sessionService.userId);
     }
-    
+
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -119,38 +138,46 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     })
     if (check == false) {
-      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)  
+      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
     }
     if(!checkFilterPM){
       request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
     }
+
     if (this.projectStatus == -1) {
       request.filterItems = this.clearFilter(request, "status", "")
       check = true
-
     }
     if (this.pmId == -1) {
       request.filterItems = this.clearFilter(request, "pmId", "")
       checkFilterPM = true
-
     }
+
     this.listProjectService
       .getAllPaging(request)
       .pipe(finalize(() => {
         finishedCallback();
       }))
       .subscribe((result: PagedResultResultDto) => {
-        this.listProjects = result.result.items;
+        this.listProjects = result.result.items.filter((product: ProductProjectDto) => (
+          this.weeklyReport === 0
+          ? (!product.isSent) || (product.isSent && this.isReportLate(product.timeSendReport))
+          : this.weeklyReport === 1
+          ? product.isSent && !this.isReportLate(product.timeSendReport)
+          : product
+        ))
+
         this.showPaging(result.result, pageNumber);
         // request.filterItems = this.clearFilter(request, "status", this.projectStatus)
         if (check == false) {
           request.filterItems = this.clearFilter(request, "status", "");
         }
-        if(!checkFilterPM){  
+        if(!checkFilterPM){
           request.filterItems = this.clearFilter(request, "pmId", "");
         }
       });
   }
+
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
       .subscribe(data => {
@@ -210,7 +237,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   }
   showActions(e , item){
-    e.preventDefault(); 
+    e.preventDefault();
     this.contextMenuPosition.x = e.clientX + 'px';
     this.contextMenuPosition.y = e.clientY + 'px';
     this.menu.openMenu();
@@ -237,5 +264,41 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     this.projectStatus = "";
     this.refresh();
   }
-}
+  isReportLate(time: string | null) {
+    if(!time) return false;
+    const timeSendReport = moment(new Date(time))
+    const penaltyTime = moment().day(2).hour(15).minute(0).second(0);
+    return timeSendReport.isAfter(penaltyTime)
+  }
 
+  handleSortWeeklyReportClick () {
+    this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
+    if(!this.sortWeeklyReport) {
+      this.refresh();
+      return;
+    }
+
+    console.log("test moment", moment().day(2))
+
+    this.listProjects.sort((project1: ProductProjectDto, project2: ProductProjectDto) => {
+      if(project1.timeSendReport && !project2.timeSendReport) {
+        return -1;
+      }
+
+      if(!project1.timeSendReport && project2.timeSendReport) {
+        return 1;
+      }
+
+      let time1: number = 0, time2: number = 0;
+      if(project1.timeSendReport && project2.timeSendReport) {
+        time1 = new Date(project1.timeSendReport).getTime();
+        time2 = new Date(project2.timeSendReport).getTime();
+      }
+      return this.sortWeeklyReport === 1
+          ? time1 - time2
+          : this.sortWeeklyReport === 2
+          ? time2 - time1
+          : 0;
+      })
+    }
+}

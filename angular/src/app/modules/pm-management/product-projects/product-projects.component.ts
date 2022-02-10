@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductProjectDto, ProjectDto } from './../../../service/model/project.dto';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-product-projects',
@@ -32,22 +33,40 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-   
+
 
   ];
+
+  public sortWeeklyReport: number = 0;
+  public weeklyReport: number = -1;
   public pmId =  -1;
   public searchPM: string = "";
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-
   ]
-  
+
+  weeklyReportFilterList = [
+    {
+      displayName: "All",
+      value: -1,
+    },
+    {
+      displayName: "Penalized",
+      value: 0,
+    },
+    {
+      displayName: "Not Penalized",
+      value: 1,
+    },
+  ]
+
+
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
     if (this.permission.isGranted(this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)) {
-      this.pmId = this.sessionService.userId;  
+      this.pmId = this.sessionService.userId;
     }
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
@@ -65,7 +84,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     if(!checkFilterPM){
       request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
     }
-    
+
     if (this.projectStatus === -1) {
       request.filterItems = this.clearFilter(request, "status", "")
       check = true
@@ -80,7 +99,14 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     this.projectService.GetAllProductPaging(request).pipe(finalize(() => {
       finishedCallback()
     })).subscribe(data => {
-      this.listProductProjects = data.result.items;
+      // this.listProductProjects = data.result.items;
+      this.listProductProjects = data.result.items.filter((project: ProductProjectDto) => (
+        this.weeklyReport === 0
+        ? (!project.isSent) || (project.isSent && this.isReportLate(project.timeSendReport))
+        : this.weeklyReport === 1
+        ? project.isSent && !this.isReportLate(project.timeSendReport)
+        : project
+      ))
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "");
       }
@@ -176,9 +202,44 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
         }
       })
     }
-   
+
   }
 
+  isReportLate(time: string | null) {
+    if(!time) return false;
+    const timeSendReport = moment(new Date(time))
+    const penaltyTime = moment().day(2).hour(15).minute(0).second(0);
+    return timeSendReport.isAfter(penaltyTime)
+  }
 
+  handleSortWeeklyReportClick () {
+    this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
+    if(!this.sortWeeklyReport) {
+      this.refresh();
+      return;
+    }
+
+    this.listProductProjects.sort((project1: ProductProjectDto, project2: ProductProjectDto) => {
+      if(project1.timeSendReport && !project2.timeSendReport) {
+        return -1;
+      }
+
+      if(!project1.timeSendReport && project2.timeSendReport) {
+        return 1;
+      }
+
+      let time1: number = 0, time2: number = 0;
+      if(project1.timeSendReport && project2.timeSendReport) {
+        time1 = new Date(project1.timeSendReport).getTime();
+        time2 = new Date(project2.timeSendReport).getTime();
+      }
+
+      return this.sortWeeklyReport === 1
+      ? time1 - time2
+      : this.sortWeeklyReport === 2
+      ? time2 - time1
+      : 0;
+    })
+  }
 
 }
