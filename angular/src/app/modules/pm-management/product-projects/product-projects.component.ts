@@ -64,6 +64,12 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
+
+    if(this.sortWeeklyReport) {
+      request.sort = 'timeSendReport';
+      request.sortDirection = this.sortWeeklyReport - 1;
+    }
+
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -213,32 +219,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
 
   handleSortWeeklyReportClick () {
     this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
-    if(!this.sortWeeklyReport) {
-      this.refresh();
-      return;
-    }
-
-    this.listProductProjects.sort((project1: ProductProjectDto, project2: ProductProjectDto) => {
-      if(project1.timeSendReport && !project2.timeSendReport) {
-        return -1;
-      }
-
-      if(!project1.timeSendReport && project2.timeSendReport) {
-        return 1;
-      }
-
-      let time1: number = 0, time2: number = 0;
-      if(project1.timeSendReport && project2.timeSendReport) {
-        time1 = new Date(project1.timeSendReport).getTime();
-        time2 = new Date(project2.timeSendReport).getTime();
-      }
-
-      return this.sortWeeklyReport === 1
-      ? time1 - time2
-      : this.sortWeeklyReport === 2
-      ? time2 - time1
-      : 0;
-    })
+    this.refresh();
   }
 
 }

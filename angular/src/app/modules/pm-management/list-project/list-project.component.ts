@@ -122,10 +122,15 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ): void {
     let check = false;
     let checkFilterPM = false;
-    // if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
-    //   this.pmId = Number(this.sessionService.userId);
-    // }
 
+    if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
+      this.pmId = Number(this.sessionService.userId);
+    }
+
+    if(this.sortWeeklyReport) {
+      request.sort = 'timeSendReport';
+      request.sortDirection = this.sortWeeklyReport - 1;
+    }
 
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
@@ -273,32 +278,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   handleSortWeeklyReportClick () {
     this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
-    if(!this.sortWeeklyReport) {
-      this.refresh();
-      return;
-    }
-
-    console.log("test moment", moment().day(2))
-
-    this.listProjects.sort((project1: ProductProjectDto, project2: ProductProjectDto) => {
-      if(project1.timeSendReport && !project2.timeSendReport) {
-        return -1;
-      }
-
-      if(!project1.timeSendReport && project2.timeSendReport) {
-        return 1;
-      }
-
-      let time1: number = 0, time2: number = 0;
-      if(project1.timeSendReport && project2.timeSendReport) {
-        time1 = new Date(project1.timeSendReport).getTime();
-        time2 = new Date(project2.timeSendReport).getTime();
-      }
-      return this.sortWeeklyReport === 1
-          ? time1 - time2
-          : this.sortWeeklyReport === 2
-          ? time2 - time1
-          : 0;
-      })
-    }
+    this.refresh();
+  }
 }
