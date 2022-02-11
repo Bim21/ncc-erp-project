@@ -269,9 +269,10 @@ namespace ProjectManagement.Users
                 DOB = user.DOB,
                 Branch = Enum.GetName(typeof(Branch), user.Branch),
                 RoleType = Enum.GetName(typeof(UserType), user.UserType),
-                Position = Enum.GetName(typeof(Job), user.Job),
+                Position = user.Job.HasValue ? Enum.GetName(typeof(Job), user.Job) : String.Empty,
                 ProjectDtos = new List<ProjectDTO>()
             };
+            
 
             if (projectUsers.Any())
             {
