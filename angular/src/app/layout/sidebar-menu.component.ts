@@ -74,7 +74,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             'Admin.Skill'
           ),
           new MenuItem(
-            this.l('Currency'),
+            this.l('Currencies'),
             '/app/currency',
             'fas fa-money-check',
             'Admin.Currency'
@@ -94,7 +94,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         ]
       ),
       new MenuItem(
-        this.l('PM Management'),
+        this.l('Projects'),
         '',
         'fas fa-user-tie',
         'PmManager.CanViewMenu',
@@ -147,13 +147,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       //   ]
       // ),
       new MenuItem(
-        this.l('Weekly report'),
+        this.l('Weekly reports'),
         '/app/weekly-report',
         'fas fa-chalkboard-teacher',
         'Deliverymanagement.CanViewMenu.WeeklyReport'
       ),
       new MenuItem(
-        this.l('Resource request'),
+        this.l('Resource requests'),
         '/app/resource-request',
         'fab fa-chromecast',
         'Deliverymanagement.CanViewMenu.ResourceManagement'
@@ -166,17 +166,17 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       ),
       new MenuItem(
         this.l('Timesheet'),
-        '',
+        '/app/timesheet',
         'fas fa-calendar-alt',
-        'Timesheet.CanViewMenu',
-        [
-          new MenuItem(
-            this.l('Timesheet'),
-            '/app/timesheet',
-            'fas fa-circle',
-            ''
-          ),
-        ]
+        'Timesheet.CanViewMenu'
+        // [
+        //   new MenuItem(
+        //     this.l('Timesheet'),
+        //     '/app/timesheet',
+        //     'fas fa-circle',
+        //     ''
+        //   ),
+        // ]
       ),
       // new MenuItem(
       //   this.l("CheckPoint"),
