@@ -29,6 +29,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
   public pmList: UserDto;
   public isEditStatus = false;
   public searchPM: string = "";
+  public searchClient: string = ""
   public title ="";
   public currencyList: CurrencyDto[]=[];
   public chargeTypeList : string[]= Object.keys(this.APP_ENUM.ChargeType)
@@ -42,7 +43,9 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     private currencyService: CurrencyService
   ) {
     super(injector);
-    this.projectTypeList = Object.keys(this.APP_ENUM.ProjectType)
+    this.projectTypeList = Object.keys(this.APP_ENUM.ProjectType).map((projectType: string) => (
+      projectType === 'TAM' ? 'T&M' : projectType
+    ))
   }
 
   ngOnInit(): void {
@@ -55,9 +58,12 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       // this.project.status = this.APP_ENUM.ProjectStatus[this.project.status]
       this.isEditStatus = true
     }
+    else {
+      this.project.isCharge = true;
+    }
     this.getAllClient()
     this.title = this.project.name;
-    
+
   }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
@@ -66,7 +72,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     this.currencyService.getAll().pipe(catchError(this.currencyService.handleError)).subscribe(data => {
       this.currencyList = data.result;
     })
-    
+
   }
 
   public saveAndClose(): void {
