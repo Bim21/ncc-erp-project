@@ -1,3 +1,4 @@
+import { PagedResultDto } from './../../../../shared/paged-listing-component-base';
 import { AppSessionService } from './../../../../shared/session/app-session.service';
 import { result } from 'lodash-es';
 import { UserDto } from './../../../../shared/service-proxies/service-proxies';
@@ -14,12 +15,15 @@ import { CreateEditListProjectComponent } from './create-edit-list-project/creat
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ProductProjectDto } from '@app/service/model/project.dto';
 import * as moment from 'moment';
+
 @Component({
   selector: 'app-list-project',
   templateUrl: './list-project.component.html',
   styleUrls: ['./list-project.component.css']
 })
+
 export class ListProjectComponent extends PagedListingComponentBase<any> implements OnInit {
+
   PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
   PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
   PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
@@ -32,18 +36,18 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   { displayName: "Closed", value: 2 },
   ]
 
-  weeklyReportFilterList = [
+  punishReportOptionList = [
     {
       displayName: "All",
-      value: -1,
+      value: EPunishReportOption.All,
     },
     {
-      displayName: "Penalized",
-      value: 0,
+      displayName: "Phạt gửi report",
+      value: EPunishReportOption.PUNISH,
     },
     {
-      displayName: "Not Penalized",
-      value: 1,
+      displayName: "Không bị phạt",
+      value: EPunishReportOption.NOT_PUNISH,
     },
   ]
 
@@ -55,7 +59,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   })
 
   public sortWeeklyReport: number = 0;
-  public weeklyReport: number = -1;
+  public punishReportFilter: number = EPunishReportOption.All; //
   private userList: UserDto[] = [];
   public projectStatus: any = 3;
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
@@ -123,6 +127,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     let check = false;
     let checkFilterPM = false;
 
+
     if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
       this.pmId = Number(this.sessionService.userId);
     }
@@ -163,16 +168,23 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       .pipe(finalize(() => {
         finishedCallback();
       }))
-      .subscribe((result: PagedResultResultDto) => {
-        this.listProjects = result.result.items.filter((product: ProductProjectDto) => (
-          this.weeklyReport === 0
-          ? (!product.isSent) || (product.isSent && this.isReportLate(product.timeSendReport))
-          : this.weeklyReport === 1
-          ? product.isSent && !this.isReportLate(product.timeSendReport)
-          : product
-        ))
 
-        this.showPaging(result.result, pageNumber);
+      .subscribe((result: PagedResultResultDto) => {
+        this.listProjects = result.result.items;
+        if(this.punishReportFilter === EPunishReportOption.PUNISH) {
+          this.listProjects = this.listProjects.filter((product) => (
+            (!product.isSent) || this.isReportLate(product.timeSendReport)
+          ));
+        }
+        else if (this.punishReportFilter === EPunishReportOption.NOT_PUNISH) {
+          this.listProjects = this.listProjects.filter((product) => (
+            product.isSent && !this.isReportLate(product.timeSendReport)
+          ))
+        }
+
+        result.result.totalCount = this.listProjects.length
+
+        this.showPaging(result.result, pageNumber)
         // request.filterItems = this.clearFilter(request, "status", this.projectStatus)
         if (check == false) {
           request.filterItems = this.clearFilter(request, "status", "");
@@ -272,7 +284,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   isReportLate(time: string | null) {
     if(!time) return false;
     const timeSendReport = moment(new Date(time))
-    const penaltyTime = moment().day(2).hour(15).minute(0).second(0);
+    const penaltyTime = moment().day(1).hour(15).minute(0).second(0); // 15:00:00 thứ 3
     return timeSendReport.isAfter(penaltyTime)
   }
 
@@ -280,4 +292,16 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
     this.refresh();
   }
+
+  handleSelectionPunishChange = () => {
+    this.pageSize = 100;
+    this.refresh();
+  }
+}
+
+
+enum EPunishReportOption {
+  All = -1,
+  PUNISH = 0,
+  NOT_PUNISH = 1
 }
