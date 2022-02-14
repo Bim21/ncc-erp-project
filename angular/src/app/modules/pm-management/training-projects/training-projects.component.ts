@@ -41,21 +41,6 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   ]
 
   public sortWeeklyReport: number = 0;
-  public weeklyReport: number = -1;
-  weeklyReportFilterList = [
-    {
-      displayName: "All",
-      value: -1,
-    },
-    {
-      displayName: "Penalized",
-      value: 0,
-    },
-    {
-      displayName: "Not Penalized",
-      value: 1,
-    },
-  ]
 
   public pmId =  -1;
   public searchPM: string = "";
@@ -101,15 +86,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     this.projectService.GetAllTrainingPaging(request).pipe(finalize(() => {
       finishedCallback()
     })).subscribe(data => {
-      // this.listTrainingProjects = data.result.items;
-      this.listTrainingProjects = data.result.items.filter((project: TrainingProjectDto) => (
-        this.weeklyReport === 0
-        ? (!project.isSent) || (project.isSent && this.isReportLate(project.timeSendReport))
-        : this.weeklyReport === 1
-        ? project.isSent && !this.isReportLate(project.timeSendReport)
-        : project
-      ))
-
+      this.listTrainingProjects = data.result.items;
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "");
       }

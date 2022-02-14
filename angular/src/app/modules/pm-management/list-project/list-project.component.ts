@@ -36,21 +36,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   { displayName: "Closed", value: 2 },
   ]
 
-  punishReportOptionList = [
-    {
-      displayName: "All",
-      value: EPunishReportOption.All,
-    },
-    {
-      displayName: "Phạt gửi report",
-      value: EPunishReportOption.PUNISH,
-    },
-    {
-      displayName: "Không bị phạt",
-      value: EPunishReportOption.NOT_PUNISH,
-    },
-  ]
-
   projectTypeParam = Object.entries(this.APP_ENUM.ProjectType).map(item => {
     return {
       displayName: item[0],
@@ -59,7 +44,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   })
 
   public sortWeeklyReport: number = 0;
-  public punishReportFilter: number = EPunishReportOption.All; //
   private userList: UserDto[] = [];
   public projectStatus: any = 3;
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
@@ -171,19 +155,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
       .subscribe((result: PagedResultResultDto) => {
         this.listProjects = result.result.items;
-        if(this.punishReportFilter === EPunishReportOption.PUNISH) {
-          this.listProjects = this.listProjects.filter((product) => (
-            (!product.isSent) || this.isReportLate(product.timeSendReport)
-          ));
-        }
-        else if (this.punishReportFilter === EPunishReportOption.NOT_PUNISH) {
-          this.listProjects = this.listProjects.filter((product) => (
-            product.isSent && !this.isReportLate(product.timeSendReport)
-          ))
-        }
-
-        result.result.totalCount = this.listProjects.length
-
         this.showPaging(result.result, pageNumber)
         // request.filterItems = this.clearFilter(request, "status", this.projectStatus)
         if (check == false) {
@@ -297,11 +268,4 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     this.pageSize = 100;
     this.refresh();
   }
-}
-
-
-enum EPunishReportOption {
-  All = -1,
-  PUNISH = 0,
-  NOT_PUNISH = 1
 }

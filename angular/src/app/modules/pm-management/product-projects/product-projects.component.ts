@@ -33,32 +33,14 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-
-
   ];
 
   public sortWeeklyReport: number = 0;
-  public weeklyReport: number = -1;
   public pmId =  -1;
   public searchPM: string = "";
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-  ]
-
-  weeklyReportFilterList = [
-    {
-      displayName: "All",
-      value: -1,
-    },
-    {
-      displayName: "Penalized",
-      value: 0,
-    },
-    {
-      displayName: "Not Penalized",
-      value: 1,
-    },
   ]
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
@@ -101,14 +83,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     this.projectService.GetAllProductPaging(request).pipe(finalize(() => {
       finishedCallback()
     })).subscribe(data => {
-      // this.listProductProjects = data.result.items;
-      this.listProductProjects = data.result.items.filter((project: ProductProjectDto) => (
-        this.weeklyReport === 0
-        ? (!project.isSent) || (project.isSent && this.isReportLate(project.timeSendReport))
-        : this.weeklyReport === 1
-        ? project.isSent && !this.isReportLate(project.timeSendReport)
-        : project
-      ))
+      this.listProductProjects = data.result.items;
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "");
       }
