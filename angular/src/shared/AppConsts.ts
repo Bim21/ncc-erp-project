@@ -31,7 +31,7 @@ export class AppConsts {
         InProgress: "badge badge-pill badge-success",
         Closed: "badge badge-pill badge-secondary",
         APPROVED:"badge badge-pill badge-danger",
-        
+
 
         // Future:"badge badge-pill badge-light"
     }
@@ -43,11 +43,11 @@ export class AppConsts {
 
 
 
-        
+
     }
     static readonly isSentStyle = {
         Sent: "badge badge-pill badge-success",
-        Unsent: "badge badge-pill badge-danger"
+        Unsent: "badge badge-pill badge-secondary"
     }
     static readonly projectRole = {
         PM: "badge bg-secondary",

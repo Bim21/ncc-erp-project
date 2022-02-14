@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductProjectDto, ProjectDto } from './../../../service/model/project.dto';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-product-projects',
@@ -32,20 +33,25 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     { propertyName: 'isSent', comparisions: [0], displayName: "Đã gửi weekly", filterType: 2 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-
-
   ];
-  public pmId = -1;
+
+  public sortWeeklyReport: number = 0;
+  public pmId =  -1;
   public searchPM: string = "";
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-
   ]
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
+
+    if(this.sortWeeklyReport) {
+      request.sort = 'timeSendReport';
+      request.sortDirection = this.sortWeeklyReport - 1;
+    }
+
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -179,6 +185,16 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
 
   }
 
+  isReportLate(time: string | null) {
+    if(!time) return false;
+    const timeSendReport = moment(new Date(time))
+    const penaltyTime = moment().day(2).hour(15).minute(0).second(0);
+    return timeSendReport.isAfter(penaltyTime)
+  }
 
+  handleSortWeeklyReportClick () {
+    this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
+    this.refresh();
+  }
 
 }

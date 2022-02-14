@@ -1,5 +1,5 @@
 tr, th, td{
-    vertical-align: text-top ;
+    vertical-align: middle;
    }
    button{
        height: fit-content;
@@ -10,7 +10,7 @@ tr, th, td{
 ::ng-deep .search-status .mat-form-field{
     width: 150px !important;
 } */
-@media only screen and (min-width: 1546px){
+/* @media only screen and (min-width: 1546px){
     .label-pm{
       width: 20%;
     }
@@ -55,10 +55,59 @@ tr, th, td{
     .listStatus{
         width: 50% !important ;
     }
-  }
+  } */
   .projectEvaluation{
     font-size: 1rem;
-    font-family: sans-serif; 
-    white-space: pre-line; 
+    font-family: sans-serif;
+    white-space: pre-line;
     line-height: initial;
   }
+
+
+
+::ng-deep .filter-wrap .mat-form-field{
+  width: 100%;
+}
+
+::ng-deep .training-project .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.85em) scale(.75) ;
+}
+
+.training-project .search-status {
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.training-project .time-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.training-project .time-wrap .start-time {
+  color: var(--secondary);
+}
+
+.training-project .time-wrap .end-time {
+  margin-top: 4px;
+}
+
+.time-send-report-wrap.report-late {
+  color: var(--danger);
+}
+
+.training-project .sort-icon-wrap {
+  margin-left: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.training-project .sort-icon-wrap i {
+  opacity: 0.4;
+  line-height: 0px;
+  font-size: 20px;
+}
+
+.training-project .sort-icon-wrap i.active {
+  opacity: 1;
+}

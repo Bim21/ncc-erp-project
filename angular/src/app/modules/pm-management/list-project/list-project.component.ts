@@ -1,3 +1,4 @@
+import { PagedResultDto } from './../../../../shared/paged-listing-component-base';
 import { AppSessionService } from './../../../../shared/session/app-session.service';
 import { result } from 'lodash-es';
 import { UserDto } from './../../../../shared/service-proxies/service-proxies';
@@ -12,12 +13,17 @@ import { PagedListingComponentBase, PagedRequestDto, PagedResultResultDto } from
 import { finalize, catchError } from 'rxjs/operators';
 import { CreateEditListProjectComponent } from './create-edit-list-project/create-edit-list-project.component';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { ProductProjectDto } from '@app/service/model/project.dto';
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-list-project',
   templateUrl: './list-project.component.html',
   styleUrls: ['./list-project.component.css']
 })
+
 export class ListProjectComponent extends PagedListingComponentBase<any> implements OnInit {
+
   PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
   PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
   PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
@@ -28,14 +34,16 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-
   ]
+
   projectTypeParam = Object.entries(this.APP_ENUM.ProjectType).map(item => {
     return {
       displayName: item[0],
       value: item[1]
     }
   })
+
+  public sortWeeklyReport: number = 0;
   private userList: UserDto[] = [];
   public projectStatus: any = 3;
   projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType);
@@ -57,9 +65,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-    
-    
-
   ];
 
   setValueProjectType(projectType, enumObject) {
@@ -69,7 +74,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     }
   }
-  listProjects: ProjectDto[] = [];
+  listProjects: ProductProjectDto[] = [];
   protected delete(entity: any): void {
     abp.message.confirm(
       "Delete project: " + entity.name + "?",
@@ -86,7 +91,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   constructor(injector: Injector, public dialog: MatDialog, private userService: UserService,
-    public listProjectService: ListProjectService , 
+    public listProjectService: ListProjectService ,
     public sessionService:AppSessionService) {
     super(injector);
     this.pmId = Number(this.sessionService.userId);
@@ -105,11 +110,17 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ): void {
     let check = false;
     let checkFilterPM = false;
-    // if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
-    //   this.pmId = Number(this.sessionService.userId);
-    // }
-  
-    
+
+
+    if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
+      this.pmId = Number(this.sessionService.userId);
+    }
+
+    if(this.sortWeeklyReport) {
+      request.sort = 'timeSendReport';
+      request.sortDirection = this.sortWeeklyReport - 1;
+    }
+
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -121,38 +132,40 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     })
     if (check == false) {
-      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)  
+      request.filterItems = this.AddFilterItem(request, "status", this.projectStatus)
     }
     if(!checkFilterPM){
       request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
     }
+
     if (this.projectStatus == -1) {
       request.filterItems = this.clearFilter(request, "status", "")
       check = true
-
     }
     if (this.pmId == -1) {
       request.filterItems = this.clearFilter(request, "pmId", "")
       checkFilterPM = true
-
     }
+
     this.listProjectService
       .getAllPaging(request)
       .pipe(finalize(() => {
         finishedCallback();
       }))
+
       .subscribe((result: PagedResultResultDto) => {
         this.listProjects = result.result.items;
-        this.showPaging(result.result, pageNumber);
+        this.showPaging(result.result, pageNumber)
         // request.filterItems = this.clearFilter(request, "status", this.projectStatus)
         if (check == false) {
           request.filterItems = this.clearFilter(request, "status", "");
         }
-        if(!checkFilterPM){  
+        if(!checkFilterPM){
           request.filterItems = this.clearFilter(request, "pmId", "");
         }
       });
   }
+
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
       .subscribe(data => {
@@ -212,7 +225,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   }
   showActions(e , item){
-    e.preventDefault(); 
+    e.preventDefault();
     this.contextMenuPosition.x = e.clientX + 'px';
     this.contextMenuPosition.y = e.clientY + 'px';
     this.menu.openMenu();
@@ -239,5 +252,20 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     this.projectStatus = "";
     this.refresh();
   }
-}
+  isReportLate(time: string | null) {
+    if(!time) return false;
+    const timeSendReport = moment(new Date(time))
+    const penaltyTime = moment().day(1).hour(15).minute(0).second(0); // 15:00:00 thứ 3
+    return timeSendReport.isAfter(penaltyTime)
+  }
 
+  handleSortWeeklyReportClick () {
+    this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
+    this.refresh();
+  }
+
+  handleSelectionPunishChange = () => {
+    this.pageSize = 100;
+    this.refresh();
+  }
+}

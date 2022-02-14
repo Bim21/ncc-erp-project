@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { CreateEditTrainingProjectComponent } from './create-edit-training-project/create-edit-training-project.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 
 
 @Component({
@@ -33,14 +34,14 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
-    
-
   ];
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
-
   ]
+
+  public sortWeeklyReport: number = 0;
+
   public pmId =  -1;
   public searchPM: string = "";
   @ViewChild(MatMenuTrigger)
@@ -49,6 +50,11 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let check = false
     let checkFilterPM = false;
+
+    if(this.sortWeeklyReport) {
+      request.sort = 'timeSendReport';
+      request.sortDirection = this.sortWeeklyReport - 1;
+    }
     request.filterItems.forEach(item => {
       if (item.propertyName == "status") {
         check = true
@@ -84,7 +90,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
       if (check == false) {
         request.filterItems = this.clearFilter(request, "status", "");
       }
-      if(!checkFilterPM){  
+      if(!checkFilterPM){
         request.filterItems = this.clearFilter(request, "pmId", "");
       }
       this.showPaging(data.result, pageNumber);
@@ -179,6 +185,18 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   }
   edit(project: TrainingProjectDto) {
     this.showDialog('edit', project)
+  }
+
+  isReportLate(time: string | null) {
+    if(!time) return false;
+    const timeSendReport = moment(new Date(time))
+    const penaltyTime = moment().day(2).hour(15).minute(0).second(0);
+    return timeSendReport.isAfter(penaltyTime)
+  }
+
+  handleSortWeeklyReportClick () {
+    this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
+    this.refresh();
   }
 
 }
