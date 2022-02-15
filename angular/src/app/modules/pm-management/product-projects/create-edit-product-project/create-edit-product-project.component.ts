@@ -34,11 +34,11 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
 
   ngOnInit(): void {
     this.getAllPM();
-    this.title = this.project.name;
     if (this.data.command == "edit") {
       this.project = this.data.dialogData
       this.isEditStatus = true
-    }    
+    }
+    this.title = this.project.name;
   }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError)).subscribe(data => { this.pmList = data.result })
