@@ -13,8 +13,8 @@
                     </div>
                     </div>
                 </div>
-            
-            
+
+
             <div class="card-body table-responsive p-4">
                 <form class="form-horizontal" autocomplete="off" #requestDetail="ngForm">
                     <div class="form-group row detail ">
@@ -39,7 +39,7 @@
                                 <p>{{project.code}}</p>
                         </div>
                         <div *ngIf="!readMode" class="col-md-5">
-                            <input type="text" class="form-control" name="projectCode" id="projectCode" 
+                            <input type="text" class="form-control" name="projectCode" id="projectCode"
                                 required [(ngModel)]="project.code" #projectCode="ngModel" #projectCodeEl />
                             <abp-validation-summary [control]="projectCode" [controlEl]="projectCodeEl">
                             </abp-validation-summary>
@@ -79,7 +79,7 @@
                                     required #projectType="ngModel">
                                     <ng-container *ngFor="let projectType of projectTypeList">
                                         <mat-option [value]="APP_ENUM.ProjectType[projectType]">
-                                            {{projectType}}</mat-option>
+                                            {{ changeTextProjectType(projectType) }}</mat-option>
                                     </ng-container>
                                 </mat-select>
                             </mat-form-field>
@@ -135,7 +135,7 @@
                     </div>
                     <div class="form-group row detail">
                        <label class="col-md-2 col-form-label" for="payCurrent">
-                            Pay Currency: 
+                            Pay Currency:
                        </label>
                        <div *ngIf="readMode" class="col-md-4 mt-2">
                             <p>{{project.currencyName}}</p>
@@ -158,7 +158,7 @@
                             Vẫn Charge Khách hàng:
                         </label>
                         <div *ngIf="readMode" class="col-md-5 pt-2">
-                          
+
                             <mat-checkbox disabled="true" [(ngModel)]="project.isCharge" name="ischarge">
                             </mat-checkbox>
 
@@ -184,7 +184,7 @@
                                         {{type}}
                                     </mat-option>
                                 </mat-select>
-                            </mat-form-field>                           
+                            </mat-form-field>
                         </div>
                     </div>
                     <div class="form-group row detail ">
@@ -225,7 +225,7 @@
                     </div>
                     <div class="form-group row" [hidden]="readMode">
                         <div class="form-group row d-flex justify-content-between">
-                            <button class="btn btn-default mx-2" (click)="readMode = true; getProjectDetail()"> 
+                            <button class="btn btn-default mx-2" (click)="readMode = true; getProjectDetail()">
                                 Cancel
                             </button>
                             <button class="btn btn-primary" [disabled]="!requestDetail.valid || isLoading " (click)="saveAndClose()">
@@ -233,8 +233,8 @@
                             </button>
                         </div>
                     </div>
-                    
-                   
+
+
                 </form>
 
             </div>
