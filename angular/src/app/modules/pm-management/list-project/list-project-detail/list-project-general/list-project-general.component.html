@@ -71,7 +71,8 @@
                            Loại dự án:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
-                           <span [ngClass]="APP_CONST.ProjectTypeStyle[getByEnum(project.projectType , APP_ENUM.ProjectType)]"  >{{getByEnum(project.projectType , APP_ENUM.ProjectType)}}</span>
+                           <span [ngClass]="APP_CONST.ProjectTypeStyle[getByEnum(project.projectType , APP_ENUM.ProjectType)]"  >
+                               {{changeTextProjectType(getByEnum(project.projectType , APP_ENUM.ProjectType))}}</span>
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 ">
                             <mat-form-field class="w-100" appearance="outline">
