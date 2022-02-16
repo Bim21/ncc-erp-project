@@ -72,6 +72,11 @@ tr, th, td{
   padding-right: 0;
 }
 
+.product-project .project-name-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
 .product-project .time-wrap {
   display: flex;
   flex-direction: column;
