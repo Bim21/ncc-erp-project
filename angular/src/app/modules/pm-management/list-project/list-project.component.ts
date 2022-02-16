@@ -245,9 +245,11 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     }
   }
-  onStatuschange() {
 
+  changeTextProjectType(projectType: string) {
+    return projectType === 'TAM' ? 'T&M' : projectType
   }
+
   clearStatus() {
     this.projectStatus = "";
     this.refresh();
