@@ -23,7 +23,7 @@ import * as moment from 'moment';
 export class CreateEditListProjectComponent extends AppComponentBase implements OnInit {
   public project = {} as ProjectDto;
   public checked: boolean;
-  public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
+  public projectTypeList = []
   public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus)
   public clientList: ClientDto[] = []
   public pmList: UserDto;
@@ -44,7 +44,10 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
   ) {
     super(injector);
     this.projectTypeList = Object.keys(this.APP_ENUM.ProjectType).map((projectType: string) => (
-      projectType === 'TAM' ? 'T&M' : projectType
+      {
+        displayName: projectType === 'TAM' ? 'T&M' : projectType,
+        value: projectType
+      }
     ))
   }
 
