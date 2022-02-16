@@ -147,13 +147,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
       //   ]
       // ),
       new MenuItem(
-        this.l('Weekly reports'),
+        this.l('Weekly Reports'),
         '/app/weekly-report',
         'fas fa-chalkboard-teacher',
         'Deliverymanagement.CanViewMenu.WeeklyReport'
       ),
       new MenuItem(
-        this.l('Resource requests'),
+        this.l('Resource Requests'),
         '/app/resource-request',
         'fab fa-chromecast',
         'Deliverymanagement.CanViewMenu.ResourceManagement'
@@ -165,18 +165,10 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         'DeliveryManagement.ResourceRequest.AvailableResource'
       ),
       new MenuItem(
-        this.l('Timesheet'),
+        this.l('Timesheets'),
         '/app/timesheet',
         'fas fa-calendar-alt',
         'Timesheet.CanViewMenu'
-        // [
-        //   new MenuItem(
-        //     this.l('Timesheet'),
-        //     '/app/timesheet',
-        //     'fas fa-circle',
-        //     ''
-        //   ),
-        // ]
       ),
       // new MenuItem(
       //   this.l("CheckPoint"),

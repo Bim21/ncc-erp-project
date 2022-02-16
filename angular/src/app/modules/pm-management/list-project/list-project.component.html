@@ -8,7 +8,7 @@
                 <button type="button" class="btn bg-blue" (click)="createProject()"
                     *ngIf="permission.isGranted(PmManager_Project_Create)">
                     <i class="fa fa-plus-square"></i>
-                    {{ 'Create' | localize }}
+                    Create
                 </button>
             </div>
         </div>
@@ -60,7 +60,7 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="col-6 search-status">
+                        <div class="col-6 search-status pr-2">
                             <!-- <label class="mt-3 label-status"><span class="pr-2">Trạng thái:</span></label> -->
                             <mat-form-field appearance="outline" class="listStatus">
                                 <mat-label>Trạng thái</mat-label>
@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="project-type-wrap">
                                             <span [ngClass]=" APP_CONST.ProjectTypeStyle[getByEnum(project.projectType,APP_ENUM.ProjectType)]">
-                                                {{ getByEnum(project.projectType,APP_ENUM.ProjectType) }}
+                                                {{ changeTextProjectType(getByEnum(project.projectType,APP_ENUM.ProjectType)) }}
                                             </span>
                                         </div>
                                     </div>

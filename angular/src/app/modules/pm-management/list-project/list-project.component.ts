@@ -245,9 +245,11 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     }
   }
-  onStatuschange() {
 
+  changeTextProjectType(projectType: string) {
+    return projectType === 'TAM' ? 'T&M' : projectType
   }
+
   clearStatus() {
     this.projectStatus = "";
     this.refresh();
@@ -255,7 +257,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   isReportLate(time: string | null) {
     if(!time) return false;
     const timeSendReport = moment(new Date(time))
-    const penaltyTime = moment().day(1).hour(15).minute(0).second(0); // 15:00:00 thứ 3
+    const penaltyTime = moment().day(2).hour(15).minute(0).second(0); // 15:00:00 thứ 3
     return timeSendReport.isAfter(penaltyTime)
   }
 

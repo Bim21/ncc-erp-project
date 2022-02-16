@@ -69,7 +69,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
     this.currencyService.getAll().pipe(catchError(this.currencyService.handleError)).subscribe(data => {
       this.currencyList = data.result;
     })
-    
+
   }
 
   public saveAndClose(): void {
@@ -92,6 +92,10 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
       this.project.chargeType = 0;
     }
   }
-  
+
+  changeTextProjectType(projectType: string) {
+    return projectType === 'TAM' ? 'T&M' : projectType
+  }
+
 
 }
