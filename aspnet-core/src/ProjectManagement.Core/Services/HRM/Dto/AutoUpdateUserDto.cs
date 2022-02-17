@@ -23,5 +23,15 @@ namespace ProjectManagement.Services.HRM.Dto
         public string PhoneNumber { get; set; }
         public DateTime? DOB { get; set; }
         public Job? Job { get; set; }
+        public Status Status { get; set; }
+        public DateTime? StartDayOff { get; set; }
+    }
+
+    public enum Status
+    {
+        Working = 0,
+        Pausing = 1,
+        Quit = 2,
+        MaternityLeave = 3
     }
 }
