@@ -420,6 +420,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              HistoryFile = tsp.HistoryFile,
                              HasFile = !string.IsNullOrEmpty(tsp.FilePath),
                              IsComplete = tsp.IsComplete,
+                             RequireTimesheetFile = p.RequireTimesheetFile,
                          }).OrderByDescending(x => x.ClientId);
             //foreach (var item in query)
             //{

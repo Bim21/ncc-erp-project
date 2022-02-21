@@ -29,5 +29,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string TechnicalProblems { get; set; }
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
+        public bool RequireTimesheetFile { get; set; }
     }
 }
