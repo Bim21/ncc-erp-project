@@ -100,14 +100,14 @@
                                                 *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)"
                                                 class="mat-menu-item  w-100" (click)="closeReport(item)">
                                                 <i class="fas fa-times mr-1 text-danger fa-lg"></i>
-                                                Close report
+                                                Close & Add New
                                             </button>
                                         </div>
                                         <button
                                             *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_Update)"
                                             class="mat-menu-item  w-100 " (click)="editReport(item)">
                                             <i class="fas fa-pencil-alt mr-1"></i>
-                                            Edit
+                                            Rename
                                         </button>
                                         <button
                                             *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_StatisticsReport)"
