@@ -149,9 +149,9 @@ export const APP_ENUMS = {
         Other: 4
     },
     UserBranch: {
-        "Hà Nội": 0,
-        "Đà Nẵng": 1,
-        "Hồ Chí Minh": 2,
+        "HN": 0,
+        "DN": 1,
+        "HCM": 2,
         "Vinh": 3,
     },
     UserLevel:
@@ -174,10 +174,10 @@ export const APP_ENUMS = {
         SeniorPlus: 15,
     },
     UserType: {
-        Internship: 0,
-        Collaborators: 1,
+        TTS: 0,
+        CTV: 1,
         Staff: 2,
-        ProbationaryStaff: 3,
+        "T.Việc": 3,
         FakeUser: 4,
 
     },

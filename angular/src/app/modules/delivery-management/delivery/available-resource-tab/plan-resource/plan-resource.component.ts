@@ -270,7 +270,6 @@ export class PlanResourceComponent
   }
 
   updateUserSkill(id) {
-    console.log('aaaa', id);
     let createOrEditUserDialog: BsModalRef;
     createOrEditUserDialog = this._modalService.show(EditUserDialogComponent, {
       class: 'modal-lg',

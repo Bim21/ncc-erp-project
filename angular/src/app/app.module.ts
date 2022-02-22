@@ -153,6 +153,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import {DateAdapter,MAT_DATE_FORMATS} from '@angular/material/core'
 import { DATE_FORMATS } from '@shared/AppEnums';
+import { CollectTimesheetDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/collect-timesheet-dialog/collect-timesheet-dialog.component';
+import { ListTimesheetByProjectCodeDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/list-timesheet-by-project-code-dialog/list-timesheet-by-project-code-dialog.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -288,6 +290,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProjectHistoryByUserComponent,
     AddNoteDialogComponent,
     ProjectFileComponent,
+    CollectTimesheetDialogComponent,
+    ListTimesheetByProjectCodeDialogComponent,
   ],
   imports: [
     CommonModule,

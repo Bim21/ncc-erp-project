@@ -115,5 +115,25 @@ export class AppConsts {
         Done: "badge badge-pill  badge-success"
     }
 
+    static readonly  userLevleStyle =
+    {
+            Intern_0 : 0,
+            Intern_600K : 1,
+            Intern_2M : 2,
+            Intern_4M : 3,
+            FresherMinus : 4,
+            Fresher : 5,
+            FresherPlus : 6,
+            JuniorMinus : 7,
+            Junior : 8,
+            JuniorPlus : 9,
+            MiddleMinus : 10,
+            Middle : 11,
+            MiddlePlus : 12,
+            SeniorMinus : 13,
+            Senior : 14,
+            SeniorPlus : 15,
+    }
+
 
 }

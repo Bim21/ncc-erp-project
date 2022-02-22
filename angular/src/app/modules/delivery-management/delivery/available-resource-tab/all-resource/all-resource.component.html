@@ -79,7 +79,8 @@
                             <td style=" border:none" class="row">
                                 <div class="w-infor" style="white-space: normal; border:none">
                                     <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath}">
+                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath,
+                                userLevel:item.userLevel}">
                                     </app-user-info>
                 
                                 </div>
@@ -110,10 +111,18 @@
                                 </div>
                             </td>
                             <td style="white-space: normal; max-width: 200px;">
-                                
-                                    {{skillsCommas(item.listSkills)}}
-
-                                
+                                    <div class="d-flex" style="align-items: center;">
+                                        <div style="width: 90%">
+                                          <p class="m-0" *ngFor="let skill of item.listSkills">
+                                            - {{skill.name}}
+                    
+                                          </p>
+                                          <!-- {{ skillsCommas(item.listSkills) }} -->
+                                        </div>
+                                        <div style="width: 10%; text-align: right;">
+                                          <i class="fas fa-edit" (click)="updateUserSkill(item.userId)" matTooltip="Edit skill"></i>
+                                        </div>
+                                      </div>
                             </td>
                             <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
                                 <button class="btn btn-secondary btn-sm" (click)="planUser(item)">

@@ -104,6 +104,11 @@
                                             </button>
                                         </div>
                                         <button
+                                        class="mat-menu-item  w-100 " (click)="collectTimesheet(item.id)">
+                                        <i class="fas fa-business-time"></i>
+                                        Collect timesheet
+                                    </button>
+                                        <button
                                             *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_Update)"
                                             class="mat-menu-item  w-100 " (click)="editReport(item)">
                                             <i class="fas fa-pencil-alt mr-1"></i>

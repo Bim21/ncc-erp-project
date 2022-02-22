@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditReportComponent } from './edit-report/edit-report.component';
 import { ReportInfoComponent } from './report-info/report-info.component';
 import { InputFilterDto } from '@shared/filter/filter.component';
+import { CollectTimesheetDialogComponent } from './collect-timesheet-dialog/collect-timesheet-dialog.component';
 
 @Component({
   selector: 'app-weekly-report-tab',
@@ -129,6 +130,13 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       data: {
         report: report
       }
+    })
+  }
+
+  collectTimesheet(pmReportId:number){
+    this.dialog.open(CollectTimesheetDialogComponent, {
+      width: "700px",
+      data: pmReportId
     })
   }
 }

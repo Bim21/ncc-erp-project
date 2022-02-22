@@ -17,6 +17,8 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
 using ProjectManagement.NccCore.BackgroundJob;
+using ProjectManagement.Services.Timesheet;
+using ProjectManagement.Services.Timesheet.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +31,11 @@ namespace ProjectManagement.APIs.PMReports
     public class PMReportAppService : ProjectManagementAppServiceBase
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
-        public PMReportAppService(IBackgroundJobManager backgroundJobManager)
+        private readonly TimesheetService _timesheetService;
+        public PMReportAppService(IBackgroundJobManager backgroundJobManager, TimesheetService timesheetService)
         {
             _backgroundJobManager = backgroundJobManager;
+            _timesheetService = timesheetService;
         }
 
         [HttpPost]
@@ -70,6 +74,67 @@ namespace ProjectManagement.APIs.PMReports
                     Note = x.Note,
                 });
             return await query.GetGridResult(query, input);
+        }
+
+        [HttpGet]
+        public async Task<List<CollectTimesheetDto>> CollectTimesheet(long pmReportId, DateTime startTime, DateTime endTime)
+        {
+            var pmReportProjects = await WorkScope.GetAll<PMReportProject>()
+                .Include(p => p.Project)
+                .Include(p => p.Project.PM)
+                .Where(x => x.PMReportId == pmReportId)
+                .Select(s => new
+                {
+                    pmReportProject = s,
+                    projectCode = s.Project.Code,
+                    projectName = s.Project.Name,
+                    pmName = s.Project.PM.Name + " " + s.Project.PM.Surname
+                 })
+                .ToListAsync();
+
+            var listProjectCode = pmReportProjects
+                .Select(pro=>pro.projectCode).ToList();
+
+            var listTimsheetByProjectCode = await _timesheetService.getTimesheetByListProjectCode(listProjectCode, startTime, endTime);
+            
+            Dictionary<String, TotalWorkingTimeOfWeekDto> mapProjectCodeToTimesheet = listTimsheetByProjectCode
+                .GroupBy(s => s.ProjectCode)
+                .ToDictionary(x => x.Key, s => s.FirstOrDefault());
+           
+            var result = new List<CollectTimesheetDto>();
+            foreach (var pmReport in pmReportProjects)
+            {
+                TotalWorkingTimeOfWeekDto timesheet = mapProjectCodeToTimesheet.ContainsKey(pmReport.projectCode) ? mapProjectCodeToTimesheet[pmReport.projectCode] : default;
+                if(timesheet != null)
+                {
+                    pmReport.pmReportProject.TotalNormalWorkingTime = timesheet.NormalWorkingTime;
+                    pmReport.pmReportProject.TotalOverTime = timesheet.OverTime;
+                    await WorkScope.UpdateAsync(pmReport.pmReportProject);
+                    result.Add(new CollectTimesheetDto
+                    {
+                        NormalWorkingTime = timesheet.NormalWorkingTime,
+                        OverTime = timesheet.OverTime,
+                        ProjectCode = pmReport.projectCode,
+                        ProjectName = pmReport.projectName,
+                        PMName = pmReport.pmName,
+                        Note = "Success"
+                    });
+                }
+                else
+                {
+                    result.Add(new CollectTimesheetDto
+                    {                        
+                        ProjectCode = pmReport.projectCode,
+                        ProjectName = pmReport.projectName,
+                        PMName = pmReport.pmName,
+                        Note = "Not found in Timesheet tool"
+                    });
+
+                }               
+
+            }
+
+            return result;
         }
 
         public async Task<List<PMReportDto>> GetAll()
