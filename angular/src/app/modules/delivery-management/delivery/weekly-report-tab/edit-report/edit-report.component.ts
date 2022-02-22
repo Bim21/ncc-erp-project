@@ -4,6 +4,7 @@ import { PmReportService } from '@app/service/api/pm-report.service';
 import { DialogDataDto } from '@app/service/model/common-DTO';
 import { pmReportDto } from '@app/service/model/pmReport.dto';
 import { AppComponentBase } from '@shared/app-component-base';
+import * as moment from 'moment';
 import { catchError } from 'rxjs/operators';
 
 @Component({
@@ -14,23 +15,39 @@ import { catchError } from 'rxjs/operators';
 export class EditReportComponent extends AppComponentBase implements OnInit {
   report = {} as pmReportDto
   reportName: string = ""
+  dialogType: string = "RENAME"
+  nextTuesday: string
   constructor(injector: Injector, public dialogRef: MatDialogRef<EditReportComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataDto, private reportService: PmReportService) {
     super(injector)
   }
 
   ngOnInit(): void {
-    this.report = this.data.dialogData
+    const now = new Date();
+    this.nextTuesday =  moment().day(9).format("yyyy-MM-DD")
+    this.dialogType = this.data.command || 'RENAME'
+    this.report = this.data.dialogData;
+    this.report.name = this.dialogType === "RENAME" ? this.report.name : `Weekly ${this.nextTuesday}`
     this.reportName = this.report.name
   }
+
   saveAndClose() {
     this.isLoading = true
-    this.reportService.update(this.report).pipe(catchError(this.reportService.handleError))
+    if(this.dialogType === "RENAME") {
+      this.reportService.update(this.report).pipe(catchError(this.reportService.handleError))
       .subscribe(rs => {
         abp.notify.success("Updated report: " + this.report.name)
         this.dialogRef.close(this.report)
       },
-        () => this.isLoading = false)
+      () => this.isLoading = false)
+    } else {
+      this.reportService.create(this.report).pipe(catchError(this.reportService.handleError))
+      .subscribe(rs => {
+        abp.notify.success("Create report: " + this.report.name)
+        this.dialogRef.close(this.report)
+      },
+      () => this.isLoading = false)
+    }
 
   }
 }

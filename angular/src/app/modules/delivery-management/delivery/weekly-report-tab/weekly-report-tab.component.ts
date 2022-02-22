@@ -27,7 +27,7 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       this.pmReportList=data.result.items;
       this.showPaging(data.result,pageNumber);
       this.isLoading =false;
-     
+
     })
   }
   protected delete(entity: WeeklyReportTabComponent): void {
@@ -53,11 +53,11 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   constructor(public router:Router,
     private pmReportService:PmReportService, private dialog:MatDialog,
     public injector:Injector) { super(injector)}
-    
+
 
   ngOnInit(): void {
     this.refresh();
-   
+
   }
   showDetail(item:any){
     if(this.permission.isGranted(this.DeliveryManagement_PMReportProject)){
@@ -65,41 +65,48 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
         queryParams: {
           id:item.id,
           isActive:item.isActive
-          
+
         }
       })
     }
-   
+
   }
-  
+
   closeReport(report:any){
-    abp.message.confirm(
-      "Close this report : " + report.name + "?",
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.pmReportService.closeReport(report.id).subscribe((res)=>{
-            if(res){
-              abp.notify.success(res.result);
-            }
-            this.refresh();
-          })
-        }
+    let dialogData = {
+      name: "",
+      isActive: 1,
+      year: new Date().getFullYear(),
+      type: this.pmReportList[0].type,
+      pmReportProjectId: this.pmReportList[0].pmReportProjectId,
+      pmReportStatus: this.pmReportList[0].status,
+    }
+    const dialogRef = this.dialog.open(EditReportComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {
+        command: "CREATE  ",
+        dialogData
       }
-    );
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refresh()
+      }
+    });
   }
   editReport(pmReport:any){
    let dialogData = {} as any
-     dialogData = {
-       id: pmReport.id,
-       name: pmReport.name,
-       isActive: pmReport.isActive,
-       year: pmReport.year,
-       type: pmReport.type,
-       pmReportStatus: pmReport.pmReportStatus,
-       note: pmReport.note
-     }
-   
+      dialogData = {
+        id: pmReport.id,
+        name: pmReport.name,
+        isActive: pmReport.isActive,
+        year: pmReport.year,
+        type: pmReport.type,
+        pmReportStatus: pmReport.pmReportStatus,
+        note: pmReport.note
+      }
+
    const dialogRef = this.dialog.open(EditReportComponent, {
      width: '700px',
      disableClose: true,
@@ -113,8 +120,9 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
      }
    });
   }
+
   viewReportInfo(report){
-    let dialogRef = this.dialog.open(ReportInfoComponent,{
+    let dialogRef = this.dialog.open(ReportInfoComponent, {
       width:'90vw',
       height: "93vh",
       disableClose: true,
@@ -123,5 +131,4 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       }
     })
   }
-
 }
