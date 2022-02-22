@@ -32,6 +32,14 @@ namespace ProjectManagement.Services.Timesheet
             return await GetAsync<TotalWorkingTimeOfWeekDto>($"api/services/app/ProjectManagement/GetTotalWorkingTime?projectCode={projectCode}&startDate={startDate.ToString("yyyy/MM/dd")}&endDate={endDate.ToString("yyyy/MM/dd")}");
         }
 
+        public async Task<List<TotalWorkingTimeOfWeekDto>> getTimesheetByListProjectCode(List<string> listProjectCode, DateTime startDate, DateTime endDate)
+        {
+            return await PostAsync<List<TotalWorkingTimeOfWeekDto>>($"api/services/app/ProjectManagement/GetTimesheetByListProjectCode" +
+                $"?startDate={startDate.ToString("yyyy/MM/dd")}" +
+                $"&endDate={endDate.ToString("yyyy/MM/dd")}",
+                listProjectCode);
+        }
+
         private async Task<T> GetAsync<T>(string Url)
         {
             using (var httpClient = new HttpClient())

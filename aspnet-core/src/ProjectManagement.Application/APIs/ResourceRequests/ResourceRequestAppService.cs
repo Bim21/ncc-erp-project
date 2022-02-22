@@ -329,6 +329,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     NormalFullName = x.Surname + " " + x.Name,
                                     EmailAddress = x.EmailAddress,
                                     Branch = x.Branch,
+                                    UserLevel = x.UserLevel,
                                     AvatarPath = "/avatars/" + x.AvatarPath,
                                     DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
                                     projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime  : x.CreationTime,

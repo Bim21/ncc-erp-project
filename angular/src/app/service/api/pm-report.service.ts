@@ -37,6 +37,9 @@ export class PmReportService extends BaseApiService {
   changeMessage(message: string) {
     this.messageSource.next(message);
   }
+  collectTimesheet(pmReportId:number, startTime:string, endTime:string):Observable<any>{
+    return this.http.get(this.rootUrl + `/CollectTimesheet?pmReportId=${pmReportId}&startTime=${startTime}&endTime=${endTime}`)
+  }
 
 
 }

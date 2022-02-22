@@ -18,6 +18,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string NormalFullName { get; set; }
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }
+        public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
         public List<ProjectBaseDto> Projects { get; set; }
         public int Used { get; set; }

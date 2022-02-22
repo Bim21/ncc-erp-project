@@ -11,6 +11,8 @@ import { PagedListingComponentBase } from '@shared/paged-listing-component-base'
 import { PlanUserComponent } from './../plan-resource/plan-user/plan-user.component';
 import { ProjectDetailComponent } from './../plan-resource/plan-user/project-detail/project-detail.component';
 import { Component, OnInit, Injector, inject } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
 
 @Component({
   selector: 'app-all-resource',
@@ -116,6 +118,8 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     private availableRerourceService: DeliveryResourceRequestService,
     private dialog: MatDialog,
     private skillService: SkillService,
+    private _modalService: BsModalService,
+
 
 
   ) { super(injector) }
@@ -193,5 +197,18 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       width: '95vw',
       height: '90vh',
     })
+  }
+  updateUserSkill(id) {
+    let createOrEditUserDialog: BsModalRef;
+    createOrEditUserDialog = this._modalService.show(EditUserDialogComponent, {
+      class: 'modal-lg',
+      initialState: {
+        id: id,
+        action: 'pmUpdate',
+      },
+    });
+    createOrEditUserDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
   }
 }
