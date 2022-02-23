@@ -41,5 +41,6 @@ namespace ProjectManagement.Entities
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
         public string Evaluation { get; set; }
+        public bool RequireTimesheetFile { get; set; }
     }
 }
