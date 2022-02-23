@@ -16,7 +16,7 @@
     </div>
     <div  class="d-flex justify-content-end mt-2">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary ml-3" (click)="saveAndClose()"
+        <button class="btn btn-primary mx-3" (click)="saveAndClose()"
             [disabled]="!reportForm.valid || isLoading">{{ dialogType === 'RENAME' ? 'Save' : 'Create' }}</button>
     </div>
 </form>
