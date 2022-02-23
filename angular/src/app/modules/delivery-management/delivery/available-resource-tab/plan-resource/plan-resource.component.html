@@ -167,7 +167,7 @@
                   ? formatDateStartPool(item.dateStartPool)
                   : ''
                   }}
-                  <p><strong>{{ item.totalFreeDay !== 0 ? item.totalFreeDay : '' }}</strong> days ago</p>
+                  <p *ngIf="item.totalFreeDay > 0"><strong>{{ item.totalFreeDay }}</strong> days ago</p>
                 </td>
               </tr>
             </tbody>
