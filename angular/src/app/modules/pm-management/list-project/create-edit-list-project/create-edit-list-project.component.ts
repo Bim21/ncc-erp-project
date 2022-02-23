@@ -1,3 +1,4 @@
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CurrencyService } from './../../../../service/api/currency.service';
 import { CurrencyDto } from './../../../../service/model/currency.dto';
 import { UserDto } from './../../../../../shared/service-proxies/service-proxies';
@@ -63,6 +64,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     }
     else {
       this.project.isCharge = true;
+      this.project.requireTimesheetFile = true;
     }
     this.getAllClient()
     this.title = this.project.name;
