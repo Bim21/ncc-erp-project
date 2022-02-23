@@ -93,7 +93,7 @@ export const APP_ENUMS = {
         TAM: 1,
         FIXPRICE: 2,
         PRODUCT: 3,
-        NoBill: 4,
+        NOCHARGE: 4,
         TRAINING: 5
     },
     SubProjectType: {
