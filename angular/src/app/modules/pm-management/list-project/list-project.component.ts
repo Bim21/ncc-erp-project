@@ -193,8 +193,8 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         chargeType : item.chargeType,
         pmId: item.pmId,
         id: item.id,
-        currencyId: item.currencyId
-
+        currencyId: item.currencyId,
+        requireTimesheetFile: item.requireTimesheetFile
       }
     }
     const dialogRef = this.dialog.open(CreateEditListProjectComponent, {

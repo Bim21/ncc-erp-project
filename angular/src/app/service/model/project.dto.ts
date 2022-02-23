@@ -153,4 +153,5 @@ export class ProductProjectDto {
   timeSendReport: string;
   dateSendReport: string;
   id: number;
+  requireTimesheetFile?: boolean;
 }
