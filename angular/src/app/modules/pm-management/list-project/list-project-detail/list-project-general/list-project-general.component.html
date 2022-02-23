@@ -176,6 +176,7 @@
 
                         </div>
                     </div>
+
                     <div class="form-group row detail mb-1" *ngIf="project.isCharge">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Charge Type :
@@ -229,6 +230,15 @@
                             </mat-form-field>
                         </div>
                     </div>
+
+                    <div class="form-group row detail mb-1">
+                        <label for="require-timesheet" class="col-md-2 col-form-label">Require File:</label>
+                        <div class="col-md-5 pt-2">
+                            <mat-checkbox *ngIf="readMode" disabled="true" name="requireFile">Require Upload Timesheet File</mat-checkbox>
+                            <mat-checkbox *ngIf="!readMode" [(ngModel)]="project.requireTimesheetFile" name="requireFile">Require Upload Timesheet File</mat-checkbox>
+                        </div>
+                    </div>
+
                     <div class="form-group row" [hidden]="readMode">
                         <div class="form-group row d-flex justify-content-between">
                             <button class="btn btn-default mx-2" (click)="readMode = true; getProjectDetail()">
