@@ -88,8 +88,10 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <button *ngIf="(item.isActive || permission.isGranted(DeliveryManagement_PMReport_CloseReport)
-                                    ||  permission.isGranted(DeliveryManagement_PMReport_Update) || permission.isGranted(DeliveryManagement_PMReport_StatisticsReport))
+                                    <button *ngIf="(item.isActive || permission.isGranted(DeliveryManagement_PMReport_CloseReport) 
+                                    || permission.isGranted(DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet)
+                                    || permission.isGranted(DeliveryManagement_PMReport_Update) 
+                                    || permission.isGranted(DeliveryManagement_PMReport_StatisticsReport))
                                     && item.isActive ==true
                                     " mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                         <i class="fas fa-bars fa-lg"></i>
@@ -103,7 +105,7 @@
                                                 Close & Add New
                                             </button>
                                         </div>
-                                        <button
+                                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet)"
                                         class="mat-menu-item  w-100 " (click)="collectTimesheet(item.id)">
                                         <i class="fas fa-business-time"></i>
                                         Collect timesheet

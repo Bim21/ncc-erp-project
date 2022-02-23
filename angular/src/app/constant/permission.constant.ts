@@ -61,6 +61,7 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProject_Delete: "DeliveryManagement.PMReportProject.Delete",
     DeliveryManagement_PMReportProject_GetAll: "DeliveryManagement.PMReportProject.GetAll",
     DeliveryManagement_PMReportProject_Update: "DeliveryManagement.PMReportProject.Update",
+    DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet: "DeliveryManagement.PMReportProject.GetWorkingTimeFromTimesheet",
     DeliveryManagement_ResourceRequest: "DeliveryManagement.ResourceRequest",
     DeliveryManagement_ResourceRequest_AddUserToRequest: "DeliveryManagement.ResourceRequest.AddUserToRequest",
     DeliveryManagement_ResourceRequest_ViewAllByProject: "DeliveryManagement.ResourceRequest.ViewAllByProject",
