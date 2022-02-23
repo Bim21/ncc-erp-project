@@ -56,8 +56,13 @@
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-select [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required
                                     #projectPM="ngModel">
-                                    <mat-option *ngFor="let pm of pmList" [value]="pm.id">
-                                        {{pm.fullName}}</mat-option>
+                                    <mat-form-field class="w-100 px-3 "
+                                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                        <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                                    </mat-form-field>
+                                    <mat-option *ngFor="let pm of pmList | listFilter: 'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'" [value]="pm.id">
+                                        {{pm.fullName}}
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"
@@ -165,7 +170,7 @@
 
                         </div>
                         <div *ngIf="!readMode" class="col-md-5 pt-2">
-                            <mat-checkbox [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge" class="mt-1">is Charge
+                            <mat-checkbox [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge" class="mt-1">is Charged
                             </mat-checkbox>
                     <span><i class="fas fa-question-circle showText ml-1 mb-1"></i></span>
 

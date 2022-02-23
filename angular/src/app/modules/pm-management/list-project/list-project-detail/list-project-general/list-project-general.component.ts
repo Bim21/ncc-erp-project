@@ -19,6 +19,7 @@ import * as moment from 'moment';
   styleUrls: ['./list-project-general.component.css']
 })
 export class ListProjectGeneralComponent extends AppComponentBase implements OnInit {
+  public searchPM: string = "";
   public readMode: boolean = true;
   private projectId: number;
   public projectTypeList: string[] = Object.keys(this.APP_ENUM.ProjectType)
