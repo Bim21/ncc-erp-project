@@ -134,9 +134,12 @@
                                 <td class="text-center"> {{ i+1 }} </td>
 
                                 <td style="white-space: normal;">
-                                    <span class="hyperlink"
+                                    <!-- <span class="hyperlink"
                                         (click)="showDetail(project.id)">{{ project.name }}
-                                    </span>
+                                    </span> -->
+                                    <a [routerLink]="['/app/training-project-detail/training-project-general']" [queryParams]="{id: project.id}" >
+                                        {{ project.name }}
+                                    </a>
                                 </td>
 
                                 <td>

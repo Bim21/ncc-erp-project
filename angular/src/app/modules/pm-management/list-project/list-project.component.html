@@ -141,10 +141,10 @@
                                 <td class="text-center" style="width: 60px; max-width: 60px;"> {{ i+1 }}</td>
                                 <td>
                                     <div class="project-wrap">
-                                        <div class="project-name-wrap">
-                                            <span class="hyperlink"
-                                                (click)="showDetail(project)">{{ project.name }}
-                                            </span>
+                                        <div class="project-name-wrap"> 
+                                            <a [routerLink]="['/app/list-project-detail/list-project-general']" [queryParams]="{id: project.id, type: project.projectType}" >
+                                                {{ project.name }}
+                                            </a>
                                             <span class="project-code">
                                                 {{ project.code }}
                                             </span>

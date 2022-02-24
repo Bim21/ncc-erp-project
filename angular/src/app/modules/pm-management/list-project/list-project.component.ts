@@ -213,17 +213,18 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       }
     });
   }
-  showDetail(project: any) {
-    if (this.permission.isGranted(this.PmManager_Project_ViewDetail)) {
-      this.router.navigate(['app/list-project-detail/list-project-general'], {
-        queryParams: {
-          id: project.id,
-          type: project.projectType
-        }
-      })
-    }
+  // showDetail(project: any) {
+  //   if (this.permission.isGranted(this.PmManager_Project_ViewDetail)) {
+  //     this.router.navigate(['app/list-project-detail/list-project-general'], {
+  //       queryParams: {
+  //         id: project.id,
+  //         type: project.projectType
+  //       }
+  //     })
+  //   }
 
-  }
+  // } 
+
   showActions(e , item){
     e.preventDefault();
     this.contextMenuPosition.x = e.clientX + 'px';
