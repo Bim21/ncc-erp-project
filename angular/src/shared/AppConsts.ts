@@ -61,7 +61,7 @@ export class AppConsts {
         TAM: "badge badge-success",
         FIXPRICE: "badge badge-danger",
         PRODUCT: "badge badge-warning",
-        NoBill: "badge badge-info",
+        NOCHARGE: "badge badge-info",
         TRAINING: "badge bg-secondary"
     }
     static readonly ProjectMilestoneStatus = {
