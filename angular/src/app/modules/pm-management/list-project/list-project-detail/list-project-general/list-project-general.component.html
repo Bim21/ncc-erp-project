@@ -3,7 +3,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <h3>Thông tin chung</h3>
+                        <h3>General</h3>
                     </div>
                     <div class="col-6 text-right ">
                         <a *ngIf="permission.isGranted(PmManager_Project_Update)" class="btn bg-primary  mt-3" [hidden]="!readMode"  (click)="editRequest()">
@@ -19,7 +19,7 @@
                 <form class="form-horizontal" autocomplete="off" #requestDetail="ngForm">
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                          Tên dự án:
+                            Name:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                                 <p>{{project.name}}</p>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="projectCode">
-                          Code:
+                            {{ 'Code' | localize }}:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                                 <p>{{project.code}}</p>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                           Loại dự án:
+                            Project type:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                            <span [ngClass]="APP_CONST.ProjectTypeStyle[getByEnum(project.projectType , APP_ENUM.ProjectType)]"  >
@@ -97,7 +97,7 @@
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                           Trạng thái:
+                            Project status:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                             <p [ngClass]="APP_CONST.statusStyle[getByEnum(project.status, APP_ENUM.ProjectStatus)]">{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p>
@@ -121,7 +121,7 @@
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                            Khách hàng:
+                            Customer:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                                 <p>{{project.clientName}}</p>
@@ -130,7 +130,11 @@
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-select [(ngModel)]="project.clientId" name="client" placeholder="select customer" required
                                     #client="ngModel">
-                                    <mat-option *ngFor="let client of clientList" [value]="client.id">
+                                    <mat-form-field class="w-100 px-3 "
+                                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                        <input matInput [(ngModel)]="searchClient" name="searchClientName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                                    </mat-form-field>
+                                    <mat-option *ngFor="let client of clientList | listFilter : 'name' : searchClient" [value]="client.id">
                                         {{client.name}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
@@ -160,9 +164,7 @@
                         </div>
                     </div>
                     <div class="form-group row detail mb-1">
-                        <label class="col-md-2 col-form-label" for="requestName">
-                            Vẫn Charge Khách hàng:
-                        </label>
+                        <label class="col-md-2 col-form-label" for="requestName"></label>
                         <div *ngIf="readMode" class="col-md-5 pt-2">
 
                             <mat-checkbox disabled="true" [(ngModel)]="project.isCharge" name="ischarge">
@@ -196,7 +198,7 @@
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                            Thời gian bắt đầu:
+                            Start time:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                            <p>{{project.startTime |date:"dd/MM/yyyy"}}</p>
@@ -216,7 +218,7 @@
                     </div>
                     <div class="form-group row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                            Thời gian kết thúc:
+                            End time:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                             <p>{{project.endTime |date:"dd/MM/yyyy"}}</p>
