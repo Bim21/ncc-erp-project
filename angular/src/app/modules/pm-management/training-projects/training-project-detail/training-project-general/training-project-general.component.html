@@ -17,9 +17,9 @@
 
     <div class="card-body table-responsive p-4">
         <form class="form-horizontal" autocomplete="off" #requestDetail="ngForm">
-            <div class="form-group row detail ">
+            <div class="form-group required row detail ">
                 <label class="col-md-2 col-form-label" for="requestName">
-                  Tên dự án:
+                  Name:
                 </label>
                 <div *ngIf="readMode" class="col-md-4 mt-2">
                         <p>{{project.name}}</p>
@@ -31,7 +31,7 @@
                     </abp-validation-summary>
                 </div>
             </div>
-            <div class="form-group row detail ">
+            <div class="form-group required row detail ">
                 <label class="col-md-2 col-form-label" for="projectCode">
                   Code:
                 </label>
@@ -45,7 +45,7 @@
                     </abp-validation-summary>
                 </div>
             </div>
-            <div class="form-group row detail ">
+            <div class="form-group required row detail ">
                 <label class="col-md-2 col-form-label" for="projectPM">
                   PM:
                 </label>
@@ -70,9 +70,9 @@
                     </mat-error>
                 </div>
             </div>
-            <div class="form-group row detail ">
+            <div class="form-group required row detail ">
                 <label class="col-md-2 col-form-label" for="requestName">
-                   Trạng thái:
+                    Status:
                 </label>
                 <div *ngIf="readMode" class="col-md-4 mt-2">
                     <p [ngClass]="APP_CONST.statusStyle[getByEnum(project.status, APP_ENUM.ProjectStatus)]">{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p>
@@ -94,9 +94,9 @@
                     </mat-error>
                 </div>
             </div>
-            <div class="form-group row detail ">
+            <div class="form-group required required row detail ">
                 <label class="col-md-2 col-form-label" for="requestName">
-                    Thời gian bắt đầu:
+                    Start time:
                 </label>
                 <div *ngIf="readMode" class="col-md-4 mt-2">
                    <p>{{project.startTime |date:"dd/MM/yyyy"}}</p>
@@ -116,7 +116,7 @@
             </div>
             <div class="form-group row detail ">
                 <label class="col-md-2 col-form-label" for="requestName">
-                    Thời gian kết thúc:
+                    End time:
                 </label>
                 <div *ngIf="readMode" class="col-md-4 mt-2">
                     <p>{{project.endTime |date:"dd/MM/yyyy"}}</p>

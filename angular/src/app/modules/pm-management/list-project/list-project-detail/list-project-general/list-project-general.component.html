@@ -17,7 +17,7 @@
 
             <div class="card-body table-responsive p-4">
                 <form class="form-horizontal" autocomplete="off" #requestDetail="ngForm">
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Name:
                         </label>
@@ -31,7 +31,7 @@
                             </abp-validation-summary>
                         </div>
                     </div>
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="projectCode">
                             {{ 'Code' | localize }}:
                         </label>
@@ -45,7 +45,7 @@
                             </abp-validation-summary>
                         </div>
                     </div>
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="projectPM">
                           PM:
                         </label>
@@ -71,7 +71,7 @@
                             </mat-error>
                         </div>
                     </div>
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Project type:
                         </label>
@@ -95,9 +95,9 @@
                             </mat-error>
                         </div>
                     </div>
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
-                            Project status:
+                            Status:
                         </label>
                         <div *ngIf="readMode" class="col-md-4 mt-2">
                             <p [ngClass]="APP_CONST.statusStyle[getByEnum(project.status, APP_ENUM.ProjectStatus)]">{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p>
@@ -119,7 +119,7 @@
                             </mat-error>
                         </div>
                     </div>
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Customer:
                         </label>
@@ -143,9 +143,9 @@
                             </mat-error>
                         </div>
                     </div>
-                    <div class="form-group row detail">
+                    <div class="form-group required row detail">
                        <label class="col-md-2 col-form-label" for="payCurrent">
-                            Pay Currency:
+                            Currency:
                        </label>
                        <div *ngIf="readMode" class="col-md-4 mt-2">
                             <p>{{project.currencyName}}</p>
@@ -196,7 +196,7 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="form-group row detail ">
+                    <div class="form-group required row detail ">
                         <label class="col-md-2 col-form-label" for="requestName">
                             Start time:
                         </label>
@@ -251,13 +251,7 @@
                             </button>
                         </div>
                     </div>
-
-
-                </form>
-
-            </div>
-
-
-
+                </form> 
+            </div>  
         </div>
 
