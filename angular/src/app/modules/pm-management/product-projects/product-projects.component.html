@@ -133,9 +133,12 @@
 
                                 <td style="width: 200px;white-space: normal;word-break: break-word;">
                                     <div class="project-name-wrap">
-                                        <span class="hyperlink"
+                                        <!-- <span class="hyperlink"
                                             (click)="showDetail(project.id)">{{ project.name }}
-                                        </span>
+                                        </span> -->
+                                        <a [routerLink]="['/app/product-project-detail/product-project-general']" [queryParams]="{id: project.id}" >
+                                            {{ project.name }}
+                                        </a>
                                         <span class="project-code">
                                             {{ project.code }}
                                         </span>
