@@ -141,7 +141,9 @@ namespace ProjectManagement.APIs.Projects
                                     PmBranch = x.PM.Branch,
                                     PmUserType = x.PM.UserType,
                                     CurrencyId = x.CurrencyId,
-                                    CurrencyName = x.Currency.Name
+                                    CurrencyName = x.Currency.Name,
+                                    RequireTimesheetFile = x.RequireTimesheetFile,
+                                    
                                 });
             return await query.FirstOrDefaultAsync();
         }

@@ -164,15 +164,10 @@
                         </div>
                     </div>
                     <div class="form-group row detail mb-1">
-                        <label class="col-md-2 col-form-label" for="requestName"></label>
-                        <div *ngIf="readMode" class="col-md-5 pt-2">
-
-                            <mat-checkbox disabled="true" [(ngModel)]="project.isCharge" name="ischarge">
-                            </mat-checkbox>
-
-                        </div>
-                        <div *ngIf="!readMode" class="col-md-5 pt-2">
-                            <mat-checkbox [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge" class="mt-1">is Charged
+                        <label class="col-md-2 col-form-label" for="requestName">Charge:</label>
+                    
+                        <div  class="col-md-5 pt-2">
+                            <mat-checkbox [disabled]="readMode" [(ngModel)]="project.isCharge" (change)="checkValue($event)" name="ischarge" class="mt-1">is Charged
                             </mat-checkbox>
                     <span><i class="fas fa-question-circle showText ml-1 mb-1"></i></span>
 
@@ -233,11 +228,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group row detail mb-1">
+                    <div class="form-group row detail mb-3">
                         <label for="require-timesheet" class="col-md-2 col-form-label">Require File:</label>
                         <div class="col-md-5 pt-2">
-                            <mat-checkbox *ngIf="readMode" disabled="true" name="requireFile">Require Upload Timesheet File</mat-checkbox>
-                            <mat-checkbox *ngIf="!readMode" [(ngModel)]="project.requireTimesheetFile" name="requireFile">Require Upload Timesheet File</mat-checkbox>
+                            <mat-checkbox [disabled]="readMode" [(ngModel)]="project.requireTimesheetFile" name="requireFile">Require Upload Timesheet File</mat-checkbox>
                         </div>
                     </div>
 
