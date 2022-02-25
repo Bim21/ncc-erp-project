@@ -44,15 +44,11 @@ export class ImportFileTimesheetDetailComponent implements OnInit {
     }
     this.timesheetProjectService.UpdateFileTimeSheetProject(this.selectedFiles, this.uploadFile.TimesheetProjectId ).pipe(catchError(this.timesheetProjectService.handleError))
     .subscribe((res) => {
-      this.dialogRef.close(this.uploadFile.TimesheetProjectId);
-    }, () => this.isDisable = false);
+      console.log("response: ", res, this.uploadFile.TimesheetProjectId)
+      if(!!res.body){
+        abp.notify.success("Upload file successfully!");
+        this.dialogRef.close(this.uploadFile.TimesheetProjectId);
+      }
+    });
   }
-
 }
-
-
-    
-    
-  
-
-
