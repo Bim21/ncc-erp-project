@@ -17,4 +17,12 @@ export interface IUser {
   userSkills: any[] | undefined;
   userCode: string;
   poolNote: string;
+  userProjectHistory?:IUSerProjectHistory[];
+}
+export interface IUSerProjectHistory {
+  ProjectName: string;
+  ProjectRole: string;
+  StartTime: string;
+  allowcatePercentage: number;
+  Status: number;
 }

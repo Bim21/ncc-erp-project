@@ -241,6 +241,7 @@ namespace ProjectManagement.Authorization
         public const string DeliveryManagement_CanViewMenu = "DeliveryManagement.CanViewMenu";
         public const string Deliverymanagement_CanViewMenu_ResourceManagement = "Deliverymanagement.CanViewMenu.ResourceManagement";
         public const string DeliveryManagement_CanViewMenu_WeeklyReport = "Deliverymanagement.CanViewMenu.WeeklyReport";
+
         //PmReport
         public const string DeliveryManagement_PMReport = "DeliveryManagement.PMReport";
         public const string DeliveryManagement_PMReport_ViewAll = "DeliveryManagement.PMReport.ViewAll";
@@ -269,11 +270,14 @@ namespace ProjectManagement.Authorization
         public const string DeliveryManagement_ResourceRequest_ViewAllByProject = "DeliveryManagement.ResourceRequest.ViewAllByProject";
         public const string DeliveryManagement_ResourceRequest_ViewAllResourceRequest = "DeliveryManagement.ResourceRequest.ViewAllResourceRequest";
         public const string DeliveryManagement_ResourceRequest_ViewDetailResourceRequest = "DeliveryManagement.ResourceRequest.ViewDetailResourceRequest";
+        public const string DeliveryManagement_ResourceRequest_ViewVendorResource = "DeliveryManagement.ResourceRequest.ViewVendorResource";
+
         public const string DeliveryManagement_ResourceRequest_AddUserToRequest = "DeliveryManagement.ResourceRequest.AddUserToRequest";
         public const string DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest = "DeliveryManagement.ResourceRequest.SearchAvailableUserForRequest";
         public const string DeliveryManagement_ResourceRequest_AvailableResource = "DeliveryManagement.ResourceRequest.AvailableResource";
         public const string DeliveryManagement_ResourceRequest_AvailableResourceFuture = "DeliveryManagement.ResourceRequest.AvailableResourceFuture";
         public const string DeliveryManagement_ResourceRequest_PlanUser = "DeliveryManagement.ResourceRequest.PlanUser";
+        public const string DeliveryManagement_ResourceRequest_CancelResource = "DeliveryManagement.ResourceRequest.CancelResource";
         public const string DeliveryManagement_ResourceRequest_ApproveUser = "DeliveryManagement.ResourceRequest.ApproveUser";
         public const string DeliveryManagement_ResourceRequest_RejectUser = "DeliveryManagement.ResourceRequest.RejectUser";
         public const string DeliveryManagement_ResourceRequest_Create = "DeliveryManagement.ResourceRequest.Create";
@@ -560,11 +564,15 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject,
                     PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest,
                     PermissionNames.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest,
+                    PermissionNames.DeliveryManagement_ResourceRequest_ViewVendorResource,
+
                     PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest,
                     PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest,
                     PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
                     PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture,
                     PermissionNames.DeliveryManagement_ResourceRequest_PlanUser,
+                    PermissionNames.DeliveryManagement_ResourceRequest_CancelResource,
+
                     PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser,
                     PermissionNames.DeliveryManagement_ResourceRequest_RejectUser,
                     PermissionNames.DeliveryManagement_ResourceRequest_Create,
@@ -828,12 +836,16 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Resource Request By Project" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewVendorResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Vendor resource" },
+
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add User To Resource Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available User For Request" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource Future" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_PlanUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan For User" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan Resource" },
+
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Approve User" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_RejectUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reject User" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Resource Request" },
@@ -1173,12 +1185,16 @@ namespace ProjectManagement.Authorization
                             {
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All By Project" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Resource Request" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewVendorResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Vendor Request" },
+
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add User To Resource Request" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available User For Request" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource Future" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_PlanUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan For User" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan User" },
+
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Approve User" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_RejectUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reject User" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Resource Request" },

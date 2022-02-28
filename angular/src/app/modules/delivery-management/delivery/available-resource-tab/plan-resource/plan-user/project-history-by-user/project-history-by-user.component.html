@@ -13,14 +13,16 @@
     >
       <thead class="bg-light">
         <tr style="border: none">
+          <th class="stt">#</th>
           <th>Tên dự án</th>
           <th style="width: 100px;">Vào/ra</th>
           <th style="width: 100px;">Thời điểm</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of projectsHistoryUser">
-          <td class="text-center">{{ item.projectName }}</td>
+        <tr *ngFor="let item of projectsHistoryUser; let i= index">
+          <td>{{i+1}}</td>
+          <td><strong>{{ item.projectName }}</strong></td>
           <td class="text-center">{{ item.allocatePercentage==0?'Ra khỏi dự án':'Vào dự án'}}</td>
           <td class="text-center">
             {{ item.startTime | date: 'dd/MM/yyyy' }}
@@ -35,6 +37,6 @@
 </div>
 <div>
   <div align="end" class="row justify-content-end">
-    <button class="btn btn-primary" mat-dialog-close>Close</button>
+    <button class="btn btn-secondary" mat-dialog-close>Close</button>
   </div>
 </div>

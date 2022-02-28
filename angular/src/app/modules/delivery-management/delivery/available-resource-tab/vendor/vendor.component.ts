@@ -1,51 +1,48 @@
-import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
-import { ProjectDetailComponent } from './plan-user/project-detail/project-detail.component';
-import { SkillService } from './../../../../../service/api/skill.service';
+import { PagedRequestDto } from './../../../../../../shared/paged-listing-component-base';
+import { SkillDto } from './../../../../../service/model/list-project.dto';
+import { PlanResourceComponent } from './../plan-resource/plan-resource.component';
 import { InputFilterDto } from './../../../../../../shared/filter/filter.component';
-import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
+import { ProjectHistoryByUserComponent } from './../plan-resource/plan-user/project-history-by-user/project-history-by-user.component';
 import { availableResourceDto } from './../../../../../service/model/delivery-management.dto';
-import { AppComponentBase } from '@shared/app-component-base';
-import { PlanUserComponent } from './plan-user/plan-user.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { result } from 'lodash-es';
-import { catchError, finalize, filter } from 'rxjs/operators';
-// import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
-// import { availableResourceDto } from './../../../../service/model/delivery-management.dto';
-import {
-  PagedListingComponentBase,
-  PagedRequestDto,
-} from '@shared/paged-listing-component-base';
-import { Component, OnInit, Injector } from '@angular/core';
-import { SkillDto } from '@app/service/model/list-project.dto';
-import { ProjectResourceRequestService } from '@app/service/api/project-resource-request.service';
-import { ProjectHistoryByUserComponent } from './plan-user/project-history-by-user/project-history-by-user.component';
+import { ProjectDetailComponent } from './../plan-resource/plan-user/project-detail/project-detail.component';
+import { UpdateUserSkillDialogComponent } from './../../../../../users/update-user-skill-dialog/update-user-skill-dialog.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Component, Injector, OnInit } from '@angular/core';
+import { PlanUserComponent } from '../plan-resource/plan-user/plan-user.component';
+import { DeliveryResourceRequestService } from '../../../../../service/api/delivery-request-resource.service';
+import { MatDialog } from '@angular/material/dialog';
+import { catchError, finalize } from 'rxjs/operators';
+import { PagedListingComponentBase } from '../../../../../../shared/paged-listing-component-base';
+import { AddNoteDialogComponent } from '../plan-resource/add-note-dialog/add-note-dialog.component';
+import { SkillService } from '../../../../../service/api/skill.service';
 import * as moment from 'moment';
-import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dialog/update-user-skill-dialog.component';
+import { UserService } from '@app/service/api/user.service';
 import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 @Component({
-  selector: 'app-plan-resource',
-  templateUrl: './plan-resource.component.html',
-  styleUrls: ['./plan-resource.component.css'],
+  selector: 'app-vendor',
+  templateUrl: './vendor.component.html',
+  styleUrls: ['./vendor.component.css']
 })
-export class PlanResourceComponent
-  extends PagedListingComponentBase<PlanResourceComponent>
-  implements OnInit {
+export class VendorComponent extends PagedListingComponentBase<PlanResourceComponent> implements OnInit {
   public listSkills: SkillDto[] = [];
   public skill = '';
   public skillsParam = [];
   subscription: Subscription[] = [];
   DeliveryManagement_ResourceRequest_CancelResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelResource
 
+  // count=0
   protected list(
     request: PagedRequestDto,
     pageNumber: number,
-    finishedCallback: Function, skill?
-
+    finishedCallback: Function,
+    skill?
   ): void {
+
+    // this.pageSizeType = request.maxResultCount
+    // this.pageSizeType = this.pageSize
+    // request.maxResultCount = this.pageSize
     this.isLoading = true;
     let check = false;
     request.filterItems.forEach((item) => {
@@ -57,11 +54,8 @@ export class PlanResourceComponent
     });
 
     this.subscription.push(
-
-
-
       this.availableRerourceService
-        .GetAllPoolResource(request, this.skill)
+        .GetVendorResource(request, this.skill)
         .pipe(
           finalize(() => {
             finishedCallback();
@@ -84,12 +78,11 @@ export class PlanResourceComponent
             });
             this.skill = '';
           }
-
-
           this.showPaging(data.result, pageNumber);
           this.isLoading = false;
         })
     )
+
   }
   protected delete(entity: PlanResourceComponent): void { }
   userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
@@ -149,7 +142,8 @@ export class PlanResourceComponent
     private _modalService: BsModalService,
     private availableRerourceService: DeliveryResourceRequestService,
     private dialog: MatDialog,
-    private skillService: SkillService
+    private skillService: SkillService,
+    private userInfoService: UserService,
   ) {
     super(injector);
   }
@@ -224,7 +218,9 @@ export class PlanResourceComponent
           filterType: 4,
           dropdownData: this.skillsParam,
         });
-      }))
+      })
+    )
+
   }
 
   skillsCommas(arr) {
@@ -300,10 +296,50 @@ export class PlanResourceComponent
               abp.notify.success("Cancel plan for user")
             })
           )
-
         }
       }
     )
+  }
+
+
+  getHistoryProjectsByUserId(user) {
+    this.subscription.push(
+      this.userInfoService.getHistoryProjectsByUserId(user.userId).pipe(catchError(this.userInfoService.handleError)).subscribe(data => {
+        user.isshowProjectHistory = true
+        let userHisTory = '';
+        let count = 0;
+        let listHistory = data.result;
+        listHistory.forEach(project => {
+          count++;
+          if (count <= 6 || user.showAllHistory) {
+            userHisTory +=
+              `<div class="mb-1 d-flex pointer ${project.allowcatePercentage > 0 ? 'join-project' : 'out-project'}">
+              <div class="col-11 p-0">
+                  <p class="mb-0" >
+                  <strong>${project.projectName}</strong> 
+                  <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
+                  ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
+                  <span> - </span> <span>${moment(project.startTime).format("YYYY/MM/DD")}</span></p>
+              </div>
+              <div class="col-1">
+                  <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
+              </div>
+          </div>
+         `
+
+          }
+        });
+        if (count > 10) {
+          user.conditionHistory = true
+        } else {
+          user.conditionHistory = false;
+        }
+        user.userProjectHistory = userHisTory
+      })
+    )
+  }
+  showMoreHistory(user) {
+    user.showAllHistory = !user.showAllHistory;
   }
   ngOnDestroy(): void {
     this.subscription.forEach(sub => {

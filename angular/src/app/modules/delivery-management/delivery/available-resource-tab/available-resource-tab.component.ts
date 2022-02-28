@@ -1,6 +1,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponentBase } from '@shared/app-component-base';
 import { Component, OnInit, Injector } from '@angular/core';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 @Component({
   selector: 'app-available-resource-tab',
@@ -10,6 +11,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 export class AvailableResourceTabComponent extends AppComponentBase implements OnInit {
   currentUrl: string = ""
 
+  DeliveryManagement_ResourceRequest_ViewVendorResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewVendorResource
   constructor(injector: Injector, private router: Router, private route: ActivatedRoute) {
     super(injector);
     this.currentUrl =this.router.url
@@ -41,11 +43,17 @@ export class AvailableResourceTabComponent extends AppComponentBase implements O
       relativeTo:this.route
     })
   }
+  routingVendorTab(){
+    this.router.navigate(['vendor'],{
+      relativeTo:this.route
+    })
+  }
   reloadComponent() {
     this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/app/accountType']);
     });
   }
+
   
 
 }

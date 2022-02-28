@@ -1,0 +1,22 @@
+td {
+    vertical-align: middle;
+  }
+  ::ng-deep .stars-line {
+    z-index: 0;
+  }
+  .pool-table i {
+    color: #686868;
+    font-size: 18px;
+  }
+  ::ng-deep .mat-tooltip {
+    font-size: 13px;
+  }
+
+  .hover-project-name:hover{
+    color: #007bff;;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.on-hover-plan{
+  text-decoration: underline;
+}

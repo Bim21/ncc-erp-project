@@ -9,9 +9,10 @@
                     <a [ngClass]="currentUrl.includes('all-resource')?'active':''"  mat-tab-link (click)="routingAllResourceTab()">
                         All Resource
                     </a>
-                    <!-- <a [ngClass]="currentUrl.includes('future-resource')?'active':''"  mat-tab-link (click)="routingFutureResourceTab()">
-                        Future Resource
-                    </a> -->
+                    <a *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ViewVendorResource)" 
+                     [ngClass]="currentUrl.includes('vendor')?'active':''"  mat-tab-link (click)="routingVendorTab()">
+                        Vendor
+                    </a>
                 </nav>
                 <router-outlet></router-outlet>
             </div>

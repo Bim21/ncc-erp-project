@@ -59,7 +59,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public deleteSkill(resourceRequestSkillId: any): Observable<any> {
     return this.http.delete<any>(
       this.rootUrl +
-        `/DeleteSkill?resourceRequestSkillId=${resourceRequestSkillId}`
+      `/DeleteSkill?resourceRequestSkillId=${resourceRequestSkillId}`
     );
   }
 
@@ -77,4 +77,50 @@ export class DeliveryResourceRequestService extends BaseApiService {
       request
     );
   }
+
+
+  public GetVendorResource(
+    request: PagedRequestDto, skillId?: any
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + '/GetVendorResource?skillId=' + skillId,
+      request
+    );
+  }
+
+  public GetAllPoolResource(
+    request: PagedRequestDto, skillId?: any
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + '/GetAllPoolResource?skillId=' + skillId,
+      request
+    );
+  }
+  public GetAllResource(
+    request: PagedRequestDto, skillId?: any
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + '/GetAllResource?skillId=' + skillId,
+      request
+    );
+  }
+
+  public CancelResourcePlan(
+    id: number
+  ): Observable<any> {
+    return this.http.delete<any>(
+      this.rootUrl + '/CancelResourcePlan?projectUserId=' + id,
+
+    );
+  }
+
+  public updatePoolNote(
+    poolNote: any
+  ): Observable<any> {
+    return this.http.put<any>(
+      this.rootUrl + '/UpdateUserPoolNote', poolNote
+
+    );
+  }
+
 }

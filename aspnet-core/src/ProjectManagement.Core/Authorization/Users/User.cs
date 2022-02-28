@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using ProjectManagement.Entities;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Authorization.Users
@@ -45,5 +46,7 @@ namespace ProjectManagement.Authorization.Users
 
         [MaxLength(3000)]
         public string PoolNote { get; set; }
+        public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
+        public virtual ICollection<UserSkill> UserSkills { get; set; }
     }
 }

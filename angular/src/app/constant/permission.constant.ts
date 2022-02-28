@@ -86,6 +86,8 @@ export const PERMISSIONS_CONSTANT = {
     DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek: "DeliveryManagement.PMReportProjectIssue.ProblemsOfTheWeek",
     DeliveryManagement_PMReportProjectIssue_Update: "DeliveryManagement.PMReportProjectIssue.Update",
     DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth: "DeliveryManagement.PMReportProject.UpdatePmReportProjectHealth",
+    DeliveryManagement_ResourceRequest_CancelResource: "DeliveryManagement.ResourceRequest.CancelResource",
+    DeliveryManagement_ResourceRequest_ViewVendorResource:"DeliveryManagement.ResourceRequest.ViewVendorResource",
 
     //ProjectUser
     DeliveryManagement_ProjectUser: "DeliveryManagement.ProjectUser",

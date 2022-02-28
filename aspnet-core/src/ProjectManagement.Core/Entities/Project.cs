@@ -42,5 +42,7 @@ namespace ProjectManagement.Entities
         public string NewKnowledge { get; set; }
         public string Evaluation { get; set; }
         public bool RequireTimesheetFile { get; set; }
+
+        public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
     }
 }

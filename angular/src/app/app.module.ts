@@ -155,6 +155,9 @@ import {DateAdapter,MAT_DATE_FORMATS} from '@angular/material/core'
 import { DATE_FORMATS } from '@shared/AppEnums';
 import { CollectTimesheetDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/collect-timesheet-dialog/collect-timesheet-dialog.component';
 import { ListTimesheetByProjectCodeDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/list-timesheet-by-project-code-dialog/list-timesheet-by-project-code-dialog.component';
+import { UpdateUserSkillDialogComponent } from './users/update-user-skill-dialog/update-user-skill-dialog.component';
+import { VendorComponent } from './modules/delivery-management/delivery/available-resource-tab/vendor/vendor.component';
+import { UpdateUserRoleComponent } from './users/update-user-role/update-user-role.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -292,6 +295,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ProjectFileComponent,
     CollectTimesheetDialogComponent,
     ListTimesheetByProjectCodeDialogComponent,
+    UpdateUserSkillDialogComponent,
+    VendorComponent,
+    UpdateUserRoleComponent,
   ],
   imports: [
     CommonModule,
