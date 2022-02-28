@@ -116,8 +116,9 @@
                         </span>
 
                         <span style="display: inline-block; width: 10px;">
-                          <i *ngIf="plan.onHover && isAllowCancelPlan(plan.creatorUserId)" class="fas fa-times pointer text-danger ml-1"
-                            (click)="CancelResourcePlan(i,item.fullName)"></i>
+                          <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
+                          || isAllowCancelPlan(plan.creatorUserId))" class="fas fa-times pointer text-danger ml-1"
+                            (click)="CancelResourcePlan(plan,item.fullName)"></i>
                         </span>
 
                       </div>

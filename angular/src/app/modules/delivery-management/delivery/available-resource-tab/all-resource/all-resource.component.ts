@@ -142,11 +142,13 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
         return true
       }
-      else if (creatorUserId !== this.appSession.userId) {
+      else if (creatorUserId === this.appSession.userId) {
+        return true
+      }
+      else{
         return false
       }
     }
-    return true
   }
   planUser(user: any) {
     this.showDialogPlanUser("plan", user);

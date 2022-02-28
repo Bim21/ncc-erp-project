@@ -200,11 +200,13 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
         return true
       }
-      else if (creatorUserId !== this.appSession.userId) {
+      else if (creatorUserId === this.appSession.userId) {
+        return true
+      }
+      else{
         return false
       }
     }
-    return true
   }
   projectHistorUser(user: availableResourceDto) {
     this.showDialogProjectHistoryUser(user);
