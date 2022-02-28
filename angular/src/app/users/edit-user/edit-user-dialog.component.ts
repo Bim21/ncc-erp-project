@@ -54,7 +54,7 @@ export class EditUserDialogComponent extends AppComponentBase
     this.getAllSkill();
     this._userService.get(this.id).subscribe((result) => {
       this.user = result;
-      this.user.userSkills = this.user.userSkills.map(item=>item.skillId)
+      this.user.userSkills = this.user.userSkills
 
       this._userService.getRoles().subscribe((result2) => {
         this.roles = result2.items;

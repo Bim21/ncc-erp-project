@@ -1,3 +1,4 @@
+import { VendorComponent } from './modules/delivery-management/delivery/available-resource-tab/vendor/vendor.component';
 import { ProductProjectDetailComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-detail.component';
 import { ProductProjectDescriptionComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-description/product-project-description.component';
 import { ProductProjectTimesheetComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-timesheet/product-project-timesheet.component';
@@ -338,6 +339,11 @@ import { ProjectFileComponent } from './modules/pm-management/list-project/list-
               {
                 path:"all-resource",
                 component:AllResourceComponent,
+                canActivate:[AppRouteGuard],
+              },
+              {
+                path:"vendor",
+                component:VendorComponent,
                 canActivate:[AppRouteGuard],
               }
             ]

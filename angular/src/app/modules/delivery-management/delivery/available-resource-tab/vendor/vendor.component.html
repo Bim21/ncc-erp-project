@@ -36,68 +36,77 @@
               </div>
             </div>
           </form>
-          <!-- <div class="col-4">
-                        <div>
-                            <mat-form-field class="w-75" appearance="outline">
-                                <mat-select class="w-100" [(ngModel)]="skill" aria-placeholder="Select Skill" name="skill" (selectionChange)="filterSkills($event.value)" placeholder="Search skill">
-                                    <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
-                                        {{skill.name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div> -->
         </div>
       </div>
       <div class="table-responsive py-4 pool-table">
         <div class="fixTableHead">
-          <table [busy]="isLoading" style="border-collapse: collapse" class="table table-hover text-nowrap">
+          <table [busy]="isLoading" style="border-collapse: collapse" class="table text-nowrap">
             <thead class="bg-light">
               <tr style="border: none">
                 <th class="stt">#</th>
                 <th>Employee</th>
-                <th style="width: 75px;">History</th>
-                <th>Temp Projects</th>
+                <th>Projects</th>
+                <th>Plan</th>
                 <th style="width: 200px;">Skills</th>
-                <th>Note</th>
-                <th style="width: 100px;">Date Start Pool</th>
+                <th style="width: 100px;">Using</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="
-                  let item of availableResourceList
-                    | paginate
-                      : {
-                          id: 'server',
-                          itemsPerPage: pageSize,
-                          currentPage: pageNumber,
-                          totalItems: totalItems
-                        };
-                  let i = index
-                ">
+                    let item of availableResourceList
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          };
+                    let i = index
+                  ">
                 <td class="text-center">
                   <span>{{ i + 1 }}</span>
                 </td>
                 <td style="width: 350px;">
                   <div style="width: 100%;">
-                    <app-user-info [userData]="{
-                        fullName: item.fullName,
-                        branch: item.branch,
-                        userType: item.userType,
-                        emailAddress: item.emailAddress,
-                        avatarPath: item.avatarPath,
-                        rateStar:item.starRate,
-                        userLevel: item.userLevel
-                      }">
+                    <app-user-info [userData]="
+                    {fullName:item.fullName,
+                      branch:item.branch,
+                      userType:item.userType,
+                      emailAddress:item.emailAddress,
+                      avatarPath:item.avatarPath,
+                      rateStar:item.starRate,
+                      userLevel:item.userLevel}">
                     </app-user-info>
                   </div>
                 </td>
-                <td class="text-center">
-                  <i class="fas fa-history fa-lg" (click)="projectHistorUser(item)"
-                    matTooltip="Xem dự án trước đây"></i>
+
+                <td>
+                  <p *ngFor="let project of item.workingProjects" class="mb-1">
+                    <strong class="hover-project-name pointer"
+                      (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
+                    </strong>
+                    <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
+                      {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
+                    <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date:
+                      "yyyy/MM/dd"}}</span>
+                  </p>
+                  <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!item.isshowProjectHistory"
+                    matTooltip="View project history" (click)="getHistoryProjectsByUserId(item)"></i>
+                  <div *ngIf="item.isshowProjectHistory"
+                    [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
+                    <div *ngIf="item.userProjectHistory && item.userProjectHistory.length > 0"
+                      [innerHTML]="item.userProjectHistory" style="white-space: nowrap;"></div>
+
+                    <p *ngIf="!item.userProjectHistory || item.userProjectHistory.length == 0">
+                      No project history!
+                    </p>
+                  </div>
+                  <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
+                    *ngIf="item.isshowProjectHistory == true && item.conditionHistory"
+                    (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
                 </td>
 
-                <td style="white-space: normal; max-width: 200px">
+                <td>
                   <div class="d-flex " style="align-items: center;">
                     <div style="width: 90%;">
                       <div *ngFor="let i of item.projectUserPlans" (mouseenter)="i.onHover = true;"
@@ -105,11 +114,12 @@
                         <span [ngClass]="i.onHover?'on-hover-plan':''">
                           <strong>{{ i.projectName }}</strong> - {{ i.startTime | date: 'dd/MM/yyyy' }}
                         </span>
+
                         <span style="display: inline-block; width: 10px;">
                           <i *ngIf="i.onHover && permission.isGranted(DeliveryManagement_ResourceRequest_CancelResource)" class="fas fa-times pointer text-danger ml-1"
                             (click)="CancelResourcePlan(i,item.fullName)"></i>
-
                         </span>
+
                       </div>
                     </div>
                     <div style="width: 10%;" class="text-right">
@@ -125,35 +135,17 @@
                         - {{item.name}}
 
                       </p>
-                      <!-- {{ skillsCommas(item.listSkills) }} -->
                     </div>
                     <div style="width: 10%; text-align: right;">
                       <i class="fas fa-edit" (click)="updateUserSkill(item)" matTooltip="Edit skill"></i>
                     </div>
                   </div>
                 </td>
-                <td style="
-                    white-space: pre-line;
-                    word-break: break-all;
-                    max-width: 200px;
-                    min-width: 150px;
-                  ">
-                  <div class="d-flex" style="align-items: center">
-                    <div style="width: 90%">{{ item.poolNote }}
-                    </div>
-                    <div style="width: 10%; text-align: right;">
-                      <i class="fas fa-edit " (click)="updateNote(item.userId, item.fullName)"
-                        matTooltip="Edit note"></i>
-                    </div>
-                  </div>
-                </td>
+
                 <td class="text-center">
-                  {{
-                  item.dateStartPool !== 0
-                  ? formatDateStartPool(item.dateStartPool)
-                  : ''
-                  }}
-                  <p *ngIf="item.totalFreeDay > 0"><strong>{{ item.totalFreeDay }}</strong> days ago</p>
+                  <strong>
+                    {{item.used}} %
+                  </strong>
                 </td>
               </tr>
             </tbody>

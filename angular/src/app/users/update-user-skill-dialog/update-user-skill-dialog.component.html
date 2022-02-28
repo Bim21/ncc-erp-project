@@ -1,0 +1,31 @@
+<div class="card-header px-0">
+    <h3>Update skill for: {{data.fullName}}</h3>
+</div>
+<div class="form-group row required mt-4">
+    <label class="col-md-3 col-form-label" for="userSkills">Skills:</label>
+    <div class="col-md-9 ">
+        <mat-form-field class="w-100" appearance="outline">
+            <mat-select multiple [(ngModel)]="userSkillList" name="userSkills" placeholder="select skill" required
+                #userSkills="ngModel">
+                <mat-form-field class="w-100 px-3 "
+                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                <input matInput [(ngModel)]="searchSkill" name="searchPMName" placeholder="Search" #search
+                    (keydown)="$event.stopPropagation(); filterSkill()">{{search.focus()}}
+            </mat-form-field>
+                <mat-option *ngFor="let skill of skillList" [value]="skill.id">
+                    {{skill.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-error class="mt-1" *ngIf="userSkills.hasError('required') && userSkills.touched" style="font-size: 13px;">
+            This field is required
+        </mat-error>
+    </div>
+</div>
+<div class="d-flex justify-content-end">
+    <button class="btn btn-secondary mr-2" mat-dialog-close>
+        Cancel
+    </button>
+    <button class="btn btn-primary" (click)="saveAndClose()">
+        Save
+    </button>
+</div>

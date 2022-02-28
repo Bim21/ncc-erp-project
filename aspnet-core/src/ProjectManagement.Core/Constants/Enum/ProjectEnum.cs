@@ -176,7 +176,8 @@ namespace ProjectManagement.Constants.Enum
             Collaborators = 1,
             Staff = 2,
             ProbationaryStaff = 3,
-            FakeUser = 4
+            FakeUser = 4,
+            Vendor = 5
         }
 
         public enum Branch

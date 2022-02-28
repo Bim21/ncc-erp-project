@@ -1,3 +1,4 @@
+import { UpdateUserSkillDialogComponent } from './update-user-skill-dialog/update-user-skill-dialog.component';
 import { SkillService } from './../service/api/skill.service';
 import { DropDownDataDto } from './../../shared/filter/filter.component';
 import { result } from 'lodash-es';
@@ -23,6 +24,9 @@ import { AppConsts } from '@shared/AppConsts';
 import { UserService } from '@app/service/api/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InputFilterDto } from '@shared/filter/filter.component';
+import { IUSerProjectHistory } from '@app/service/model/user.inteface';
+import * as moment from 'moment';
+import { UpdateUserRoleComponent } from './update-user-role/update-user-role.component';
 
 class PagedUsersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -32,6 +36,8 @@ class PagedUsersRequestDto extends PagedRequestDto {
 @Component({
   templateUrl: './users.component.html',
   animations: [appModuleAnimation()]
+
+
 })
 export class UsersComponent extends PagedListingComponentBase<UserDto> {
   userLevelParam = Object.entries(this.APP_ENUM.UserLevel).map(item => {
@@ -73,6 +79,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   skill = ""
   isviewOnlyMe: boolean = false
   advancedFiltersVisible = false;
+  public userProjectHistory: IUSerProjectHistory[] = []
   Pages_Users_Create = PERMISSIONS_CONSTANT.Pages_Users_Create;
   Pages_Users_Delete = PERMISSIONS_CONSTANT.Pages_Users_Delete;
   Pages_Users_ImportUserFromFile = PERMISSIONS_CONSTANT.Pages_Users_ImportUserFromFile;
@@ -120,16 +127,21 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     request.keyword = this.keyword;
     request.isActive = this.isActive;
     this.isLoading = true
-    request.filterItems.forEach(item => {
+    let requestBody: any = request
+    requestBody.skillIds = []
+    requestBody.filterItems.forEach(item => {
       if (item.filterType == 4) {
-        request.filterItems = this.clearFilter(request, "skill", 0)
-        this.skill = item.value
+        requestBody.filterItems = this.clearFilter(requestBody, "skill", 0)
+        // this.skill = item.value
+        requestBody.skillIds.push(item.value)
         check = true
       }
     })
+  
+
     this.userInfoService
       .getUserPaging(
-        request, this.skill
+        requestBody
       )
       .pipe(
         finalize(() => {
@@ -142,7 +154,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         this.isLoading = false
         if (check == true) {
           request.filterItems.push({ propertyName: 'skill', comparision: 0, value: this.skill, filterType: 4, dropdownData: this.skillsParam })
-          this.skill = ''
+          // this.skill = ''
         }
 
       },
@@ -269,5 +281,94 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         }
       }
     )
+  }
+
+  getHistoryProjectsByUserId(user) {
+    this.userInfoService.getHistoryProjectsByUserId(user.id).pipe(catchError(this.userInfoService.handleError)).subscribe(data => {
+      user.isshowProjectHistory = true
+      let userHisTory = '';
+      let count = 0;
+      let listHistory = data.result;
+      listHistory.forEach(project => {
+        count++;
+        if (count <= 6 || user.showAllHistory) {
+          userHisTory +=
+            `<div class="mb-1 d-flex pointer ${project.allowcatePercentage > 0 ? 'join-project' : 'out-project'}">
+              <div class="col-11 p-0">
+                  <p class="mb-0" >
+                  <strong>${project.projectName}</strong> 
+                  <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
+                  ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
+                  -  <span>${moment(project.startTime).format("YYYY/MM/DD")}</span></p>
+              </div>
+              <div class="col-1">
+                  <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
+              </div>
+          </div>
+         `
+
+        }
+      });
+      if (count > 10) {
+        user.conditionHistory = true
+      } else {
+        user.conditionHistory = false;
+      }
+      user.userProjectHistory = userHisTory
+    })
+  }
+
+  showMoreHistory(user) {
+    user.showAllHistory = !user.showAllHistory;
+  }
+
+  updateUserActive(user: UserDto, isActive: boolean) {
+    this.userInfoService.updateUserActive(user.id, isActive).pipe(catchError(this.userInfoService.handleError)).subscribe(rs => {
+      if (isActive) {
+        abp.notify.success(`Update user ${user.fullName} to Active`)
+      }
+      else {
+        abp.notify.success(`Update user ${user.fullName} to InActive`)
+      }
+      this.refresh()
+    })
+  }
+
+  deleteFakeUser(user: UserDto) {
+    abp.message.confirm(
+      "Delete fake user " + user.fullName + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.userInfoService.deleteFakeUser(user.id).pipe(catchError(this.userInfoService.handleError)).subscribe(rs => {
+            abp.notify.success(`deleted fake user ${user.fullName}`)
+            this.refresh()
+          })
+        }
+      }
+    )
+
+  }
+  updateUserSkill(user) {
+    let ref = this.dialog.open(UpdateUserSkillDialogComponent, {
+      width: "700px",
+      data: user
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.refresh()
+      }
+    })
+  }
+  updateUserRole(user) {
+    let ref = this.dialog.open(UpdateUserRoleComponent, {
+      width: "700px",
+      data: user
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.refresh()
+      }
+    })
   }
 }

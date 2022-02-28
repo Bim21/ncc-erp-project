@@ -19,3 +19,11 @@
         
     }
 }
+.hover-project-name:hover{
+    color: #007bff;;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.on-hover-plan{
+    text-decoration: underline;
+  }

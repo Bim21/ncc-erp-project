@@ -86,7 +86,9 @@ export class AppConsts {
         1: "badge badge-primary",
         2: "badge badge-danger",
         3: "badge badge-warning",
-        4: "badge badge-secondary"
+        4: "badge badge-secondary",
+        5: "badge vendor-userType"
+
 
     }
     static readonly SaodoStatusStyle = {
@@ -133,6 +135,13 @@ export class AppConsts {
             SeniorMinus : 13,
             Senior : 14,
             SeniorPlus : 15,
+    }
+    static readonly projectUserRole = {
+        0: "badge bg-danger",
+        1: "badge bg-primary",
+        2: "badge bg-success",
+        3: "badge bg-secondary",
+        4: "badge bg-warning",
     }
 
 

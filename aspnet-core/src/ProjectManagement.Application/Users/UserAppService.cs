@@ -93,42 +93,127 @@ namespace ProjectManagement.Users
             _httpContextAccessor = httpContextAccessor;
         }
 
+
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Pages_Users_ViewAll, PermissionNames.Pages_Users_ViewOnlyMe)]
-        public async Task<GridResult<UserDto>> GetAllPaging(GridParam input, long? skillId)
+        [AbpAuthorize(PermissionNames.Pages_Users_ViewAll)]
+        public async Task<GridResult<GetAllUserDto>> GetAllPaging(InputGetAllUserDto input)
         {
-            bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Pages_Users_ViewAll);
+            var quser = from u in _workScope.All<User>()
+                        select new GetAllUserDto
+                        {
 
-            var userSkills = _workScope.GetAll<UserSkill>();
-            var users = _workScope.GetAll<User>()
-                .Where(x => isViewAll || x.Id == AbpSession.UserId.Value)
-                .Select(x => new UserDto
-                {
-                    Id = x.Id,
-                    UserName = x.UserName,
-                    Name = x.Name,
-                    Surname = x.Surname,
-                    EmailAddress = x.EmailAddress,
-                    UserCode = x.UserCode,
-                    AvatarPath = "/avatars/" + x.AvatarPath,
-                    UserType = x.UserType,
-                    UserLevel = x.UserLevel,
-                    Branch = x.Branch,
-                    IsActive = x.IsActive,
-                    FullName = x.Name + " " + x.Surname,
-                    FullNameNormal = x.Surname + " " + x.Name,
-                    UserSkills = userSkills.Where(s => s.UserId == x.Id).Select(s => new UserSkillDto
-                    {
-                        UserId = s.UserId,
-                        SkillId = s.SkillId,
-                        SkillName = s.Skill.Name
-                    }).ToList(),
-                    PoolNote = x.PoolNote,
-                    RoleNames = _roleManager.Roles.Where(r => x.Roles.Select(x => x.RoleId).Contains(r.Id)).Select(r => r.NormalizedName).ToArray()
-                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.Id).Select(y => y.SkillId).Contains(skillId.Value));
+                            Id = u.Id,
+                            EmailAddress = u.EmailAddress,
+                            AvatarPath = "/avatars/" + u.AvatarPath,
+                            UserType = u.UserType,
+                            UserLevel = u.UserLevel,
+                            Branch = u.Branch,
+                            IsActive = u.IsActive,
+                            FullName = u.Name + " " + u.Surname,
+                            CreationTime = u.CreationTime,
+                            RoleNames = _roleManager.Roles
+                            .Where(r => u.Roles
+                            .Select(x => x.RoleId)
+                            .Contains(r.Id))
+                            .Select(r => r.NormalizedName).ToArray(),
+                            UserSkills = u.UserSkills.Select(s => new UserSkillDto
+                            {
+                                UserId = u.Id,
+                                SkillId = s.SkillId,
+                                SkillName = s.Skill.Name
+                            }).ToList(),
+                            WorkingProjects = u.ProjectUsers
+                            .Where(s => s.Status == ProjectUserStatus.Present && s.AllocatePercentage > 0)
+                            .Select(p => new WorkingProjectDto
+                            {
+                                ProjectName = p.Project.Name,
+                                ProjectRole = p.ProjectRole,
+                                StartTime = p.StartTime
+                            }).ToList(),
+                        };
 
-            return await users.GetGridResult(users, input);
+            if (input.SkillIds != null && !input.SkillIds.IsEmpty())
+            {
+                var qSkillUserIds = _workScope.GetAll<UserSkill>()
+                    .Where(s => input.SkillIds.Contains(s.SkillId))
+                    .Select(s => s.UserId);
+
+                quser = from u in quser
+                        join userId in qSkillUserIds on u.Id equals userId
+                        select u;
+            }
+
+            return await quser.GetGridResult(quser, input);
+
         }
+
+        [HttpGet]
+        public async Task<List<ProjectHistoryDto>> GetHistoryProjectsByUserId(long userId)
+        {
+            return await _workScope.GetAll<ProjectUser>().Where(s => s.UserId == userId)
+                .Where(sa => sa.Status == ProjectUserStatus.Past || (sa.Status == ProjectUserStatus.Present & sa.AllocatePercentage <= 0))
+                .Select(pu => new ProjectHistoryDto
+                {
+                    ProjectId = pu.ProjectId,
+                    ProjectName = pu.Project.Name,
+                    ProjectRole = pu.ProjectRole,
+                    allowcatePercentage = pu.AllocatePercentage,
+                    StartTime = pu.StartTime,
+                    Status = pu.Status,
+                })
+                .OrderBy(s => s.Status)
+                .ThenByDescending(s => s.StartTime)
+                .ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task updateUserSkill(UpdateUserSkillDto input)
+        {
+            var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.UserId).ToListAsync();
+            var currenUserSkillId = userSkills.Select(x => x.SkillId);
+
+            var deleteSkillId = currenUserSkillId.Except(input.UserSkills);
+            var listSkillDelete = userSkills.Where(x => deleteSkillId.Contains(x.SkillId));
+            var listSkillInsert = input.UserSkills.Where(x => !currenUserSkillId.Contains(x));
+
+            foreach (var item in listSkillDelete)
+            {
+                await _workScope.DeleteAsync<UserSkill>(item);
+            }
+
+            foreach (var item in listSkillInsert)
+            {
+                var userSkill = new UserSkill
+                {
+                    UserId = input.UserId,
+                    SkillId = item
+                };
+                await _workScope.InsertAndGetIdAsync(userSkill);
+            }
+
+        }
+
+
+        [HttpPut]
+        public async Task updateUserActive(long userId, bool isActive)
+        {
+            var user = await _userManager.GetUserByIdAsync(userId);
+            user.IsActive = isActive;
+            await _workScope.UpdateAsync<User>(user);
+        }
+
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
+        public async Task DeleteFakeUser(long userId)
+        {
+            var user = await _userManager.GetUserByIdAsync(userId);
+            if (user.UserType != UserType.FakeUser)
+            {
+                throw new UserFriendlyException(String.Format("You can delete FakeUser only!"));
+            }
+            await _userManager.DeleteAsync(user);
+        }
+
 
         [AbpAuthorize(PermissionNames.Pages_Users_Create)]
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -167,7 +252,36 @@ namespace ProjectManagement.Users
             return MapToEntityDto(user);
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Update, PermissionNames.Pages_Users_UpdateMySkills)]
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
+        public async Task<IActionResult> UpdateUserInfo(CreateUpdateUserDto input)
+        {
+            var user = await _userManager.GetUserByIdAsync(input.Id);
+
+            ObjectMapper.Map(input, user);
+            CheckErrors(await _userManager.UpdateAsync(user));
+
+            return new OkObjectResult("Update succesful");
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
+        public async Task<IActionResult> UpdateUserRole(UpdateUserRoleDto input)
+        {
+            var user = await _userManager.GetUserByIdAsync(input.UserId);
+
+            if (input.RoleNames != null && !input.RoleNames.IsEmpty())
+            {
+                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+            }
+
+            return new OkObjectResult("Update succesful");
+        }
+
+
+
+
+        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
             bool isUpdateAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Pages_Users_Update);
@@ -272,7 +386,7 @@ namespace ProjectManagement.Users
                 Position = user.Job.HasValue ? Enum.GetName(typeof(Job), user.Job) : String.Empty,
                 ProjectDtos = new List<ProjectDTO>()
             };
-            
+
 
             if (projectUsers.Any())
             {
@@ -440,9 +554,9 @@ namespace ProjectManagement.Users
         }
 
         [HttpGet]
-        public async Task<List<UserDto>> GetAllUserActive(bool onlyStaff,bool isFake=false)
+        public async Task<List<UserDto>> GetAllUserActive(bool onlyStaff, bool isFake = false)
         {
-            var query = _workScope.GetAll<User>().Where(u => u.IsActive&& isFake?true:(u.UserType != UserType.FakeUser))
+            var query = _workScope.GetAll<User>().Where(u => u.IsActive && isFake ? true : (u.UserType != UserType.FakeUser))
                 .Where(x => onlyStaff ? x.UserType != UserType.Internship : true)
                 .Select(u => new UserDto
                 {
@@ -613,7 +727,7 @@ namespace ProjectManagement.Users
         public async Task<object> AutoUpdateUserFromHRM()
         {
             var hrmUsers = await _hrmService.GetUserFromHRM();
-            
+
             var hrmEmails = hrmUsers.Select(x => x.EmailAddress.ToLower().Trim())
                 .ToHashSet();
 
@@ -658,10 +772,10 @@ namespace ProjectManagement.Users
 
             foreach (var hrmUser in hrmUsers)
             {
-                
-                var pUser = mapProjectUser.ContainsKey(hrmUser.EmailAddress.ToLower().Trim()) ? 
+
+                var pUser = mapProjectUser.ContainsKey(hrmUser.EmailAddress.ToLower().Trim()) ?
                     mapProjectUser[hrmUser.EmailAddress.ToLower().Trim()] : null;
-               
+
                 if (pUser == null && !hrmUser.IsActive)
                 {
                     continue;
@@ -676,7 +790,7 @@ namespace ProjectManagement.Users
                             await ProcessUserQuitJob(pUser, hrmUser.StartDayOff.HasValue ? hrmUser.StartDayOff.Value : DateTimeUtils.GetNow());
                             continue;
                         }
-                        
+
                         if (IsTheSame(hrmUser, pUser))
                         {
                             continue;
@@ -684,7 +798,7 @@ namespace ProjectManagement.Users
                         ObjectMapper.Map(hrmUser, pUser);
                         pUser.UserName = hrmUser.EmailAddress.ToLower().Trim();
                         pUser.UserCode = hrmUser.UserCode;
-                        await _workScope.UpdateAsync(pUser);                        
+                        await _workScope.UpdateAsync(pUser);
 
                         updateSuccessful.Add(hrmUser.EmailAddress);
                     }
@@ -833,7 +947,7 @@ namespace ProjectManagement.Users
                 UserType = user.UserType,
                 UserLevel = user.UserLevel,
                 Branch = user.Branch.Value,
-                IsActive = user.IsActive,                
+                IsActive = user.IsActive,
                 Password = RandomPasswordHelper.CreateRandomPassword(),
                 RoleNames = new string[] { "EMPLOYEE" }
             };
@@ -882,7 +996,7 @@ namespace ProjectManagement.Users
             {
                 return;
             }
-            
+
             user.PhoneNumber = userFromHRM.PhoneNumber;
             user.DOB = userFromHRM.DOB;
             user.Job = userFromHRM.Job;
@@ -891,7 +1005,7 @@ namespace ProjectManagement.Users
 
         private bool IsTheSame(AutoUpdateUserDto hrmUser, User projectUser)
         {
-            return string.Equals(hrmUser.PhoneNumber, projectUser.PhoneNumber)                
+            return string.Equals(hrmUser.PhoneNumber, projectUser.PhoneNumber)
                 && string.Equals(hrmUser.Name, projectUser.Name)
                 && string.Equals(hrmUser.Surname, projectUser.Surname)
                 && string.Equals(hrmUser.UserType, projectUser.UserType)
@@ -899,7 +1013,7 @@ namespace ProjectManagement.Users
                 && string.Equals(hrmUser.Branch, projectUser.Branch)
                 && string.Equals(hrmUser.FullName, projectUser.FullName)
                 && string.Equals(hrmUser.IsActive, projectUser.IsActive);
-           
+
         }
         #endregion
     }

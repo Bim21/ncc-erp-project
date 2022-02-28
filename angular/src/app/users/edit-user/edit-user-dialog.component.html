@@ -82,39 +82,6 @@
           </div>
         </div>
 
-
-
-
-
-        <div class="form-group row required"  *ngIf="!action">
-          <label class="col-md-3 col-form-label" for="userCode">
-            {{ "userCode" | localize }}
-          </label>
-          <div class="col-md-9">
-            <input
-            [disabled]="isviewOnlyMe"
-              type="text"
-              class="form-control"
-              name="userCode"
-              id="userCode"
-              required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="user.userCode"
-              #userCodeModel="ngModel"
-              #userCodeEl
-            />
-            <abp-validation-summary
-              [control]="userCodeModel"
-              [controlEl]="userCodeEl"
-            ></abp-validation-summary>
-          </div>
-        </div>
-      
-
-
-
-    
       <div class="form-group row required" *ngIf="!action" >
         <label class="col-md-3 col-form-label" for="branch">Branch:</label>
         <div class="col-md-9 ">
@@ -164,23 +131,6 @@
               </mat-error>
           </div>
       </div>
-
-        <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="userSkills">User skills:</label>
-          <div class="col-md-9 ">
-              <mat-form-field class="w-100" appearance="outline">
-                  <mat-select multiple  [(ngModel)]="user.userSkills" name="userSkills" placeholder="select skill" required
-                      #userSkills="ngModel">
-                      <mat-option *ngFor="let skill of skillList" [value]="skill.id">
-                          {{skill.name}}</mat-option>
-                  </mat-select>
-              </mat-form-field>
-              <mat-error class="mt-1" *ngIf="userSkills.hasError('required') && userSkills.touched"
-                  style="font-size: 13px;">
-                  This field is required
-              </mat-error>
-          </div>
-      </div>
         <div class="form-group row required"  *ngIf="!action">
           <label class="col-md-3 col-form-label" for="emailAddress">
             {{ "EmailAddress" | localize }}
@@ -224,27 +174,7 @@
           </div>
         </div>
       </tab>
-      <tab [heading]="'UserRoles' | localize" class="pt-3 px-2"  *ngIf="!isviewOnlyMe">
-        <div class="form-group row mb-0">
-          <ng-container *ngFor="let role of roles; let i = index">
-            <div class="col-md-6">
-              <div class="custom-control custom-checkbox">
-                <input
-                [disabled]="isviewOnlyMe"
-                  type="checkbox"
-                  class="custom-control-input"
-                  [id]="'role_' + i"
-                  [checked]="isRoleChecked(role.normalizedName)"
-                  (change)="onRoleChange(role, $event)"
-                />
-                <label class="custom-control-label" [for]="'role_' + i">
-                  {{ role.name }}
-                </label>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-      </tab>
+   
     </tabset>
   </div>
   <abp-modal-footer

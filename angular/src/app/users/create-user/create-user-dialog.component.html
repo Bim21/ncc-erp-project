@@ -139,7 +139,7 @@ flex-direction: column;"
         
       
      
-        <div class="form-group row ">
+        <!-- <div class="form-group row ">
           <label class="col-md-3 col-form-label" for="userCode">
             {{ "userCode" | localize }}
           </label>
@@ -149,21 +149,10 @@ flex-direction: column;"
               class="form-control"
               name="userCode"
               id="userCode"
-              minlength="2"
-              maxlength="32"
               [(ngModel)]="user.userCode"
-              #userCodeModel="ngModel"
-              #userCodeEl
             />
-            <abp-validation-summary
-              [control]="userCodeModel"
-              [controlEl]="userCodeEl"
-            ></abp-validation-summary>
           </div>
-        </div>
-      
-
-
+        </div> -->
 
     
       <div class="form-group row required">
@@ -216,7 +205,7 @@ flex-direction: column;"
           </div>
       </div>
 
-        <div class="form-group row required">
+        <!-- <div class="form-group row required">
           <label class="col-md-3 col-form-label" for="userSkills">Skill:</label>
           <div class="col-md-9 ">
               <mat-form-field class="w-100" appearance="outline">
@@ -231,7 +220,7 @@ flex-direction: column;"
                   This field is required
               </mat-error>
           </div>
-      </div>
+      </div> -->
         <div class="form-group row required">
           <label class="col-md-3 col-form-label" for="emailAddress">
             {{ "EmailAddress" | localize }}
@@ -255,7 +244,7 @@ flex-direction: column;"
             ></abp-validation-summary>
           </div>
         </div>
-        <div class="form-group row mb-0">
+        <!-- <div class="form-group row mb-0">
           <label class="col-md-3 col-form-label">
             {{ "IsActive" | localize }}
           </label>
@@ -271,7 +260,7 @@ flex-direction: column;"
               <label class="custom-control-label mt-2" for="isActive"></label>
             </div>
           </div>
-        </div>
+        </div> -->
       </tab>
       <tab [heading]="'UserRoles' | localize" class="pt-3 px-2">
         <div class="form-group row mb-0">

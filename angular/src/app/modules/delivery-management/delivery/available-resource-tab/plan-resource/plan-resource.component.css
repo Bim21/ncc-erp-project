@@ -11,6 +11,11 @@ td {
 ::ng-deep .mat-tooltip {
   font-size: 13px;
 }
-.pool-table i:hover {
-  color: black !important;
+
+.cancel-plan{
+  font-size: 14px; cursor: pointer;
+}
+
+.on-hover-plan{
+  text-decoration: underline;
 }

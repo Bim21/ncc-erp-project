@@ -1959,7 +1959,7 @@ export class UserServiceProxy {
    * @return Success
    */
   update(body: UserDto | undefined): Observable<UserDto> {
-    let url_ = this.baseUrl + '/api/services/app/User/Update';
+    let url_ = this.baseUrl + '/api/services/app/User/UpdateUserInfo';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(body);

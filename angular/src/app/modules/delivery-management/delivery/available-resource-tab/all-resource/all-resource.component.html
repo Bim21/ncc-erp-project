@@ -34,9 +34,9 @@
                                             (click)="addFilter()"></i>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                         </div>
                     </form>
                     <!-- <div class="col-4">
@@ -50,90 +50,124 @@
                             </mat-form-field>
                         </div>
                     </div> -->
-                    
-                    
+
+
                 </div>
             </div>
             <div class=" table-responsive py-4">
                 <div class="fixTableHead">
-                <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                    <thead class="bg-light">
-                        <tr style="border: none;">
-                            <th>STT</th>
-                            <th>Nhân viên</th>
-                            <th>Dự án</th>
-                            <th>Plan sử dụng</th>
-                            <th>Kĩ năng</th>
-                            <th>Sử dụng hiện tại</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of availableResourceList |paginate
+                    <table [busy]="isLoading" style="border-collapse: collapse;" class="table text-nowrap">
+                        <thead class="bg-light">
+                            <tr style="border: none;">
+                                <th>#</th>
+                                <th>Employee</th>
+                                <th>Project</th>
+                                <th>Plan</th>
+                                <th>Skills</th>
+                                <th>Using</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of availableResourceList |paginate
                             : {
                                 id: 'server',
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
                               }; let i = index">
-                            <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td style=" border:none" class="row">
-                                <div class="w-infor" style="white-space: normal; border:none">
-                                    <app-user-info [userData]="{fullName:item.fullName,branch:item.branch,
-                                userType:item.userType,emailAddress:item.emailAddress,avatarPath:item.avatarPath,
-                                userLevel:item.userLevel}">
-                                    </app-user-info>
-                
-                                </div>
-                                <div class="w-review">
-                                    <ngx-stars style="z-index: 1 !important;" [readonly]="true" [wholeStars]="true" [size]="1" [color]="'gold'"  [initialStars]="item.starRate" [maxStars]="item.starRate?item.starRate:0" (ratingOutput)="onRatingSet($event)"></ngx-stars>
-                                </div>
+                                <td class="text-center"><span>{{ i +1 }}</span></td>
+                                <td style="width: 350px;">
+                                    <div style="width: 100%;">
+                                      <app-user-info [userData]="
+                                      {fullName:item.fullName,
+                                        branch:item.branch,
+                                        userType:item.userType,
+                                        emailAddress:item.emailAddress,
+                                        avatarPath:item.avatarPath,
+                                        rateStar:item.starRate,
+                                        userLevel:item.userLevel}">
+                                      </app-user-info>
+                                    </div>
+                                  </td>
+                                <td>
+                                    <p *ngFor="let project of item.workingProjects" class="mb-1">
+                                        <strong class="hover-project-name pointer"
+                                            (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
+                                        </strong>
+                                        <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
+                                            {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
+                                        <span> - </span><span
+                                            style="font-size: 15px; color: #494d50">{{project.startTime | date:
+                                            "yyyy/MM/dd"}}</span>
+                                    </p>
+                                    <i class=" fas fa-history pointer" style="color: #6b7278;"
+                                        *ngIf="!item.isshowProjectHistory" matTooltip="View project history"
+                                        (click)="getHistoryProjectsByUserId(item)"></i>
+                                    <div *ngIf="item.isshowProjectHistory"
+                                        [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
+                                        <div *ngIf="item.userProjectHistory && item.userProjectHistory.length > 0"
+                                            [innerHTML]="item.userProjectHistory" style="white-space: nowrap;"></div>
 
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
-                                <!-- <strong *ngFor="let project of item.projects;let i =index">
-                                    {{project.projectName}} <span *ngIf="i < item.projects.length-1">,</span>
-                                </strong> -->
-                                <ng-container *ngFor="let project of item.projects">
-                                    <div><strong class="hyperlink" (click)="showProjectDetail(project.projectId,project.projectName)">-{{project.projectName}}</strong></div>
-                                </ng-container>
-                                
-                            
-                                    
-                             
-                                
-                                
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
-                                <div *ngFor="let i of item.projectUserPlans">
-                                    <span><strong>Tham gia dự án:</strong>  {{i.projectName}}</span><br>
-                                    <span><strong>Từ ngày :</strong> {{i.startTime | date: "dd/MM/yyyy"}}</span><br>
-                                    <span><strong>Sử dụng:</strong> {{i.allocatePercentage}}%</span><br><br>
-                                </div>
-                            </td>
-                            <td style="white-space: normal; max-width: 200px;">
+                                        <p *ngIf="!item.userProjectHistory || item.userProjectHistory.length == 0">
+                                            No project history!
+                                        </p>
+                                    </div>
+
+                                    <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
+                                        *ngIf="item.isshowProjectHistory == true && item.conditionHistory"
+                                        (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
+                                </td>
+                                <td>
+                                    <div class="d-flex " style="align-items: center;">
+                                        <div style="width: 90%;">
+                                            <div *ngFor="let i of item.projectUserPlans"
+                                                (mouseenter)="i.onHover = true;" (mouseleave)="i.onHover = false"
+                                                style="white-space: nowrap;">
+                                                <span [ngClass]="i.onHover?'on-hover-plan':''">
+                                                    <strong>{{ i.projectName }}</strong> - {{ i.startTime | date:
+                                                    'dd/MM/yyyy' }}
+                                                </span>
+                                                <span style="display: inline-block; width: 10px;">
+                                                    <i *ngIf="i.onHover && permission.isGranted(DeliveryManagement_ResourceRequest_CancelResource)" class="fas fa-times pointer text-danger ml-1"
+                                                        (click)="CancelResourcePlan(i,item.fullName)"></i></span>
+                                            </div>
+                                        </div>
+                                        <div style="width: 10%;" class="text-right">
+                                            <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
+                                        </div>
+                                    </div>
+
+                                </td>
+
+
+
+
+
+
+
+
+                                <td style="white-space: normal; max-width: 200px;">
                                     <div class="d-flex" style="align-items: center;">
                                         <div style="width: 90%">
-                                          <p class="m-0" *ngFor="let skill of item.listSkills">
-                                            - {{skill.name}}
-                    
-                                          </p>
-                                          <!-- {{ skillsCommas(item.listSkills) }} -->
+                                            <p class="m-0" *ngFor="let skill of item.listSkills">
+                                                - {{skill.name}}
+
+                                            </p>
                                         </div>
                                         <div style="width: 10%; text-align: right;">
-                                          <i class="fas fa-edit" (click)="updateUserSkill(item.userId)" matTooltip="Edit skill"></i>
+                                            <i class="fas fa-edit" (click)="updateUserSkill(item)"
+                                                matTooltip="Edit skill"></i>
                                         </div>
-                                      </div>
-                            </td>
-                            <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
-                                <button class="btn btn-secondary btn-sm" (click)="planUser(item)">
-                                    Plan
-                                </button>
-                            </td>
+                                    </div>
+                                </td>
+                                <td class="text-center"><strong class="mr-2">{{item.used}}%</strong>
 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="bg-light border-top pt-2">
                 <div class="row">
