@@ -30,7 +30,9 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   public skill = '';
   public skillsParam = [];
   subscription: Subscription[] = [];
-  DeliveryManagement_ResourceRequest_CancelResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelResource
+  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
+  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
+
 
   // count=0
   protected list(
@@ -193,6 +195,17 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     });
   }
 
+  public isAllowCancelPlan(creatorUserId: number) {
+    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
+      if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
+        return true
+      }
+      else if (creatorUserId !== this.appSession.userId) {
+        return false
+      }
+    }
+    return true
+  }
   projectHistorUser(user: availableResourceDto) {
     this.showDialogProjectHistoryUser(user);
   }

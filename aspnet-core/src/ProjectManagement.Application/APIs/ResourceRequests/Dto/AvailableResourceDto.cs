@@ -36,6 +36,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
 
     public class ProjectUserPlan
     {
+        public long CreatorUserId { get; set; }
         public long ProjectUserId { get; set; }
         public string ProjectName { get; set; }
         public DateTime StartTime { get; set; }

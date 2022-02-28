@@ -30,7 +30,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public listSkills: SkillDto[] = [];
   public skill = '';
   public skillsParam = [];
-  DeliveryManagement_ResourceRequest_CancelResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelResource
+  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
+  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
+
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
     let check = false;
@@ -135,7 +137,17 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   }
 
-
+  public isAllowCancelPlan(creatorUserId: number) {
+    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
+      if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
+        return true
+      }
+      else if (creatorUserId !== this.appSession.userId) {
+        return false
+      }
+    }
+    return true
+  }
   planUser(user: any) {
     this.showDialogPlanUser("plan", user);
   }

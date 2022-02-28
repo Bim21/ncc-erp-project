@@ -109,14 +109,14 @@
                 <td>
                   <div class="d-flex " style="align-items: center;">
                     <div style="width: 90%;">
-                      <div *ngFor="let i of item.projectUserPlans" (mouseenter)="i.onHover = true;"
-                        (mouseleave)="i.onHover = false" style="white-space: nowrap;">
-                        <span [ngClass]="i.onHover?'on-hover-plan':''">
-                          <strong>{{ i.projectName }}</strong> - {{ i.startTime | date: 'dd/MM/yyyy' }}
+                      <div *ngFor="let plan of item.projectUserPlans" (mouseenter)="plan.onHover = true;"
+                        (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
+                        <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                          <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date: 'dd/MM/yyyy' }}
                         </span>
 
                         <span style="display: inline-block; width: 10px;">
-                          <i *ngIf="i.onHover && permission.isGranted(DeliveryManagement_ResourceRequest_CancelResource)" class="fas fa-times pointer text-danger ml-1"
+                          <i *ngIf="plan.onHover && isAllowCancelPlan(plan.creatorUserId)" class="fas fa-times pointer text-danger ml-1"
                             (click)="CancelResourcePlan(i,item.fullName)"></i>
                         </span>
 
