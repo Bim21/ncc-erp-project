@@ -299,7 +299,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
                   <strong>${project.projectName}</strong> 
                   <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
                   ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
-                  -  <span>${moment(project.startTime).format("YYYY/MM/DD")}</span></p>
+                  -  <span>${moment(project.startTime).format("DD/MM/YYYY")}</span></p>
               </div>
               <div class="col-1">
                   <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
