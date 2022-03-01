@@ -443,6 +443,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
                                     ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
                                     {
+                                        CreatorUserId = p.CreatorUserId.Value,
                                         ProjectUserId = p.Id,
                                         ProjectName = p.Project.Name,
                                         StartTime = p.StartTime.Date,
@@ -536,6 +537,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
                                     ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
                                     {
+                                        CreatorUserId = p.CreatorUserId.Value,
                                         ProjectUserId = p.Id,
                                         ProjectName = p.Project.Name,
                                         StartTime = p.StartTime.Date,
@@ -631,6 +633,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
                                     ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
                                     {
+                                        CreatorUserId = p.CreatorUserId.Value,
                                         ProjectUserId = p.Id,
                                         ProjectName = p.Project.Name,
                                         StartTime = p.StartTime.Date,
@@ -670,12 +673,56 @@ namespace ProjectManagement.APIs.ResourceRequests
 
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_CancelResource)]
+        [AbpAuthorize]
         public async Task CancelResourcePlan(long projectUserId)
         {
-            var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
+            var pu = await WorkScope.GetAll<ProjectUser>()
+                .Include(s => s.User)
+                .Include(s => s.Project)
+                .Include(s => s.Project.PM)
+                .Where(s => s.Id == projectUserId)
+                .Select(s => new
+                {
+                    ProjectUser = s,
+                    ProjectCode = s.Project.Code,
+                    ProjectName = s.Project.Name,
+                    EmployeeName = s.User.Name + " " + s.User.Surname,
+                    PMName = s.Project.PM.Name + " " + s.Project.PM.Surname,
+                    InOutString = s.AllocatePercentage > 0 ? "vào dự án" : "ra dự án"
+                 }).FirstOrDefaultAsync();
+          
+            var projectUser = pu.ProjectUser;
+
+                if(projectUser.Status != ProjectUserStatus.Future)
+                {
+                    throw new UserFriendlyException(String.Format("projectUser with id {0} is not future!", projectUser.Id));
+                }
+                if (projectUser.CreatorUserId != AbpSession.UserId.Value )
+                {
+                    bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource);
+                    if (!allowCancelAnyPlan)
+                        {
+                            throw new UserFriendlyException(String.Format("You don't have permission to cancel resource plan of other people!"));
+                        }
+                }
 
             await WorkScope.DeleteAsync(projectUser);
+
+            if (!pu.ProjectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
+            {               
+                var komuMessage = new StringBuilder();
+                komuMessage.Append($"Vào ngày **{DateTimeUtils.GetNow():dd/MM/yyyy}**, ");
+                komuMessage.Append($"PM **{pu.PMName}** đã hủy plan: ");
+                komuMessage.Append($"**{pu.EmployeeName}** {pu.InOutString } **{pu.ProjectName}** ");
+                komuMessage.Append($"từ ngày **{projectUser.StartTime:dd/MM/yyyy}**, ");
+
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    CreateDate = DateTimeUtils.GetNow(),
+                    Message = komuMessage.ToString(),
+                },
+                ChannelTypeConstant.PM_CHANNEL);
+            }
 
         }
 
@@ -788,7 +835,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
 
             var project = WorkScope.Get<Project>(input.ProjectId);
-            if (!project.Code.Equals("CHO_NGHI"))
+            if (!project.Code.Equals(AppConsts.CHO_NGHI_PROJECT_CODE))
             {
                 var pmKomuId = await _userAppService.UpdateKomuId(AbpSession.UserId.Value);
                 var pmUserName = string.Empty;

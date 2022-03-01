@@ -38,8 +38,8 @@ export class PlanResourceComponent
   public skill = '';
   public skillsParam = [];
   subscription: Subscription[] = [];
-  DeliveryManagement_ResourceRequest_CancelResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelResource
-
+  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
+  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
   protected list(
     request: PagedRequestDto,
     pageNumber: number,
@@ -158,6 +158,21 @@ export class PlanResourceComponent
     this.pageSizeType = 100;
     this.changePageSize();
     this.getAllSkills();
+
+
+  }
+  public isAllowCancelPlan(creatorUserId: number) {
+    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
+      if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
+        return true
+      }
+      else if (creatorUserId === this.appSession.userId) {
+        return true
+      }
+      else{
+        return false
+      }
+    }
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {

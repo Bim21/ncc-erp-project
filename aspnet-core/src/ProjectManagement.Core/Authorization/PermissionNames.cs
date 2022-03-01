@@ -277,7 +277,9 @@ namespace ProjectManagement.Authorization
         public const string DeliveryManagement_ResourceRequest_AvailableResource = "DeliveryManagement.ResourceRequest.AvailableResource";
         public const string DeliveryManagement_ResourceRequest_AvailableResourceFuture = "DeliveryManagement.ResourceRequest.AvailableResourceFuture";
         public const string DeliveryManagement_ResourceRequest_PlanUser = "DeliveryManagement.ResourceRequest.PlanUser";
-        public const string DeliveryManagement_ResourceRequest_CancelResource = "DeliveryManagement.ResourceRequest.CancelResource";
+        public const string DeliveryManagement_ResourceRequest_CancelAnyPlanResource = "DeliveryManagement.ResourceRequest.CancelAnyPlanResource";
+        public const string DeliveryManagement_ResourceRequest_CancelMyPlanOnly = "DeliveryManagement.ResourceRequest.CancelMyPlanOnly";
+
         public const string DeliveryManagement_ResourceRequest_ApproveUser = "DeliveryManagement.ResourceRequest.ApproveUser";
         public const string DeliveryManagement_ResourceRequest_RejectUser = "DeliveryManagement.ResourceRequest.RejectUser";
         public const string DeliveryManagement_ResourceRequest_Create = "DeliveryManagement.ResourceRequest.Create";
@@ -571,7 +573,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
                     PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture,
                     PermissionNames.DeliveryManagement_ResourceRequest_PlanUser,
-                    PermissionNames.DeliveryManagement_ResourceRequest_CancelResource,
+                    PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource,
+                    PermissionNames.DeliveryManagement_ResourceRequest_CancelMyPlanOnly,
 
                     PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser,
                     PermissionNames.DeliveryManagement_ResourceRequest_RejectUser,
@@ -844,7 +847,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource Future" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_PlanUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan For User" },
-                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan Resource" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan Resource" },
+                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelMyPlanOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Resource Only" },
+
 
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Approve User" },
                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_RejectUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reject User" },
@@ -1193,7 +1198,9 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Available Resource Future" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_PlanUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan For User" },
-                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan User" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan Resource" },
+                                 new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_CancelMyPlanOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only" },
+
 
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Approve User" },
                                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ResourceRequest_RejectUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Reject User" },

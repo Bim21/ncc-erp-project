@@ -867,6 +867,31 @@ namespace ProjectManagement.Users
             CurrentUnitOfWork.SaveChanges();
             return input;
         }
+
+        public async Task<long?> GetKomuIdUpdateIfEmpty(User user)
+        {
+            if (user.KomuUserId.HasValue)
+            {
+                return user.KomuUserId.Value;
+            }
+
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+
+            user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto
+            {
+                Username = userName,
+            },
+            ChannelTypeConstant.KOMU_USER);
+
+            if (user.KomuUserId.HasValue)
+            {
+                await _userManager.UpdateAsync(user);
+                return user.KomuUserId;
+            }
+
+            return null;
+        }
+
         public async Task<long?> UpdateKomuId(long userId)
         {
             var user = await _userManager.GetUserByIdAsync(userId);
@@ -1015,6 +1040,7 @@ namespace ProjectManagement.Users
                 && string.Equals(hrmUser.IsActive, projectUser.IsActive);
 
         }
+               
         #endregion
     }
 }

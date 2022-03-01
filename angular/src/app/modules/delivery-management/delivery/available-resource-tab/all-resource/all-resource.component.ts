@@ -30,7 +30,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public listSkills: SkillDto[] = [];
   public skill = '';
   public skillsParam = [];
-  DeliveryManagement_ResourceRequest_CancelResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelResource
+  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
+  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
+
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
     let check = false;
@@ -135,7 +137,19 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   }
 
-
+  public isAllowCancelPlan(creatorUserId: number) {
+    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
+      if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
+        return true
+      }
+      else if (creatorUserId === this.appSession.userId) {
+        return true
+      }
+      else{
+        return false
+      }
+    }
+  }
   planUser(user: any) {
     this.showDialogPlanUser("plan", user);
   }
@@ -239,7 +253,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
                     <strong>${project.projectName}</strong> 
                     <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
                     ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
-                    -  <span>${moment(project.startTime).format("YYYY/MM/DD")}</span></p>
+                    -  <span>${moment(project.startTime).format("DD/MM/YYYY")}</span></p>
                 </div>
                 <div class="col-1">
                     <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
