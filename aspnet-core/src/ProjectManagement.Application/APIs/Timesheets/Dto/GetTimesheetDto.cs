@@ -20,6 +20,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long TotalProject { get; set; }
         public long TotalTimesheet { get; set; }
         public float? TotalWorkingDay { get; set; }
+        public int TotalIsRequiredFile { get; set; }
+        public int TotalHasFile { get; set; }
 
     }
 }
