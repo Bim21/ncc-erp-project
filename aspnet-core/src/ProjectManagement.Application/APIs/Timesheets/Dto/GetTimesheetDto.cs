@@ -22,6 +22,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public float? TotalWorkingDay { get; set; }
         public int TotalIsRequiredFile { get; set; }
         public int TotalHasFile { get; set; }
+        public double ManMonth { get; set; }
 
     }
 }

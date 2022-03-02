@@ -50,6 +50,7 @@ namespace ProjectManagement.APIs.TimeSheets
                     TotalIsRequiredFile = timesheetProject.Where(y => y.TimesheetId == x.Id &&
                                                             y.Project.RequireTimesheetFile)
                                                     .Count(),
+                    ManMonth = Math.Round((double)x.TotalWorkingDay/22, 2)
                 });
 
             return await query.GetGridResult(query, input);
