@@ -18,6 +18,7 @@ import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-deta
 import * as FileSaver from 'file-saver';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
+import { UserService } from '@app/service/api/user.service';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -29,11 +30,33 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.requestBody = request
     this.pageNum = pageNumber
+    let checkFilterPM = false;
+    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewMyProjectOnly) && 
+        !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject))
+    {
+      this.pmId = Number(this.sessionService.userId);
+    }
+    request.filterItems.forEach(item => {
+      if (item.propertyName == "pmId") {
+        checkFilterPM = true;
+        item.value = this.pmId;
+      }
+    })
+    if(!checkFilterPM){
+      request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
+    }
+    if (this.pmId == -1) {
+      request.filterItems = this.clearFilter(request, "pmId", "")
+      checkFilterPM = true
+    }
     this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
       .subscribe((data: PagedResultResultDto) => {
         this.TimesheetDetaiList = data.result.items;
         this.showPaging(data.result, pageNumber);
         this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
+        if(!checkFilterPM){
+          request.filterItems = this.clearFilter(request, "pmId", "");
+        }
       })
   }
   protected delete(item: TimesheetDetailDto): void {
@@ -63,6 +86,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public listExportInvoice: any[] = [];
   public clientId: number = 0;
   public isShowButtonAction: boolean;
+  public pmId = -1;
+  public pmList: any[] = [];
+  public searchPM: string = "";
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -83,7 +109,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
   Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
   Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
-  Timesheet_TimesheetProject_ExportInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ExportInvoice
+  Timesheet_TimesheetProject_ExportInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ExportInvoice;
+  Timesheet_TimesheetProject_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewMyProjectOnly;
+  Timesheet_TimesheetProject_ViewAllProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewAllProject
 
 
   constructor(
@@ -92,8 +120,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector: Injector,
-    private ref: ChangeDetectorRef
-
+    private ref: ChangeDetectorRef,
+    private userService: UserService,
   ) {
     super(injector)
 
@@ -103,6 +131,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
     this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
+    this.getAllPM();
     this.refresh();
     this.showButtonAction();
   }
@@ -350,5 +379,16 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
               this.isShowButtonAction = false;
     else
       this.isShowButtonAction = true
+  }
+  public getAllPM(): void {
+    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+      .subscribe(data => {
+        this.pmList = data.result;
+      })
+  }
+  requiredFile(item){
+    if(item.requireTimesheetFile && !item.hasFile)
+      return 'bd-red';
+    return ''
   }
 }

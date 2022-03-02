@@ -237,6 +237,8 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_Timesheet_ViewProjectBillInfomation: "Timesheet.Timesheet.ViewProjectBillInfomation",
     PmManager_Project_UpdateProjectDetail: "PmManager.Project.UpdateProjectDetail",
     PmManager_Project_ViewProjectInfor: "PmManager.Project.ViewProjectInfor",
+    Timesheet_TimesheetProject_ViewMyProjectOnly: "Timesheet.TimesheetProject.ViewMyProjectOnly",
+    Timesheet_TimesheetProject_ViewAllProject: "Timesheet.TimesheetProject.ViewAllProject",
 
     Timesheet_TimesheetProject_ExportInvoice: "Timesheet.TimesheetProject.ExportInvoice"
 }

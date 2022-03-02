@@ -8,3 +8,10 @@
 .project-timesheet td{
   vertical-align: middle;
 }
+::ng-deep #timesheet-detail .filter-pm .mat-form-field{
+  display: block;
+}
+
+#timesheet-detail .bd-red{
+  border: 1px solid red;
+}

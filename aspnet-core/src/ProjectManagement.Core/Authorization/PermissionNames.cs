@@ -175,14 +175,16 @@ namespace ProjectManagement.Authorization
         public const string Timesheet_TimesheetProject_ViewInvoice = "Timesheet.TimesheetProject.ViewInvoice";
         public const string Timesheet_TimesheetProject_CreateInvoice = "Timesheet.TimesheetProject.CreateInvoice";
         public const string Timesheet_TimesheetProject_ExportInvoice = "Timesheet.TimesheetProject.ExportInvoice";
+        public const string Timesheet_TimesheetProject_ViewMyProjectOnly = "Timesheet.TimesheetProject.ViewMyProjectOnly";
+        public const string Timesheet_TimesheetProject_ViewAllProject = "Timesheet.TimesheetProject.ViewAllProject";
 
-            //TimeSheetProjectBill
-            public const string Timesheet_TimesheetProject_TimesheetProjectBill = "Timesheet.TimesheetProject.TimesheetProjectBill";
-            public const string Timesheet_TimesheetProject_TimesheetProjectBill_GetAll = "Timesheet.TimesheetProject.TimesheetProjectBill.GetAll";
-            public const string Timesheet_TimesheetProject_TimesheetProjectBill_Create = "Timesheet.TimesheetProject.TimesheetProjectBill.Create";
-            public const string Timesheet_TimesheetProject_TimesheetProjectBill_Update = "Timesheet.TimesheetProject.TimesheetProjectBill.Update";
-            public const string Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser = "Timesheet.TimesheetProject.TimesheetProjectBill.ChangeUser";
-            public const string Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill = "Timesheet.TimesheetProject.TimesheetProjectBill.UpdateFromProjectUserBill";
+        //TimeSheetProjectBill
+        public const string Timesheet_TimesheetProject_TimesheetProjectBill = "Timesheet.TimesheetProject.TimesheetProjectBill";
+        public const string Timesheet_TimesheetProject_TimesheetProjectBill_GetAll = "Timesheet.TimesheetProject.TimesheetProjectBill.GetAll";
+        public const string Timesheet_TimesheetProject_TimesheetProjectBill_Create = "Timesheet.TimesheetProject.TimesheetProjectBill.Create";
+        public const string Timesheet_TimesheetProject_TimesheetProjectBill_Update = "Timesheet.TimesheetProject.TimesheetProjectBill.Update";
+        public const string Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser = "Timesheet.TimesheetProject.TimesheetProjectBill.ChangeUser";
+        public const string Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill = "Timesheet.TimesheetProject.TimesheetProjectBill.UpdateFromProjectUserBill";
 
         //Checklist
         public const string CheckList = "CheckList";
@@ -421,6 +423,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheet_TimesheetProject_ViewInvoice,
                     PermissionNames.Timesheet_TimesheetProject_CreateInvoice,
                     PermissionNames.Timesheet_TimesheetProject_ExportInvoice,
+                    PermissionNames.Timesheet_TimesheetProject_ViewMyProjectOnly,
+                    PermissionNames.Timesheet_TimesheetProject_ViewAllProject,
 
                     //Timesheet Project Bill
                     PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill,
@@ -727,6 +731,8 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View info Invoice" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_CreateInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Invoice To Finance" },
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ExportInvoice, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Export Invoice Timesheet For One Project" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewMyProjectOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only My Project" },
+                  new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project" },
 
                  //Timesheet Project Bill
                   new SystemPermission{ Name =  PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "TimeSheet Project Bill" },
@@ -1319,7 +1325,8 @@ namespace ProjectManagement.Authorization
 
                                     }
                                     },
-
+                                    new SystemPermission{ Name = PermissionNames.Timesheet_TimesheetProject_ViewMyProjectOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Only My Project"},
+                                    new SystemPermission{ Name = PermissionNames.Timesheet_TimesheetProject_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project"}
                             }
                         }
                     }
