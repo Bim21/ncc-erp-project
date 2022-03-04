@@ -1,5 +1,6 @@
 ﻿using NccCore.Anotations;
 using ProjectManagement.APIs.Skills.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;

@@ -399,18 +399,15 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize]
         public async Task<GridResult<GetAllResourceDto>> GetVendorResource(InputGetResourceDto input)
         {
-            var query = _resourceManager.QueryAllResource(input, true);
-            return await query.GetGridResult(query, input);
+            return await _resourceManager.GetResources(input, true);
         }
 
         [HttpPost]
         [AbpAuthorize]
         public async Task<GridResult<GetAllResourceDto>> GetAllResource(InputGetResourceDto input)
         {
-            var query = _resourceManager.QueryAllResource(input, false);
-            return await query.GetGridResult(query, input);
+            return await _resourceManager.GetResources(input, false);
         }
-
 
 
         [HttpPost]

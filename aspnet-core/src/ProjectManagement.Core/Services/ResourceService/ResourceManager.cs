@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.IoC;
+using NccCore.Paging;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceManager.Dto;
@@ -333,38 +334,83 @@ namespace ProjectManagement.Services.ResourceManager
                                 StartTime = p.StartTime
                             }).ToList(),
                        });
+                        
+            return quser;
+        }
 
-            if (input.SkillIds != null && !input.SkillIds.IsEmpty())
+        public IQueryable<long> queryUserIdsHaveAnySkill(List<long> skillIds)
+        {
+            if (skillIds == null || skillIds.IsEmpty())
             {
-                //OR
-                var qSkillUserIds = _workScope.GetAll<UserSkill>()
-                   .Where(s => input.SkillIds.Contains(s.SkillId))
+                throw new Exception("skillIds null or empty");
+            }
+            return _workScope.GetAll<UserSkill>()
+                   .Where(s => skillIds.Contains(s.SkillId))
                    .Select(s => s.UserId);
+        }
 
-                //AND
-                if (input.IsAndCondition)
+
+        public async Task<List<long>> getUserIdsHaveAllSkill(List<long> skillIds)
+        {
+            if(skillIds == null || skillIds.IsEmpty())
+            {
+                throw new Exception("skillIds null or empty");
+            }
+            
+            var result = await _workScope.GetAll<UserSkill>()
+                    .Where(s => skillIds[0] == s.SkillId)
+                    .Select(s => s.UserId)
+                    .Distinct()
+                    .ToListAsync();
+
+            if (result == null || result.IsEmpty())
+            {
+                return new List<long>();
+            }
+
+            for (var i = 1; i < skillIds.Count(); i++)
+            {
+                var userIds = await _workScope.GetAll<UserSkill>()
+                    .Where(s => skillIds[i] == s.SkillId)
+                    .Select(s => s.UserId)
+                    .Distinct()
+                    .ToListAsync();
+
+                result = result.Intersect(userIds).ToList();
+
+                if (result == null || result.IsEmpty())
                 {
-                    qSkillUserIds = _workScope.GetAll<UserSkill>()
-                    .Where(s => input.SkillIds[0] == s.SkillId)
-                    .Select(s => s.UserId);
-
-                    for (var i = 1; i < input.SkillIds.Count(); i++)
-                    {
-                        qSkillUserIds = from userId in qSkillUserIds
-                                    join userId2 in (_workScope.GetAll<UserSkill>()
-                                    .Where(s => input.SkillIds[i] == s.SkillId)
-                                    .Select(s => s.UserId)) on userId equals userId2
-                                    select userId;
-                    }
-
+                    return new List<long>();
                 }
+            }
 
-                quser = from u in quser
-                        join userId in qSkillUserIds on u.UserId equals userId
+            return result;
+
+
+        }
+
+
+        public async Task<GridResult<GetAllResourceDto>> GetResources(InputGetResourceDto input, bool isVendor)
+        {
+            var query = QueryAllResource(input, isVendor);
+            if (input.SkillIds == null || input.SkillIds.IsEmpty())
+            {
+                return await query.GetGridResult(query, input);
+            }
+            if (input.SkillIds.Count() == 1)
+            {
+                var querySkillUserIds = queryUserIdsHaveAnySkill(input.SkillIds);
+                query = from u in query
+                        join userId in querySkillUserIds on u.UserId equals userId
                         select u;
 
+                return await query.GetGridResult(query, input);
             }
-            return quser;
+
+            var userIdsHaveAllSkill = await getUserIdsHaveAllSkill(input.SkillIds);
+            query = query.Where(s => userIdsHaveAllSkill.Contains(s.UserId));
+
+            return await query.GetGridResult(query, input);
         }
 
 
