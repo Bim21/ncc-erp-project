@@ -1,12 +1,10 @@
 ﻿using NccCore.Anotations;
-using ProjectManagement.APIs.Skills.Dto;
-using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.APIs.ResourceRequests.Dto
+namespace ProjectManagement.Services.ResourceService.Dto
 {
     public class GetAllResourceDto
     {
@@ -23,7 +21,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
         public int Used { get; set; }
-        public List<ProjectUserPlan> ProjectUserPlans { get; set; }
+        public List<ProjectUserPlans> ProjectUserPlans { get; set; }
         public List<UserSkillDto> UserSkills { get; set; }
         public int? StarRate { get; set; }
         public List<WorkingProjectDto> WorkingProjects { get; set; }

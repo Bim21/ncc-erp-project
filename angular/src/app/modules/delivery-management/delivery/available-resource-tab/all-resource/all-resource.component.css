@@ -27,3 +27,6 @@
 .on-hover-plan{
     text-decoration: underline;
   }
+  button{
+    height: fit-content;
+  }

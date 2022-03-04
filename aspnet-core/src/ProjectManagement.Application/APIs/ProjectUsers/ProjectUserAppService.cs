@@ -20,6 +20,9 @@ using ProjectManagement.Entities;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
@@ -33,11 +36,15 @@ namespace ProjectManagement.APIs.ProjectUsers
     [AbpAuthorize]
     public class ProjectUserAppService : ProjectManagementAppServiceBase, IProjectUserAppService
     {
+        private readonly ResourceManager _resourceManager;
         private ISettingManager _settingManager;
         private KomuService _komuService;
         public ProjectUserAppService(
-            KomuService komuService, ISettingManager settingManager):base()
+            KomuService komuService,
+            ResourceManager resourceManager,
+            ISettingManager settingManager):base()
         {
+            _resourceManager = resourceManager;
             _komuService = komuService;
             _settingManager = settingManager;
         }
@@ -73,6 +80,32 @@ namespace ProjectManagement.APIs.ProjectUsers
                         });
             return await query.ToListAsync();
         }
+
+
+
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject, PermissionNames.DeliveryManagement_ProjectUser_ViewAllByProject)]
+        public async Task<List<UserOfProjectDto>> GetAllWorkingUserByProject(long projectId, bool viewHistory)
+        {
+            var query = _resourceManager.QueryWorkingUsersOfPRoject(projectId)
+                .Where(x => x.Status != ProjectUserStatus.Future);
+            if (!viewHistory)
+            {
+                query = query.Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0);
+            }
+            return  await query.ToListAsync();
+        }
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public async Task<List<UserDto>> GetAllProjectUserInProject(long projectId)
@@ -260,5 +293,6 @@ namespace ProjectManagement.APIs.ProjectUsers
 
             await WorkScope.DeleteAsync(projectUser);
         }
+     
     }
 }

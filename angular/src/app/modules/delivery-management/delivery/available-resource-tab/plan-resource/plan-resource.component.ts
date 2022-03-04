@@ -37,7 +37,9 @@ export class PlanResourceComponent
   public listSkills: SkillDto[] = [];
   public skill = '';
   public skillsParam = [];
-  subscription: Subscription[] = [];
+  private subscription: Subscription[] = [];
+  public selectedSkillId:number[]
+  public isAndCondition:boolean = false
   DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
   DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
   protected list(
@@ -47,21 +49,12 @@ export class PlanResourceComponent
 
   ): void {
     this.isLoading = true;
-    let check = false;
-    request.filterItems.forEach((item) => {
-      if (item.filterType == 4) {
-        request.filterItems = this.clearFilter(request, 'skill', 0);
-        check = true;
-        this.skill = item.value;
-      }
-    });
-
+    let requestBody:any = request 
+    requestBody.skillIds = this.selectedSkillId
+    requestBody.isAndCondition = this.isAndCondition
     this.subscription.push(
-
-
-
       this.availableRerourceService
-        .GetAllPoolResource(request, this.skill)
+        .GetAllPoolResource(requestBody, this.skill)
         .pipe(
           finalize(() => {
             finishedCallback();
@@ -74,18 +67,6 @@ export class PlanResourceComponent
               return item;
             }
           });
-          if (check == true) {
-            request.filterItems.push({
-              propertyName: 'skill',
-              comparision: 0,
-              value: this.skill,
-              filterType: 4,
-              dropdownData: this.skillsParam,
-            });
-            this.skill = '';
-          }
-
-
           this.showPaging(data.result, pageNumber);
           this.isLoading = false;
         })
@@ -110,21 +91,6 @@ export class PlanResourceComponent
       propertyName: 'fullName',
       comparisions: [0, 6, 7, 8],
       displayName: 'User Name',
-    },
-    {
-      propertyName: 'projectName',
-      comparisions: [0, 6, 7, 8],
-      displayName: 'Project Name',
-    },
-    {
-      propertyName: 'projectUserPlans',
-      comparisions: [0, 6, 7, 8],
-      displayName: 'Project User Plans',
-    },
-    {
-      propertyName: 'used',
-      comparisions: [0, 1, 2, 3, 4],
-      displayName: 'Used',
     },
     {
       propertyName: 'branch',
@@ -232,13 +198,6 @@ export class PlanResourceComponent
             value: item.id,
           };
         });
-        this.FILTER_CONFIG.push({
-          propertyName: 'skill',
-          comparisions: [0],
-          displayName: 'Skill',
-          filterType: 4,
-          dropdownData: this.skillsParam,
-        });
       }))
   }
 
@@ -271,7 +230,7 @@ export class PlanResourceComponent
     let ref = this.dialog.open(UpdateUserSkillDialogComponent, {
       width: "700px",
       data: {
-        userSkills: user.listSkills.map(skill => { return { skillId: skill.id } }),
+        userSkills: user.userSkills,
         id: user.userId,
         fullName: user.fullName
       }

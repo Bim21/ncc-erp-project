@@ -3,19 +3,56 @@
         <div class="">
             <div class="">
                 <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
-                            <i class="fas fa-search"></i>
-                        </button>
+
+                    <div class="row w-100">
+                        <div class="col-8 d-flex mt-1">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control" name="keyword" placeholder="Search"
+                                [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+                                    <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                                        [class.fa-angle-down]="!advancedFiltersVisible"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-3 row justify-content-end">
+                            <label for="" style="margin-top: 13px;" class="mr-2">Skills:</label>
+                            <mat-form-field style="width: 300px;" appearance="outline">
+                                <mat-select placeholder="search skill" multiple (selectionChange)="refresh()"
+                                    [(ngModel)]="selectedSkillId">
+                                    <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
+                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition"
+                                            style=" width: 100%;">
+                                            <div class="col-4">
+                                                <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                                            </div>
+                                            <div class="col-8 pt-2">
+                                                <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
+                                                <mat-radio-button  [value]="false">Or</mat-radio-button>
+                                            </div>
+                                        </mat-radio-group>
+                                    </div>
+
+
+
+
+                                    <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
+                                        {{skill.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-1">
+                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length>0"
+                                (click)="selectedSkillId = null; refresh()"></i>
+                        </div>
                     </div>
-                    <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-                        (keyup.enter)="getDataPage(1)" />
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-default" (click)="checkAddFilter()">
-                            <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
-                                [class.fa-angle-down]="!advancedFiltersVisible"></i>
-                        </button>
-                    </div>
+
                 </div>
             </div>
             <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
@@ -78,7 +115,7 @@
                                 <td class="text-center"><span>{{ i +1 }}</span></td>
                                 <td style="width: 350px;">
                                     <div style="width: 100%;">
-                                      <app-user-info [userData]="
+                                        <app-user-info [userData]="
                                       {fullName:item.fullName,
                                         branch:item.branch,
                                         userType:item.userType,
@@ -86,9 +123,9 @@
                                         avatarPath:item.avatarPath,
                                         rateStar:item.starRate,
                                         userLevel:item.userLevel}">
-                                      </app-user-info>
+                                        </app-user-info>
                                     </div>
-                                  </td>
+                                </td>
                                 <td>
                                     <p *ngFor="let project of item.workingProjects" class="mb-1">
                                         <strong class="hover-project-name pointer"
@@ -129,7 +166,8 @@
                                                 </span>
                                                 <span style="display: inline-block; width: 10px;">
                                                     <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
-                                                    || isAllowCancelPlan(plan.creatorUserId))" class="fas fa-times pointer text-danger ml-1"
+                                                    || isAllowCancelPlan(plan.creatorUserId))"
+                                                        class="fas fa-times pointer text-danger ml-1"
                                                         (click)="CancelResourcePlan(plan,item.fullName)"></i></span>
                                             </div>
                                         </div>
@@ -139,19 +177,11 @@
                                     </div>
 
                                 </td>
-
-
-
-
-
-
-
-
                                 <td style="white-space: normal; max-width: 200px;">
                                     <div class="d-flex" style="align-items: center;">
                                         <div style="width: 90%">
-                                            <p class="m-0" *ngFor="let skill of item.listSkills">
-                                                - {{skill.name}}
+                                            <p class="m-0" *ngFor="let skill of item.userSkills">
+                                                - {{skill.skillName}}
 
                                             </p>
                                         </div>

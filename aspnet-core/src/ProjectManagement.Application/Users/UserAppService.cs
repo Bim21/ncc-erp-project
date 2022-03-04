@@ -45,6 +45,7 @@ using ProjectManagement.Configuration;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Constants.Enum;
 using NccCore.Helper;
+using ProjectManagement.Services.ResourceService.Dto;
 
 namespace ProjectManagement.Users
 {
@@ -124,6 +125,7 @@ namespace ProjectManagement.Users
                             }).ToList(),
                             WorkingProjects = u.ProjectUsers
                             .Where(s => s.Status == ProjectUserStatus.Present && s.AllocatePercentage > 0)
+                            .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
                             .Select(p => new WorkingProjectDto
                             {
                                 ProjectName = p.Project.Name,
