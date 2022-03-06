@@ -31,5 +31,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public Branch Branch { get; set; }
         public float WorkingTime { get; set; }
         public string ProjectBillInfomation { get; set; }
+        public UserLevel? UserLevel { get; set; }
     }
 }

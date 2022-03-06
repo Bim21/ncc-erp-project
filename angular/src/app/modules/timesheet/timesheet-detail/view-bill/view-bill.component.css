@@ -2,3 +2,26 @@ button:disabled{
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+.btn-edit-neutral{
+    color: green;
+    background-color: white;
+    border: 2px solid;
+}
+.btn-edit-neutral:hover{
+    color: white;
+    background-color: green;
+    transition: all 0.25s;
+    border-radius: 5px;
+}
+.btn-create-neutral{
+    color: blue;
+    background-color: white;
+    border: 2px solid;
+}
+.btn-create-neutral:hover{
+    color: white;
+    background-color: blue;
+    transition: all 0.25s;
+    border-radius: 5px;
+}

@@ -1,7 +1,6 @@
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
-import { result } from 'lodash-es';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppComponentBase } from '@shared/app-component-base';
 import { BaseApiService } from '@app/service/api/base-api.service';
@@ -12,13 +11,14 @@ import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto } from './../../
 import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
-import { catchError } from 'rxjs/operators';
+import { catchError, filter } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
 import { UserService } from '@app/service/api/user.service';
+import { ClientService } from '@app/service/api/client.service';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -30,33 +30,45 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.requestBody = request
     this.pageNum = pageNumber
-    let checkFilterPM = false;
-    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewMyProjectOnly) && 
-        !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject))
-    {
-      this.pmId = Number(this.sessionService.userId);
+    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme) && !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject)){
+      this.pmId = Number(this.appSession.userId);
     }
+    let objFilter = [
+      {name: 'pmId', isTrue: false, value: this.pmId},
+      {name: 'clientId', isTrue: false, value: this.clientId},
+    ];
+
     request.filterItems.forEach(item => {
-      if (item.propertyName == "pmId") {
-        checkFilterPM = true;
-        item.value = this.pmId;
+      let filter = objFilter.find(x => x.name == item.propertyName)
+      if(filter != null){
+        filter.isTrue = true;
+        item.value = filter.value
       }
     })
-    if(!checkFilterPM){
-      request.filterItems = this.AddFilterItem(request, "pmId", this.pmId)
-    }
-    if (this.pmId == -1) {
-      request.filterItems = this.clearFilter(request, "pmId", "")
-      checkFilterPM = true
-    }
+    objFilter.forEach((item) => {
+      if(!item.isTrue){
+        request.filterItems = this.AddFilterItem(request, item.name, item.value)
+      }
+      if(item.value == -1){
+        request.filterItems = this.clearFilter(request, item.name, "")
+        item.isTrue = true
+      }
+    })
     this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
       .subscribe((data: PagedResultResultDto) => {
-        this.TimesheetDetaiList = data.result.items;
+        this.TimesheetDetaiList = data.result.items.map(el => {
+          el.projectBillInfomation.map(item => {
+            return {...item, isShow: false}
+          })
+          return el;
+        });
         this.showPaging(data.result, pageNumber);
         this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
-        if(!checkFilterPM){
-          request.filterItems = this.clearFilter(request, "pmId", "");
-        }
+        objFilter.forEach((item) => {
+          if(!item.isTrue){
+            request.filterItems = this.clearFilter(request, item.name, "")
+          }
+        })
       })
   }
   protected delete(item: TimesheetDetailDto): void {
@@ -84,11 +96,14 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public isActive: boolean;
   public createdInvoice: boolean;
   public listExportInvoice: any[] = [];
-  public clientId: number = 0;
+  public clientId: number = -1;
   public isShowButtonAction: boolean;
   public pmId = -1;
   public pmList: any[] = [];
   public searchPM: string = "";
+  public clientList: any[]= []
+  public searchClient: string = ""
+  public chargeType = ['d','m','h']
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -110,8 +125,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
   Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
   Timesheet_TimesheetProject_ExportInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ExportInvoice;
-  Timesheet_TimesheetProject_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewMyProjectOnly;
-  Timesheet_TimesheetProject_ViewAllProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewAllProject
+  Timesheet_TimesheetProject_ViewOnlyme = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewOnlyme;
+  Timesheet_TimesheetProject_ViewAllProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewAllProject;
+  Timesheet_TimesheetProject_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation;
 
 
   constructor(
@@ -122,6 +138,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     injector: Injector,
     private ref: ChangeDetectorRef,
     private userService: UserService,
+    private clientService: ClientService
   ) {
     super(injector)
 
@@ -132,8 +149,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
     this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
     this.getAllPM();
+    this.getAllClient()
     this.refresh();
-    this.showButtonAction();
+    //this.showButtonAction();
   }
   ngAfterContentChecked() {
     this.ref.detectChanges();
@@ -372,23 +390,33 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       FileSaver.saveAs(file, res.result.fileName);
     })
   }
-  public showButtonAction(){
-    if(!this.permission.isGranted(this.Timesheet_TimesheetProject_Update)
-        && !this.permission.isGranted(this.Timesheet_TimesheetProject_ExportInvoice)
-          && !this.permission.isGranted(this.Timesheet_TimesheetProject_Delete))
-              this.isShowButtonAction = false;
-    else
-      this.isShowButtonAction = true
-  }
   public getAllPM(): void {
     this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })
   }
+  public getAllClient(): void{
+    this.clientService.getAllClient()
+    .subscribe((res) =>{
+      this.clientList = res.result
+    })
+  }
   requiredFile(item){
     if(item.requireTimesheetFile && !item.hasFile)
       return 'bd-red';
     return ''
+  }
+  getChargeType(index){
+    if(index)
+      return '/'+this.chargeType[index]
+    return ''
+  }
+  covertMoneyType(money){
+    return (
+      money.toLocaleString("vi", {
+        currency: "VND",
+      })
+    );
   }
 }

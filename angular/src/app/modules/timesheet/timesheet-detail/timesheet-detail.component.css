@@ -11,7 +11,29 @@
 ::ng-deep #timesheet-detail .filter-pm .mat-form-field{
   display: block;
 }
+::ng-deep #timesheet-detail .btn-search{
+  height: fit-content;
+}
 
 #timesheet-detail .bd-red{
-  border: 1px solid red;
+  border: 2px solid red;
+}
+
+#timesheet-detail .bg-tag{
+  background-color: #820505;
+}
+#timesheet-detail .btn-upload{
+  background-color: #F9F8A8;
+}
+.expand-billinfo{
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.billinfo{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

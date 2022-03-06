@@ -85,5 +85,12 @@ namespace ProjectManagement.APIs.Clients
 
             await WorkScope.DeleteAsync<Client>(clientId);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllClient()
+        {
+            var clients = await WorkScope.GetAll<Client>().Select(x => new {Id = x.Id, Name = x.Name}).ToListAsync();
+            return new OkObjectResult(clients);
+        }
     }
 }

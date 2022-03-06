@@ -5,23 +5,23 @@
   novalidate
 >
   <abp-modal-header
-    title="Thông tin bill dự án: {{ data.projectName }}"
+    title="Bill Info: {{ data.projectName }}"
     (onCloseClick)="dialogRef.close()"
   >
   </abp-modal-header>
   <div class="modal-body row">
     <div class="col-11 row mb-1">
-      <!-- <button
-        class="btn btn-primary ml-2"
+      <button
+        class="btn btn-create-neutral ml-2"
         [disabled]="isEdittingRows"
-        *ngIf="!isEdit"
+        *ngIf="!isEdit && permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)"
         (click)="create()"
         [disabled]="this.data.isComplete"
       >
         <i class="fa fa-plus-square mr-1"></i>Create
-      </button> -->
+      </button>
       <button
-        class="btn btn-secondary ml-2"
+        class="btn btn-edit-neutral ml-2"
         *ngIf="!isEdittingRows && billDetail.length && !isEdit"
         (click)="editMultiRows()"
         [disabled]="this.data.isComplete"
@@ -30,6 +30,17 @@
       </button>
       <div *ngIf="isEdittingRows" class="pt-1 ml-4">
         <button
+          *ngIf="!permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation) && 
+            permission.isGranted(Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM)"
+          [disabled]="!timesheetDetailForm.valid"
+          class="mr-3 submit-btn"
+          style="background: none; border: none"
+          (click)="saveAllUpdateTS()"
+        >
+          <i style="color: green" class="fas fa-check fa-2x"></i>
+        </button>
+        <button
+        *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)"
           [disabled]="!timesheetDetailForm.valid"
           class="mr-3 submit-btn"
           style="background: none; border: none"
@@ -62,9 +73,10 @@
           <thead class="bg-light">
             <tr>
               <th class="stt">#</th>
-              <th>Nhân viên</th>
-              <th>Charge Role</th>
+              <th style="width: 350px;">Nhân viên</th>
+              <th style="width: 150px;">Charge Role</th>
               <th
+                style="width: 150px;"
                 *ngIf="
                   permission.isGranted(
                     Timesheet_Timesheet_ViewProjectBillInfomation
@@ -73,10 +85,9 @@
               >
                 Rate
               </th>
-              <th>Working time(Day)</th>
-              <th>Is Charge</th>
+              <th style="width: 100px; white-space: break-spaces;">Working time(Day)</th>
+              <th style="width: 50px;">Is Charge</th>
               <th>Note</th>
-              <th>Shadow note</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -96,12 +107,13 @@
                       branch: bill.branch,
                       userType: bill.userType,
                       emailAddress: bill.emailAddress,
-                      avatarPath: bill.avatarPath
+                      avatarPath: bill.avatarPath,
+                      userLevel: bill.userLevel
                     }"
                   >
                   </app-user-info>
                 </span>
-                <div *ngIf="bill.createMode || isEdittingRows">
+                <div *ngIf="(bill.createMode || isEdittingRows) && permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
                   <mat-form-field class="w-100" appearance="outline">
                     <mat-select
                       [(ngModel)]="bill.userId"
@@ -146,12 +158,25 @@
                     This field is required
                   </mat-error>
                 </div>
+                <span *ngIf="(bill.createMode || isEdittingRows) && !permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
+                  <app-user-info
+                    [userData]="{
+                      fullName: bill.fullName,
+                      branch: bill.branch,
+                      userType: bill.userType,
+                      emailAddress: bill.emailAddress,
+                      avatarPath: bill.avatarPath, 
+                      userLevel: bill.userLevel
+                    }"
+                  >
+                  </app-user-info>
+                </span>
               </td>
               <td class="text-center">
                 <span *ngIf="!bill.createMode && !isEdittingRows">{{
                   bill.billRole
                 }}</span>
-                <div *ngIf="bill.createMode || isEdittingRows">
+                <div *ngIf="(bill.createMode || isEdittingRows) && permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
                   <input
                     style="min-width: 110px"
                     required
@@ -170,6 +195,9 @@
                   >
                   </abp-validation-summary>
                 </div>
+                <span *ngIf="(bill.createMode || isEdittingRows) && !permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">{{
+                  bill.billRole
+                }}</span>
               </td>
               <td
                 class="text-center"
@@ -274,36 +302,6 @@
                   ></textarea>
                 </div>
               </td>
-              <td style="white-space: normal; text-align: left">
-                <pre
-                  class="mb-0 p-0 ml-2"
-                  *ngIf="!bill.createMode && !isEdittingRows"
-                  style="
-                    white-space: pre-line;
-                    word-wrap: break-word;
-                    width: 150px;
-                    font-family: sans-serif;
-                    align-self: flex-start;
-                  "
-                >
-                                   {{ bill.shadowNote }}
-                              </pre
-                >
-
-                <div *ngIf="bill.createMode || isEdittingRows">
-                  <textarea
-                    cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize"
-                    rows="2"
-                    style="min-width: 150px"
-                    class="form-control mt-1"
-                    #shadowNote="ngModel"
-                    placeholder="Shadow note"
-                    [name]="i + 'shadowNote'"
-                    [(ngModel)]="bill.shadowNote"
-                  ></textarea>
-                </div>
-              </td>
               <td class="text-center">
                 <div *ngIf="!bill.createMode">
                   <button
@@ -313,7 +311,7 @@
                       this.data.isComplete ||
                       isEdittingRows
                     "
-                    class="btn btn-sm bg-secondary mr-1 mt-3"
+                    class="btn btn-sm btn-edit-neutral mr-1 mt-3"
                     (click)="editUserBill(bill)"
                   >
                     <i class="fas fa-pencil-alt mr-1"></i>Edit
@@ -321,10 +319,21 @@
                 </div>
                 <div *ngIf="bill.createMode" class="pt-1 mt-1">
                   <button
+                    *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)"
                     [disabled]="!bill?.userId || !timesheetDetailForm.valid"
                     class="mr-3 submit-btn"
                     style="background: none; border: none"
                     (click)="saveUserBill(bill)"
+                  >
+                    <i style="color: green" class="fas fa-check fa-2x"></i>
+                  </button>
+                  <button
+                    *ngIf="!permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)&&
+                            permission.isGranted(Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM)"
+                    [disabled]="!bill?.userId || !timesheetDetailForm.valid"
+                    class="mr-3 submit-btn"
+                    style="background: none; border: none"
+                    (click)="saveUpdateTS(bill)"
                   >
                     <i style="color: green" class="fas fa-check fa-2x"></i>
                   </button>

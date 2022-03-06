@@ -26,7 +26,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll)]
         public async Task<List<GetTimeSheetProjectBillDto>> GetAll(long timesheetId, long projectId)
         {
-            var permissionViewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
+            var permissionViewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject);
             var tenantId = WorkScope.GetAll<TimesheetProjectBill>().Select(x => x.TenantId).FirstOrDefault();
             var ass = WorkScope.GetAll<TimesheetProjectBill>().ToList();
             var aass = ass.Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId);
@@ -51,6 +51,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              EmailAddress = x.User.EmailAddress,
                              UserType = x.User.UserType,
                              WorkingTime = x.WorkingTime,
+                             UserLevel = x.User.UserLevel,
                              //ProjectBillInfomation = $"<b>{x.User.FullName}</b> - {x.BillRole} - {x.BillRate} - {x.Note} - {x.ShadowNote} <br>"
                          });
             return await query.ToListAsync();
@@ -138,6 +139,29 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
 
             //input.ForEach(async x => await UpdateProjectBillInformation(x.ProjectId, x.TimeSheetId.Value));
             return input;
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
+        public async Task<IActionResult> UpdateTSOfPM(List<UpdateTimesheetPMDto> input)
+        {
+            var timesheetProjectBillIds = input.Select(x => x.Id).ToList();
+            var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(x => timesheetProjectBillIds.Contains(x.Id))
+                .ToDictionaryAsync( x => x.Id,
+                                    x => x);
+            foreach (var bill in input)
+            {
+                var timesheetProjectBill = timesheetProjectBills[bill.Id];
+                if (timesheetProjectBill != null)
+                {
+                    timesheetProjectBill.WorkingTime = bill.WorkingTime;
+                    timesheetProjectBill.IsActive = bill.IsActive;
+                    timesheetProjectBill.Note = bill.Note;
+                }
+            }
+            CurrentUnitOfWork.SaveChanges();
+            return new OkObjectResult("Save Success!");
         }
 
         [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill)]
@@ -234,32 +258,32 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
 
             var timesheetProjectBills = await (from tspb in WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
                                                join u in WorkScope.GetAll<User>() on tspb.UserId equals u.Id
+                                               where tspb.IsActive == true
                                                select new
                                                {
                                                    FullName = u.FullName,
                                                    BillRole = tspb.BillRole,
                                                    BillRate = tspb.BillRate,
                                                    Note = tspb.Note,
-                                                   ShadowNote = tspb.ShadowNote
+                                                   IsCharge = tspb.IsActive
                                                }).ToListAsync();
 
             var billInfomation = new StringBuilder();
-
-            foreach (var item in timesheetProjectBills)
+            var timesheetProjects = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).FirstOrDefaultAsync();
+            if(timesheetProjects != null)
             {
-                try
+                foreach (var item in timesheetProjectBills)
                 {
-                    var timesheetProjects = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).FirstOrDefaultAsync();
-                    if (timesheetProjects != null)
+                    try
                     {
-                        billInfomation.Append($"<b>{item.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} - {item.ShadowNote} <br>");
+                        billInfomation.Append($"<b>{item.FullName}</b> - {item.BillRole} - {item.BillRate} - {item.Note} <br>");
                         timesheetProjects.ProjectBillInfomation = $"{billInfomation}";
                         await WorkScope.UpdateAsync(timesheetProjects);
                     }
-                }
-                catch (Exception ex)
-                {
-                    failList.Add($"error UserId = {item.FullName} : " + ex.Message);
+                    catch (Exception ex)
+                    {
+                        failList.Add($"error UserId = {item.FullName} : " + ex.Message);
+                    }
                 }
             }
             return failList;

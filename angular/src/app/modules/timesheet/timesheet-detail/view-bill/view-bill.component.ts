@@ -25,6 +25,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdittingRows: boolean = false;
   tempUserList = []
   Timesheet_Timesheet_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation
+  Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {
@@ -232,5 +233,41 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   onUserSelect(bill) {
     bill.searchText = ""
   }
+  saveUpdateTS(data){
+    let request = [{
+      Id: data.id,
+      workingTime: data.workingTime,
+      isActive: data.isActive,
+      note: data.note
+    }]
+    this.projectBillService.updateTS(request).subscribe((response) =>{
+      if(response.success){
+        abp.notify.success(response.result)
+        this.isEdit = false;
+        this.isCreate = false
+        this.isEdittingRows = false
+        this.getProjectBill();
+      }
+      else{
+        abp.notify.error(response.message)
+      }
+    })
+  }
+  saveAllUpdateTS(){
+    let arr = this.billDetail.map((userBill) => {
+      return {
+        note: userBill?.note,
+        isActive: userBill.isActive,
+        workingTime: userBill.workingTime,
+        id: userBill.id
+      }
+    })
 
+    this.projectBillService.updateTS(arr).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+      abp.notify.success(`Update successfull`)
+      this.getProjectBill();
+      this.searchUserBill = "";
+      this.isEdittingRows = false;
+    })
+  }
 }
