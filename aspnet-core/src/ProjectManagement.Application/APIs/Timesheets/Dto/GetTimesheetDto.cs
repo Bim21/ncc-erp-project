@@ -22,7 +22,11 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public float? TotalWorkingDay { get; set; }
         public int TotalIsRequiredFile { get; set; }
         public int TotalHasFile { get; set; }
-        public double ManMonth { get; set; }
+        public double ManMonth { 
+            get {
+                return Math.Round((double)this.TotalWorkingDay/22, 2);
+            }
+        }
 
     }
 }
