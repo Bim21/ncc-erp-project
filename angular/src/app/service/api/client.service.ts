@@ -19,5 +19,8 @@ export class ClientService extends BaseApiService{
     return this.http.delete<any>(this.rootUrl + '/Delete', {
         params: new HttpParams().set('clientId', id)
     })
-}
+  }
+  public getAllClient(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/getAllClient');
+  }
 }

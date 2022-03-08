@@ -42,8 +42,14 @@ namespace ProjectManagement.APIs.TimeSheets
                     IsActive = x.IsActive,
                     CreatedInvoice = x.CreatedInvoice,
                     TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
-                    TotalTimesheet = timesheetProject.Where(y => y.TimesheetId == x.Id && y.FilePath != null).Count(),
-                    TotalWorkingDay = x.TotalWorkingDay
+                    TotalHasFile = timesheetProject.Where(y => y.TimesheetId == x.Id &&
+                                                            y.FilePath != null && 
+                                                            y.Project.RequireTimesheetFile)
+                                                    .Count(),
+                    TotalWorkingDay = x.TotalWorkingDay,
+                    TotalIsRequiredFile = timesheetProject.Where(y => y.TimesheetId == x.Id &&
+                                                            y.Project.RequireTimesheetFile)
+                                                    .Count(),
                 });
 
             return await query.GetGridResult(query, input);

@@ -113,7 +113,8 @@ import { NgxStarsModule } from 'ngx-stars';
         MatFormFieldModule,
         MatSelectModule,
         FormsModule,
-        NgxStarsModule
+        NgxStarsModule,
+        DragDropModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -178,6 +179,7 @@ import { NgxStarsModule } from 'ngx-stars';
         FileUploadComponent,
         ListFilterPipe,
         NgxStarsModule,
+        DragDropModule
     ]
 })
 export class SharedModule {

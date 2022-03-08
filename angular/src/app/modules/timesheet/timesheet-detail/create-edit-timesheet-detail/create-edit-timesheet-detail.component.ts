@@ -48,11 +48,26 @@ export class CreateEditTimesheetDetailComponent implements OnInit {
       }, () => this.isDisable = false);
     }
     else {
-      this.timesheetProjectService.update(this.projectTimesheet).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("Edited timesheet detail successfully");
+      let request = {
+        Id: this.projectTimesheet.id,
+        Note: this.projectTimesheet.note
+      }
+      this.timesheetProjectService
+      .updateNote(request)
+      .subscribe((res) => {
+        if(res.success){
+          abp.notify.success(res.result)
+        }
+        else{
+          abp.notify.error(res.result)
+        }
         this.dialogRef.close(this.projectTimesheet)
+      }, () => this.isDisable = false)
+      // this.timesheetProjectService.update(this.projectTimesheet).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+      //   abp.notify.success("Edited timesheet detail successfully");
+      //   this.dialogRef.close(this.projectTimesheet)
 
-      }, () => this.isDisable = false);
+      // }, () => this.isDisable = false);
     }
 
   }
@@ -62,8 +77,4 @@ export class CreateEditTimesheetDetailComponent implements OnInit {
       this.projectList = data.result.filter(item => !this.projectTimesheetId.includes(item.id));
     })
   }
-
-
-
-
 }
