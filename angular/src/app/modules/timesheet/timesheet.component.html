@@ -62,11 +62,12 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
+                            <th style="width: 100px">Man Month</th>
                             <th style="width : 150px">Date</th>
-                            <th style="width : 150px">Total of Working day</th>
-                            <th style="width : 150px">Number of project</th>
-                            <th style="width : 150px">Number of timesheet</th>
-                            <th>Status</th>
+                            <th style="width : 150px">Working day</th>
+                            <th style="width : 150px">Project Quantity</th>
+                            <th style="width : 150px">Timesheet File</th>
+                            <th style="width : 100px">Status</th>
                             <th style="width: 100px;">Action</th>
                         </tr>
                     </thead>
@@ -81,10 +82,11 @@
                             <td class="text-center"><span>{{ i +1 }}</span></td>
                             <td ><span class="hyperlink" (click)="showDetail(item)">{{ item.name
                                     }}</span></td>
-                            <td class="text-center">{{item.month}}/{{item.year}}</td>
+                            <td class="text-center">{{item.manMonth}}</td>
+                            <td class="text-center">{{item.year}}/{{item.month < 10 ? '0'+item.month : item.month}}</td>
                             <td class="text-center">{{item.totalWorkingDay}}</td>
                             <td class="text-center">{{item.totalProject}}</td>
-                            <td class="text-center">{{item.totalTimesheet}}</td>
+                            <td class="text-center" [ngClass]="colorTSFile(item)">{{item.totalHasFile}}/{{item.totalIsRequiredFile}}</td>
                             <td class="text-center">
                                 <span [ngClass]="item.isActive?'badge  badge-success':'badge  badge-secondary'">
                                     {{item.isActive?'Active':'Closed'}}
@@ -112,7 +114,7 @@
                                     class="mat-menu-item  w-100" (click)="changeStatus(item)" >
                                     <i *ngIf="!item.isActive" class="fas fa-check fa-lg mr-1"></i>
                                     <i *ngIf="item.isActive" class="fas fa-times fa-lg mr-1"></i>
-                                    {{item.isActive?'DeActive':'Active'}}
+                                    {{item.isActive?'Closed':'Active'}}
                                 </button>
                                 </mat-menu>
                             </td>

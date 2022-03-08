@@ -134,4 +134,9 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     })
   }
 
+  colorTSFile(item){
+    if(item.totalHasFile == item.totalIsRequiredFile)
+      return 'text-success';
+    return ''
+  }
 }
