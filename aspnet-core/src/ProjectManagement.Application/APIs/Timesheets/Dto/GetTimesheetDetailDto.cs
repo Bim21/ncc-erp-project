@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
+using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
         public long PmId { get; set; }
+        [ApplySearchAttribute]
         public string PmEmailAddress { get; set; }
         public string PmUserName { get; set; }
         [ApplySearchAttribute]
@@ -22,16 +24,19 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public string PmAvatarPath { get; set; }
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
-        public long ClientId { get; set; }
+        public long? ClientId { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
         public string File { get; set; }
         public string HistoryFile { get; set; }
-        public string ProjectBillInfomation { get; set; }
+        public List<TimesheetProjectBillInfoDto> ProjectBillInfomation { get; set; }
         public string Note { get; set; }
         public PMReportProjectStatus IsSendReport { get; set; }
         public bool HasFile { get; set; }
         public bool? IsComplete { get; set; }
         public bool RequireTimesheetFile { get; set; }
+        public string Currency { get; set; }
+        public ChargeType? ChargeType { get; set; }
     }
+
 }

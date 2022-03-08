@@ -11,6 +11,7 @@ using NccCore.Uitls;
 using OfficeOpenXml;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills;
+using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
@@ -367,10 +368,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet,
-            PermissionNames.Timesheet_TimesheetProject_ViewOnlyme,
-            PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject,
-            PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation)]
+        [AbpAuthorize(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetOfAllProject,           
+            PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
             var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
@@ -378,54 +377,44 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 input.FilterItems.Remove(filterItem);
             }
-            var viewAll = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_GetAllProjectTimesheetByTimesheet);
-            var viewonlyme = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyme);
-            var viewActiveProject = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewOnlyActiveProject);
-            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetProject_ViewProjectBillInfomation);
-            //var timsheetProjectBills = WorkScope.GetAll<TimesheetProjectBill>().Where(x => x.TimesheetId == timesheetId);
-
-            //foreach (var item in timsheetProjectBills)
-            //{
-            //}
-            //var projectBillInfomation = 
+            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject);
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
                                               .Where(x => filterItem == null || x.IsComplete != true)
-                         join p in WorkScope.GetAll<Project>() on tsp.ProjectId equals p.Id
-                         //join pr in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals pr.ProjectId
-                         join c in WorkScope.GetAll<Client>() on p.ClientId equals c.Id into ps
-                         from c in ps.DefaultIfEmpty()
-                         join u in WorkScope.GetAll<User>() on p.PMId equals u.Id
-                         where viewAll || (viewonlyme ? p.PMId == AbpSession.UserId.Value : !viewActiveProject || p.Status != ProjectStatus.Potential && p.Status != ProjectStatus.Closed)
                          select new GetTimesheetDetailDto
                          {
                              Id = tsp.Id,
                              ProjectId = tsp.ProjectId,
                              TimesheetId = tsp.TimesheetId,
-                             ProjectName = p.Name,
-                             PmId = u.Id,
-                             PmUserType = u.UserType,
-                             PmAvatarPath = "/avatars/" + u.AvatarPath,
-                             PmBranch = u.Branch,
-                             PmEmailAddress = u.EmailAddress,
-                             PmFullName = u.Name + " " + u.Surname,
-                             PmUserName = u.UserName,
-                             ClientId = c.Id,
-                             ClientName = c.Name,
+                             ProjectName = tsp.Project.Name,
+                             PmId = tsp.Project.PMId,
+                             PmUserType = tsp.Project.PM.UserType,
+                             PmAvatarPath = "/avatars/" + tsp.Project.PM.AvatarPath,
+                             PmBranch = tsp.Project.PM.Branch,
+                             PmEmailAddress = tsp.Project.PM.EmailAddress,
+                             PmFullName = tsp.Project.PM.Name + " " + tsp.Project.PM.Surname,
+                             ClientId = tsp.Project.ClientId,
+                             ClientName = tsp.Project.Client != null ? tsp.Project.Client.Name : "NULL",
                              File = tsp.FilePath,
-                             ProjectBillInfomation = viewProjectBillInfo ? tsp.ProjectBillInfomation : "" ,
+                             ProjectBillInfomation = WorkScope.GetAll<TimesheetProjectBill>()
+                                                    .Where(x => x.TimesheetId == tsp.TimesheetId && x.ProjectId == tsp.ProjectId && x.IsActive)
+                                                    .Select(x => new TimesheetProjectBillInfoDto
+                                                    {
+                                                        FullName = x.User.FullName,
+                                                        BillRate = viewProjectBillInfo ? x.BillRate : 0,
+                                                        BillRole = x.BillRole,
+                                                        WorkingTime = x.WorkingTime,
+                                                        Description = x.Note
+                                                    }).ToList(),
                              Note = tsp.Note,
-                             //IsSendReport = pr.Status,
                              HistoryFile = tsp.HistoryFile,
                              HasFile = !string.IsNullOrEmpty(tsp.FilePath),
                              IsComplete = tsp.IsComplete,
-                             RequireTimesheetFile = p.RequireTimesheetFile,
+                             RequireTimesheetFile = tsp.Project.RequireTimesheetFile,
+                             Currency = tsp.Project.Currency.Name,
+                             ChargeType = tsp.Project.ChargeType,
                          }).OrderByDescending(x => x.ClientId);
-            //foreach (var item in query)
-            //{
-            //    item.ProjectBillInfomation
-            //}
             return await query.GetGridResult(query, input);
         }
 
@@ -638,5 +627,39 @@ namespace ProjectManagement.APIs.TimesheetProjects
             };
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateNote(UpdateNoteDto input)
+        {
+            var projectTimesheet = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);
+            if(projectTimesheet != null)
+            {
+                projectTimesheet.Note = input.Note;
+                await WorkScope.UpdateAsync<TimesheetProject>(projectTimesheet);
+                return new OkObjectResult("Update Note Success!");
+            }
+            return new BadRequestObjectResult("Not Found Timesheet Project!");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPM()
+        {
+            var pms = await WorkScope.GetAll<Project>()
+                .Select(u => new
+                {
+                    Id = u.PMId,
+                    UserName = u.PM.UserName,
+                    Name = u.PM.Name,
+                    Surname = u.PM.Surname,
+                    EmailAddress = u.PM.EmailAddress,
+                    FullName = u.PM.FullName,
+                    AvatarPath = "/avatars/" + u.PM.AvatarPath,
+                    UserType = u.PM.UserType,
+                    UserLevel = u.PM.UserLevel,
+                    Branch = u.PM.Branch,
+                })
+                .Distinct()
+                .ToListAsync();
+            return new OkObjectResult(pms);
+        }
     }
 }

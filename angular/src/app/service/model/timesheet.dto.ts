@@ -69,4 +69,5 @@ export class TimesheetProjectBill {
     currency: string
     userList:any[]
     searchText:string
+    chargeType?: number
 }

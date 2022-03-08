@@ -32,4 +32,7 @@ export class TimeSheetProjectBillService extends BaseApiService {
   public getAllUserUnused(projectId: any, timesheetId: any, isEdited: boolean): Observable<any> {
     return this.http.get(this.rootUrl + `/GetUserForTimesheetProjectBill?projectId=${projectId}&timesheetId=${timesheetId}&isEdited=${isEdited}`);
   }
+  public updateTS(data: any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/updateTSOfPM', data);
+  }
 }

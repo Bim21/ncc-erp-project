@@ -1,16 +1,20 @@
 <section class="content-header pb-1">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
-        <h1>Timesheet Detail</h1>
+      <div class="col-6" id="title-page-tsdetail" style="font-size: 1.5rem;">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="app/Timesheet">Timesheets</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{titleTimesheet}}</li>
+          </ol>
+        </nav>
       </div>
       <div class="col-6 text-right">
-        <!-- <span *ngIf="createdInvoice==true" class="mr-2" style="color: red;font-weight: 800;">Timesheet đã được tạo Invoice</span> -->
         <button 
           *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
           [disabled]="listExportInvoice?.length <= 0"
           (click)="exportInvoiceClient()" 
-          class="btn bg-secondary mr-2"
+          class="btn bg-success mr-2"
         >
           <i class="fa fa-file"></i>
           Export Invoice
@@ -20,35 +24,77 @@
           <i class="fa fa-plus-square"></i>
           Create
         </button>
-        <!-- <button *ngIf="createdInvoice==false && permission.isGranted(Timesheet_TimesheetProject_CreateInvoice)" (click)="createInvoice()" class="btn btn-success ml-3">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    Create Invoice
-                </button> -->
-        <!-- <button  (click)="exportInvoice()" class="btn btn-success ml-3">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    Export Invoice
-                </button> -->
       </div>
     </div>
   </div>
 </section>
-<section class="content px-2">
+<section class="content px-2"  id="timesheet-detail">
   <div class="container-fluid">
     <div class="card">
       <div class="card-header">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
-              <i class="fas fa-search"></i>
-            </button>
+        <div class="row g-3">
+          <div class="input-group col-8 pt-1">
+            <div class="input-group-prepend">
+              <button type="button" class="btn bg-blue btn-search" (click)="getDataPage(1)">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <input type="text" class="form-control" name="keyword" placeholder="Search by Project name, PM Name, PM Email, Client Name" [(ngModel)]="searchText"
+              (keyup.enter)="getDataPage(1)" />
+            <div class="input-group-append">
+              <button type="button" class="btn btn-default btn-search" (click)="checkAddFilter()">
+                <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                  [class.fa-angle-down]="!advancedFiltersVisible"></i>
+              </button>
+            </div>
           </div>
-          <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-            (keyup.enter)="getDataPage(1)" />
-          <div class="input-group-append">
-            <button type="button" class="btn btn-default" (click)="checkAddFilter()">
-              <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
-                [class.fa-angle-down]="!advancedFiltersVisible"></i>
-            </button>
+          <div class="col-2">
+            <div class="row filter-pm">
+                <div class="col-12">
+                    <!-- <label class="label-pm pr-2 mt-3 ">PM:</label> -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>PM</mat-label>
+                        <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
+                            (selectionChange)="refresh()">
+                            <mat-form-field class="w-100 px-3"
+                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"
+                                    #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                            </mat-form-field>
+                            <mat-option [value]="-1">All</mat-option>
+                            <mat-option [value]="meId">Me</mat-option>
+                            <mat-option
+                                *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'"
+                                [value]="data.id">
+                                {{data.fullName}} - ({{data.emailAddress}})
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="row filter-pm">
+                <div class="col-12">
+                    <!-- <label class="label-pm pr-2 mt-3 ">PM:</label> -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Client</mat-label>
+                        <mat-select [(ngModel)]="clientId" placeholder="select a Client"
+                            (selectionChange)="refresh()">
+                            <mat-form-field class="w-100 px-3"
+                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                <input matInput [(ngModel)]="searchClient" name="searchClient" placeholder="Search" (keydown)="$event.stopPropagation()">{{search.focus()}}
+                            </mat-form-field>
+                            <mat-option [value]="-1">All</mat-option>
+                            <mat-option
+                                *ngFor="let data of clientList | listFilter:  'name' : searchClient"
+                                [value]="data.id">
+                                {{data.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -80,12 +126,10 @@
                 <th class="stt">#</th>
                 <th>Project</th>
                 <th>PM</th>
-                <th>Khách hàng</th>
                 <th>Note</th>
-                <th>Thông tin Bill dự án</th>
-                <th>File</th>
+                <th>Bill Info</th>
+                <th>Timesheet File</th>
                 <th>Done</th>
-
                 <th *ngIf="isActive">Actions</th>
               </tr>
             </thead>
@@ -105,7 +149,8 @@
                   <span>{{ i + 1 }}</span>
                 </td>
                 <td style="white-space: normal; min-width: 165px">
-                  {{ item.projectName }}
+                  <b>{{ item.projectName }}</b>
+                  <p>{{item.clientName}}</p>
                 </td>
                 <td class="text-left">
                   <div style="width: 300px">
@@ -119,9 +164,6 @@
                     </app-user-info>
                   </div>
                 </td>
-                <td style="min-width: 170px; white-space: pre-line">
-                  {{ item.clientName }}
-                </td>
                 <td style="
                     white-space: pre-line;
                     word-wrap: break-word;
@@ -130,18 +172,28 @@
                   ">
                   {{ item.note }}
                 </td>
-                <td style="cursor: pointer" class="text-left bill" (click)="viewBillDetail(item)">
+                <td style="cursor: pointer" class="text-left bill">
                   <div *ngIf="item.projectBillInfomation" style="
                       word-break: break-all;
                       white-space: pre-line;
                       min-width: 290px;
-                    " [innerHtml]="item.projectBillInfomation"></div>
-                  <!-- <div class="text-center" *ngIf="!item.projectBillInfomation">
-                                        <i class="fas fa-search fa-lg" ></i>
-
-                                    </div> -->
+                    ">
+                    <p *ngFor="let bill of item.projectBillInfomation" 
+                      (click)="bill.isShow = !bill.isShow" 
+                      [ngClass]="bill.isShow?'billinfo':'expand-billinfo'" 
+                      style="margin-bottom: 0;"
+                    >
+                      <label >{{bill.fullName}} -</label>
+                      {{bill.billRole}}
+                      <label >
+                        {{permission.isGranted(Timesheet_TimesheetProject_ViewProjectBillInfomation)?'- '+
+                        covertMoneyType(bill.billRate)+item.currency+getChargeType(item.chargeType):""}}
+                      </label>
+                      - <label>{{bill.workingTime}}d</label>
+                      {{bill.description?'- '+bill.description:''}}
+                    </p>
+                    </div>
                 </td>
-
                 <td class="" style="
                     white-space: normal;
                     max-width: 230px;
@@ -154,11 +206,13 @@
                     <i class="fas fa-times fa-lg ml-1" (click)="DeleteFile(item)"></i>
                   </span>
                   <div class="text-center">
-                    <button *ngIf="
-                        permission.isGranted(
-                          Timesheet_TimesheetProject_UploadFileTimesheetProject
-                        ) && item.file == null
-                      " class="btn btn-secondary btn-sm" (click)="importExcel(item.id)" #importFileBtn>
+                    <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject) && 
+                      item.file == null" 
+                      [matTooltip]="(item.requireTimesheetFile && !item.hasFile)?'Required File':''" 
+                      class="btn btn-success btn-sm" 
+                      [ngClass]="requiredFile(item)" 
+                      (click)="importExcel(item.id)" #importFileBtn
+                    >
                       <i class="fas fa-upload mr-1"></i> Upload
                     </button>
                   </div>
@@ -169,11 +223,6 @@
                   </button>
                 </td>
                 <td *ngIf="isActive" class="text-center" style="vertical-align: middle">
-                  <button class="btn btn-sm bg-primary" (click)="viewBillDetail(item)" #importFileBtn>
-                    <i class="fas fa-edit"></i>
-                    Update Bill
-                  </button>
-
                   <mat-checkbox
                     *ngIf="permission.isGranted(Timesheet_TimesheetProject_ExportInvoice)"
                     #checkboxExportInvoice
@@ -187,10 +236,28 @@
                     [style.top]="contextMenuPosition.y"
                     [matMenuTriggerFor]="menu"
                   ></div>
-                  <button *ngIf="isShowButtonAction" mat-button [matMenuTriggerFor]="menu">
+                  <button mat-button [matMenuTriggerFor]="menu">
                     <i class="fas fa-bars fa-lg"></i>
                   </button>
                   <mat-menu #menu="matMenu" class="p-2">
+                    <button
+                      *ngIf="permission.isGranted(Timesheet_TimesheetProject_ViewProjectBillInfomation);"
+                      class="btn mat-menu-item w-100" 
+                      (click)="viewBillDetail(item)" 
+                      #importFileBtn
+                    >
+                      <i class="fas fa-edit"></i>
+                      Update Bill
+                    </button>
+                    <button
+                    *ngIf="!permission.isGranted(Timesheet_TimesheetProject_ViewProjectBillInfomation);"
+                      class="btn mat-menu-item w-100" 
+                      (click)="viewBillDetail(item)" 
+                      #updateTs
+                    >
+                      <i class="fas fa-edit"></i>
+                      Update TS
+                    </button>
                     <button *ngIf="
                         permission.isGranted(
                           Timesheet_TimesheetProject_ExportInvoice
@@ -199,9 +266,8 @@
                       <i class="fas fa-file-invoice-dollar mr-1"></i>
                       Export Invoice
                     </button>
-                    <button *ngIf="
-                        permission.isGranted(Timesheet_TimesheetProject_Update)
-                      " class="btn mat-menu-item w-100" (click)="editTimesheet(item); $event.stopPropagation()">
+                    <button  
+                      class="btn mat-menu-item w-100" (click)="editTimesheet(item); $event.stopPropagation()">
                       <i class="fas fa-pencil-alt mr-1"></i>
                       Note
                     </button>
