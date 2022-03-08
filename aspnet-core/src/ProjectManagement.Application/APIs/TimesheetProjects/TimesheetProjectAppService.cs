@@ -372,11 +372,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
             PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
-
+            var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
+            if (filterItem != null)
+            {
+                input.FilterItems.Remove(filterItem);
+            }
             var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject);
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
+                                              .Where(x => filterItem == null || x.IsComplete != true)
                          select new GetTimesheetDetailDto
                          {
                              Id = tsp.Id,
@@ -622,5 +627,39 @@ namespace ProjectManagement.APIs.TimesheetProjects
             };
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateNote(UpdateNoteDto input)
+        {
+            var projectTimesheet = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);
+            if(projectTimesheet != null)
+            {
+                projectTimesheet.Note = input.Note;
+                await WorkScope.UpdateAsync<TimesheetProject>(projectTimesheet);
+                return new OkObjectResult("Update Note Success!");
+            }
+            return new BadRequestObjectResult("Not Found Timesheet Project!");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllPM()
+        {
+            var pms = await WorkScope.GetAll<Project>()
+                .Select(u => new
+                {
+                    Id = u.PMId,
+                    UserName = u.PM.UserName,
+                    Name = u.PM.Name,
+                    Surname = u.PM.Surname,
+                    EmailAddress = u.PM.EmailAddress,
+                    FullName = u.PM.FullName,
+                    AvatarPath = "/avatars/" + u.PM.AvatarPath,
+                    UserType = u.PM.UserType,
+                    UserLevel = u.PM.UserLevel,
+                    Branch = u.PM.Branch,
+                })
+                .Distinct()
+                .ToListAsync();
+            return new OkObjectResult(pms);
+        }
     }
 }

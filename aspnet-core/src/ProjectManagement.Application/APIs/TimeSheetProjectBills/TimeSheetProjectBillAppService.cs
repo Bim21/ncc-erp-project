@@ -52,6 +52,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              UserType = x.User.UserType,
                              WorkingTime = x.WorkingTime,
                              UserLevel = x.User.UserLevel,
+                             Currency = x.Project.Currency.Name,
+                             ChargeType = x.Project.ChargeType,
                              //ProjectBillInfomation = $"<b>{x.User.FullName}</b> - {x.BillRole} - {x.BillRate} - {x.Note} - {x.ShadowNote} <br>"
                          });
             return await query.ToListAsync();

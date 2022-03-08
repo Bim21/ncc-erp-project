@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ViewBillComponent } from './view-bill/view-bill.component';
 import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
@@ -104,6 +105,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public clientList: any[]= []
   public searchClient: string = ""
   public chargeType = ['d','m','h']
+  public titleTimesheet: string = ''
+  public meId: number;
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -146,8 +149,10 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
+    this.titleTimesheet = this.route.snapshot.queryParamMap.get('name')
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
     this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
+    this.meId = Number(this.appSession.userId);
     this.getAllPM();
     this.getAllClient()
     this.refresh();
@@ -187,7 +192,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         item: timesheetDetail,
         command: command,
         projectTimesheetDetailId: this.projectTimesheetDetailId,
-
       },
       width: "700px",
       disableClose: true,
@@ -224,7 +228,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
 
   showDialogUpdateFile(command: string) {
-
   }
   importExcel(id: any) {
     const dialogRef = this.dialog.open(ImportFileTimesheetDetailComponent, {
@@ -335,7 +338,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public viewBillDetail(bill) {
     const show = this.dialog.open(ViewBillComponent, {
       width: "95%",
-      data: bill
+      data: bill, 
     })
     show.afterClosed().subscribe((res) => {
       this.refresh();
@@ -391,7 +394,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
   }
   public getAllPM(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+    this.timesheetProjectService.getAllPM().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })
@@ -408,7 +411,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     return ''
   }
   getChargeType(index){
-    if(index)
+    if(index != null && index >= 0)
       return '/'+this.chargeType[index]
     return ''
   }

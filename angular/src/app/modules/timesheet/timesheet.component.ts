@@ -111,6 +111,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.router.navigate(['app/timesheetDetail'], {
       queryParams: {
         id: item.id,
+        name: item.name,
         createdInvoice: item.createdInvoice,
         isActive: item.isActive
       }

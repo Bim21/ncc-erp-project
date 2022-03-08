@@ -9,7 +9,7 @@
     (onCloseClick)="dialogRef.close()"
   >
   </abp-modal-header>
-  <div class="modal-body row">
+  <div class="modal-body row" id="modal-bill-info">
     <div class="col-11 row mb-1">
       <button
         class="btn btn-create-neutral ml-2"
@@ -21,12 +21,12 @@
         <i class="fa fa-plus-square mr-1"></i>Create
       </button>
       <button
-        class="btn btn-edit-neutral ml-2"
+        class="btn btn-editall-neutral ml-2"
         *ngIf="!isEdittingRows && billDetail.length && !isEdit"
         (click)="editMultiRows()"
         [disabled]="this.data.isComplete"
       >
-        <i class="fas fa-pencil-alt mr-1"></i>Edit
+        <i class="fas fa-pencil-alt mr-1"></i>Edit All
       </button>
       <div *ngIf="isEdittingRows" class="pt-1 ml-4">
         <button
@@ -83,9 +83,9 @@
                   )
                 "
               >
-                Rate
+                Rate <br> {{getTitleRate()}}
               </th>
-              <th style="width: 100px; white-space: break-spaces;">Working time(Day)</th>
+              <th style="width: 100px; white-space: break-spaces;">Working Day</th>
               <th style="width: 50px;">Is Charge</th>
               <th>Note</th>
               <th>Action</th>
@@ -265,6 +265,7 @@
               <td class="text-center pt-3">
                 <mat-checkbox
                   [disabled]="!bill.createMode && !isEdittingRows"
+                  [ngClass]="{'bg-succes': bill.isActive}"
                   class="mt-1"
                   name="isactive+{{ i }}"
                   (change)="onActiveChange(active, bill)"

@@ -24,6 +24,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
   tempUserList = []
+  public chargeType = ['d','m','h']
   Timesheet_Timesheet_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation
   Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
@@ -42,7 +43,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(data => {
       this.billDetail = data.result
       this.isLoading = false
-      this.getAllFakeUser(false)
+      //this.getAllFakeUser(false)
     },
       () => { this.isLoading = false })
   }
@@ -269,5 +270,12 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       this.searchUserBill = "";
       this.isEdittingRows = false;
     })
+  }
+  public getTitleRate(){
+    if(this.billDetail.length > 0){
+      return '(' + this.billDetail[0].currency + '/' + this.chargeType[this.billDetail[0].chargeType] + ')'
+    }
+    else
+      return ''
   }
 }

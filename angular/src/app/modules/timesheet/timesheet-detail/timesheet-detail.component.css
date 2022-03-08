@@ -16,7 +16,7 @@
 }
 
 #timesheet-detail .bd-red{
-  border: 2px solid red;
+  border: 1px solid red;
 }
 
 #timesheet-detail .bg-tag{
@@ -36,4 +36,7 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+::ng-deep #title-page-tsdetail .breadcrumb-item+.breadcrumb-item::before{
+  content: '>';
 }
