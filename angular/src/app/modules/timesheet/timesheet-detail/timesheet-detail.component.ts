@@ -243,13 +243,12 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
           this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).subscribe(
             (res) => {
               abp.notify.success("Deleted File Success");
+              item.file = null
+              item.hasFile = false
             },
             (err) => {
               abp.notify.error(err)
             },
-            () => {
-              this.refresh()
-            }
           );
         }
       }
