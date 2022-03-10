@@ -64,6 +64,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       })
   }
   protected delete(item: TimesheetDetailDto): void {
+    this.menu.closeMenu();
     abp.message.confirm(
       "Delete TimeSheet " + item.projectName + "?",
       "",
@@ -218,6 +219,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.showDialog('create', {})
   }
   editTimesheet(timesheet: TimesheetDetailDto) {
+    this.menu.closeMenu();
     this.showDialog("edit", timesheet);
   }
 
@@ -327,6 +329,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.createdInvoice = true;
   }
   public viewBillDetail(bill) {
+    this.menu.closeMenu()
     const show = this.dialog.open(ViewBillComponent, {
       width: "95%",
       data: bill, 
