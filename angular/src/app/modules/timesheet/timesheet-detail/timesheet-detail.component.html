@@ -266,14 +266,14 @@
                       Export Invoice
                     </button>
                     <button  
-                      class="btn mat-menu-item w-100" (click)="editTimesheet(item); $event.stopPropagation()"
+                      class="btn mat-menu-item w-100" (click)="editTimesheet(item);"
                     >
                       <i class="fas fa-pencil-alt mr-1"></i>
                       Note
                     </button>
                     <button *ngIf="
                         permission.isGranted(Timesheet_TimesheetProject_Delete)
-                      " class="btn mat-menu-item w-100" (click)="delete(item); $event.stopPropagation()" #deleteBtn>
+                      " class="btn mat-menu-item w-100" (click)="delete(item);" #deleteBtn>
                       <i class="fas fa-trash mr-1"></i>
                       Delete
                     </button>
