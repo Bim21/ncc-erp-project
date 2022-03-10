@@ -93,7 +93,13 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button mat-button [matMenuTriggerFor]="menu">
+                                <button 
+                                    mat-button [matMenuTriggerFor]="menu" 
+                                    *ngIf="permission.isGranted(Timesheet_Timesheet_Update) || 
+                                            permission.isGranted(Timesheet_Timesheet_ReverseActive) || 
+                                            permission.isGranted(Timesheet_Timesheet_ReverseActive)
+                                        "
+                                >
                                     <i class="fas fa-bars fa-lg"></i>
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
