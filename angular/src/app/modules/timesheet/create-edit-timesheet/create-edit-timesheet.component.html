@@ -23,7 +23,7 @@
         </div>
         <div class="form-group row required mt-4">
             <label class="col-md-3 col-form-label" for="tenancyName">
-               Total of Working day: 
+                Working day: 
             </label>
             <div class="col-md-9">
                 <input type="number" min=0 #totalWorking="ngModel" placeholder="Nhập số ngày làm việc"
@@ -59,7 +59,7 @@
 
             <div class="col-md-9">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="timesheet.year" name="yearSelect" placeholder="select month" required
+                    <mat-select [(ngModel)]="timesheet.year" name="yearSelect" placeholder="select year" required
                         #account="ngModel">
                         <ng-container *ngFor="let year of listYear">
                             <mat-option [value]="year">{{
