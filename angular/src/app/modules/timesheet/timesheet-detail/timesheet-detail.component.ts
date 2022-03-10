@@ -240,10 +240,17 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       "",
       async (result: boolean) => {
         if (result) {
-          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).subscribe((res) => {
-            abp.notify.success("Deleted File Success");
-            item.file = null
-          });
+          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).subscribe(
+            (res) => {
+              abp.notify.success("Deleted File Success");
+            },
+            (err) => {
+              abp.notify.error(err)
+            },
+            () => {
+              this.refresh()
+            }
+          );
         }
       }
     );
