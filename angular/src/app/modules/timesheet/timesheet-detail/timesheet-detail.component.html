@@ -230,12 +230,11 @@
                     [value]="item"
                     (change)="addProjectToExport($event)"
                   ></mat-checkbox>
-                  <div
+                  <!-- <div
                     style="visibility: hidden; position: fixed"
                     [style.left]="contextMenuPosition.x"
                     [style.top]="contextMenuPosition.y"
-                    [matMenuTriggerFor]="menu"
-                  ></div>
+                  ></div> -->
                   <button mat-button [matMenuTriggerFor]="menu">
                     <i class="fas fa-bars fa-lg"></i>
                   </button>
@@ -267,7 +266,8 @@
                       Export Invoice
                     </button>
                     <button  
-                      class="btn mat-menu-item w-100" (click)="editTimesheet(item); $event.stopPropagation()">
+                      class="btn mat-menu-item w-100" (click)="editTimesheet(item); $event.stopPropagation()"
+                    >
                       <i class="fas fa-pencil-alt mr-1"></i>
                       Note
                     </button>
