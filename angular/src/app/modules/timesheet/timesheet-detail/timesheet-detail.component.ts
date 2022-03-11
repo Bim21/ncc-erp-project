@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { result } from 'lodash-es';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ViewBillComponent } from './view-bill/view-bill.component';
@@ -31,21 +32,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.requestBody = request
     this.pageNum = pageNumber
-    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme) && !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject)){
-      this.pmId = Number(this.appSession.userId);
-    }
     let objFilter = [
       {name: 'pmId', isTrue: false, value: this.pmId},
       {name: 'clientId', isTrue: false, value: this.clientId},
     ];
 
-    request.filterItems.forEach(item => {
-      let filter = objFilter.find(x => x.name == item.propertyName)
-      if(filter != null){
-        filter.isTrue = true;
-        item.value = filter.value
-      }
-    })
     objFilter.forEach((item) => {
       if(!item.isTrue){
         request.filterItems = this.AddFilterItem(request, item.name, item.value)
@@ -67,12 +58,13 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
         objFilter.forEach((item) => {
           if(!item.isTrue){
-            request.filterItems = this.clearFilter(request, item.name, "")
+            request.filterItems = this.clearFilter(request, item.name, '')
           }
         })
       })
   }
   protected delete(item: TimesheetDetailDto): void {
+    this.menu.closeMenu();
     abp.message.confirm(
       "Delete TimeSheet " + item.projectName + "?",
       "",
@@ -148,11 +140,14 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
 
   }
   ngOnInit(): void {
+    this.meId = Number(this.appSession.userId);
+    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme) && !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject)){
+      this.pmId = this.meId
+    }
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
     this.titleTimesheet = this.route.snapshot.queryParamMap.get('name')
     this.isActive = this.route.snapshot.queryParamMap.get('isActive') == 'true' ? true : false;
     this.createdInvoice = this.route.snapshot.queryParamMap.get('createdInvoice') == 'true' ? true : false;
-    this.meId = Number(this.appSession.userId);
     this.getAllPM();
     this.getAllClient()
     this.refresh();
@@ -203,27 +198,28 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
   }
 
-  reloadTimesheetFile(id) {
-    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, this.requestBody).pipe(catchError(this.timesheetProjectService.handleError))
-      .subscribe((data: PagedResultResultDto) => {
-        this.TimesheetDetaiList = data.result.items;
-        if (!this.TimesheetDetaiList.filter(timesheet => timesheet.id == id)[0].file) {
-          setTimeout(() => {
-            this.reloadTimesheetFile(id)
-          }, 1000)
-        }
-        else {
-          this.showPaging(data.result, this.pageNum);
-          this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
-          abp.notify.success("import file successfull")
-        }
-      })
-  }
+  // reloadTimesheetFile(id) {
+  //   this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, this.requestBody).pipe(catchError(this.timesheetProjectService.handleError))
+  //     .subscribe((data: PagedResultResultDto) => {
+  //       this.TimesheetDetaiList = data.result.items;
+  //       if (!this.TimesheetDetaiList.filter(timesheet => timesheet.id == id)[0].file) {
+  //         setTimeout(() => {
+  //           this.reloadTimesheetFile(id)
+  //         }, 1000)
+  //       }
+  //       else {
+  //         this.showPaging(data.result, this.pageNum);
+  //         this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
+  //         abp.notify.success("import file successfull")
+  //       }
+  //     })
+  // }
 
   createTimeSheet() {
     this.showDialog('create', {})
   }
   editTimesheet(timesheet: TimesheetDetailDto) {
+    this.menu.closeMenu();
     this.showDialog("edit", timesheet);
   }
 
@@ -235,8 +231,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.reloadTimesheetFile(result)
-
+        // this.reloadTimesheetFile(result)
+        this.refresh()
       }
     });
   }
@@ -244,18 +240,21 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     abp.message.confirm(
       "Delete File " + item.file + "?",
       "",
-      (result: boolean) => {
+      async (result: boolean) => {
         if (result) {
-          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(() => {
-            setTimeout(() => {
-              abp.notify.success("Deleted File  " + item.file);
-              this.refresh();
-            }, 1000)
-          });
+          this.timesheetProjectService.UpdateFileTimeSheetProject(null, item.id).subscribe(
+            (res) => {
+              abp.notify.success("Deleted File Success");
+              item.file = null
+              item.hasFile = false
+            },
+            (err) => {
+              abp.notify.error(err)
+            },
+          );
         }
       }
     );
-
   }
   search() {
     this.TimesheetDetaiList = this.tempTimesheetDetaiList.filter((item) => {
@@ -336,6 +335,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.createdInvoice = true;
   }
   public viewBillDetail(bill) {
+    this.menu.closeMenu()
     const show = this.dialog.open(ViewBillComponent, {
       width: "95%",
       data: bill, 

@@ -488,9 +488,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 throw new UserFriendlyException("Timesheet not active !");
             }
-
-            if (string.IsNullOrEmpty(input.ProjectBillInfomation))
-                input.ProjectBillInfomation = timeSheetProject.ProjectBillInfomation;
             ObjectMapper.Map<TimesheetProjectDto, TimesheetProject>(input, timeSheetProject);
             await WorkScope.GetRepo<TimesheetProject, long>().UpdateAsync(timeSheetProject);
             return input;
