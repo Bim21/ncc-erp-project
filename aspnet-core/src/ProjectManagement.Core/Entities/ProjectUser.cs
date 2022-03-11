@@ -22,6 +22,8 @@ namespace ProjectManagement.Entities
         public long ProjectId { get; set; }
 
         public ProjectUserRole ProjectRole { get; set; }
+        public bool IsPool { get; set; }
+
         public byte AllocatePercentage { get; set; }
         public DateTime StartTime { get; set; }
         public ProjectUserStatus Status { get; set; }

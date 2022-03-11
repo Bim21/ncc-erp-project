@@ -625,7 +625,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateNote(UpdateNoteDto input)
+        public async Task<IActionResult> UpdateNote(UpdateTsProjectNoteDto input)
         {
             var projectTimesheet = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);
             if(projectTimesheet != null)

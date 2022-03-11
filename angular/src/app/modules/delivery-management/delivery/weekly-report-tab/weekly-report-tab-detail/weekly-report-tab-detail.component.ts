@@ -19,7 +19,7 @@ import * as moment from 'moment';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { GetTimesheetWorkingComponent, WorkingTimeDto } from './get-timesheet-working/get-timesheet-working.component';
-
+import * as echarts from 'echarts';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -66,7 +66,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
   public isActive: boolean;
-  public projectType= "";
+  public projectType = "";
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
@@ -79,9 +79,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
-  public processFuture:boolean = false;
-  public processProblem:boolean=false
-  public processWeekly:boolean =false;
+  public processFuture: boolean = false;
+  public processProblem: boolean = false
+  public processWeekly: boolean = false;
   public createdDate = new Date();
   public projectId: number;
   public projectIdReport: number;
@@ -95,12 +95,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
   sidebarExpanded: boolean;
-  isShowCurrentResource:boolean =true;
-  searchUser:string =""
-  isTimmerCounting:boolean =false
-  isStopCounting:boolean =false
-  isRefresh:boolean = false
-  isStart:boolean =false
+  isShowCurrentResource: boolean = true;
+  searchUser: string = ""
+  isTimmerCounting: boolean = false
+  isStopCounting: boolean = false
+  isRefresh: boolean = false
+  isStart: boolean = false
 
   constructor(private pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
@@ -115,58 +115,61 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     super(injector)
   }
   ngOnInit(): void {
-    this.pmReportService.currentMessage.subscribe(message => {
-      this.projectType = message;
-      if(this.pmReportId){
-        this.getPmReportProject();
+    if (this.router.url.includes("weeklyReportTabDetail")) {
+      this.pmReportService.currentMessage.subscribe(message => {
+        this.projectType = message;
+        if (this.pmReportId) {
+          this.getPmReportProject();
+        }
       }
+
+      );
+
+      this.pmReportId = this.route.snapshot.queryParamMap.get('id');
+      this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
+      this.getPmReportProject();
+      this.getUser();
+      this._layoutStore.sidebarExpanded.subscribe((value) => {
+        this.sidebarExpanded = value;
+      });
+      this.buildChar()
     }
-    
-    );
-    
-    this.pmReportId = this.route.snapshot.queryParamMap.get('id');
-    this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
-    this.getPmReportProject();
-    this.getUser();
-    this._layoutStore.sidebarExpanded.subscribe((value) => {
-      this.sidebarExpanded = value;
-    });
   }
-  public startTimmer(){
-    if((!this.isTimmerCounting && ! this.isStopCounting) || this.isRefresh){
+  public startTimmer() {
+    if ((!this.isTimmerCounting && !this.isStopCounting) || this.isRefresh) {
       this.timmerCount.start()
-      this.isTimmerCounting=true
+      this.isTimmerCounting = true
       this.isStopCounting = false
-      this.isRefresh =false
-      this.isStart =true
+      this.isRefresh = false
+      this.isStart = true
     }
   }
-  public stopTimmer(){
+  public stopTimmer() {
     this.timmerCount.stop()
-    this.isTimmerCounting=false
-    this.isStopCounting =true
-    this.isRefresh =false
+    this.isTimmerCounting = false
+    this.isStopCounting = true
+    this.isRefresh = false
 
   }
-  public refreshTimmer(){
+  public refreshTimmer() {
     this.timmerCount.reset()
-    this.isTimmerCounting=false
+    this.isTimmerCounting = false
     // this.isStopCounting =true
-    this.isRefresh =true
-    this.isStart =false
+    this.isRefresh = true
+    this.isStart = false
 
   }
-  public resumeTimmer(){
+  public resumeTimmer() {
     this.timmerCount.resume()
-    this.isTimmerCounting=true
-    this.isStopCounting =false
-    this.isRefresh =false
+    this.isTimmerCounting = true
+    this.isStopCounting = false
+    this.isRefresh = false
 
 
 
   }
   public getPmReportProject(): void {
-    this.pmReportProjectService.GetAllByPmReport(this.pmReportId,this.projectType).subscribe((data => {
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
       this.pmReportProjectList = data.result;
       this.tempPmReportProjectList = data.result;
       this.projectId = this.pmReportProjectList[0]?.projectId
@@ -175,7 +178,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
       this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
       this.pmReportProjectId = this.pmReportProjectList[0]?.id
-      if(this.pmReportProjectList[0]){
+      if (this.pmReportProjectList[0]) {
         this.pmReportProjectList[0].setBackground = true
       }
       this.getProjectInfo();
@@ -187,13 +190,26 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }))
   }
   getProjectInfo() {
-    this.isLoading=true;
-    if(this.pmReportProjectId){
+    this.isLoading = true;
+    if (this.pmReportProjectId) {
       this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
-        this.isLoading =false;
+        this.isLoading = false;
+        if (this.router.url.includes("weeklyReportTabDetail")) {
+          this.router.navigate(
+            [],
+            {
+              relativeTo: this.route,
+              queryParams: {
+                name: this.projectInfo.projectName,
+                client: this.projectInfo.clientName, pmName: this.projectInfo.pmName
+              },
+              queryParamsHandling: 'merge'
+            });
+
+        }
       },
-      ()=>{this.isLoading =false})
+        () => { this.isLoading = false })
     }
   }
   public view(projectReport) {
@@ -211,7 +227,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.totalNormalWorkingTime = projectReport.totalNormalWorkingTime
     this.totalOverTime = projectReport.totalOverTime
     this.generalNote = projectReport.note
-   
+
     this.getProjectInfo();
     this.getWeeklyReport();
     this.getFuturereport();
@@ -221,15 +237,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isEditFutureReport = false;
     this.isEditProblem = false;
     this.processFuture = false;
-    this.processProblem=false
-    this.processWeekly =false;
+    this.processProblem = false
+    this.processWeekly = false;
     this.searchUser = ""
-    
+
   }
 
 
   public getWeeklyReport() {
-    if(this.projectId){
+    if (this.projectId) {
       this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.weeklyReportList = data.result;
         this.isShowWeeklyList = this.weeklyReportList.length == 0 ? false : true;
@@ -237,25 +253,25 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
   public getFuturereport() {
-    if(this.projectId){
+    if (this.projectId) {
       this.pmReportProjectService.getChangesInFuture(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.futureReportList = data.result;
         this.isShowFutureList = this.futureReportList.length == 0 ? false : true;
       })
     }
-    
+
   }
   public getProjectProblem() {
-    if(this.projectId){
+    if (this.projectId) {
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
           this.problemList = data.result.result;
-  
+
           this.projectHealth = data.result.projectHealth;
-  
+
         } else {
           this.problemList = [];
-  
+
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
       })
@@ -273,7 +289,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.generalNote = this.pmReportProjectList[0].note
     this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
-  
+
     this.pmReportProjectId = this.pmReportProjectList[0].id
     // this.pmReportProjectList[0].setBackground = true
     this.pmReportProjectList.forEach(element => {
@@ -299,7 +315,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       } else {
         abp.notify.success("Mark Unread!");
       }
-      project.seen = ! project.seen
+      project.seen = !project.seen
 
     })
 
@@ -361,13 +377,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           report.createMode = true
         })
     }
-    
+
   }
   public cancelWeekReport() {
     this.processWeekly = false;
-    this.isEditWeeklyReport =false;
+    this.isEditWeeklyReport = false;
     this.getWeeklyReport();
-    this.searchUser =""
+    this.searchUser = ""
   }
   updateWeekReport(report) {
     this.processWeekly = true
@@ -415,7 +431,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.getCurrentResourceOfProject();
           this.isEditFutureReport = false;
           this.processFuture = false
-          this.searchUser =""
+          this.searchUser = ""
         })
       },
         () => {
@@ -435,17 +451,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         report.createMode = false;
         this.getFuturereport();
         this.getCurrentResourceOfProject();
-        this.searchUser =""
+        this.searchUser = ""
       },
         () => {
           report.createMode = true
         })
     }
-    
+
   }
   public cancelFutureReport() {
     this.processFuture = false;
-    this.isEditFutureReport =false;
+    this.isEditFutureReport = false;
     this.getFuturereport();
   }
   public approveRequest(resource: projectUserDto): void {
@@ -528,7 +544,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public cancelProblemReport() {
     this.processProblem = false;
-    this.isEditProblem =false;
+    this.isEditProblem = false;
     this.getProjectProblem();
   }
   public editProblemReport(user: projectUserDto) {
@@ -584,27 +600,93 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     report.allocatePercentage = data
   }
   getCurrentResourceOfProject() {
-    if(this.projectId){  
+    if (this.projectId) {
       this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
-      .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-        this.projectCurrentResource = data.result
-      })
+        .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+          this.projectCurrentResource = data.result
+        })
     }
   }
 
- getTimesheetWorking(){
-   const dialogRef = this.dialog.open(GetTimesheetWorkingComponent, {
-    data: {
-      dialogData: this.pmReportProjectId,
-    },
-    width: "500px",
-    disableClose: true,
-  });
-  dialogRef.afterClosed().subscribe((result:WorkingTimeDto) => {
-    if (result) {
-      this.totalNormalWorkingTime = result.normalWorkingTime
-      this.totalOverTime = result.overTime
-    }
-  });
- } 
+  getTimesheetWorking() {
+    const dialogRef = this.dialog.open(GetTimesheetWorkingComponent, {
+      data: {
+        dialogData: this.pmReportProjectId,
+      },
+      width: "500px",
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((result: WorkingTimeDto) => {
+      if (result) {
+        this.totalNormalWorkingTime = result.normalWorkingTime
+        this.totalOverTime = result.overTime
+      }
+    });
+  }
+
+
+
+  //  echarts.use([GridComponent, LineChart, CanvasRenderer, UniversalTransition]);
+
+
+  buildChar() {
+
+
+    // type EChartsOption = echarts.ComposeOption<
+    //   GridComponentOption | LineSeriesOption
+    // >;
+
+    var chartDom = document.getElementById('timesheet-chart')!;
+    var myChart = echarts.init(chartDom);
+    var option: echarts.EChartsOption;
+
+    option = {
+
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data: ['Normal', 'OT'],
+        
+      },
+      color: ['green', 'red'],
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      // toolbox: {
+      //   feature: {
+      //     saveAsImage: {}
+      //   }
+      // },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['November', 'December', 'January', 'February', 'March']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          lineStyle: {color: 'green'},
+          name: 'Normal',
+          type: 'line',
+          stack: 'Total',
+          data: [100, 182, 170, 234, 300, 350, 240]
+        },
+        {
+          lineStyle: {color: 'red'},
+          name: 'OT',
+          type: 'line',
+          stack: 'Total',
+          data: [120, 152, 101, 134, 90, 230, 160]
+        },
+
+      ]
+    };
+    option && myChart.setOption(option);
+  }
 }

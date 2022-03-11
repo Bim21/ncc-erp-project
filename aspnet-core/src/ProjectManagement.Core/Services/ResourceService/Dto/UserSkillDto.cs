@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjectManagement.Users.Dto
-{
+namespace ProjectManagement.Services.ResourceService.Dto
+{ 
     public class UserSkillDto
     {
         public long UserId { get; set; }

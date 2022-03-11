@@ -2830,6 +2830,9 @@ namespace ProjectManagement.Migrations
                     b.Property<bool>("IsFutureActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsPool")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
@@ -3865,7 +3868,7 @@ namespace ProjectManagement.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Entities.Project", "Project")
-                        .WithMany()
+                        .WithMany("ProjectUsers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -3875,7 +3878,7 @@ namespace ProjectManagement.Migrations
                         .HasForeignKey("ResourceRequestId");
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
-                        .WithMany()
+                        .WithMany("ProjectUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -3963,7 +3966,7 @@ namespace ProjectManagement.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
-                        .WithMany()
+                        .WithMany("UserSkills")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

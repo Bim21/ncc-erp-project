@@ -142,7 +142,8 @@
                                 <td>
                                     <div class="project-wrap">
                                         <div class="project-name-wrap"> 
-                                            <a [routerLink]="['/app/list-project-detail/list-project-general']" [queryParams]="{id: project.id, type: project.projectType}" >
+                                            <a [routerLink]="['/app/list-project-detail/weeklyreport']" [queryParams]="{id: project.id, type: project.projectType, 
+                                                projectName: project.name, projectCode: project.code}" >
                                                 {{ project.name }}
                                             </a>
                                             <span class="project-code">

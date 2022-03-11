@@ -1,4 +1,5 @@
-import { Component,OnInit, Injector} from '@angular/core';
+import { ProjectInfoDto } from './../service/model/project.dto';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ActivationEnd, NavigationEnd, NavigationStart, Router, Event as NavigationEvent } from '@angular/router';
 import { AddReportNoteComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
@@ -7,6 +8,7 @@ import { pmReportDto } from '@app/service/model/pmReport.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { catchError, filter } from 'rxjs/operators';
+import { PMReportProjectService } from '@app/service/api/pmreport-project.service';
 
 @Component({
   selector: 'header-left-navbar',
@@ -16,26 +18,44 @@ import { catchError, filter } from 'rxjs/operators';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderLeftNavbarComponent extends AppComponentBase implements OnInit {
+  @ViewChild("timmer") timmerCount;
+
   sidebarExpanded: boolean;
   isShowReportBar: boolean = false;
   currentUrl: string = "";
   pmReportList: pmReportDto[] = [];
   pmReport = {} as pmReportDto;
   reportId: any;
+  projectInfo = {} as ProjectInfoDto
+  projectName: string
+  projectCode: string
   projectTypeList = [
     "ALL",
     "OUTSOURCING",
     "TRAINING",
     "PRODUCT"
   ]
-
-
+  projectHealth
+  projectId
+  isTimmerCounting: boolean = false
+  isStopCounting: boolean = false
+  isRefresh: boolean = false
+  isStart: boolean = false
+  public problemIssueList: string[] = []
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
-    private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService) {
+    private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
+    private pmReportProjectService: PMReportProjectService) {
     super(injector)
   }
   projectType = this.reportService.messageSource.getValue();
   ngOnInit(): void {
+      this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
+      this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
+      this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
+   
+    this.projectName = this.route.snapshot.queryParamMap.get("projectName")
+    this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
+
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
     });
@@ -68,6 +88,15 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
             this.projectType = this.reportService.messageSource.getValue();
             this.reportService.changeMessage("OUTSOURCING")
           }
+          if(this.isShowReportBar){
+            this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
+            this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
+            this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
+          }
+        
+          this.projectName = this.route.snapshot.queryParamMap.get("projectName")
+          this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
+
         }
       )
   }
@@ -102,5 +131,38 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
         },
       });
     });
+  }
+  public startTimmer() {
+    if ((!this.isTimmerCounting && !this.isStopCounting) || this.isRefresh) {
+      this.timmerCount.start()
+      this.isTimmerCounting = true
+      this.isStopCounting = false
+      this.isRefresh = false
+      this.isStart = true
+    }
+  }
+  public stopTimmer() {
+    this.timmerCount.stop()
+    this.isTimmerCounting = false
+    this.isStopCounting = true
+    this.isRefresh = false
+
+  }
+  public refreshTimmer() {
+    this.timmerCount.reset()
+    this.isTimmerCounting = false
+    // this.isStopCounting =true
+    this.isRefresh = true
+    this.isStart = false
+
+  }
+  public resumeTimmer() {
+    this.timmerCount.resume()
+    this.isTimmerCounting = true
+    this.isStopCounting = false
+    this.isRefresh = false
+
+
+
   }
 }

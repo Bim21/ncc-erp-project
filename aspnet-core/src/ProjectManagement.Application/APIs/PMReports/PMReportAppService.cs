@@ -17,6 +17,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
 using ProjectManagement.NccCore.BackgroundJob;
+using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
 using System;
@@ -32,10 +33,12 @@ namespace ProjectManagement.APIs.PMReports
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
         private readonly TimesheetService _timesheetService;
-        public PMReportAppService(IBackgroundJobManager backgroundJobManager, TimesheetService timesheetService)
+        private readonly ResourceManager _resourceManager;
+        public PMReportAppService(IBackgroundJobManager backgroundJobManager, TimesheetService timesheetService, ResourceManager resourceManager)
         {
             _backgroundJobManager = backgroundJobManager;
             _timesheetService = timesheetService;
+            _resourceManager = resourceManager;
         }
 
         [HttpPost]
@@ -169,142 +172,78 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Create)]
         public async Task<CreatePMReportDto> Create(CreatePMReportDto input)
         {
-            var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
+            var isExist = await WorkScope.GetAll<PMReport>()
+                .AnyAsync(x => x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
+
             if (isExist)
-                throw new UserFriendlyException("PM Report already exist!");
+                throw new UserFriendlyException("PM Report already exist!");           
 
             var activeReport = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            long lastReportId = 0;
             if (activeReport != null)
             {
                 activeReport.IsActive = false;
                 await WorkScope.UpdateAsync(activeReport);
+                lastReportId = activeReport.Id;
             }
 
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<PMReport>(input));
+            var pmReport = ObjectMapper.Map<PMReport>(input);
+            input.Id = await WorkScope.InsertAndGetIdAsync(pmReport);
+            pmReport.Id = input.Id;
 
-            var userInFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.PMReportId == (activeReport != null ? activeReport.Id : 0) && x.Status == ProjectUserStatus.Future && x.IsFutureActive);
-            foreach (var item in userInFuture)
+            var userInFuture = WorkScope.GetAll<ProjectUser>()
+                .Where(x => x.PMReportId == lastReportId && x.Status == ProjectUserStatus.Future);
+
+            foreach (var pu in userInFuture)
             {
-                item.IsFutureActive = false;
-                await WorkScope.UpdateAsync(item);
+                pu.PMReportId = input.Id;
+                pu.IsFutureActive = true;
+                pu.Id = 0;
+                await WorkScope.InsertAsync(pu);
+            }
 
-                var projectUser = new ProjectUser
+            var mapInprogressIssues = (await WorkScope.GetAll<PMReportProjectIssue>()
+                .Where(x => x.Status == PMReportProjectIssueStatus.InProgress)
+                .Where(s => s.PMReportProject.PMReportId == lastReportId)
+                .Select(s => new
                 {
-                    UserId = item.UserId,
-                    ProjectId = item.ProjectId,
-                    ProjectRole = item.ProjectRole,
-                    AllocatePercentage = item.AllocatePercentage,
-                    StartTime = item.StartTime,
-                    Status = item.Status,
-                    IsExpense = item.IsExpense,
-                    ResourceRequestId = item.ResourceRequestId,
-                    PMReportId = input.Id,
-                    IsFutureActive = true
-                };
-                await WorkScope.InsertAsync(projectUser);
-            }
+                    s.PMReportProject.ProjectId,
+                    Issues = s
+                }).ToListAsync())
+                .GroupBy(s => s.ProjectId)
+                .ToDictionary(s => s.Key, s => s.Select(s => s.Issues).ToList());
 
-            var pmReportProjectInProcess = from prp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReportId == (activeReport != null ? activeReport.Id : 0))
-                                           join prpi in WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.Status == PMReportProjectIssueStatus.InProgress)
-                                           on prp.Id equals prpi.PMReportProjectId
-                                           select new
-                                           {
-                                               ProjectId = prp.ProjectId,
-                                               Issue = prpi
-                                           };
+            var activeProjects = await WorkScope.GetAll<Project>()
+                .Where(x => x.Status == ProjectStatus.InProgress)
+                .ToListAsync();
 
-            var projectActive = await WorkScope.GetAll<Project>().Where(x => x.Status != ProjectStatus.Closed).ToListAsync();
-            foreach (var item in projectActive)
+            foreach (var project in activeProjects)
             {
-
                 var pmReportProject = new PMReportProject
                 {
                     PMReportId = input.Id,
-                    ProjectId = item.Id,
+                    ProjectId = project.Id,
                     Status = PMReportProjectStatus.Draft,
-                    ProjectHealth = ProjectHealth.Green,
-                    PMId = item.PMId,
+                    ProjectHealth = mapInprogressIssues.ContainsKey(project.Id) ? ProjectHealth.Yellow : ProjectHealth.Green,
+                    PMId = project.PMId,
                     Note = null
                 };
                 pmReportProject.Id = await WorkScope.InsertAndGetIdAsync(pmReportProject);
 
-                var listInProcess = pmReportProjectInProcess.Where(x => x.ProjectId == item.Id).Select(x => x.Issue);
-                if (listInProcess.Count() > 0)
+                if (mapInprogressIssues.ContainsKey(project.Id))
                 {
-                    foreach (var issue in listInProcess)
+                    var issues = mapInprogressIssues[project.Id];
+                    if (issues != null && !issues.IsEmpty())
                     {
-                        var pmReportProjectIssue = new PMReportProjectIssue
+                        foreach(var issue in issues)
                         {
-                            PMReportProjectId = pmReportProject.Id,
-                            CreationTime = issue.CreationTime,
-                            Description = issue.Description,
-                            Impact = issue.Impact,
-                            Critical = issue.Critical,
-                            Source = issue.Source,
-                            Solution = issue.Solution,
-                            MeetingSolution = issue.MeetingSolution,
-                            Status = issue.Status
-                        };
-                        await WorkScope.InsertAsync(pmReportProjectIssue);
+                            issue.Id = 0;
+                            issue.PMReportProjectId = pmReportProject.Id;
+                            await WorkScope.InsertAsync(issue);
+                        }
                     }
                 }
-            }
-
-            // back ground job update status can send of pmreport
-            var now = DateTimeUtils.GetNow();
-            var canSendDay = Int32.Parse(await SettingManager.GetSettingValueAsync(AppSettingNames.CanSendDay));
-            var canSendHour = Int32.Parse(await SettingManager.GetSettingValueAsync(AppSettingNames.CanSendHour));
-            var expiredDay = Int32.Parse(await SettingManager.GetSettingValueAsync(AppSettingNames.ExpiredDay));
-            var expiredHour = Int32.Parse(await SettingManager.GetSettingValueAsync(AppSettingNames.ExpiredHour));
-
-            if (!input.CanSendTime.HasValue)
-            {
-                input.CanSendTime = SettingToDate(canSendDay, canSendHour, now);
-            }
-
-            if (!input.ExpiredTime.HasValue)
-            {
-                input.ExpiredTime = SettingToDate(expiredDay, expiredHour, now);
-            }
-
-            if (input.CanSendTime > input.ExpiredTime)
-            {
-                throw new UserFriendlyException("CanSendTime can't not greater than ExpiredTime!");
-            }
-            var pmReport = await WorkScope.GetAsync<PMReport>(input.Id);
-
-            // nếu qua thời điểm cantime thì ko cần tạo job, tương tự expired
-            if (input.ExpiredTime < now)
-            {
-                pmReport.PMReportStatus = PMReportStatus.Expired;
-                await WorkScope.UpdateAsync(pmReport);
-                return input;
-            }
-            else
-            {
-                // add background job
-                await _backgroundJobManager.EnqueueAsync<PMReportBackgroundJob, PMReportBackgroundJobArgs>(new PMReportBackgroundJobArgs
-                {
-                    PMReportId = input.Id,
-                    PMReportStatus = PMReportStatus.Expired
-                }, BackgroundJobPriority.High, TimeSpan.FromHours((input.ExpiredTime.Value - DateTimeUtils.GetNow()).TotalHours));
-
-                if (input.CanSendTime < now)
-                {
-                    pmReport.PMReportStatus = PMReportStatus.CanSend;
-                    await WorkScope.UpdateAsync(pmReport);
-                }
-                else
-                {
-                    // add background job
-                    await _backgroundJobManager.EnqueueAsync<PMReportBackgroundJob, PMReportBackgroundJobArgs>(new PMReportBackgroundJobArgs
-                    {
-                        PMReportId = input.Id,
-                        PMReportStatus = PMReportStatus.CanSend
-                    }, BackgroundJobPriority.High, TimeSpan.FromHours((input.CanSendTime.Value - DateTimeUtils.GetNow()).TotalHours));
-                }
-            }
-
+            }          
             return input;
         }
 
@@ -320,7 +259,8 @@ namespace ProjectManagement.APIs.PMReports
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(input.Id);
 
-            var isExist = await WorkScope.GetAll<PMReport>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
+            var isExist = await WorkScope.GetAll<PMReport>()
+                .AnyAsync(x => x.Id != input.Id && x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
             if (isExist)
                 throw new UserFriendlyException("PM Report already exist !");
 
@@ -328,8 +268,9 @@ namespace ProjectManagement.APIs.PMReports
             {
                 throw new UserFriendlyException("Report status cannot be edited !");
             }
+            pmReport.Name = input.Name;
 
-            await WorkScope.UpdateAsync(ObjectMapper.Map<PMReportDto, PMReport>(input, pmReport));
+            await WorkScope.UpdateAsync(pmReport);
             return input;
         }
 

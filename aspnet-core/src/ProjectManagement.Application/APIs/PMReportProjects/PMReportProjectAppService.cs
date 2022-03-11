@@ -226,7 +226,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             PermissionNames.PmManager_PMReportProject_ResourceChangesDuringTheWeek)]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId && x.IsFutureActive)
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId )
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
                             .Where(x => x.User.UserType != UserType.FakeUser)
                             .Select(x => new GetProjectUserDto

@@ -12,5 +12,10 @@ namespace NccCore.Uitls
         {
             return Clock.Provider.Now;
         }
+
+        public static string ToString(DateTime dateTime)
+        {
+            return dateTime.ToString("dd/MM/yyyy");
+        }
     }
 }

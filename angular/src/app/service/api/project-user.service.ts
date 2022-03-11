@@ -18,7 +18,14 @@ export class ProjectUserService extends BaseApiService {
   getAllProjectUser(id: number, viewHistory?: boolean): Observable<any> {
     return this.http.get<any>(
       this.rootUrl +
-        `/GetAllByProject?projectId=${id}&viewHistory=${viewHistory}`
+      `/GetAllWorkingUserByProject?projectId=${id}&viewHistory=${viewHistory}`
+    );
+  }
+
+  GetAllPlannedUserByProject(projectId: number): Observable<any> {
+    return this.http.get<any>(
+      this.rootUrl +
+      `/GetAllPlannedUserByProject?projectId=${projectId}`
     );
   }
   getAllProjectUserInProject(id: number): Observable<any> {
@@ -26,16 +33,70 @@ export class ProjectUserService extends BaseApiService {
       this.rootUrl + "/GetAllProjectUserInProject?projectId=" + id
     );
   }
+  GetAllWorkingProjectByUserId(userId: number): Observable<any> {
+    return this.http.get<any>(
+      this.rootUrl + "/GetAllWorkingProjectByUserId?userId=" + userId
+    );
+  }
   removeProjectUser(userId: number): Observable<any> {
     return this.http.delete<any>(
       this.rootUrl + `/Delete?projectUserId=${userId}`
     );
   }
+
+  AddUserToProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToProject`, user
+    );
+  }
+  UpdateCurrentResourceDetail(user): Observable<any> {
+    return this.http.put<any>(
+      this.rootUrl + `/UpdateCurrentResourceDetail`, user
+    );
+  }
+
   getProjectHistoryByUser(
     userId: number
   ): Observable<ResponseWrapper<IProjectHistoryUser[]>> {
     return this.http.get<ResponseWrapper<IProjectHistoryUser[]>>(
       this.rootUrl + `/GetProjectHistoryByUser?UserId=${userId}`
+    );
+  }
+
+
+  ReleaseUserToPool(input): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/ReleaseUser`, input
+    );
+  }
+
+
+  CancelResourcePlan(id): Observable<any> {
+    return this.http.delete<any>(
+      this.rootUrl + `/CancelResourcePlan?projectUserId=${id}`,
+    );
+  }
+
+  EditProjectUserPlan(projectUser): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/EditProjectUserPlan`, projectUser
+    );
+  }
+  PlanNewResourceToProject(projectUser): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/PlanNewResourceToProject`, projectUser
+    );
+  }
+
+  ConfirmOutProject(projectUser): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/ConfirmOutProject`, projectUser
+    );
+  }
+
+  ConfirmJoinProject(projectUserId, startTime): Observable<any> {
+    return this.http.get<any>(
+      this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`,
     );
   }
 }

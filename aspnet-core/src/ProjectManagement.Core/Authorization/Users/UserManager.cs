@@ -11,6 +11,7 @@ using Abp.Domain.Uow;
 using Abp.Organizations;
 using Abp.Runtime.Caching;
 using ProjectManagement.Authorization.Roles;
+using System.Threading.Tasks;
 
 namespace ProjectManagement.Authorization.Users
 {
@@ -54,5 +55,19 @@ namespace ProjectManagement.Authorization.Users
                 settingManager)
         {
         }
+        public async Task DeactiveUser(long userId)
+        {
+            await UpdateUserActive(userId, false);
+        }
+
+        public async Task UpdateUserActive(long userId, bool isActive)
+        {
+            var user = await GetUserByIdAsync(userId);
+            user.IsActive = isActive;
+            await UpdateAsync(user);
+        }
+
     }
+
+    
 }

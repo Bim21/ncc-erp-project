@@ -50,11 +50,12 @@ export class AppConsts {
         Unsent: "badge badge-pill badge-secondary"
     }
     static readonly projectRole = {
-        PM: "badge bg-secondary",
+
+        PM: "badge bg-danger",
         DEV: "badge bg-primary",
-        TESTER: "badge bg-info",
-        BA: "badge bg-warning",
-        Artist: "badge bg-success",
+        TESTER: "badge bg-success",
+        BA: "badge bg-info",
+        Artist: "badge bg-warning",
     }
     static readonly ProjectTypeStyle = {
         ODC: "badge badge-primary",
@@ -140,7 +141,7 @@ export class AppConsts {
         0: "badge bg-danger",
         1: "badge bg-primary",
         2: "badge bg-success",
-        3: "badge bg-secondary",
+        3: "badge bg-info",
         4: "badge bg-warning",
     }
 

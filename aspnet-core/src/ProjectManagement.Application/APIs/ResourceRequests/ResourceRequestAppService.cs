@@ -21,6 +21,9 @@ using ProjectManagement.Entities;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Users;
 using ProjectManagement.Users.Dto;
 using System;
@@ -39,6 +42,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         private readonly ProjectUserAppService _projectUserAppService;
         private readonly PMReportProjectIssueAppService _pMReportProjectIssueAppService;
         private readonly IUserAppService _userAppService;
+        private readonly ResourceManager _resourceManager;
+
         private readonly UserManager _userManager;
         private ISettingManager _settingManager;
         private KomuService _komuService;
@@ -48,12 +53,14 @@ namespace ProjectManagement.APIs.ResourceRequests
             PMReportProjectIssueAppService pMReportProjectIssueAppService,
             KomuService komuService,
             UserManager userManager,
+            ResourceManager resourceManager,
             ISettingManager settingManager,
             IUserAppService userAppService)
         {
             _projectUserAppService = projectUserAppService;
             _pMReportProjectIssueAppService = pMReportProjectIssueAppService;
             _komuService = komuService;
+            _resourceManager = resourceManager;
             _settingManager = settingManager;
             _userAppService = userAppService;
             _userManager = userManager;
@@ -295,380 +302,119 @@ namespace ProjectManagement.APIs.ResourceRequests
             return await users.GetGridResult(users, input);
         }
 
+
+        //[HttpPost]
+        //[AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
+        //PermissionNames.PmManager_ResourceRequest_AvailableResource)]
+        //public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
+        //{
+        //    input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
+        //    var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
+        //    if (skill != null)
+        //    {
+        //        skillId = long.Parse(skill.Value.ToString());
+        //        input.FilterItems.Remove(skill);
+        //    }
+        //    var projectUsers = WorkScope.GetAll<ProjectUser>()
+        //                       .Where(x => x.Project.Status != ProjectStatus.Potential 
+        //                       && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present 
+        //                       && x.IsFutureActive)
+        //                       .Select(x => new
+        //                       {
+        //                           UserId = x.UserId,
+        //                           ProjectId = x.ProjectId,
+        //                           ProjectName = x.Project.Name,
+        //                           AllocatePercentage = x.AllocatePercentage,
+        //                           Status = x.Status,
+        //                           ProjectRole = x.ProjectRole,
+        //                           StartTime = x.StartTime,
+        //                       });
+        //    var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
+        //    var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
+        //               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
+        //    var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
+        //    var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
+        //    var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
+        //    var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
+        //                        .Select(x => new AvailableResourceDto
+        //                        {
+        //                            UserId = x.Id,
+        //                            UserType = x.UserType,
+        //                            FullName = x.Name + " " + x.Surname,
+        //                            NormalFullName = x.Surname + " " + x.Name,
+        //                            EmailAddress = x.EmailAddress,
+        //                            Branch = x.Branch,
+        //                            UserLevel = x.UserLevel,
+        //                            AvatarPath = "/avatars/" + x.AvatarPath,
+        //                            DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
+        //                            projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime : x.CreationTime,
+        //                            WorkingProjects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
+        //                            .Select(x => new WorkingProjectDto
+        //                            {
+        //                                projectId = x.ProjectId,
+        //                                ProjectName = x.ProjectName,
+        //                                ProjectRole = x.ProjectRole,
+        //                                StartTime = x.StartTime
+        //                            }).ToList(),
+        //                            Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
+        //                            ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
+        //                            {
+        //                                ProjectName = p.Project.Name,
+        //                                StartTime = p.StartTime.Date,
+        //                                AllocatePercentage = p.AllocatePercentage
+        //                            }).ToList(),
+        //                            ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
+        //                            {
+        //                                Id = uk.SkillId,
+        //                                Name = uk.Skill.Name
+        //                            }).ToList(),
+        //                            PoolNote = x.PoolNote,
+        //                            StarRate = x.StarRate,
+        //                            TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
+        //                            0 :
+        //                            WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
+        //                            (DateTime.Now - WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
+        //                            : (DateTime.Now - x.CreationTime).Days //lấy ra ngày tạo
+        //                            ,
+        //                        }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
+        //    if (filterProjectName != null)
+        //    {
+        //        string searchByProject = filterProjectName.Value.ToString();
+        //        input.FilterItems.Remove(filterProjectName);
+        //        var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
+        //        users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
+        //    }
+        //    if (filterprojectUserPlans != null)
+        //    {
+        //        string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
+        //        input.FilterItems.Remove(filterprojectUserPlans);
+        //        var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
+        //        users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
+        //    }
+        //    return await users.GetGridResult(users, input);
+        //}
+
+
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
-            PermissionNames.PmManager_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
+        [AbpAuthorize]
+        public async Task<GridResult<GetAllResourceDto>> GetVendorResource(InputGetResourceDto input)
         {
-            input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
-            var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
-            if (skill != null)
-            {
-                skillId = long.Parse(skill.Value.ToString());
-                input.FilterItems.Remove(skill);
-            }
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                               .Select(x => new
-                               {
-                                   UserId = x.UserId,
-                                   ProjectId = x.ProjectId,
-                                   ProjectName = x.Project.Name,
-                                   AllocatePercentage = x.AllocatePercentage,
-                                   Status = x.Status,
-                                   ProjectRole = x.ProjectRole,
-                                   StartTime = x.StartTime,
-                               });
-            var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
-            var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
-                       .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
-            var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
-            var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-            var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
-                                .Select(x => new AvailableResourceDto
-                                {
-                                    UserId = x.Id,
-                                    UserType = x.UserType,
-                                    FullName = x.Name + " " + x.Surname,
-                                    NormalFullName = x.Surname + " " + x.Name,
-                                    EmailAddress = x.EmailAddress,
-                                    Branch = x.Branch,
-                                    UserLevel = x.UserLevel,
-                                    AvatarPath = "/avatars/" + x.AvatarPath,
-                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
-                                    projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime : x.CreationTime,
-                                    WorkingProjects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
-                                    .Select(x => new WorkingProjectDto
-                                    {
-                                        projectId = x.ProjectId,
-                                        ProjectName = x.ProjectName,
-                                        ProjectRole = x.ProjectRole,
-                                        StartTime = x.StartTime
-                                    }).ToList(),
-                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
-                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
-                                    {
-                                        ProjectName = p.Project.Name,
-                                        StartTime = p.StartTime.Date,
-                                        AllocatePercentage = p.AllocatePercentage
-                                    }).ToList(),
-                                    ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
-                                    {
-                                        Id = uk.SkillId,
-                                        Name = uk.Skill.Name
-                                    }).ToList(),
-                                    PoolNote = x.PoolNote,
-                                    StarRate = x.StarRate,
-                                    TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
-                                    0 :
-                                    WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
-                                    (DateTime.Now - WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
-                                    : (DateTime.Now - x.CreationTime).Days //lấy ra ngày tạo
-                                    ,
-                                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-            if (filterProjectName != null)
-            {
-                string searchByProject = filterProjectName.Value.ToString();
-                input.FilterItems.Remove(filterProjectName);
-                var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            if (filterprojectUserPlans != null)
-            {
-                string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
-                input.FilterItems.Remove(filterprojectUserPlans);
-                var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            return await users.GetGridResult(users, input);
+            return await _resourceManager.GetResources(input, true);
+        }
+
+        [HttpPost]
+        [AbpAuthorize]
+        public async Task<GridResult<GetAllResourceDto>> GetAllResource(InputGetResourceDto input)
+        {
+            return await _resourceManager.GetResources(input, false);
         }
 
 
-
-
-
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
-                   PermissionNames.PmManager_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> GetAllResource(GridParam input, long? skillId)
+        [AbpAuthorize]
+        public async Task<GridResult<GetAllPoolResourceDto>> GetAllPoolResource(InputGetResourceDto input)
         {
-            input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
-            var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
-            if (skill != null)
-            {
-                skillId = long.Parse(skill.Value.ToString());
-                input.FilterItems.Remove(skill);
-            }
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                               .Select(x => new
-                               {
-                                   UserId = x.UserId,
-                                   ProjectId = x.ProjectId,
-                                   ProjectName = x.Project.Name,
-                                   AllocatePercentage = x.AllocatePercentage,
-                                   Status = x.Status,
-                                   StartTime = x.StartTime,
-                                   ProjectRole = x.ProjectRole
-                               });
-            var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
-            var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
-                       .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
-            var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
-            var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-            var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
-                                .Where(u => u.UserType != UserType.Vendor)
-                                .Select(x => new AvailableResourceDto
-                                {
-                                    UserId = x.Id,
-                                    UserType = x.UserType,
-                                    FullName = x.Name + " " + x.Surname,
-                                    NormalFullName = x.Surname + " " + x.Name,
-                                    EmailAddress = x.EmailAddress,
-                                    Branch = x.Branch,
-                                    UserLevel = x.UserLevel,
-                                    AvatarPath = "/avatars/" + x.AvatarPath,
-                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
-                                    projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime : x.CreationTime,
-                                    WorkingProjects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
-                                    .Select(x => new WorkingProjectDto
-                                    {
-                                        projectId = x.ProjectId,
-                                        ProjectName = x.ProjectName,
-                                        ProjectRole = x.ProjectRole,
-                                        StartTime = x.StartTime
-                                    }).ToList(),
-                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
-                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
-                                    {
-                                        CreatorUserId = p.CreatorUserId.Value,
-                                        ProjectUserId = p.Id,
-                                        ProjectName = p.Project.Name,
-                                        StartTime = p.StartTime.Date,
-                                        AllocatePercentage = p.AllocatePercentage
-                                    }).ToList(),
-                                    ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
-                                    {
-                                        Id = uk.SkillId,
-                                        Name = uk.Skill.Name
-                                    }).ToList(),
-                                    PoolNote = x.PoolNote,
-                                    StarRate = x.StarRate,
-                                    TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
-                                    0 :
-                                    WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
-                                    (DateTime.Now - WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
-                                    : (DateTime.Now - x.CreationTime).Days //lấy ra ngày tạo
-                                    ,
-                                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-            if (filterProjectName != null)
-            {
-                string searchByProject = filterProjectName.Value.ToString();
-                input.FilterItems.Remove(filterProjectName);
-                var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            if (filterprojectUserPlans != null)
-            {
-                string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
-                input.FilterItems.Remove(filterprojectUserPlans);
-                var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            return await users.GetGridResult(users, input);
-        }
-
-
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
-                          PermissionNames.PmManager_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> GetAllPoolResource(GridParam input, long? skillId)
-        {
-            input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
-            var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
-            if (skill != null)
-            {
-                skillId = long.Parse(skill.Value.ToString());
-                input.FilterItems.Remove(skill);
-            }
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                               .Select(x => new
-                               {
-                                   UserId = x.UserId,
-                                   ProjectId = x.ProjectId,
-                                   ProjectName = x.Project.Name,
-                                   AllocatePercentage = x.AllocatePercentage,
-                                   Status = x.Status,
-                                   StartTime = x.StartTime,
-                                   ProjectRole = x.ProjectRole
-                               });
-            var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
-            var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
-                       .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
-            var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
-            var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-            var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
-                                .Where(u => u.UserType != UserType.Vendor)
-                                .Select(x => new AvailableResourceDto
-                                {
-                                    UserId = x.Id,
-                                    UserType = x.UserType,
-                                    FullName = x.Name + " " + x.Surname,
-                                    NormalFullName = x.Surname + " " + x.Name,
-                                    EmailAddress = x.EmailAddress,
-                                    Branch = x.Branch,
-                                    UserLevel = x.UserLevel,
-                                    AvatarPath = "/avatars/" + x.AvatarPath,
-                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
-                                    projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime : x.CreationTime,
-                                    WorkingProjects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
-                                    .Select(x => new WorkingProjectDto
-                                    {
-                                        projectId = x.ProjectId,
-                                        ProjectName = x.ProjectName,
-                                        ProjectRole = x.ProjectRole,
-                                        StartTime = x.StartTime
-                                    }).ToList(),
-                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
-                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
-                                    {
-                                        CreatorUserId = p.CreatorUserId.Value,
-                                        ProjectUserId = p.Id,
-                                        ProjectName = p.Project.Name,
-                                        StartTime = p.StartTime.Date,
-                                        AllocatePercentage = p.AllocatePercentage
-                                    }).ToList(),
-                                    ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
-                                    {
-                                        Id = uk.SkillId,
-                                        Name = uk.Skill.Name
-                                    }).ToList(),
-                                    PoolNote = x.PoolNote,
-                                    StarRate = x.StarRate,
-                                    TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
-                                    0 :
-                                    WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
-                                    (DateTime.Now - WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
-                                    : (DateTime.Now - x.CreationTime).Days //lấy ra ngày tạo
-                                    ,
-                                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value))
-                                .Where(x => x.Used <= 0);
-            if (filterProjectName != null)
-            {
-                string searchByProject = filterProjectName.Value.ToString();
-                input.FilterItems.Remove(filterProjectName);
-                var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            if (filterprojectUserPlans != null)
-            {
-                string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
-                input.FilterItems.Remove(filterprojectUserPlans);
-                var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            return await users.GetGridResult(users, input);
-        }
-
-
-
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
-                                 PermissionNames.PmManager_ResourceRequest_AvailableResource)]
-        public async Task<GridResult<AvailableResourceDto>> GetVendorResource(GridParam input, long? skillId)
-        {
-            input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
-            var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
-            if (skill != null)
-            {
-                skillId = long.Parse(skill.Value.ToString());
-                input.FilterItems.Remove(skill);
-            }
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                               .Select(x => new
-                               {
-                                   UserId = x.UserId,
-                                   ProjectId = x.ProjectId,
-                                   ProjectName = x.Project.Name,
-                                   AllocatePercentage = x.AllocatePercentage,
-                                   Status = x.Status,
-                                   ProjectRole = x.ProjectRole,
-                                   StartTime = x.StartTime,
-                               });
-            var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
-            var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
-                       .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
-            var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
-            var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-            var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
-                                .Where(u => u.UserType == UserType.Vendor)
-                                .Select(x => new AvailableResourceDto
-                                {
-                                    UserId = x.Id,
-                                    UserType = x.UserType,
-                                    FullName = x.Name + " " + x.Surname,
-                                    NormalFullName = x.Surname + " " + x.Name,
-                                    EmailAddress = x.EmailAddress,
-                                    Branch = x.Branch,
-                                    UserLevel = x.UserLevel,
-                                    AvatarPath = "/avatars/" + x.AvatarPath,
-                                    DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
-                                    projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime : x.CreationTime,
-                                    WorkingProjects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
-                                    .Select(x => new WorkingProjectDto
-                                    {
-                                        projectId = x.ProjectId,
-                                        ProjectName = x.ProjectName,
-                                        ProjectRole = x.ProjectRole,
-                                        StartTime = x.StartTime
-                                    }).ToList(),
-                                    Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
-                                    ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
-                                    {
-                                        CreatorUserId = p.CreatorUserId.Value,
-                                        ProjectUserId = p.Id,
-                                        ProjectName = p.Project.Name,
-                                        StartTime = p.StartTime.Date,
-                                        AllocatePercentage = p.AllocatePercentage
-                                    }).ToList(),
-                                    ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
-                                    {
-                                        Id = uk.SkillId,
-                                        Name = uk.Skill.Name
-                                    }).ToList(),
-                                    PoolNote = x.PoolNote,
-                                    StarRate = x.StarRate,
-                                    TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
-                                    0 :
-                                    WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
-                                    (DateTime.Now - WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
-                                    : (DateTime.Now - x.CreationTime).Days //lấy ra ngày tạo
-                                    ,
-                                }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-
-            if (filterProjectName != null)
-            {
-                string searchByProject = filterProjectName.Value.ToString();
-                input.FilterItems.Remove(filterProjectName);
-                var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            if (filterprojectUserPlans != null)
-            {
-                string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
-                input.FilterItems.Remove(filterprojectUserPlans);
-                var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
-                users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-            }
-            return await users.GetGridResult(users, input);
+            return await _resourceManager.GetAllPoolResource(input);
         }
 
 
@@ -689,30 +435,29 @@ namespace ProjectManagement.APIs.ResourceRequests
                     EmployeeName = s.User.Name + " " + s.User.Surname,
                     PMName = s.Project.PM.Name + " " + s.Project.PM.Surname,
                     InOutString = s.AllocatePercentage > 0 ? "vào dự án" : "ra dự án"
-                 }).FirstOrDefaultAsync();
-          
+                }).FirstOrDefaultAsync();
+
             var projectUser = pu.ProjectUser;
 
-                if(projectUser.Status != ProjectUserStatus.Future)
+            if (projectUser.Status != ProjectUserStatus.Future)
+            {
+                throw new UserFriendlyException(String.Format("projectUser with id {0} is not future!", projectUser.Id));
+            }
+            if (projectUser.CreatorUserId != AbpSession.UserId.Value)
+            {
+                bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource);
+                if (!allowCancelAnyPlan)
                 {
-                    throw new UserFriendlyException(String.Format("projectUser with id {0} is not future!", projectUser.Id));
+                    throw new UserFriendlyException(String.Format("You don't have permission to cancel resource plan of other people!"));
                 }
-                if (projectUser.CreatorUserId != AbpSession.UserId.Value )
-                {
-                    bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource);
-                    if (!allowCancelAnyPlan)
-                        {
-                            throw new UserFriendlyException(String.Format("You don't have permission to cancel resource plan of other people!"));
-                        }
-                }
+            }
 
             await WorkScope.DeleteAsync(projectUser);
 
             if (!pu.ProjectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
-            {               
+            {
                 var komuMessage = new StringBuilder();
-                komuMessage.Append($"Vào ngày **{DateTimeUtils.GetNow():dd/MM/yyyy}**, ");
-                komuMessage.Append($"PM **{pu.PMName}** đã hủy plan: ");
+                komuMessage.Append($"PM **{pu.PMName}** đã **HỦY** plan: ");
                 komuMessage.Append($"**{pu.EmployeeName}** {pu.InOutString } **{pu.ProjectName}** ");
                 komuMessage.Append($"từ ngày **{projectUser.StartTime:dd/MM/yyyy}**, ");
 
