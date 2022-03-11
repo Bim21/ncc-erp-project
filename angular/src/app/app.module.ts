@@ -158,6 +158,9 @@ import { ListTimesheetByProjectCodeDialogComponent } from './modules/delivery-ma
 import { UpdateUserSkillDialogComponent } from './users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { VendorComponent } from './modules/delivery-management/delivery/available-resource-tab/vendor/vendor.component';
 import { UpdateUserRoleComponent } from './users/update-user-role/update-user-role.component';
+import { ReleaseUserDialogComponent } from './modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
+import { ProjectBillComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/project-bill.component';
+import { ConfirmPopupComponent } from './modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -298,6 +301,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     UpdateUserSkillDialogComponent,
     VendorComponent,
     UpdateUserRoleComponent,
+    ReleaseUserDialogComponent,
+    ProjectBillComponent,
+    ConfirmPopupComponent,
   ],
   imports: [
     CommonModule,

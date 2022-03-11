@@ -1,3 +1,6 @@
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateUserSkillDialogComponent } from './../../../../../users/update-user-skill-dialog/update-user-skill-dialog.component';
+import { ReleaseUserDialogComponent } from './../../../list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
 import { UserService } from './../../../../../service/api/user.service';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -11,6 +14,7 @@ import { catchError } from 'rxjs/operators';
 import { projectUserBillDto, projectResourceRequestDto, projectUserDto } from './../../../../../service/model/project.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
+import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-product-resource-management',
@@ -18,21 +22,14 @@ import * as moment from 'moment';
   styleUrls: ['./product-resource-management.component.css']
 })
 export class ProductResourceManagementComponent extends AppComponentBase implements OnInit {
-
   PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
-  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
   PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
   PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
-  PmManager_ProjectUserBill = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
-  PmManager_ProjectUserBill_GetAllbyProject = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_GetAllbyProject;
-  PmManager_ProjectUserBill_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
-  PmManager_ProjectUserBill_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
-  PmManager_ProjectUserBill_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
+
   PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
   PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
   PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
-
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -57,16 +54,20 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public isEditRequest: boolean = false;
   public requestProcess: boolean = false;
   public isShowRequest: boolean = false;
-  // project user bill
-  public userBillList: projectUserBillDto[] = [];
-  public userForUserBill: UserDto[] = [];
-  public isEditUserBill: boolean = false;
-  public userBillProcess: boolean = false;
-  public panelOpenState: boolean = false;
-  public isShowUserBill: boolean = false;
-  
+  // plan resource
+  public planResourceProcess: boolean = false;
+  public plannedUserList: any = []
+  public resourceListCurrentPage = 1
+  public isShowCurrentResouce: boolean = true;
+  public isEditPlannedResource: boolean = false
+  public searchPlanResource: string = ""
+
+
+
+
+  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
-    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute) { super(injector) }
+    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog) { super(injector) }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
   ];
@@ -74,10 +75,9 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
     this.getProjectUser();
     this.getResourceRequestList();
-    this.getUserBill();
     this.getAllUser();
-    this.getAllFakeUser();
-    
+    this.getPlannedtUser();
+
   }
   // get data
   private getProjectUser() {
@@ -88,6 +88,15 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     }
 
   }
+
+  private getPlannedtUser() {
+    this.projectUserService.GetAllPlannedUserByProject(this.projectId).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+      this.plannedUserList = data.result;
+    })
+
+  }
+
+
   private getResourceRequestList(): void {
     if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
       this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
@@ -95,25 +104,46 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       })
     }
   }
-  private getUserBill(): void {
-    if (this.permission.isGranted(this.PmManager_ProjectUserBill_GetAllbyProject)) {
-      this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
-        this.userBillList = data.result
-      })
-    }
-
-  }
 
   private getAllUser() {
-    this.userService.GetAllUserActive(false,false).pipe(catchError(this.userService.handleError)).subscribe(data => {
+    this.userService.GetAllUserActive(false, false).pipe(catchError(this.userService.handleError)).subscribe(data => {
       this.userForProjectUser = data.result;
       // this.userForUserBill = data.result;
     })
   }
-  private getAllFakeUser() {
-    this.userService.GetAllUserActive(false,true).pipe(catchError(this.userService.handleError)).subscribe(data => {
-      // this.userForProjectUser = data.result;
-      this.userForUserBill = data.result;
+
+
+
+  updateUserSkill(user) {
+    let ref = this.dialog.open(UpdateUserSkillDialogComponent, {
+      width: "700px",
+      data: {
+        userSkills: user?.userSkills,
+        id: user.userId,
+        fullName: user.fullName
+      }
+
+    });
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.getProjectUser()
+        this.getPlannedtUser()
+      }
+    })
+  }
+
+  releaseUser(user) {
+    let ref = this.dialog.open(ReleaseUserDialogComponent, {
+      width: "700px",
+      data: {
+        user: user
+      }
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.getProjectUser()
+        this.getPlannedtUser()
+      }
     })
   }
 
@@ -121,10 +151,13 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
 
   public addProjectUser() {
     let newUser = {} as projectUserDto
+    newUser.isPool = false;
+    newUser.startTime = moment(new Date()).format("YYYY-MM-DD")
     newUser.createMode = true;
     this.projectUserList.unshift(newUser)
     this.projectUserProcess = true;
   }
+
 
   public getValueByEnum(enumValue: number, enumObject) {
     for (const key in enumObject) {
@@ -133,44 +166,78 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       }
     }
   }
- 
-  saveProjectUser(user: projectUserDto) {
-    if (!this.isEditUserProject) {
-      let newUser: projectUserDto = this.projectUserList[0]
-      // newUser.isFutureActive = false
-      newUser.projectId = this.projectId
-      newUser.isExpense = true;
-      // newUser.status = "0";
-      newUser.startTime = moment(newUser.startTime).format("YYYY-MM-DD");
-      delete newUser["createMode"]
-      this.projectUserService.create(newUser).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-        this.getProjectUser();
-        abp.notify.success(`Added user to project`);
-        this.projectUserProcess = false
-        this.searchUser = "";
 
-      },
-        () => {
-          newUser.createMode = true
-        })
+  saveProjectUser(user: any) {
+
+    if (this.isEditUserProject) {
+      this.updateProjectCurrentResource(user)
     }
     else {
-      user.startTime = moment(user.startTime).format("YYYY-MM-DD")
-      this.projectUserService.update(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-        abp.notify.success(`updated user: ${user.userName}`);
-        this.getProjectUser();
-        this.isEditUserProject = false;
-        this.projectUserProcess = false
-        this.searchUser = "";
-
+      user.userId = user.userInfo.id
+      let workingProject = [];
+      this.projectUserService.GetAllWorkingProjectByUserId(user.userId).subscribe(data => {
+        workingProject = data.result
+        if (workingProject.length > 0) {
+          let message: string = ""
+          workingProject.forEach(project => {
+            message += `<p>- <strong>${project.projectName} (${project.pmName}) </strong>from ${moment(project.startTime).format("DD/MM/YYYY")}</p>`
+          })
+          abp.message.confirm(
+            `<div class='text-left'><div style= "font-size: 22px;" ><strong>${user.userInfo.fullName} </strong> is working on: </div> <br/>
+            ${message}
+           <div >
+           Are you sure to add <strong>${user.userInfo.fullName}</strong> join project and release from other projects?
+           </div>
+              </div>`
+            , `   `, (rs) => {
+              if (rs) {
+                this.AddUserToProject(user)
+              }
+            },
+            true
+          );
+        }
+        else {
+          abp.message.confirm(`Add user <strong>${user.userInfo.fullName}</strong> to Project`, "", rs => {
+            if (rs) {
+              this.AddUserToProject(user)
+            }
+          }, true)
+        }
       })
     }
+
   }
-  editProjectUser(user: projectUserDto) {
+
+  AddUserToProject(user) {
+    user.startTime = moment(user.startTime).format("YYYY-MM-DD")
+    user.projectId = this.projectId
+    delete user["createMode"]
+    this.projectUserService.AddUserToProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+      this.getProjectUser();
+      abp.notify.success(`Added new employee to project`);
+      this.projectUserProcess = false
+      this.searchUser = "";
+    },
+      () => {
+        user.createMode = true
+      })
+  }
+  updateProjectCurrentResource(user) {
+    user.startTime = moment(user.startTime).format("YYYY-MM-DD")
+    this.projectUserService.UpdateCurrentResourceDetail(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+      abp.notify.success(`updated user: ${user.userName}`);
+      this.getProjectUser();
+      this.isEditUserProject = false;
+      user.editMode = false;
+      this.projectUserProcess = false
+      this.searchUser = "";
+    })
+  }
+
+  editProjectUser(user) {
     this.isEditUserProject = true;
-    user.createMode = true
-    user.status = this.APP_ENUM.ProjectUserStatus[user.status]
-    user.projectRole = this.APP_ENUM.ProjectUserRole[user.projectRole]
+    user.editMode = true
     this.projectUserProcess = true
   }
   removeUser(user: projectUserDto) {
@@ -193,16 +260,17 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       this.projectUserList = data.result;
     })
   }
-  cancelProjectUser() {
+  cancelProjectUser(user) {
     this.getProjectUser();
     this.isEditUserProject = false;
+    user.editMode = false;
     this.projectUserProcess = false
     this.searchUser = ""
   }
   private filterProjectUserDropDown() {
 
     let userProjectList = this.projectUserList.map(item => item.userId)
-    this.userForProjectUser = this.userForUserBill.filter(user => userProjectList.indexOf(user.id) == -1)
+    // this.userForProjectUser = this.userForUserBill.filter(user => userProjectList.indexOf(user.id) == -1)
   }
   // resource request
 
@@ -223,7 +291,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
         abp.notify.success(`Created request: ${request.name}`)
         this.getResourceRequestList();
         this.requestProcess = false;
-
       },
         () => { request.createMode = true })
     }
@@ -237,7 +304,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       },
         () => { request.createMode = true })
     }
-
   }
 
   public cancelProjectRerequest(): void {
@@ -268,85 +334,134 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     );
   }
 
-  // user bill
-  public addUserBill(): void {
-    let newUserBill = {} as projectUserBillDto
-    newUserBill.createMode = true;
-    this.userBillProcess = true;
-    this.userBillList.unshift(newUserBill)
-  }
-  public saveUserBill(userBill: projectUserBillDto): void {
-    delete userBill["createMode"]
-    // userBill.isActive = true;
-    userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
-    if (userBill.endTime) {
-      userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
-
-    }
-
-    if (!this.isEditUserBill) {
-      userBill.projectId = this.projectId
-      this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
-        abp.notify.success(`Created new user bill`)
-        this.getUserBill();
-        this.userBillProcess = false;
-        this.searchUser = ""
-        this.searchUserBill = ""
-      }, () => {
-        userBill.createMode = true
-      })
-    }
-    else {
-      this.projectUserBillService.update(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
-        abp.notify.success(`Updated request user bill`)
-        this.getUserBill();
-        this.userBillProcess = false;
-        this.isEditUserBill = false;
-        this.searchUser = ""
-        this.searchUserBill = ""
-      },
-        () => {
-          userBill.createMode = true;
-        })
-    }
-
-
-  }
-  public cancelUserBill(): void {
-    this.getUserBill();
-    this.userBillProcess = false;
-    this.isEditUserBill = false;
-    this.searchUser = ""
-    this.searchUserBill = ""
-  }
-  public editUserBill(userBill: projectUserBillDto): void {
-    userBill.createMode = true;
-    this.userBillProcess = true;
-    this.isEditUserBill = true;
-    // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
-  }
-  public removeUserBill(userBill: projectUserBillDto): void {
-    abp.message.confirm(
-      "Delete user bill?",
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.projectUserBillService.deleteUserBill(userBill.id).pipe(catchError(this.projectUserBillService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted user bill");
-            this.getUserBill();
-          });
-        }
-      }
-    );
-  }
 
   public filterUser(userId: number) {
     return this.userForProjectUser.filter(item => item.id == userId)[0];
   }
+
   getPercentage(user, data) {
     user.allocatePercentage = data
   }
 
+  //  Planned resource
+  confirm(user) {
+    if (user.allocatePercentage <= 0) {
+      let ref = this.dialog.open(ReleaseUserDialogComponent, {
+        width: "700px",
+        data: {
+          user: user,
+          type: "confirmOut"
+        },
+      })
+      ref.afterClosed().subscribe(rs => {
+        if (rs) {
+          this.getPlannedtUser()
+          this.getProjectUser()
+        }
+      })
+    }
+    else if (user.allocatePercentage > 0) {
+      let workingProject = [];
+      this.projectUserService.GetAllWorkingProjectByUserId(user.userId).subscribe(data => {
+        workingProject = data.result
+      let ref =  this.dialog.open(ConfirmPopupComponent,{
+          width: '700px',
+          data: {
+            workingProject: workingProject,
+            user: user,
+            type: "confirmJoin"
+          }
+        })
+
+        ref.afterClosed().subscribe(rs=>{
+          if(rs){
+            this.getProjectUser()
+            this.getPlannedtUser()
+          }
+        })
+      })
+    }
+  }
+
+  cancelResourcePlan(user) {
+    abp.message.confirm(
+      `Cancel plan for user <strong>${user.fullName}</strong> <strong class = "${user.allocatePercentage > 0 ? 'text-success' : 'text-danger'}">
+      ${user.allocatePercentage > 0 ? 'Join project' : 'Out project'}</strong>?`,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.CancelResourcePlan(user.id).subscribe(rs => {
+            abp.notify.success(`Cancel plan for user ${user.fullName}`)
+            this.getPlannedtUser()
+          })
+        }
+      },
+      true
+    )
+  }
+
+  saveResourcePlan(projectUser) {
+    projectUser.projectId = this.projectId
+    this.projectUserService.EditProjectUserPlan(projectUser).subscribe(rs => {
+      abp.notify.success(`Edited plan for user ${projectUser.fullName}`)
+      this.getPlannedtUser()
+    })
+  }
+
+  public addPlanResource() {
+    let newPlan = {} as any
+    newPlan.isPool = false
+    newPlan.allocatePercentage = 100
+    newPlan.createMode = true;
+    this.plannedUserList.unshift(newPlan)
+    this.planResourceProcess = true;
+  }
+  cancelPlanResourceProcess(user) {
+    this.getPlannedtUser();
+    this.planResourceProcess = false
+    this.searchUser = ""
+  }
 
 
+  savePlanResource(projectUser) {
+    if (this.isEditPlannedResource) {
+      let requestBody = {
+        projectUserId: projectUser.id,
+        projectId: projectUser.projectId,
+        startTime: moment(projectUser.startTime).format("YYYY-MM-DD"),
+        allocatePercentage: projectUser.allocatePercentage,
+        note: projectUser.note,
+        isPool: projectUser.isPool,
+        projectRole: projectUser.projectRole
+      }
+      this.projectUserService.EditProjectUserPlan(requestBody).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+        abp.notify.success(`Edited plan for user ${projectUser.fullName}`)
+        this.getPlannedtUser()
+        this.planResourceProcess = false
+        this.isEditPlannedResource = false
+      })
+    }
+    else {
+      let requestBody = {
+        userId: projectUser.userId,
+        projectId: this.projectId,
+        isPool: projectUser.isPool,
+        allocatePercentage: projectUser.allocatePercentage,
+        startTime: moment(projectUser.startTime).format("YYYY-MM-DD"),
+        note: projectUser.note,
+        projectRole: projectUser.projectRole
+      }
+      this.projectUserService.PlanNewResourceToProject(requestBody).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+        abp.notify.success("added new plan to project")
+        this.getPlannedtUser()
+        this.planResourceProcess = false;
+      })
+    }
+
+  }
+  editResourcePlan(projectUser) {
+    projectUser.editMode = true
+    this.isEditPlannedResource = true;
+    this.planResourceProcess = true
+  }
 }

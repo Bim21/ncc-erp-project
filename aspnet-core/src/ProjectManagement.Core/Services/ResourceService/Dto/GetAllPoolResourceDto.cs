@@ -1,15 +1,11 @@
 ﻿using NccCore.Anotations;
 using NccCore.Uitls;
-using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceManager.Dto;
-using ProjectManagement.Services.ResourceService.Dto;
-using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.APIs.ResourceRequests.Dto
+namespace ProjectManagement.Services.ResourceService.Dto
 {
     public class GetAllPoolResourceDto
     {
@@ -29,16 +25,16 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         
         public string PoolNote { get; set; }
         public bool IsOffical { get; set; }
-        public DateTime PUPoolStartTime { get; set; }
+        public DateTime LastReleaseDate { get; set; }
         public DateTime UserCreationTime { get; set; }
 
         public int TotalFreeDay
         {
             get
             {
-                if (this.PUPoolStartTime > this.UserCreationTime)
+                if (this.LastReleaseDate > this.UserCreationTime)
                 {
-                    return (DateTimeUtils.GetNow().Date - this.PUPoolStartTime.Date).Days;
+                    return (DateTimeUtils.GetNow().Date - this.LastReleaseDate.Date).Days;
                 }
                 return (DateTimeUtils.GetNow().Date - this.UserCreationTime.Date).Days;
 
@@ -49,7 +45,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         {
             get
             {
-                return this.PUPoolStartTime > this.UserCreationTime ? this.PUPoolStartTime : this.UserCreationTime;
+                return this.LastReleaseDate > this.UserCreationTime ? this.LastReleaseDate : this.UserCreationTime;
             }
         }
     }

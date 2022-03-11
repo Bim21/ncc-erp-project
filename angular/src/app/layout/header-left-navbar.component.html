@@ -1,48 +1,88 @@
 <ul class="navbar-nav">
-  <li class="nav-item">
-    <a class="nav-link" href="javascript:;" (click)="toggleSidebar()">
-      <i class="fas fa-bars fa-lg"></i>
-    </a>
-  </li>
-  <li *ngIf="isShowReportBar" class="ml-4 mt-1" >
-    <button class="btn btn-warning" (click)="showDialog()">
+    <li class="nav-item">
+        <a class="nav-link" href="javascript:;" (click)="toggleSidebar()">
+            <i class="fas fa-bars fa-lg"></i>
+        </a>
+    </li>
+
+    <li *ngIf="isShowReportBar" class="ml-4 mt-1">
+        <button class="btn btn-info" (click)="showDialog()">
       <i class="fas fa-sticky-note mr-1"></i> Note
     </button>
-  </li>
-  <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block "
-  >
-    <div class="form-froup row header-report-nav"  style="margin-left: 67px;">
-      <label style="margin-top: 11px;">Pm Report: </label>
-      <mat-form-field appearance="outline" class="ml-2">
-        <mat-select [(ngModel)]="pmReport" (selectionChange)="routingReportDetail()">
-          <mat-option *ngFor="let report of pmReportList" [value]="report">
-            <div class="row">
-              <div class="col-10 text-overflow">
-                {{report.name}}
-              </div>
-              <div class="col-2">
-                <i class="fas fa-circle float-right mt-3"
-                   [ngClass]="report.isActive==true?'text-success':'text-secondary'"></i>
-              </div>
-            </div>
-            
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </li>
-  <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-    <div class="form-froup row header-report-nav"  style="margin-left: 67px;">
-      <label style="margin-top: 11px;">Project Type: </label>
-      <mat-form-field appearance="outline" class="ml-2">
-        <mat-select [(ngModel)]="projectType" (selectionChange)="newMessage($event.value)">
-          <mat-option *ngFor="let type of projectTypeList" [value] = "type">
-                {{type}}  
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-   
-  </li>
- 
+    </li>
+    <li style="margin-left: 132px;" *ngIf="isShowReportBar">
+        <div class="mt-1" style="font-size: 21px;">
+            <strong>
+        {{projectInfo?.projectName}} - {{projectInfo?.clientName}} - {{projectInfo?.pmName}}
+      </strong>
+
+        </div>
+    </li>
+
+    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+        <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
+            <mat-form-field appearance="outline" class="ml-2">
+                <mat-label>Project Type: </mat-label>
+                <mat-select [(ngModel)]="projectType" (selectionChange)="newMessage($event.value)">
+                    <mat-option *ngFor="let type of projectTypeList" [value]="type">
+                        {{type}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+    </li>
+    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+        <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
+            <mat-form-field appearance="outline" class="ml-2">
+                <mat-label>Pm Report: </mat-label>
+
+                <mat-select [(ngModel)]="pmReport" (selectionChange)="routingReportDetail()">
+                    <mat-option *ngFor="let report of pmReportList" [value]="report">
+                        <div class="row">
+                            <div class="col-10 text-overflow">
+                                {{report.name}}
+                            </div>
+                            <div class="col-2">
+                                <i class="fas fa-circle float-right mt-3" [ngClass]="report.isActive==true?'text-success':'text-secondary'"></i>
+                            </div>
+                        </div>
+
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </li>
+
+    <li>
+        <div class="mt-1" style="font-size: 21px;" *ngIf="projectName">
+            <strong>
+        {{projectName}}
+      </strong> [
+            <span>
+        {{projectCode}}
+      </span> ]
+        </div>
+    </li>
+    <li *ngIf="isShowReportBar" style="margin-left: 40px; cursor: pointer; display: flex;">
+
+        <div class="count-timer " (click)="startTimmer()" [ngClass]="(!this.isTimmerCounting && ! this.isStopCounting) || this.isRefresh?'pointer':''">
+            <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
+            <button *ngIf="(!isTimmerCounting && !isStopCounting) || isRefresh" class="btn btn-sm  mb-2 pr-0">
+        <i class="fas fa-clock fa-lg"></i>
+      </button>
+            <button (click)="stopTimmer(); $event.stopPropagation()" *ngIf="!isStopCounting && isStart " class="btn btn-sm mb-2 pr-0">
+        <i class="fas fa-pause fa-lg"></i>
+      </button>
+            <button (click)="resumeTimmer(); $event.stopPropagation()" *ngIf="isStopCounting && !isTimmerCounting && !isRefresh" class="btn btn-sm mb-2 pr-0">
+        <i class="fas fa-play fa-lg"></i>
+      </button>
+        </div>
+        <div style="padding-top: 12px;
+        margin-left: 13px;">
+            <i class="fas fa-redo-alt mx-1 mb-2 fa-lg" (click)="refreshTimmer()" *ngIf="isStart"></i>
+        </div>
+    </li>
+
+
 </ul>

@@ -199,9 +199,7 @@ namespace ProjectManagement.Users
         [HttpPut]
         public async Task updateUserActive(long userId, bool isActive)
         {
-            var user = await _userManager.GetUserByIdAsync(userId);
-            user.IsActive = isActive;
-            await _workScope.UpdateAsync<User>(user);
+            await _userManager.UpdateUserActive(userId, isActive);            
         }
 
         [HttpDelete]

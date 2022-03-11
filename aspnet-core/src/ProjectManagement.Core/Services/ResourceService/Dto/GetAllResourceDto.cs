@@ -1,4 +1,5 @@
 ﻿using NccCore.Anotations;
+using ProjectManagement.Services.ResourceManager.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,9 +22,9 @@ namespace ProjectManagement.Services.ResourceService.Dto
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
         public int Used { get; set; }
-        public List<ProjectUserPlans> ProjectUserPlans { get; set; }
+        public List<ProjectOfUserDto> PlanProjects { get; set; }
         public List<UserSkillDto> UserSkills { get; set; }
         public int? StarRate { get; set; }
-        public List<WorkingProjectDto> WorkingProjects { get; set; }
+        public List<ProjectOfUserDto> WorkingProjects { get; set; }
     }
 }

@@ -10,7 +10,8 @@ namespace ProjectManagement.Services.ResourceManager.Dto
         public long UserId { get; set; }
         public long ProjectId { get; set; }
         public DateTime StartTime { get; set; }
-        public string Note { get; set; }
         public bool IsPool { get; set; }
+        public ProjectUserRole ProjectRole { get; set; }
+
     }
 }

@@ -1,89 +1,85 @@
 <section class="content px-2 mt-2">
-  <div class="container-fluid">
-    <div class="">
-      <div class="">
-        <div class="input-group">
-       
-          <div class="row w-100">
-            <div class="col-8 d-flex mt-1">
-              <div class="input-group-prepend">
-                <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+    <div class="container-fluid">
+        <div class="">
+            <div class="">
+                <div class="input-group">
+
+                    <div class="row w-100">
+                        <div class="col-8 d-flex mt-1">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
                   <i class="fas fa-search"></i>
                 </button>
-              </div>
-              <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-              (keyup.enter)="getDataPage(1)" />
-            <div class="input-group-append">
-              <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+                            </div>
+                            <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                 <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
                   [class.fa-angle-down]="!advancedFiltersVisible"></i>
               </button>
-            </div>
-            </div>
-            <div class="col-3 row justify-content-end">
-              <label for="" style="margin-top: 13px;" class="mr-2">Skills:</label>
-              <mat-form-field style="width: 300px;" appearance="outline">
-                <mat-select placeholder="select skill"  multiple (selectionChange)="refresh()" [(ngModel)]="selectedSkillId">
-                  <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
-                    <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition"
-                        style=" width: 100%;">
-                        <div class="col-4">
-                            <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                            </div>
                         </div>
-                        <div class="col-8 pt-2">
-                            <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
-                            <mat-radio-button  [value]="false">Or</mat-radio-button>
+                        <div class="col-3 row justify-content-end">
+                            <label for="" style="margin-top: 13px;" class="mr-2">Skills:</label>
+                            <mat-form-field style="width: 300px;" appearance="outline">
+                                <mat-select placeholder="select skill" multiple (selectionChange)="refresh()" [(ngModel)]="selectedSkillId">
+                                    <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
+                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
+                                            <div class="col-4">
+                                                <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                                            </div>
+                                            <div class="col-8 pt-2">
+                                                <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
+                                                <mat-radio-button [value]="false">Or</mat-radio-button>
+                                            </div>
+                                        </mat-radio-group>
+                                    </div>
+                                    <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
+                                        {{skill.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
-                    </mat-radio-group>
-                </div>
-                    <mat-option *ngFor="let skill of listSkills"  [value]="skill.id" >
-                      {{skill.name}}
-                    </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-1">
-              <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId" (click)="selectedSkillId = null; refresh()"></i>
-            </div>
-          </div>
-       
-        </div>
-      </div>
-      <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
-        <div class="card-body">
-          <form class="form-horizontal">
-            <div class="row">
-              <div class="col-md-12 col-xl-12">
-                <div class="mb-0">
-                  <div>
-                    <div *ngFor="let item of filterItems; let i = index">
-                      <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
-                        (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
-                      </app-filter>
+                        <div class="col-1">
+                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId" (click)="selectedSkillId = null; refresh()"></i>
+                        </div>
                     </div>
-                    <i style="padding: 0" class="fas fa-plus-circle ml-3" (click)="addFilter()"></i>
-                  </div>
+
                 </div>
-              </div>
             </div>
-          </form>
-        </div>
-      </div>
-      <div class="table-responsive py-4 pool-table">
-        <div class="fixTableHead">
-          <table [busy]="isLoading" style="border-collapse: collapse" class="table text-nowrap">
-            <thead class="bg-light">
-              <tr style="border: none">
-                <th class="stt">#</th>
-                <th>Employee</th>
-                <th>Projects</th>
-                <th>Plan</th>
-                <th style="width: 200px;">Skills</th>
-                <th style="width: 100px;">Using</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="
+            <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
+                <div class="card-body">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-12">
+                                <div class="mb-0">
+                                    <div>
+                                        <div *ngFor="let item of filterItems; let i = index">
+                                            <app-filter [item]="item" (emitChange)="onEmitChange($event, i)" (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
+                                            </app-filter>
+                                        </div>
+                                        <i style="padding: 0" class="fas fa-plus-circle ml-3" (click)="addFilter()"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive py-4 pool-table">
+                <div class="fixTableHead">
+                    <table [busy]="isLoading" style="border-collapse: collapse" class="table text-nowrap">
+                        <thead class="bg-light">
+                            <tr style="border: none">
+                                <th class="stt">#</th>
+                                <th>Employee</th>
+                                <th>Projects</th>
+                                <th style="width: 350px;">Plan</th>
+                                <th style="width: 200px;">Skills</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="
                     let item of availableResourceList
                       | paginate
                         : {
@@ -94,12 +90,12 @@
                           };
                     let i = index
                   ">
-                <td class="text-center">
-                  <span>{{ i + 1 }}</span>
-                </td>
-                <td style="width: 350px;">
-                  <div style="width: 100%;">
-                    <app-user-info [userData]="
+                                <td class="text-center">
+                                    <span>{{ i + 1 }}</span>
+                                </td>
+                                <td style="width: 350px;">
+                                    <div style="width: 100%;">
+                                        <app-user-info [userData]="
                     {fullName:item.fullName,
                       branch:item.branch,
                       userType:item.userType,
@@ -107,113 +103,100 @@
                       avatarPath:item.avatarPath,
                       rateStar:item.starRate,
                       userLevel:item.userLevel}">
-                    </app-user-info>
-                  </div>
-                </td>
+                                        </app-user-info>
+                                    </div>
+                                </td>
 
-                <td>
-                  <p *ngFor="let project of item.workingProjects" class="mb-1">
-                    <strong class="hover-project-name pointer"
-                      (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
+                                <td>
+                                    <p *ngFor="let project of item.workingProjects" class="mb-1">
+                                        <strong class="hover-project-name pointer" (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
                     </strong>
-                    <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
+                                        <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
                       {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
-                    <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date:
+                                        <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date:
                       "dd/MM/yyyy"}}</span>
-                  </p>
-                  <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!item.isshowProjectHistory"
-                    matTooltip="View project history" (click)="getHistoryProjectsByUserId(item)"></i>
-                  <div *ngIf="item.isshowProjectHistory"
-                    [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
-                    <div *ngIf="item.userProjectHistory && item.userProjectHistory.length > 0"
-                      [innerHTML]="item.userProjectHistory" style="white-space: nowrap;"></div>
+                                    </p>
+                                    <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!item.isshowProjectHistory" matTooltip="View project history" (click)="getHistoryProjectsByUserId(item)"></i>
+                                    <div *ngIf="item.isshowProjectHistory" [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
+                                        <div *ngIf="item.userProjectHistory && item.userProjectHistory.length > 0" [innerHTML]="item.userProjectHistory" style="white-space: nowrap;"></div>
 
-                    <p *ngIf="!item.userProjectHistory || item.userProjectHistory.length == 0">
-                      No project history!
-                    </p>
-                  </div>
-                  <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
-                    *ngIf="item.isshowProjectHistory == true && item.conditionHistory"
-                    (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
-                </td>
+                                        <p *ngIf="!item.userProjectHistory || item.userProjectHistory.length == 0">
+                                            No project history!
+                                        </p>
+                                    </div>
+                                    <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'" *ngIf="item.isshowProjectHistory == true && item.conditionHistory" (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
+                                </td>
 
-                <td>
-                  <div class="d-flex " style="align-items: center;">
-                    <div style="width: 90%;">
-                      <div *ngFor="let plan of item.projectUserPlans" (mouseenter)="plan.onHover = true;"
-                        (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
-                        <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                                <td>
+                                    <div class="d-flex " style="align-items: center;">
+                                        <div style="width: 90%;">
+                                            <div *ngFor="let plan of item.projectUserPlans" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
+                                                <span [ngClass]="plan.onHover?'on-hover-plan':''">
                           <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date: 'dd/MM/yyyy' }}
                         </span>
 
-                        <span style="display: inline-block; width: 10px;">
+                                                <span style="display: inline-block; width: 10px;">
                           <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
                           || isAllowCancelPlan(plan.creatorUserId))" class="fas fa-times pointer text-danger ml-1"
                             (click)="CancelResourcePlan(plan,item.fullName)"></i>
                         </span>
 
-                      </div>
-                    </div>
-                    <div style="width: 10%;" class="text-right">
-                      <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
-                    </div>
-                  </div>
+                                            </div>
+                                        </div>
+                                        <div style="width: 10%;" class="text-right">
+                                            <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
+                                        </div>
+                                    </div>
 
-                </td>
-                <td style="white-space: normal; max-width: 200px">
-                  <div class="d-flex" style="align-items: center;">
-                    <div style="width: 90%">
-                      <p class="m-0" *ngFor="let item of item.userSkills">
-                        - {{item.skillName}}
+                                </td>
+                                <td style="white-space: normal; max-width: 200px">
+                                    <div class="d-flex" style="align-items: center;">
+                                        <div style="width: 90%">
+                                            <p class="m-0" *ngFor="let item of item.userSkills">
+                                                - {{item.skillName}}
 
-                      </p>
-                    </div>
-                    <div style="width: 10%; text-align: right;">
-                      <i class="fas fa-edit" (click)="updateUserSkill(item)" matTooltip="Edit skill"></i>
-                    </div>
-                  </div>
-                </td>
-
-                <td class="text-center">
-                  <strong>
-                    {{item.used}} %
-                  </strong>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="bg-light border-top pt-2">
-        <div class="row">
-          <div class="col-sm-4 col-12 text-sm-left text-center">
-            <button class="btn btn-secondary mb-2" (click)="refresh()">
+                                            </p>
+                                        </div>
+                                        <div style="width: 10%; text-align: right;">
+                                            <i class="fas fa-edit" (click)="updateUserSkill(item)" matTooltip="Edit skill"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bg-light border-top pt-2">
+                <div class="row">
+                    <div class="col-sm-4 col-12 text-sm-left text-center">
+                        <button class="btn btn-secondary mb-2" (click)="refresh()">
               <i class="fas fa-redo-alt"></i>
             </button>
-            <mat-form-field style="width: 20%; margin-left: 30px">
-              <mat-label>Number items</mat-label>
-              <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">
-                <mat-option [value]="5"> 5 </mat-option>
-                <mat-option [value]="10"> 10 </mat-option>
-                <mat-option [value]="20"> 20 </mat-option>
-                <mat-option [value]="50"> 50 </mat-option>
-                <mat-option [value]="100"> 100 </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-4 col-12 text-center">
-            <p class="mb-0 my-2">
-              {{ 'TotalRecordsCount' | localize: totalItems }}
-            </p>
-          </div>
-          <div class="col-sm-4 col-12">
-            <div class="float-sm-right m-auto">
-              <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
-              </abp-pagination-controls>
+                        <mat-form-field style="width: 20%; margin-left: 30px">
+                            <mat-label>Number items</mat-label>
+                            <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">
+                                <mat-option [value]="5"> 5 </mat-option>
+                                <mat-option [value]="10"> 10 </mat-option>
+                                <mat-option [value]="20"> 20 </mat-option>
+                                <mat-option [value]="50"> 50 </mat-option>
+                                <mat-option [value]="100"> 100 </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-4 col-12 text-center">
+                        <p class="mb-0 my-2">
+                            {{ 'TotalRecordsCount' | localize: totalItems }}
+                        </p>
+                    </div>
+                    <div class="col-sm-4 col-12">
+                        <div class="float-sm-right m-auto">
+                            <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
+                            </abp-pagination-controls>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>

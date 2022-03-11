@@ -411,73 +411,10 @@ namespace ProjectManagement.APIs.ResourceRequests
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
-                          PermissionNames.PmManager_ResourceRequest_AvailableResource)]
+        [AbpAuthorize]
         public async Task<GridResult<GetAllPoolResourceDto>> GetAllPoolResource(InputGetResourceDto input)
         {
-            var now = DateTimeUtils.GetNow().Date;
-            var workingUserIds = await WorkScope.All<ProjectUser> ()
-                .Where(s => s.Status == ProjectUserStatus.Present)
-                .Where(s => !s.IsPool)
-                .Where(s => s.AllocatePercentage > 0)
-                .Where(s => s.Project.Status == ProjectStatus.InProgress)
-                .Select(s => s.UserId)
-                .Distinct()
-                .ToListAsync();
-
-            var quser = WorkScope.All<User>()
-                       .Where(x => x.IsActive)
-                       .Where(x => x.UserType != UserType.FakeUser)
-                       .Where(x => x.UserType != UserType.Vendor)
-                       .Where(s => !workingUserIds.Contains(s.Id))
-                       .Select(u => new GetAllPoolResourceDto
-                       {
-                           UserId = u.Id,
-                           UserType = u.UserType,
-                           FullName = u.Name + " " + u.Surname,
-                           EmailAddress = u.EmailAddress,
-                           Branch = u.Branch,
-                           UserLevel = u.UserLevel,
-                           AvatarPath = "/avatars/" + u.AvatarPath,
-                           StarRate = u.StarRate,
-                           PoolNote = u.PoolNote,
-                           UserSkills = u.UserSkills.Select(s => new UserSkillDto
-                           {
-                               SkillId = s.SkillId,
-                               SkillName = s.Skill.Name
-                           }).ToList(),
-
-                           PlannedProjects = u.ProjectUsers
-                             .Where(pu => pu.Status == ProjectUserStatus.Future)
-                             .Where(pu => pu.Project.Status != ProjectStatus.Closed)
-                             .Select(p => new ProjectOfUserDto
-                             {
-                                 ProjectId = p.Id,
-                                 ProjectName = p.Project.Name,
-                                 StartTime = p.StartTime.Date,
-                                 AllocatePercentage = p.AllocatePercentage
-                             })
-                             .ToList(),
-
-                           PUPoolStartTime = u.ProjectUsers.Where(x => x.Status == ProjectUserStatus.Present)
-                            .Where(x => x.AllocatePercentage <= 0)
-                            .OrderByDescending(x => x.StartTime)
-                            .Select(x => x.StartTime).FirstOrDefault(),
-                           
-                            UserCreationTime = u.CreationTime,
-                       }); ;
-
-            if (input.SkillIds != null && !input.SkillIds.IsEmpty())
-            {
-                var qSkillUserIds = WorkScope.GetAll<UserSkill>()
-                    .Where(s => input.SkillIds.Contains(s.SkillId))
-                    .Select(s => s.UserId);
-
-                quser = from u in quser
-                        join userId in qSkillUserIds on u.UserId equals userId
-                        select u;
-            }
-            return await quser.GetGridResult(quser, input);
+            return await _resourceManager.GetAllPoolResource(input);
         }
 
 
@@ -520,7 +457,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (!pu.ProjectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
             {
                 var komuMessage = new StringBuilder();
-                komuMessage.Append($"PM **{pu.PMName}** đã hủy plan: ");
+                komuMessage.Append($"PM **{pu.PMName}** đã **HỦY** plan: ");
                 komuMessage.Append($"**{pu.EmployeeName}** {pu.InOutString } **{pu.ProjectName}** ");
                 komuMessage.Append($"từ ngày **{projectUser.StartTime:dd/MM/yyyy}**, ");
 

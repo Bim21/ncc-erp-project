@@ -11,6 +11,8 @@ import { Component, OnInit, Injector } from '@angular/core';
 export class ListProjectDetailComponent extends AppComponentBase implements OnInit {
   requestId: any;
   projectType: any;
+  projectName:string;
+  projectCode:string
   currentUrl: string = "";
   PmManager_CanViewMenu_Milestone=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_Milestone;
   PmManager_CanViewMenu_ProjectChecklist=PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectChecklist;
@@ -29,12 +31,15 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
     this.requestId = this.route.snapshot.queryParamMap.get("id");
     this.projectType = this.route.snapshot.queryParamMap.get("type");
- 
+    this.projectName = this.route.snapshot.queryParamMap.get("projectName");
+    this.projectCode = this.route.snapshot.queryParamMap.get("projectCode");
   }
   public routingGeneralTab(){
     this.router.navigate(['list-project-general'],{
       relativeTo:this.route, queryParams:{
         id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
     })
   }
@@ -42,7 +47,9 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingResourceTab() {
     this.router.navigate(['resourcemanagement'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id: this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -53,7 +60,9 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingMilestoneTab() {
     this.router.navigate(['milestone'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id: this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -61,7 +70,9 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingWeeklyReportTab(){
     this.router.navigate(['weeklyreport'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id: this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -70,7 +81,9 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     this.router.navigate(['projectchecklist'], {
       relativeTo: this.route, queryParams: {
         id: this.requestId,
-        type: this.projectType
+        type: this.projectType,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -78,7 +91,9 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingTimesheetTab(){
     this.router.navigate(['timesheet-tab'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id: this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -87,14 +102,27 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
   public routingDescriptionTab(){
     this.router.navigate(['description-tab'],{
       relativeTo: this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       }
     })
   }
   public routingFileTab(){
     this.router.navigate(['project-file-tab'],{
       relativeTo: this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
+      }
+    })
+  }
+  public routingProjectBillTab(){
+    this.router.navigate(['project-bill-tab'],{
+      relativeTo: this.route, queryParams:{
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       }
     })
   }

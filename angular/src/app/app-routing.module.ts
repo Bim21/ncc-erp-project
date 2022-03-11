@@ -1,3 +1,4 @@
+import { ProjectBillComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/project-bill.component';
 import { VendorComponent } from './modules/delivery-management/delivery/available-resource-tab/vendor/vendor.component';
 import { ProductProjectDetailComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-detail.component';
 import { ProductProjectDescriptionComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-description/product-project-description.component';
@@ -216,6 +217,11 @@ import { ProjectFileComponent } from './modules/pm-management/list-project/list-
                 path: "project-file-tab",
                 component: ProjectFileComponent,
                 canActivate: [AppRouteGuard]
+              },
+              {
+                path: "project-bill-tab",
+                component: ProjectBillComponent,
+                canActivate: [AppRouteGuard]
               }
             ],
           },
@@ -262,6 +268,11 @@ import { ProjectFileComponent } from './modules/pm-management/list-project/list-
               path: "project-file-tab",
               component: ProjectFileComponent,
               canActivate: [AppRouteGuard]
+            },
+            {
+              path: "project-bill-tab",
+              component: ProjectBillComponent,
+              canActivate: [AppRouteGuard]
             }
           ],
           },
@@ -307,6 +318,11 @@ import { ProjectFileComponent } from './modules/pm-management/list-project/list-
             {
               path: "project-file-tab",
               component: ProjectFileComponent,
+              canActivate: [AppRouteGuard]
+            },
+            {
+              path: "project-bill-tab",
+              component: ProjectBillComponent,
               canActivate: [AppRouteGuard]
             }
           ],

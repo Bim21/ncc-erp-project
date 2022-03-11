@@ -12,13 +12,14 @@ namespace ProjectManagement.Services.ResourceManager.Dto
         public long ProjectId { get; set; }
         public long UserId { get; set; }
         public string ProjectName { get; set; }
+        public ProjectType ProjectType { get; set; }
         public ProjectUserRole ProjectRole { get; set; }
         public string PmName { get; set; }
         public byte AllocatePercentage { get; set; }
         public DateTime StartTime { get; set; }
         public ProjectStatus ProjectStatus { get; set; }
-        public ProjectUserStatus PUStatus { get; set; }
-
+        public long PMReportId { get; set; }
+        public ProjectUserStatus Status { get; set; }
         public bool IsPool { get; set; }
         public string ProjectRoleName { get
             {

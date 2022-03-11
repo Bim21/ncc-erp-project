@@ -1,32 +1,41 @@
-::ng-deep .stars-line{
+::ng-deep .stars-line {
     z-index: 0;
 }
+
 @media screen and (max-width: 1260px) {
-    .w-infor{
+    .w-infor {
         width: 100% !important;
     }
-    .w-review{
+    .w-review {
         width: 100% !important;
         margin-left: 25%;
     }
 }
-@media screen and (min-width: 1261px){
-    .w-infor{
+
+@media screen and (min-width: 1261px) {
+    .w-infor {
         width: 70% !important;
     }
-    .w-review{
+    .w-review {
         width: 30% !important;
-        
     }
 }
-.hover-project-name:hover{
-    color: #007bff;;
+
+.hover-project-name:hover {
+    color: #007bff;
+    ;
     text-decoration: underline;
     cursor: pointer;
 }
-.on-hover-plan{
+
+.on-hover-plan {
     text-decoration: underline;
-  }
-  button{
+}
+
+button {
     height: fit-content;
-  }
+}
+
+span {
+    height: fit-content;
+}
