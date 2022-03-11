@@ -68,16 +68,7 @@
                             <th style="width : 150px">Project Quantity</th>
                             <th style="width : 150px">Timesheet File</th>
                             <th style="width : 100px">Status</th>
-                            <th 
-                                style="width: 100px;"
-                                *ngIf="
-                                    permission.isGranted(Timesheet_Timesheet_Update) || 
-                                    permission.isGranted(Timesheet_Timesheet_Delete) || 
-                                    permission.isGranted(Timesheet_Timesheet_ReverseActive)
-                                "
-                            >
-                                Action
-                            </th>
+                            <th style="width: 100px;"*ngIf="showColumnAction()">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,14 +92,7 @@
                                     {{item.isActive?'Active':'Closed'}}
                                 </span>
                             </td>
-                            <td 
-                                class="text-center" 
-                                *ngIf="
-                                    permission.isGranted(Timesheet_Timesheet_Update) || 
-                                    permission.isGranted(Timesheet_Timesheet_Delete) || 
-                                    permission.isGranted(Timesheet_Timesheet_ReverseActive)
-                                "
-                            >
+                            <td class="text-center" *ngIf="showColumnAction()">
                                 <button 
                                     mat-button [matMenuTriggerFor]="menu" 
                                 >

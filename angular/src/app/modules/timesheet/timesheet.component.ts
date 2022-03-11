@@ -139,4 +139,15 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
       return 'text-success';
     return ''
   }
+  showColumnAction(){
+    if(
+      this.permission.isGranted(this.Timesheet_Timesheet_Update) || 
+      this.permission.isGranted(this.Timesheet_Timesheet_Delete) || 
+      this.permission.isGranted(this.Timesheet_Timesheet_ReverseActive)
+    )
+    {
+      return true
+    }
+    return false
+  }
 }
