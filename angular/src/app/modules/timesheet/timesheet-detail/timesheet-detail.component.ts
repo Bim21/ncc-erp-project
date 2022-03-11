@@ -422,4 +422,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       })
     );
   }
+  showButtonMenu(pmId){
+    if(
+      this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject) ||
+      (
+        !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject) && 
+        this.permission.isGranted(this.Timesheet_TimesheetProject_ViewOnlyme) && 
+        this.meId == pmId
+      )
+    )
+    {
+      return true
+    }  
+    return false
+  }
 }
