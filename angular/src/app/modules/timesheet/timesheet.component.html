@@ -68,7 +68,16 @@
                             <th style="width : 150px">Project Quantity</th>
                             <th style="width : 150px">Timesheet File</th>
                             <th style="width : 100px">Status</th>
-                            <th style="width: 100px;">Action</th>
+                            <th 
+                                style="width: 100px;"
+                                *ngIf="
+                                    permission.isGranted(Timesheet_Timesheet_Update) || 
+                                    permission.isGranted(Timesheet_Timesheet_Delete) || 
+                                    permission.isGranted(Timesheet_Timesheet_ReverseActive)
+                                "
+                            >
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +87,7 @@
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index">
+                            }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
                             <td ><span class="hyperlink" (click)="showDetail(item)">{{ item.name
                                     }}</span></td>
@@ -92,13 +101,16 @@
                                     {{item.isActive?'Active':'Closed'}}
                                 </span>
                             </td>
-                            <td class="text-center">
+                            <td 
+                                class="text-center" 
+                                *ngIf="
+                                    permission.isGranted(Timesheet_Timesheet_Update) || 
+                                    permission.isGranted(Timesheet_Timesheet_Delete) || 
+                                    permission.isGranted(Timesheet_Timesheet_ReverseActive)
+                                "
+                            >
                                 <button 
                                     mat-button [matMenuTriggerFor]="menu" 
-                                    *ngIf="permission.isGranted(Timesheet_Timesheet_Update) || 
-                                            permission.isGranted(Timesheet_Timesheet_ReverseActive) || 
-                                            permission.isGranted(Timesheet_Timesheet_ReverseActive)
-                                        "
                                 >
                                     <i class="fas fa-bars fa-lg"></i>
                                 </button>
