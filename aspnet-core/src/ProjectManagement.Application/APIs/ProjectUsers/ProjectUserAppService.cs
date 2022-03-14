@@ -20,6 +20,9 @@ using ProjectManagement.Entities;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
@@ -33,11 +36,15 @@ namespace ProjectManagement.APIs.ProjectUsers
     [AbpAuthorize]
     public class ProjectUserAppService : ProjectManagementAppServiceBase, IProjectUserAppService
     {
+        private readonly ResourceManager _resourceManager;
         private ISettingManager _settingManager;
         private KomuService _komuService;
         public ProjectUserAppService(
-            KomuService komuService, ISettingManager settingManager):base()
+            KomuService komuService,
+            ResourceManager resourceManager,
+            ISettingManager settingManager) : base()
         {
+            _resourceManager = resourceManager;
             _komuService = komuService;
             _settingManager = settingManager;
         }
@@ -73,6 +80,118 @@ namespace ProjectManagement.APIs.ProjectUsers
                         });
             return await query.ToListAsync();
         }
+
+
+
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task<List<UserOfProjectDto>> GetAllWorkingUserByProject(long projectId, bool viewHistory)
+        {
+            var query = _resourceManager.QueryUsersOfProject(projectId);
+            if (!viewHistory)
+            {
+                query = query.Where(x => x.PUStatus == ProjectUserStatus.Present && x.AllocatePercentage > 0);
+            }
+            else
+            {
+                query = query.Where(x => x.PUStatus != ProjectUserStatus.Future);
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task<List<UserOfProjectDto>> GetAllPlannedUserByProject(long projectId)
+        {
+            var query = await  _resourceManager.QueryPlansOfProject(projectId);
+
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task<List<ProjectOfUserDto>> GetAllWorkingProjectByUserId(long userId)
+        {
+            var query = _resourceManager.QueryWorkingProjectsOfUser(userId);
+
+            return await query.ToListAsync();
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task AddUserToProject(AddResourceToProjectDto input)
+        {
+            await _resourceManager.CreatePresentProjectUserAndNofity(input);
+        }
+
+
+
+        [HttpPut]
+        [AbpAuthorize()]
+        public async Task<IActionResult> UpdateCurrentResourceDetail(UpdateProjectUserDto input)
+        {
+            var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
+            //var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            //if (pmReportActive == null)
+            //    throw new UserFriendlyException("Can't find any active reports !");
+
+            projectUser.ProjectRole = input.ProjectRole;
+            projectUser.IsPool = input.IsPool;
+            projectUser.StartTime = input.StartTime;
+            //model.PMReportId = pmReportActive.Id;
+            await WorkScope.UpdateAsync(projectUser);
+
+            return new OkObjectResult("Update succesful");
+        }
+
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task ReleaseUser(ReleaseUserToPoolDto input)
+        {
+            await _resourceManager.ReleaseWorkingUserFromProject(input);
+        }
+
+
+
+        [HttpDelete]
+        [AbpAuthorize()]
+        public async Task CancelResourcePlan(long projectUserId)
+        {
+            await _resourceManager.DeleteFuturePUAndNotify(projectUserId);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task ConfirmOutProject(ConfirmOutProjectDto input)
+        {
+            await _resourceManager.ConfirmOutProject(input);
+        }
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        {
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task EditProjectUserPlan(EditProjectUserDto input)
+        {
+            await _resourceManager.EditProjectUserPlan(input);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task PlanNewResourceToProject(InputPlanResourceDto input)
+        {
+            await _resourceManager.AddFuturePU(input);
+        }
+
 
         [HttpGet]
         public async Task<List<UserDto>> GetAllProjectUserInProject(long projectId)
@@ -260,5 +379,6 @@ namespace ProjectManagement.APIs.ProjectUsers
 
             await WorkScope.DeleteAsync(projectUser);
         }
+
     }
 }

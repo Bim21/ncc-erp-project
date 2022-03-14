@@ -49,7 +49,7 @@ export class projectUserDto {
   projectRole: string;
   allocatePercentage: number;
   startTime: string;
-  status: string;
+  status: any;
   isExpense: boolean;
   resourceRequestId: number;
   resourceRequestName: string;
@@ -59,6 +59,8 @@ export class projectUserDto {
   id: number;
   createMode?: boolean;
   viewMode?: boolean;
+  workType:boolean;
+  isPool?: boolean;
 }
 export class projectResourceRequestDto {
   name: string;

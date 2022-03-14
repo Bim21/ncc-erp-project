@@ -35,6 +35,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
   ]
+  
 
   projectTypeParam = Object.entries(this.APP_ENUM.ProjectType).map(item => {
     return {

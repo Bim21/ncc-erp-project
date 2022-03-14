@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.Users.Dto
+namespace ProjectManagement.Services.ResourceService.Dto
 {
     public class WorkingProjectDto
     {

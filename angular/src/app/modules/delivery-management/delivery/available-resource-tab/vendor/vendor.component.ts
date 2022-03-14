@@ -29,6 +29,8 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   public listSkills: SkillDto[] = [];
   public skill = '';
   public skillsParam = [];
+  public selectedSkillId:number[]
+  public isAndCondition:boolean = false
   subscription: Subscription[] = [];
   DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
   DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
@@ -42,22 +44,14 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     skill?
   ): void {
 
-    // this.pageSizeType = request.maxResultCount
-    // this.pageSizeType = this.pageSize
-    // request.maxResultCount = this.pageSize
+  
     this.isLoading = true;
-    let check = false;
-    request.filterItems.forEach((item) => {
-      if (item.filterType == 4) {
-        request.filterItems = this.clearFilter(request, 'skill', 0);
-        check = true;
-        this.skill = item.value;
-      }
-    });
-
+    let requestBody:any = request 
+    requestBody.skillIds = this.selectedSkillId
+    requestBody.isAndCondition = this.isAndCondition
     this.subscription.push(
       this.availableRerourceService
-        .GetVendorResource(request, this.skill)
+        .GetVendorResource(requestBody)
         .pipe(
           finalize(() => {
             finishedCallback();
@@ -70,16 +64,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
               return item;
             }
           });
-          if (check == true) {
-            request.filterItems.push({
-              propertyName: 'skill',
-              comparision: 0,
-              value: this.skill,
-              filterType: 4,
-              dropdownData: this.skillsParam,
-            });
-            this.skill = '';
-          }
+     
           this.showPaging(data.result, pageNumber);
           this.isLoading = false;
         })
@@ -105,16 +90,6 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       propertyName: 'fullName',
       comparisions: [0, 6, 7, 8],
       displayName: 'User Name',
-    },
-    {
-      propertyName: 'projectName',
-      comparisions: [0, 6, 7, 8],
-      displayName: 'Project Name',
-    },
-    {
-      propertyName: 'projectUserPlans',
-      comparisions: [0, 6, 7, 8],
-      displayName: 'Project User Plans',
     },
     {
       propertyName: 'used',
@@ -226,13 +201,6 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
             value: item.id,
           };
         });
-        this.FILTER_CONFIG.push({
-          propertyName: 'skill',
-          comparisions: [0],
-          displayName: 'Skill',
-          filterType: 4,
-          dropdownData: this.skillsParam,
-        });
       })
     )
 
@@ -267,7 +235,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     let ref = this.dialog.open(UpdateUserSkillDialogComponent, {
       width: "700px",
       data: {
-        userSkills: user.listSkills.map(skill => { return { skillId: skill.id } }),
+        userSkills: user.userSkills,
         id: user.userId,
         fullName: user.fullName
       }

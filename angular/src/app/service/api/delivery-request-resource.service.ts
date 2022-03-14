@@ -80,27 +80,27 @@ export class DeliveryResourceRequestService extends BaseApiService {
 
 
   public GetVendorResource(
-    request: PagedRequestDto, skillId?: any
+    request: PagedRequestDto
   ): Observable<any> {
     return this.http.post<any>(
-      this.rootUrl + '/GetVendorResource?skillId=' + skillId,
+      this.rootUrl + '/GetVendorResource',
       request
     );
   }
 
   public GetAllPoolResource(
-    request: PagedRequestDto, skillId?: any
+    request: any, skillId?: any
   ): Observable<any> {
     return this.http.post<any>(
-      this.rootUrl + '/GetAllPoolResource?skillId=' + skillId,
+      this.rootUrl + '/GetAllPoolResource',
       request
     );
   }
   public GetAllResource(
-    request: PagedRequestDto, skillId?: any
+    request: PagedRequestDto
   ): Observable<any> {
     return this.http.post<any>(
-      this.rootUrl + '/GetAllResource?skillId=' + skillId,
+      this.rootUrl + '/GetAllResource',
       request
     );
   }

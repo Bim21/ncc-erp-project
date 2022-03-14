@@ -7,6 +7,7 @@ using Abp.AutoMapper;
 using NccCore.Anotations;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.ResourceService.Dto;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Users.Dto

@@ -1,3 +1,51 @@
+th,
+td {
+    text-align: center;
+}
+
+.disablePage ul li {
+    cursor: not-allowed;
+}
+
+::ng-deep .mat-form-field-outline {
+    background: white;
+}
+
+::ng-deep .mat-checkbox-layout {
+    margin-top: 10px;
+}
+
 .submit-btn:disabled i {
-  color: gray !important;
+    color: gray !important;
+}
+
+.btnCreate {
+    margin-bottom: 10px;
+}
+
+i {
+    margin-right: 5px;
+}
+
+span {
+    height: fit-content;
+}
+
+.table-vertical {
+    margin-top: 20px;
+}
+
+.table-title {
+    font-size: 24px;
+    color: #424242;
+}
+
+.past {
+    background-color: #efefef;
+}
+
+.status-badges {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
