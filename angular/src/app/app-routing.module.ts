@@ -66,6 +66,8 @@ import { TrainingProjectDescriptionComponent } from './modules/pm-management/tra
 import { ProductProjectMilestoneComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-milestone/product-project-milestone.component';
 import { ProductProjectChecklistComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-checklist/product-project-checklist.component';
 import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
+import * as path from 'path';
+import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.component';
 
 
 @NgModule({
@@ -91,6 +93,11 @@ import { ProjectFileComponent } from './modules/pm-management/list-project/list-
             component: RolesComponent,
             data: { permission: "Pages.Roles" },
             canActivate: [AppRouteGuard],
+          },
+          {
+            path: "edit-role",
+            component: EditRoleDialogComponent,
+            canActivate: [AppRouteGuard]
           },
           {
             path: "tenants",
