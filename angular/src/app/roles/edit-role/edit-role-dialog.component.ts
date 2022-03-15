@@ -1,3 +1,5 @@
+import { MatSelect } from '@angular/material/select';
+import { result } from 'lodash-es';
 import {
   Component,
   Injector,
@@ -5,10 +7,10 @@ import {
   EventEmitter,
   Output,
   Inject,
+  ViewChild,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { forEach as _forEach, includes as _includes, map as _map } from 'lodash-es';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   RoleServiceProxy,
@@ -25,15 +27,13 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
   templateUrl: 'edit-role-dialog.component.html',
   styleUrls: ['edit-role-dialog.component.css']
 })
-export class EditRoleDialogComponent extends AppComponentBase
-  implements OnInit {
+export class EditRoleDialogComponent extends AppComponentBase implements OnInit {
   selection = new SelectionModel<string>(true, []);
   treeControl: NestedTreeControl<any>;
   dataSource: MatTreeNestedDataSource<any>;
@@ -42,27 +42,43 @@ export class EditRoleDialogComponent extends AppComponentBase
   saving = false;
   roleId: number;
   role = new RoleDto();
-  id: number;
+  id: any;
+  title: string;
   roles = [];
   listRoles = [];
+  public listUsers: any[] = []
+  userTypes = [
+    { value: 0, label: "Internship" },
+    { value: 1, label: "Collaborator" },
+    { value: 2, label: "Staff" }
+  ];
+  public listUserLevel: any[] = []
   selectedRole: any;
   keyword: string = '';
+  public isCreated: boolean = false
+  public searchUser: string = ''
+  public userId: number = 0
+  public listUsersNotInRole: any[] = []
+  listUsersForSearch: any[] = []
+  public searchMemberText = '';
+  public userTypeForFilter = -1;
+  public userBranchForFilter = -1;
+  public userLevelForFilter = -1;
   //permissions: PermissionDto[] = [];
   checkedPermissionsMap: { [key: string]: boolean } = {};
   defaultPermissionCheckedStatus = true;
   permissions: RolePermissionDto = new RolePermissionDto();
   grantedPermissionNames: string[];
 
+  @ViewChild('slUserRef', {static: false}) slUserRef: MatSelect;
   @Output() onSave = new EventEmitter<any>();
   constructor(
     //@Inject(MAT_DIALOG_DATA) public data: any,
     private activatedRoute: ActivatedRoute,
-   
     injector: Injector,
     private _roleService: RoleServiceProxy,
-    public bsModalRef: BsModalRef,
-
-
+    private _route: ActivatedRoute,
+    private ref: ChangeDetectorRef,
   ) {
     super(injector);
     this.dataSource = new MatTreeNestedDataSource<Permission>();
@@ -71,6 +87,8 @@ export class EditRoleDialogComponent extends AppComponentBase
   hasChild = (_: number, node: Permission) => !!node.childrens && node.childrens.length > 0;
   
   ngOnInit() {
+    this.id = this._route.snapshot.queryParamMap.get('id');
+    this.title = this._route.snapshot.queryParamMap.get('name')
     this._roleService
       .getRoleForEdit(this.id)
       .subscribe((result: any) => {
@@ -85,7 +103,16 @@ export class EditRoleDialogComponent extends AppComponentBase
           this.initSelectionList(node)
         );
       });
+    this.getAllUserLevel()
+    this.getAllUserInRole()
+    this.getAllUserNotInRole()
+  }
 
+  ngAfterViewChecked(): void {
+    if(this.isCreated){
+      this.slUserRef.focus()
+    }
+    this.ref.detectChanges()
   }
 
   isPermissionChecked(permissionName: string): boolean {
@@ -215,40 +242,131 @@ export class EditRoleDialogComponent extends AppComponentBase
       }
     });
   }
+  public getAllUserInRole(){
+    this._roleService.getAllUserInRole(this.id).subscribe(res => {
+      this.listUsersForSearch = this.listUsers = res.result
+    });
+  }
 
+  public removeMemberFromProject(id, fullName){
+    abp.message.confirm(
+      "Remove " + fullName + " From Out Role?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this._roleService.removeUserFromOutRole(id).subscribe((res) => {
+            if(res.success){
+              abp.notify.success(res.result)
+              let index = this.listUsers.findIndex(x => x.id == id);
+              if(index >= 0){
+                this.listUsers.splice(index,1);
+              }
+              this.getAllUserNotInRole()
+            }
+            else{
+              abp.notify.error(res.result)
+            }
+          })
+        }
+      }
+    );
+    
+  }
 
-  // getAllRoles() {
-  //   this.roleService.getAll().subscribe((data) => {
-  //     this.roles = data.result;
-  //     this.listRoles.forEach(item => {
-  //       var role = this.roles.find(value => value.id == item.id);
-  //       var index = this.roles.indexOf(role);
-  //       this.roles.splice(index, 1);
-  //     })
-  //   })
-  // }
+  public searchMember(){
+    this.listUsers = this.listUsersForSearch.filter(
+      member => 
+        ( this.searchMemberText ? 
+          ( member.fullName.includes(this.searchMemberText) || 
+            member.email.includes(this.searchMemberText)
+        ) : true)
+        && (this.userBranchForFilter < 0 || member.branch === this.userBranchForFilter)
+        && (this.userTypeForFilter < 0 || member.userType === this.userTypeForFilter)
+        && (this.userLevelForFilter < 0 || member.userLevel === this.userLevelForFilter)
+    );
+  }
 
-  // getAllByRoles() {
-  //   this.roleService.getAllByRoles(this.role.id).subscribe((data) => {
-  //     this.listRoles = data.result;
-  //   })
-  // }
+  getAllUserLevel(){
+    this._roleService.getAllUserLevel().subscribe((res) => {
+      this.listUserLevel = res.result
+    })
+  }
 
-  // addToRoleList(value) {
-  //   const outcomingentype = {
-  //     roleId: this.role.id,
-  //     outcomingEntryTypeId: value.id
-  //   }
-  //   this.roleService.addToRoleList(outcomingentype).subscribe(() => {
-  //     this.getAllByRoles();
-  //     this.roles = this.roles.filter(item => item.id !== value.id)
-  //   })
-  // }
+  getAllUserNotInRole(){
+    this._roleService.getAllUserNotInRole(this.id).subscribe(res => {
+      this.listUsersNotInRole = res.result
+    })
+  }
 
-  // close(value) {
-  //   this.roleService.close(this.role.id, value.id).subscribe(() => {
-  //     this.getAllByRoles();
-  //     this.roles.push(value);
-  //   });
-  // }
+  addUserIntoRole(){
+    let request = {
+      userId: this.userId,
+      roleId: this.id
+    }
+    this._roleService.addUserIntoRole(request).subscribe((res) => {
+      if(res.success){
+        abp.notify.success(res.result)
+        this.isCreated = false
+        this.getAllUserInRole()
+        this.getAllUserNotInRole()
+        this.userId = 0
+      }
+      else{
+        abp.notify.error(res.result)
+      }
+    })
+  }
+
+  getAvatar(member) {
+    if (member.avatarPath) {
+      return AppConsts.remoteServiceBaseUrl+ '/' + member.avatarPath;
+    }
+    return "assets/img/undefine.png";
+  }
+
+  findDevLevelName(id) {
+    const level = this.listUserLevel?.find((item) => {
+      return item.id == id;
+    })
+    return level ? level.name : '';
+  }
+
+  styleTagLevel(level){
+    switch (level) {
+      case 0:
+        return '#B2BEB5'
+      case 1:
+        return '#8F9779'
+      case 2:
+        return  '#665D1E'
+      case 3: 
+        return '#777'
+      case 4: 
+        return '#60b8ff'
+      case 5: 
+        return  '#318CE7'
+      case 6: 
+        return  '#1f75cb'
+      case 7: 
+        return  '#ad9fa1'
+      case 8: 
+        return  '#A57164'
+      case 9: 
+          return '#3B2F2F'
+      case 10: 
+        return '#A4C639'
+      case 11: 
+        return '#3bab17'
+      case 12: 
+        return '#008000'
+      case 13:
+        return  '#c36285'
+      case 14: 
+        return '#AB274F'
+      case 15: 
+        return '#902ee1'
+      default:
+        return '#e40202'
+    }
+  }
 }

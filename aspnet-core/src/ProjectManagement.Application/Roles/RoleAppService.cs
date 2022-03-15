@@ -15,6 +15,11 @@ using ProjectManagement.Roles.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using static ProjectManagement.Authorization.GrantPermissionRoles;
+using NccCore.IoC;
+using Abp.Authorization.Users;
+using System;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectManagement.Roles
 {
@@ -23,12 +28,20 @@ namespace ProjectManagement.Roles
     {
         private readonly RoleManager _roleManager;
         private readonly UserManager _userManager;
+        private readonly IWorkScope _workScope;
+        private readonly IRepository<UserRole, long> _userRoleRepository;
 
-        public RoleAppService(IRepository<Role> repository, RoleManager roleManager, UserManager userManager)
-            : base(repository)
+        public RoleAppService(IRepository<Role> repository, 
+            RoleManager roleManager, 
+            UserManager userManager, 
+            IWorkScope workScope,
+            IRepository<UserRole, long> userRoleRepository
+        ) : base(repository)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _workScope = workScope;
+            _userRoleRepository = userRoleRepository;
         }
 
         public override async Task<RoleDto> CreateAsync(CreateRoleDto input)
@@ -153,6 +166,76 @@ namespace ProjectManagement.Roles
             await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
 
             return input;
+        }
+
+        public async Task<List<UserRoleDto>> GetAllUserInRole(long Id)
+        {
+            var qallUsers = from ur in _userRoleRepository.GetAll()
+                            join u in _workScope.GetAll<User>() on ur.UserId equals u.Id
+                            where ur.RoleId == Id
+                            select new UserRoleDto
+                            {
+                                Id = ur.Id,
+                                UserId = u.Id,
+                                FullName = u.FullName,
+                                AvatarPath = u.AvatarPath,
+                                Branch = u.Branch,
+                                Email = u.EmailAddress,
+                                UserLevel = u.UserLevel,
+                                UserName = u.UserName,
+                                UserType = u.UserType,
+                            };
+            var allUsers = await qallUsers.Distinct().ToListAsync();
+            return allUsers;
+        }
+
+        [HttpGet]
+        public async Task<string> RemoveUserFromOutRole(long Id)
+        {
+            await _userRoleRepository.DeleteAsync(Id);
+            return "Delete Successed";
+        }
+
+        [HttpPost]
+        public async Task<string> AddUserIntoRole(CreateUserRoleDto input)
+        {
+            await _userRoleRepository.InsertAsync(new UserRole
+            {
+                RoleId = input.RoleId,
+                UserId = input.UserId,
+            });
+            return "Add Successed";
+        }
+
+        public IActionResult GetAllUserLevel()
+        {
+            var allUserLevels = Enum.GetValues(typeof(UserLevel))
+                                    .Cast<UserLevel>()
+                                    .Select(x => new
+                                    {
+                                        Id = ((int)x),
+                                        Name = x.ToString()
+                                    })
+                                    .ToList();
+            return new OkObjectResult(allUserLevels);
+        }
+
+        public async Task<IActionResult> GetAllUserNotInRole(int RoleId)
+        {
+            var listUsersInRole = await _userRoleRepository.GetAll().Select(x => x.UserId).Distinct().ToListAsync();
+            var qallUsersNotInRole = from u in _workScope.GetAll<User>()
+                            where !listUsersInRole.Contains(u.Id) && 
+                                  (u.UserType != UserType.FakeUser || u.UserType != UserType.Vendor)
+                            select new
+                            {
+                                Id = u.Id,
+                                Surname = u.Surname,
+                                Name = u.Name,
+                                FullName = u.FullName,
+                                Email = u.EmailAddress,
+                            };
+            var allUserNotInRole = await qallUsersNotInRole.Distinct().ToListAsync();
+            return new OkObjectResult(allUserNotInRole);
         }
     }
 }
