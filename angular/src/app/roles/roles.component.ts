@@ -1,3 +1,4 @@
+import { Route, Router, ActivatedRoute } from '@angular/router';
 import { Component, Injector } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -29,7 +30,9 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
   constructor(
     injector: Injector,
     private _rolesService: RoleServiceProxy,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {
     super(injector);
   }
@@ -81,32 +84,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
   editRole(role: RoleDto): void {
     this.showCreateOrEditRoleDialog(role.id);
   }
-
-  showCreateOrEditRoleDialog(id?: number): void {
-    let createOrEditRoleDialog: BsModalRef;
-    if (!id) {
-      createOrEditRoleDialog = this._modalService.show(
-        CreateRoleDialogComponent,
-        {
-          class: 'modal-lg',
-          
-        },
-      );
-    } else {
-      createOrEditRoleDialog = this._modalService.show(
-        EditRoleDialogComponent,
-        {
-          class: 'modal-lg',
-          initialState: {
-            id: id,
-          },
-          
-        }
-      );
-    }
-
-    createOrEditRoleDialog.content.onSave.subscribe(() => {
-      this.refresh();
-    });
+  editPage(roleId, name){
+    this._router.navigate(['/app/edit-role'],{queryParams: {id: roleId, name: name}})
   }
 }

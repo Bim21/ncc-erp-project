@@ -790,6 +790,21 @@ export class RoleServiceProxy {
       this.baseUrl + '/api/services/app/Role/GetRoleForEdit?Id=' + id
     );
   }
+  getAllUserInRole(id: number): Observable<any>{
+    return this.http.get<any>(this.baseUrl + '/api/services/app/Role/GetAllUserInRole?Id=' + id)
+  }
+  getAllUserLevel(): Observable<any>{
+    return this.http.get<any>(this.baseUrl + '/api/services/app/Role/GetAllUserLevel')
+  }
+  removeUserFromOutRole(id: number): Observable<any>{
+    return this.http.get<any>(this.baseUrl + '/api/services/app/Role/RemoveUserFromOutRole?Id='+id)
+  }
+  getAllUserNotInRole(roleId: number): Observable<any>{
+    return this.http.get<any>(this.baseUrl + '/api/services/app/Role/GetAllUserNotInRole?RoleId=' + roleId)
+  }
+  addUserIntoRole(request: any): Observable<any>{
+    return this.http.post<any>(this.baseUrl + '/api/services/app/Role/AddUserIntoRole', request)
+  }
   protected processGetRoleForEdit(
     response: HttpResponseBase
   ): Observable<GetRoleForEditOutput> {
