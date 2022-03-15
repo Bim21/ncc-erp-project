@@ -345,7 +345,7 @@
                                         </div>
                                         <div *ngIf="user.createMode || user.editMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
-                                                <input matInput [matDatepicker]="picker" placeholder="chose a date *" required [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel" #projectDateEl>
+                                                <input matInput [matDatepicker]="picker" [min]="tomorrowDate" placeholder="chose a date *" required [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel" #projectDateEl>
                                                 <mat-datepicker-toggle matSuffix [for]="picker">
                                                 </mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>

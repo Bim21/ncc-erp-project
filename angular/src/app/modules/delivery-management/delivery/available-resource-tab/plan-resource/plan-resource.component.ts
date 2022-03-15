@@ -25,6 +25,7 @@ import * as moment from 'moment';
 import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
 
 @Component({
   selector: 'app-plan-resource',
@@ -282,6 +283,21 @@ export class PlanResourceComponent
   ngOnDestroy(): void {
     this.subscription.forEach(sub => {
       sub.unsubscribe()
+    })
+  }
+  releaseUser(user, name) {
+    user.fullName = name
+    let ref = this.dialog.open(ReleaseUserDialogComponent, {
+      width: "700px",
+      data: {
+        user: user
+      }
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        // this.getProjectUser()
+        // this.getPlannedtUser()
+      }
     })
   }
 }

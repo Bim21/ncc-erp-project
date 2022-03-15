@@ -29,6 +29,8 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.getAllProject();
+    this.planUser.isPool = false
+    this.planUser.allocatePercentage = 100
     this.planUser.userId = this.data.item.userId;
     this.planUser.fullName = this.data.item.fullName;
   }

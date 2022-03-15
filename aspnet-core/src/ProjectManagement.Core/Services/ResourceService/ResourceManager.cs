@@ -762,6 +762,7 @@ namespace ProjectManagement.Services.ResourceManager
                            PoolProjects = u.ProjectUsers
                            .Where(pu => pu.Status == ProjectUserStatus.Present)
                            .Where(pu => pu.IsPool)
+                           .Where(pu => pu.AllocatePercentage > 0)
                            .Where(pu => pu.Project.Status != ProjectStatus.Closed)
                            .Select(pu => new ProjectOfUserDto
                            {

@@ -1,4 +1,4 @@
-<section class="content px-2 mt-2">
+<section class="content px-2 mt-2" id="pool">
     <div class="container-fluid">
         <div class="">
             <div class="">
@@ -8,15 +8,15 @@
                         <div class="col-8 d-flex mt-1">
                             <div class="input-group-prepend">
                                 <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
-                  <i class="fas fa-search"></i>
-                </button>
+                                    <i class="fas fa-search"></i>
+                                </button>
                             </div>
                             <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-default" (click)="checkAddFilter()">
-                <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
-                  [class.fa-angle-down]="!advancedFiltersVisible"></i>
-              </button>
+                                    <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                                        [class.fa-angle-down]="!advancedFiltersVisible"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="col-3 row justify-content-end">
@@ -26,7 +26,8 @@
                                     <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
                                         <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
                                             <div class="col-4">
-                                                <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                                                <label style=" white-space: nowrap;" class="mt-2 mr-2">Search
+                                                    type:</label>
                                             </div>
                                             <div class="col-8 pt-2">
                                                 <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
@@ -41,7 +42,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId" (click)="selectedSkillId = null; refresh()"></i>
+                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0" (click)="selectedSkillId = null; refresh()"></i>
                         </div>
                     </div>
 
@@ -74,10 +75,11 @@
                                 <th class="stt">#</th>
                                 <th>Employee</th>
                                 <th style="width: 75px;">History</th>
-                                <th>Temp Projects</th>
-                                <th style="width: 200px;">Skills</th>
-                                <th>Note</th>
-                                <th style="width: 100px;">Date Start Pool</th>
+                                <th>Planned Projects</th>
+                                <th>Tempt Projects</th>
+                                <th style="width: 150px;">Skills</th>
+                                <th style="min-width: 240px;">Note</th>
+                                <th style="width: 100px;">Start Pool</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,16 +117,24 @@
                                 <td style="white-space: normal;">
                                     <div class="d-flex " style="align-items: center;">
                                         <div style="width: 90%;">
+
                                             <div *ngFor="let plan of item.plannedProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
+                                                <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="planMenu">
                                                 <span [ngClass]="plan.onHover?'on-hover-plan':''">
-                          <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date: 'dd/MM/yyyy' }}
-                        </span>
-                                                <span style="display: inline-block; width: 10px;">
-                          <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
-                          || isAllowCancelPlan(plan.creatorUserId))" 
-                          class="fas fa-times pointer text-danger ml-1"
-                            (click)="CancelResourcePlan(plan,item.fullName)"></i>
-                        </span>
+                                                    <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date:
+                                                    'dd/MM/yyyy' }}
+                                                </span>
+                                                <!-- <span style="display: inline-block; width: 10px;">
+                                                    <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
+                                                     || isAllowCancelPlan(plan.creatorUserId))" class="fas fa-times pointer text-danger ml-1"
+                                                        (click)="CancelResourcePlan(plan,item.fullName)"></i>
+                                                </span> -->
+                                                </button>
+                                                <mat-menu #planMenu="matMenu">
+                                                    <button mat-menu-item>Confirm</button>
+                                                    <button mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)"> Cancel</button>
+                                                    <button mat-menu-item>Edit</button>
+                                                </mat-menu>
                                             </div>
                                         </div>
                                         <div style="width: 10%;" class="text-right">
@@ -133,7 +143,33 @@
                                     </div>
 
                                 </td>
-                                <td style="white-space: normal; max-width: 200px">
+                                <td style="white-space: normal;">
+                                    <div class="d-flex " style="align-items: center;">
+                                        <div style="width: 90%;">
+
+
+                                            <div *ngFor="let plan of item.poolProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false">
+                                                <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="tempMenu">
+                                                    <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                                                        <strong>{{ plan.projectName }}</strong> - {{ plan.startTime |
+                                                        date:
+                                                        'dd/MM/yyyy' }}
+                                                    </span>
+                                                </button>
+                                                <mat-menu #tempMenu="matMenu">
+                                                    <button mat-menu-item (click)="releaseUser(plan,item.fullName)">Release</button>
+                                                    <button mat-menu-item>Add</button>
+                                                </mat-menu>
+                                            </div>
+
+                                        </div>
+                                        <!-- <div style="width: 10%;" class="text-right">
+                                            <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
+                                        </div> -->
+                                    </div>
+
+                                </td>
+                                <td style="white-space: normal; max-width: 150px">
                                     <div class="d-flex" style="align-items: center;">
                                         <div style="width: 90%">
                                             <p class="m-0" *ngFor="let item of item.userSkills">
@@ -163,7 +199,8 @@
                                 </td>
                                 <td class="text-center">
                                     {{ item.dateStartPool !== 0 ? formatDateStartPool(item.dateStartPool) : '' }}
-                                    <p *ngIf="item.totalFreeDay > 0"><strong>{{ item.totalFreeDay }}</strong> days ago</p>
+                                    <p *ngIf="item.totalFreeDay > 0"><strong>{{ item.totalFreeDay }}</strong> days ago
+                                    </p>
                                 </td>
                             </tr>
                         </tbody>
@@ -174,8 +211,8 @@
                 <div class="row">
                     <div class="col-sm-4 col-12 text-sm-left text-center">
                         <button class="btn btn-secondary mb-2" (click)="refresh()">
-              <i class="fas fa-redo-alt"></i>
-            </button>
+                            <i class="fas fa-redo-alt"></i>
+                        </button>
                         <mat-form-field style="width: 20%; margin-left: 30px">
                             <mat-label>Number items</mat-label>
                             <mat-select [(ngModel)]="pageSizeType" (ngModelChange)="changePageSize()">

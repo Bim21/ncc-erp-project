@@ -85,6 +85,6 @@ export class PMReportProjectService extends BaseApiService {
   }
 
   public PlanNewResourceToProject( input:any) {
-    return this.http.post(this.rootUrl + `/PlanNewResourceToProject`,input)
+    return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
   }
 }

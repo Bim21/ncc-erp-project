@@ -308,7 +308,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             var query = _resourceManager.QueryUsersOfProject(projectId);
             return await query.Where(x => x.PMReportId == pmReportId)
                              .Where(x => x.ProjectId == projectId)
-                             .Where(x => x.PUStatus == ProjectUserStatus.Present)
+                             .Where(x => x.PUStatus != ProjectUserStatus.Future)
                              .OrderByDescending(x => x.StartTime)
                              .ToListAsync();
         }
@@ -344,7 +344,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPost]
-        public async Task PlanNewResourceToProject(InputPlanResourceDto input)
+        public async Task PlanEmployeeJoinProject(InputPlanResourceDto input)
         {
             await _resourceManager.AddFuturePU(input);
         }

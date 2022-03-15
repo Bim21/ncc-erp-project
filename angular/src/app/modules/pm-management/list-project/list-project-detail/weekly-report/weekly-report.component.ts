@@ -46,6 +46,7 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   PmManager_PMReportProject_UpdateNote = PERMISSIONS_CONSTANT.PmManager_PMReportProject_UpdateNote
 
   // Paging
+  public tomorrowDate = new Date();
   public itemPerPage: number = 50;
   public searchUser: string = "";
   public weeklyCurrentPage: number = 1;
@@ -90,6 +91,8 @@ export class WeeklyReportComponent extends AppComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
+    this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
+
     this.getAllPmReport();
     this.getUser();
     this.minDate.setDate(this.minDate.getDate() + 1)
