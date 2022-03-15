@@ -158,8 +158,8 @@
 
                                 <td class="text-center" >
                                     <div class="time-wrap">
-                                        <span class="time-item start-time">{{ project.startTime | date:"yyyy-MM-dd" }}</span>
-                                        <span class="time-item end-time">{{ project.endTime | date:"yyyy-MM-dd" }}</span>
+                                        <span class="time-item start-time">{{ project.startTime | date:"dd-MM-yyyy" }}</span>
+                                        <span class="time-item end-time">{{ project.endTime | date:"dd-MM-yyyy" }}</span>
                                     </div>
                                 </td>
 
@@ -175,7 +175,7 @@
                                             [ngClass]=" APP_CONST.isSentStyle[getByEnum(project.isSent,APP_ENUM.WeeklySent)]">{{getByEnum(project.isSent,APP_ENUM.WeeklySent)}}
                                         </span>
                                         <div class="time-send-report-wrap" [class.report-late]="isReportLate(project.timeSendReport)" >
-                                            <div class="mb-0">{{project.timeSendReport| date:"yyyy-MM-dd"}}</div>
+                                            <div class="mb-0">{{project.timeSendReport| date:"dd-MM-yyyy"}}</div>
                                             <div>{{project.timeSendReport| date:"hh:mm a"}}</div>
                                         </div>
                                     </div>
