@@ -101,26 +101,26 @@ namespace ProjectManagement.APIs.ResourceRequests
 
                 query = from request in WorkScope.GetAll<ResourceRequest>()
                         join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId
-                            select new GetResourceRequestDto
-                            {
-                                DMNote = request.DMNote,
-                                Id = request.Id,
-                                IsRecruitmentSend = request.IsRecruitmentSend,
-                                Level = request.Level,
-                                Name = request.Name,
-                                ProjectName = request.Project.Name,
-                                PMNote = request.PMNote,
-                                Priority = request.Priority,
-                                ProjectId = request.ProjectId,
-                                RecruitmentUrl = request.RecruitmentUrl,
-                                TimeNeed = request.TimeNeed,
-                                TimeDone = request.TimeDone,
-                                Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Skill.Name }).ToList(),
-                                Status = request.Status,
-                                PlannedDate = request.ProjectUsers.Select(x => x.StartTime).FirstOrDefault(),
-                                PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
-                                RequestStartTime = request.CreationTime
-                            };
+                        select new GetResourceRequestDto
+                        {
+                            DMNote = request.DMNote,
+                            Id = request.Id,
+                            IsRecruitmentSend = request.IsRecruitmentSend,
+                            Level = request.Level,
+                            Name = request.Name,
+                            ProjectName = request.Project.Name,
+                            PMNote = request.PMNote,
+                            Priority = request.Priority,
+                            ProjectId = request.ProjectId,
+                            RecruitmentUrl = request.RecruitmentUrl,
+                            TimeNeed = request.TimeNeed,
+                            TimeDone = request.TimeDone,
+                            Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Skill.Name }).ToList(),
+                            Status = request.Status,
+                            PlannedDate = request.ProjectUsers.Select(x => x.StartTime).FirstOrDefault(),
+                            PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
+                            RequestStartTime = request.CreationTime
+                        };
             }
             else
             {
@@ -693,24 +693,6 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Update, PermissionNames.PmManager_ResourceRequest_Update)]
         public async Task<ResourceRequestDto> Update(ResourceRequestDto model)
         {
-            //Check old request status
-            var oldRequest = await WorkScope.GetAll<ResourceRequest>().FirstOrDefaultAsync(p => p.Id == model.Id);
-
-            switch (oldRequest.Status)
-            {
-                case ResourceRequestStatus.DONE:
-                    {
-                        throw new UserFriendlyException("Request already done");
-                    }
-                case ResourceRequestStatus.CANCELLED:
-                    {
-                        throw new UserFriendlyException("Request cancelled");
-                    }
-                default:
-                    break;
-            }
-
-            var projectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
             {
@@ -718,7 +700,10 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
 
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
-            await WorkScope.UpdateAsync(ObjectMapper.Map(model, resourceRequest));
+
+            var requestPlan = await WorkScope.GetAll<ProjectUser>().AnyAsync(p => p.ResourceRequestId == resourceRequest.Id);
+            if (!requestPlan && resourceRequest.ProjectId != model.ProjectId)
+                throw new UserFriendlyException("Cannot change project of a planned resource request");
 
             //Update skill
             var oldSkillIdsList = WorkScope.GetAll<ResourceRequestSkill>()
@@ -732,7 +717,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             {
                 var skillModel = new ResourceRequestSkill()
                 {
-                    IsDeleted = false,
                     ResourceRequestId = model.Id,
                     SkillId = skillId,
                     Quantity = 1
@@ -743,10 +727,18 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             foreach (var skillId in skillIdsToRemove)
             {
-                var rs = await WorkScope.GetAsync<ResourceRequestSkill>(skillId);
-                if (rs != null)
-                    await WorkScope.SoftDeleteAsync(rs);
+                await WorkScope.DeleteAsync<ResourceRequestSkill>(skillId);
             }
+
+            resourceRequest.ProjectId = model.ProjectId;
+            resourceRequest.DMNote = model.DMNote;
+            resourceRequest.PMNote = model.PMNote;
+            resourceRequest.TimeNeed = model.TimeNeed;
+            resourceRequest.Status = model.Status;
+            resourceRequest.Level = model.Level;
+            resourceRequest.Priority = model.Priority;
+
+            await WorkScope.UpdateAsync(resourceRequest);
 
             SendKomuNotify(model.Name, project.Name, model.Status);
 
