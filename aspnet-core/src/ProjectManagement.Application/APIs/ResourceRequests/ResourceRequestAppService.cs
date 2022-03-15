@@ -79,7 +79,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                             ProjectName = x.Project.Name,
                             Name = x.Name,
                             Status = x.Status,
-                            StatusName = x.Status.ToString(),
                             PMNote = x.PMNote,
                             DMNote = x.DMNote,
                             TimeNeed = x.TimeNeed,
@@ -91,60 +90,41 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest,
         PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
-        public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(GridParam input, string order = "PROJECT")
+        public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
-            var projectUser = WorkScope.GetAll<ProjectUser>();
-            var SumSkillByResourceRequest = WorkScope.GetAll<ResourceRequestSkill>()
-                .GroupBy(x => x.ResourceRequestId)
-                .Select(x => new
-                {
-                    ResourceRequestId = x.Key,
-                    Sum = x.Sum(y => y.Quantity)
-                });
+            var querySkill = WorkScope.GetAll<ResourceRequestSkill>();
 
-            var query = WorkScope.GetAll<ResourceRequest>().Select(x => new GetResourceRequestDto
-            {
+            if (input.SkillIds.Any())
+                querySkill = querySkill.Where(p => input.SkillIds.Contains(p.SkillId));
 
-                Id = x.Id,
-                Name = x.Name,
-                ProjectId = x.ProjectId,
-                ProjectName = x.Project.Name,
-                Status = x.Status,
-                StatusName = x.Status.ToString(),
-                TimeNeed = x.TimeNeed,
-                TimeDone = x.TimeDone.Value,
-                PMNote = x.PMNote,
-                DMNote = x.DMNote,
-                UserSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).Select(z => new GetSkillDetailDto
-                {
-                    SkillId = z.SkillId,
-                    SkillName = z.Skill.Name,
-                    Quantity = z.Quantity,
-                    ResourceRequestId = z.ResourceRequestId,
-                    ResourceRequestName = z.ResourceRequest.Name
-                }).OrderBy(x => x.SkillName).ToList(),
-                KeySkill = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).OrderBy(z => z.Skill.Name).FirstOrDefault().Skill.Name,
-                KeyQuantity = WorkScope.GetAll<ResourceRequestSkill>().Where(z => z.ResourceRequestId == x.Id).OrderBy(z => z.Skill.Name).FirstOrDefault().Quantity,
-                SumSkill = SumSkillByResourceRequest.Where(h => h.ResourceRequestId == x.Id).FirstOrDefault().Sum,
-                PlannedNumberOfPersonnel = projectUser.Where(y => y.ProjectId == x.ProjectId && y.ResourceRequestId == x.Id).Count()
-            });
-            if (order == "TIMENEED")
-            {
-                query = query.OrderBy(x => x.TimeNeed);
-            }
-            else if (order == "SKILL")
-            {
-                //query = (query.Where(x => x.KeyQuantity > 0).OrderBy(x => x.KeySkill).ThenByDescending(x=>x.KeyQuantity).AsEnumerable().Union(query.Where(x => x.KeyQuantity == null))).AsQueryable();
-                query = query.OrderBy(x => x.KeySkill == null).ThenBy(x => x.KeySkill).ThenByDescending(x => x.KeyQuantity);
-            }
-            else
-            {
-                query = query.OrderByDescending(x => x.ProjectName);
-            }
+            var queryRequest = WorkScope.GetAll<ResourceRequest>();
 
+            var query = from request in queryRequest
+                        join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId
+                        select new GetResourceRequestDto
+                        {
+                            DMNote = request.DMNote,
+                            Id = request.Id,
+                            IsRecruitmentSend = request.IsRecruitmentSend,
+                            Level = request.Level,
+                            Name = request.Name,
+                            ProjectName = request.Project.Name,
+                            PMNote = request.PMNote,
+                            Priority = request.Priority,
+                            ProjectId = request.ProjectId,
+                            RecruitmentUrl = request.RecruitmentUrl,
+                            TimeNeed = request.TimeNeed,
+                            TimeDone = request.TimeDone,
+                            Skills = request.ResourceRequestSkills.Select(p => p.Skill.Name).ToList(),
+                            Status = request.Status,
+                            PlannedDate = request.ProjectUsers.Select(x => x.StartTime).FirstOrDefault(),
+                            PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
+                            RequestStartTime = request.CreationTime
+                        };
 
             return await query.GetGridResult(query, input);
         }
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail,
             PermissionNames.PmManager_ResourceRequest_GetSkillDetail)]
@@ -647,28 +627,40 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Create, PermissionNames.PmManager_ResourceRequest_Create)]
         public async Task<ResourceRequestDto> Create(ResourceRequestDto model)
         {
-            model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(model));
-            var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+            model.Status = ResourceRequestStatus.APPROVE;
+
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
                 throw new UserFriendlyException("Project doesn't exist");
-            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-            var userName = UserHelper.GetUserName(user.EmailAddress);
-            if (user != null && !user.KomuUserId.HasValue)
+
+            if (model.Quantity <= 0)
+                throw new UserFriendlyException("Quantity must be equal or greater than 1");
+
+            if (!model.SkillIds.Any())
+                throw new UserFriendlyException("Select at least 1 skill");
+
+            //Create ResourceRequest, amount based on quantity
+            for (int i = 0; i < model.Quantity; i++)
             {
-                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
-                await WorkScope.UpdateAsync<User>(user);
+                model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(model));
+
+                //Create ResourceRequestSkill, amount based on Skills selected
+                for (int j = 0; j < model.SkillIds.Count(); j++)
+                {
+                    var skillModel = new ResourceRequestSkill()
+                    {
+                        IsDeleted = false,
+                        ResourceRequestId = model.Id,
+                        SkillId = model.SkillIds[j],
+                        Quantity = 1
+                    };
+
+                    await WorkScope.InsertAsync(skillModel);
+                }
+
+                SendKomuNotify(model.Name, project.Name, model.Status);
             }
-            var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
-            var message = new StringBuilder();
-            message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{model.Name}** cho dự án **{project.Name}**.");
-            message.AppendLine(link);
-            await _komuService.NotifyToChannel(new KomuMessage
-            {
-                UserName = userName ?? user.UserName,
-                Message = message.ToString(),
-                CreateDate = DateTimeUtils.GetNow(),
-            }, ChannelTypeConstant.PM_CHANNEL);
+
             return model;
         }
 
@@ -676,53 +668,114 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Update, PermissionNames.PmManager_ResourceRequest_Update)]
         public async Task<ResourceRequestDto> Update(ResourceRequestDto model)
         {
-            var resourceRequest = await WorkScope
-                .GetAsync<ResourceRequest>(model.Id);
-            await WorkScope.UpdateAsync(ObjectMapper.Map(model, resourceRequest));
+            //Check old request status
+            var oldRequest = await WorkScope.GetAll<ResourceRequest>().FirstOrDefaultAsync(p => p.Id == model.Id);
 
-            if (model.Status == ResourceRequestStatus.PENDING ||
-                    model.Status == ResourceRequestStatus.APPROVE)
+            switch (oldRequest.Status)
             {
-                return model;
+                case ResourceRequestStatus.DONE:
+                    {
+                        throw new UserFriendlyException("Request already done");
+                    }
+                case ResourceRequestStatus.CANCELLED:
+                    {
+                        throw new UserFriendlyException("Request cancelled");
+                    }
+                default:
+                    break;
             }
 
             var projectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-            var project = await WorkScope
-                .GetAll<Project>()
-                .FirstOrDefaultAsync(x => x.Id == model.ProjectId);
+            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
             {
                 throw new UserFriendlyException("Project doesn't exist");
             }
-            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-            user.KomuUserId = await _userAppService.UpdateKomuId(user.Id);
-            if (!user.KomuUserId.HasValue)
+
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
+            await WorkScope.UpdateAsync(ObjectMapper.Map(model, resourceRequest));
+
+            //Update skill
+            var oldSkillIdsList = WorkScope.GetAll<ResourceRequestSkill>()
+                                                .Where(p => p.ResourceRequestId == model.Id)
+                                                .Select(p => p.SkillId).ToList();
+
+            var skillIdsToAdd = model.SkillIds.Where(p => !oldSkillIdsList.Contains(p));
+            var skillIdsToRemove = oldSkillIdsList.Where(p => !model.SkillIds.Contains(p));
+
+            foreach (var skillId in skillIdsToAdd)
             {
-                user.UserName = UserHelper.GetUserName(user.EmailAddress) ?? user.UserName;
+                var skillModel = new ResourceRequestSkill()
+                {
+                    IsDeleted = false,
+                    ResourceRequestId = model.Id,
+                    SkillId = skillId,
+                    Quantity = 1
+                };
+
+                await WorkScope.InsertAsync(skillModel);
             }
+
+            foreach (var skillId in skillIdsToRemove)
+            {
+                var rs = await WorkScope.GetAsync<ResourceRequestSkill>(skillId);
+                if (rs != null)
+                    await WorkScope.DeleteAsync(rs);
+            }
+
+            SendKomuNotify(model.Name, project.Name, model.Status);
+
+            return model;
+        }
+
+        private async void SendKomuNotify(string requestName, string projectName, ResourceRequestStatus requestStatus)
+        {
+            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
+
+            var userName = UserHelper.GetUserName(user.EmailAddress);
+
+            if (user != null && !user.KomuUserId.HasValue)
+            {
+                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
+                await WorkScope.UpdateAsync<User>(user);
+            }
+
+            var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+
+            var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
 
             var message = new StringBuilder();
-            var titlelink = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
-            if (model.Status == ResourceRequestStatus.DONE)
+            switch (requestStatus)
             {
-                message.Append($"Request **{model.Name}** cho dự án **{project.Name}** ");
-                message.AppendLine($"đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
-            }
-            else
-            {
-                message.Append($"Request **{model.Name}** cho dự án **{project.Name}** ");
-                message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
+                case ResourceRequestStatus.DONE:
+                    {
+                        message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
+                        message.AppendLine($"đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
+                    }
+                    break;
+                case ResourceRequestStatus.CANCELLED:
+                    {
+                        message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
+                        message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
+                    }
+                    break;
+                case ResourceRequestStatus.APPROVE:
+                    {
+                        message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{requestName}** cho dự án **{projectName}**.");
+                        message.AppendLine(link);
+                    }
+                    break;
+                case ResourceRequestStatus.INPROGRESS:
+                default:
+                    return;
             }
 
-            message.AppendLine(titlelink);
             await _komuService.NotifyToChannel(new KomuMessage
             {
-                UserName = user.UserName,
+                UserName = userName ?? user.UserName,
                 Message = message.ToString(),
                 CreateDate = DateTimeUtils.GetNow(),
-            },
-            ChannelTypeConstant.PM_CHANNEL);
-            return model;
+            }, ChannelTypeConstant.PM_CHANNEL);
         }
 
         [HttpDelete]

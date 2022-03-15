@@ -90,7 +90,7 @@ namespace ProjectManagement.Constants.Enum
         }
         public enum ResourceRequestStatus
         {
-            PENDING = 0,
+            INPROGRESS = 0,
             DONE = 1,
             CANCELLED = 2,
             APPROVE = 3
@@ -170,6 +170,25 @@ namespace ProjectManagement.Constants.Enum
             Senior = 14,
             SeniorPlus = 15,
         }
+
+        public enum UserLevel_ResourceRequest : byte
+        {
+            Intern_0 = 0,
+            Fresher = 5,
+            Junior = 8,
+            Middle = 11,
+            Senior = 14,
+            Any = 99
+        }
+
+        public enum Priority : byte
+        {
+            Low = 0,
+            Medium = 1,
+            High = 2,
+            Critical = 3
+        }
+
         public enum UserType
         {
             Internship = 0,

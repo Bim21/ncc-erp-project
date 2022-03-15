@@ -18,5 +18,9 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public DateTime? TimeDone { get; set; }
         public string PMNote { get; set; }
         public string DMNote { get; set; }
+        public UserLevel_ResourceRequest Level { get; set; }
+        public int Quantity { get; set; }
+        public Priority Priority { get; set; }
+        public List<long> SkillIds { get; set; }
     }
 }

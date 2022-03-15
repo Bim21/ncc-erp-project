@@ -24,5 +24,13 @@ namespace ProjectManagement.Entities
         [MaxLength(10000)]        
         public string PMNote { get; set; }
         public string DMNote { get; set; }
+        public bool IsRecruitmentSend { get; set; }
+        public string RecruitmentUrl { get; set; }
+        public UserLevel_ResourceRequest Level { get; set; }
+        public Priority Priority { get; set; }
+
+        public ICollection<ResourceRequestSkill> ResourceRequestSkills { get; set; }
+
+        public ICollection<ProjectUser> ProjectUsers { get; set; }
     }
 }

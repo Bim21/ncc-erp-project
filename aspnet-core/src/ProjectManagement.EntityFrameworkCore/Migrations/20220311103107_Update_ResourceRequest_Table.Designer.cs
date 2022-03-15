@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220311103107_Update_ResourceRequest_Table")]
+    partial class Update_ResourceRequest_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2828,9 +2830,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsFutureActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPool")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModificationTime")

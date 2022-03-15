@@ -16,14 +16,42 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string ProjectName { get; set; }
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }
-        public string StatusName { get; set; }
         public DateTime? TimeDone { get; set; }
+        [ApplySearchAttribute]
         public string PMNote { get; set; }
+        [ApplySearchAttribute]
         public string DMNote { get; set; }
-        public int PlannedNumberOfPersonnel { get; set; }
-        public List<GetSkillDetailDto> UserSkills { get; set; }
-        public long  SumSkill { get; set; }
-        public string KeySkill { get; set; }
-        public long KeyQuantity { get; set; }
+        public List<string> Skills { get; set; }
+        public bool IsRecruitmentSend { get; set; }
+        public string RecruitmentUrl { get; set; }
+        public UserLevel_ResourceRequest Level { get; set; }
+        public Priority Priority { get; set; }
+        public DateTime RequestStartTime { get; set; }
+        public string PlannedEmployee { get; set; }
+        public DateTime? PlannedDate { get; set; }
+        public string StatusName
+        {
+            get
+            {
+                return Enum.GetName(typeof(ResourceRequestStatus), Status);
+            }
+        }
+
+        public string PriorityName
+        {
+            get
+            {
+                return Enum.GetName(typeof(Priority), Priority);
+            }
+        }
+
+        public string LevelName
+        {
+            get
+            {
+                return Enum.GetName(typeof(UserLevel_ResourceRequest), Level);
+            }
+        }
+
     }
 }
