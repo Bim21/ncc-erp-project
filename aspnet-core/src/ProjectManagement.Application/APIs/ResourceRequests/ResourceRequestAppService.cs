@@ -94,7 +94,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             IQueryable<GetResourceRequestDto> query = null;
 
-            if (input.SkillIds.Any())
+            if (input.SkillIds != null && input.SkillIds.Any())
             {
                 var querySkill = WorkScope.GetAll<ResourceRequestSkill>()
                                           .Where(p => input.SkillIds.Contains(p.SkillId));
