@@ -31,3 +31,7 @@ button {
 span {
     height: fit-content;
 }
+
+#pool .fa-edit {
+    font-size: 15px;
+}

@@ -570,6 +570,11 @@ namespace ProjectManagement.Users
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
                     Branch = u.Branch,
+                    UserSkills = (List<UserSkillDto>)u.UserSkills.Select(x => new UserSkillDto
+                    {
+                        SkillId = x.SkillId,
+                        SkillName  = x.Skill.Name
+                    })
                 });
             return await query.ToListAsync();
         }

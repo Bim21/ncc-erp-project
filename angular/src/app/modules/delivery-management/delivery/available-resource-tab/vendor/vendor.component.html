@@ -130,7 +130,7 @@
                                 <td>
                                     <div class="d-flex " style="align-items: center;">
                                         <div style="width: 90%;">
-                                            <div *ngFor="let plan of item.projectUserPlans" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
+                                            <div *ngFor="let plan of item.planProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
                                                 <span [ngClass]="plan.onHover?'on-hover-plan':''">
                           <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date: 'dd/MM/yyyy' }}
                         </span>

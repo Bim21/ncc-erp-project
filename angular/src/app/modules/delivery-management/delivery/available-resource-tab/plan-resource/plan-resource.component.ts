@@ -269,7 +269,7 @@ export class PlanResourceComponent
       (result: boolean) => {
         if (result) {
           this.subscription.push(
-            this.availableRerourceService.CancelResourcePlan(projectUser.projectUserId).subscribe(rs => {
+            this.availableRerourceService.CancelResourcePlan(projectUser.id).subscribe(rs => {
               this.refresh()
               abp.notify.success("Cancel plan for user")
             })
