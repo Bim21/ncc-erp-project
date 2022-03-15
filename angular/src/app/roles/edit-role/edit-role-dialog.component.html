@@ -100,8 +100,8 @@
         <tab class="tab-user" [heading]="'Users' | localize" class="pt-3 px-2 test" style="height : auto !important; width: 100%;">
           <div class="row mt-2">
             <div class="col-10">
-              <div class="row">
-                <div class="col-2">
+              <div class="row form-search-role">
+                <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Branch</mat-label>
                     <mat-select [(value)]='userBranchForFilter' (selectionChange)="searchMember()">
@@ -115,7 +115,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-2">
+                <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Type</mat-label>
                     <mat-select [(value)]='userTypeForFilter' (selectionChange)="searchMember()">
@@ -126,7 +126,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-2">
+                <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Level</mat-label>
                     <mat-select [(value)]='userLevelForFilter' (selectionChange)="searchMember()">
@@ -137,7 +137,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-6">
+                <div class="col-md-6">
                   <mat-form-field>
                     <input type="text" matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
                       name="searchMember" (keyup)="searchMember()">
