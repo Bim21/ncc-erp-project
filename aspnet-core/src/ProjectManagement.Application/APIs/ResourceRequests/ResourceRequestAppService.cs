@@ -92,15 +92,39 @@ namespace ProjectManagement.APIs.ResourceRequests
         PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
-            var querySkill = WorkScope.GetAll<ResourceRequestSkill>();
+            IQueryable<GetResourceRequestDto> query = null;
 
             if (input.SkillIds.Any())
-                querySkill = querySkill.Where(p => input.SkillIds.Contains(p.SkillId));
+            {
+                var querySkill = WorkScope.GetAll<ResourceRequestSkill>()
+                                          .Where(p => input.SkillIds.Contains(p.SkillId));
 
-            var queryRequest = WorkScope.GetAll<ResourceRequest>();
-
-            var query = from request in queryRequest
+                query = from request in WorkScope.GetAll<ResourceRequest>()
                         join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId
+                            select new GetResourceRequestDto
+                            {
+                                DMNote = request.DMNote,
+                                Id = request.Id,
+                                IsRecruitmentSend = request.IsRecruitmentSend,
+                                Level = request.Level,
+                                Name = request.Name,
+                                ProjectName = request.Project.Name,
+                                PMNote = request.PMNote,
+                                Priority = request.Priority,
+                                ProjectId = request.ProjectId,
+                                RecruitmentUrl = request.RecruitmentUrl,
+                                TimeNeed = request.TimeNeed,
+                                TimeDone = request.TimeDone,
+                                Skills = request.ResourceRequestSkills.Select(p => p.Skill.Name).ToList(),
+                                Status = request.Status,
+                                PlannedDate = request.ProjectUsers.Select(x => x.StartTime).FirstOrDefault(),
+                                PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
+                                RequestStartTime = request.CreationTime
+                            };
+            }
+            else
+            {
+                query = from request in WorkScope.GetAll<ResourceRequest>()
                         select new GetResourceRequestDto
                         {
                             DMNote = request.DMNote,
@@ -121,6 +145,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
                             RequestStartTime = request.CreationTime
                         };
+            }
 
             return await query.GetGridResult(query, input);
         }
@@ -720,7 +745,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             {
                 var rs = await WorkScope.GetAsync<ResourceRequestSkill>(skillId);
                 if (rs != null)
-                    await WorkScope.DeleteAsync(rs);
+                    await WorkScope.SoftDeleteAsync(rs);
             }
 
             SendKomuNotify(model.Name, project.Name, model.Status);
@@ -786,8 +811,15 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (resourceRequest)
                 throw new UserFriendlyException("Resource Request can not delete !");
 
+            var resourceRequestSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(p => p.ResourceRequestId == resourceRequestId);
+            foreach (var requestSkill in resourceRequestSkills)
+            {
+                await WorkScope.SoftDeleteAsync(requestSkill);
+            }
+
             await WorkScope.DeleteAsync<ResourceRequest>(resourceRequestId);
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_CreateSkill, PermissionNames.PmManager_ResourceRequest_CreateSkill)]
         public async Task<ResourceRequestSkillDto> CreateSkill(ResourceRequestSkillDto input)
@@ -807,6 +839,89 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("Resource Request Skill can not delete !");
 
             await WorkScope.DeleteAsync<ResourceRequestSkill>(resourceRequestSkillId);
+        }
+
+        [HttpGet]
+        public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long resourceRequestId)
+        {
+            await Task.CompletedTask;
+            var projectUser = WorkScope.GetAll<ProjectUser>()
+                                        .Where(p => p.ResourceRequestId == resourceRequestId && !p.IsDeleted)
+                                        .FirstOrDefault();
+            if (projectUser == null)
+                return new ResourceRequestPlanDto() { ResourceRequestId = resourceRequestId };
+            else
+                return new ResourceRequestPlanDto()
+                {
+                    Id = projectUser.Id,
+                    UserId = projectUser.UserId,
+                    JoinDate = projectUser.StartTime,
+                    ResourceRequestId = resourceRequestId
+                };
+        }
+
+        [HttpPost]
+        public async Task<ResourceRequestPlanDto> CreateResourceRequestPlan(ResourceRequestPlanDto model)
+        {
+            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
+
+            if (resourceRequest == null)
+                throw new UserFriendlyException("Invalid resource request");
+
+            if (model.UserId == null)
+                throw new UserFriendlyException("Select user");
+
+            if (model.JoinDate == null)
+                throw new UserFriendlyException("Specify join date");
+
+            var projectUser = new ProjectUser()
+            {
+                IsDeleted = false,
+                ResourceRequestId = model.ResourceRequestId,
+                UserId = (long)model.UserId,
+                ProjectId = resourceRequest.ProjectId,
+                IsFutureActive = true
+            };
+
+            model.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
+
+            return model;
+        }
+
+        [HttpPost]
+        public async Task<ResourceRequestPlanDto> UpdateResourceRequestPlan(ResourceRequestPlanDto model)
+        {
+            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
+
+            if (resourceRequest == null)
+                throw new UserFriendlyException("Invalid resource request");
+
+            if (model.UserId == null)
+                throw new UserFriendlyException("Select user");
+
+            if (model.JoinDate == null)
+                throw new UserFriendlyException("Specify join date");
+
+            var projectUser = WorkScope.Get<ProjectUser>((long)model.Id);
+
+            projectUser.UserId = (long)model.UserId;
+            projectUser.StartTime = (DateTime)model.JoinDate;
+            projectUser.IsFutureActive = model.IsFutureActive;
+
+            await WorkScope.UpdateAsync(projectUser);
+
+            return model;
+        }
+
+        [HttpDelete]
+        public async Task DeleteResourceRequestPlan(long id)
+        {
+            var projectUser = WorkScope.Get<ProjectUser>(id);
+
+            if (projectUser == null)
+                throw new UserFriendlyException("Invalid plan");
+
+            await WorkScope.SoftDeleteAsync(projectUser);
         }
         #region PRIVATE API
         private async Task ChangeProjectUserStatus(long projectUserId, long projectId, long userId)
