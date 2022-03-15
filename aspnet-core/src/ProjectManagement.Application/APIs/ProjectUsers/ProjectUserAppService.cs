@@ -106,9 +106,9 @@ namespace ProjectManagement.APIs.ProjectUsers
         [AbpAuthorize()]
         public async Task<List<UserOfProjectDto>> GetAllPlannedUserByProject(long projectId)
         {
-            var query = await  _resourceManager.QueryPlansOfProject(projectId);
-
-            return await query.ToListAsync();
+            var activeReportId = await _resourceManager.GetActiveReportId();
+            var query = _resourceManager.QueryPlansOfProject(projectId);
+            return await query.Where(x => x.PMReportId == activeReportId).ToListAsync();
         }
 
         [HttpGet]

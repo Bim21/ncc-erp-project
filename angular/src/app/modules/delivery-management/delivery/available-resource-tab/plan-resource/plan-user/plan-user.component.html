@@ -2,33 +2,16 @@
     <abp-modal-header title="Plan for user: {{planUser.fullName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
-        <!-- <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="pm">
-                Sử dụng nhân sự:
-            </label>
-            <div class="col-md-9">
-                <div style="max-width: 260px;">
-                    <mat-radio-group [(ngModel)]="planUser.percentUsage" aria-label="Select an option" name="allocatePercentageDropdown">
-                        <mat-radio-button [value]="100">Sử dụng</mat-radio-button>
-                        <br/>
-                        <mat-radio-button [value]="0">Không sử dụng</mat-radio-button>
-                      </mat-radio-group>
-                </div>
-            </div>
-        </div> -->
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Project:
             </label>
             <div class="col-md-9">
-                <mat-form-field class="mt-2" appearance="outline" style =width:250px>
-                    <mat-select name="projectId" #projectIdValid="ngModel" placeholder="Select project" required
-                        [(ngModel)]="planUser.projectId">
-                        <mat-form-field class="w-100 px-3 "
-                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                        <input matInput [(ngModel)]="searchProject" name="searchProjectName" placeholder="Search" #search (keydown)="$event.stopPropagation()"
-                        >{{search.focus()}}
-                    </mat-form-field>
+                <mat-form-field class="mt-2" appearance="outline" style=width:250px>
+                    <mat-select name="projectId" #projectIdValid="ngModel" placeholder="Select project" required [(ngModel)]="planUser.projectId">
+                        <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                            <input matInput [(ngModel)]="searchProject" name="searchProjectName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
+                        </mat-form-field>
                         <ng-container *ngFor="let project of listProject |listFilter: 'name'  :searchProject">
                             <mat-option [value]="project.id">
                                 {{project.name}}
@@ -36,8 +19,7 @@
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
-                <mat-error class="mt-1" *ngIf="projectIdValid.hasError('required') && projectIdValid.touched"
-                    style="font-size: 13px;">
+                <mat-error class="mt-1" *ngIf="projectIdValid.hasError('required') && projectIdValid.touched" style="font-size: 13px;">
                     This field is required
                 </mat-error>
             </div>
@@ -48,21 +30,42 @@
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline">
-                    <input placeholder="Choose date" matInput [matDatepicker]="picker" name="startDate"
-                        [(ngModel)]="planUser.startTime" #timeStart="ngModel" required />
+                    <input placeholder="Choose date" matInput [matDatepicker]="picker" name="startDate" [(ngModel)]="planUser.startTime" #timeStart="ngModel" required />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
-                <mat-error class="mt-1" *ngIf="timeStart.hasError('required') && timeStart.touched"
-                    style="font-size: 13px;">
+                <mat-error class="mt-1" *ngIf="timeStart.hasError('required') && timeStart.touched" style="font-size: 13px;">
                     This field is required
                 </mat-error>
             </div>
         </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="isPool">
+                Join/Out:
+            </label>
+            <div class="col-md-9">
+                <mat-radio-group [(ngModel)]="planUser.isPool" aria-label="Select an option" name="isPool">
+                    <mat-radio-button class="mt-2 mr-3" [value]="100">Join</mat-radio-button>
+                    <mat-radio-button [value]="0">Out</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="allocatePercentage">
+                Work type:
+            </label>
+            <div class="col-md-9">
+                <mat-radio-group [ngModelOptions]="{standalone: true}" [(ngModel)]="planUser.allocatePercentage" aria-label="Select an option" name="allocatePercentage">
+                    <mat-radio-button class="mt-2 mr-3" [value]="false">Offical</mat-radio-button>
+                    <mat-radio-button [value]="true">Tempt</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
     </div>
-    <div align="end" class="row justify-content-end">
+    <div class="row justify-content-end">
         <button class="btn btn-secondary mr-2" mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary" [disabled]="!resourceRequestForm.valid || isLoading"
-            (click)="SaveAndClose()">Save</button>
+        <button class="btn btn-primary" [disabled]="!resourceRequestForm.valid || isLoading" (click)="SaveAndClose()">Plan</button>
     </div>
+
 </form>

@@ -3,6 +3,7 @@ import { ProjectUserService } from '@app/service/api/project-user.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
 import * as moment from 'moment';
+import { PMReportProjectService } from '@app/service/api/pmreport-project.service';
 
 @Component({
   selector: 'app-confirm-popup',
@@ -10,12 +11,13 @@ import * as moment from 'moment';
   styleUrls: ['./confirm-popup.component.css']
 })
 export class ConfirmPopupComponent implements OnInit {
-  public startDate 
+  public startDate
   public user
   public title: string = ""
   public confirmMessage: string = ""
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-    private projectUserService: ProjectUserService, private dialogRef: MatDialogRef<ConfirmPopupComponent>) { }
+    private projectUserService: ProjectUserService, private pmReportProService:PMReportProjectService,
+     private dialogRef: MatDialogRef<ConfirmPopupComponent>) { }
 
   ngOnInit(): void {
     this.user = this.data.user
@@ -23,7 +25,7 @@ export class ConfirmPopupComponent implements OnInit {
     if (this.data.type === 'confirmJoin') {
       this.title = `Confirm user: <strong>${this.user.fullName}</strong> <strong class ="text-success">join project</strong>`
     }
-    else if( this.data.type === 'confirmOut'){
+    else if (this.data.type === 'confirmOut') {
       this.title = `Confirm user: <strong>${this.user.fullName}</strong> <strong class="text-success">Out project</strong>`
     }
   }
@@ -42,10 +44,18 @@ export class ConfirmPopupComponent implements OnInit {
             </div>`
         , `   `, (rs) => {
           if (rs) {
-            this.projectUserService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
-              abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-              this.dialogRef.close(true)
-            })
+            if (this.data.page == "weekly") {
+              this.pmReportProService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.pmReportProService.handleError)).subscribe(rs => {
+                abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+                this.dialogRef.close(true)
+              })
+            }
+            else {
+              this.projectUserService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+                abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+                this.dialogRef.close(true)
+              })
+            }
           }
         },
         true
@@ -54,10 +64,22 @@ export class ConfirmPopupComponent implements OnInit {
     else {
       abp.message.confirm(`Confirm user <strong>${this.user.fullName}</strong> <strong class="text-success">join</strong> Project`, "", rs => {
         if (rs) {
-          this.projectUserService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
-            this.dialogRef.close(true)
-            abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-          })
+
+          if (this.data.page == "weekly") {
+            this.pmReportProService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.pmReportProService.handleError)).subscribe(rs => {
+              this.dialogRef.close(true)
+              abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+            })
+          }
+          else {
+            this.projectUserService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+              this.dialogRef.close(true)
+              abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+            })
+
+          }
+
+
         }
       }, true)
     }

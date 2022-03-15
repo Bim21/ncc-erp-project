@@ -387,17 +387,21 @@ namespace ProjectManagement.Services.ResourceManager
 
             var activeReportId = await GetActiveReportId();
 
-            presentPU.PU.Status = ProjectUserStatus.Past;
-            presentPU.PU.PMReportId = activeReportId;
 
-            await _workScope.UpdateAsync(presentPU.PU);
+            if(input.ReleaseDate.Date <= DateTimeUtils.GetNow())
+            {
+                presentPU.PU.Status = ProjectUserStatus.Past;
+                presentPU.PU.PMReportId = activeReportId;
 
+                await _workScope.UpdateAsync(presentPU.PU);
+            }
             var releasePU = new ProjectUser
             {
                 UserId = presentPU.PU.UserId,
                 IsPool = presentPU.PU.IsPool,
                 Status = input.ReleaseDate.Date <= DateTimeUtils.GetNow() ? ProjectUserStatus.Present : ProjectUserStatus.Future,
                 ProjectId = presentPU.PU.ProjectId,
+                ProjectRole = presentPU.PU.ProjectRole,
                 PMReportId = activeReportId,
                 AllocatePercentage = 0,
                 StartTime = input.ReleaseDate,
@@ -419,14 +423,11 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
-        public async Task<IQueryable<UserOfProjectDto>> QueryPlansOfProject(long projectId)
+        public IQueryable<UserOfProjectDto> QueryPlansOfProject(long projectId)
         {
-            var activeReportId = await GetActiveReportId();
-
             var q = QueryUsersOfProject(projectId)
                 .Where(x => x.PUStatus == ProjectUserStatus.Future)
-                .Where(x => x.PMReportId == activeReportId)
-                .OrderByDescending(x => x.StartTime); ;
+                .OrderByDescending(x => x.StartTime);
 
             return q;
 
@@ -754,12 +755,14 @@ namespace ProjectManagement.Services.ResourceManager
                                ProjectRole = pu.ProjectRole,
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
+                               Id = pu.Id,
                            })
                            .ToList(),
 
                            PoolProjects = u.ProjectUsers
                            .Where(pu => pu.Status == ProjectUserStatus.Present)
                            .Where(pu => pu.IsPool)
+                           .Where(pu => pu.AllocatePercentage > 0)
                            .Where(pu => pu.Project.Status != ProjectStatus.Closed)
                            .Select(pu => new ProjectOfUserDto
                            {
@@ -767,6 +770,7 @@ namespace ProjectManagement.Services.ResourceManager
                                ProjectRole = pu.ProjectRole,
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
+                               Id = pu.Id,
                            })
                            .ToList(),
 

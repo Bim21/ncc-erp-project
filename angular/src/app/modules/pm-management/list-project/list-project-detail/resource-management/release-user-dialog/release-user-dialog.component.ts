@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
 import * as moment from 'moment';
 import { ProjectUserService } from '@app/service/api/project-user.service';
+import { PMReportProjectService } from '@app/service/api/pmreport-project.service';
 
 @Component({
   selector: 'app-release-user-dialog',
@@ -13,7 +14,8 @@ export class ReleaseUserDialogComponent implements OnInit {
 
   public releaseDate: any = new Date()
   public note: string = ""
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private projectUserService: ProjectUserService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private pmReportProService:PMReportProjectService,
+   private projectUserService: ProjectUserService,
     public dialogRef: MatDialogRef<ReleaseUserDialogComponent>) { }
 
   ngOnInit(): void {
@@ -28,10 +30,18 @@ export class ReleaseUserDialogComponent implements OnInit {
         projectUserId: this.data.user.id,
         startTime: moment(this.releaseDate).format("YYYY-MM-DD"),
       }
-      this.projectUserService.ConfirmOutProject(requestBody).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
-        abp.notify.success(`confirmed for user ${this.data.user.fullName} out project`)
-        this.dialogRef.close(true)
-      })
+      if (this.data.page == "weekly"){
+        this.pmReportProService.ConfirmOutProject(requestBody).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+          abp.notify.success(`confirmed for user ${this.data.user.fullName} out project`)
+          this.dialogRef.close(true)
+        })
+      }
+      else{
+        this.projectUserService.ConfirmOutProject(requestBody).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+          abp.notify.success(`confirmed for user ${this.data.user.fullName} out project`)
+          this.dialogRef.close(true)
+        })
+      }
     }
     else {
       let requestBody = {

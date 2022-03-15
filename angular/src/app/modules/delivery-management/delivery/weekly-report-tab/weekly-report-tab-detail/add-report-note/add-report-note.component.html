@@ -11,8 +11,8 @@
               </mat-form-field>
         </div>
     </div>
-    <div style="background-color: white;" align="end" class="d-flex justify-content-end" >
-        <button class="btn btn-secondary cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+    <div style="background-color: white;" align="end" class="d-flex justify-content-between" >
+        <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button class="btn btn-primary" (click)="saveAndClose()" 
             [disabled]="!reportNote.valid || isLoading">Save</button>
     </div>

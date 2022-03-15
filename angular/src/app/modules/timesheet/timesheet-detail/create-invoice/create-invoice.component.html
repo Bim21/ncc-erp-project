@@ -27,7 +27,7 @@
 
     </div>
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
-        <button class="btn btn-secondary cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+        <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
         <button *ngIf="data.title !=='Export Invoice'" mat-raised-button color="primary" class="saving-btn" mat-button
             [disabled]="!invoiceForm.form.valid ||isLoading" (click)="SaveAndClose()">Save</button>
         <button *ngIf="data.title =='Export Invoice'" mat-raised-button color="primary" class="saving-btn" mat-button

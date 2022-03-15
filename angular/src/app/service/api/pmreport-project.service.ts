@@ -16,10 +16,10 @@ export class PMReportProjectService extends BaseApiService {
     super(http);
   }
   public getChangesDuringWeek(projectId: number, pmReportId: number): Observable<any> {
-    return this.http.get<any>(this.rootUrl + `/ResourceChangesDuringTheWeek?projectId=${projectId}&pmReportId=${pmReportId}`);
+    return this.http.get<any>(this.rootUrl + `/GetchangedResourceByPmReport?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
   public getChangesInFuture(projectId: number, pmReportId: number): Observable<any> {
-    return this.http.get<any>(this.rootUrl + `/ResourceChangesInTheFuture?projectId=${projectId}&pmReportId=${pmReportId}`);
+    return this.http.get<any>(this.rootUrl + `/GetPlannedResourceByPmReport?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
   public GetAllPmReportProjectForDropDown(): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllPmReportProjectForDropDown');
@@ -65,4 +65,26 @@ export class PMReportProjectService extends BaseApiService {
     return this.http.post<any>(this.rootUrl + `/GetWorkingTimeFromTimesheet?pmReportProjectId=${pmReportProjectId}&startTime=${startTime}&endTime=${endTime}`, {});
   }
 
+  
+  public CancelResourcePlan(projectUserId: number) {
+    return this.http.delete(this.rootUrl + `/CancelResourcePlan?projectUserId=${projectUserId}`)
+  }
+
+
+  public ConfirmOutProject(input: any) {
+    return this.http.post(this.rootUrl + `/ConfirmOutProject`, input)
+
+  }
+  public ConfirmJoinProject(projectUserId: number, startTime: any) {
+    return this.http.get(this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`)
+  }
+
+
+  public EditProjectUserPlan( input:any) {
+    return this.http.post(this.rootUrl + `/EditProjectUserPlan`,input)
+  }
+
+  public PlanNewResourceToProject( input:any) {
+    return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
+  }
 }
