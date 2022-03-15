@@ -21,7 +21,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string PMNote { get; set; }
         [ApplySearchAttribute]
         public string DMNote { get; set; }
-        public List<string> Skills { get; set; }
+        public List<GetResourceRequestDto_SkillInfo> Skills { get; set; }
         public bool IsRecruitmentSend { get; set; }
         public string RecruitmentUrl { get; set; }
         public UserLevel_ResourceRequest Level { get; set; }
@@ -52,6 +52,12 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
                 return Enum.GetName(typeof(UserLevel_ResourceRequest), Level);
             }
         }
+    }
 
+    public class GetResourceRequestDto_SkillInfo
+    {
+        public long SkillId { get; set; }
+
+        public string SkillName { get; set; }
     }
 }
