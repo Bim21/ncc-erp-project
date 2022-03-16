@@ -749,7 +749,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<ResourceRequestCancelDto> Cancel(ResourceRequestCancelDto model)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
-            if(resourceRequest == null)
+            if (resourceRequest == null)
                 throw new UserFriendlyException("Request doesn't exist");
 
             resourceRequest.Status = ResourceRequestStatus.CANCELLED;
@@ -876,16 +876,21 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (resourceRequest == null)
                 throw new UserFriendlyException("Invalid resource request");
 
-            if (model.JoinDate == null)
-                throw new UserFriendlyException("Specify join date");
+            var reportProject = WorkScope.GetAll<PMReportProject>().Where(p => p.ProjectId == resourceRequest.ProjectId).FirstOrDefault();
 
             var projectUser = new ProjectUser()
             {
-                IsDeleted = false,
-                ResourceRequestId = model.ResourceRequestId,
                 UserId = model.UserId,
                 ProjectId = resourceRequest.ProjectId,
-                IsFutureActive = true
+                ProjectRole = ProjectUserRole.DEV,
+                AllocatePercentage = 100,
+                StartTime = resourceRequest.TimeNeed,
+                Status = ProjectUserStatus.Future,
+                IsExpense = false,
+                ResourceRequestId = model.ResourceRequestId,
+                PMReportId = reportProject.PMReportId,
+                IsFutureActive = true,
+                IsPool = false
             };
 
             model.ProjectUserId = await WorkScope.InsertAndGetIdAsync(projectUser);
@@ -898,7 +903,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             var projectUser = WorkScope.Get<ProjectUser>(model.ProjectUserId);
 
-            if(projectUser == null)
+            if (projectUser == null)
                 throw new UserFriendlyException($"Project user not found with id : {model.ProjectUserId}");
 
             projectUser.UserId = model.UserId;
@@ -925,12 +930,12 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             var query = WorkScope.GetAll<User>();
 
-            if(!string.IsNullOrWhiteSpace(keyword))
+            if (!string.IsNullOrWhiteSpace(keyword))
             {
                 keyword = keyword.Trim().ToLower();
 
-                query = query.Where(p=> p.UserName.ToLower().Contains(keyword) 
-                                        || p.Surname.ToLower().Contains(keyword) 
+                query = query.Where(p => p.UserName.ToLower().Contains(keyword)
+                                        || p.Surname.ToLower().Contains(keyword)
                                         || p.FullName.ToLower().Contains(keyword)
                                         || p.EmailAddress.ToLower().Contains(keyword));
             }
