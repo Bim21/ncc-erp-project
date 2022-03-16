@@ -745,6 +745,22 @@ namespace ProjectManagement.APIs.ResourceRequests
             return model;
         }
 
+        [HttpPost]
+        public async Task<ResourceRequestCancelDto> Cancel(ResourceRequestCancelDto model)
+        {
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
+            if(resourceRequest == null)
+                throw new UserFriendlyException("Request doesn't exist");
+
+            resourceRequest.Status = ResourceRequestStatus.CANCELLED;
+
+            await WorkScope.UpdateAsync(resourceRequest);
+
+            SendKomuNotify(resourceRequest.Name, resourceRequest.Project.Name, resourceRequest.Status);
+
+            return model;
+        }
+
         private async void SendKomuNotify(string requestName, string projectName, ResourceRequestStatus requestStatus)
         {
             var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
@@ -838,14 +854,14 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             await Task.CompletedTask;
             var projectUser = WorkScope.GetAll<ProjectUser>()
-                                        .Where(p => p.ResourceRequestId == resourceRequestId && !p.IsDeleted)
+                                        .Where(p => p.ResourceRequestId == resourceRequestId)
                                         .FirstOrDefault();
             if (projectUser == null)
-                return new ResourceRequestPlanDto() { ResourceRequestId = resourceRequestId };
+                return null;
             else
                 return new ResourceRequestPlanDto()
                 {
-                    Id = projectUser.Id,
+                    ProjectUserId = projectUser.Id,
                     UserId = projectUser.UserId,
                     JoinDate = projectUser.StartTime,
                     ResourceRequestId = resourceRequestId
@@ -860,9 +876,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (resourceRequest == null)
                 throw new UserFriendlyException("Invalid resource request");
 
-            if (model.UserId == null)
-                throw new UserFriendlyException("Select user");
-
             if (model.JoinDate == null)
                 throw new UserFriendlyException("Specify join date");
 
@@ -870,12 +883,12 @@ namespace ProjectManagement.APIs.ResourceRequests
             {
                 IsDeleted = false,
                 ResourceRequestId = model.ResourceRequestId,
-                UserId = (long)model.UserId,
+                UserId = model.UserId,
                 ProjectId = resourceRequest.ProjectId,
                 IsFutureActive = true
             };
 
-            model.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
+            model.ProjectUserId = await WorkScope.InsertAndGetIdAsync(projectUser);
 
             return model;
         }
@@ -883,22 +896,13 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpPost]
         public async Task<ResourceRequestPlanDto> UpdateResourceRequestPlan(ResourceRequestPlanDto model)
         {
-            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
+            var projectUser = WorkScope.Get<ProjectUser>(model.ProjectUserId);
 
-            if (resourceRequest == null)
-                throw new UserFriendlyException("Invalid resource request");
+            if(projectUser == null)
+                throw new UserFriendlyException($"Project user not found with id : {model.ProjectUserId}");
 
-            if (model.UserId == null)
-                throw new UserFriendlyException("Select user");
-
-            if (model.JoinDate == null)
-                throw new UserFriendlyException("Specify join date");
-
-            var projectUser = WorkScope.Get<ProjectUser>((long)model.Id);
-
-            projectUser.UserId = (long)model.UserId;
-            projectUser.StartTime = (DateTime)model.JoinDate;
-            projectUser.IsFutureActive = model.IsFutureActive;
+            projectUser.UserId = model.UserId;
+            projectUser.StartTime = model.JoinDate;
 
             await WorkScope.UpdateAsync(projectUser);
 
@@ -915,6 +919,34 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.SoftDeleteAsync(projectUser);
         }
+
+        [HttpPost]
+        public async Task<List<ResourceRequestPlanUserDto>> GetResourceRequestPlanUser(string keyword)
+        {
+            var query = WorkScope.GetAll<User>();
+
+            if(!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.Trim().ToLower();
+
+                query = query.Where(p=> p.UserName.ToLower().Contains(keyword) 
+                                        || p.Surname.ToLower().Contains(keyword) 
+                                        || p.FullName.ToLower().Contains(keyword)
+                                        || p.EmailAddress.ToLower().Contains(keyword));
+            }
+
+            var result = await query.Select(p => new ResourceRequestPlanUserDto()
+            {
+                UserId = p.Id,
+                Email = p.EmailAddress,
+                Name = p.Name,
+                Surname = p.Surname,
+                Fullname = p.FullName
+            }).ToListAsync();
+
+            return result;
+        }
+
         #region PRIVATE API
         private async Task ChangeProjectUserStatus(long projectUserId, long projectId, long userId)
         {
