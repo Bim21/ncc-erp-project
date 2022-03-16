@@ -20,58 +20,97 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-8 pt-1">
-
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <input type="text" class="form-control" name="keyword" placeholder="Search"
-                                [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-default" (click)="checkAddFilter()">
-                                    <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
-                                        [class.fa-angle-down]="!advancedFiltersVisible"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
-                            <div class="card-body">
-                                <form class="form-horizontal">
-                                    <div class="row">
-                                        <div class="col-md-12 col-xl-12">
-                                            <div class="mb-0">
-                                                <div>
-                                                    <div *ngFor="let item of filterItems; let i = index">
-                                                        <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
-                                                            (deleteDataFilter)="deleteFilterItem(i)"
-                                                            [inputFilters]="FILTER_CONFIG">
-                                                        </app-filter>
+                    <div class="col-4 pt-1">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" name="keyword" placeholder="Search"
+                                        [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+                                            <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                                                [class.fa-angle-down]="!advancedFiltersVisible"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
+                                    <div class="card-body">
+                                        <form class="form-horizontal">
+                                            <div class="row">
+                                                <div class="col-md-12 col-xl-12">
+                                                    <div class="mb-0">
+                                                        <div>
+                                                            <div *ngFor="let item of filterItems; let i = index">
+                                                                <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
+                                                                    (deleteDataFilter)="deleteFilterItem(i)"
+                                                                    [inputFilters]="FILTER_CONFIG">
+                                                                </app-filter>
+                                                            </div>
+                                                            <i style="padding: 0;" class="fas fa-plus-circle ml-3"
+                                                                (click)="addFilter()"></i>
+                                                        </div>
                                                     </div>
-                                                    <i style="padding: 0;" class="fas fa-plus-circle ml-3"
-                                                        (click)="addFilter()"></i>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <label class="ml-4 mr-2 pt-3">Trạng thái:</label>
-                        <mat-form-field appearance="outline" style="width: 250px;">
-                            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
-                                <mat-option [value]="-1">All</mat-option>
-                                <mat-option *ngFor="let status of statusList"
-                                    [value]="APP_ENUM.ResourceRequestStatus[status]">
-                                    {{status}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-md-4 d-flex align-items-center">
+                                <label class="mr-2 mb-0">Trạng thái:</label>
+                                <mat-form-field appearance="outline">
+                                    <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+                                        <mat-option [value]="-1">All</mat-option>
+                                        <mat-option *ngFor="let status of statusList"
+                                            [value]="APP_ENUM.ResourceRequestStatus[status]">
+                                            {{status}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-center">
+                                <label class="mr-2 mb-0">Level:</label>
+                                <mat-form-field appearance="outline">
+                                    <mat-select [(ngModel)]="selectedLevel" (selectionChange)="refresh()">
+                                        <mat-option [value]="-1">All</mat-option>
+                                        <mat-option *ngFor="let level of levelList"
+                                            [value]="APP_ENUM.UserLevel[level]">
+                                            {{level}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-center">
+                                <label class="mr-2 mb-0">Skills:</label>
+                                <mat-form-field appearance="outline">
+                                    <mat-select placeholder="search skill" multiple (selectionChange)="refresh()" [(ngModel)]="skillIds">
+                                        <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
+                                            <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
+                                                <div class="col-4">
+                                                    <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                                                </div>
+                                                <div class="col-8 pt-2">
+                                                    <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
+                                                    <mat-radio-button [value]="false">Or</mat-radio-button>
+                                                </div>
+                                            </mat-radio-group>
+                                        </div>
+                                        <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
+                                            {{skill.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,18 +126,11 @@
                 </div>
                 <!-- <div class="fixTableHead"> -->
                 <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap mt-2">
-                    <thead class="bg-light">
-                        <tr style="border: none;">
-                            <th>STT</th>
-                            <th>Request</th>
-                            <th>Project</th>
-                            <th style="width: 100px;">Nhân sự đã plan</th>
-                            <th style="width: 100px;">Time Need</th>
-                            <th style="width: 100px;">Thông tin request</th>
-                            <th>PM Note</th>
-                            <th>HR,DM Note</th>
-                            <th style="width: 120px;">Trạng thái</th>
-                            <th style="width: 120px;">Actions</th>
+                    <thead>
+                        <tr>
+                            <th *ngFor="let thead of theadTable" [ngStyle]="styleObject(thead)">
+                                {{thead.name}}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -108,53 +140,128 @@
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index">
+                            }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td class="text-left" style="white-space: normal; max-width: 250px;"><span class="hyperlink"
-                                    (click)="showDetail(item)">{{ item.name }}</span></td>
+                            <td class="text-center"><p class="tag" [ngClass]="APP_CONST.priorityRequest[item.priority]">{{item.priorityName}}</p></td>
+                            <!-- <td class="text-left" style="white-space: normal; max-width: 250px;"><span class="hyperlink"
+                                    (click)="showDetail(item)">{{ item.name }}</span></td> -->
                             <td class="text-center">{{item.projectName}}</td>
-                            <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td>
-                            <td class="text-center">{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
                             <td>
                                 <ul class="pl-3  m-0">
-                                    <li *ngFor="let skill of item.userSkills">
-                                        <strong>{{skill.quantity}}</strong> {{skill.skillName}}
+                                    <li *ngFor="let skill of item.skills">
+                                        {{skill.skillName}}
                                     </li>
                                 </ul>
-
+                            </td>
+                            <td class="text-center">
+                                <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.level).style">
+                                    {{item.levelName}}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <b>{{item.requestStartTime | date: "dd/MM/yyyy"}}</b>
+                                <br> 
+                                <small>{{Utils.getTimeHistory(item.requestStartTime)}}</small>
+                            </td>
+                            <!-- <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td> -->
+                            <td class="text-center">{{item.timeNeed |date: "dd/MM/yyyy"}}</td>
+                            <td> 
+                                <b>{{item.plannedEmployee}} </b>
+                                <br>
+                                {{item.plannedDate|date: "dd/MM/yyyy"}}
                             </td>
                             <td style="white-space: normal; max-width: 250px;">
-                                <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                    font-family: sans-serif; align-self:flex-start; line-height: initial;">
-                                      {{item.pmNote}}
-                                  </pre>
+                                <pre 
+                                    class="mb-0 p-0  ml-2" style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                >
+                                    {{item.pmNote}}
+                                    <i class="fa fa-edit"></i>
+                                </pre>
                             </td>
                             <td style="white-space: normal; max-width: 250px;">
-                                <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                font-family: sans-serif; align-self:flex-start; line-height: initial;">
-                                  {{item.dmNote}}
-                              </pre>
+                                <pre 
+                                    class="mb-0 p-0  ml-2" style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                >
+                                    {{item.dmNote}} 
+                                    <i class="fa fa-edit"></i>
+                                </pre>
                             </td>
                             <td class="text-center">
                                 <span
                                     [ngClass]="APP_CONST.resourceRequestStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{
                                     getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
+                                    <br>
+                                <span *ngIf="item.statusName == 'DONE'">{{item.timeDone | date: "dd/MM/yyyy"}}</span>
 
                             </td>
                             <td class="text-center">
-                                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
-                                    class="btn btn-sm bg-secondary mr-1"
-                                    (click)="editRequest(item);$event.stopPropagation()">
-                                    <i class="fas fa-pencil-alt"></i>
-
-                                    Edit
+                                <button mat-button [matMenuTriggerFor]="menu" >
+                                    <i class="fas fa-bars fa-lg"></i>
                                 </button>
-                                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
-                                    class="btn btn-sm bg-danger ml-1" (click)="delete(item);$event.stopPropagation()"
-                                    #deleteBtn>
-                                    <i class="fas fa-trash"></i>
-                                    Delete
-                                </button>
+                                <mat-menu #menu="matMenu" class="p-2">
+                                    <!-- case 1: Status is inprogress -->
+                                    <div *ngIf="item.statusName == 'INPROGRESS'" class="text-center">
+                                        <button 
+                                            mat-button
+                                            *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
+                                            (click)="editRequest(item);"
+                                        >
+                                            Edit
+                                        </button>
+                                        <br>
+                                        <button
+                                            mat-button
+                                            *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                            (click)="delete(item);"
+                                        >
+                                            Delete
+                                        </button>
+                                        <br>
+                                        <button
+                                            mat-button
+                                            (click)="cancelRequest(item);"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <br>
+                                        <button 
+                                            mat-button
+                                            (click)="showModalPlanUser(item)"
+                                        >
+                                            Plan
+                                        </button>
+                                    </div>
+                                    <!-- case 2: Status is inprogress and IsRecruitmentSend is TRUE-->
+                                    <div *ngIf="item.statusName == 'INPROGRESS' && item.isRecruitmentSend" class="text-center">
+                                        <button mat-button>
+                                            View recruitment
+                                        </button>
+                                    </div>
+                                    <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
+                                    <div *ngIf="item.statusName == 'INPROGRESS' && !item.isRecruitmentSend" class="text-center">
+                                        <button mat-button>
+                                            Send recruitment
+                                        </button>
+                                    </div>
+                                    <!-- case 4: Status is done and IsRecruitmentSend is TRUE-->
+                                    <div *ngIf="item.statusName == 'DONE' && item.isRecruitmentSend" class="text-center">
+                                        <button mat-button>
+                                            View recruitment
+                                        </button>
+                                    </div>
+                                    <!-- case 5: Status is cancel-->
+                                    <div *ngIf="item.statusName == 'CANCEL'" class="text-center">
+                                        <button mat-button>
+                                            Delete
+                                        </button>
+                                    </div>
+                                    <!-- case 6: Status is cancel and IsRecruitmentSend is TRUE-->
+                                    <div *ngIf="item.statusName == 'CANCEL' && item.isRecruitmentSend" class="text-center">
+                                        <a mat-button (click)="viewRecruitment()">
+                                            View recruitment
+                                        </a>
+                                    </div>
+                                </mat-menu>
                             </td>
 
                         </tr>

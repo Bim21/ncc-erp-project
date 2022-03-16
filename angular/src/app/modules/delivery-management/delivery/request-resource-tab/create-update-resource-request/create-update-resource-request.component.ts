@@ -20,7 +20,8 @@ import * as _ from 'lodash'
 export class CreateUpdateResourceRequestComponent extends AppComponentBase implements OnInit {
   public isLoading: boolean = false;
   public listProject: ProjectDto[] = [];
-  public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
+  public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
+  public userLevelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
   public resourceRequestDto = {} as RequestResourceDto;
   public title
   public searchProject: string = ""
@@ -29,11 +30,14 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   listSkill: any[] = []
   listSkillDetail: any[] = []
   public selectedSkill: any[] = []
-  constructor(injector: Injector,
+  constructor(
+    injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
     private resourceRequestService: DeliveryResourceRequestService, private skillService: SkillService,
-    public dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>) {
+    public dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>,
+  ) 
+  {
     super(injector);
   }
 
@@ -44,17 +48,24 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     this.getallskill();
     
   }
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    
+  }
   addSkill() {
     this.listSkillDetail.push({ pending: true })
     this.isAddingSkill = true
   }
   SaveAndClose() {
     this.isLoading = true;
-    this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
+    // this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
     if (this.resourceRequestDto.timeDone) {
       this.resourceRequestDto.timeDone = moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
     }
     if (this.data.command == "create") {
+      this.resourceRequestDto.id = 0
+      this.resourceRequestDto.status = 0
       this.resourceRequestService.create(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.resourceRequestDto);
@@ -86,7 +97,8 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
         this.listSkillDetail = data.result
         
         let b = this.listSkillDetail.map(item => item.skillId)
-        this.listSkill=  this.temp.filter(item=>  !b.includes(item.id))
+        this.resourceRequestDto.skillIds = b
+        console.log(this.resourceRequestDto.skillIds)
       })
     }
   }

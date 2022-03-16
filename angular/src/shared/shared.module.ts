@@ -128,7 +128,7 @@ import { NgxStarsModule } from 'ngx-stars';
         UserInfoComponent,
         RadioDropdownComponent,
         FileUploadComponent,
-        ListFilterPipe
+        ListFilterPipe,
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -179,7 +179,7 @@ import { NgxStarsModule } from 'ngx-stars';
         FileUploadComponent,
         ListFilterPipe,
         NgxStarsModule,
-        DragDropModule
+        DragDropModule,
     ]
 })
 export class SharedModule {

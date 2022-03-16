@@ -96,8 +96,10 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             if (input.SkillIds != null && input.SkillIds.Any())
             {
-                var querySkill = WorkScope.GetAll<ResourceRequestSkill>()
-                                          .Where(p => input.SkillIds.Contains(p.SkillId));
+                var querySkill = WorkScope.GetAll<ResourceRequestSkill>();
+     
+
+                var queryRequest = WorkScope.GetAll<ResourceRequest>();
 
                 query = from request in WorkScope.GetAll<ResourceRequest>()
                         join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId

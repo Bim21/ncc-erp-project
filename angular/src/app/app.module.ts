@@ -161,6 +161,7 @@ import { UpdateUserRoleComponent } from './users/update-user-role/update-user-ro
 import { ReleaseUserDialogComponent } from './modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
 import { ProjectBillComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/project-bill.component';
 import { ConfirmPopupComponent } from './modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { FormPlanUserComponent } from './modules/delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -304,6 +305,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ReleaseUserDialogComponent,
     ProjectBillComponent,
     ConfirmPopupComponent,
+    FormPlanUserComponent,
   ],
   imports: [
     CommonModule,

@@ -123,4 +123,23 @@ export class DeliveryResourceRequestService extends BaseApiService {
     );
   }
 
+  public async getPlanResource(projecUserId,id){
+    return await this.http.get<any>(this.rootUrl + '/GetResourceRequestPlan?projectUserId='+ projecUserId +'&resourceRequestId=' + id).toPromise()
+  }
+
+  public getPlanResourceUser(): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/GetResourceRequestPlanUser', '')
+  }
+
+  public createPlanUser(data: any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/CreateResourceRequestPlan', data)
+  }
+
+  public updatePlanUser(data: any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/UpdateResourceRequestPlan', data)
+  }
+
+  public deletePlanUser(id: number): Observable<any>{
+    return this.http.delete<any>(this.rootUrl + '/DeleteResourceRequestPlan?Id=' + id)
+  }
 }

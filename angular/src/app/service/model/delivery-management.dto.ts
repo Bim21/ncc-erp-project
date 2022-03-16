@@ -2,15 +2,18 @@ export class RequestResourceDto {
   name: string;
   projectId: number;
   projectName?: string;
-  timeNeed: string;
-  status: number;
+  timeNeed?: string;
+  status?: number;
   statusName?: string;
   timeDone: string;
   pmNote?: string;
   dmNote?: string;
   plannedNumberOfPersonnel?: number;
   id?: number;
-  userSkills?: any;
+  skillIds?: any;
+  level?: any;
+  priority?: any;
+  quantity: number;
 }
 export class ResourceRequestDetailDto {
   userId: number;

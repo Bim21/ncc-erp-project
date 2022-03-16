@@ -36,10 +36,10 @@ export class AppConsts {
         // Future:"badge badge-pill badge-light"
     }
     static resourceRequestStyle ={
-        PENDING: "badge badge-pill badge-primary",
-        DONE: "badge badge-pill badge-secondary",
+        INPROGRESS: "badge badge-pill badge-primary",
+        DONE: "badge badge-pill badge-success",
         CANCELLED: "badge badge-pill badge-danger",
-        APPROVED:"badge badge-pill badge-success",
+        APPROVED:"badge badge-pill badge-secondary",
 
 
 
@@ -145,5 +145,11 @@ export class AppConsts {
         4: "badge bg-warning",
     }
 
+    static readonly priorityRequest = [
+        'bg-secondary',
+        'bg-primary',
+        'bg-success',
+        'bg-danger'
+    ]
 
 }

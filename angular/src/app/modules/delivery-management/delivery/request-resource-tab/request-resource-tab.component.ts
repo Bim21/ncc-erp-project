@@ -1,3 +1,7 @@
+import { AppComponentBase } from 'shared/app-component-base';
+import { async } from '@angular/core/testing';
+import { result } from 'lodash-es';
+import { ResourcePlanDto } from './../../../../service/model/resource-plan.dto';
 import { PERMISSIONS_CONSTANT } from './../../../../constant/permission.constant';
 import { CreateUpdateResourceRequestComponent } from './create-update-resource-request/create-update-resource-request.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,8 +11,12 @@ import { Router } from '@angular/router';
 import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { RequestResourceDto } from './../../../../service/model/delivery-management.dto';
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
+import { SkillDto } from '@app/service/model/list-project.dto';
+import { SkillService } from '@app/service/api/skill.service';
+import { FormPlanUserComponent } from './form-plan-user/form-plan-user.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-request-resource-tab',
@@ -17,31 +25,34 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 })
 export class RequestResourceTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.isLoading = true;
-    let check = false
-    request.filterItems.forEach(item => {
-      if (item.propertyName == "status") {
-        check = true
-        item.value = this.selectedStatus
+    let requestBody:any = request
+    requestBody.skillIds = this.skillIds
+    requestBody.isAndCondition = this.isAndCondition
+    let objFilter = [
+      {name: 'status', isTrue: false, value: this.selectedStatus},
+      {name: 'level', isTrue: false, value: this.selectedLevel},
+    ];
+    objFilter.forEach((item) => {
+      if(!item.isTrue){
+        requestBody.filterItems = this.AddFilterItem(requestBody, item.name, item.value)
+      }
+      if(item.value == -1){
+        requestBody.filterItems = this.clearFilter(requestBody, item.name, "")
+        item.isTrue = true
       }
     })
-    if (check == false) {
-      request.filterItems = this.AddFilterItem(request, "status", this.selectedStatus)
-    }
-    if (this.selectedStatus === -1) {
-      request.filterItems = this.clearFilter(request, "status", "")
-      check = true
-
-    }
-    this.resourceRequestService.getResourcePaging(request, this.selectedOption).pipe(finalize(() => {
+    this.resourceRequestService.getResourcePaging(requestBody, this.selectedOption).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = data.result.items;
       this.tempListRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
-      if (check == false) {
-        request.filterItems = this.clearFilter(request, "status", "")
-      }
+      objFilter.forEach((item) => {
+        if(!item.isTrue){
+          request.filterItems = this.clearFilter(request, item.name, '')
+        }
+      })
+      requestBody.skillIds = null
       this.isLoading = false;
     })
   }
@@ -81,6 +92,25 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public listRequest: RequestResourceDto[] = [];
   public tempListRequest: RequestResourceDto[] = [];
   public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus)
+  public selectedLevel: any = -1
+  public levelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
+  public listSkills: SkillDto[] = [];
+  public isAndCondition:boolean =false;
+  public skillIds:number[]
+  public theadTable: THeadTable[] = [
+    {name: '#'},
+    {name: 'Priority'},
+    {name: 'Project'},
+    {name: 'Skill'},
+    {name: 'Level'},
+    {name: 'Time request'},
+    {name: 'Time need'},
+    {name: 'Planned resource'},
+    {name: 'PM Note'},
+    {name: 'HPM Note'},
+    {name: 'Status'},
+    {name: 'Action'},
+  ]
   DeliveryManagement_ResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
   DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
   DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
@@ -90,12 +120,18 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   constructor(private injector: Injector,
     private resourceRequestService: DeliveryResourceRequestService,
+    private skillService: SkillService,
+    private ref: ChangeDetectorRef,
     private dialog: MatDialog) { super(injector) }
 
   ngOnInit(): void {
+    this.getAllSkills()
     this.refresh();
-
-
+  }
+  ngAfterContentInit(): void {
+    //Called after ngOnInit when the component's or directive's content has been initialized.
+    //Add 'implements AfterContentInit' to the class.
+    this.ref.detectChanges()
   }
   showDetail(item: any) {
     if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)) {
@@ -122,17 +158,16 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   showDialog(command: string, request: any) {
     let resourceRequest = {} as RequestResourceDto;
-    if (command == "edit") {
-      resourceRequest = {
-        name: request.name,
-        projectId: request.projectId,
-        timeNeed: request.timeNeed,
-        status: request.status,
-        timeDone: request.timeDone,
-        id: request.id,
-        pmNote: request.pmNote,
-        dmNote: request.dmNote
-      }
+    resourceRequest = {
+      name: request.name,
+      projectId: request.projectId,
+      priority: request.id ? request.priority : 1,
+      timeDone: request.timeDone,
+      id: request.id ? request.id : null,
+      quantity: request.id ? request.quantity : 1, 
+      skillIds: request.id ? request.skillIds : null,
+      timeNeed: request.id ? request.timeNeed : null,
+      level: request.id ? request.level : null
     }
     const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
       data: {
@@ -152,5 +187,62 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public editRequest(item: any) {
     this.showDialog("edit", item);
   }
+  async showModalPlanUser(item: any){
+    let data = await this.getPlanResource(item);
+    const show = this.dialog.open(FormPlanUserComponent, {
+      data,
+      width: "700px",
+      maxHeight:"90vh"
+    })
+    show.afterClosed().subscribe(result => {
+      this.refresh()
+    });
+  }
+  getAllSkills(){
+    this.skillService.getAll().subscribe((data) => {
+      this.listSkills = data.result;
+      this.skillsParam = data.result.map(item => {
+        return {
+          displayName: item.name,
+          value: item.id
+        }
+      })
+    })
+  }
 
+  styleObject(item: any){
+    return {
+      width: item.width,
+      height: item.height
+    }
+  }
+
+  cancelRequest(id){
+
+  }
+
+  async getPlanResource(item){
+    let data = new ResourcePlanDto();
+    data.projectUserId = item.projectId;
+    data.resourceRequestId = item.id;
+    if(!item.plannedProjectUserId) return data;
+    let res = await this.resourceRequestService.getPlanResource(item.plannedProjectUserId, item.id)
+    data = res.result
+    return data
+  }
+
+  getInforUserPlan(user, date){
+    if(user){
+      return '<b>' + user + '</b>' + ' đã được plan cho request này từ ' + '<b>' + moment(date).format("DD/MM/YYYY") + '</b>';
+    }
+    return ''
+  }
 }
+
+export class THeadTable{
+  name: string;
+  width?: string = 'auto';
+  height?: string = 'auto';
+  backgroud_color?: string;
+}
+
