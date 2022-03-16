@@ -119,7 +119,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             Status = request.Status,
                             PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
                             PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.Id).FirstOrDefault(),
+                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
                             RequestStartTime = request.CreationTime
                         };
             }
@@ -144,7 +144,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             Status = request.Status,
                             PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
                             PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.Id).FirstOrDefault(),
+                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
                             RequestStartTime = request.CreationTime
                         };
             }
