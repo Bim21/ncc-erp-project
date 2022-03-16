@@ -117,8 +117,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                             TimeDone = request.TimeDone,
                             Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Skill.Name }).ToList(),
                             Status = request.Status,
-                            PlannedDate = request.ProjectUsers.Select(x => x.StartTime).FirstOrDefault(),
-                            PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
+                            PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
+                            PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
+                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.Id).FirstOrDefault(),
                             RequestStartTime = request.CreationTime
                         };
             }
@@ -141,8 +142,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                             TimeDone = request.TimeDone,
                             Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Skill.Name }).ToList(),
                             Status = request.Status,
-                            PlannedDate = request.ProjectUsers.Select(x => x.StartTime).FirstOrDefault(),
-                            PlannedEmployee = request.ProjectUsers.Select(x => x.User.FullName).FirstOrDefault(),
+                            PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
+                            PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
+                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.Id).FirstOrDefault(),
                             RequestStartTime = request.CreationTime
                         };
             }
@@ -850,12 +852,10 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpGet]
-        public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long resourceRequestId)
+        public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long projectUserId, long resourceRequestId)
         {
             await Task.CompletedTask;
-            var projectUser = WorkScope.GetAll<ProjectUser>()
-                                        .Where(p => p.ResourceRequestId == resourceRequestId)
-                                        .FirstOrDefault();
+            var projectUser = WorkScope.Get<ProjectUser>(projectUserId);
             if (projectUser == null)
                 return null;
             else

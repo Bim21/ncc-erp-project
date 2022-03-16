@@ -29,6 +29,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public DateTime RequestStartTime { get; set; }
         public string PlannedEmployee { get; set; }
         public DateTime? PlannedDate { get; set; }
+        public long? PlannedProjectUserId { get; set; }
         public string StatusName
         {
             get
