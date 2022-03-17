@@ -27,7 +27,7 @@ export class ReleaseUserDialogComponent implements OnInit {
   confirmRelease() {
     if (this.data.type === 'confirmOut') {
       let requestBody = {
-        projectUserId: this.releaseDate,
+        projectUserId: this.data.user.id,
         startTime: moment(this.releaseDate).format("YYYY-MM-DD"),
       }
       if (this.data.page == "weekly"){

@@ -146,10 +146,24 @@ export class PlanResourceComponent
       }
     }
   }
+
+  // public long ProjectId { get; set; }
+  // public long UserId { get; set; }
+  // public byte PercentUsage { get; set; }
+  // public ProjectUserRole ProjectRole { get; set; }
+  // public DateTime StartTime { get; set; }
+  // public bool IsExpense { get; set; }
+  // public string Note { get; set; }
   showDialogPlanUser(command: string, user: any) {
     let item = {
       userId: user.userId,
       fullName: user.fullName,
+      projectId: user.projectId,
+      projectRole: user.projectRole,
+      startTime: user.startTime,
+      allocatePercentage: user.allocatePercentage,
+      isPool: user.isPool,
+      projectUserId: user.projectUserId
     };
 
     const show = this.dialog.open(PlanUserComponent, {
@@ -189,8 +203,14 @@ export class PlanResourceComponent
   projectHistorUser(user: availableResourceDto) {
     this.showDialogProjectHistoryUser(user);
   }
-  planUser(user: any) {
+  planUser(user: any,) {
     this.showDialogPlanUser('plan', user);
+  }
+  editUserPlan(user: any, projectUser:any) {
+    user.userId = projectUser.userId
+    user.projectUserId = user.id 
+    user.fullName = projectUser.fullName
+    this.showDialogPlanUser('edit', user);
   }
   showUserDetail(userId: any) { }
 
@@ -329,7 +349,7 @@ export class PlanResourceComponent
     plan.fullName = userName
     this.projectUserService.GetAllWorkingProjectByUserId(userId).subscribe(data => {
       let ref = this.dialog.open(ConfirmPlanDialogComponent, {
-        width: '700px',
+        width: '580px',
         data: {
           workingProject: data.result,
           user: plan,

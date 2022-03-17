@@ -32,18 +32,33 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
     this.getAllProject();
-    this.planUser.isPool = false
-    this.planUser.allocatePercentage = 100
+    if (this.data.command != "edit") {
+      this.planUser.startTime = moment(this.tomorrowDate).format("YYYY-MM-DD");
+      this.planUser.isPool = false
+      this.planUser.allocatePercentage = 100
+    }
+    else {
+      this.planUser.startTime = moment(this.planUser.startTime).format("YYYY-MM-DD");
+      this.planUser = this.data.item
+    }
     this.planUser.userId = this.data.item.userId;
     this.planUser.fullName = this.data.item.fullName;
-    this.planUser.startTime = moment(this.planUser.startTime).format("YYYY/MM/DD");
   }
   public SaveAndClose() {
     this.isLoading = true
+    this.planUser.startTime = moment(this.planUser.startTime).format("YYYY-MM-DD");
+    if (this.data.command != "edit") {
       this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
         abp.notify.success("Planed Successfully!");
         this.dialogRef.close(this.planUser);
       }, () => this.isLoading = false);
+    }
+    else {
+      this.availableResourceService.EditProjectUserPlan(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
+        abp.notify.success("Planed Successfully!");
+        this.dialogRef.close(this.planUser);
+      }, () => this.isLoading = false);
+    }
   }
 
   public getAllProject() {

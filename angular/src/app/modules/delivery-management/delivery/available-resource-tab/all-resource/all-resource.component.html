@@ -11,7 +11,8 @@
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
+                            <input type="text" class="form-control" name="keyword" placeholder="Search"
+                                [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                                     <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
@@ -22,11 +23,16 @@
                         <div class="col-3 row justify-content-end">
                             <label for="" style="margin-top: 13px;" class="mr-2">Skills:</label>
                             <mat-form-field style="width: 300px;" appearance="outline">
-                                <mat-select placeholder="search skill" multiple (selectionChange)="refresh()" [(ngModel)]="selectedSkillId">
-                                    <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
-                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
+                                <mat-select placeholder="search skill" multiple (selectionChange)="refresh()"
+                                    [(ngModel)]="selectedSkillId">
+                                    <div style="width: 334px;"
+                                        style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
+                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3  row"
+                                            [(ngModel)]="isAndCondition" (ngModelChange)="refresh()"
+                                            style=" width: 100%;">
                                             <div class="col-4">
-                                                <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                                                <label style=" white-space: nowrap;" class="mt-2 mr-2">Search
+                                                    type:</label>
                                             </div>
                                             <div class="col-8 pt-2">
                                                 <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
@@ -45,7 +51,8 @@
                             </mat-form-field>
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0" (click)="selectedSkillId = null; refresh()"></i>
+                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0"
+                                (click)="selectedSkillId = null; refresh()"></i>
                         </div>
                     </div>
 
@@ -59,10 +66,12 @@
                                 <div class="mb-0">
                                     <div>
                                         <div *ngFor="let item of filterItems; let i = index">
-                                            <app-filter [item]="item" (emitChange)="onEmitChange($event, i)" (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
+                                            <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
+                                                (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
                                             </app-filter>
                                         </div>
-                                        <i style="padding: 0;" class="fas fa-plus-circle ml-3" (click)="addFilter()"></i>
+                                        <i style="padding: 0;" class="fas fa-plus-circle ml-3"
+                                            (click)="addFilter()"></i>
                                     </div>
                                 </div>
 
@@ -121,47 +130,75 @@
                                 </td>
                                 <td>
                                     <p *ngFor="let project of item.workingProjects" class="mb-1">
-                                        <strong class="hover-project-name pointer" (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
+                                        <strong class="hover-project-name pointer"
+                                            (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
                                         </strong>
                                         <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
-                                            {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
-                                        <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date:
+                                            {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>&nbsp;
+                                        <strong
+                                            [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong>&nbsp;
+                                        <span style="font-size: 15px; color: #494d50">{{project.startTime | date:
                                             "dd/MM/yyyy"}}</span>
                                     </p>
-                                    <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!item.isshowProjectHistory" matTooltip="View project history" (click)="getHistoryProjectsByUserId(item)"></i>
-                                    <div *ngIf="item.isshowProjectHistory" [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
-                                        <div *ngIf="item.userProjectHistory && item.userProjectHistory.length > 0" [innerHTML]="item.userProjectHistory" style="white-space: nowrap;"></div>
+                                    <i class=" fas fa-history pointer" style="color: #6b7278;"
+                                        *ngIf="!item.isshowProjectHistory" matTooltip="View project history"
+                                        (click)="getHistoryProjectsByUserId(item)"></i>
+                                    <div *ngIf="item.isshowProjectHistory"
+                                        [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
+                                        <div *ngIf="item.userProjectHistory && item.userProjectHistory.length > 0"
+                                            [innerHTML]="item.userProjectHistory" style="white-space: nowrap;"></div>
 
                                         <p *ngIf="!item.userProjectHistory || item.userProjectHistory.length == 0">
                                             No project history!
                                         </p>
                                     </div>
 
-                                    <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'" *ngIf="item.isshowProjectHistory == true && item.conditionHistory" (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
+                                    <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
+                                        *ngIf="item.isshowProjectHistory == true && item.conditionHistory"
+                                        (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
                                 </td>
                                 <td>
-                                    <div class="d-flex " style="align-items: center;">
-                                        <div style="width: 90%;">
-                                            <div *ngFor="let plan of item.planProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
-                                                <span [ngClass]="plan.onHover?'on-hover-plan':''">
-                                                    <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date:
-                                                    'dd/MM/yyyy' }}
-                                                </span>
-                                                <span style="display: inline-block; width: 10px;">
-                                                    <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
-                                                    || isAllowCancelPlan(plan.creatorUserId))"
-                                                        class="fas fa-times pointer text-danger ml-1"
-                                                        (click)="CancelResourcePlan(plan,item.fullName)"></i></span>
+                                    <div class="d-flex justify-content-between" style="align-items: center;">
+                                        <div>
+                                            <div *ngFor="let plan of item.planProjects"
+                                                (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false"
+                                                style="white-space: nowrap;">
+                                                <button class="btn p-0 text-left text-nowrap"
+                                                    [matMenuTriggerFor]="planMenu">
+                                                    <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                                                        <strong class="mr-1">{{ plan.projectName }}</strong><strong
+                                                            [ngClass]="plan.isPool?'text-secondary' : 'text-primary'"
+                                                            class=" mr-1">
+                                                            {{plan.workType}}</strong> <strong
+                                                            [ngClass]="plan.allocatePercentage > 0?'badge-success' : 'badge-danger'"
+                                                            class="badge mr-1">
+                                                            {{plan.allocatePercentage > 0 ? 'Join' : 'Out'}}</strong> {{
+                                                        plan.startTime | date:
+                                                        'dd/MM/yyyy' }}
+                                                    </span>
+                                                </button>
+                                                <mat-menu #planMenu="matMenu">
+                                                    <button mat-menu-item
+                                                        (click)="confirm(plan, item.userId, item.fullName)"><i
+                                                            class="fas fa-check mr-1 text-success"></i>Confirm</button>
+                                                    <button mat-menu-item
+                                                        (click)="CancelResourcePlan(plan,item.fullName)">
+                                                        <i class="fas fa-times mr-1 text-danger"></i> Cancel
+                                                        plan</button>
+                                                    <button mat-menu-item (click)="editUserPlan(plan,item)"> <i
+                                                            class="fas fa-edit mr-1 text-secondary"></i> Edit</button>
+                                                </mat-menu>
                                             </div>
                                         </div>
-                                        <div style="width: 10%;" class="text-right">
-                                            <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
+                                        <div style="width: 14%;" class="text-right ml-1">
+                                            <i class="fas fa-plus text-primary" (click)="planUser(item)"
+                                                matTooltip="Plan user"></i>
                                         </div>
                                     </div>
 
                                 </td>
                                 <td style="white-space: normal; max-width: 200px;">
-                                    <div class="d-flex" style="align-items: center;">
+                                    <div class="d-flex justify-content-between" style="align-items: center;">
                                         <div style="width: 90%">
                                             <p class="m-0" *ngFor="let skill of item.userSkills">
                                                 - {{skill.skillName}}
@@ -169,7 +206,8 @@
                                             </p>
                                         </div>
                                         <div style="width: 10%; text-align: right;">
-                                            <i class="fas fa-edit" (click)="updateUserSkill(item)" matTooltip="Edit skill"></i>
+                                            <i class="fas fa-edit" (click)="updateUserSkill(item)"
+                                                matTooltip="Edit skill"></i>
                                         </div>
                                     </div>
                                 </td>

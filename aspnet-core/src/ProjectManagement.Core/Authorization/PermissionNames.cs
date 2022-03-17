@@ -307,6 +307,25 @@ namespace ProjectManagement.Authorization
         public const string DeliveryManagement_ProjectUser_Create = "DeliveryManagement.ProjectUser.Create";
         public const string DeliveryManagement_ProjectUser_Update = "DeliveryManagement.ProjectUser.Update";
         public const string DeliveryManagement_ProjectUser_Delete = "DeliveryManagement.ProjectUser.Delete";
+
+
+
+        public const string PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject = "PmManager.ProjectUser.ConfirmMoveEmployeeToOtherProject";
+        public const string PmManager_ProjectUser_ConfirmPickUserFromPoolToProject = "PmManager.ProjectUser.ConfirmPickUserFromPoolToProject";
+
+        public const string PmManager_ProjectUser_ProjectUser_MoveEmployeeToOtherProject = "PmManager.ProjectUser.ProjectUser.MoveEmployeeToOtherProject";
+        public const string PmManager_ProjectUser_ProjectUser_PickUserFromPoolToProject = "PmManager.ProjectUser.ProjectUser.PickUserFromPoolToProject";
+
+
+
+
+        public const string DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject = "DeliveryManagement.ProjectUser.ConfirmMoveEmployeeToOtherProject";
+        public const string DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject = "DeliveryManagement.ProjectUser.ConfirmPickUserFromPoolToProject";
+
+        public const string DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject = "DeliveryManagement.ProjectUser.MoveEmployeeToOtherProject";
+        public const string DeliveryManagement_ProjectUser_PickUserFromPoolToProject = "DeliveryManagement.ProjectUser.PickUserFromPoolToProject";
+
+
     }
 
     public class GrantPermissionRoles
@@ -458,9 +477,14 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_ProjectUser_Create,
                     PermissionNames.PmManager_ProjectUser_Update,
                     PermissionNames.PmManager_ProjectUser_Delete,
+                    PermissionNames.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject,
+                    PermissionNames.PmManager_ProjectUser_ConfirmPickUserFromPoolToProject,
+                    PermissionNames.PmManager_ProjectUser_ProjectUser_MoveEmployeeToOtherProject,
+                    PermissionNames.PmManager_ProjectUser_ProjectUser_PickUserFromPoolToProject,
+                     
 
-                     //PMReportProject
-                    PermissionNames.PmManager_PMReportProject,
+        //PMReportProject
+        PermissionNames.PmManager_PMReportProject,
                     PermissionNames.PmManager_PMReportProject_GetAllByPmReport,
                     PermissionNames.PmManager_PMReportProject_ResourceChangesDuringTheWeek,
                     PermissionNames.PmManager_PMReportProject_ResourceChangesInTheFuture,
@@ -606,6 +630,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.DeliveryManagement_ProjectUser_Create,
                     PermissionNames.DeliveryManagement_ProjectUser_Update,
                     PermissionNames.DeliveryManagement_ProjectUser_Delete,
+                    PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject,
+                    PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject,
+                    PermissionNames.DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject,
+                    PermissionNames.DeliveryManagement_ProjectUser_PickUserFromPoolToProject,
 
                     //Project Milestone
                     PermissionNames.PmManager_ProjectMilestone,
@@ -766,7 +794,16 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Project User" },
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project User" },
                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project User" },
-                 
+                  new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to move employee working on a project to other" },
+                  new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ConfirmPickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to pick employee from POOL to project" },
+                  new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ProjectUser_MoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "move employee working on a project to other" },
+                  new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ProjectUser_PickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "pick employee from POOL to project" },
+
+
+
+
+
+
                   //ProjectUser by DM
                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project User" },
                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_ViewAllByProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Get All By Project" },
@@ -774,6 +811,13 @@ namespace ProjectManagement.Authorization
                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Project User" },
                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project User" },
                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project User" },
+
+                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to move employee working on a project to other" },
+                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to pick employee from POOL to project" },
+                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "move employee working on a project to other" },
+                  new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_PickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "pick employee from POOL to project" },
+
+
 
                   //Check List Category
                   new SystemPermission{ Name =  PermissionNames.CheckList_CheckListCategory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check List Category" },
@@ -1028,6 +1072,10 @@ namespace ProjectManagement.Authorization
                                    new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Project User" },
                                    new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project User" },
                                    new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project User" },
+                                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to move employee working on a project to other" },
+                                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ConfirmPickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to pick employee from POOL to project" },
+                                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ProjectUser_MoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "move employee working on a project to other" },
+                                   new SystemPermission{ Name =  PermissionNames.PmManager_ProjectUser_ProjectUser_PickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "pick employee from POOL to project" },
                             }
                         },
                         //Project File
@@ -1240,6 +1288,11 @@ namespace ProjectManagement.Authorization
                                    new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Project User" },
                                    new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project User" },
                                    new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project User" },
+
+                                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to move employee working on a project to other" },
+                                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm to pick employee from POOL to project" },
+                                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "move employee working on a project to other" },
+                                   new SystemPermission{ Name =  PermissionNames.DeliveryManagement_ProjectUser_PickUserFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "pick employee from POOL to project" },
                             }
                         },
                     }

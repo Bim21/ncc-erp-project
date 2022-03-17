@@ -141,7 +141,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
   }
 
   public AddUserToTempProject( input:any) {
-    return this.http.post(this.rootUrl + `/AddUserToTempProject`,input)
+    return this.http.post(this.rootUrl + `/AddUserFromPoolToTempProject`,input)
   }
 
 

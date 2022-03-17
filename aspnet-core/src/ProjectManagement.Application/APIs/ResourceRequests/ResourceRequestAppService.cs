@@ -406,7 +406,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                 .Where(s => s.Status == ProjectUserStatus.Present)
                 .Where(s => s.AllocatePercentage > 0)
                 .Where(s => s.Project.Status == ProjectStatus.InProgress)
-                .Where(s => s.IsPool)
                 .Any();
 
                 if (!isWorkingTempInProject)
@@ -426,14 +425,15 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
-        [AbpAuthorize()]
-        public async Task AddUserToTempProject(AddResourceToProjectDto input)
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject)]
+        public async Task AddUserFromPoolToTempProject(AddResourceToProjectDto input)
         {
             await _resourceManager.CreatePresentProjectUserAndNofity(input);
         }
 
         [HttpGet]
-        [AbpAuthorize()]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject 
+            ,PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject)]
         public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
         {
             await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
