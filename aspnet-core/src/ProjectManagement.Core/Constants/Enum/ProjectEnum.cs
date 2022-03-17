@@ -90,7 +90,7 @@ namespace ProjectManagement.Constants.Enum
         }
         public enum ResourceRequestStatus
         {
-            INPROGRESS = 0,
+            PENDING = 0,
             DONE = 1,
             CANCELLED = 2,
             APPROVE = 3

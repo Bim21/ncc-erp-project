@@ -94,12 +94,14 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             IQueryable<GetResourceRequestDto> query = null;
 
+            var queryRequest = WorkScope.GetAll<ResourceRequest>();
+
             if (input.SkillIds != null && input.SkillIds.Any())
             {
                 var querySkill = WorkScope.GetAll<ResourceRequestSkill>()
-                                          .Where(p => input.SkillIds.Contains(p.SkillId)); ;
+                                          .Where(p => input.SkillIds.Contains(p.SkillId));
 
-                query = from request in WorkScope.GetAll<ResourceRequest>()
+                query = from request in queryRequest
                         join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId
                         select new GetResourceRequestDto
                         {
@@ -125,7 +127,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
             else
             {
-                query = from request in WorkScope.GetAll<ResourceRequest>()
+                query = from request in queryRequest
                         select new GetResourceRequestDto
                         {
                             DMNote = request.DMNote,
@@ -149,15 +151,162 @@ namespace ProjectManagement.APIs.ResourceRequests
                         };
             }
 
+            if (!string.IsNullOrWhiteSpace(input.SearchText))
+            {
+                var searchText = input.SearchText.ToLower().EmptyIfNull();
+
+                query = query.Where(p => p.Name.ToLower().Contains(searchText)
+                                      || p.ProjectName.ToLower().Contains(searchText)
+                                      || p.PMNote.ToLower().Contains(searchText)
+                                      || p.DMNote.ToLower().Contains(searchText)
+                                   );
+            }
+
+            //Sorting Result
+            var sortText = input.Sort.EmptyIfNull().ToLower();
+
+            if (input.SortDirection == SortDirection.ASC)
+            {
+                switch (sortText)
+                {
+                    case "priority":
+                        {
+                            query = query.OrderBy(p => p.Priority);
+                            break;
+                        }
+                    case "project":
+                        {
+                            query = query.OrderBy(p => p.ProjectName);
+                            break;
+                        }
+                    case "level":
+                        {
+                            query = query.OrderBy(p => p.Level);
+                            break;
+                        }
+                    case "timeneed":
+                        {
+                            query = query.OrderBy(p => p.TimeNeed);
+                            break;
+                        }
+                    case "timerequest":
+                        {
+                            query = query.OrderBy(p => p.RequestStartTime);
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (sortText)
+                {
+                    case "priority":
+                        {
+                            query = query.OrderByDescending(p => p.Priority);
+                            break;
+                        }
+                    case "project":
+                        {
+                            query = query.OrderByDescending(p => p.ProjectName);
+                            break;
+                        }
+                    case "level":
+                        {
+                            query = query.OrderByDescending(p => p.Level);
+                            break;
+                        }
+                    case "timeneed":
+                        {
+                            query = query.OrderByDescending(p => p.TimeNeed);
+                            break;
+                        }
+                    case "timerequest":
+                        {
+                            query = query.OrderByDescending(p => p.RequestStartTime);
+                            break;
+                        }
+                    default:
+                        break;
+                }
+            }
+
             return await query.GetGridResult(query, input);
         }
+
+        [HttpGet]
+        public async Task<List<ResourceRequestSelectListDto>> GetSkills()
+        {
+            var query = WorkScope.GetAll<Skill>()
+                                 .Select(p => new ResourceRequestSelectListDto()
+                                 {
+                                     Id = p.Id,
+                                     Name = p.Name
+                                 });
+
+            return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<List<ResourceRequestSelectListDto>> GetLevels()
+        {
+            await Task.CompletedTask;
+
+            var result = Enum.GetValues(typeof(UserLevel_ResourceRequest))
+                             .Cast<UserLevel_ResourceRequest>()
+                             .Select(p => new ResourceRequestSelectListDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
+
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<List<ResourceRequestSelectListDto>> GetPriorities()
+        {
+            await Task.CompletedTask;
+
+            var result = Enum.GetValues(typeof(Priority))
+                             .Cast<Priority>()
+                             .Select(p => new ResourceRequestSelectListDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
+
+            return result;
+        }
+
+        [HttpGet]
+        public async Task<List<ResourceRequestSelectListDto>> GetStatuses()
+        {
+            await Task.CompletedTask;
+
+            var result = Enum.GetValues(typeof(ResourceRequestStatus))
+                             .Cast<ResourceRequestStatus>()
+                             .Select(p => new ResourceRequestSelectListDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
+
+            return result;
+        }
+
+
 
         [HttpGet]
         public async Task<List<GetResourceRequestDto>> GetAllRequestByProjectId(long projectId)
         {
             var query = WorkScope.GetAll<ResourceRequest>()
                                  .Where(p => p.ProjectId == projectId)
-                                 .OrderByDescending(p=>p.CreationTime)
+                                 .OrderByDescending(p => p.CreationTime)
                                  .Select(p => new GetResourceRequestDto()
                                  {
                                      DMNote = p.DMNote,
@@ -183,8 +332,38 @@ namespace ProjectManagement.APIs.ResourceRequests
             return await query.ToListAsync();
         }
 
+        [HttpGet]
+        public async Task<GetResourceRequestDto> GetResourceRequestById(long requestId)
+        {
+            var query = WorkScope.GetAll<ResourceRequest>()
+                     .Where(p => p.Id == requestId)
+                     .Select(p => new GetResourceRequestDto()
+                     {
+                         DMNote = p.DMNote,
+                         Id = p.Id,
+                         IsRecruitmentSend = p.IsRecruitmentSend,
+                         Level = p.Level,
+                         Name = p.Name,
+                         ProjectName = p.Project.Name,
+                         PMNote = p.PMNote,
+                         Priority = p.Priority,
+                         ProjectId = p.ProjectId,
+                         RecruitmentUrl = p.RecruitmentUrl,
+                         TimeNeed = p.TimeNeed,
+                         TimeDone = p.TimeDone,
+                         Skills = p.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Skill.Name }).ToList(),
+                         Status = p.Status,
+                         PlannedDate = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
+                         PlannedEmployee = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
+                         PlannedProjectUserId = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
+                         RequestStartTime = p.CreationTime
+                     });
+
+            return await query.FirstOrDefaultAsync();
+        }
+
         [HttpPost]
-        public async Task<ResourceRequestDto> CreateRequestByProjectI(ResourceRequestDto model)
+        public async Task<ResourceRequestDto> CreateRequestByProject(ResourceRequestDto model)
         {
             model.Status = ResourceRequestStatus.APPROVE;
 
@@ -766,6 +945,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             model.Status = ResourceRequestStatus.APPROVE;
 
+            var test = ObjectMapper.Map<ResourceRequest>(model);
+
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
                 throw new UserFriendlyException("Project doesn't exist");
@@ -779,7 +960,22 @@ namespace ProjectManagement.APIs.ResourceRequests
             //Create ResourceRequest, amount based on quantity
             for (int i = 0; i < model.Quantity; i++)
             {
-                model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(model));
+                var resourceRequestModel = new ResourceRequest()
+                {
+                    DMNote = model.DMNote,
+                    Level = model.Level,
+                    IsRecruitmentSend = false,
+                    Name = model.Name,
+                    PMNote = model.PMNote,
+                    Priority = model.Priority,
+                    ProjectId = model.ProjectId,
+                    RecruitmentUrl = string.Empty,
+                    Status = model.Status,
+                    TimeDone = model.TimeDone,
+                    TimeNeed = model.TimeNeed
+                };
+
+                model.Id = await WorkScope.InsertAndGetIdAsync(resourceRequestModel);
 
                 //Create ResourceRequestSkill, amount based on Skills selected
                 for (int j = 0; j < model.SkillIds.Count(); j++)
@@ -910,7 +1106,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                         message.AppendLine(link);
                     }
                     break;
-                case ResourceRequestStatus.INPROGRESS:
+                case ResourceRequestStatus.PENDING:
                 default:
                     return;
             }
@@ -932,7 +1128,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("Request doesnt exist");
 
             var projectUser = resourceRequest.ProjectUsers.Count > 0;
-            if(projectUser)
+            if (projectUser)
                 throw new UserFriendlyException("Resource Request can not delete !");
 
             var resourceRequestSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(p => p.ResourceRequestId == resourceRequestId);
