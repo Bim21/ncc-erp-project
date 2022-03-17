@@ -234,6 +234,34 @@ namespace ProjectManagement.APIs.ResourceRequests
             return await Cancel(model);
         }
 
+        [HttpPost]
+        public async Task<ResourceRequestNoteUpdateDto> UpdateRequestPmNote(ResourceRequestNoteUpdateDto model)
+        {
+            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
+            if (resourceRequest == null)
+                throw new UserFriendlyException("Request doesn't exist");
+
+            resourceRequest.PMNote = model.PMNote;
+
+            await WorkScope.UpdateAsync(resourceRequest);
+
+            return model;
+        }
+
+        [HttpPost]
+        public async Task<ResourceRequestNoteUpdateDto> UpdateRequestHpmNote(ResourceRequestNoteUpdateDto model)
+        {
+            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
+            if (resourceRequest == null)
+                throw new UserFriendlyException("Request doesn't exist");
+
+            resourceRequest.DMNote = model.HPMNote;
+
+            await WorkScope.UpdateAsync(resourceRequest);
+
+            return model;
+        }
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail,
             PermissionNames.PmManager_ResourceRequest_GetSkillDetail)]
