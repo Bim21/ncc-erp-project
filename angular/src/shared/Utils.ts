@@ -99,27 +99,54 @@ export class Utils{
 
     public static getTimeHistory(timeHistory: any){
       let now = Date.now()
-      let time = Math.round((now - new Date(timeHistory).getTime())/(1000 * 3600 * 24));
-      if(time < 1){
-        return ''
-      }
-      if(time == 1){
-        return '1 day ago';
-      }
-      else if(time <= 7){
-        return time + ' days ago';
-      }
-      else if(time <= 30){
-        let week = Math.round(time/7)
-        return week > 1 ? week + ' weeks ago' : week + ' week ago'
-      }
-      else if(time <= 365){
-        let month = Math.round(time/30)
-        return month > 1 ? month + ' months ago' : month + ' month ago'
+      let time
+      if(now < new Date(timeHistory).getTime()){
+        time = Math.round((new Date(timeHistory).getTime() - now)/(1000 * 3600 * 24));
+        if(time < 1){
+          return ''
+        }
+        if(time == 1){
+          return '1 in day';
+        }
+        else if(time <= 7){
+          return time + ' in days';
+        }
+        else if(time <= 30){
+          let week = Math.round(time/7)
+          return week > 1 ? week + ' in weeks' : week + ' in week'
+        }
+        else if(time <= 365){
+          let month = Math.round(time/30)
+          return month > 1 ? month + ' in months' : month + ' in month'
+        }
+        else{
+          let year = Math.round(time/365)
+          return year > 1 ? year + ' in years' : year + ' in year'
+        }
       }
       else{
-        let year = Math.round(time/365)
-        return year > 1 ? year + ' years ago' : year + ' year ago'
+        time = Math.round((now - new Date(timeHistory).getTime())/(1000 * 3600 * 24));
+        if(time < 1){
+          return ''
+        }
+        if(time == 1){
+          return '1 day ago';
+        }
+        else if(time <= 7){
+          return time + ' days ago';
+        }
+        else if(time <= 30){
+          let week = Math.round(time/7)
+          return week > 1 ? week + ' weeks ago' : week + ' week ago'
+        }
+        else if(time <= 365){
+          let month = Math.round(time/30)
+          return month > 1 ? month + ' months ago' : month + ' month ago'
+        }
+        else{
+          let year = Math.round(time/365)
+          return year > 1 ? year + ' years ago' : year + ' year ago'
+        }
       }
     }
 

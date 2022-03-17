@@ -63,6 +63,9 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     if (this.resourceRequestDto.timeDone) {
       this.resourceRequestDto.timeDone = moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
     }
+    if(this.resourceRequestDto.timeNeed){
+      this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY-MM-DD")
+    }
     if (this.data.command == "create") {
       this.resourceRequestDto.id = 0
       this.resourceRequestDto.status = 0

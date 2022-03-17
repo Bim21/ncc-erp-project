@@ -111,6 +111,10 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     {name: 'Status'},
     {name: 'Action'},
   ]
+  public isShowModal: string = 'none'
+  public modal_title: string
+  public strNote: string
+  public typePM: string
   DeliveryManagement_ResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
   DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
   DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
@@ -187,6 +191,21 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public editRequest(item: any) {
     this.showDialog("edit", item);
   }
+
+  public openModal(name, typePM, content){
+    this.typePM = typePM
+    this.modal_title = name
+    this.strNote = content
+    this.isShowModal = 'block'
+  }
+
+  public closeModal(){
+    this.isShowModal = 'none'
+  }
+
+  public updateNote(id, note){
+
+  }
   async showModalPlanUser(item: any){
     let data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
@@ -218,7 +237,23 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   cancelRequest(id){
-
+    abp.message.confirm(
+      'Are you sure cancel request?',
+      '',
+      (result) => {
+        if(result){
+          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
+            if(res.success){
+              abp.notify.success('Cancel Request Success!')
+              this.refresh()
+            }
+            else{
+              abp.notify.error(res.result)
+            }
+          })
+        }
+      }
+    )
   }
 
   async getPlanResource(item){
@@ -236,6 +271,21 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       return '<b>' + user + '</b>' + ' đã được plan cho request này từ ' + '<b>' + moment(date).format("DD/MM/YYYY") + '</b>';
     }
     return ''
+  }
+
+  showActionViewRecruitment(status, isRecruitment){
+    if(
+      isRecruitment &&
+      (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE')
+    )
+    {
+      return true
+    }
+    return false
+  }
+
+  viewRecruitment(url){
+    window.open(url, '_blank')
   }
 }
 
