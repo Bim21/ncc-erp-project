@@ -394,6 +394,60 @@ namespace ProjectManagement.APIs.ResourceRequests
         //    return await users.GetGridResult(users, input);
         //}
 
+        [HttpPost]
+        [AbpAuthorize]
+        public async Task PlanEmployeeJoinProject(InputPlanResourceDto input)
+        {
+            if (input.AllocatePercentage <= 0)
+            {
+                var isWorkingTempInProject = WorkScope.GetAll<ProjectUser>()
+                .Where(s => s.UserId == input.UserId)
+                .Where(s => s.ProjectId == input.ProjectId)
+                .Where(s => s.Status == ProjectUserStatus.Present)
+                .Where(s => s.AllocatePercentage > 0)
+                .Where(s => s.Project.Status == ProjectStatus.InProgress)
+                .Where(s => s.IsPool)
+                .Any();
+
+                if (!isWorkingTempInProject)
+                {
+                    throw new UserFriendlyException("This user is not working on this Project, so you can't plan him out");
+                }
+            }
+
+            await _resourceManager.AddFuturePUAndNofity(input);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task ConfirmOutProject(ConfirmOutProjectDto input)
+        {
+            await _resourceManager.ConfirmOutProject(input);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task AddUserToTempProject(AddResourceToProjectDto input)
+        {
+            await _resourceManager.CreatePresentProjectUserAndNofity(input);
+        }
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        {
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task EditProjectUserPlan(EditProjectUserDto input)
+        {
+            await _resourceManager.EditProjectUserPlan(input);
+        }
+
+
+
 
         [HttpPost]
         [AbpAuthorize]

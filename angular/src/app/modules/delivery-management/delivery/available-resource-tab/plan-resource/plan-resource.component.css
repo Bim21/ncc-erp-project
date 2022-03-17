@@ -32,6 +32,7 @@ span {
     height: fit-content;
 }
 
-#pool .fa-edit {
+#pool .fa-edit,
+#pool .fa-plus {
     font-size: 15px;
 }

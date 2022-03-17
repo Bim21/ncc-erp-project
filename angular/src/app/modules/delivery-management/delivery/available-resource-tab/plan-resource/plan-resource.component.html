@@ -76,7 +76,7 @@
                                 <th>Employee</th>
                                 <th style="width: 75px;">History</th>
                                 <th>Planned Projects</th>
-                                <th>Tempt Projects</th>
+                                <th>Temp Project</th>
                                 <th style="width: 150px;">Skills</th>
                                 <th style="min-width: 240px;">Note</th>
                                 <th style="width: 100px;">Start Pool</th>
@@ -116,29 +116,34 @@
 
                                 <td style="white-space: normal;">
                                     <div class="d-flex " style="align-items: center;">
-                                        <div style="width: 90%;">
+                                        <div style="width: 86%;">
 
                                             <div *ngFor="let plan of item.plannedProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
                                                 <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="planMenu">
-                                                <span [ngClass]="plan.onHover?'on-hover-plan':''">
-                                                    <strong>{{ plan.projectName }}</strong> - {{ plan.startTime | date:
-                                                    'dd/MM/yyyy' }}
-                                                </span>
-                                                <!-- <span style="display: inline-block; width: 10px;">
+                                                    <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                                                        <strong class="mr-1">{{ plan.projectName }}</strong><strong
+                                                            [ngClass]="plan.isPool?'text-secondary' : 'text-primary'" class=" mr-1">
+                                                            {{plan.workType}}</strong> <strong
+                                                            [ngClass]="plan.allocatePercentage > 0?'badge-success' : 'badge-danger'" class="badge mr-1">
+                                                            {{plan.allocatePercentage > 0 ? 'Join' : 'Out'}}</strong> {{ plan.startTime | date:
+                                                        'dd/MM/yyyy' }}
+                                                    </span>
+                                                    <!-- <span style="display: inline-block; width: 10px;">
                                                     <i *ngIf="plan.onHover && (permission.isGranted(DeliveryManagement_ResourceRequest_CancelAnyPlanResource) 
                                                      || isAllowCancelPlan(plan.creatorUserId))" class="fas fa-times pointer text-danger ml-1"
                                                         (click)="CancelResourcePlan(plan,item.fullName)"></i>
                                                 </span> -->
                                                 </button>
                                                 <mat-menu #planMenu="matMenu">
-                                                    <button mat-menu-item>Confirm</button>
-                                                    <button mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)"> Cancel</button>
+                                                    <button mat-menu-item (click)="confirm(plan, item.userId, item.fullName)">Confirm</button>
+                                                    <button mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)">
+                                                        Cancel</button>
                                                     <button mat-menu-item>Edit</button>
                                                 </mat-menu>
                                             </div>
                                         </div>
-                                        <div style="width: 10%;" class="text-right">
-                                            <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
+                                        <div style="width: 14%;" class="text-right">
+                                            <i class="fas fa-plus text-primary" (click)="planUser(item)" matTooltip="Plan user"></i>
                                         </div>
                                     </div>
 
@@ -146,8 +151,6 @@
                                 <td style="white-space: normal;">
                                     <div class="d-flex " style="align-items: center;">
                                         <div style="width: 90%;">
-
-
                                             <div *ngFor="let plan of item.poolProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false">
                                                 <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="tempMenu">
                                                     <span [ngClass]="plan.onHover?'on-hover-plan':''">
@@ -158,14 +161,13 @@
                                                 </button>
                                                 <mat-menu #tempMenu="matMenu">
                                                     <button mat-menu-item (click)="releaseUser(plan,item.fullName)">Release</button>
-                                                    <button mat-menu-item>Add</button>
                                                 </mat-menu>
                                             </div>
 
                                         </div>
-                                        <!-- <div style="width: 10%;" class="text-right">
-                                            <i class="fas fa-edit" (click)="planUser(item)" matTooltip="Plan user"></i>
-                                        </div> -->
+                                        <div style="width: 10%;" class="text-right">
+                                            <i class="fas fa-edit" (click)="addToTempProject(item)" matTooltip="Plan user"></i>
+                                        </div>
                                     </div>
 
                                 </td>

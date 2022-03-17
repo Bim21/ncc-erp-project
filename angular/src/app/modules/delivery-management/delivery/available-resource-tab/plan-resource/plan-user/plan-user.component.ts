@@ -20,6 +20,8 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   public listProject: ProjectDto[] = [];
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole);
   public searchProject: string = ""
+  public tomorrowDate = new Date();
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
     private availableResourceService: DeliveryResourceRequestService,
@@ -28,23 +30,20 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
     private projectUserService: ProjectUserService) { super(injector) }
 
   ngOnInit(): void {
+    this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
     this.getAllProject();
     this.planUser.isPool = false
     this.planUser.allocatePercentage = 100
     this.planUser.userId = this.data.item.userId;
     this.planUser.fullName = this.data.item.fullName;
+    this.planUser.startTime = moment(this.planUser.startTime).format("YYYY/MM/DD");
   }
   public SaveAndClose() {
-
-    if (this.data.command == "plan") {
-      this.planUser.percentUsage = 100
-      this.planUser.startTime = moment(this.planUser.startTime).format("YYYY/MM/DD");
+    this.isLoading = true
       this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
         abp.notify.success("Planed Successfully!");
         this.dialogRef.close(this.planUser);
-
       }, () => this.isLoading = false);
-    }
   }
 
   public getAllProject() {

@@ -165,6 +165,7 @@ namespace ProjectManagement.Services.ResourceManager
                 .Include(s => s.Project)
                 .Where(s => s.UserId == employee.UserId)
                 .Where(s => s.Status == ProjectUserStatus.Present)
+                .Where(s => s.Project.Status == ProjectStatus.InProgress)
                 .Where(s => s.AllocatePercentage > 0)
                 .ToListAsync();
 
@@ -756,6 +757,8 @@ namespace ProjectManagement.Services.ResourceManager
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                Id = pu.Id,
+                               AllocatePercentage = pu.AllocatePercentage,
+                               IsPool = pu.IsPool,
                            })
                            .ToList(),
 

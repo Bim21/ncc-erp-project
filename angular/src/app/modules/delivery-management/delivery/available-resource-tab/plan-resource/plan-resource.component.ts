@@ -1,3 +1,5 @@
+import { AddUserToTempProjectDialogComponent } from './add-user-to-temp-project-dialog/add-user-to-temp-project-dialog.component';
+import { ProjectUserService } from '@app/service/api/project-user.service';
 import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditUserDialogComponent } from '@app/users/edit-user/edit-user-dialog.component';
@@ -26,6 +28,8 @@ import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dia
 import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
+import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { ConfirmPlanDialogComponent } from './plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 
 @Component({
   selector: 'app-plan-resource',
@@ -39,8 +43,8 @@ export class PlanResourceComponent
   public skill = '';
   public skillsParam = [];
   private subscription: Subscription[] = [];
-  public selectedSkillId:number[]
-  public isAndCondition:boolean = false
+  public selectedSkillId: number[]
+  public isAndCondition: boolean = false
   DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
   DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
   protected list(
@@ -50,7 +54,7 @@ export class PlanResourceComponent
 
   ): void {
     this.isLoading = true;
-    let requestBody:any = request 
+    let requestBody: any = request
     requestBody.skillIds = this.selectedSkillId
     requestBody.isAndCondition = this.isAndCondition
     this.subscription.push(
@@ -116,7 +120,8 @@ export class PlanResourceComponent
     private _modalService: BsModalService,
     private availableRerourceService: DeliveryResourceRequestService,
     private dialog: MatDialog,
-    private skillService: SkillService
+    private skillService: SkillService,
+    private projectUserService: ProjectUserService
   ) {
     super(injector);
   }
@@ -130,13 +135,13 @@ export class PlanResourceComponent
   }
   public isAllowCancelPlan(creatorUserId: number) {
     if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
-      if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
+      if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)) {
         return true
       }
       else if (creatorUserId === this.appSession.userId) {
         return true
       }
-      else{
+      else {
         return false
       }
     }
@@ -265,7 +270,7 @@ export class PlanResourceComponent
 
   CancelResourcePlan(projectUser, userName: string) {
     abp.message.confirm(
-      `Cancel plan to project [${projectUser.projectName}] for user [${userName}]?`,
+      `Cancel plan to project <strong>${projectUser.projectName}</strong> for user <strong>${userName}</strong>?`,
       "",
       (result: boolean) => {
         if (result) {
@@ -278,6 +283,7 @@ export class PlanResourceComponent
 
         }
       }
+      , true
     )
   }
   ngOnDestroy(): void {
@@ -286,6 +292,7 @@ export class PlanResourceComponent
     })
   }
   releaseUser(user, name) {
+    console.log("user", user)
     user.fullName = name
     let ref = this.dialog.open(ReleaseUserDialogComponent, {
       width: "700px",
@@ -295,9 +302,110 @@ export class PlanResourceComponent
     })
     ref.afterClosed().subscribe(rs => {
       if (rs) {
-        // this.getProjectUser()
-        // this.getPlannedtUser()
+        this.refresh();
       }
     })
   }
+
+
+  confirm(plan, userId, userName) {
+    // if (user.allocatePercentage <= 0) {
+    //   let ref = this.dialog.open(ReleaseUserDialogComponent, {
+    //     width: "700px",
+    //     data: {
+    //       user: user,
+    //       type: "confirmOut",
+    //     },
+    //   })
+    //   ref.afterClosed().subscribe(rs => {
+    //     if (rs) {
+    //       this.refresh()
+    //     }
+    //   })
+    // }
+    // else if (user.allocatePercentage > 0) {
+
+    plan.userId = userId
+    plan.fullName = userName
+    this.projectUserService.GetAllWorkingProjectByUserId(userId).subscribe(data => {
+      let ref = this.dialog.open(ConfirmPlanDialogComponent, {
+        width: '700px',
+        data: {
+          workingProject: data.result,
+          user: plan,
+        }
+      })
+
+      ref.afterClosed().subscribe(rs => {
+        if (rs) {
+          this.refresh()
+        }
+      })
+    })
+    // }
+  }
+
+  cancelResourcePlan(user) {
+    abp.message.confirm(
+      `Cancel plan for user <strong>${user.fullName}</strong> <strong class = "${user.allocatePercentage > 0 ? 'text-success' : 'text-danger'}">
+      ${user.allocatePercentage > 0 ? 'Join project' : 'Out project'}</strong>?`,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.reportService.CancelResourcePlan(user.id).subscribe(rs => {
+            abp.notify.success(`Cancel plan for user ${user.fullName}`)
+            this.refresh()
+
+          })
+        }
+      },
+      true
+    )
+  }
+
+  saveResourcePlan(projectUser) {
+    projectUser.projectId = this.projectId
+    this.reportService.EditProjectUserPlan(projectUser).subscribe(rs => {
+      abp.notify.success(`Edited plan for user ${projectUser.fullName}`)
+      this.refresh()
+    })
+  }
+
+
+
+
+  editResourcePlan(projectUser) {
+    // projectUser.editMode = true
+    // this.isEditPlannedResource = true;
+    // this.planResourceProcess = true
+  }
+
+
+  addToTempProject(projectUser) {
+    console.log(projectUser)
+    let ref = this.dialog.open(AddUserToTempProjectDialogComponent,
+      {
+        width: "700px",
+        data: projectUser
+      })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.refresh()
+      }
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

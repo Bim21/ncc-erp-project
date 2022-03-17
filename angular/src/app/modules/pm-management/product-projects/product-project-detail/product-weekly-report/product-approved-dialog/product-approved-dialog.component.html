@@ -73,8 +73,8 @@
             </div>
         </div>
     </div>
-    <div align="end" class="justify-content-between" mat-dialog-actions="">
-        <button class="btn btn-default" mat-dialog-close>Cancel</button>
+    <div align="end" class="justify-content-end" mat-dialog-actions="">
+        <button class="btn btn-secondary mr-2" mat-dialog-close>Cancel</button>
         <button class="btn btn-primary" (click)="saveAndClose()" [disabled]="!approveForm.valid || isLoading">Save</button>
     </div>
 </form>
