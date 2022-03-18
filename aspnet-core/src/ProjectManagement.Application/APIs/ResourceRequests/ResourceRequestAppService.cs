@@ -151,76 +151,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                         };
             }
 
-            //Sorting Result
-            var sortText = input.Sort.EmptyIfNull().ToLower();
-
-            if (input.SortDirection == SortDirection.ASC)
-            {
-                switch (sortText)
-                {
-                    case "priority":
-                        {
-                            query = query.OrderBy(p => p.Priority);
-                            break;
-                        }
-                    case "project":
-                        {
-                            query = query.OrderBy(p => p.ProjectName);
-                            break;
-                        }
-                    case "level":
-                        {
-                            query = query.OrderBy(p => p.Level);
-                            break;
-                        }
-                    case "timeneed":
-                        {
-                            query = query.OrderBy(p => p.TimeNeed);
-                            break;
-                        }
-                    case "timerequest":
-                        {
-                            query = query.OrderBy(p => p.RequestStartTime);
-                            break;
-                        }
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                switch (sortText)
-                {
-                    case "priority":
-                        {
-                            query = query.OrderByDescending(p => p.Priority);
-                            break;
-                        }
-                    case "project":
-                        {
-                            query = query.OrderByDescending(p => p.ProjectName);
-                            break;
-                        }
-                    case "level":
-                        {
-                            query = query.OrderByDescending(p => p.Level);
-                            break;
-                        }
-                    case "timeneed":
-                        {
-                            query = query.OrderByDescending(p => p.TimeNeed);
-                            break;
-                        }
-                    case "timerequest":
-                        {
-                            query = query.OrderByDescending(p => p.RequestStartTime);
-                            break;
-                        }
-                    default:
-                        break;
-                }
-            }
-
             return await query.GetGridResult(query, input);
         }
 
@@ -1105,9 +1035,9 @@ namespace ProjectManagement.APIs.ResourceRequests
             return model;
         }
 
-        private async void SendKomuNotify(string requestName, string projectName, ResourceRequestStatus requestStatus)
+        private void SendKomuNotify(string requestName, string projectName, ResourceRequestStatus requestStatus)
         {
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
 
@@ -1173,10 +1103,10 @@ namespace ProjectManagement.APIs.ResourceRequests
             var resourceRequestSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(p => p.ResourceRequestId == resourceRequestId);
             foreach (var requestSkill in resourceRequestSkills)
             {
-                await WorkScope.SoftDeleteAsync(requestSkill);
+                await WorkScope.DeleteAsync(requestSkill);
             }
 
-            await WorkScope.SoftDeleteAsync(resourceRequest);
+            await WorkScope.DeleteAsync(resourceRequest);
         }
 
         [HttpPost]
@@ -1272,7 +1202,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (projectUser == null)
                 throw new UserFriendlyException("Invalid plan");
 
-            await WorkScope.SoftDeleteAsync(projectUser);
+            await WorkScope.DeleteAsync(projectUser);
         }
 
         [HttpPost]
