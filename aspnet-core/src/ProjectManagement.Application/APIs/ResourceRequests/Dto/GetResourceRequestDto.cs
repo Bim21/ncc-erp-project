@@ -21,7 +21,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string PMNote { get; set; }
         [ApplySearchAttribute]
         public string DMNote { get; set; }
-        public List<long> Skills { get; set; }
+        public List<long> SkillIds { get; set; }
         public bool IsRecruitmentSend { get; set; }
         public string RecruitmentUrl { get; set; }
         public UserLevel Level { get; set; }
