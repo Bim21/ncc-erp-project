@@ -80,7 +80,7 @@
                                                 <div style="width: 10%; text-align: right;"
                                                     *ngIf="!(user.workingStatus == APP_ENUM.ProjectUserStatus.Past 
                                                 || (user.workingStatus == APP_ENUM.ProjectUserStatus.Present && user.allocatePercentage == 0))">
-                                                    <i class="fas fa-edit" (click)="updateUserSkill(user)"
+                                                    <i class="fas fa-edit" (click)="updateUserSkill(user)" *ngIf="!user.createMode && !user.editMode"
                                                         matTooltip="Edit skill"></i>
                                                 </div>
                                             </div>
@@ -248,8 +248,8 @@
                                                         - {{item.skillName}}
                                                     </p>
                                                 </div>
-                                                <div style="width: 10%; text-align: right;">
-                                                    <i class="fas fa-edit" (click)="updateUserSkill(user)"
+                                                <div style="width: 10%; text-align: right;" >
+                                                    <i class="fas fa-edit" (click)="updateUserSkill(user) " *ngIf="!user.createMode && !user.editMode"
                                                         matTooltip="Edit skill"></i>
                                                 </div>
                                             </div>

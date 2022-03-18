@@ -165,7 +165,7 @@ namespace ProjectManagement.Services.ResourceManager
         private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project, long activeReportId, bool isPresentPool)
         {
             var sbKomuMessage = new StringBuilder();
-            var currentPUs = await _workScope.GetAll<ProjectUser>()
+           var currentPUs = await _workScope.GetAll<ProjectUser>()
             .Include(s => s.Project)
             .Where(s => s.UserId == employee.UserId)
             .Where(s => s.Status == ProjectUserStatus.Present)
@@ -276,10 +276,6 @@ namespace ProjectManagement.Services.ResourceManager
         {
             var confirmPUExt = await GetPUExt(projectUserId);
 
-
-
-
-
             if (confirmPUExt == null || confirmPUExt.PU == null)
             {
                 throw new UserFriendlyException("Not found ProjectUser with Id " + projectUserId);
@@ -296,16 +292,11 @@ namespace ProjectManagement.Services.ResourceManager
                 throw new UserFriendlyException($"Start Time must be less than or equal {DateTimeUtils.ToString(startTime)}");
             }
 
-
             var employee = await getKomuUserInfo(futurePU.UserId);
+     
 
-
-
-
-         
             var project = await GetKomuProjectInfo(futurePU.ProjectId);
             var activeReportId = await GetActiveReportId();
-
             var sessionUser = await getSessionKomuUserInfo();
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool);
 
@@ -314,7 +305,6 @@ namespace ProjectManagement.Services.ResourceManager
             futurePU.PMReportId = activeReportId;
 
             await _workScope.UpdateAsync(confirmPUExt.PU);
-
             await nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
 
 
@@ -322,10 +312,25 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
+        public void ValidateUserWorkingInThisProject(long userId, long projectId)
+        {
+            var isUserWorkingInThisProject =  _workScope.GetAll<ProjectUser>()
+                 .Where(s => s.UserId == userId)
+                 .Where(s => s.ProjectId == projectId)
+                 .Where(s => s.Status == ProjectUserStatus.Present)
+                 .Where(s => s.AllocatePercentage > 0)
+                 .Where(s => s.Project.Status == ProjectStatus.InProgress)
+                 .Any();
+            if (!isUserWorkingInThisProject)
+            {
+                throw new UserFriendlyException("This user is not working in this Project, so you can't plan him out project");
+            }
+        }
 
         public async Task<ProjectUser> ConfirmOutProject(ConfirmOutProjectDto input)
         {
             var outPUExt = await GetPUExt(input.ProjectUserId);
+            ValidateUserWorkingInThisProject(outPUExt.PU.UserId, outPUExt.PU.ProjectId);
 
             if (outPUExt == null || outPUExt.PU == null)
             {
@@ -333,7 +338,6 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             var outPU = outPUExt.PU;
-
             if (outPU.Status != ProjectUserStatus.Future || outPU.AllocatePercentage > 0)
             {
                 throw new UserFriendlyException($"Invalid ProjectUser with Id {outPU.Id}:  Status != FUTURE or AllocatePercentage > 0");
@@ -345,7 +349,6 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             var activeReportId = await GetActiveReportId();
-
             var curentPUs = await _workScope.GetAll<ProjectUser>()
                 .Where(x => x.ProjectId == outPU.ProjectId)
                 .Where(x => x.Status == ProjectUserStatus.Present)
@@ -367,7 +370,6 @@ namespace ProjectManagement.Services.ResourceManager
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(outPU.UserId);
             var project = await GetKomuProjectInfo(outPU.ProjectId);
-
             var sbKomuMessage = new StringBuilder();
 
             sbKomuMessage.Append($"{DateTimeUtils.ToString(outPU.StartTime)}: {sessionUser.KomuAccountInfo} ");
@@ -376,7 +378,6 @@ namespace ProjectManagement.Services.ResourceManager
             await SendKomu(sbKomuMessage, project.ProjectCode);
 
             return outPU;
-
         }
 
 
@@ -465,7 +466,7 @@ namespace ProjectManagement.Services.ResourceManager
                 }).ToList()))
             );
 
-
+            
             var activeReportId = await GetActiveReportId();
 
             var queryPu = _workScope.GetAll<ProjectUser>()
@@ -495,8 +496,8 @@ namespace ProjectManagement.Services.ResourceManager
                 //        SkillId = s.SkillId,
                 //        SkillName = s.Skill.Name
                 //    }).ToList()
-
-
+                
+                
                 //}
                 .OrderByDescending(x => x.StartTime);
 
@@ -670,6 +671,7 @@ namespace ProjectManagement.Services.ResourceManager
                                 ProjectId = pu.Id,
                                 ProjectName = pu.Project.Name,
                                 ProjectRole = pu.ProjectRole,
+                                ProjectStatus = pu.Project.Status,
                                 PmName = pu.Project.PM.Name,
                                 StartTime = pu.StartTime,
                                 IsPool = pu.IsPool
@@ -777,11 +779,12 @@ namespace ProjectManagement.Services.ResourceManager
                                ProjectName = pu.Project.Name,
                                ProjectId = pu.ProjectId,
                                ProjectRole = pu.ProjectRole,
+                               ProjectStatus = pu.Project.Status,
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                Id = pu.Id,
                                AllocatePercentage = pu.AllocatePercentage,
-                               IsPool = pu.IsPool,
+                               IsPool = pu.IsPool
                            })
                            .ToList(),
 

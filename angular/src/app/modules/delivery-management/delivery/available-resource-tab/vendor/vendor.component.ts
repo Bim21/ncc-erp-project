@@ -28,110 +28,80 @@ import { ProjectUserService } from '@app/service/api/project-user.service';
   styleUrls: ['./vendor.component.css']
 })
 export class VendorComponent extends PagedListingComponentBase<PlanResourceComponent> implements OnInit {
+ 
+  subscription: Subscription[] = [];
   public listSkills: SkillDto[] = [];
   public skill = '';
   public skillsParam = [];
   public selectedSkillId:number[]
-  public isAndCondition:boolean = false
-  subscription: Subscription[] = [];
+  public isAndCondition:boolean =false;
   DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
   DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
 
-
-  // count=0
-  protected list(
-    request: PagedRequestDto,
-    pageNumber: number,
-    finishedCallback: Function,
-    skill?
-  ): void {
-
-  
+  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
-    let requestBody:any = request 
+    let requestBody:any = request
     requestBody.skillIds = this.selectedSkillId
     requestBody.isAndCondition = this.isAndCondition
     this.subscription.push(
-      this.availableRerourceService
-        .GetVendorResource(requestBody)
-        .pipe(
-          finalize(() => {
-            finishedCallback();
-          }),
-          catchError(this.availableRerourceService.handleError)
-        )
-        .subscribe((data) => {
-          this.availableResourceList = data.result.items.filter((item) => {
-            if (item.userType !== 4) {
-              return item;
-            }
-          });
-     
-          this.showPaging(data.result, pageNumber);
-          this.isLoading = false;
-        })
+      this.availableRerourceService.GetVendorResource(requestBody).pipe(finalize(() => {
+        finishedCallback();
+      }), catchError(this.availableRerourceService.handleError)).subscribe(data => {
+        this.availableResourceList = data.result.items.filter((item) => {
+          if (item.userType !== 4) {
+            return item;
+          }
+        });
+        this.showPaging(data.result, pageNumber);
+        this.isLoading = false;
+      })
     )
 
   }
-  protected delete(entity: PlanResourceComponent): void { }
+  protected delete(entity: PlanResourceComponent): void {
+
+  }
   userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
     return {
       displayName: item[0],
-      value: item[1],
-    };
-  });
+      value: item[1]
+    }
+
+  })
   branchParam = Object.entries(this.APP_ENUM.UserBranch).map((item) => {
     return {
       displayName: item[0],
-      value: item[1],
-    };
-  });
+      value: item[1]
+    }
+  })
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
-    {
-      propertyName: 'fullName',
-      comparisions: [0, 6, 7, 8],
-      displayName: 'User Name',
-    },
-    {
-      propertyName: 'used',
-      comparisions: [0, 1, 2, 3, 4],
-      displayName: 'Used',
-    },
-    {
-      propertyName: 'branch',
-      comparisions: [0],
-      displayName: 'Branch',
-      filterType: 3,
-      dropdownData: this.branchParam,
-    },
-    {
-      propertyName: 'userType',
-      comparisions: [0],
-      displayName: 'User Type',
-      filterType: 3,
-      dropdownData: this.userTypeParam,
-    },
+    { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
+    { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
+    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
+    { propertyName: 'userType', comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam },
+
+
   ];
 
   public availableResourceList: availableResourceDto[] = [];
 
-  constructor(
-    public injector: Injector,
-    private _modalService: BsModalService,
+  constructor(public injector: Injector,
     private availableRerourceService: DeliveryResourceRequestService,
     private dialog: MatDialog,
     private skillService: SkillService,
+    private _modalService: BsModalService,
     private userInfoService: UserService,
     private projectUserService: ProjectUserService
-  ) {
-    super(injector);
-  }
+
+
+  ) { super(injector) }
 
   ngOnInit(): void {
-    this.pageSizeType = 100;
+    this.pageSizeType = 100
     this.changePageSize();
     this.getAllSkills();
+    console.log("project status", this.APP_ENUM.ProjectStatus)
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
@@ -159,25 +129,6 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       }
     });
   }
-  showDialogProjectHistoryUser(user: availableResourceDto) {
-    let userInfo = {
-      userId: user.userId,
-      emailAddress: user.emailAddress,
-    };
-
-    const show = this.dialog.open(ProjectHistoryByUserComponent, {
-      width: '700px',
-      disableClose: true,
-      data: {
-        item: userInfo,
-      },
-    });
-    show.afterClosed().subscribe((result) => {
-      if (result) {
-        this.refresh();
-      }
-    });
-  }
 
   public isAllowCancelPlan(creatorUserId: number) {
     if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
@@ -192,41 +143,41 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       }
     }
   }
-  projectHistorUser(user: availableResourceDto) {
-    this.showDialogProjectHistoryUser(user);
-  }
   planUser(user: any) {
-    this.showDialogPlanUser('plan', user);
+    this.showDialogPlanUser("plan", user);
   }
-  showUserDetail(userId: any) { }
+  showUserDetail(userId: any) {
+
+  }
 
   getAllSkills() {
     this.subscription.push(
       this.skillService.getAll().subscribe((data) => {
         this.listSkills = data.result;
-        this.skillsParam = data.result.map((item) => {
+        this.skillsParam = data.result.map(item => {
           return {
             displayName: item.name,
-            value: item.id,
-          };
-        });
+            value: item.id
+          }
+        })
+       
       })
     )
+
 
   }
 
   skillsCommas(arr) {
     arr = arr.map((item) => {
       return item.name;
-    });
-    return arr.join(', ');
+    })
+    return arr.join(', ')
   }
-
   projectsCommas(arr) {
     arr = arr.map((item) => {
       return item.projectName;
-    });
-    return arr.join(', ');
+    })
+    return arr.join(', ')
   }
 
   showProjectDetail(projectId, projectName) {
@@ -237,9 +188,8 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       },
       width: '95vw',
       height: '90vh',
-    });
+    })
   }
-
   updateUserSkill(user) {
     let ref = this.dialog.open(UpdateUserSkillDialogComponent, {
       width: "700px",
@@ -257,24 +207,6 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     })
   }
 
-  formatDateStartPool(date: string) {
-    return moment(date).format('DD/MM/YYYY');
-  }
-
-  updateNote(id, fullName) {
-    let addOrEditNoteDialog: BsModalRef;
-    addOrEditNoteDialog = this._modalService.show(AddNoteDialogComponent, {
-      class: 'modal',
-      initialState: {
-        id: id,
-        fullName: fullName,
-      },
-    });
-
-    addOrEditNoteDialog.content.onSave.subscribe(() => {
-      this.refresh();
-    });
-  }
 
   CancelResourcePlan(projectUser, userName: string) {
     abp.message.confirm(
@@ -294,6 +226,8 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   }
 
 
+
+
   getHistoryProjectsByUserId(user) {
     this.subscription.push(
       this.userInfoService.getHistoryProjectsByUserId(user.userId).pipe(catchError(this.userInfoService.handleError)).subscribe(data => {
@@ -306,25 +240,25 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
           if (count <= 6 || user.showAllHistory) {
             userHisTory +=
               `<div class="mb-1 d-flex pointer ${project.allowcatePercentage > 0 ? 'join-project' : 'out-project'}">
-              <div class="col-11 p-0">
-                  <p class="mb-0" >
-                  <strong>${project.projectName}</strong> 
-                  <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
-                  ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
-                  <span> - </span> <span>${moment(project.startTime).format("DD/MM/YYYY")}</span></p>
-              </div>
-              <div class="col-1">
-                  <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
-              </div>
-          </div>
-         `
+                <div class="col-11 p-0">
+                    <p class="mb-0" >
+                    <strong>${project.projectName}</strong> 
+                    <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
+                    ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
+                    -  <span>${moment(project.startTime).format("DD/MM/YYYY")}</span></p>
+                </div>
+                <div class="col-1">
+                    <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
+                </div>
+            </div>
+           `
 
           }
         });
-        if (count > 10) {
-          user.conditionHistory = true
+        if (count > 6) {
+          user.showMoreHistory = true
         } else {
-          user.conditionHistory = false;
+          user.showMoreHistory = false;
         }
         user.userProjectHistory = userHisTory
       })
@@ -334,11 +268,9 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     user.showAllHistory = !user.showAllHistory;
   }
   ngOnDestroy(): void {
-    this.subscription.forEach(sub => {
-      sub.unsubscribe()
-    })
+    this.subscription.forEach(sub => sub.unsubscribe())
   }
-
+  
   confirm(plan, userId, userName) {
     // if (user.allocatePercentage <= 0) {
     //   let ref = this.dialog.open(ReleaseUserDialogComponent, {

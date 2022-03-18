@@ -12,6 +12,7 @@ import {
 
 import { AppSessionService } from '@shared/session/app-session.service';
 import { APP_ENUMS } from './AppEnums';
+import * as moment from 'moment';
 
 export abstract class AppComponentBase {
 
@@ -75,5 +76,8 @@ export abstract class AppComponentBase {
       }else{
         this.checkNull = false;
       }
+    }
+    public formatDateYMD(date:any){
+        return moment(date).format("YYYY-MM-DD")
     }
 }

@@ -133,6 +133,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       if (rs) {
         this.getProjectUser()
         this.getPlannedtUser()
+        this.getAllUser()
         this.projectUserProcess = false;
         this.planResourceProcess = false;
       }
@@ -175,34 +176,32 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
 
   saveProjectUser(user: any) {
-
+  console.log("userrrr", user)
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
     }
     else {
       user.userId = user.userInfo.id
+      user.fullName = user.userInfo.fullName
       let workingProject = [];
       this.projectUserService.GetAllWorkingProjectByUserId(user.userId).subscribe(data => {
         workingProject = data.result
         if (workingProject.length > 0) {
-          let message: string = ""
-          workingProject.forEach(project => {
-            message += `<p>- <strong>${project.projectName} (${project.pmName}) </strong>from ${moment(project.startTime).format("DD/MM/YYYY")}</p>`
-          })
-          abp.message.confirm(
-            `<div class='text-left'><div style= "font-size: 22px;" ><strong>${user.userInfo.fullName} </strong> is working on: </div> <br/>
-            ${message}
-           <div >
-           Are you sure to add <strong>${user.userInfo.fullName}</strong> join project and release from other projects?
-           </div>
-              </div>`
-            , `   `, (rs) => {
-              if (rs) {
+          user.allocatePercentage = 100
+          let ref = this.dialog.open(ConfirmPopupComponent,
+            {
+              width: "700px",
+              data: {
+                workingProject : workingProject,
+                user: user
+              }
+            }
+            )
+            ref.afterClosed().subscribe(rs =>{
+              if(rs){
                 this.AddUserToProject(user)
               }
-            },
-            true
-          );
+            })
         }
         else {
           abp.message.confirm(`Add user <strong>${user.userInfo.fullName}</strong> to Project`, "", rs => {

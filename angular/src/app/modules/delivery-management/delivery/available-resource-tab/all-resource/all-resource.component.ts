@@ -100,6 +100,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.pageSizeType = 100
     this.changePageSize();
     this.getAllSkills();
+    console.log("project status", this.APP_ENUM.ProjectStatus)
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
@@ -253,10 +254,10 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
           }
         });
-        if (count > 10) {
-          user.conditionHistory = true
+        if (count > 6) {
+          user.showMoreHistory = true
         } else {
-          user.conditionHistory = false;
+          user.showMoreHistory = false;
         }
         user.userProjectHistory = userHisTory
       })
