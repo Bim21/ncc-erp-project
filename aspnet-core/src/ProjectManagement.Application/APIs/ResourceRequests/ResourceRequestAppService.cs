@@ -26,6 +26,7 @@ using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Users;
 using ProjectManagement.Users.Dto;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1005,7 +1006,8 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             foreach (var skillId in skillIdsToRemove)
             {
-                await WorkScope.DeleteAsync<ResourceRequestSkill>(skillId);
+                var requestSkillToRemove = WorkScope.GetAll<ResourceRequestSkill>().Where(p => p.ResourceRequestId == model.Id && p.SkillId == skillId).FirstOrDefault();
+                await WorkScope.DeleteAsync(requestSkillToRemove);
             }
 
             resourceRequest.ProjectId = model.ProjectId;
@@ -1018,9 +1020,32 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.UpdateAsync(resourceRequest);
 
-            SendKomuNotify(model.Name, project.Name, model.Status);
+            //SendKomuNotify(model.Name, project.Name, model.Status);
 
-            return await GetResourceRequestById(model.Id);
+            var result = new GetResourceRequestDto()
+            {
+                DMNote = resourceRequest.DMNote,
+                Id = resourceRequest.Id,
+                IsRecruitmentSend = resourceRequest.IsRecruitmentSend,
+                Level = resourceRequest.Level,
+                Name = resourceRequest.Name,
+                ProjectName = resourceRequest.Project.Name,
+                PMNote = resourceRequest.PMNote,
+                Priority = resourceRequest.Priority,
+                ProjectId = resourceRequest.ProjectId,
+                RecruitmentUrl = resourceRequest.RecruitmentUrl,
+                TimeNeed = resourceRequest.TimeNeed,
+                TimeDone = resourceRequest.TimeDone,
+                SkillIds = model.SkillIds,
+                Skills = WorkScope.GetAll<Skill>().Where(p=> model.SkillIds.Contains(p.Id)).Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Name }).ToList(),
+                Status = resourceRequest.Status,
+                PlannedDate = resourceRequest.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
+                PlannedEmployee = resourceRequest.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
+                PlannedProjectUserId = resourceRequest.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
+                RequestStartTime = resourceRequest.CreationTime
+            };
+
+            return result;
         }
 
         [HttpPost]
@@ -1035,6 +1060,14 @@ namespace ProjectManagement.APIs.ResourceRequests
             await WorkScope.UpdateAsync(resourceRequest);
 
             SendKomuNotify(resourceRequest.Name, resourceRequest.Project.Name, resourceRequest.Status);
+
+            return model;
+        }
+
+        [HttpPost]
+        public async Task<ResourceRequestSetDoneDto> SetDone(ResourceRequestSetDoneDto model)
+        {
+            await _resourceManager.ConfirmJoinProject(model.ProjectUserId, model.StartTime);
 
             return model;
         }
