@@ -20,13 +20,14 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject
   DeliveryManagement_ProjectUser_PickUserFromPoolToProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_PickUserFromPoolToProject
 
-  public allowConfirm:boolean  =true
+  public allowConfirm: boolean = true
   public startDate
   public user
   public title: string = ""
   public confirmMessage: string = ""
   public projectRoleList = Object.keys(APP_ENUMS.ProjectUserRole);
   public workingProject: any[] = []
+  public canNotWorkTemp: boolean = false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private puService: DeliveryResourceRequestService,
     injector: Injector,
@@ -35,17 +36,17 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   }
 
   ngOnInit(): void {
-    
+
     this.user = this.data.user
     this.workingProject = this.data.workingProject
     this.startDate = moment(this.data.user.startTime).format("YYYY-MM-DD")
     if (this.data.user.allocatePercentage > 0) {
       this.title = `Confirm <strong>${this.user.fullName}</strong> <strong class ="text-success">join</strong> <strong>${this.user.projectName}</strong>`
+      this.checkConfirmPermission()
     }
     else if (this.data.user.allocatePercentage <= 0) {
       this.title = `Confirm <strong>${this.user.fullName}</strong> <strong class="text-danger">Out</strong> <strong>${this.user.projectName}</strong>`
     }
-   this.checkConfirmPermission()
 
   }
   confirm() {
@@ -67,13 +68,15 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
     }
   }
   checkConfirmPermission() {
-    console.log(this.permission.isGranted(this.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject) == false)
-    console.log(this.workingProject)
+    console.log(this.user.isPool)
     if (this.permission.isGranted(this.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject) == false) {
       this.workingProject.forEach(pu => {
-        if (pu.isPool == false) {
+        if (!pu.isPool) {
           this.allowConfirm = false
-          return 
+          if (this.user.isPool) {
+            this.canNotWorkTemp = true
+          }
+          return
         }
       }
       )
