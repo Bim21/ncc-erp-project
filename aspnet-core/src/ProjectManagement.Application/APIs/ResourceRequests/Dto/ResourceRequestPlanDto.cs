@@ -10,8 +10,10 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
 
         public long UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public DateTime JoinDate { get; set; }
 
-        public long ResourceRequestId { get; set; }
+        public long? ResourceRequestId { get; set; }
     }
 }

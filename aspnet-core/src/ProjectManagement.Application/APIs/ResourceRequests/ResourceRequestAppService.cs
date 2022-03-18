@@ -151,17 +151,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                         };
             }
 
-            if (!string.IsNullOrWhiteSpace(input.SearchText))
-            {
-                var searchText = input.SearchText.ToLower().EmptyIfNull();
-
-                query = query.Where(p => p.Name.ToLower().Contains(searchText)
-                                      || p.ProjectName.ToLower().Contains(searchText)
-                                      || p.PMNote.ToLower().Contains(searchText)
-                                      || p.DMNote.ToLower().Contains(searchText)
-                                   );
-            }
-
             //Sorting Result
             var sortText = input.Sort.EmptyIfNull().ToLower();
 
@@ -398,7 +387,56 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpPost]
         public async Task<ResourceRequestDto> UpdateRequestByProject(ResourceRequestDto model)
         {
-            return await Update(model);
+            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
+            if (project == null)
+            {
+                throw new UserFriendlyException("Project doesn't exist");
+            }
+
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
+
+            var requestPlan = await WorkScope.GetAll<ProjectUser>().AnyAsync(p => p.ResourceRequestId == resourceRequest.Id);
+            if (!requestPlan && resourceRequest.ProjectId != model.ProjectId)
+                throw new UserFriendlyException("Cannot change project of a planned resource request");
+
+            //Update skill
+            var oldSkillIdsList = WorkScope.GetAll<ResourceRequestSkill>()
+                                                .Where(p => p.ResourceRequestId == model.Id)
+                                                .Select(p => p.SkillId).ToList();
+
+            var skillIdsToAdd = model.SkillIds.Where(p => !oldSkillIdsList.Contains(p));
+            var skillIdsToRemove = oldSkillIdsList.Where(p => !model.SkillIds.Contains(p));
+
+            foreach (var skillId in skillIdsToAdd)
+            {
+                var skillModel = new ResourceRequestSkill()
+                {
+                    ResourceRequestId = model.Id,
+                    SkillId = skillId,
+                    Quantity = 1
+                };
+
+                await WorkScope.InsertAsync(skillModel);
+            }
+
+            foreach (var skillId in skillIdsToRemove)
+            {
+                await WorkScope.DeleteAsync<ResourceRequestSkill>(skillId);
+            }
+
+            resourceRequest.ProjectId = model.ProjectId;
+            resourceRequest.DMNote = model.DMNote;
+            resourceRequest.PMNote = model.PMNote;
+            resourceRequest.TimeNeed = model.TimeNeed;
+            resourceRequest.Status = model.Status;
+            resourceRequest.Level = model.Level;
+            resourceRequest.Priority = model.Priority;
+
+            await WorkScope.UpdateAsync(resourceRequest);
+
+            SendKomuNotify(model.Name, project.Name, model.Status);
+
+            return model;
         }
 
         [HttpPost]
@@ -945,8 +983,6 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             model.Status = ResourceRequestStatus.APPROVE;
 
-            var test = ObjectMapper.Map<ResourceRequest>(model);
-
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
                 throw new UserFriendlyException("Project doesn't exist");
@@ -975,7 +1011,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                     TimeNeed = model.TimeNeed
                 };
 
-                model.Id = await WorkScope.InsertAndGetIdAsync(resourceRequestModel);
+                var newRequestId = await WorkScope.InsertAndGetIdAsync(resourceRequestModel);
 
                 //Create ResourceRequestSkill, amount based on Skills selected
                 for (int j = 0; j < model.SkillIds.Count(); j++)
@@ -983,7 +1019,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                     var skillModel = new ResourceRequestSkill()
                     {
                         IsDeleted = false,
-                        ResourceRequestId = model.Id,
+                        ResourceRequestId = newRequestId,
                         SkillId = model.SkillIds[j],
                         Quantity = 1
                     };
@@ -999,7 +1035,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Update, PermissionNames.PmManager_ResourceRequest_Update)]
-        public async Task<ResourceRequestDto> Update(ResourceRequestDto model)
+        public async Task<GetResourceRequestDto> Update(ResourceRequestDto model)
         {
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
@@ -1050,7 +1086,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             SendKomuNotify(model.Name, project.Name, model.Status);
 
-            return model;
+            return await GetResourceRequestById(model.Id);
         }
 
         [HttpPost]
@@ -1162,7 +1198,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpGet]
-        public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long projectUserId, long resourceRequestId)
+        public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long projectUserId)
         {
             await Task.CompletedTask;
             var projectUser = WorkScope.Get<ProjectUser>(projectUserId);
@@ -1173,15 +1209,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                 {
                     ProjectUserId = projectUser.Id,
                     UserId = projectUser.UserId,
+                    UserName = WorkScope.Get<User>(projectUser.UserId).FullName,
                     JoinDate = projectUser.StartTime,
-                    ResourceRequestId = resourceRequestId
+                    ResourceRequestId = projectUser.ResourceRequestId
                 };
         }
 
         [HttpPost]
         public async Task<ResourceRequestPlanDto> CreateResourceRequestPlan(ResourceRequestPlanDto model)
         {
-            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
+            var resourceRequest = WorkScope.Get<ResourceRequest>((long)model.ResourceRequestId);
 
             if (resourceRequest == null)
                 throw new UserFriendlyException("Invalid resource request");

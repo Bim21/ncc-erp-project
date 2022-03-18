@@ -24,7 +24,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public List<GetResourceRequestDto_SkillInfo> Skills { get; set; }
         public bool IsRecruitmentSend { get; set; }
         public string RecruitmentUrl { get; set; }
-        public UserLevel_ResourceRequest Level { get; set; }
+        public UserLevel Level { get; set; }
         public Priority Priority { get; set; }
         public DateTime RequestStartTime { get; set; }
         public string PlannedEmployee { get; set; }
@@ -50,7 +50,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         {
             get
             {
-                return Enum.GetName(typeof(UserLevel_ResourceRequest), Level);
+                return Enum.GetName(typeof(UserLevel), Level);
             }
         }
     }
