@@ -19,7 +19,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditUserBot: boolean = false;
   public isEditPassBot: boolean = false;
   public isEditKomuUrl: boolean = false;
-  public isEditKomuUserNames: boolean = false;
+  public isEditKomuSecretCode: boolean = false;
   public isEditFinanceUri: boolean = false;
   public isEditFinanceSecretKey: boolean = false;
   public isEditTimesheetUri: boolean = false;
@@ -32,6 +32,14 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditHRM: boolean = false;
   public isEditHRMSecretKey: boolean = false;
   public isEditDefaultWorkingHours: boolean = false;
+  public isShowKomuSetting: boolean = false;
+  public isShowProjectSetting: boolean = false;
+  public isShowHRMSetting: boolean = false;
+  public isShowTimesheetSetting: boolean = false;
+  public isShowFinanceSetting: boolean = false;
+  public isShowSendReportSetting: boolean = false;
+  public isShowGoogleClientApp: boolean = false;
+  public isShowDefaultWorking: boolean = false;
   public listDays: any[] = [
     { value: '2', text: 'Monday' },
     { value: '3', text: 'Tuesday' },
@@ -68,6 +76,13 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
         abp.notify.success('Edited');
       });
   }
+  enableNoticeToKomu(value){
+    this.configuration.noticeToKomu = value.toString();
+  }
+  checkNoticeToKomu() {
+    if (this.configuration.noticeToKomu == 'true' && this.isEditKomuSecretCode) return true;
+    return false;
+  }
 }
 export class ConfigurationDto {
   clientAppId: string;
@@ -77,6 +92,7 @@ export class ConfigurationDto {
   passwordBot: string;
   komuUrl: string;
   komuUserNames: string;
+  komuSecretCode: string;
   financeUri: string;
   financeSecretCode: string;
   timesheetUri: string;
@@ -88,4 +104,5 @@ export class ConfigurationDto {
   hrmUri: string;
   hrmSecretCode: string;
   defaultWorkingHours: string;
+  noticeToKomu: string;
 }

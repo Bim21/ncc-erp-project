@@ -20,6 +20,7 @@
         public const string UserBot = "UserBot";
         public const string PasswordBot = "PasswordBot";
         public const string KomuUrl = "KomuUrl";
+        public const string NoticeToKomu = "NoticeToKomu";
         public const string KomuSecretCode = "KomuSecretCode";
         public const string KomuUserNames = "KomuUsernames";
         public const string KomuRoom = "KomuRoom";
