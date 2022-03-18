@@ -25,6 +25,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.UserBot,"bot1@ncc.asia",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.PasswordBot,"12345678a@",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuUrl,"http://172.16.11.90:3000/",scopes:SettingScopes.Application |SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.NoticeToKomu,"true",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuSecretCode,"6kkCZQja9Gn27kTiv",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.ProjectUri,"http://project.dev.nccsoft.vn/",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuUserNames,"hang.buithidiem.ncc;trung.do.trong;lam.buihoang.ncc;",scopes:SettingScopes.Application |SettingScopes.Tenant),

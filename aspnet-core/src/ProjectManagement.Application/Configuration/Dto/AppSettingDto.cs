@@ -20,6 +20,7 @@ namespace ProjectManagement.Configuration.Dto
         public string ExpiredDay { get; set; }
         public string ExpiredHour { get; set; }
         public string KomuUrl { get; set; }
+        public string NoticeToKomu { get; set; }
         public string KomuSecretCode { get; set; }
         public string KomuUserNames { get; set; }
         public string UserBot { get; set; }
