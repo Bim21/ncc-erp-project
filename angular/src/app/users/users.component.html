@@ -115,7 +115,7 @@
                       No project history!
                     </p>
                   </div>
-                  <i [ngClass]="user.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="user.isshowProjectHistory == true && user.conditionHistory"
+                  <i [ngClass]="user.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="user.isshowProjectHistory == true && user.showMoreHistory"
                     (click)="showMoreHistory(user);getHistoryProjectsByUserId(user)"></i>
                 </td>
                 <td style="width: 200px;">

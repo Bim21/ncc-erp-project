@@ -45,7 +45,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
     );
   }
   public planUser(item: any): Observable<any> {
-    return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinProject', item);
+    return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
   }
   public availableResourceFuture(request: PagedRequestDto): Observable<any> {
     return this.http.post<any>(

@@ -396,22 +396,11 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         [HttpPost]
         [AbpAuthorize]
-        public async Task PlanEmployeeJoinProject(InputPlanResourceDto input)
+        public async Task PlanEmployeeJoinOrOutProject(InputPlanResourceDto input)
         {
             if (input.AllocatePercentage <= 0)
             {
-                var isWorkingTempInProject = WorkScope.GetAll<ProjectUser>()
-                .Where(s => s.UserId == input.UserId)
-                .Where(s => s.ProjectId == input.ProjectId)
-                .Where(s => s.Status == ProjectUserStatus.Present)
-                .Where(s => s.AllocatePercentage > 0)
-                .Where(s => s.Project.Status == ProjectStatus.InProgress)
-                .Any();
-
-                if (!isWorkingTempInProject)
-                {
-                    throw new UserFriendlyException("This user is not working on this Project, so you can't plan him out");
-                }
+               _resourceManager.ValidateUserWorkingInThisProject(input.UserId, input.ProjectId);
             }
 
             await _resourceManager.AddFuturePUAndNofity(input);

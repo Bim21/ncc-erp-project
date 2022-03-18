@@ -130,6 +130,9 @@
                                 </td>
                                 <td>
                                     <p *ngFor="let project of item.workingProjects" class="mb-1">
+                                        <span matTooltip="Potential project" *ngIf="project.projectStatus==APP_ENUM.ProjectStatus.Potential" 
+                                        class="badge bg-info pointer mr-1">
+                                            P</span>
                                         <strong class="hover-project-name pointer"
                                             (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
                                         </strong>
@@ -154,7 +157,7 @@
                                     </div>
 
                                     <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
-                                        *ngIf="item.isshowProjectHistory == true && item.conditionHistory"
+                                        *ngIf="item.isshowProjectHistory == true && item.showMoreHistory"
                                         (click)="showMoreHistory(item);getHistoryProjectsByUserId(item)"></i>
                                 </td>
                                 <td>

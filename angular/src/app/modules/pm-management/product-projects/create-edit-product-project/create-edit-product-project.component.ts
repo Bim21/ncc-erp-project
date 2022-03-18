@@ -54,7 +54,6 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
     }
     if (this.data.command == "create") {
       this.project.projectType = 3;
-      this.project.status = 0;
       this.projectService.create(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
         abp.notify.success("created new project");
         this.dialogRef.close(this.project);

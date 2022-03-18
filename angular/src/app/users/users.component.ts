@@ -309,10 +309,10 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
 
         }
       });
-      if (count > 10) {
-        user.conditionHistory = true
+      if (count > 6) {
+        user.showMoreHistory = true
       } else {
-        user.conditionHistory = false;
+        user.showMoreHistory = false;
       }
       user.userProjectHistory = userHisTory
     })

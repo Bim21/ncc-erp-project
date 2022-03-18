@@ -120,6 +120,9 @@
                                             <div *ngFor="let plan of item.plannedProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
                                                 <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="planMenu">
                                                     <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                                                        <span matTooltip="Potential project" *ngIf="plan.projectStatus==APP_ENUM.ProjectStatus.Potential" 
+                                                        class="badge bg-info pointer mr-1">
+                                                            P</span>
                                                         <strong class="mr-1">{{ plan.projectName }}</strong><strong
                                                             [ngClass]="plan.isPool?'text-secondary' : 'text-primary'"
                                                             class=" mr-1">

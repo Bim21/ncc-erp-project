@@ -90,7 +90,6 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       this.project.endTime =null
     }
     if (this.data.command == "create") {
-      this.project.status = 0;
       this.projectService.create(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
         abp.notify.success("created new project");
         this.dialogRef.close(this.project);

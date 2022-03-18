@@ -35,7 +35,7 @@ export class AddUserToTempProjectDialogComponent extends AppComponentBase implem
     let requestBody = {
       userId: this.data.userId,
       projectId: this.user.projectId,
-      startTime: this.user.startTime,
+      startTime: this.formatDateYMD(this.user.startTime),
       isPool: true,
       projectRole: this.user.proejctRole
     }

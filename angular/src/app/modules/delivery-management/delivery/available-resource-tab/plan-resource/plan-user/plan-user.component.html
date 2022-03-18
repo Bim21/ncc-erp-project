@@ -1,5 +1,5 @@
 <form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
-    <abp-modal-header title="{{this.data.command == 'edit' ? 'Edit plan for user' : 'Plan for user'}}: {{planUser.fullName}}" (onCloseClick)="dialogRef.close()">
+    <abp-modal-header class="pt-0" title="{{this.data.command == 'edit' ? 'Edit plan for user' : 'Plan for user'}}: {{planUser.fullName}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row required">
@@ -22,6 +22,28 @@
                 <mat-error class="mt-1" *ngIf="projectIdValid.hasError('required') && projectIdValid.touched" style="font-size: 13px;">
                     This field is required
                 </mat-error>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="isPool">
+                Join/Out:
+            </label>
+            <div class="col-md-9">
+                <mat-radio-group [(ngModel)]="planUser.allocatePercentage" aria-label="Select an option" name="isPool">
+                    <mat-radio-button [checked]="planUser.allocatePercentage == 100" class="mt-2 mr-3" [value]="100">Join</mat-radio-button>
+                    <mat-radio-button [checked]="planUser.allocatePercentage == 0" [value]="0">Out</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="form-group row required" *ngIf="planUser.allocatePercentage > 0">
+            <label class="col-md-3 col-form-label" for="allocatePercentage">
+                Work type:
+            </label>
+            <div class="col-md-9">
+                <mat-radio-group [(ngModel)]="planUser.isPool" aria-label="Select an option" name="allocatePercentage">
+                    <mat-radio-button [checked]="planUser.isPool == false" class="mt-2 mr-3" [value]="false">Offical</mat-radio-button>
+                    <mat-radio-button [checked]="planUser.isPool == true" [value]="true">Tempt</mat-radio-button>
+                </mat-radio-group>
             </div>
         </div>
         <div class="form-group row required" *ngIf="planUser.allocatePercentage > 0">
@@ -53,29 +75,9 @@
             </div>
         </div>
 
-        <div class="form-group row required">
-            <label class="col-md-3 col-form-label" for="isPool">
-                Join/Out:
-            </label>
-            <div class="col-md-9">
-                <mat-radio-group [(ngModel)]="planUser.allocatePercentage" aria-label="Select an option" name="isPool">
-                    <mat-radio-button [checked]="planUser.allocatePercentage == 100" class="mt-2 mr-3" [value]="100">Join</mat-radio-button>
-                    <mat-radio-button [checked]="planUser.allocatePercentage == 0" [value]="0">Out</mat-radio-button>
-                </mat-radio-group>
-            </div>
-        </div>
+       
 
-        <div class="form-group row required" *ngIf="planUser.allocatePercentage > 0">
-            <label class="col-md-3 col-form-label" for="allocatePercentage">
-                Work type:
-            </label>
-            <div class="col-md-9">
-                <mat-radio-group [(ngModel)]="planUser.isPool" aria-label="Select an option" name="allocatePercentage">
-                    <mat-radio-button [checked]="planUser.isPool" class="mt-2 mr-3" [value]="false">Offical</mat-radio-button>
-                    <mat-radio-button [checked]="planUser.isPool" [value]="true">Tempt</mat-radio-button>
-                </mat-radio-group>
-            </div>
-        </div>
+       
     </div>
     <div class="row justify-content-end">
         <button class="btn btn-secondary mr-2" mat-dialog-close>Cancel</button>
