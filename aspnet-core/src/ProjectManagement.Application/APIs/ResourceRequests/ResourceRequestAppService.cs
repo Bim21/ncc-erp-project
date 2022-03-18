@@ -1107,52 +1107,55 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         private async void SendKomuNotify(string requestName, string projectName, ResourceRequestStatus requestStatus)
         {
-            var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-
-            var userName = UserHelper.GetUserName(user.EmailAddress);
-
-            if (user != null && !user.KomuUserId.HasValue)
+            await Task.Run(async () =>
             {
-                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
-                await WorkScope.UpdateAsync<User>(user);
-            }
+                var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
 
-            var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
+                var userName = UserHelper.GetUserName(user.EmailAddress);
 
-            var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
+                if (user != null && !user.KomuUserId.HasValue)
+                {
+                    user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
+                    await WorkScope.UpdateAsync<User>(user);
+                }
 
-            var message = new StringBuilder();
-            switch (requestStatus)
-            {
-                case ResourceRequestStatus.DONE:
-                    {
-                        message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
-                        message.AppendLine($"đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
-                    }
-                    break;
-                case ResourceRequestStatus.CANCELLED:
-                    {
-                        message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
-                        message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
-                    }
-                    break;
-                case ResourceRequestStatus.APPROVE:
-                    {
-                        message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{requestName}** cho dự án **{projectName}**.");
-                        message.AppendLine(link);
-                    }
-                    break;
-                case ResourceRequestStatus.PENDING:
-                default:
-                    return;
-            }
+                var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
 
-            await _komuService.NotifyToChannel(new KomuMessage
-            {
-                UserName = userName ?? user.UserName,
-                Message = message.ToString(),
-                CreateDate = DateTimeUtils.GetNow(),
-            }, ChannelTypeConstant.PM_CHANNEL);
+                var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
+
+                var message = new StringBuilder();
+                switch (requestStatus)
+                {
+                    case ResourceRequestStatus.DONE:
+                        {
+                            message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
+                            message.AppendLine($"đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
+                        }
+                        break;
+                    case ResourceRequestStatus.CANCELLED:
+                        {
+                            message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
+                            message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
+                        }
+                        break;
+                    case ResourceRequestStatus.APPROVE:
+                        {
+                            message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{requestName}** cho dự án **{projectName}**.");
+                            message.AppendLine(link);
+                        }
+                        break;
+                    case ResourceRequestStatus.PENDING:
+                    default:
+                        return;
+                }
+
+                await _komuService.NotifyToChannel(new KomuMessage
+                {
+                    UserName = userName ?? user.UserName,
+                    Message = message.ToString(),
+                    CreateDate = DateTimeUtils.GetNow(),
+                }, ChannelTypeConstant.PM_CHANNEL);
+            });
         }
 
         [HttpDelete]
