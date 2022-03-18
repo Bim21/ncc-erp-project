@@ -19,6 +19,8 @@ import * as moment from 'moment';
 import { UserService } from '@app/service/api/user.service';
 import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
+import { ProjectUserService } from '@app/service/api/project-user.service';
 
 @Component({
   selector: 'app-vendor',
@@ -121,6 +123,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     private dialog: MatDialog,
     private skillService: SkillService,
     private userInfoService: UserService,
+    private projectUserService: ProjectUserService
   ) {
     super(injector);
   }
@@ -134,6 +137,12 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     let item = {
       userId: user.userId,
       fullName: user.fullName,
+      projectId: user.projectId,
+      projectRole: user.projectRole,
+      startTime: user.startTime,
+      allocatePercentage: user.allocatePercentage,
+      isPool: user.isPool,
+      projectUserId: user.projectUserId
     };
 
     const show = this.dialog.open(PlanUserComponent, {
@@ -274,7 +283,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       (result: boolean) => {
         if (result) {
           this.subscription.push(
-            this.availableRerourceService.CancelResourcePlan(projectUser.projectUserId).subscribe(rs => {
+            this.availableRerourceService.CancelResourcePlan(projectUser.id).subscribe(rs => {
               this.refresh()
               abp.notify.success("Cancel plan for user")
             })
@@ -328,5 +337,48 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     this.subscription.forEach(sub => {
       sub.unsubscribe()
     })
+  }
+
+  confirm(plan, userId, userName) {
+    // if (user.allocatePercentage <= 0) {
+    //   let ref = this.dialog.open(ReleaseUserDialogComponent, {
+    //     width: "700px",
+    //     data: {
+    //       user: user,
+    //       type: "confirmOut",
+    //     },
+    //   })
+    //   ref.afterClosed().subscribe(rs => {
+    //     if (rs) {
+    //       this.refresh()
+    //     }
+    //   })
+    // }
+    // else if (user.allocatePercentage > 0) {
+
+    plan.userId = userId
+    plan.fullName = userName
+    this.projectUserService.GetAllWorkingProjectByUserId(userId).subscribe(data => {
+      let ref = this.dialog.open(ConfirmPlanDialogComponent, {
+        width: '580px',
+        data: {
+          workingProject: data.result,
+          user: plan,
+        }
+      })
+
+      ref.afterClosed().subscribe(rs => {
+        if (rs) {
+          this.refresh()
+        }
+      })
+    })
+    // }
+  }
+  editUserPlan(user: any, projectUser:any) {
+    user.userId = projectUser.userId
+    user.projectUserId = user.id 
+    user.fullName = projectUser.fullName
+    this.showDialogPlanUser('edit', user);
   }
 }
