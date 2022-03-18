@@ -145,7 +145,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                             TimeNeed = request.TimeNeed,
                             TimeDone = request.TimeDone,
                             SkillIds = request.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
-                            Skills = request.ResourceRequestSkills.Select(p=>new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
+                            Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
                             Status = request.Status,
                             PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
                             PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
@@ -1020,7 +1020,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await WorkScope.UpdateAsync(resourceRequest);
 
-            //SendKomuNotify(model.Name, project.Name, model.Status);
+            SendKomuNotify(model.Name, project.Name, model.Status);
 
             var result = new GetResourceRequestDto()
             {
@@ -1039,9 +1039,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                 SkillIds = model.SkillIds,
                 Skills = WorkScope.GetAll<Skill>().Where(p=> model.SkillIds.Contains(p.Id)).Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Name }).ToList(),
                 Status = resourceRequest.Status,
-                PlannedDate = resourceRequest.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
-                PlannedEmployee = resourceRequest.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                PlannedProjectUserId = resourceRequest.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
+                PlannedDate = resourceRequest.ProjectUsers?.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
+                PlannedEmployee = resourceRequest.ProjectUsers?.OrderByDescending(p => p.UserId)?.Select(x => x.User.FullName).FirstOrDefault(),
+                PlannedProjectUserId = resourceRequest.ProjectUsers?.OrderByDescending(p => p.UserId)?.Select(x => x.Id).FirstOrDefault(),
                 RequestStartTime = resourceRequest.CreationTime
             };
 
