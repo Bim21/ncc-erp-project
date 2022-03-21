@@ -178,7 +178,7 @@ namespace ProjectManagement.Roles
                                 Id = ur.Id,
                                 UserId = u.Id,
                                 FullName = u.FullName,
-                                AvatarPath = u.AvatarPath,
+                                AvatarPath = "/avatars/"+ u.AvatarPath,
                                 Branch = u.Branch,
                                 Email = u.EmailAddress,
                                 UserLevel = u.UserLevel,
