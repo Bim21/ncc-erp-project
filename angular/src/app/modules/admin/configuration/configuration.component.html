@@ -30,18 +30,6 @@
                 Edit
               </button>
               <button
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditKomuUrl = !isEditKomuUrl;
-                  isEditKomuSecretCode = !isEditKomuSecretCode;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditKomuUrl"
-              >
-                Save
-              </button>
-              <button
                 class="btn bg-secondary"
                 (click)="
                   isEditKomuUrl = !isEditKomuUrl;
@@ -53,6 +41,18 @@
               >
                 Cancel
               </button>
+              <button
+              class="btn btn-primary btn-action ml-3"
+              (click)="
+                saveConfiguration();
+                isEditKomuUrl = !isEditKomuUrl;
+                isEditKomuSecretCode = !isEditKomuSecretCode;
+                $event.stopPropagation()
+              "
+              [hidden]="!isEditKomuUrl"
+            >
+              Save
+            </button>
             </div>
           </mat-panel-title>
   
@@ -118,20 +118,7 @@
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              <a
-                href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditSecretCode = !isEditSecretCode;
-                  isEditProjectUri = !isEditProjectUri;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditProjectUri"
-              >
-                Save
-              </a>
-    
+              
               <a
                 href="javascript:;"
                 class="btn bg-secondary"
@@ -145,6 +132,20 @@
               >
                 Cancel
               </a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary btn-action ml-3"
+                (click)="
+                  saveConfiguration();
+                  isEditSecretCode = !isEditSecretCode;
+                  isEditProjectUri = !isEditProjectUri;
+                  $event.stopPropagation()
+                "
+                [hidden]="!isEditProjectUri"
+              >
+                Save
+              </a>
+    
             </div>
           </mat-panel-title>
   
@@ -201,19 +202,6 @@
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              <a
-                href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditHRM = !isEditHRM;
-                  isEditHRMSecretKey = !isEditHRMSecretKey;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditHRM"
-              >
-                Save
-              </a>
     
               <a
                 href="javascript:;"
@@ -228,6 +216,19 @@
               >
                 Cancel
               </a>
+              <a
+              href="javascript:;"
+              class="btn btn-primary btn-action ml-3"
+              (click)="
+                saveConfiguration();
+                isEditHRM = !isEditHRM;
+                isEditHRMSecretKey = !isEditHRMSecretKey;
+                $event.stopPropagation()
+              "
+              [hidden]="!isEditHRM"
+            >
+              Save
+            </a>
             </div>
           </mat-panel-title>
   
@@ -284,20 +285,7 @@
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              <a
-                href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditTimesheetSecretKey = !isEditTimesheetSecretKey;
-                  isEditTimesheetUri = !isEditTimesheetUri;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditTimesheetUri"
-              >
-                Save
-              </a>
-    
+
               <a
                 href="javascript:;"
                 class="btn bg-secondary"
@@ -310,6 +298,19 @@
                 [hidden]="!isEditTimesheetUri"
               >
                 Cancel
+              </a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary btn-action ml-3"
+                (click)="
+                  saveConfiguration();
+                  isEditTimesheetSecretKey = !isEditTimesheetSecretKey;
+                  isEditTimesheetUri = !isEditTimesheetUri;
+                  $event.stopPropagation()
+                "
+                [hidden]="!isEditTimesheetUri"
+              >
+                Save
               </a>
             </div>
           </mat-panel-title>
@@ -369,20 +370,6 @@
               </a>
               <a
                 href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditFinanceSecretKey = !isEditFinanceSecretKey;
-                  isEditFinanceUri = !isEditFinanceUri;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditFinanceUri"
-              >
-                Save
-              </a>
-    
-              <a
-                href="javascript:;"
                 class="btn bg-secondary"
                 (click)="
                   isEditFinanceSecretKey = !isEditFinanceSecretKey;
@@ -393,6 +380,19 @@
                 [hidden]="!isEditFinanceUri"
               >
                 Cancel
+              </a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary btn-action ml-3"
+                (click)="
+                  saveConfiguration();
+                  isEditFinanceSecretKey = !isEditFinanceSecretKey;
+                  isEditFinanceUri = !isEditFinanceUri;
+                  $event.stopPropagation()
+                "
+                [hidden]="!isEditFinanceUri"
+              >
+                Save
               </a>
             </div>
           </mat-panel-title>
@@ -451,22 +451,7 @@
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              <a
-                href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditCanSendDay = !isEditCanSendDay;
-                  isEditCanSendHour = !isEditCanSendHour;
-                  isEditExpiredDay = !isEditExpiredDay;
-                  isEditExpiredHour = !isEditExpiredHour;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditCanSendDay"
-              >
-                Save
-              </a>
-    
+
               <a
                 href="javascript:;"
                 class="btn bg-secondary"
@@ -482,6 +467,22 @@
               >
                 Cancel
               </a>
+              <a
+              href="javascript:;"
+              class="btn btn-primary btn-action ml-3"
+              (click)="
+                saveConfiguration();
+                isEditCanSendDay = !isEditCanSendDay;
+                isEditCanSendHour = !isEditCanSendHour;
+                isEditExpiredDay = !isEditExpiredDay;
+                isEditExpiredHour = !isEditExpiredHour;
+                $event.stopPropagation()
+              "
+              [hidden]="!isEditCanSendDay"
+            >
+              Save
+            </a>
+  
             </div>
           </mat-panel-title>
   
@@ -591,20 +592,20 @@
               </a>
               <a
                 href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="saveConfiguration(); isEditClientId = !isEditClientId;$event.stopPropagation()"
-                [hidden]="!isEditClientId"
-              >
-                Save
-              </a>
-              <a
-                href="javascript:;"
                 class="btn bg-secondary"
                 (click)="isEditClientId = !isEditClientId; getSetting();$event.stopPropagation()"
                 [hidden]="!isEditClientId"
               >
                 Cancel
               </a>
+              <a
+              href="javascript:;"
+              class="btn btn-primary btn-action ml-3"
+              (click)="saveConfiguration(); isEditClientId = !isEditClientId;$event.stopPropagation()"
+              [hidden]="!isEditClientId"
+            >
+              Save
+            </a>
             </div>
           </mat-panel-title>
   
@@ -645,17 +646,7 @@
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              <a
-                href="javascript:;"
-                class="btn bg-red mr-3"
-                (click)="
-                  saveConfiguration();
-                  isEditDefaultWorkingHours = !isEditDefaultWorkingHours;$event.stopPropagation()
-                "
-                [hidden]="!isEditDefaultWorkingHours"
-              >
-                Save
-              </a>
+              
               <a
                 href="javascript:;"
                 class="btn bg-secondary"
@@ -666,6 +657,17 @@
                 [hidden]="!isEditDefaultWorkingHours"
               >
                 Cancel
+              </a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary btn-action ml-3"
+                (click)="
+                  saveConfiguration();
+                  isEditDefaultWorkingHours = !isEditDefaultWorkingHours;$event.stopPropagation()
+                "
+                [hidden]="!isEditDefaultWorkingHours"
+              >
+                Save
               </a>
             </div>
           </mat-panel-title>

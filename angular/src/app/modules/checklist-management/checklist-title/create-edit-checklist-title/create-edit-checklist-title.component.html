@@ -14,9 +14,9 @@
             </div>
         </div>
     </div>
-    <div style="background-color: white;" align="end" class="d-flex justify-content-between" >
-        <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary" (click)="saveAndClose()" 
+    <div style="background-color: white;" align="end" class="d-flex justify-content-end" >
+        <button class="btn btn-secondary btn-action cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+        <button class="btn btn-primary btn-action" (click)="saveAndClose()" 
             [disabled]="!checkListTitle.valid || isLoading">Save</button>
     </div>
 </form>
