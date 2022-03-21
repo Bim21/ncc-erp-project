@@ -71,7 +71,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
                 this.refresh();
               })
             )
-            .subscribe(() => {});
+            .subscribe(() => { });
         }
       }
     );
@@ -81,10 +81,20 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
     this.showCreateOrEditRoleDialog();
   }
 
-  editRole(role: RoleDto): void {
-    this.showCreateOrEditRoleDialog(role.id);
+  showCreateOrEditRoleDialog(): void {
+    let createOrEditRoleDialog: BsModalRef;
+    createOrEditRoleDialog = this._modalService.show(
+      CreateRoleDialogComponent,
+      {
+        class: 'modal-lg',
+      },
+    );
+    createOrEditRoleDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
   }
-  editPage(roleId, name){
-    this._router.navigate(['/app/edit-role'],{queryParams: {id: roleId, name: name}})
+
+  editPage(roleId, name) {
+    this._router.navigate(['/app/edit-role'], { queryParams: { id: roleId, name: name } })
   }
 }

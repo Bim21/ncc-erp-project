@@ -226,6 +226,10 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
       });
   }
 
+  onCancelClick(){
+    history.back();
+  }
+
   onSaveData(node: Permission) {
     node.isLoading = true;
     let descendants = this.treeControl.getDescendants(node);

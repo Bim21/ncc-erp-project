@@ -30,8 +30,8 @@
 
 </div>
 <div align="end" class="row justify-content-end">
-    <button class="btn btn-secondary mr-2" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary"
+    <button class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
+    <button class="btn btn-primary btn-action"
         [disabled]="!resourceRequestForm.valid || checkNull || isLoading" (click)="SaveAndClose()">Save</button>
 </div>
 </form>
