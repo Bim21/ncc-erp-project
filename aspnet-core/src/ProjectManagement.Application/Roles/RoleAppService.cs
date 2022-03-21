@@ -193,7 +193,7 @@ namespace ProjectManagement.Roles
         public async Task<string> RemoveUserFromOutRole(long Id)
         {
             await _userRoleRepository.DeleteAsync(Id);
-            return "Delete Successed";
+            return "Deleted successfully";
         }
 
         [HttpPost]
@@ -204,7 +204,7 @@ namespace ProjectManagement.Roles
                 RoleId = input.RoleId,
                 UserId = input.UserId,
             });
-            return "Add Successed";
+            return "Added successfully";
         }
 
         public IActionResult GetAllUserLevel()
