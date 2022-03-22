@@ -28,9 +28,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public UserLevel Level { get; set; }
         public Priority Priority { get; set; }
         public DateTime RequestStartTime { get; set; }
-        public string PlannedEmployee { get; set; }
-        public DateTime? PlannedDate { get; set; }
-        public long? PlannedProjectUserId { get; set; }
         public string StatusName
         {
             get
@@ -54,6 +51,8 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
                 return Enum.GetName(typeof(UserLevel), Level);
             }
         }
+        public PlanUserInfoDto PlanUserInfo { get; set; }
+        public DateTime CreationTime { get; set; }
     }
 
     public class GetResourceRequestDto_SkillInfo
@@ -61,5 +60,24 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public long SkillId { get; set; }
 
         public string SkillName { get; set; }
+    }
+
+    public class PlanUserInfoDto
+    {
+        public long? ProjectUserId { get; set; }
+        public string PlannedEmployee { get; set; }
+        public DateTime? PlannedDate { get; set; }
+        public Branch? Branch { get; set; }
+        public UserType? UserType { get; set; }
+        public UserLevel? UserLevel { get; set; }
+        public string LevelName
+        {
+            get
+            {
+                if(UserLevel != null)
+                    return Enum.GetName(typeof(UserLevel), UserLevel);
+                return null;
+            }
+        }
     }
 }

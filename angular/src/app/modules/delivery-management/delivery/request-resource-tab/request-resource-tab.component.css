@@ -18,3 +18,7 @@
 .vertical-align-baseline{
     vertical-align: baseline !important;
 }
+
+::ng-deep table thead th i:hover {
+    color: black;
+}

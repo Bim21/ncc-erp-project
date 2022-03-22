@@ -65,7 +65,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
       this.resourceRequestService.createPlanUser(this.resourcePlan).subscribe(res => {
         if(res.success){
           abp.notify.success("Plan Success")
-          this.dialogRef.close(this.resourcePlan)
+          this.dialogRef.close({ type: '', data: res.result})
         }
         else{
           abp.notify.error(res.result)
@@ -77,7 +77,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
         this.resourceRequestService.deletePlanUser(this.resourcePlan.projectUserId).subscribe(res => {
           if(res.success){
             abp.notify.success("Plan Success")
-            this.dialogRef.close()
+            this.dialogRef.close({ type: 'delete', data: {resourceRequestId: this.resourcePlan.resourceRequestId}})
           }
           else{
             abp.notify.error(res.result)
@@ -88,7 +88,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
         this.resourceRequestService.updatePlanUser(this.resourcePlan).subscribe(res => {
           if(res.success){
             abp.notify.success("Update Success")
-            this.dialogRef.close()
+            this.dialogRef.close({ type: '', data: res.result})
           }
           else{
             abp.notify.error(res.result)

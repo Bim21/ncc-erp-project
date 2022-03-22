@@ -73,7 +73,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
     option: string
   ): Observable<any> {
     return this.http.post<any>(
-      this.rootUrl + `/GetAllPaging?order=${option}`,
+      this.rootUrl + `/GetAllPaging`,
       request
     );
   }
@@ -145,5 +145,34 @@ export class DeliveryResourceRequestService extends BaseApiService {
 
   public cancelResourceRequest(id: number): Observable<any>{
     return this.http.delete<any>(this.rootUrl + '/CancelResourcePlan?projectUserId='+ id);
+  }
+
+  public getSkills(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetSkills');
+  }
+
+  public getLevels(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetLevels');
+  }
+
+  public getPriorities(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetPriorities');
+  }
+
+  public getStatuses(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetStatuses');
+  }
+
+  public getResourceRequestById(id: number): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetResourceRequestById?requestId=' +id)
+  }
+  public updateNotePM(data: any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/UpdateRequestPmNote', data)
+  }
+  public updateNoteHPM(data: any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/UpdateRequestHpmNote', data)
+  }
+  public setDoneRequest(id: number): Observable<any>{
+    return this.http.get<any>(this.rootUrl )
   }
 }

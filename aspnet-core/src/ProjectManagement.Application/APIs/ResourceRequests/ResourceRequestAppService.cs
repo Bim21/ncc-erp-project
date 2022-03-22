@@ -93,23 +93,20 @@ namespace ProjectManagement.APIs.ResourceRequests
         PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
-            IQueryable<GetResourceRequestDto> query = null;
-
-            var queryRequest = WorkScope.GetAll<ResourceRequest>();
+            IQueryable<GetResourceRequestDto> qresourceRequest = null;
 
             if (input.SkillIds != null && input.SkillIds.Any())
             {
                 var querySkill = WorkScope.GetAll<ResourceRequestSkill>()
                                           .Where(p => input.SkillIds.Contains(p.SkillId));
 
-                query = from request in queryRequest
+                qresourceRequest = from request in WorkScope.GetAll<ResourceRequest>()
                         join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId
                         select new GetResourceRequestDto
                         {
                             DMNote = request.DMNote,
                             Id = request.Id,
                             IsRecruitmentSend = request.IsRecruitmentSend,
-                            Level = request.Level,
                             Name = request.Name,
                             ProjectName = request.Project.Name,
                             PMNote = request.PMNote,
@@ -121,40 +118,24 @@ namespace ProjectManagement.APIs.ResourceRequests
                             SkillIds = request.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
                             Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
                             Status = request.Status,
-                            PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
-                            PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
-                            RequestStartTime = request.CreationTime
+                            PlanUserInfo = new PlanUserInfoDto
+                            {
+                                ProjectUserId = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.Id).FirstOrDefault(),
+                                PlannedEmployee = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.FullName).FirstOrDefault(),
+                                PlannedDate = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.StartTime).FirstOrDefault(),
+                                Branch = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.Branch).FirstOrDefault(),
+                                UserLevel = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserLevel).FirstOrDefault(),
+                                UserType = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserType).FirstOrDefault(),
+                            },
+                            RequestStartTime = request.CreationTime,
+                            Level = request.Level,
                         };
             }
             else
             {
-                query = from request in queryRequest
-                        select new GetResourceRequestDto
-                        {
-                            DMNote = request.DMNote,
-                            Id = request.Id,
-                            IsRecruitmentSend = request.IsRecruitmentSend,
-                            Level = request.Level,
-                            Name = request.Name,
-                            ProjectName = request.Project.Name,
-                            PMNote = request.PMNote,
-                            Priority = request.Priority,
-                            ProjectId = request.ProjectId,
-                            RecruitmentUrl = request.RecruitmentUrl,
-                            TimeNeed = request.TimeNeed,
-                            TimeDone = request.TimeDone,
-                            SkillIds = request.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
-                            Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
-                            Status = request.Status,
-                            PlannedDate = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
-                            PlannedEmployee = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                            PlannedProjectUserId = request.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
-                            RequestStartTime = request.CreationTime
-                        };
+                qresourceRequest = IQGetResourceRequest(input.SkillIds);
             }
-
-            return await query.GetGridResult(query, input);
+            return await qresourceRequest.GetGridResult(qresourceRequest, input);
         }
 
         [HttpGet]
@@ -226,70 +207,27 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpGet]
         public async Task<List<GetResourceRequestDto>> GetAllRequestByProjectId(long projectId)
         {
-            var query = WorkScope.GetAll<ResourceRequest>()
-                                 .Where(p => p.ProjectId == projectId)
-                                 .OrderByDescending(p => p.CreationTime)
-                                 .Select(p => new GetResourceRequestDto()
-                                 {
-                                     DMNote = p.DMNote,
-                                     Id = p.Id,
-                                     IsRecruitmentSend = p.IsRecruitmentSend,
-                                     Level = p.Level,
-                                     Name = p.Name,
-                                     ProjectName = p.Project.Name,
-                                     PMNote = p.PMNote,
-                                     Priority = p.Priority,
-                                     ProjectId = p.ProjectId,
-                                     RecruitmentUrl = p.RecruitmentUrl,
-                                     TimeNeed = p.TimeNeed,
-                                     TimeDone = p.TimeDone,
-                                     SkillIds = p.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
-                                     Skills = p.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
-                                     Status = p.Status,
-                                     PlannedDate = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
-                                     PlannedEmployee = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                                     PlannedProjectUserId = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
-                                     RequestStartTime = p.CreationTime
-                                 });
+            var qgetAllRequestByProject = IQGetResourceRequest();
+            qgetAllRequestByProject = qgetAllRequestByProject
+                .Where(q => q.ProjectId == projectId)
+                .OrderByDescending(q => q.CreationTime);
 
-            return await query.ToListAsync();
+            return await qgetAllRequestByProject.ToListAsync();
         }
 
         [HttpGet]
         public async Task<GetResourceRequestDto> GetResourceRequestById(long requestId)
         {
-            var query = WorkScope.GetAll<ResourceRequest>()
-                     .Where(p => p.Id == requestId)
-                     .Select(p => new GetResourceRequestDto()
-                     {
-                         DMNote = p.DMNote,
-                         Id = p.Id,
-                         IsRecruitmentSend = p.IsRecruitmentSend,
-                         Level = p.Level,
-                         Name = p.Name,
-                         ProjectName = p.Project.Name,
-                         PMNote = p.PMNote,
-                         Priority = p.Priority,
-                         ProjectId = p.ProjectId,
-                         RecruitmentUrl = p.RecruitmentUrl,
-                         TimeNeed = p.TimeNeed,
-                         TimeDone = p.TimeDone,
-                         SkillIds = p.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
-                         Skills = p.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
-                         Status = p.Status,
-                         PlannedDate = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
-                         PlannedEmployee = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.User.FullName).FirstOrDefault(),
-                         PlannedProjectUserId = p.ProjectUsers.OrderByDescending(p => p.UserId).Select(x => x.Id).FirstOrDefault(),
-                         RequestStartTime = p.CreationTime
-                     });
-
-            return await query.FirstOrDefaultAsync();
+            var qgetResourceById = IQGetResourceRequest();
+            qgetResourceById = qgetResourceById
+                .Where(q => q.Id == requestId);
+            return await qgetResourceById.FirstOrDefaultAsync();
         }
 
         [HttpPost]
         public async Task<ResourceRequestDto> CreateRequestByProject(ResourceRequestDto model)
         {
-            model.Status = ResourceRequestStatus.APPROVE;
+            model.Status = ResourceRequestStatus.PENDING;
 
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
@@ -571,99 +509,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             return await users.GetGridResult(users, input);
         }
 
-
-        //[HttpPost]
-        //[AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResource,
-        //PermissionNames.PmManager_ResourceRequest_AvailableResource)]
-        //public async Task<GridResult<AvailableResourceDto>> AvailableResource(GridParam input, DateTime? startTime, long? skillId)
-        //{
-        //    input.SearchText = Regex.Replace(input.SearchText, @"\s+", " ");
-        //    var skill = input.FilterItems.Where(x => x.PropertyName == "skill").FirstOrDefault();
-        //    if (skill != null)
-        //    {
-        //        skillId = long.Parse(skill.Value.ToString());
-        //        input.FilterItems.Remove(skill);
-        //    }
-        //    var projectUsers = WorkScope.GetAll<ProjectUser>()
-        //                       .Where(x => x.Project.Status != ProjectStatus.Potential 
-        //                       && x.Project.Status != ProjectStatus.Closed && x.Status == ProjectUserStatus.Present 
-        //                       && x.IsFutureActive)
-        //                       .Select(x => new
-        //                       {
-        //                           UserId = x.UserId,
-        //                           ProjectId = x.ProjectId,
-        //                           ProjectName = x.Project.Name,
-        //                           AllocatePercentage = x.AllocatePercentage,
-        //                           Status = x.Status,
-        //                           ProjectRole = x.ProjectRole,
-        //                           StartTime = x.StartTime,
-        //                       });
-        //    var userSkills = WorkScope.GetAll<UserSkill>().Include(x => x.Skill);
-        //    var userPlanFuture = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
-        //               .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed);
-        //    var filterProjectName = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectName") : null;
-        //    var filterprojectUserPlans = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "projectUserPlans") : null;
-        //    var projectUserPresent = projectUsers.Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.StartTime);
-        //    var users = WorkScope.GetAll<User>().Where(x => x.IsActive).Where(x => x.UserType != UserType.FakeUser)
-        //                        .Select(x => new AvailableResourceDto
-        //                        {
-        //                            UserId = x.Id,
-        //                            UserType = x.UserType,
-        //                            FullName = x.Name + " " + x.Surname,
-        //                            NormalFullName = x.Surname + " " + x.Name,
-        //                            EmailAddress = x.EmailAddress,
-        //                            Branch = x.Branch,
-        //                            UserLevel = x.UserLevel,
-        //                            AvatarPath = "/avatars/" + x.AvatarPath,
-        //                            DateStartPool = projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id) != null ?
-        //                            projectUserPresent.FirstOrDefault(y => y.AllocatePercentage == 0 && y.UserId == x.Id).StartTime : x.CreationTime,
-        //                            WorkingProjects = projectUsers.Where(y => y.UserId == x.Id && y.AllocatePercentage > 0)
-        //                            .Select(x => new WorkingProjectDto
-        //                            {
-        //                                projectId = x.ProjectId,
-        //                                ProjectName = x.ProjectName,
-        //                                ProjectRole = x.ProjectRole,
-        //                                StartTime = x.StartTime
-        //                            }).ToList(),
-        //                            Used = (projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) > 0) ? projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage) : 0,
-        //                            ProjectUserPlans = userPlanFuture.Where(pu => pu.UserId == x.Id).Select(p => new ProjectUserPlan
-        //                            {
-        //                                ProjectName = p.Project.Name,
-        //                                StartTime = p.StartTime.Date,
-        //                                AllocatePercentage = p.AllocatePercentage
-        //                            }).ToList(),
-        //                            ListSkills = userSkills.Where(uk => uk.UserId == x.Id).Select(uk => new Skills.Dto.SkillDto
-        //                            {
-        //                                Id = uk.SkillId,
-        //                                Name = uk.Skill.Name
-        //                            }).ToList(),
-        //                            PoolNote = x.PoolNote,
-        //                            StarRate = x.StarRate,
-        //                            TotalFreeDay = WorkScope.GetAll<ProjectUser>().Where(y => y.UserId == x.Id).Any(y => y.Project.Status == ProjectStatus.InProgress && y.Status == ProjectUserStatus.Present && y.AllocatePercentage >= 100) ? //điều kiện đang có trong 1 dự dán
-        //                            0 :
-        //                            WorkScope.GetAll<ProjectUser>().Where(z => z.UserId == x.Id).Any(z => z.Status == ProjectUserStatus.Present && z.AllocatePercentage == 0) ? //điều kiện đã được release ra khỏi dự án
-        //                            (DateTime.Now - WorkScope.GetAll<ProjectUser>().Where(k => k.UserId == x.Id && k.Status == ProjectUserStatus.Present && k.AllocatePercentage == 0).OrderByDescending(k => k.StartTime).Select(k => k.StartTime).FirstOrDefault()).Days //lấy ra ngày release gần nhất
-        //                            : (DateTime.Now - x.CreationTime).Days //lấy ra ngày tạo
-        //                            ,
-        //                        }).Where(x => !skillId.HasValue || userSkills.Where(y => y.UserId == x.UserId).Select(y => y.SkillId).Contains(skillId.Value));
-        //    if (filterProjectName != null)
-        //    {
-        //        string searchByProject = filterProjectName.Value.ToString();
-        //        input.FilterItems.Remove(filterProjectName);
-        //        var listIdContainsProjectName = projectUsers.Where(x => x.ProjectName.Contains(searchByProject));
-        //        users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-        //    }
-        //    if (filterprojectUserPlans != null)
-        //    {
-        //        string searchByprojectUserPlans = filterprojectUserPlans.Value.ToString();
-        //        input.FilterItems.Remove(filterprojectUserPlans);
-        //        var listIdContainsProjectName = userPlanFuture.Where(x => x.Project.Name.Contains(searchByprojectUserPlans));
-        //        users = users.Where(x => listIdContainsProjectName.Where(y => y.UserId == x.UserId).Any());
-        //    }
-        //    return await users.GetGridResult(users, input);
-        //}
-
-
         [HttpPost]
         [AbpAuthorize]
         public async Task<GridResult<GetAllResourceDto>> GetVendorResource(InputGetResourceDto input)
@@ -778,6 +623,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                           }).FirstOrDefault();
             return result;
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture,
             PermissionNames.PmManager_ResourceRequest_AvailableResourceFuture)]
@@ -916,7 +762,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Create, PermissionNames.PmManager_ResourceRequest_Create)]
         public async Task<ResourceRequestDto> Create(ResourceRequestDto model)
         {
-            model.Status = ResourceRequestStatus.APPROVE;
+            model.Status = ResourceRequestStatus.PENDING;
 
             var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
@@ -962,7 +808,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                     await WorkScope.InsertAsync(skillModel);
                 }
 
-                SendKomuNotify(model.Name, project.Name, model.Status);
+                //SendKomuNotify(model.Name, project.Name, model.Status);
             }
 
             return model;
@@ -977,8 +823,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             {
                 throw new UserFriendlyException("Project doesn't exist");
             }
-
-            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
+            var resourceRequest = await WorkScope.GetAll<ResourceRequest>().Include(x => x.ProjectUsers).FirstOrDefaultAsync(x => x.Id == model.Id);
 
             var requestPlan = await WorkScope.GetAll<ProjectUser>().AnyAsync(p => p.ResourceRequestId == resourceRequest.Id);
             if (!requestPlan && resourceRequest.ProjectId != model.ProjectId)
@@ -1019,32 +864,10 @@ namespace ProjectManagement.APIs.ResourceRequests
             resourceRequest.Priority = model.Priority;
 
             await WorkScope.UpdateAsync(resourceRequest);
+            CurrentUnitOfWork.SaveChanges();
 
-            SendKomuNotify(model.Name, project.Name, model.Status);
-
-            var result = new GetResourceRequestDto()
-            {
-                DMNote = resourceRequest.DMNote,
-                Id = resourceRequest.Id,
-                IsRecruitmentSend = resourceRequest.IsRecruitmentSend,
-                Level = resourceRequest.Level,
-                Name = resourceRequest.Name,
-                ProjectName = resourceRequest.Project.Name,
-                PMNote = resourceRequest.PMNote,
-                Priority = resourceRequest.Priority,
-                ProjectId = resourceRequest.ProjectId,
-                RecruitmentUrl = resourceRequest.RecruitmentUrl,
-                TimeNeed = resourceRequest.TimeNeed,
-                TimeDone = resourceRequest.TimeDone,
-                SkillIds = model.SkillIds,
-                Skills = WorkScope.GetAll<Skill>().Where(p=> model.SkillIds.Contains(p.Id)).Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.Id, SkillName = p.Name }).ToList(),
-                Status = resourceRequest.Status,
-                PlannedDate = resourceRequest.ProjectUsers?.OrderByDescending(p => p.UserId).Select(x => x.StartTime).FirstOrDefault(),
-                PlannedEmployee = resourceRequest.ProjectUsers?.OrderByDescending(p => p.UserId)?.Select(x => x.User.FullName).FirstOrDefault(),
-                PlannedProjectUserId = resourceRequest.ProjectUsers?.OrderByDescending(p => p.UserId)?.Select(x => x.Id).FirstOrDefault(),
-                RequestStartTime = resourceRequest.CreationTime
-            };
-
+            //SendKomuNotify(model.Name, project.Name, model.Status);
+            var result = await IQGetResourceRequest().Where(x => x.Id == resourceRequest.Id).FirstOrDefaultAsync();
             return result;
         }
 
@@ -1105,12 +928,12 @@ namespace ProjectManagement.APIs.ResourceRequests
                             message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
                         }
                         break;
-                    case ResourceRequestStatus.APPROVE:
-                        {
-                            message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{requestName}** cho dự án **{projectName}**.");
-                            message.AppendLine(link);
-                        }
-                        break;
+                    //case ResourceRequestStatus.APPROVE:
+                    //    {
+                    //        message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{requestName}** cho dự án **{projectName}**.");
+                    //        message.AppendLine(link);
+                    //    }
+                    //    break;
                     case ResourceRequestStatus.PENDING:
                     default:
                         return;
@@ -1156,6 +979,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequestSkill>(input));
             return input;
         }
+
         [HttpDelete]
         [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_DeleteSkill, PermissionNames.PmManager_ResourceRequest_DeleteSkill)]
         public async Task DeleteSkill(long resourceRequestSkillId)
@@ -1285,6 +1109,43 @@ namespace ProjectManagement.APIs.ResourceRequests
                 item.Status = ProjectUserStatus.Past;
                 await WorkScope.UpdateAsync(item);
             }
+        }
+        #endregion
+
+        #region IQueryable
+        private IQueryable<GetResourceRequestDto> IQGetResourceRequest(List<long> skills = null)
+        {
+            var query = from request in WorkScope.GetAll<ResourceRequest>()
+                        select new GetResourceRequestDto
+                        {
+                            DMNote = request.DMNote,
+                            Id = request.Id,
+                            IsRecruitmentSend = request.IsRecruitmentSend,
+                            Name = request.Name,
+                            ProjectName = request.Project.Name,
+                            PMNote = request.PMNote,
+                            Priority = request.Priority,
+                            ProjectId = request.ProjectId,
+                            RecruitmentUrl = request.RecruitmentUrl,
+                            TimeNeed = request.TimeNeed,
+                            TimeDone = request.TimeDone,
+                            SkillIds = request.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
+                            Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
+                            Status = request.Status,
+                            PlanUserInfo = new PlanUserInfoDto
+                            {
+                                ProjectUserId = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.Id).FirstOrDefault(),
+                                PlannedEmployee = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.FullName).FirstOrDefault(),
+                                PlannedDate = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.StartTime).FirstOrDefault(),
+                                Branch = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.Branch).FirstOrDefault(),
+                                UserLevel = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserLevel).FirstOrDefault(),
+                                UserType = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserType).FirstOrDefault(),
+                            },
+                            RequestStartTime = request.CreationTime,
+                            Level = request.Level,
+                            CreationTime = request.CreationTime,
+                        };
+            return query;
         }
         #endregion
     }

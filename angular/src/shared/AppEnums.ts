@@ -110,7 +110,7 @@ export const APP_ENUMS = {
     },
     ResourceRequestStatus:
     {
-        INPROGRESS: 0,
+        PENDING: 0,
         DONE: 1,
         CANCELLED: 2,
         APPROVED: 3,
@@ -225,5 +225,9 @@ export const APP_ENUMS = {
         Medium: 1,
         High: 2,
         Critical: 3
+    },
+    Sortable:{
+        ASC: 0,
+        DESC: 1
     }
 }

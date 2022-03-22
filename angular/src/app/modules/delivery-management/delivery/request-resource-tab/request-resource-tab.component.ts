@@ -1,3 +1,5 @@
+import { FormSetDoneComponent } from './form-set-done/form-set-done.component';
+import { SortableComponent } from './../../../../../shared/components/sortable/sortable.component';
 import { AppComponentBase } from 'shared/app-component-base';
 import { async } from '@angular/core/testing';
 import { result } from 'lodash-es';
@@ -11,7 +13,7 @@ import { Router } from '@angular/router';
 import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { RequestResourceDto } from './../../../../service/model/delivery-management.dto';
-import { Component, OnInit, Injector, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Injector, ChangeDetectorRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from '@app/service/model/list-project.dto';
 import { SkillService } from '@app/service/api/skill.service';
@@ -41,6 +43,10 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         item.isTrue = true
       }
     })
+    if(this.sortable.sort){
+      requestBody.sort = this.sortable.sort;
+      requestBody.sortDirection = this.sortable.sortDirection
+    }
     this.resourceRequestService.getResourcePaging(requestBody, this.selectedOption).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
@@ -53,6 +59,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         }
       })
       requestBody.skillIds = null
+      requestBody.sort = null
+      requestBody.sortDirection = null
       this.isLoading = false;
     })
   }
@@ -91,23 +99,24 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public selectedStatus: any = 0
   public listRequest: RequestResourceDto[] = [];
   public tempListRequest: RequestResourceDto[] = [];
-  public statusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus)
-  public selectedLevel: any = -1
-  public levelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
+  public listStatuses: any[] = []
+  public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
+  public listPriorities: any[] = []
+  public selectedLevel: any = -1
   public isAndCondition:boolean =false;
   public skillIds:number[]
   public theadTable: THeadTable[] = [
     {name: '#'},
-    {name: 'Priority'},
-    {name: 'Project'},
+    {name: 'Priority', sortName: 'priority', defaultSort: 'ASC'},
+    {name: 'Project', sortName: 'projectName', defaultSort: ''},
     {name: 'Skill'},
-    {name: 'Level'},
-    {name: 'Time request'},
-    {name: 'Time need'},
+    {name: 'Level', sortName: 'level', defaultSort: ''},
+    {name: 'Time request', sortName: 'requestStartTime', defaultSort: ''},
+    {name: 'Time need', sortName: 'timeNeed', defaultSort: ''},
     {name: 'Planned resource'},
     {name: 'PM Note'},
-    {name: 'HPM Note'},
+    {name: 'HR/DM Note'},
     {name: 'Status'},
     {name: 'Action'},
   ]
@@ -115,6 +124,13 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public modal_title: string
   public strNote: string
   public typePM: string
+  public resourceRequestId: number
+  public sortable = {
+    sort: 'priority',
+    sortDirection: 0, 
+    typeSort: 'ASC'
+  }
+
   DeliveryManagement_ResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
   DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
   DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
@@ -130,8 +146,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   ngOnInit(): void {
     this.getAllSkills()
+    this.getLevels()
+    this.getPriorities()
+    this.getStatuses()
     this.refresh();
   }
+
   ngAfterContentInit(): void {
     //Called after ngOnInit when the component's or directive's content has been initialized.
     //Add 'implements AfterContentInit' to the class.
@@ -161,28 +181,29 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   showDialog(command: string, request: any) {
-    let resourceRequest = {} as RequestResourceDto;
-    resourceRequest = {
-      name: request.name,
-      projectId: request.projectId,
-      priority: request.id ? request.priority : 1,
-      timeDone: request.timeDone,
+    let resourceRequest = {
       id: request.id ? request.id : null,
-      quantity: request.id ? request.quantity : 1, 
-      skillIds: request.id ? request.skillIds : null,
-      timeNeed: request.id ? request.timeNeed : null,
-      level: request.id ? request.level : null
     }
     const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
       data: {
         command: command,
-        item: resourceRequest
+        item: resourceRequest, 
+        skills: this.listSkills,
+        levels: this.listLevels
       },
       width: "700px",
       maxHeight: '90vh',
     })
     show.afterClosed().subscribe(result => {
-      this.refresh()
+      if(command == 'create' && result)
+        this.refresh()
+      else if(command == 'edit'){
+        let index = this.listRequest.findIndex(x => x.id == result.id)
+        console.log(result)
+        if(index >= 0){
+          this.listRequest[index] = result
+        }
+      }
     });
   }
   public createRequest() {
@@ -192,10 +213,22 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.showDialog("edit", item);
   }
 
-  public openModal(name, typePM, content){
+  public modalSetDoneRequest(data){
+    const showModal = this.dialog.open(FormSetDoneComponent, {
+      data,
+      width: "700px",
+      maxHeight: "90vh"
+    })
+    showModal.afterClosed().subscribe((rs) => {
+
+    })
+  }
+
+  public openModal(name, typePM, content, id){
     this.typePM = typePM
     this.modal_title = name
     this.strNote = content
+    this.resourceRequestId = id
     this.isShowModal = 'block'
   }
 
@@ -203,9 +236,53 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.isShowModal = 'none'
   }
 
-  public updateNote(id, note){
-
+  public updateNote(){
+    let request = {
+      resourceRequestId: this.resourceRequestId,
+      pmNote: '',
+      hpmNote: ''
+    }
+    if(this.typePM == 'PM'){
+      this.updatePMNote(request,this.strNote)
+    }
+    else{
+      this.updateHPMNote(request,this.strNote)
+    }
+    this.closeModal()
   }
+
+  updatePMNote(request, note){
+    request.pmNote = note
+    this.resourceRequestService.updateNotePM(request).subscribe(res => {
+      if(res.success){
+        abp.notify.success('Update Note Successfully!')
+        let index = this.listRequest.findIndex(x => x.id == request.resourceRequestId);
+        if(index >= 0){
+          this.listRequest[index].pmNote = note;
+        }
+      }
+      else{
+        abp.notify.error(res.result)
+      }
+    })
+  }
+
+  updateHPMNote(request, note){
+    request.hpmNote = note
+    this.resourceRequestService.updateNoteHPM(request).subscribe(res => {
+      if(res.success){
+        abp.notify.success('Update Note Successfully!')
+        let index = this.listRequest.findIndex(x => x.id == request.resourceRequestId);
+        if(index >= 0){
+          this.listRequest[index].dmNote = note;
+        }
+      }
+      else{
+        abp.notify.error(res.result)
+      }
+    })
+  }
+
   async showModalPlanUser(item: any){
     let data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
@@ -214,19 +291,48 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       maxHeight:"90vh"
     })
     show.afterClosed().subscribe(result => {
-      this.refresh()
+      let resourceRequestId;
+        resourceRequestId = result.data.resourceRequestId
+      let index = this.listRequest.findIndex(x => x.id == resourceRequestId)
+      if(index >= 0){
+        if(result.type == 'delete'){
+          this.listRequest[index].plannedEmployee = null
+          this.listRequest[index].plannedDate = null
+        }
+        else{
+          this.listRequest[index].plannedEmployee = result.data.userName
+          this.listRequest[index].plannedDate = result.data.timeJoin
+        }
+      }
     });
   }
+
+  /*get skills, statuses, levels, priorities*/
   getAllSkills(){
-    this.skillService.getAll().subscribe((data) => {
+    this.resourceRequestService.getSkills().subscribe((data) => {
       this.listSkills = data.result;
-      this.skillsParam = data.result.map(item => {
-        return {
-          displayName: item.name,
-          value: item.id
-        }
-      })
     })
+  }
+  getLevels(){
+    this.resourceRequestService.getLevels().subscribe(res => {
+      this.listLevels = res.result
+    })
+  }
+  getPriorities(){
+    this.resourceRequestService.getPriorities().subscribe(res => {
+      this.listPriorities = res.result
+    })
+  }
+  getStatuses(){
+    this.resourceRequestService.getStatuses().subscribe(res => {
+      this.listStatuses = res.result
+    })
+  }
+  /*end get skills, statuses, levels, priorities */
+
+  sortTable(event: any){
+    this.sortable = event
+    this.refresh()
   }
 
   styleObject(item: any){
@@ -287,6 +393,10 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   viewRecruitment(url){
     window.open(url, '_blank')
   }
+
+  setDoneRequest(id: number){
+
+  }
 }
 
 export class THeadTable{
@@ -294,5 +404,7 @@ export class THeadTable{
   width?: string = 'auto';
   height?: string = 'auto';
   backgroud_color?: string;
+  sortName?: string;;
+  defaultSort?: string;
 }
 

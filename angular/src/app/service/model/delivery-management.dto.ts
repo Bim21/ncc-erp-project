@@ -1,8 +1,14 @@
 export class RequestResourceDto {
+  constructor(){
+    this.level = -1;
+    this.quantity = 1;
+    this.priority =1;
+    this.timeNeed = new Date()
+  }
   name: string;
   projectId: number;
   projectName?: string;
-  timeNeed?: string;
+  timeNeed?: any;
   status?: number;
   statusName?: string;
   timeDone: string;
@@ -14,6 +20,8 @@ export class RequestResourceDto {
   level?: any;
   priority?: any;
   quantity: number;
+  plannedEmployee?: string
+  plannedDate?: any
 }
 export class ResourceRequestDetailDto {
   userId: number;

@@ -36,7 +36,7 @@ export class AppConsts {
         // Future:"badge badge-pill badge-light"
     }
     static resourceRequestStyle ={
-        INPROGRESS: "badge badge-pill badge-primary",
+        PENDING: "badge badge-pill badge-primary",
         DONE: "badge badge-pill badge-success",
         CANCELLED: "badge badge-pill badge-danger",
         APPROVED:"badge badge-pill badge-secondary",

@@ -4,7 +4,7 @@ import { DeliveryResourceRequestService } from './../../../../../service/api/del
 import { result } from 'lodash-es';
 import { ProjectDto } from './../../../../../service/model/list-project.dto';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
-import { RequestResourceDto } from './../../../../../service/model/delivery-management.dto';
+import { RequestResourceDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -43,16 +43,28 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
 
   ngOnInit(): void {
     this.getAllProject();
-    this.resourceRequestDto = this.data.item;
-    this.title = this.resourceRequestDto.name;
-    this.getallskill();
-    
+    if(this.data.item.id){
+      this.getResourceRequestById(this.data.item.id)
+    }
+    else{
+      this.resourceRequestDto = new RequestResourceDto()
+    }
+    this.listSkill = this.data.skills
+    this.userLevelList = this.data.levels
   }
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     
   }
+
+  getResourceRequestById(id: number){
+    this.resourceRequestService.getResourceRequestById(id).subscribe(res => {
+      this.resourceRequestDto = res.result
+      this.title = res.result.name
+    })
+  }
+
   addSkill() {
     this.listSkillDetail.push({ pending: true })
     this.isAddingSkill = true
@@ -75,8 +87,8 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       }, () => this.isLoading = false)
     } else {
       this.resourceRequestService.update(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
-        abp.notify.success("Create Successfully!");
-        this.dialogRef.close(this.resourceRequestDto);
+        abp.notify.success("Update Successfully!");
+        this.dialogRef.close(res.result);
       }, () => this.isLoading = false)
     }
 

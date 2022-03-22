@@ -64,6 +64,7 @@ import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
+import { SortableComponent } from './components/sortable/sortable.component';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -129,12 +130,14 @@ import { NgxStarsModule } from 'ngx-stars';
         RadioDropdownComponent,
         FileUploadComponent,
         ListFilterPipe,
+        SortableComponent,
     ],
     exports: [
         AbpPaginationControlsComponent,
         AbpValidationSummaryComponent,
         AbpModalHeaderComponent,
         AbpModalFooterComponent,
+        SortableComponent,
         LocalizePipe,
         BusyDirective,
         EqualValidator,

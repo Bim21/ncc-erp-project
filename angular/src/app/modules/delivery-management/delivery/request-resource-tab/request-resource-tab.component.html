@@ -20,7 +20,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-4 pt-1">
+                    <div class="col-md-4 col-sm-12 pt-1">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="input-group">
@@ -63,33 +63,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-8">
+                    <div class="col-md-7 col-sm-12" style="text-align: end;">
                         <div class="row">
-                            <div class="col-md-4 d-flex align-items-center">
-                                <label class="mr-2 mb-0">Trạng thái:</label>
+                            <div class="col-md-4 col-sm-12">
+                                <label class="mr-2 mb-0">Status:</label>
                                 <mat-form-field appearance="outline">
                                     <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
                                         <mat-option [value]="-1">All</mat-option>
-                                        <mat-option *ngFor="let status of statusList"
-                                            [value]="APP_ENUM.ResourceRequestStatus[status]">
-                                            {{status}}
+                                        <mat-option *ngFor="let status of listStatuses"
+                                            [value]="status.id">
+                                            {{status.name}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-4 d-flex align-items-center">
+                            <div class="col-md-4 col-sm-12">
                                 <label class="mr-2 mb-0">Level:</label>
                                 <mat-form-field appearance="outline">
                                     <mat-select [(ngModel)]="selectedLevel" (selectionChange)="refresh()">
                                         <mat-option [value]="-1">All</mat-option>
-                                        <mat-option *ngFor="let level of levelList"
-                                            [value]="APP_ENUM.UserLevel[level]">
-                                            {{level}}
+                                        <mat-option *ngFor="let level of listLevels"
+                                            [value]="level.id">
+                                            {{level.name}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-4 d-flex align-items-center">
+                            <div class="col-md-4 col-sm-12">
                                 <label class="mr-2 mb-0">Skills:</label>
                                 <mat-form-field appearance="outline">
                                     <mat-select placeholder="search skill" multiple (selectionChange)="refresh()" [(ngModel)]="skillIds">
@@ -112,24 +112,34 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-1 pt-1" style="text-align: end;">
+                        <button type="button" class="btn btn-light" matTooltip="Clear Filter"><i class="fa fa-times"></i>Clear</button>
+                    </div>
                 </div>
             </div>
 
             <div class="card-body table-responsive pb-4">
-                <div class="d-flex">
+                <!-- <div class="d-flex">
                     <label class="mb-1 mr-2">Order by: </label>
                     <mat-radio-group [(ngModel)]="selectedOption" aria-label="Select an option" (change)="refresh()">
                         <mat-radio-button class="mx-2" value="PROJECT">Project</mat-radio-button>
                         <mat-radio-button class="mx-2" value="TIMENEED">Time need</mat-radio-button>
                         <mat-radio-button class="mx-2" value="SKILL">Skill</mat-radio-button>
                     </mat-radio-group>
-                </div>
+                </div> -->
                 <!-- <div class="fixTableHead"> -->
                 <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap mt-2">
                     <thead>
                         <tr>
-                            <th *ngFor="let thead of theadTable" [ngStyle]="styleObject(thead)">
-                                {{thead.name}}
+                            <th *ngFor="let thead of theadTable; let i = index" [ngStyle]="styleObject(thead)">
+                                <div class="row">
+                                    <div class="col-md-8 text-left">
+                                        {{thead.name}}
+                                    </div>
+                                    <div class="col-md-4 text-right" *ngIf="i != 0 && thead.sortName" style="vertical-align: middle;">
+                                        <app-sortable [data]="{sort: thead.sortName, typeSort: thead.defaultSort}" (sortEvent)="sortTable($event)"></app-sortable>
+                                    </div>
+                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -142,7 +152,9 @@
                                 totalItems: totalItems
                             }; let i = index">
                             <td class="text-center"><span>{{ i +1 }}</span></td>
-                            <td class="text-center"><p class="tag" [ngClass]="APP_CONST.priorityRequest[item.priority]">{{item.priorityName}}</p></td>
+                            <td class="text-center">
+                                <p class="tag" [ngClass]="APP_CONST.priorityRequest[item.priority]">{{item.priorityName}}</p>
+                            </td>
                             <!-- <td class="text-left" style="white-space: normal; max-width: 250px;"><span class="hyperlink"
                                     (click)="showDetail(item)">{{ item.name }}</span></td> -->
                             <td class="text-center">{{item.projectName}}</td>
@@ -170,25 +182,46 @@
                                 <small>{{Utils.getTimeHistory(item.timeNeed)}}</small>
                             </td>
                             <td> 
-                                <b>{{item.plannedEmployee}} </b>
-                                <br>
-                                {{item.plannedDate|date: "dd/MM/yyyy"}}
+                                <div class="row">
+                                    <div class="col-md-9" *ngIf="item.planUserInfo">
+                                        <b>{{item.planUserInfo.plannedEmployee}} </b>
+                                        <br>
+                                        {{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}
+                                    </div>
+                                    <div class="col-md-3 text-right" *ngIf="item.statusName == 'PENDING'">
+                                        <i class="fa fa-edit" (click)="showModalPlanUser(item)"></i>
+                                    </div>
+                                </div>
                             </td>
                             <td style="white-space: normal; max-width: 250px;">
-                                <pre 
-                                    class="mb-0 p-0  ml-2" style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
-                                >
-                                    {{item.pmNote}}
-                                    <i class="fa fa-edit" (click)="openModal(item.name, 'PM', item.pmNote)"></i>
-                                </pre>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <pre 
+                                            class="mb-0 p-0  ml-2" 
+                                            style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                        >
+                                            {{item.pmNote}}
+                                        </pre>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <i class="fa fa-edit" (click)="openModal(item.name, 'PM', item.pmNote, item.id)"></i>
+                                    </div>
+                                </div>
                             </td>
                             <td style="white-space: normal; max-width: 250px;">
-                                <pre 
-                                    class="mb-0 p-0  ml-2" style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
-                                >
-                                    {{item.dmNote}} 
-                                    <i class="fa fa-edit" (click)="openModal(item.name, 'HPM', item.dmNote)"></i>
-                                </pre>
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <pre 
+                                            class="mb-0 p-0  ml-2" 
+                                            style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                        >
+                                            {{item.dmNote}} 
+                                        </pre>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <i class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
+                                    </div>
+                                </div>
                             </td>
                             <td class="text-center">
                                 <span
@@ -204,7 +237,25 @@
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
                                     <!-- case 1: Status is inprogress -->
-                                    <div *ngIf="item.statusName == 'INPROGRESS'">
+                                    <div *ngIf="item.statusName == 'PENDING'">
+                                        <button
+                                            class="btn btn-block text-left"
+                                            mat-button
+                                            (click)="setDoneRequest(item);"
+                                        >
+                                            <i class="vertical-align-baseline"></i>
+                                            Set Done
+                                        </button>
+                                        <br>
+                                        <button
+                                            class="btn btn-block text-left"
+                                            mat-button
+                                            (click)="cancelRequest(item);"
+                                        >
+                                            <i class="fa fa-times vertical-align-baseline"></i>
+                                            Cancel
+                                        </button>
+                                        <br>
                                         <button 
                                             class="btn btn-block text-left"
                                             mat-button
@@ -224,23 +275,6 @@
                                             <i class="fa fa-trash vertical-align-baseline"></i>
                                             Delete
                                         </button>
-                                        <br>
-                                        <button
-                                            class="btn btn-block text-left"
-                                            mat-button
-                                            (click)="cancelRequest(item);"
-                                        >
-                                            <i class="fa fa-times vertical-align-baseline"></i>
-                                            Cancel
-                                        </button>
-                                        <br>
-                                        <button 
-                                            class="btn btn-block text-left"
-                                            mat-button
-                                            (click)="showModalPlanUser(item)"
-                                        >
-                                            Plan
-                                        </button>
                                     </div>
                                     <!-- case 2: Status is inprogress and IsRecruitmentSend is TRUE-->
                                     <!-- case 6: Status is cancel and IsRecruitmentSend is TRUE-->
@@ -251,7 +285,7 @@
                                         </button>
                                     </div>
                                     <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
-                                    <div *ngIf="item.statusName == 'INPROGRESS' && !item.isRecruitmentSend" class="text-left">
+                                    <div *ngIf="item.statusName == 'PENDING' && !item.isRecruitmentSend" class="text-left">
                                         <button class="btn btn-block text-left" mat-button>
                                             Send recruitment
                                         </button>
@@ -345,7 +379,7 @@
         <!-- Modal footer -->
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
-            <button type="button" class="btn btn-primary" (click)="saveAndClose()">Save</button>
+            <button type="button" class="btn btn-primary" (click)="updateNote()">Save</button>
         </div>
 
         </div>
