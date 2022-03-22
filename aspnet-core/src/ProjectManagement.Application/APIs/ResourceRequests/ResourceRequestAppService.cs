@@ -400,9 +400,9 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             if (input.AllocatePercentage <= 0)
             {
-               _resourceManager.ValidateUserWorkingInThisProject(input.UserId, input.ProjectId);
+              var pu = _resourceManager.ValidateUserWorkingInThisProject(input.UserId, input.ProjectId);
+                input.ProjectRole = pu.Result.ProjectRole;
             }
-
             await _resourceManager.AddFuturePUAndNofity(input);
         }
 
