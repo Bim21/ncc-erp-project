@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.Timesheet
 {
@@ -25,6 +26,32 @@ namespace ProjectManagement.Services.Timesheet
             this.settingManager = settingManager;
             this.httpClient = httpClient;
             this.logger = logger;
+        }
+
+        public async Task<string> createCustomer(string name, string code, string address)
+        {
+            var item = new
+            {
+                Name = name,
+                Code = code,
+                Address = address
+            };
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateCustomer", item);
+        }
+        public async Task<string> createProject(string name, string code,
+                            DateTime startTime, DateTime? endTime, string customerCode, ProjectType projectType, string emailPM)
+        {
+            var item = new
+            {
+                Name = name,
+                Code = code,
+                TimeStart = startTime,
+                TimeEnd = endTime,
+                CustomerCode = customerCode,
+                ProjectType = projectType,
+                EmailPM = emailPM
+            };
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateProject", item);
         }
 
         public async Task<TotalWorkingTimeOfWeekDto> GetWorkingHourFromTimesheet(string projectCode, DateTime startDate, DateTime endDate)

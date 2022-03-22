@@ -36,9 +36,9 @@
         </div>
     </div>
 </div>
-<div align="end" class="row justify-content-between">
-    <button class="btn btn-default" mat-dialog-close>Cancel</button>
-    <button class="btn btn-primary"
+<div align="end" class="row justify-content-end">
+    <button class="btn btn-secondary btn-action mr-3" mat-dialog-close>Cancel</button>
+    <button class="btn btn-primary btn-action"
         [disabled]=" !timesheetForm.valid || isLoading" (click)="SaveAndClose()">Save</button>
 </div>
 </form>

@@ -150,9 +150,9 @@
                             </td>
                             <td *ngIf="item.createMode !=null" class="d-flex text-center" style="border: none;">
                                 <button [disabled]="!item.description || !item?.status?.toString()"  (click)="saveMilestoneRequest(item);"
-                                    type="submit" class="btn btn-primary mr-1 ml-3 mt-2"
+                                    type="submit" class="btn btn-primary btn-action mr-1 ml-3 mt-2"
                                     >Save</button>
-                                <button  (click)="refresh();  isAllowed =true; isEditing=false" class="btn btn-default mt-2">Cancel</button>
+                                <button  (click)="refresh();  isAllowed =true; isEditing=false" class="btn btn-default btn-action mt-2">Cancel</button>
 
                             </td>
                         </tr>
