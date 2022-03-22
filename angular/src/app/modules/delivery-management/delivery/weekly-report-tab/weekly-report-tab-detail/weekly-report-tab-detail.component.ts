@@ -169,25 +169,27 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
   public getPmReportProject(): void {
-    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
-      this.pmReportProjectList = data.result;
-      this.tempPmReportProjectList = data.result;
-      this.projectId = this.pmReportProjectList[0]?.projectId
-      this.generalNote = this.pmReportProjectList[0]?.note
-      this.totalNormalWorkingTime = this.pmReportProjectList[0]?.totalNormalWorkingTime
-      this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
-      this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
-      this.pmReportProjectId = this.pmReportProjectList[0]?.id
-      if (this.pmReportProjectList[0]) {
-        this.pmReportProjectList[0].setBackground = true
-      }
-      this.getProjectInfo();
-      this.getWeeklyReport();
-      this.getFuturereport();
-      this.getProjectProblem();
-      this.getCurrentResourceOfProject();
-      this.search()
-    }))
+    if (this.router.url.includes("weeklyReportTabDetail")) {
+      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
+        this.pmReportProjectList = data.result;
+        this.tempPmReportProjectList = data.result;
+        this.projectId = this.pmReportProjectList[0]?.projectId
+        this.generalNote = this.pmReportProjectList[0]?.note
+        this.totalNormalWorkingTime = this.pmReportProjectList[0]?.totalNormalWorkingTime
+        this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
+        this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
+        this.pmReportProjectId = this.pmReportProjectList[0]?.id
+        if (this.pmReportProjectList[0]) {
+          this.pmReportProjectList[0].setBackground = true
+        }
+        this.getProjectInfo();
+        this.getWeeklyReport();
+        this.getFuturereport();
+        this.getProjectProblem();
+        this.getCurrentResourceOfProject();
+        this.search()
+      }))
+    }
   }
   getProjectInfo() {
     this.isLoading = true;
