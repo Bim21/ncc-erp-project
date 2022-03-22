@@ -21,6 +21,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Services.Timesheet;
+using Abp.Domain.Repositories;
+using Abp.Authorization.Users;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -29,9 +32,13 @@ namespace ProjectManagement.APIs.Projects
     {
         private readonly IProjectUserAppService _projectUserAppService;
 
-        public ProjectAppService(IProjectUserAppService projectUserAppService)
+        private readonly TimesheetService _timesheetService;
+        private readonly IRepository<UserRole, long> _userRoleRepository;
+        public ProjectAppService(IProjectUserAppService projectUserAppService, TimesheetService timesheetService, IRepository<UserRole, long> userRoleRepository)
         {
             _projectUserAppService = projectUserAppService;
+            _timesheetService = timesheetService;
+            _userRoleRepository = userRoleRepository;
         }
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
@@ -175,9 +182,42 @@ namespace ProjectManagement.APIs.Projects
             return input;
         }
 
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
-        public async Task<ProjectDto> Create(ProjectDto input)
+        private async Task<string> CreateProjectInTimesheet(ProjectDto input)
+        {
+
+            //Set role PM for user when user set PM of project
+            var isRolePM = await (from ur in _userRoleRepository.GetAll()
+                                  where ur.RoleId == StaticRoleNames.Host.PM
+                                  where ur.UserId == input.PmId
+                                  select ur.Id).FirstOrDefaultAsync();
+            if (isRolePM == default)
+            {
+                await _userRoleRepository.InsertAsync(new UserRole
+                {
+                    RoleId = StaticRoleNames.Host.PM,
+                    UserId = input.PmId
+                });
+            }
+
+            var customerCode = await WorkScope.GetAll<Client>().Where(x => x.Id == input.ClientId).Select(x => x.Code).FirstOrDefaultAsync();
+            var emailPM = await WorkScope.GetAll<User>().Where(x => x.Id == input.PmId).Select(x => x.EmailAddress).FirstOrDefaultAsync(); ;
+            if (customerCode == default)
+            {
+                //Training + product
+                customerCode = "NCC";
+            }
+            var createProject = await _timesheetService.createProject(input.Name, input.Code, input.StartTime, input.EndTime,
+                                                                       customerCode, input.ProjectType, emailPM, input.Status);
+            return createProject;
+        }
+
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
+        public async Task<string> Create(ProjectDto input)
         {
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
 
@@ -220,7 +260,7 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-            return input;
+            return await CreateProjectInTimesheet(input);
         }
 
         [HttpPut]
@@ -338,7 +378,7 @@ namespace ProjectManagement.APIs.Projects
         }
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
-        public async Task<TrainingProjectDto> CreateTrainingProject(TrainingProjectDto input)
+        public async Task<string> CreateTrainingProject(TrainingProjectDto input)
         {
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.Id == input.Id);
 
@@ -381,7 +421,19 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-            return input;
+
+            var trainingProject = new ProjectDto
+            {
+                Name = input.Name,
+                Code = input.Code,
+                ProjectType = ProjectType.TRAINING,
+                PmId = input.PmId,
+                StartTime = input.StartTime,
+                EndTime = input.EndTime,
+                Status = input.Status
+            };
+
+            return await CreateProjectInTimesheet(trainingProject);
         }
         [HttpPut]
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]

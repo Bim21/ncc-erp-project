@@ -8,7 +8,6 @@ import { catchError } from 'rxjs/operators';
 import { UserService } from './../../../../service/api/user.service';
 import { Component, OnInit, Injector, Inject } from '@angular/core';
 import * as moment from 'moment';
-
 @Component({
   selector: 'app-create-edit-training-project',
   templateUrl: './create-edit-training-project.component.html',
@@ -37,6 +36,10 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
       this.project = this.data.dialogData
       this.isEditStatus = true
     }
+    else{
+      this.project.status = this.APP_ENUM.ProjectStatus.InProgress;
+      this.project.startTime = moment(new Date()).format("YYYY-MM-DD")
+    }
     this.title = this.project.name;
   }
   public getAllPM(): void {
@@ -56,12 +59,22 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
       this.projectService.CreateTrainingProject(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
         abp.notify.success("created new project");
         this.dialogRef.close(this.project);
+        if(res.result == null || res.result == ""){
+          abp.message.success(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+          <p style='color:#28a745'>Create project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+         'Create project result',true);
+        }
+        else{
+          abp.message.error(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+          <p style='color:#dc3545'>${res.result}</p>`, 
+          'Create project result',true);
+        }
       }, () => this.isLoading = false);
     }
     else {
       this.project.projectType = 5;
       this.projectService.UpdateTrainingProject(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("edited project: "+this.project.name);
+        abp.notify.success("Edited project: "+this.project.name);
         this.dialogRef.close(this.project);
       }, () => this.isLoading = false);
     }
