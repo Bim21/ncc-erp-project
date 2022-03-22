@@ -277,8 +277,8 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
     this.listUsers = this.listUsersForSearch.filter(
       member => 
         ( this.searchMemberText ? 
-          ( member.fullName.includes(this.searchMemberText) || 
-            member.email.includes(this.searchMemberText)
+          ( member.fullName.toLowerCase().includes(this.searchMemberText.toLowerCase()) || 
+            member.email.toLowerCase().includes(this.searchMemberText.toLowerCase())
         ) : true)
         && (this.userBranchForFilter < 0 || member.branch === this.userBranchForFilter)
         && (this.userTypeForFilter < 0 || member.userType === this.userTypeForFilter)
