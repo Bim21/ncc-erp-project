@@ -242,4 +242,20 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM: "Timesheet.TimesheetProject.TimesheetProjectBill.UpdateOnlyMyProjectPM",
 
     Timesheet_TimesheetProject_ExportInvoice: "Timesheet.TimesheetProject.ExportInvoice",
+
+
+
+
+
+
+    // Project User Add and confirm permission
+     PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject :"PmManager.ProjectUser.ConfirmMoveEmployeeToOtherProject",
+     PmManager_ProjectUser_ConfirmPickUserFromPoolToProject :"PmManager.ProjectUser.ConfirmPickUserFromPoolToProject",
+     PmManager_ProjectUser_ProjectUser_MoveEmployeeToOtherProject :"PmManager.ProjectUser.ProjectUser.MoveEmployeeToOtherProject",
+     PmManager_ProjectUser_ProjectUser_PickUserFromPoolToProject :"PmManager.ProjectUser.ProjectUser.PickUserFromPoolToProject",
+
+     DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject :"DeliveryManagement.ProjectUser.ConfirmMoveEmployeeToOtherProject",
+     DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject :"DeliveryManagement.ProjectUser.ConfirmPickUserFromPoolToProject",
+     DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject :"DeliveryManagement.ProjectUser.MoveEmployeeToOtherProject",
+     DeliveryManagement_ProjectUser_PickUserFromPoolToProject :"DeliveryManagement.ProjectUser.PickUserFromPoolToProject",
 }

@@ -57,12 +57,12 @@
                                         <div *ngIf="user.createMode" class="form-group row required">
 
                                             <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select [(ngModel)]="user.userInfo" name="projectEmployee" placeholder="select account *" required #projectEmployee="ngModel">
+                                                <mat-select [(ngModel)]="user.userInfo" (ngModelChange)="onUserSelect(user)" name="projectEmployee" placeholder="select account *" required #projectEmployee="ngModel">
                                                     <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUser" name="searchUserName" placeholder="Search" (keydown)="$event.stopPropagation()" #search>{{search.focus()}}
                                                     </mat-form-field>
-                                                    <mat-option *ngFor="let user of userForProjectUser |listFilter: 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'" [value]="user">
-                                                        {{user.fullName}} - ({{user.emailAddress}})</mat-option>
+                                                    <mat-option *ngFor="let u of userForProjectUser |listFilter: 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'" [value]="u">
+                                                        {{u.fullName}} - ({{u.emailAddress}})</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                             <mat-error class="mt-1" *ngIf="projectEmployee.hasError('required') && projectEmployee.touched" style="font-size: 13px;">
@@ -80,7 +80,7 @@
                                                 <div style="width: 10%; text-align: right;"
                                                     *ngIf="!(user.workingStatus == APP_ENUM.ProjectUserStatus.Past 
                                                 || (user.workingStatus == APP_ENUM.ProjectUserStatus.Present && user.allocatePercentage == 0))">
-                                                    <i class="fas fa-edit" (click)="updateUserSkill(user)"
+                                                    <i class="fas fa-edit" (click)="updateUserSkill(user)" *ngIf="!user.createMode && !user.editMode"
                                                         matTooltip="Edit skill"></i>
                                                 </div>
                                             </div>
@@ -227,8 +227,8 @@
                                                             <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                                 <input matInput [(ngModel)]="searchUser" name="searchUserName" placeholder="Search" (keydown)="$event.stopPropagation()" #search>{{search.focus()}}
                                                             </mat-form-field>
-                                                            <mat-option *ngFor="let user of userForProjectUser |listFilter: 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'" [value]="user.id">
-                                                                {{user.fullName}} - ({{user.emailAddress}})</mat-option>
+                                                            <mat-option *ngFor="let u of userForProjectUser |listFilter: 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'" [value]="u.id" (click)="onPlanUserSelect(user,u)">
+                                                                {{u.fullName}} - ({{u.emailAddress}})</mat-option>
                                                         </mat-select>
                                                     </mat-form-field>
                                                     <mat-error class="mt-1" *ngIf="projectEmployee.hasError('required') && projectEmployee.touched" style="font-size: 13px;">
@@ -248,8 +248,8 @@
                                                         - {{item.skillName}}
                                                     </p>
                                                 </div>
-                                                <div style="width: 10%; text-align: right;">
-                                                    <i class="fas fa-edit" (click)="updateUserSkill(user)"
+                                                <div style="width: 10%; text-align: right;" >
+                                                    <i class="fas fa-edit" (click)="updateUserSkill(user) " *ngIf="!user.createMode && !user.editMode"
                                                         matTooltip="Edit skill"></i>
                                                 </div>
                                             </div>
@@ -280,7 +280,7 @@
                                         </div>
                                         <div *ngIf="user.createMode || user.editMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
-                                                <input matInput [matDatepicker]="picker" placeholder="chose a date *" required [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel" #projectDateEl>
+                                                <input matInput [matDatepicker]="picker" [min]="tomorrowDate" placeholder="chose a date *" required [(ngModel)]="user.startTime" name="usercreateDate" #projectDate="ngModel" #projectDateEl>
                                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker></mat-datepicker>
                                             </mat-form-field>

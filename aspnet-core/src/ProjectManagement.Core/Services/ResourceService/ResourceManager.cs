@@ -11,6 +11,7 @@ using NccCore.Extension;
 using NccCore.IoC;
 using NccCore.Paging;
 using NccCore.Uitls;
+using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants;
 using ProjectManagement.Entities;
@@ -124,7 +125,8 @@ namespace ProjectManagement.Services.ResourceManager
                 {
                     ProjectName = x.Project.Name,
                     PmName = x.Project.PM.FullName,
-                    StartTime = x.StartTime
+                    StartTime = x.StartTime,
+                    IsPool = x.IsPool
                 });
         }
 
@@ -135,6 +137,7 @@ namespace ProjectManagement.Services.ResourceManager
                 .Where(s => s.Id == projectId)
                 .Select(s => new KomuProjectInfoDto
                 {
+                    Status = s.Status,
                     ProjectId = projectId,
                     ProjectCode = s.Code,
                     ProjectName = s.Name,
@@ -161,15 +164,24 @@ namespace ProjectManagement.Services.ResourceManager
 
         private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project, long activeReportId, bool isPresentPool)
         {
-            var currentPUs = await _workScope.GetAll<ProjectUser>()
-                .Include(s => s.Project)
-                .Where(s => s.UserId == employee.UserId)
-                .Where(s => s.Status == ProjectUserStatus.Present)
-                .Where(s => s.AllocatePercentage > 0)
-                .ToListAsync();
-
             var sbKomuMessage = new StringBuilder();
-
+           var currentPUs = await _workScope.GetAll<ProjectUser>()
+            .Include(s => s.Project)
+            .Where(s => s.UserId == employee.UserId)
+            .Where(s => s.Status == ProjectUserStatus.Present)
+            .Where(s => s.Project.Status == ProjectStatus.InProgress)
+            .Where(s => s.AllocatePercentage > 0)
+            .ToListAsync();
+            if (await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject) == false)
+            {
+                foreach (var pu in currentPUs)
+                {
+                    if (pu.IsPool == false)
+                    {
+                        throw new UserFriendlyException("This user is working offical in other project, so he/she can't work TEMP in other project");
+                    }
+                }
+            }
             if (!currentPUs.IsEmpty())
             {
                 var isUserWorkingOnProject = currentPUs
@@ -184,14 +196,7 @@ namespace ProjectManagement.Services.ResourceManager
 
                 foreach (var pu in currentPUs)
                 {
-                    if (!pu.IsPool && isPresentPool)
-                    {
-                        throw new UserFriendlyException($"UserId {employee.FullName} is working OFFICIALLY for Project {project.ProjectName}." +
-                            $" So he/she can't work TEMPT for other project now!");
-                    }
-
                     //release user from current project
-
                     pu.PMReportId = activeReportId;
                     pu.Status = ProjectUserStatus.Past;
 
@@ -230,7 +235,11 @@ namespace ProjectManagement.Services.ResourceManager
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(input.UserId);
             var project = await GetKomuProjectInfo(input.ProjectId);
-
+        
+            if (project.Status == ProjectStatus.Closed)
+            {
+                throw new UserFriendlyException("You can not add user to closed project");
+            }
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, input.IsPool);
 
             var joinPU = new ProjectUser
@@ -283,12 +292,12 @@ namespace ProjectManagement.Services.ResourceManager
                 throw new UserFriendlyException($"Start Time must be less than or equal {DateTimeUtils.ToString(startTime)}");
             }
 
-            var activeReportId = await GetActiveReportId();
-
-            var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(futurePU.UserId);
-            var project = await GetKomuProjectInfo(futurePU.ProjectId);
+     
 
+            var project = await GetKomuProjectInfo(futurePU.ProjectId);
+            var activeReportId = await GetActiveReportId();
+            var sessionUser = await getSessionKomuUserInfo();
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool);
 
             futurePU.Status = ProjectUserStatus.Present;
@@ -296,7 +305,6 @@ namespace ProjectManagement.Services.ResourceManager
             futurePU.PMReportId = activeReportId;
 
             await _workScope.UpdateAsync(confirmPUExt.PU);
-
             await nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
 
 
@@ -304,10 +312,25 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
+        public void ValidateUserWorkingInThisProject(long userId, long projectId)
+        {
+            var isUserWorkingInThisProject =  _workScope.GetAll<ProjectUser>()
+                 .Where(s => s.UserId == userId)
+                 .Where(s => s.ProjectId == projectId)
+                 .Where(s => s.Status == ProjectUserStatus.Present)
+                 .Where(s => s.AllocatePercentage > 0)
+                 .Where(s => s.Project.Status == ProjectStatus.InProgress)
+                 .Any();
+            if (!isUserWorkingInThisProject)
+            {
+                throw new UserFriendlyException("This user is not working in this Project, so you can't plan him out project");
+            }
+        }
 
         public async Task<ProjectUser> ConfirmOutProject(ConfirmOutProjectDto input)
         {
             var outPUExt = await GetPUExt(input.ProjectUserId);
+            ValidateUserWorkingInThisProject(outPUExt.PU.UserId, outPUExt.PU.ProjectId);
 
             if (outPUExt == null || outPUExt.PU == null)
             {
@@ -315,7 +338,6 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             var outPU = outPUExt.PU;
-
             if (outPU.Status != ProjectUserStatus.Future || outPU.AllocatePercentage > 0)
             {
                 throw new UserFriendlyException($"Invalid ProjectUser with Id {outPU.Id}:  Status != FUTURE or AllocatePercentage > 0");
@@ -327,7 +349,6 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             var activeReportId = await GetActiveReportId();
-
             var curentPUs = await _workScope.GetAll<ProjectUser>()
                 .Where(x => x.ProjectId == outPU.ProjectId)
                 .Where(x => x.Status == ProjectUserStatus.Present)
@@ -338,18 +359,17 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 curentPU.Status = ProjectUserStatus.Past;
                 curentPU.PMReportId = activeReportId;
-                curentPU.StartTime = input.StartTime;
                 await _workScope.UpdateAsync(curentPU);
             }
 
             outPU.Status = ProjectUserStatus.Present;
             outPU.PMReportId = activeReportId;
+            outPU.StartTime = input.StartTime;
             await _workScope.UpdateAsync(outPU);
 
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(outPU.UserId);
             var project = await GetKomuProjectInfo(outPU.ProjectId);
-
             var sbKomuMessage = new StringBuilder();
 
             sbKomuMessage.Append($"{DateTimeUtils.ToString(outPU.StartTime)}: {sessionUser.KomuAccountInfo} ");
@@ -358,7 +378,6 @@ namespace ProjectManagement.Services.ResourceManager
             await SendKomu(sbKomuMessage, project.ProjectCode);
 
             return outPU;
-
         }
 
 
@@ -387,17 +406,21 @@ namespace ProjectManagement.Services.ResourceManager
 
             var activeReportId = await GetActiveReportId();
 
-            presentPU.PU.Status = ProjectUserStatus.Past;
-            presentPU.PU.PMReportId = activeReportId;
 
-            await _workScope.UpdateAsync(presentPU.PU);
+            if (input.ReleaseDate.Date <= DateTimeUtils.GetNow())
+            {
+                presentPU.PU.Status = ProjectUserStatus.Past;
+                presentPU.PU.PMReportId = activeReportId;
 
+                await _workScope.UpdateAsync(presentPU.PU);
+            }
             var releasePU = new ProjectUser
             {
                 UserId = presentPU.PU.UserId,
                 IsPool = presentPU.PU.IsPool,
                 Status = input.ReleaseDate.Date <= DateTimeUtils.GetNow() ? ProjectUserStatus.Present : ProjectUserStatus.Future,
                 ProjectId = presentPU.PU.ProjectId,
+                ProjectRole = presentPU.PU.ProjectRole,
                 PMReportId = activeReportId,
                 AllocatePercentage = 0,
                 StartTime = input.ReleaseDate,
@@ -419,14 +442,11 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
-        public async Task<IQueryable<UserOfProjectDto>> QueryPlansOfProject(long projectId)
+        public IQueryable<UserOfProjectDto> QueryPlansOfProject(long projectId)
         {
-            var activeReportId = await GetActiveReportId();
-
             var q = QueryUsersOfProject(projectId)
                 .Where(x => x.PUStatus == ProjectUserStatus.Future)
-                .Where(x => x.PMReportId == activeReportId)
-                .OrderByDescending(x => x.StartTime); ;
+                .OrderByDescending(x => x.StartTime);
 
             return q;
 
@@ -494,7 +514,6 @@ namespace ProjectManagement.Services.ResourceManager
         public async Task<ProjectUser> AddFuturePU(InputPlanResourceDto input)
         {
             var activeReportId = await GetActiveReportId();
-
             var pu = new ProjectUser
             {
                 AllocatePercentage = input.AllocatePercentage,
@@ -632,10 +651,14 @@ namespace ProjectManagement.Services.ResourceManager
                            .Where(pu => pu.PMReportId == activeReportId)
                            .Select(pu => new ProjectOfUserDto
                            {
+                               Id = pu.Id,
+                               ProjectId = pu.ProjectId,
                                ProjectName = pu.Project.Name,
                                ProjectRole = pu.ProjectRole,
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
+                               IsPool = pu.IsPool,
+                               AllocatePercentage = pu.AllocatePercentage
                            })
                            .ToList(),
 
@@ -645,10 +668,13 @@ namespace ProjectManagement.Services.ResourceManager
                             && s.Project.Status != ProjectStatus.Closed)
                             .Select(pu => new ProjectOfUserDto
                             {
+                                ProjectId = pu.Id,
                                 ProjectName = pu.Project.Name,
                                 ProjectRole = pu.ProjectRole,
+                                ProjectStatus = pu.Project.Status,
                                 PmName = pu.Project.PM.Name,
                                 StartTime = pu.StartTime,
+                                IsPool = pu.IsPool
                             })
                            .ToList(),
 
@@ -751,15 +777,21 @@ namespace ProjectManagement.Services.ResourceManager
                            .Select(pu => new ProjectOfUserDto
                            {
                                ProjectName = pu.Project.Name,
+                               ProjectId = pu.ProjectId,
                                ProjectRole = pu.ProjectRole,
+                               ProjectStatus = pu.Project.Status,
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
+                               Id = pu.Id,
+                               AllocatePercentage = pu.AllocatePercentage,
+                               IsPool = pu.IsPool
                            })
                            .ToList(),
 
                            PoolProjects = u.ProjectUsers
                            .Where(pu => pu.Status == ProjectUserStatus.Present)
                            .Where(pu => pu.IsPool)
+                           .Where(pu => pu.AllocatePercentage > 0)
                            .Where(pu => pu.Project.Status != ProjectStatus.Closed)
                            .Select(pu => new ProjectOfUserDto
                            {
@@ -767,6 +799,7 @@ namespace ProjectManagement.Services.ResourceManager
                                ProjectRole = pu.ProjectRole,
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
+                               Id = pu.Id,
                            })
                            .ToList(),
 

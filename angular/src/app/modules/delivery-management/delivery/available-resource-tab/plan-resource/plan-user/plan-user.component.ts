@@ -20,6 +20,8 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   public listProject: ProjectDto[] = [];
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole);
   public searchProject: string = ""
+  public tomorrowDate = new Date();
+
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
     private availableResourceService: DeliveryResourceRequestService,
@@ -28,19 +30,33 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
     private projectUserService: ProjectUserService) { super(injector) }
 
   ngOnInit(): void {
+    this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
     this.getAllProject();
+    if (this.data.command != "edit") {
+      this.planUser.startTime = moment(this.tomorrowDate).format("YYYY-MM-DD");
+      this.planUser.isPool = false
+      this.planUser.allocatePercentage = 100
+    }
+    else {
+      this.planUser.startTime = moment(this.planUser.startTime).format("YYYY-MM-DD");
+      this.planUser = this.data.item
+    }
     this.planUser.userId = this.data.item.userId;
     this.planUser.fullName = this.data.item.fullName;
   }
   public SaveAndClose() {
-
-    if (this.data.command == "plan") {
-      this.planUser.percentUsage = 100
-      this.planUser.startTime = moment(this.planUser.startTime).format("YYYY/MM/DD");
+    this.isLoading = true
+    this.planUser.startTime = moment(this.planUser.startTime).format("YYYY-MM-DD");
+    if (this.data.command != "edit") {
       this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
         abp.notify.success("Planed Successfully!");
         this.dialogRef.close(this.planUser);
-
+      }, () => this.isLoading = false);
+    }
+    else {
+      this.availableResourceService.EditProjectUserPlan(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
+        abp.notify.success("Planed Successfully!");
+        this.dialogRef.close(this.planUser);
       }, () => this.isLoading = false);
     }
   }

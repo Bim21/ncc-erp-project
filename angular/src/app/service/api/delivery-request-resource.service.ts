@@ -45,7 +45,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
     );
   }
   public planUser(item: any): Observable<any> {
-    return this.http.post<any>(this.rootUrl + '/PlanUser', item);
+    return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
   }
   public availableResourceFuture(request: PagedRequestDto): Observable<any> {
     return this.http.post<any>(
@@ -175,4 +175,27 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public setDoneRequest(id: number): Observable<any>{
     return this.http.get<any>(this.rootUrl )
   }
+  public ConfirmOutProject(input: any) {
+    return this.http.post(this.rootUrl + `/ConfirmOutProject`, input)
+
+  }
+  public ConfirmJoinProject(projectUserId: number, startTime: any) {
+    return this.http.get(this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`)
+  }
+
+
+  public EditProjectUserPlan( input:any) {
+    return this.http.post(this.rootUrl + `/EditProjectUserPlan`,input)
+  }
+
+  public PlanNewResourceToProject( input:any) {
+    return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
+  }
+
+  public AddUserToTempProject( input:any) {
+    return this.http.post(this.rootUrl + `/AddUserFromPoolToTempProject`,input)
+  }
+
+
+
 }

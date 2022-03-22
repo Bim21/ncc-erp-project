@@ -152,7 +152,6 @@
     margin-left: 20px;
   }
   .modal-body{
-    max-height: 82vh !important;
     overflow: auto;
   }
   .modal-open .modal {
@@ -160,5 +159,20 @@
   }
   ::ng-deep .modal-content{
     
+  }
+  ::ng-deep .w-80{
+    min-width: 80vw !important;
+  }
+
+  .scroll-user-role{
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  ::ng-deep .add-user-form-role .mat-form-field {
+    width: 20rem;
+  }
+  ::ng-deep .form-search-role .mat-form-field{
+    display: block;
   }
   

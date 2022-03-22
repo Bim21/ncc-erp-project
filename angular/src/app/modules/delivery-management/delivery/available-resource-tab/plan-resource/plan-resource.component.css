@@ -31,3 +31,12 @@ button {
 span {
     height: fit-content;
 }
+
+#pool .fa-edit,
+#pool .fa-plus {
+    font-size: 15px;
+}
+table { height: 1px; } /* Will be ignored, don't worry. */
+tr { height: 100%; }
+td { height: 100%; }
+td > div { height: 100%; }

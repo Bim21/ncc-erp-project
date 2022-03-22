@@ -24,7 +24,7 @@ namespace ProjectManagement.Services.ResourceService.Dto
         public int? StarRate { get; set; }
         
         public string PoolNote { get; set; }
-        public bool IsOffical { get; set; }
+        public bool IsPool { get; set; }
         public DateTime LastReleaseDate { get; set; }
         public DateTime UserCreationTime { get; set; }
 

@@ -18,6 +18,8 @@ import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dia
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { ProjectUserService } from '@app/service/api/project-user.service';
+import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 
 @Component({
   selector: 'app-all-resource',
@@ -88,8 +90,8 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     private dialog: MatDialog,
     private skillService: SkillService,
     private _modalService: BsModalService,
-    private userInfoService: UserService
-
+    private userInfoService: UserService,
+    private projectUserService: ProjectUserService
 
 
   ) { super(injector) }
@@ -98,28 +100,33 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.pageSizeType = 100
     this.changePageSize();
     this.getAllSkills();
+    console.log("project status", this.APP_ENUM.ProjectStatus)
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
       userId: user.userId,
-      fullName: user.fullName
-    }
+      fullName: user.fullName,
+      projectId: user.projectId,
+      projectRole: user.projectRole,
+      startTime: user.startTime,
+      allocatePercentage: user.allocatePercentage,
+      isPool: user.isPool,
+      projectUserId: user.projectUserId
+    };
 
     const show = this.dialog.open(PlanUserComponent, {
       width: '700px',
       disableClose: true,
       data: {
         item: item,
-        command: command
+        command: command,
       },
     });
-    show.afterClosed().subscribe(result => {
+    show.afterClosed().subscribe((result) => {
       if (result) {
-        this.refresh()
+        this.refresh();
       }
     });
-
-
   }
 
   public isAllowCancelPlan(creatorUserId: number) {
@@ -207,7 +214,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       (result: boolean) => {
         if (result) {
           this.subscription.push(
-            this.availableRerourceService.CancelResourcePlan(projectUser.projectUserId).subscribe(rs => {
+            this.availableRerourceService.CancelResourcePlan(projectUser.id).subscribe(rs => {
               this.refresh()
               abp.notify.success("Cancel plan for user")
             })
@@ -247,10 +254,10 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
           }
         });
-        if (count > 10) {
-          user.conditionHistory = true
+        if (count > 6) {
+          user.showMoreHistory = true
         } else {
-          user.conditionHistory = false;
+          user.showMoreHistory = false;
         }
         user.userProjectHistory = userHisTory
       })
@@ -261,5 +268,48 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   }
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe())
+  }
+  
+  confirm(plan, userId, userName) {
+    // if (user.allocatePercentage <= 0) {
+    //   let ref = this.dialog.open(ReleaseUserDialogComponent, {
+    //     width: "700px",
+    //     data: {
+    //       user: user,
+    //       type: "confirmOut",
+    //     },
+    //   })
+    //   ref.afterClosed().subscribe(rs => {
+    //     if (rs) {
+    //       this.refresh()
+    //     }
+    //   })
+    // }
+    // else if (user.allocatePercentage > 0) {
+
+    plan.userId = userId
+    plan.fullName = userName
+    this.projectUserService.GetAllWorkingProjectByUserId(userId).subscribe(data => {
+      let ref = this.dialog.open(ConfirmPlanDialogComponent, {
+        width: '580px',
+        data: {
+          workingProject: data.result,
+          user: plan,
+        }
+      })
+
+      ref.afterClosed().subscribe(rs => {
+        if (rs) {
+          this.refresh()
+        }
+      })
+    })
+    // }
+  }
+  editUserPlan(user: any, projectUser:any) {
+    user.userId = projectUser.userId
+    user.projectUserId = user.id 
+    user.fullName = projectUser.fullName
+    this.showDialogPlanUser('edit', user);
   }
 }

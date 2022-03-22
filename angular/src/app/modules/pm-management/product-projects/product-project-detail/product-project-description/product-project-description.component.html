@@ -131,10 +131,10 @@
 
             <div class="form-group row" [hidden]="readMode">
                 <div class="form-group row d-flex justify-content-between">
-                    <button class="btn btn-default mx-2" (click)="readMode = true; " (click)="getProjectDetail()">
+                    <button class="btn btn-secondary btn-action mx-2" (click)="readMode = true; " (click)="getProjectDetail()">
                         Cancel
                     </button>
-                    <button class="btn btn-primary" [disabled]=" isLoading" (click)="updateInfo()">
+                    <button class="btn btn-primary btn-action" [disabled]=" isLoading" (click)="updateInfo()">
                         Save
                     </button>
                 </div>

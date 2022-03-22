@@ -16,6 +16,9 @@ using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
 using System;
@@ -31,10 +34,13 @@ namespace ProjectManagement.APIs.PMReportProjects
     public class PMReportProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly TimesheetService _timesheetService;
+        private readonly ResourceManager _resourceManager;
 
-        public PMReportProjectAppService(TimesheetService timesheetService)
+
+        public PMReportProjectAppService(TimesheetService timesheetService, ResourceManager resourceManager)
         {
             _timesheetService = timesheetService;
+            _resourceManager = resourceManager;
         }
 
         [HttpGet]
@@ -290,6 +296,60 @@ namespace ProjectManagement.APIs.PMReportProjects
             query = query.Where(x => x.UserType != UserType.FakeUser);
             return await query.ToListAsync();
         }
+
+        public async Task<List<UserOfProjectDto>> GetPlannedResourceByPmReport(long projectId, long pmReportId)
+        {
+            var query = _resourceManager.QueryPlansOfProject(projectId);
+            return await query.Where(x => x.PMReportId == pmReportId).ToListAsync();
+        }
+
+        public async Task<List<UserOfProjectDto>> GetchangedResourceByPmReport(long projectId, long pmReportId)
+        {
+            var query = _resourceManager.QueryUsersOfProject(projectId);
+            return await query.Where(x => x.PMReportId == pmReportId)
+                             .Where(x => x.ProjectId == projectId)
+                             .Where(x => x.PUStatus != ProjectUserStatus.Future)
+                             .OrderByDescending(x => x.StartTime)
+                             .ToListAsync();
+        }
+
+
+
+        [HttpDelete]
+        [AbpAuthorize()]
+        public async Task CancelResourcePlan(long projectUserId)
+        {
+            await _resourceManager.DeleteFuturePUAndNotify(projectUserId);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task ConfirmOutProject(ConfirmOutProjectDto input)
+        {
+            await _resourceManager.ConfirmOutProject(input);
+        }
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        {
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+        }
+
+        [HttpPost]
+        [AbpAuthorize()]
+        public async Task EditProjectUserPlan(EditProjectUserDto input)
+        {
+            await _resourceManager.EditProjectUserPlan(input);
+        }
+
+        [HttpPost]
+        public async Task PlanEmployeeJoinProject(InputPlanResourceDto input)
+        {
+            await _resourceManager.AddFuturePU(input);
+        }
+
+
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_SendReport,

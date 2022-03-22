@@ -24,7 +24,7 @@ export class EditReportComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     const now = new Date();
-    this.nextTuesday =  moment().day(9).format("yyyy-MM-DD")
+    this.nextTuesday =  moment().day(9).format("DD-MM-yyyy")
     this.dialogType = this.data.command || 'RENAME'
     this.report = this.data.dialogData;
     this.report.name = this.dialogType === "RENAME" ? this.report.name : `Weekly ${this.nextTuesday}`

@@ -11,3 +11,6 @@ button:disabled{
     font-size: 80%;
     color: #dc3545;
 }
+.btn-save{
+    width: 75px;
+}

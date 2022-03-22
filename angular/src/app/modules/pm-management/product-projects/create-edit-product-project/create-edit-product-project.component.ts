@@ -38,6 +38,10 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
       this.project = this.data.dialogData
       this.isEditStatus = true
     }
+    else{
+      this.project.status = this.APP_ENUM.ProjectStatus.InProgress;
+      this.project.startTime = moment(new Date()).format("YYYY-MM-DD")
+    }
     this.title = this.project.name;
   }
   public getAllPM(): void {
@@ -54,16 +58,25 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
     }
     if (this.data.command == "create") {
       this.project.projectType = 3;
-      this.project.status = 0;
       this.projectService.create(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
         abp.notify.success("created new project");
         this.dialogRef.close(this.project);
+        if(res.result == null || res.result == ""){
+          abp.message.success(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+          <p style='color:#28a745'>Create project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+         'Create project result',true);
+        }
+        else{
+          abp.message.error(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+          <p style='color:#dc3545'>${res.result}</p>`, 
+          'Create project result',true);
+        }
       }, () => this.isLoading = false);
     }
     else {
       this.project.projectType = 3;
       this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("edited project: "+this.project.name);
+        abp.notify.success("Edited project: "+this.project.name);
         this.dialogRef.close(this.project);
       }, () => this.isLoading = false);
     }

@@ -15,11 +15,47 @@
             </mat-form-field>
         </div>
     </div>
+    <div *ngIf="!allowConfirm">
+        <p style="font-size: 20px;" class="text-danger"><strong>{{user.fullName}}</strong> is working on the following
+            projects:</p>
+        <ul>
+            <li *ngFor="let project of workingProject">
+                <strong>{{project.projectName}}</strong> (pm:
+                <strong>{{project.pmName}}</strong>) <strong
+                [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong> since
+                <strong>{{project.startTime | date: "dd/MM/yyyy"}}</strong>
+
+            </li>
+        </ul>
+        <p style="font-size: 17px;">
+            Please contact PM to release <strong>{{user.fullName}}</strong>
+        </p>
+    </div>
+    <div *ngIf="workingProject.length >0 && user.allocatePercentage > 0 && allowConfirm">
+        <p style="font-size: 20px;" class="text-danger"><strong>{{user.fullName}}</strong> is working on the following
+            projects:</p>
+        <ul>
+            <li *ngFor="let project of workingProject">
+                <strong>{{project.projectName}}</strong> (pm:
+                <strong>{{project.pmName}}</strong>) <strong
+                [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong> since
+                <strong>{{project.startTime | date: "dd/MM/yyyy"}}</strong>
+
+            </li>
+        </ul>
+        <p style="font-size: 17px;">
+            Are you sure to confirm <strong>{{user.fullName}} </strong> <strong class="text-success">join</strong>
+            project and <strong class="text-danger">release</strong> from other
+            projects?
+        </p>
+
+    </div>
+
     <div class="d-flex justify-content-end">
-        <button class="btn btn-secondary mr-2" mat-dialog-close="">
+        <button class="btn btn-secondary btn-action mr-2" mat-dialog-close="">
             Cancel
         </button>
-        <button class="btn btn-primary" (click)="confirm()">
+        <button class="btn btn-primary btn-action" (click)="confirm()">
             Confirm
         </button>
     </div>
