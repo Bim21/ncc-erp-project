@@ -210,7 +210,7 @@ namespace ProjectManagement.APIs.Projects
                 customerCode = "NCC";
             }
             var createProject = await _timesheetService.createProject(input.Name, input.Code, input.StartTime, input.EndTime,
-                                                                       customerCode, input.ProjectType, emailPM, input.Status);
+                                                                       customerCode, input.ProjectType, emailPM);
             return createProject;
         }
 
@@ -429,8 +429,7 @@ namespace ProjectManagement.APIs.Projects
                 ProjectType = ProjectType.TRAINING,
                 PmId = input.PmId,
                 StartTime = input.StartTime,
-                EndTime = input.EndTime,
-                Status = input.Status
+                EndTime = input.EndTime
             };
 
             return await CreateProjectInTimesheet(trainingProject);

@@ -39,7 +39,7 @@ namespace ProjectManagement.Services.Timesheet
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateCustomer", item);
         }
         public async Task<string> createProject(string name, string code,
-                            DateTime startTime, DateTime? endTime, string customerCode, ProjectType projectType, string emailPM, ProjectStatus Status)
+                            DateTime startTime, DateTime? endTime, string customerCode, ProjectType projectType, string emailPM)
         {
             var item = new
             {
@@ -49,8 +49,7 @@ namespace ProjectManagement.Services.Timesheet
                 TimeEnd = endTime,
                 CustomerCode = customerCode,
                 ProjectType = projectType,
-                EmailPM = emailPM,
-                Status = Status,
+                EmailPM = emailPM
             };
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateProject", item);
         }
