@@ -12,24 +12,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjectManagement.Services.Timesheet;
 
 namespace ProjectManagement.APIs.Clients
 {
     [AbpAuthorize]
     public class ClientAppService : ProjectManagementAppServiceBase
     {
+        private readonly TimesheetService _timesheetService;
+        public ClientAppService(TimesheetService timesheetService)
+        {
+            _timesheetService = timesheetService;
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Admin_Client_ViewAll)]
         public async Task<GridResult<ClientDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Client>()
+                .OrderByDescending(s => s.CreationTime)
                 .Select(s => new ClientDto
                 {
                     Id = s.Id,
                     Name = s.Name,
                     Code = s.Code,
                     Address = s.Address,
-                    
                 });
             return await query.GetGridResult(query, input);
         }
@@ -50,7 +57,7 @@ namespace ProjectManagement.APIs.Clients
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Admin_Client_Create)]
-        public async Task<ClientDto> Create(ClientDto input)
+        public async Task<string> Create(ClientDto input)
         {
             var isExist = await WorkScope.GetAll<Client>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
 
@@ -58,7 +65,9 @@ namespace ProjectManagement.APIs.Clients
                 throw new UserFriendlyException(String.Format("Name or Code already exist !"));
 
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Client>(input));
-            return input;
+
+            var createCustomer = await _timesheetService.createCustomer(input.Name, input.Code, input.Address);
+            return createCustomer;
         }
         [HttpPut]
         [AbpAuthorize(PermissionNames.Admin_Client_Edit)]
