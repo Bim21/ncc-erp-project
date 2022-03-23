@@ -291,7 +291,6 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 throw new UserFriendlyException($"Start Time must be less than or equal {DateTimeUtils.ToString(startTime)}");
             }
-
             var employee = await getKomuUserInfo(futurePU.UserId);
      
 

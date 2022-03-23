@@ -153,3 +153,10 @@ cd-timer {
 .badge {
     height: fit-content;
 }
+
+td,
+th {
+    padding: 5px !important;
+    vertical-align: middle;
+    white-space: nowrap;
+}

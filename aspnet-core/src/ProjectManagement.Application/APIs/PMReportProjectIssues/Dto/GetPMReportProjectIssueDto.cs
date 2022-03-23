@@ -26,5 +26,6 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
         public ProjectHealth ProjectHealth { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int TotalWeekAgo { get; set; }
     }
 }

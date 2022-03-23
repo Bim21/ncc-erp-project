@@ -87,6 +87,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             var query = WorkScope.GetAll<PMReportProject>().Where(x => x.Id == pmReportProjectId)
                                         .Select(x => new
                                         {
+                                            ProjectCode = x.Project.Code,
                                             ProjectName = x.Project.Name,
                                             ClientName = x.Project.Client.Name,
                                             PmName = x.PM.FullName,
@@ -102,28 +103,33 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, 
             PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
-        public async Task<List<CurrentResourceDto>> GetCurrentResourceOfProject(long projectId)
+        public async Task<List<UserOfProjectDto>> GetWorkingResourceOfProject(long projectId)
         {
-            var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Project.Status != ProjectStatus.Closed)
-                               .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                               select new
-                               {
-                                   UserId = pu.UserId,
-                                   TotalPercent = pu.AllocatePercentage
-                               };
+            //var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Project.Status != ProjectStatus.Closed)
+            //                   .Where(x => x.Status == ProjectUserStatus.Present )
+            //                   select new
+            //                   {
+            //                       UserId = pu.UserId,
+            //                       TotalPercent = pu.AllocatePercentage
+            //                   };
 
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                                .Where(x => x.ProjectId == projectId)
-                                .Where(x => x.Status == ProjectUserStatus.Present && x.IsFutureActive && x.AllocatePercentage > 0)
-                                .Where(x => x.User.UserType != UserType.FakeUser)
-                                .Select(x => new CurrentResourceDto
-                                { 
-                                    FullName = x.User.FullName,
-                                    ProjectRole = x.ProjectRole.ToString(),
-                                    AllocatePercentage = x.AllocatePercentage,
-                                    TotalPercent = totalPercent.Where(t => t.UserId == x.UserId).Sum(x => x.TotalPercent)
-                                });
-            return await projectUsers.ToListAsync();
+            //var projectUsers = WorkScope.GetAll<ProjectUser>()
+            //                    .Where(x => x.ProjectId == projectId)
+            //                    .Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0)
+            //                    .Where(x => x.User.UserType != UserType.FakeUser)
+            //                    .Select(x => new CurrentResourceDto
+            //                    { 
+            //                        UserId= x.UserId,
+            //                        FullName = x.User.FullName,
+            //                        ProjectRole = x.ProjectRole.ToString(),
+            //                        AllocatePercentage = x.AllocatePercentage,
+            //                        TotalPercent = totalPercent.Where(t => t.UserId == x.UserId).Sum(x => x.TotalPercent)
+            //                    });
+            //return await projectUsers.ToListAsync();
+            var query = _resourceManager.QueryUsersOfProject(projectId)
+                .Where(x => x.PUStatus == ProjectUserStatus.Present && x.AllocatePercentage > 0);
+
+            return await query.ToListAsync();
         }
 
         [HttpPost]
@@ -169,7 +175,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                             Solution = prpi.Solution,
                             MeetingSolution = prpi.MeetingSolution,
                             Status = prpi.Status.ToString(),
-                            CreatedAt = prpi.CreationTime
+                            CreatedAt = prpi.CreationTime,
+                            TotalWeekAgo = (DateTimeUtils.GetNow() - prpi.CreationTime).Days
                         };
 
             var result = query.Select(x => new GetResultpmReportProjectIssue
@@ -299,7 +306,8 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         public async Task<List<UserOfProjectDto>> GetPlannedResourceByPmReport(long projectId, long pmReportId)
         {
-            var query = _resourceManager.QueryPlansOfProject(projectId);
+            var query = _resourceManager.QueryPlansOfProject(projectId)
+                .Where(s => s.PMReportId == pmReportId);
             return await query.Where(x => x.PMReportId == pmReportId).ToListAsync();
         }
 
