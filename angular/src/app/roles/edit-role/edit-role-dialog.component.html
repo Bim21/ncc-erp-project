@@ -139,8 +139,8 @@
                 </div>
                 <div class="col-md-6">
                   <mat-form-field>
-                    <input type="text" matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
-                      name="searchMember" (keyup)="searchMember()"  (keyup.enter)="$event.stopPropagation()">
+                    <input type="text" #name matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
+                      name="searchMember" (keyup)="searchMember()" (keypress)="keyPressed($event)">
                   </mat-form-field>
                 </div>
               </div>
@@ -192,12 +192,12 @@
                         </button>
                         <img [src]="getAvatar(member)" width="60" height="60"  style="border-radius: 50%;" />
                       </div>
-                      <div class="col-11 col-sm-10 col-md-11 col-lg-11">
+                      <div class="col-11 col-sm-10 col-md-11 col-lg-11 name">
                         <b>{{member.fullName}}</b>
-                        <span class="label tag bg-red" *ngIf="member.branch == 0">HN</span>
-                        <span class="label tag bg-green" *ngIf="member.branch == 1">ĐN</span>
-                        <span class="label tag bg-blue" *ngIf="member.branch == 2">HCM</span>
-                        <span class="label tag bg-orange" *ngIf="member.branch == 3">Vinh</span>
+                        <span class="label tag bg-red " *ngIf="member.branch == 0">HN</span>
+                        <span class="label tag bg-green " *ngIf="member.branch == 1">ĐN</span>
+                        <span class="label tag bg-blue " *ngIf="member.branch == 2">HCM</span>
+                        <span class="label tag bg-orange " *ngIf="member.branch == 3">Vinh</span>
       
       
                         <span style="margin-left: 10px;" *ngIf="member.userType == 0"

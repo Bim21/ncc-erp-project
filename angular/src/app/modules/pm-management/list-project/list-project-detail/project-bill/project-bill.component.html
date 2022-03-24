@@ -2,11 +2,11 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel expanded=true *ngIf="permission.isGranted(PmManager_ProjectUserBill)">
+            <mat-expansion-panel [expanded]="!isShowUserBill" *ngIf="permission.isGranted(PmManager_ProjectUserBill)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Danh sách Bill Dự án</h4>
                     <button *ngIf="!userBillProcess && permission.isGranted(PmManager_ProjectUserBill_Create)"
-                        [hidden]="!isShowUserBill" style="border: none;" class="btn bg-blue ml-3"
+                        [hidden]="isShowUserBill" style="border: none;" class="btn bg-blue ml-3"
                         (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
                         <i class="fa fa-plus-square mr-1"></i>Create
                     </button>

@@ -70,7 +70,7 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
   permissions: RolePermissionDto = new RolePermissionDto();
   grantedPermissionNames: string[];
 
-  @ViewChild('slUserRef', {static: false}) slUserRef: MatSelect;
+  // @ViewChild('slUserRef', {static: false}) slUserRef: MatSelect;
   @Output() onSave = new EventEmitter<any>();
   constructor(
     //@Inject(MAT_DIALOG_DATA) public data: any,
@@ -109,9 +109,9 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
   }
 
   ngAfterViewChecked(): void {
-    if(this.isCreated){
-      this.slUserRef.focus()
-    }
+    // if(this.isCreated){
+    //   this.slUserRef.focus()
+    // }
     this.ref.detectChanges()
   }
 
@@ -289,6 +289,12 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
         && (this.userLevelForFilter < 0 || member.userLevel === this.userLevelForFilter)
     );
   }
+  keyPressed (event) {
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  }  
 
   getAllUserLevel(){
     this._roleService.getAllUserLevel().subscribe((res) => {
