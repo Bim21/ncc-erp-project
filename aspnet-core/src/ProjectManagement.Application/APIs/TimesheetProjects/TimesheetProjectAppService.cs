@@ -658,5 +658,51 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 .ToListAsync();
             return new OkObjectResult(pms);
         }
+
+        public async Task<TimesheetChartDto> GetBillInfoChart(long projectId, DateTime? fromDate, DateTime? toDate)
+        {
+            DateTime endDate = toDate.HasValue ? toDate.Value : DateTimeUtils.GetNow().AddMonths(-1);
+            DateTime startDate = fromDate.HasValue ? fromDate.Value : endDate.AddMonths(-6);
+            var toYear = endDate.Year;
+            var toMonth = endDate.Month;
+            var fromYear = startDate.Year;
+            var fromMonth = startDate.Month;
+
+            var mapTimesheet = await WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(s => s.ProjectId == projectId)
+                .Where(s => s.TimeSheet.Year > fromYear || (s.TimeSheet.Year == fromYear && s.TimeSheet.Month >= fromMonth))
+                .Where(s => s.TimeSheet.Year < toYear || (s.TimeSheet.Year == toYear && s.TimeSheet.Month <= toMonth))
+                .GroupBy(s => new { s.TimesheetId, s.TimeSheet.Year, s.TimeSheet.Month, s.TimeSheet.TotalWorkingDay })
+                .Select(s => new
+                {
+                    s.Key.Year,
+                    s.Key.Month,
+                    TotalWorkingDay = s.Key.TotalWorkingDay.HasValue ? s.Key.TotalWorkingDay : 22,
+                    ManDay = s.Sum(x => x.WorkingTime),
+                }).ToDictionaryAsync(s => s.Year + "-" + s.Month );
+
+            var listMonth = DateTimeUtils.GetListMonth(startDate, endDate);
+            var listManDay = new List<double>();
+            var listManMonth = new List<double>();
+            foreach (var date in listMonth)
+            {
+                var key = date.Year + "-" + date.Month;
+                var manDay = mapTimesheet.ContainsKey(key) ? mapTimesheet[key].ManDay : 0;
+                listManDay.Add(manDay);
+
+                var manMonth  = mapTimesheet.ContainsKey(key) ? Math.Round((double)(manDay / mapTimesheet[key].TotalWorkingDay), 2) : 0;
+                listManMonth.Add(manMonth);
+            }
+
+            var result = new TimesheetChartDto() {
+                Labels = listMonth.Select(s => DateTimeUtils.GetMonthName(s)).ToList(),
+                ManDays = listManDay,
+                ManMonths = listManMonth
+            };
+            
+            return result;
+
+
+        }
     }
 }

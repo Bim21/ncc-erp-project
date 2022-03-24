@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
+using NccCore.Uitls;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
@@ -31,7 +32,8 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ViewAll)]
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
-            var timesheetProject = WorkScope.GetAll<TimesheetProject>();
+            var qtimesheetProject = WorkScope.GetAll<TimesheetProject>();
+            var qtimesheetProjectBill = WorkScope.GetAll<TimesheetProjectBill>();
             var query = WorkScope.GetAll<Timesheet>().OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
                 .Select(x => new GetTimesheetDto
                 {
@@ -41,13 +43,14 @@ namespace ProjectManagement.APIs.TimeSheets
                     Year = x.Year,
                     IsActive = x.IsActive,
                     CreatedInvoice = x.CreatedInvoice,
-                    TotalProject = timesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
-                    TotalHasFile = timesheetProject.Where(y => y.TimesheetId == x.Id &&
+                    TotalProject = qtimesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
+                    TotalHasFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
                                                             y.FilePath != null && 
                                                             y.Project.RequireTimesheetFile)
                                                     .Count(),
                     TotalWorkingDay = x.TotalWorkingDay,
-                    TotalIsRequiredFile = timesheetProject.Where(y => y.TimesheetId == x.Id &&
+                    WorkingDayOfUser = qtimesheetProjectBill.Where(s => s.TimesheetId == x.Id && s.IsActive).Count(),
+                    TotalIsRequiredFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
                                                             y.Project.RequireTimesheetFile)
                                                     .Count(),
                 });
@@ -218,6 +221,6 @@ namespace ProjectManagement.APIs.TimeSheets
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);
             timesheet.IsActive = !timesheet.IsActive;
             await WorkScope.UpdateAsync(timesheet);
-        }
+        }       
     }
 }
