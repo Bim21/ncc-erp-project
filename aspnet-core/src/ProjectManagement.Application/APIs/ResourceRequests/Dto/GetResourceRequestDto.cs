@@ -35,7 +35,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public ProjectType ProjectType { get; set; }
         public ProjectStatus ProjectStatus { get; set; }
 
-        public string PrjectTypeName
+        public string ProjectTypeName
         {
             get
             {
@@ -44,7 +44,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
 
         }
 
-        public string PrjectStatusName
+        public string ProjectStatusName
         {
             get
             {
