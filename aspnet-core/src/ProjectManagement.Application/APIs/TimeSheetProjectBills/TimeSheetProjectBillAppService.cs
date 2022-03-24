@@ -271,7 +271,11 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                                                }).ToListAsync();
 
             var billInfomation = new StringBuilder();
-            var timesheetProjects = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId).FirstOrDefaultAsync();
+
+            var timesheetProjects = await WorkScope.GetAll<TimesheetProject>()
+                .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
+                .FirstOrDefaultAsync();
+
             if(timesheetProjects != null)
             {
                 foreach (var item in timesheetProjectBills)
