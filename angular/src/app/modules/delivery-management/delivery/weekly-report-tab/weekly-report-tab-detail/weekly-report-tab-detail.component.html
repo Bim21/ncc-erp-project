@@ -48,9 +48,9 @@
                 <div style="width: 59%;">
                     <div class="px-4 pb-2 pt-2 card"
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col-6">
-                                <strong style="font-size: 24px;">Pm note: </strong>
+                                <strong style="font-size: 22px;">Pm note: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit mb-2 fa-lg"
                                         (click)="isEditingNote = true"></i>
@@ -66,9 +66,15 @@
                                     style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
                                     {{generalNote}}
                                 </p>
+                                <mat-form-field class="ml-1" style="width:68%" appearance="outline" *ngIf="isEditingNote">
+                                    <textarea #generalNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                        style="padding-bottom: 20px;" rows="2" id="message" matInput [(ngModel)]="generalNote"
+                                        name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
+                                </textarea>
+                                </mat-form-field>
                             </div>
-                            <div class="col-6">
-                                <strong style="font-size: 24px;">Automation test: </strong>
+                            <div class="col-6" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
+                                <strong style="font-size: 22px;">Automation test: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2">
                                     <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote"
                                         class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
@@ -84,23 +90,19 @@
                                     style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
                                     {{automationNote}}
                                 </p>
+                                <mat-form-field class="ml-1" style="width:68%" appearance="outline"
+                                *ngIf="isEditingAutomationNote">
+                                <textarea #autoNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                    style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
+                                    name="autoNotePM" placeholder="Automation note">{{autoNoteFocus.focus()}}
+                            </textarea>
+                            </mat-form-field>
                             </div>
                         </div>
 
 
-                        <mat-form-field class="ml-1" style="width:68%" appearance="outline" *ngIf="isEditingNote">
-                            <textarea #generalNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                style="padding-bottom: 20px;" rows="2" id="message" matInput [(ngModel)]="generalNote"
-                                name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
-                        </textarea>
-                        </mat-form-field>
-                        <mat-form-field class="ml-1" style="width:68%" appearance="outline"
-                            *ngIf="isEditingAutomationNote">
-                            <textarea #autoNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
-                                name="autoNotePM" placeholder="Automation note">{{autoNoteFocus.focus()}}
-                        </textarea>
-                        </mat-form-field>
+                     
+                      
                         <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                             <thead class="bg-light">
                                 <tr>
@@ -205,8 +207,8 @@
                         <div class="card-body">
                             <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
                             <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>
-                            <strong class="d-block">Charged accounts:
-                                <strong>{{projectInfo.totalBill}}</strong></strong>
+                            <span style="font-size: 21px; margin-left: 21px;">Charged accounts:
+                                <strong [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' " >{{projectInfo.totalBill}}</strong></span>
                             <div class="fixTableHead" style="max-height: 59vh;">
                                 <table class="table table-hover ">
                                     <thead>
@@ -319,11 +321,6 @@
 
                                                 <h5 class="d-inline-block mb-2">Changed Resource</h5>&nbsp;<strong
                                                     style="font-size: 18px;">({{weeklyReportList?.length}})</strong>
-
-                                                <i class="fa fa-plus fa-lg mt-2 ml-3 text-primary"
-                                                    *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_Create) && isActive"
-                                                    [hidden]="processWeekly || !isShowWeeklyList "
-                                                    (click)="addWeekReport();$event.stopPropagation()"></i>
                                             </mat-expansion-panel-header>
 
 
@@ -500,12 +497,12 @@
                                                                     <i style="margin-top: 23px ; color: #585858;" class="fas fa-ellipsis-v fa-lg" [matMenuTriggerFor]="menu2"></i>
                                                                     
                                                                 <mat-menu #menu2="matMenu">
-                                                                    <button  [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="confirm(report)"> <i class="fas fa-check"></i>Confirm
+                                                                    <button  [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="confirm(report)"> <i class="fas fa-check mr-1"></i>Confirm
                                                                         {{report.allocatePercentage > 0 ? 'Join' : 'Out'}}</button>
                                                                     <button [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="cancelResourcePlan(report)"> <i
-                                                                            class="fas fa-times"></i>Cancel Plan</button>
+                                                                            class="fas fa-times mr-1"></i>Cancel Plan</button>
                                                                     <button [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="editResourcePlan(report)"> <i
-                                                                            class="fas fa-edit"></i>Edit</button>
+                                                                            class="fas fa-edit mr-1"></i>Edit</button>
                                                                 </mat-menu>
                                                                 </div>
                                                                 <div *ngIf="report.createMode"

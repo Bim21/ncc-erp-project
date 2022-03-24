@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../service/api/resource-manager.service';
 import { AddUserToTempProjectDialogComponent } from './add-user-to-temp-project-dialog/add-user-to-temp-project-dialog.component';
 import { ProjectUserService } from '@app/service/api/project-user.service';
 import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
@@ -123,7 +124,7 @@ export class PlanResourceComponent
   constructor(
     public injector: Injector,
     private _modalService: BsModalService,
-    private availableRerourceService: DeliveryResourceRequestService,
+    private availableRerourceService: ResourceManagerService,
     private dialog: MatDialog,
     private skillService: SkillService,
     private projectUserService: ProjectUserService

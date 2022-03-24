@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../../service/api/resource-manager.service';
 import { catchError } from 'rxjs/operators';
 import { DeliveryResourceRequestService } from './../../../../../../service/api/delivery-request-resource.service';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -15,7 +16,7 @@ export class AddUserToTempProjectDialogComponent extends AppComponentBase implem
   public searchProject: string = ""
   public user = {} as any
   public listProject: any[] = []
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private resourceService: DeliveryResourceRequestService,
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private resourceService: ResourceManagerService,
    private listProjectService: ListProjectService,
     injector: Injector, public dialogRef: MatDialogRef<AddUserToTempProjectDialogComponent>) {
     super(injector)

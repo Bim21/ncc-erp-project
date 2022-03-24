@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../../../service/api/resource-manager.service';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { catchError } from 'rxjs/operators';
 import { DeliveryResourceRequestService } from './../../../../../../../service/api/delivery-request-resource.service';
@@ -29,7 +30,7 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   public workingProject: any[] = []
   public canNotWorkTemp: boolean = false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-    private puService: DeliveryResourceRequestService,
+    private puService: ResourceManagerService,
     injector: Injector,
     private dialogRef: MatDialogRef<ConfirmPlanDialogComponent>) {
     super(injector)
