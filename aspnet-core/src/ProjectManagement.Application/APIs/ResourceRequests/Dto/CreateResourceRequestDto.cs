@@ -9,13 +9,11 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
     [AutoMapTo(typeof(ResourceRequest))]
-    public class ResourceRequestDto : EntityDto<long>
+    public class CreateResourceRequestDto : EntityDto<long>
     {
         public string Name { get; set; }
         public long ProjectId { get; set; }
         public DateTime TimeNeed { get; set; }
-        public ResourceRequestStatus Status { get; set; }
-        public DateTime? TimeDone { get; set; }
         public string PMNote { get; set; }
         public string DMNote { get; set; }
         public UserLevel Level { get; set; }

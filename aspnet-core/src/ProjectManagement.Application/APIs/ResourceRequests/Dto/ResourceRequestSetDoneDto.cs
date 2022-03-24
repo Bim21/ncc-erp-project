@@ -6,7 +6,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
     public class ResourceRequestSetDoneDto
     {
-        public long ProjectUserId { get; set; }
+        public long RequestId { get; set; }
 
         public DateTime StartTime { get; set; }
     }

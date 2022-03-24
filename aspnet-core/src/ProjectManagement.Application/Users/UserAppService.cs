@@ -49,6 +49,7 @@ using ProjectManagement.Services.ResourceService.Dto;
 
 namespace ProjectManagement.Users
 {
+    [AbpAuthorize]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -105,12 +106,12 @@ namespace ProjectManagement.Users
 
                             Id = u.Id,
                             EmailAddress = u.EmailAddress,
-                            AvatarPath = "/avatars/" + u.AvatarPath,
+                            AvatarPath = u.AvatarPath,
                             UserType = u.UserType,
                             UserLevel = u.UserLevel,
                             Branch = u.Branch,
                             IsActive = u.IsActive,
-                            FullName = u.Name + " " + u.Surname,
+                            FullName = u.FullName,
                             CreationTime = u.CreationTime,
                             RoleNames = _roleManager.Roles
                             .Where(r => u.Roles
@@ -199,7 +200,7 @@ namespace ProjectManagement.Users
         [HttpPut]
         public async Task updateUserActive(long userId, bool isActive)
         {
-            await _userManager.UpdateUserActive(userId, isActive);            
+            await _userManager.UpdateUserActive(userId, isActive);
         }
 
         [HttpDelete]
@@ -520,28 +521,39 @@ namespace ProjectManagement.Users
             return true;
         }
 
+        //[AbpAllowAnonymous]
+        //public async Task<List<string>> ResetPasswordAllAccount()
+        //{
+        //    var users = await Repository.GetAll().Where(s => s.IsActive).ToListAsync();
+        //    foreach (var user in users)
+        //    {
+        //        user.Password = _passwordHasher.HashPassword(user, "123qwe");
+        //    }
+        //    CurrentUnitOfWork.SaveChanges();
+        //    return users.Select(s => s.UserName).ToList();
+
+        //}
+
+        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
         public async Task<bool> ResetPassword(ResetPasswordDto input)
         {
-            if (_abpSession.UserId == null)
-            {
-                throw new UserFriendlyException("Please log in before attemping to reset password.");
-            }
-            long currentUserId = _abpSession.UserId.Value;
-            var currentUser = await _userManager.GetUserByIdAsync(currentUserId);
-            var loginAsync = await _logInManager.LoginAsync(currentUser.UserName, input.AdminPassword, shouldLockout: false);
-            if (loginAsync.Result != AbpLoginResultType.Success)
-            {
-                throw new UserFriendlyException("Your 'Admin Password' did not match the one on record.  Please try again.");
-            }
-            if (currentUser.IsDeleted || !currentUser.IsActive)
-            {
-                return false;
-            }
-            var roles = await _userManager.GetRolesAsync(currentUser);
-            if (!roles.Contains(StaticRoleNames.Tenants.Admin))
-            {
-                throw new UserFriendlyException("Only administrators may reset passwords.");
-            }
+            
+            //long currentUserId = _abpSession.UserId.Value;
+            //var currentUser = await _userManager.GetUserByIdAsync(currentUserId);
+            //var loginAsync = await _logInManager.LoginAsync(currentUser.UserName, input.AdminPassword, shouldLockout: false);
+            //if (loginAsync.Result != AbpLoginResultType.Success)
+            //{
+            //    throw new UserFriendlyException("Your 'Admin Password' did not match the one on record.  Please try again.");
+            //}
+            //if (currentUser.IsDeleted || !currentUser.IsActive)
+            //{
+            //    return false;
+            //}
+            //var roles = await _userManager.GetRolesAsync(currentUser);
+            //if (!roles.Contains(StaticRoleNames.Tenants.Admin))
+            //{
+            //    throw new UserFriendlyException("Only administrators may reset passwords.");
+            //}
 
             var user = await _userManager.GetUserByIdAsync(input.UserId);
             if (user != null)
@@ -566,14 +578,14 @@ namespace ProjectManagement.Users
                     Surname = u.Surname,
                     EmailAddress = u.EmailAddress,
                     FullName = u.FullName,
-                    AvatarPath = "/avatars/" + u.AvatarPath,
+                    AvatarPath = u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
                     Branch = u.Branch,
                     UserSkills = u.UserSkills.Select(x => new UserSkillDto
                     {
                         SkillId = x.SkillId,
-                        SkillName  = x.Skill.Name
+                        SkillName = x.Skill.Name
                     }).ToList()
                 });
             return await query.ToListAsync();
@@ -591,7 +603,7 @@ namespace ProjectManagement.Users
                     Surname = u.Surname,
                     EmailAddress = u.EmailAddress,
                     FullName = u.FullName,
-                    AvatarPath = "/avatars/" + u.AvatarPath,
+                    AvatarPath = u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
                     Branch = u.Branch,
@@ -632,10 +644,10 @@ namespace ProjectManagement.Users
                         using (var stream = System.IO.File.Create(Path.Combine(_webHostEnvironment.WebRootPath, "avatars", avatarPath)))
                         {
                             await input.File.CopyToAsync(stream);
-                            user.AvatarPath = avatarPath;
+                            user.AvatarPath = "/avatars/" + avatarPath;
                             await _userManager.UpdateAsync(user);
                         }
-                        return "/avatars/" + avatarPath;
+                        return user.AvatarPath;
                     }
                 }
                 else
@@ -850,6 +862,25 @@ namespace ProjectManagement.Users
         }
 
 
+        public async Task<List<UserBaseDto>> GetAllActiveUser()
+        {
+            return await _workScope.GetAll<User>()
+                .Where(s => s.IsActive)
+                .Where(s => s.UserType != UserType.FakeUser)
+                .Select(s => new UserBaseDto
+                {
+                    AvatarPath = s.AvatarPath,
+                    Branch = s.Branch,
+                    EmailAddress = s.EmailAddress,
+                    FullName = s.FullName,
+                    Id = s.Id,
+                    UserLevel = s.UserLevel,
+                    UserType = s.UserType,
+
+                })
+                .ToListAsync();
+        }
+
 
         [HttpPost]
         //[AbpAuthorize(PermissionNames.Pages_Users_UpdateStarRateFromTimesheet)]
@@ -1045,7 +1076,7 @@ namespace ProjectManagement.Users
                 && string.Equals(hrmUser.IsActive, projectUser.IsActive);
 
         }
-               
+
         #endregion
     }
 }

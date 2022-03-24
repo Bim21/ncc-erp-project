@@ -71,7 +71,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             ResourceRequestId = x.ResourceRequestId,
                             PMReportId = x.PMReportId,
                             IsFutureActive = x.IsFutureActive,
-                            AvatarPath = "/avatars/" + x.User.AvatarPath,
+                            AvatarPath = x.User.AvatarPath,
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
                             UserName = x.User.UserName,
@@ -203,7 +203,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                         {
                             Id = x.Id,
                             FullName = x.FullName,
-                            AvatarPath = "/avatars/" + x.AvatarPath,
+                            AvatarPath = x.AvatarPath,
                             UserType = x.UserType,
                             UserLevel = x.UserLevel,
                             Branch = x.Branch,

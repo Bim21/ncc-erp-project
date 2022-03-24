@@ -12,6 +12,7 @@ using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.APIs.ResourceRequests.Dto;
+using ProjectManagement.APIs.Skills.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
@@ -67,935 +68,325 @@ namespace ProjectManagement.APIs.ResourceRequests
             _userManager = userManager;
         }
 
-        [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllByProject,
-            PermissionNames.PmManager_ResourceRequest_ViewAllByProject)]
-        public async Task<List<GetResourceRequestDto>> GetAllByProject(long projectId)
-        {
-            var query = WorkScope.GetAll<ResourceRequest>().Where(x => x.ProjectId == projectId).OrderByDescending(x => x.CreationTime)
-                        .Select(x => new GetResourceRequestDto
-                        {
-                            Id = x.Id,
-                            ProjectId = x.ProjectId,
-                            ProjectName = x.Project.Name,
-                            Name = x.Name,
-                            Status = x.Status,
-                            PMNote = x.PMNote,
-                            DMNote = x.DMNote,
-                            TimeNeed = x.TimeNeed,
-                            TimeDone = x.TimeDone.Value
-                        });
-            return await query.ToListAsync();
-        }
-
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewAllResourceRequest,
-        PermissionNames.PmManager_ResourceRequest_ViewAllResourceRequest)]
+        [AbpAuthorize]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
-            IQueryable<GetResourceRequestDto> qresourceRequest = null;
+            var query = IQGetResourceRequest();
 
-            if (input.SkillIds != null && input.SkillIds.Any())
+            if (input.SkillIds == null || input.SkillIds.IsEmpty())
             {
-                var querySkill = WorkScope.GetAll<ResourceRequestSkill>()
-                                          .Where(p => input.SkillIds.Contains(p.SkillId));
+                return await query.GetGridResult(query, input);
+            }
+            if (input.SkillIds.Count() == 1 || !input.IsAndCondition)
+            {
+                var qRequestIdsHaveAnySkill = QueryResourceRequestIdsHaveAnySkill(input.SkillIds).Distinct();
+                query = from request in query
+                        join requestId in qRequestIdsHaveAnySkill on request.Id equals requestId
+                        select request;
 
-                qresourceRequest = from request in WorkScope.GetAll<ResourceRequest>()
-                        join requestSkill in querySkill on request.Id equals requestSkill.ResourceRequestId
-                        select new GetResourceRequestDto
-                        {
-                            DMNote = request.DMNote,
-                            Id = request.Id,
-                            IsRecruitmentSend = request.IsRecruitmentSend,
-                            Name = request.Name,
-                            ProjectName = request.Project.Name,
-                            PMNote = request.PMNote,
-                            Priority = request.Priority,
-                            ProjectId = request.ProjectId,
-                            RecruitmentUrl = request.RecruitmentUrl,
-                            TimeNeed = request.TimeNeed,
-                            TimeDone = request.TimeDone,
-                            SkillIds = request.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
-                            Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
-                            Status = request.Status,
-                            PlanUserInfo = new PlanUserInfoDto
-                            {
-                                ProjectUserId = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.Id).FirstOrDefault(),
-                                PlannedEmployee = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.FullName).FirstOrDefault(),
-                                PlannedDate = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.StartTime).FirstOrDefault(),
-                                Branch = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.Branch).FirstOrDefault(),
-                                UserLevel = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserLevel).FirstOrDefault(),
-                                UserType = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserType).FirstOrDefault(),
-                            },
-                            RequestStartTime = request.CreationTime,
-                            Level = request.Level,
-                        };
+                return await query.GetGridResult(query, input);
             }
-            else
-            {
-                qresourceRequest = IQGetResourceRequest(input.SkillIds);
-            }
-            return await qresourceRequest.GetGridResult(qresourceRequest, input);
+
+            var requestIds = await QetResourceRequestIdsHaveAllSkill(input.SkillIds);
+            query = query.Where(s => requestIds.Contains(s.Id));
+
+            return await query.GetGridResult(query, input);
         }
 
         [HttpGet]
-        public async Task<List<ResourceRequestSelectListDto>> GetSkills()
+        [AbpAuthorize]
+        public async Task<List<GetResourceRequestDto>> GetAllByProject(long projectId, ResourceRequestStatus? status)
         {
-            var query = WorkScope.GetAll<Skill>()
-                                 .Select(p => new ResourceRequestSelectListDto()
-                                 {
-                                     Id = p.Id,
-                                     Name = p.Name
-                                 });
-
+            var query = IQGetResourceRequest()
+                .Where(x => x.ProjectId == projectId)
+                .Where(s => !status.HasValue || s.Status == status)
+                .OrderByDescending(x => x.CreationTime);
             return await query.ToListAsync();
         }
 
-        [HttpGet]
-        public async Task<List<ResourceRequestSelectListDto>> GetLevels()
-        {
-            await Task.CompletedTask;
-
-            var result = Enum.GetValues(typeof(UserLevel_ResourceRequest))
-                             .Cast<UserLevel_ResourceRequest>()
-                             .Select(p => new ResourceRequestSelectListDto()
-                             {
-                                 Id = p.GetHashCode(),
-                                 Name = p.ToString()
-                             })
-                             .ToList();
-
-            return result;
-        }
-
-        [HttpGet]
-        public async Task<List<ResourceRequestSelectListDto>> GetPriorities()
-        {
-            await Task.CompletedTask;
-
-            var result = Enum.GetValues(typeof(Priority))
-                             .Cast<Priority>()
-                             .Select(p => new ResourceRequestSelectListDto()
-                             {
-                                 Id = p.GetHashCode(),
-                                 Name = p.ToString()
-                             })
-                             .ToList();
-
-            return result;
-        }
-
-        [HttpGet]
-        public async Task<List<ResourceRequestSelectListDto>> GetStatuses()
-        {
-            await Task.CompletedTask;
-
-            var result = Enum.GetValues(typeof(ResourceRequestStatus))
-                             .Cast<ResourceRequestStatus>()
-                             .Select(p => new ResourceRequestSelectListDto()
-                             {
-                                 Id = p.GetHashCode(),
-                                 Name = p.ToString()
-                             })
-                             .ToList();
-
-            return result;
-        }
-
-
-
-        [HttpGet]
-        public async Task<List<GetResourceRequestDto>> GetAllRequestByProjectId(long projectId)
-        {
-            var qgetAllRequestByProject = IQGetResourceRequest();
-            qgetAllRequestByProject = qgetAllRequestByProject
-                .Where(q => q.ProjectId == projectId)
-                .OrderByDescending(q => q.CreationTime);
-
-            return await qgetAllRequestByProject.ToListAsync();
-        }
-
-        [HttpGet]
-        public async Task<GetResourceRequestDto> GetResourceRequestById(long requestId)
-        {
-            var qgetResourceById = IQGetResourceRequest();
-            qgetResourceById = qgetResourceById
-                .Where(q => q.Id == requestId);
-            return await qgetResourceById.FirstOrDefaultAsync();
-        }
-
         [HttpPost]
-        public async Task<ResourceRequestDto> CreateRequestByProject(ResourceRequestDto model)
+        [AbpAuthorize]
+        public async Task<List<GetResourceRequestDto>> Create(CreateResourceRequestDto input)
         {
-            model.Status = ResourceRequestStatus.PENDING;
+            if (input.Quantity <= 0)
+                throw new UserFriendlyException("Quantity must be >= 1");
 
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
-            if (project == null)
-                throw new UserFriendlyException("Project doesn't exist");
-
-            if (!model.SkillIds.Any())
+            if (!input.SkillIds.Any())
                 throw new UserFriendlyException("Select at least 1 skill");
 
-            model.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequest>(model));
-
-            //Create ResourceRequestSkill, amount based on Skills selected
-            for (int j = 0; j < model.SkillIds.Count(); j++)
+            List<long> createdRequestIds = new List<long>();
+            for (int i = 0; i < input.Quantity; i++)
             {
-                var skillModel = new ResourceRequestSkill()
+                var request = ObjectMapper.Map<ResourceRequest>(input);
+                request.Id = await WorkScope.InsertAndGetIdAsync(request);
+                createdRequestIds.Add(request.Id);
+                CurrentUnitOfWork.SaveChanges();
+                foreach (var skillId in input.SkillIds)
                 {
-                    IsDeleted = false,
-                    ResourceRequestId = model.Id,
-                    SkillId = model.SkillIds[j],
-                    Quantity = 1
-                };
+                    var requestSkill = new ResourceRequestSkill()
+                    {
+                        ResourceRequestId = request.Id,
+                        SkillId = skillId,
+                        Quantity = 1
+                    };
 
-                await WorkScope.InsertAsync(skillModel);
+                    await WorkScope.InsertAsync(requestSkill);
+                }
+
+                //SendKomuNotify(model.Name, project.Name, model.Status);
             }
+            CurrentUnitOfWork.SaveChanges();
 
-            SendKomuNotify(model.Name, project.Name, model.Status);
+            var listRequestDto = await IQGetResourceRequest()
+                .Where(s => createdRequestIds.Contains(s.Id))
+                .ToListAsync();
 
-            return model;
+            await notifyToKomu(listRequestDto.FirstOrDefault(), Action.Create, listRequestDto.Count);
+
+            return listRequestDto;
+        }
+
+        [HttpGet]
+        public async Task<GetResourceRequestDto> GetById(long requestId)
+        {
+            return await IQGetResourceRequest()
+                .Where(q => q.Id == requestId)
+                .FirstOrDefaultAsync();
         }
 
         [HttpPost]
-        public async Task<ResourceRequestDto> UpdateRequestByProject(ResourceRequestDto model)
+        public async Task<GetResourceRequestDto> Update(UpdateResourceRequestDto input)
         {
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
-            if (project == null)
+            if (input.SkillIds == null || input.SkillIds.IsEmpty())
             {
-                throw new UserFriendlyException("Project doesn't exist");
+                throw new UserFriendlyException("Skill can't be null or empty");
             }
 
-            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.Id);
+            ObjectMapper.Map(input, resourceRequest);
+            await WorkScope.UpdateAsync(resourceRequest);
 
-            var requestPlan = await WorkScope.GetAll<ProjectUser>().AnyAsync(p => p.ResourceRequestId == resourceRequest.Id);
-            if (!requestPlan && resourceRequest.ProjectId != model.ProjectId)
-                throw new UserFriendlyException("Cannot change project of a planned resource request");
+            var dbRequestSkills = await WorkScope.GetAll<ResourceRequestSkill>()
+                                                .Where(p => p.ResourceRequestId == input.Id)
+                                                .Select(p => new { p.Id, p.SkillId })
+                                                .ToListAsync();
 
-            //Update skill
-            var oldSkillIdsList = WorkScope.GetAll<ResourceRequestSkill>()
-                                                .Where(p => p.ResourceRequestId == model.Id)
-                                                .Select(p => p.SkillId).ToList();
+            var dbSkillIds = dbRequestSkills.Select(s => s.SkillId).ToList();
 
-            var skillIdsToAdd = model.SkillIds.Where(p => !oldSkillIdsList.Contains(p));
-            var skillIdsToRemove = oldSkillIdsList.Where(p => !model.SkillIds.Contains(p));
+            var skillIdsToAdd = input.SkillIds.Except(dbSkillIds);
+            var requestSkillIdsToRemove = dbRequestSkills.Where(s => !input.SkillIds.Contains(s.SkillId))
+                .Select(s => s.Id);
 
             foreach (var skillId in skillIdsToAdd)
             {
                 var skillModel = new ResourceRequestSkill()
                 {
-                    ResourceRequestId = model.Id,
+                    ResourceRequestId = input.Id,
                     SkillId = skillId,
                     Quantity = 1
                 };
-
                 await WorkScope.InsertAsync(skillModel);
             }
 
-            foreach (var skillId in skillIdsToRemove)
+            foreach (var requestSkillId in requestSkillIdsToRemove)
             {
-                await WorkScope.DeleteAsync<ResourceRequestSkill>(skillId);
+                await WorkScope.DeleteAsync<ResourceRequestSkill>(requestSkillId);
             }
-
-            resourceRequest.ProjectId = model.ProjectId;
-            resourceRequest.DMNote = model.DMNote;
-            resourceRequest.PMNote = model.PMNote;
-            resourceRequest.TimeNeed = model.TimeNeed;
-            resourceRequest.Status = model.Status;
-            resourceRequest.Level = model.Level;
-            resourceRequest.Priority = model.Priority;
-
-            await WorkScope.UpdateAsync(resourceRequest);
-
-            SendKomuNotify(model.Name, project.Name, model.Status);
-
-            return model;
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return await IQGetResourceRequest()
+                .Where(s => s.Id == input.Id)
+                .FirstOrDefaultAsync();
         }
 
         [HttpPost]
-        public async Task DeleteRequestByProject(long resourceRequestId)
+        public async Task<GetResourceRequestDto> UpdateMyRequest(UpdateResourceRequestDto input)
         {
+            await checkRequestIsForMyProject(input.Id, input.ProjectId);
+            return await Update(input);
+        }
+
+        [HttpDelete]
+        [AbpAuthorize]
+        public async Task Delete(long resourceRequestId)
+        {
+            var IsPlannedResource = await WorkScope.GetAll<ProjectUser>()
+                .Where(s => s.ResourceRequestId == resourceRequestId)
+                .AnyAsync();
+            if (IsPlannedResource)
+            {
+                throw new UserFriendlyException($"Request Id {resourceRequestId} already planned resource.");
+            }
+
+            await WorkScope.DeleteAsync<ResourceRequest>(resourceRequestId);
+        }
+
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Delete)]
+        public async Task DeleteMyRequest(long resourceRequestId)
+        {
+            await checkRequestIsForMyProject(resourceRequestId, null);
             await Delete(resourceRequestId);
         }
 
-        [HttpPost]
-        public async Task<ResourceRequestCancelDto> CancelRequestByProject(ResourceRequestCancelDto model)
+
+        private async Task checkRequestIsForMyProject(long requestId, long? newProjectId)
         {
-            return await Cancel(model);
+            var projectId = await WorkScope.GetAll<ResourceRequest>()
+                .Where(s => s.Id == requestId)
+                .Where(s => s.Project.PMId == AbpSession.UserId.Value)
+                .Select(s => s.ProjectId)
+                .FirstOrDefaultAsync();
+            if (projectId == default)
+            {
+                throw new UserFriendlyException($"Request Id {requestId} is not exist or not for my project");
+            }
+
+            if (newProjectId.HasValue && projectId != newProjectId)
+            {
+                throw new UserFriendlyException($"Request Id {requestId} is for your project. You can't change to other project");
+            }
+
         }
 
-        [HttpPost]
-        public async Task<ResourceRequestNoteUpdateDto> UpdateRequestPmNote(ResourceRequestNoteUpdateDto model)
-        {
-            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
-            if (resourceRequest == null)
-                throw new UserFriendlyException("Request doesn't exist");
 
-            resourceRequest.PMNote = model.PMNote;
+        [HttpPost]
+        public async Task<GetResourceRequestDto> Cancel(long requestId)
+        {
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(requestId);
+
+            resourceRequest.Status = ResourceRequestStatus.CANCELLED;
 
             await WorkScope.UpdateAsync(resourceRequest);
 
-            return model;
+
+            var requestDto = await IQGetResourceRequest()
+                .Where(s => s.Id == requestId)
+                .FirstOrDefaultAsync();
+
+            await notifyToKomu(requestDto, Action.Cancel, null);
+            return requestDto;
         }
 
-        [HttpPost]
-        public async Task<ResourceRequestNoteUpdateDto> UpdateRequestHpmNote(ResourceRequestNoteUpdateDto model)
+        public async Task<GetResourceRequestDto> CancelMyRequest(long requestId)
         {
-            var resourceRequest = WorkScope.Get<ResourceRequest>(model.ResourceRequestId);
-            if (resourceRequest == null)
-                throw new UserFriendlyException("Request doesn't exist");
+            await checkRequestIsForMyProject(requestId, null);
+            return await Cancel(requestId);
+        }
 
-            resourceRequest.DMNote = model.HPMNote;
+
+        [HttpPost]
+        public async Task<UpdateRequestNoteDto> UpdatePMNote(UpdateRequestNoteDto input)
+        {
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
+            
+            resourceRequest.PMNote = input.Note;
 
             await WorkScope.UpdateAsync(resourceRequest);
 
-            return model;
-        }
-
-        [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetSkillDetail,
-            PermissionNames.PmManager_ResourceRequest_GetSkillDetail)]
-        public async Task<List<GetSkillDetailDto>> GetSkillDetail(long resourceRequestId)
-        {
-            var query = WorkScope.GetAll<ResourceRequestSkill>().Where(x => x.ResourceRequestId == resourceRequestId)
-                                    .Select(x => new GetSkillDetailDto
-                                    {
-                                        Id = x.Id,
-                                        ResourceRequestId = x.ResourceRequestId,
-                                        ResourceRequestName = x.ResourceRequest.Name,
-                                        SkillId = x.SkillId,
-                                        SkillName = x.Skill.Name,
-                                        Quantity = x.Quantity
-
-                                    });
-            return await query.ToListAsync();
-        }
-        [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest,
-            PermissionNames.PmManager_ResourceRequest_ViewDetailResourceRequest)]
-        public async Task<List<GetProjectUserDto>> ResourceRequestDetail(long resourceRequestId)
-        {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ResourceRequestId == resourceRequestId)
-                                    .Where(x => x.User.UserType != UserType.FakeUser)
-                                    .Select(x => new GetProjectUserDto
-                                    {
-                                        Id = x.Id,
-                                        UserId = x.UserId,
-                                        FullName = x.User.FullName,
-                                        ProjectId = x.ProjectId,
-                                        ProjectName = x.Project.Name,
-                                        ProjectRole = x.ProjectRole.ToString(),
-                                        AllocatePercentage = x.AllocatePercentage,
-                                        StartTime = x.StartTime,
-                                        Status = x.Status.ToString(),
-                                        IsExpense = x.IsExpense,
-                                        ResourceRequestId = x.ResourceRequestId,
-                                        PMReportId = x.PMReportId,
-                                        IsFutureActive = x.IsFutureActive,
-                                        AvatarPath = "/avatars/" + x.User.AvatarPath,
-                                        Branch = x.User.Branch,
-                                        EmailAddress = x.User.EmailAddress,
-                                        UserName = x.User.UserName,
-                                        UserType = x.User.UserType,
-                                        Note = x.Note
-                                    });
-            return await query.ToListAsync();
+            return input;
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AddUserToRequest,
-            PermissionNames.PmManager_ResourceRequest_AddUserToRequest)]
-        public async Task<ProjectUserDto> AddUserToRequest(ProjectUserDto input)
+        public async Task<UpdateRequestNoteDto> UpdateHPMNote(UpdateRequestNoteDto input)
         {
-            if (input.StartTime.Date < DateTime.Now.Date)
-            {
-                throw new UserFriendlyException("Can't add user at past time !");
-            }
-            var isExistProjectUser = await WorkScope
-                .GetAll<ProjectUser>()
-                .AnyAsync(x =>
-                            x.ProjectId == input.ProjectId &&
-                            x.UserId == input.UserId &&
-                            x.Status == input.Status &&
-                            x.StartTime.Date == input.StartTime.Date &&
-                            x.ProjectRole == x.ProjectRole &&
-                            x.AllocatePercentage == input.AllocatePercentage);
-            if (isExistProjectUser)
-            {
-                throw new UserFriendlyException("User already exist in project !");
-            }
+            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
 
-            var resourceRequest = await WorkScope
-                .GetAsync<ResourceRequest>((long)input.ResourceRequestId);
-            if (input.StartTime.Date < resourceRequest.TimeNeed.Date)
-            {
-                throw new UserFriendlyException("Start date must be greater than request date !");
-            }
+            resourceRequest.DMNote = input.Note;
 
-            var pmReportActive = await WorkScope
-                .GetAll<PMReport>()
-                .FirstOrDefaultAsync(x => x.IsActive);
-            if (pmReportActive == null)
+            await WorkScope.UpdateAsync(resourceRequest);
+
+            return input;
+        }    
+
+
+
+        [HttpPost]
+        public async Task<ResourceRequestSetDoneDto> SetDone(ResourceRequestSetDoneDto input)
+        {
+            var request = await WorkScope.GetAll<ResourceRequest>()
+                .Where(s => s.Id == input.RequestId)
+                .Select(s => new
+                {
+                    Request = s,
+                    PlanUserInfo = s.ProjectUsers.OrderByDescending(x => x.CreationTime).FirstOrDefault()
+                }).FirstOrDefaultAsync();
+
+            if (request == default)
             {
-                throw new UserFriendlyException("Can't find any active reports !");
+                throw new UserFriendlyException("Not found Request with Id " + input.RequestId);
             }
 
-            input.ProjectId = resourceRequest.ProjectId;
-            input.PMReportId = pmReportActive.Id;
-            input.Status = ProjectUserStatus.Future;
-            input.IsFutureActive = true;
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectUser>(input));
-
-            if (input.Status == ProjectUserStatus.Present)
+            if (request.PlanUserInfo == null)
             {
-                await ChangeProjectUserStatus(input.Id, input.ProjectId, input.UserId);
+                throw new UserFriendlyException("You have to plan resource for this request first");
             }
 
-            var pmKomuId = await _userAppService.UpdateKomuId(AbpSession.UserId.Value);
-            var pmUserName = string.Empty;
-            if (!pmKomuId.HasValue)
-            {
-                pmUserName = UserManager.GetUserById(AbpSession.UserId.Value).UserName;
-            }
-            var employee = UserManager.GetUserById(input.UserId);
-            employee.UserName = UserHelper.GetUserName(employee.EmailAddress) ?? employee.UserName;
-            var projectName = WorkScope.Get<Project>(input.ProjectId)?.Name;
+            await _resourceManager.ConfirmJoinProject(request.PlanUserInfo.Id, input.StartTime);
 
-            var komuMessage = new StringBuilder();
-            komuMessage.Append($"Từ ngày **{input.StartTime:dd/MM/yyyy}**, ");
-            komuMessage.Append($"PM {(pmKomuId.HasValue ? "<@" + pmKomuId + ">" : "**" + pmUserName + "**")} request ");
-            komuMessage.Append($"**{employee.UserName}** làm việc ở dự án ");
-            komuMessage.Append($"**{projectName}**");
+            request.Request.Status = ResourceRequestStatus.DONE;
+            request.Request.TimeDone = DateTimeUtils.GetNow();
+            await WorkScope.UpdateAsync(request.Request);
+
+            return input;
+        }
+
+        private async Task notifyToKomu(GetResourceRequestDto requestDto, Action action, int? quantity)
+        {
+            var sessionUser = await _resourceManager.getSessionKomuUserInfo();
+            StringBuilder sbKomuMessage = new StringBuilder();
+            sbKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} {ActionName(action)}");
+            sbKomuMessage.AppendLine($"```{requestDto.KomuInfo()}");
+            if (action == Action.Create)
+            {
+                sbKomuMessage.AppendLine($"Quantity: {quantity.Value}");
+            }
+            sbKomuMessage.AppendLine($"```");
+
+            if (action == Action.Plan && requestDto.PlanUserInfo != null)
+            {
+                sbKomuMessage.AppendLine($"Planned Info:");
+                sbKomuMessage.Append($"```{requestDto.PlanUserInfo.KomuInfo()}```");
+            }
+
+            await SendKomu(sbKomuMessage);
+        }
+
+        private string ActionName(Action action)
+        {
+            switch (action)
+            {
+                case Action.Create:
+                    return "has **created** a resource request:";
+
+                case Action.Cancel:
+                    return "has **cancelled** the resource request:";
+                case Action.Plan:
+                    return "has **planned** for the resource request:";
+                case Action.Done:
+                    return "has **done** the resource request:";
+            }
+            return "";
+        }
+
+        private async Task SendKomu(StringBuilder komuMessage)
+        {
+
             await _komuService.NotifyToChannel(new KomuMessage
             {
                 CreateDate = DateTimeUtils.GetNow(),
                 Message = komuMessage.ToString(),
             },
             ChannelTypeConstant.PM_CHANNEL);
-            return input;
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest,
-            PermissionNames.PmManager_ResourceRequest_SearchAvailableUserForRequest)]
-        public async Task<GridResult<ResourceRequestUserDto>> SearchAvailableUserForRequest(GridParam input, DateTime startDate)
-        {
-            if (startDate.Date < DateTime.Now.Date)
-            {
-                throw new UserFriendlyException("The start date must be greater than the current time !");
-            }
-
-            var projectUsers = WorkScope.GetAll<ProjectUser>()
-                                .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
-                                .Where(x => x.StartTime.Date <= startDate.Date && x.Status == ProjectUserStatus.Present && x.IsFutureActive)
-                                .Select(x => new
-                                {
-                                    UserId = x.UserId,
-                                    AllocatePercentage = x.AllocatePercentage
-                                });
-            var users = WorkScope.GetAll<User>().Where(x => x.IsActive && x.UserType != UserType.FakeUser)
-                                .Select(x => new ResourceRequestUserDto
-                                {
-                                    UserId = x.Id,
-                                    UserName = x.UserName,
-                                    UserType = x.UserType,
-                                    EmailAddress = x.EmailAddress,
-                                    Branch = x.Branch,
-                                    FullName = x.Name + " " + x.Surname,
-                                    AvatarPath = "/avatars/" + x.AvatarPath,
-                                    Undisposed = projectUsers.Any(y => y.UserId == x.Id) ? (100 - projectUsers.Where(y => y.UserId == x.Id).Sum(y => y.AllocatePercentage)) : 100
-                                });
-
-            return await users.GetGridResult(users, input);
-        }
-
-        [HttpPost]
-        [AbpAuthorize]
-        public async Task<GridResult<GetAllResourceDto>> GetVendorResource(InputGetResourceDto input)
-        {
-            return await _resourceManager.GetResources(input, true);
-        }
-
-        [HttpPost]
-        [AbpAuthorize]
-        public async Task<GridResult<GetAllResourceDto>> GetAllResource(InputGetResourceDto input)
-        {
-            return await _resourceManager.GetResources(input, false);
-        }
-
-
-        [HttpPost]
-        [AbpAuthorize]
-        public async Task<GridResult<GetAllPoolResourceDto>> GetAllPoolResource(InputGetResourceDto input)
-        {
-            return await _resourceManager.GetAllPoolResource(input);
-        }
-
-
-        [HttpDelete]
-        [AbpAuthorize]
-        public async Task CancelResourcePlan(long projectUserId)
-        {
-            var pu = await WorkScope.GetAll<ProjectUser>()
-                .Include(s => s.User)
-                .Include(s => s.Project)
-                .Include(s => s.Project.PM)
-                .Where(s => s.Id == projectUserId)
-                .Select(s => new
-                {
-                    ProjectUser = s,
-                    ProjectCode = s.Project.Code,
-                    ProjectName = s.Project.Name,
-                    EmployeeName = s.User.Name + " " + s.User.Surname,
-                    PMName = s.Project.PM.Name + " " + s.Project.PM.Surname,
-                    InOutString = s.AllocatePercentage > 0 ? "vào dự án" : "ra dự án"
-                }).FirstOrDefaultAsync();
-
-            var projectUser = pu.ProjectUser;
-
-            if (projectUser.Status != ProjectUserStatus.Future)
-            {
-                throw new UserFriendlyException(String.Format("projectUser with id {0} is not future!", projectUser.Id));
-            }
-            if (projectUser.CreatorUserId != AbpSession.UserId.Value)
-            {
-                bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource);
-                if (!allowCancelAnyPlan)
-                {
-                    throw new UserFriendlyException(String.Format("You don't have permission to cancel resource plan of other people!"));
-                }
-            }
-
-            await WorkScope.DeleteAsync(projectUser);
-
-            if (!pu.ProjectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
-            {
-                var komuMessage = new StringBuilder();
-                komuMessage.Append($"PM **{pu.PMName}** đã **HỦY** plan: ");
-                komuMessage.Append($"**{pu.EmployeeName}** {pu.InOutString } **{pu.ProjectName}** ");
-                komuMessage.Append($"từ ngày **{projectUser.StartTime:dd/MM/yyyy}**, ");
-
-                await _komuService.NotifyToChannel(new KomuMessage
-                {
-                    CreateDate = DateTimeUtils.GetNow(),
-                    Message = komuMessage.ToString(),
-                },
-                ChannelTypeConstant.PM_CHANNEL);
-            }
 
         }
 
-        [HttpPut]
-        public async Task updateUserPoolNote(UpdateUserPoolNoteDto input)
-        {
-            var user = await _userManager.GetUserByIdAsync(input.UserId);
-            user.PoolNote = input.Note;
-            await WorkScope.UpdateAsync<User>(user);
-        }
-
-
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_GetProjectForDM,
-        PermissionNames.PmManager_ResourceRequest_SearchAvailableUserForRequest)]
-        public async Task<ProjectForDMDto> GetProjectForDM(long projectId, long pmReportId)
-        {
-            var problemsOfTheWeek = await _pMReportProjectIssueAppService.ProblemsOfTheWeek(projectId, pmReportId);
-            var projectUsers = await WorkScope.GetAll<ProjectUser>()
-                                .Include(x => x.User).Include(x => x.Project).ThenInclude(x => x.PM)
-                                .Where(x => x.ProjectId == projectId).ToListAsync();
-            var result = (from pu in projectUsers
-                          group pu by new { pu.Project.Name, pu.ProjectId, pu.Project.PM.FullName } into pus
-                          select new ProjectForDMDto
-                          {
-                              ProjectName = pus.Key.Name,
-                              PMName = pus.Key.FullName,
-                              ListUsers = pus
-                              .Where(x => x.Status == ProjectUserStatus.Present)
-                              .Where(x => x.AllocatePercentage > 0)
-                              .Select(u => new UserBaseDto
-                              {
-                                  FullName = u.User.FullName,
-                                  EmailAddress = u.User.EmailAddress,
-                                  AvatarPath = "/avatars/" + u.User.AvatarPath,
-                                  UserType = u.User.UserType,
-                                  Branch = u.User.Branch
-                              }).ToList(),
-                              ProblemsOfTheWeek = problemsOfTheWeek
-                          }).FirstOrDefault();
-            return result;
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_AvailableResourceFuture,
-            PermissionNames.PmManager_ResourceRequest_AvailableResourceFuture)]
-        public async Task<GridResult<AvailableResourceFutureDto>> AvailableResourceFuture(GridParam input)
-        {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Future && x.IsFutureActive)
-                        .Where(x => x.Project.Status != ProjectStatus.Potential && x.Project.Status != ProjectStatus.Closed)
-                        .Select(x => new AvailableResourceFutureDto
-                        {
-                            Id = x.Id,
-                            UserId = x.UserId,
-                            UserName = x.User.Name,
-                            AvatarPath = "/avatars/" + x.User.AvatarPath,
-                            Branch = x.User.Branch,
-                            EmailAddress = x.User.EmailAddress,
-                            FullName = x.User.Name + " " + x.User.Surname,
-                            UserType = x.User.UserType,
-                            Projectid = x.ProjectId,
-                            ProjectName = x.Project.Name,
-                            StartDate = x.StartTime.Date,
-                            Use = x.AllocatePercentage
-                        });
-            query = query.Where(x => x.UserType != UserType.FakeUser);
-            return await query.GetGridResult(query, input);
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_PlanUser,
-            PermissionNames.PmManager_ResourceRequest_PlanUser)]
-        public async Task<PlanUserDto> PlanUser(PlanUserDto input)
-        {
-            var projectUsers = WorkScope
-                .GetAll<ProjectUser>()
-                .Where(x =>
-                            x.Project.Status != ProjectStatus.Potential &&
-                            x.Project.Status != ProjectStatus.Closed &&
-                            x.Status == ProjectUserStatus.Future &&
-                            x.IsFutureActive);
-
-            var pmReportActive = await WorkScope
-                .GetAll<PMReport>()
-                .FirstOrDefaultAsync(x => x.IsActive);
-            if (pmReportActive == null)
-                throw new UserFriendlyException("Can't find any active reports !");
-
-            var isExistProjectUser = projectUsers
-                .Any(x =>
-                        x.ProjectId == input.ProjectId &&
-                        x.UserId == input.UserId &&
-                        x.StartTime == input.StartTime);
-            if (isExistProjectUser)
-            {
-                throw new UserFriendlyException($"Project User already exist in {input.StartTime.Date} !");
-            }
-
-            var projectUser = new ProjectUser
-            {
-                UserId = input.UserId,
-                ProjectId = input.ProjectId,
-                ProjectRole = input.ProjectRole,
-                AllocatePercentage = input.PercentUsage,
-                StartTime = input.StartTime,
-                Status = ProjectUserStatus.Future,
-                IsExpense = input.IsExpense,
-                IsFutureActive = true,
-                PMReportId = pmReportActive.Id,
-                Note = input.Note
-            };
-            input.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
-
-            var project = WorkScope.Get<Project>(input.ProjectId);
-            if (!project.Code.Equals(AppConsts.CHO_NGHI_PROJECT_CODE))
-            {
-                var pmKomuId = await _userAppService.UpdateKomuId(AbpSession.UserId.Value);
-                var pmUserName = string.Empty;
-                if (!pmKomuId.HasValue)
-                {
-                    pmUserName = UserManager.GetUserById(AbpSession.UserId.Value).UserName;
-                }
-                var employee = UserManager.GetUserById(input.UserId);
-                employee.UserName = UserHelper.GetUserName(employee.EmailAddress) ?? employee.UserName;
-
-
-                var komuMessage = new StringBuilder();
-                komuMessage.Append($"Từ ngày **{input.StartTime:dd/MM/yyyy}**, ");
-                komuMessage.Append($"PM {(pmKomuId.HasValue ? "<@" + pmKomuId + ">" : "**" + pmUserName + "**")} request ");
-                komuMessage.Append($"**{employee.UserName}** làm việc ở dự án ");
-                komuMessage.Append($"**{project.Name}**");
-                await _komuService.NotifyToChannel(new KomuMessage
-                {
-                    CreateDate = DateTimeUtils.GetNow(),
-                    Message = komuMessage.ToString(),
-                },
-                ChannelTypeConstant.PM_CHANNEL);
-            }
-            return input;
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_ApproveUser,
-            PermissionNames.PmManager_ResourceRequest_ApproveUser)]
-        public async Task<ProjectUserDto> ApproveUser(ProjectUserDto input)
-        {
-            var projectUser = await WorkScope.GetAsync<ProjectUser>(input.Id);
-            if (projectUser.Status != ProjectUserStatus.Future)
-            {
-                throw new UserFriendlyException("Can't approve request not in the future !");
-            }
-
-            input.Status = ProjectUserStatus.Present;
-            input.ProjectId = projectUser.ProjectId;
-            input.IsFutureActive = true;
-            await _projectUserAppService.Update(input);
-
-            var pu = WorkScope.GetAll<ProjectUser>().Where(x => x.Id != input.Id && x.ProjectId == input.ProjectId && x.UserId == input.UserId && x.Status == ProjectUserStatus.Present);
-            foreach (var item in pu)
-            {
-                item.Status = ProjectUserStatus.Past;
-                await WorkScope.UpdateAsync(item);
-            }
-
-            return input;
-        }
-
-        [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_RejectUser,
-            PermissionNames.PmManager_ResourceRequest_RejectUser)]
-        public async Task RejectUser(long projectUserId)
-        {
-            var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
-
-            await WorkScope.DeleteAsync(projectUser);
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Create, PermissionNames.PmManager_ResourceRequest_Create)]
-        public async Task<ResourceRequestDto> Create(ResourceRequestDto model)
-        {
-            model.Status = ResourceRequestStatus.PENDING;
-
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
-            if (project == null)
-                throw new UserFriendlyException("Project doesn't exist");
-
-            if (model.Quantity <= 0)
-                throw new UserFriendlyException("Quantity must be equal or greater than 1");
-
-            if (!model.SkillIds.Any())
-                throw new UserFriendlyException("Select at least 1 skill");
-
-            //Create ResourceRequest, amount based on quantity
-            for (int i = 0; i < model.Quantity; i++)
-            {
-                var resourceRequestModel = new ResourceRequest()
-                {
-                    DMNote = model.DMNote,
-                    Level = model.Level,
-                    IsRecruitmentSend = false,
-                    Name = model.Name,
-                    PMNote = model.PMNote,
-                    Priority = model.Priority,
-                    ProjectId = model.ProjectId,
-                    RecruitmentUrl = string.Empty,
-                    Status = model.Status,
-                    TimeDone = model.TimeDone,
-                    TimeNeed = model.TimeNeed
-                };
-
-                var newRequestId = await WorkScope.InsertAndGetIdAsync(resourceRequestModel);
-
-                //Create ResourceRequestSkill, amount based on Skills selected
-                for (int j = 0; j < model.SkillIds.Count(); j++)
-                {
-                    var skillModel = new ResourceRequestSkill()
-                    {
-                        IsDeleted = false,
-                        ResourceRequestId = newRequestId,
-                        SkillId = model.SkillIds[j],
-                        Quantity = 1
-                    };
-
-                    await WorkScope.InsertAsync(skillModel);
-                }
-
-                //SendKomuNotify(model.Name, project.Name, model.Status);
-            }
-
-            return model;
-        }
-
-        [HttpPut]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Update, PermissionNames.PmManager_ResourceRequest_Update)]
-        public async Task<GetResourceRequestDto> Update(ResourceRequestDto model)
-        {
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
-            if (project == null)
-            {
-                throw new UserFriendlyException("Project doesn't exist");
-            }
-            var resourceRequest = await WorkScope.GetAll<ResourceRequest>().Include(x => x.ProjectUsers).FirstOrDefaultAsync(x => x.Id == model.Id);
-
-            var requestPlan = await WorkScope.GetAll<ProjectUser>().AnyAsync(p => p.ResourceRequestId == resourceRequest.Id);
-            if (!requestPlan && resourceRequest.ProjectId != model.ProjectId)
-                throw new UserFriendlyException("Cannot change project of a planned resource request");
-
-            //Update skill
-            var oldSkillIdsList = WorkScope.GetAll<ResourceRequestSkill>()
-                                                .Where(p => p.ResourceRequestId == model.Id)
-                                                .Select(p => p.SkillId).ToList();
-
-            var skillIdsToAdd = model.SkillIds.Where(p => !oldSkillIdsList.Contains(p));
-            var skillIdsToRemove = oldSkillIdsList.Where(p => !model.SkillIds.Contains(p));
-
-            foreach (var skillId in skillIdsToAdd)
-            {
-                var skillModel = new ResourceRequestSkill()
-                {
-                    ResourceRequestId = model.Id,
-                    SkillId = skillId,
-                    Quantity = 1
-                };
-
-                await WorkScope.InsertAsync(skillModel);
-            }
-
-            foreach (var skillId in skillIdsToRemove)
-            {
-                var requestSkillToRemove = WorkScope.GetAll<ResourceRequestSkill>().Where(p => p.ResourceRequestId == model.Id && p.SkillId == skillId).FirstOrDefault();
-                await WorkScope.DeleteAsync(requestSkillToRemove);
-            }
-
-            resourceRequest.ProjectId = model.ProjectId;
-            resourceRequest.DMNote = model.DMNote;
-            resourceRequest.PMNote = model.PMNote;
-            resourceRequest.TimeNeed = model.TimeNeed;
-            resourceRequest.Status = model.Status;
-            resourceRequest.Level = model.Level;
-            resourceRequest.Priority = model.Priority;
-
-            await WorkScope.UpdateAsync(resourceRequest);
-            CurrentUnitOfWork.SaveChanges();
-
-            //SendKomuNotify(model.Name, project.Name, model.Status);
-            var result = await IQGetResourceRequest().Where(x => x.Id == resourceRequest.Id).FirstOrDefaultAsync();
-            return result;
-        }
-
-        [HttpPost]
-        public async Task<ResourceRequestCancelDto> Cancel(ResourceRequestCancelDto model)
-        {
-            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(model.Id);
-            if (resourceRequest == null)
-                throw new UserFriendlyException("Request doesn't exist");
-
-            resourceRequest.Status = ResourceRequestStatus.CANCELLED;
-
-            await WorkScope.UpdateAsync(resourceRequest);
-
-            SendKomuNotify(resourceRequest.Name, resourceRequest.Project.Name, resourceRequest.Status);
-
-            return model;
-        }
-
-        [HttpPost]
-        public async Task<ResourceRequestSetDoneDto> SetDone(ResourceRequestSetDoneDto model)
-        {
-            await _resourceManager.ConfirmJoinProject(model.ProjectUserId, model.StartTime);
-
-            return model;
-        }
-
-        private void SendKomuNotify(string requestName, string projectName, ResourceRequestStatus requestStatus)
-        {
-            Task.Run(async () =>
-            {
-                var user = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
-
-                var userName = UserHelper.GetUserName(user.EmailAddress);
-
-                if (user != null && !user.KomuUserId.HasValue)
-                {
-                    user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
-                    await WorkScope.UpdateAsync<User>(user);
-                }
-
-                var projectUri = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri);
-
-                var link = $"{projectUri.Replace("-api", String.Empty)}app/resource-request";
-
-                var message = new StringBuilder();
-                switch (requestStatus)
-                {
-                    case ResourceRequestStatus.DONE:
-                        {
-                            message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
-                            message.AppendLine($"đã được {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")} chuyển sang trạng thái hoàn thành.");
-                        }
-                        break;
-                    case ResourceRequestStatus.CANCELLED:
-                        {
-                            message.Append($"Request **{requestName}** cho dự án **{projectName}** ");
-                            message.AppendLine($"đã được huỷ bởi {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId + ">" : "**" + user.UserName + "**")}.");
-                        }
-                        break;
-                    //case ResourceRequestStatus.APPROVE:
-                    //    {
-                    //        message.AppendLine($"PM {(user.KomuUserId.HasValue ? "<@" + user.KomuUserId.ToString() + ">" : "**" + (userName ?? user.UserName) + "**")} đã tạo mới request **{requestName}** cho dự án **{projectName}**.");
-                    //        message.AppendLine(link);
-                    //    }
-                    //    break;
-                    case ResourceRequestStatus.PENDING:
-                    default:
-                        return;
-                }
-
-                await _komuService.NotifyToChannel(new KomuMessage
-                {
-                    UserName = userName ?? user.UserName,
-                    Message = message.ToString(),
-                    CreateDate = DateTimeUtils.GetNow(),
-                }, ChannelTypeConstant.PM_CHANNEL);
-            });
-        }
-
-        [HttpDelete]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_Delete, PermissionNames.PmManager_ResourceRequest_Delete)]
-        public async Task Delete(long resourceRequestId)
-        {
-            var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(resourceRequestId);
-            if (resourceRequest == null)
-                throw new UserFriendlyException("Request doesnt exist");
-
-            var projectUser = resourceRequest.ProjectUsers.Count > 0;
-            if (projectUser)
-                throw new UserFriendlyException("Resource Request can not delete !");
-
-            var resourceRequestSkills = WorkScope.GetAll<ResourceRequestSkill>().Where(p => p.ResourceRequestId == resourceRequestId);
-            foreach (var requestSkill in resourceRequestSkills)
-            {
-                await WorkScope.DeleteAsync(requestSkill);
-            }
-
-            await WorkScope.DeleteAsync(resourceRequest);
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_CreateSkill, PermissionNames.PmManager_ResourceRequest_CreateSkill)]
-        public async Task<ResourceRequestSkillDto> CreateSkill(ResourceRequestSkillDto input)
-        {
-            var isExist = await WorkScope.GetAll<ResourceRequestSkill>().AnyAsync(x => x.SkillId == input.SkillId && x.ResourceRequestId == input.ResourceRequestId);
-            if (isExist)
-                throw new UserFriendlyException("Can not create !");
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ResourceRequestSkill>(input));
-            return input;
-        }
-
-        [HttpDelete]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ResourceRequest_DeleteSkill, PermissionNames.PmManager_ResourceRequest_DeleteSkill)]
-        public async Task DeleteSkill(long resourceRequestSkillId)
-        {
-            var resourceRequestSkill = await WorkScope.GetAll<ResourceRequestSkill>().AnyAsync(x => x.Id == resourceRequestSkillId);
-            if (!resourceRequestSkill)
-                throw new UserFriendlyException("Resource Request Skill can not delete !");
-
-            await WorkScope.DeleteAsync<ResourceRequestSkill>(resourceRequestSkillId);
-        }
 
         [HttpGet]
         public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long projectUserId)
         {
-            await Task.CompletedTask;
-            var projectUser = WorkScope.Get<ProjectUser>(projectUserId);
+            var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
+
             if (projectUser == null)
                 return null;
             else
@@ -1003,117 +394,110 @@ namespace ProjectManagement.APIs.ResourceRequests
                 {
                     ProjectUserId = projectUser.Id,
                     UserId = projectUser.UserId,
-                    UserName = WorkScope.Get<User>(projectUser.UserId).FullName,
-                    JoinDate = projectUser.StartTime,
+                    StartTime = projectUser.StartTime,
+                    ProjectRole = projectUser.ProjectRole,
                     ResourceRequestId = projectUser.ResourceRequestId
                 };
         }
 
         [HttpPost]
-        public async Task<ResourceRequestPlanDto> CreateResourceRequestPlan(ResourceRequestPlanDto model)
+        public async Task<PlanUserInfoDto> CreateResourceRequestPlan(ResourceRequestPlanDto input)
         {
-            var resourceRequest = WorkScope.Get<ResourceRequest>((long)model.ResourceRequestId);
+            if (!input.ResourceRequestId.HasValue)
+            {
+                throw new UserFriendlyException("ResourceRequestId can't be null");
+            }
 
-            if (resourceRequest == null)
-                throw new UserFriendlyException("Invalid resource request");
+            var request = await WorkScope.GetAll<ResourceRequest>()
+                .Where(s => s.Id == input.ResourceRequestId.Value)
+                .Select(s => new {s.ProjectId })
+                .FirstOrDefaultAsync();
 
-            var reportProject = WorkScope.GetAll<PMReportProject>().Where(p => p.ProjectId == resourceRequest.ProjectId).FirstOrDefault();
+            if (request == default)
+                throw new UserFriendlyException("Not found resource request Id " + input.ResourceRequestId);
+
+            var activeReportId = await _resourceManager.GetActiveReportId();
+
 
             var projectUser = new ProjectUser()
             {
-                UserId = model.UserId,
-                ProjectId = resourceRequest.ProjectId,
+                UserId = input.UserId,
+                ProjectId = request.ProjectId,
                 ProjectRole = ProjectUserRole.DEV,
                 AllocatePercentage = 100,
-                StartTime = resourceRequest.TimeNeed,
+                StartTime = input.StartTime,
                 Status = ProjectUserStatus.Future,
-                IsExpense = false,
-                ResourceRequestId = model.ResourceRequestId,
-                PMReportId = reportProject.PMReportId,
-                IsFutureActive = true,
-                IsPool = false
+                ResourceRequestId = input.ResourceRequestId,
+                PMReportId = activeReportId,
+                IsPool = false,
+                Note = "Planned for resource request Id " + input.ResourceRequestId
             };
 
-            model.ProjectUserId = await WorkScope.InsertAndGetIdAsync(projectUser);
+            projectUser.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
+            CurrentUnitOfWork.SaveChanges();
+                        
+            var requestDto = await IQGetResourceRequest()
+                .Where(s => s.Id == input.ResourceRequestId)
+                .FirstOrDefaultAsync();
 
-            return model;
+            await notifyToKomu(requestDto, Action.Plan, null);
+
+            return requestDto.PlanUserInfo;
+
         }
 
         [HttpPost]
-        public async Task<ResourceRequestPlanDto> UpdateResourceRequestPlan(ResourceRequestPlanDto model)
+        public async Task<PlanUserInfoDto> UpdateResourceRequestPlan(ResourceRequestPlanDto input)
         {
-            var projectUser = WorkScope.Get<ProjectUser>(model.ProjectUserId);
+            var projectUser = WorkScope.Get<ProjectUser>(input.ProjectUserId);
 
             if (projectUser == null)
-                throw new UserFriendlyException($"Project user not found with id : {model.ProjectUserId}");
+                throw new UserFriendlyException($"Not found ProjectUser with id : {input.ProjectUserId}");
 
-            projectUser.UserId = model.UserId;
-            projectUser.StartTime = model.JoinDate;
+            projectUser.UserId = input.UserId;
+            projectUser.StartTime = input.StartTime;
+            projectUser.ProjectRole = input.ProjectRole;
 
             await WorkScope.UpdateAsync(projectUser);
+            CurrentUnitOfWork.SaveChanges();
 
-            return model;
+            return (await IQGetResourceRequest()
+                .Where(s => s.Id == input.ResourceRequestId)
+                .FirstOrDefaultAsync()).PlanUserInfo;
         }
 
         [HttpDelete]
-        public async Task DeleteResourceRequestPlan(long id)
+        public async Task DeleteResourceRequestPlan(long requestId)
         {
-            var projectUser = WorkScope.Get<ProjectUser>(id);
+            var request = await WorkScope.GetAll<ResourceRequest>()
+                .Where(s => s.Id == requestId)
+                .Select(s => new
+                {
+                    s.Status,
+                    PUs = s.ProjectUsers.Where(s => s.Status == ProjectUserStatus.Future && s.AllocatePercentage > 0).ToList()
+                }).FirstOrDefaultAsync();
 
-            if (projectUser == null)
-                throw new UserFriendlyException("Invalid plan");
-
-            await WorkScope.DeleteAsync(projectUser);
-        }
-
-        [HttpPost]
-        public async Task<List<ResourceRequestPlanUserDto>> GetResourceRequestPlanUser(string keyword)
-        {
-            var query = WorkScope.GetAll<User>();
-
-            if (!string.IsNullOrWhiteSpace(keyword))
+            if (request == default)
             {
-                keyword = keyword.Trim().ToLower();
-
-                query = query.Where(p => p.UserName.ToLower().Contains(keyword)
-                                        || p.Surname.ToLower().Contains(keyword)
-                                        || p.FullName.ToLower().Contains(keyword)
-                                        || p.EmailAddress.ToLower().Contains(keyword));
+                throw new UserFriendlyException("Not found request with Id " + requestId);
             }
 
-            var result = await query.Select(p => new ResourceRequestPlanUserDto()
+            if (request.Status == ResourceRequestStatus.DONE)
             {
-                UserId = p.Id,
-                Email = p.EmailAddress,
-                Name = p.Name,
-                Surname = p.Surname,
-                Fullname = p.FullName
-            }).ToListAsync();
-
-            return result;
-        }
-
-        #region PRIVATE API
-        private async Task ChangeProjectUserStatus(long projectUserId, long projectId, long userId)
-        {
-            var projectUsers = await WorkScope
-                    .GetAll<ProjectUser>()
-                    .Where(x =>
-                                x.Id != projectUserId &&
-                                x.ProjectId == projectId &&
-                                x.UserId == userId &&
-                                x.Status == ProjectUserStatus.Present)
-                    .ToListAsync();
-            foreach (var item in projectUsers)
-            {
-                item.Status = ProjectUserStatus.Past;
-                await WorkScope.UpdateAsync(item);
+                throw new UserFriendlyException("Request already DONE. You can't delete Planned Resource");
             }
-        }
-        #endregion
+
+            foreach (var pu in request.PUs)
+            {
+                pu.IsDeleted = true;
+            }
+
+            CurrentUnitOfWork.SaveChanges();
+        
+        }                       
 
         #region IQueryable
-        private IQueryable<GetResourceRequestDto> IQGetResourceRequest(List<long> skills = null)
+        private IQueryable<GetResourceRequestDto> IQGetResourceRequest()
         {
             var query = from request in WorkScope.GetAll<ResourceRequest>()
                         select new GetResourceRequestDto
@@ -1129,24 +513,134 @@ namespace ProjectManagement.APIs.ResourceRequests
                             RecruitmentUrl = request.RecruitmentUrl,
                             TimeNeed = request.TimeNeed,
                             TimeDone = request.TimeDone,
-                            SkillIds = request.ResourceRequestSkills.Select(p => p.SkillId).ToList(),
-                            Skills = request.ResourceRequestSkills.Select(p => new GetResourceRequestDto_SkillInfo() { SkillId = p.SkillId, SkillName = p.Skill.Name }).ToList(),
                             Status = request.Status,
-                            PlanUserInfo = new PlanUserInfoDto
-                            {
-                                ProjectUserId = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.Id).FirstOrDefault(),
-                                PlannedEmployee = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.FullName).FirstOrDefault(),
-                                PlannedDate = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.StartTime).FirstOrDefault(),
-                                Branch = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.Branch).FirstOrDefault(),
-                                UserLevel = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserLevel).FirstOrDefault(),
-                                UserType = request.ProjectUsers.OrderByDescending(q => q.StartTime).Select(q => q.User.UserType).FirstOrDefault(),
-                            },
-                            RequestStartTime = request.CreationTime,
                             Level = request.Level,
                             CreationTime = request.CreationTime,
+
+                            Skills = request.ResourceRequestSkills.Select(p => new SkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
+                            PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
+                            {
+                                ProjectUserId = s.Id,
+                                Employee = new UserBaseDto
+                                {
+                                    Branch = s.User.Branch,
+                                    UserLevel = s.User.UserLevel,
+                                    UserType = s.User.UserType,
+                                    FullName = s.User.FullName,
+                                    EmailAddress = s.User.EmailAddress,
+                                    Id = s.UserId,
+                                    AvatarPath = s.User.AvatarPath,
+                                },
+                                
+                                PlannedDate = s.StartTime,
+                                
+                            }).FirstOrDefault(),
                         };
             return query;
         }
         #endregion
+
+        private IQueryable<long> QueryResourceRequestIdsHaveAnySkill(List<long> skillIds)
+        {
+            if (skillIds == null || skillIds.IsEmpty())
+            {
+                throw new Exception("skillIds null or empty");
+            }
+            return WorkScope.GetAll<ResourceRequestSkill>()
+                   .Where(s => skillIds.Contains(s.SkillId))
+                   .Select(s => s.ResourceRequestId);
+        }
+
+
+        private async Task<List<long>> QetResourceRequestIdsHaveAllSkill(List<long> skillIds)
+        {
+            if (skillIds == null || skillIds.IsEmpty())
+            {
+                throw new Exception("skillIds null or empty");
+            }
+
+            var result = await WorkScope.GetAll<ResourceRequestSkill>()
+                    .Where(s => skillIds[0] == s.SkillId)
+                    .Select(s => s.ResourceRequestId)
+                    .Distinct()
+                    .ToListAsync();
+
+            if (result == null || result.IsEmpty())
+            {
+                return new List<long>();
+            }
+
+            for (var i = 1; i < skillIds.Count(); i++)
+            {
+                var userIds = await WorkScope.GetAll<ResourceRequestSkill>()
+                    .Where(s => skillIds[i] == s.SkillId)
+                    .Select(s => s.ResourceRequestId)
+                    .Distinct()
+                    .ToListAsync();
+
+                result = result.Intersect(userIds).ToList();
+
+                if (result == null || result.IsEmpty())
+                {
+                    return new List<long>();
+                }
+            }
+
+            return result;
+
+
+        }
+
+
+        [HttpGet]
+        public List<IDNameDto> GetRequestLevels()
+        {
+            var result = new List<IDNameDto>();
+            result.Add(new IDNameDto { Id = UserLevel.AnyLevel.GetHashCode(), Name = "Any Level" });
+            result.Add(new IDNameDto { Id = UserLevel.Intern_4M.GetHashCode(), Name = "Intern" });
+            result.Add(new IDNameDto { Id = UserLevel.Fresher.GetHashCode(), Name = "Fresher" });
+            result.Add(new IDNameDto { Id = UserLevel.Junior.GetHashCode(), Name = "Junior" });
+            result.Add(new IDNameDto { Id = UserLevel.Middle.GetHashCode(), Name = "Middle" });
+            result.Add(new IDNameDto { Id = UserLevel.Senior.GetHashCode(), Name = "Senior" });
+            return result;
+        }
+
+        [HttpGet]
+        public List<IDNameDto> GetPriorities()
+        {
+            return Enum.GetValues(typeof(Priority))
+                             .Cast<Priority>()
+                             .Select(p => new IDNameDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
+        }
+
+        [HttpGet]
+        public List<IDNameDto> GetStatuses()
+        {
+
+            return Enum.GetValues(typeof(ResourceRequestStatus))
+                             .Cast<ResourceRequestStatus>()
+                             .Select(p => new IDNameDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
+        }
+
+        enum Action : byte
+        {
+            Create = 1,
+            Cancel = 2,
+            Plan = 3,
+            Done = 4
+        }
+
     }
+
+
 }

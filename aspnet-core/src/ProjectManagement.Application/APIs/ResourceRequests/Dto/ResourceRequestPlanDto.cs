@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
@@ -10,9 +11,9 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
 
         public long UserId { get; set; }
 
-        public string UserName { get; set; }
+        public ProjectUserRole ProjectRole { get; set; }
 
-        public DateTime JoinDate { get; set; }
+        public DateTime StartTime { get; set; }
 
         public long? ResourceRequestId { get; set; }
     }

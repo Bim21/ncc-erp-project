@@ -153,6 +153,7 @@ namespace ProjectManagement.Constants.Enum
         }
         public enum UserLevel : byte
         {
+            AnyLevel = 100,
             Intern_0 = 0,
             Intern_600K = 1,
             Intern_2M = 2,
@@ -168,17 +169,7 @@ namespace ProjectManagement.Constants.Enum
             MiddlePlus = 12,
             SeniorMinus = 13,
             Senior = 14,
-            SeniorPlus = 15,
-        }
-
-        public enum UserLevel_ResourceRequest : byte
-        {
-            Any = 99,
-            Intern = 0,
-            Fresher = 5,
-            Junior = 8,
-            Middle = 11,
-            Senior = 14
+            Principal = 15,
         }
 
         public enum Priority : byte

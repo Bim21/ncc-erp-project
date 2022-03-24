@@ -45,7 +45,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              Note = x.Note,
                              ShadowNote = x.ShadowNote,
                              IsActive = x.IsActive,
-                             AvatarPath = "/avatars/" + x.User.AvatarPath,
+                             AvatarPath = x.User.AvatarPath,
                              FullName = x.User.FullName,
                              Branch = x.User.Branch,
                              EmailAddress = x.User.EmailAddress,

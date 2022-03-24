@@ -57,9 +57,9 @@ namespace ProjectManagement.Services.Komu
             } 
         }
         private async Task<HttpResponseMessage> PostAsync(string url, StringContent contentString)
-        {
-            logger.LogInformation($"Komu: {url}");
+        {            
             url = _baseUrl + url;
+            logger.LogInformation($"Komu: {url}");
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Add("X-Secret-Key", _secretCode);
             HttpResponseMessage httpResponse = new HttpResponseMessage();

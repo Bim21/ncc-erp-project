@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
-    public class ResourceRequestSelectListDto
+    public class IDNameDto
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
     }

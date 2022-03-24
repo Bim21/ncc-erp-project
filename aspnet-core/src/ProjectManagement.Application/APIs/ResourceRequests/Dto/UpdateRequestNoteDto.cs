@@ -4,12 +4,11 @@ using System.Text;
 
 namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
-    public class ResourceRequestNoteUpdateDto
+    public class UpdateRequestNoteDto
     {
         public long ResourceRequestId { get; set; }
 
-        public string PMNote { get; set; }
+        public string Note { get; set; }
 
-        public string HPMNote { get; set; }
     }
 }
