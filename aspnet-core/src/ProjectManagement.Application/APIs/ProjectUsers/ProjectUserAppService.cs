@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
+using ProjectManagement.APIs.ResourceRequests.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
@@ -71,7 +72,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             ResourceRequestId = x.ResourceRequestId,
                             PMReportId = x.PMReportId,
                             IsFutureActive = x.IsFutureActive,
-                            AvatarPath = "/avatars/" + x.User.AvatarPath,
+                            AvatarPath = x.User.AvatarPath,
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
                             UserName = x.User.UserName,
@@ -203,7 +204,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                         {
                             Id = x.Id,
                             FullName = x.FullName,
-                            AvatarPath = "/avatars/" + x.AvatarPath,
+                            AvatarPath = x.AvatarPath,
                             UserType = x.UserType,
                             UserLevel = x.UserLevel,
                             Branch = x.Branch,
@@ -378,6 +379,20 @@ namespace ProjectManagement.APIs.ProjectUsers
             var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
 
             await WorkScope.DeleteAsync(projectUser);
+        }
+
+        [HttpGet]
+        public List<IDNameDto> GetProjectUserRoles()
+        {
+
+            return Enum.GetValues(typeof(ProjectUserRole))
+                             .Cast<ProjectUserRole>()
+                             .Select(p => new IDNameDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
         }
 
     }

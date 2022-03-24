@@ -49,6 +49,7 @@
     "ngx-mask": "^12.0.0",
     "ngx-pagination": "^5.1.1",
     "ngx-stars": "^1.5.1",
+    "primeicons": "^5.0.0",
     "push.js": "1.0.12",
     "rxjs": "^6.4.0",
     "stream": "0.0.2",

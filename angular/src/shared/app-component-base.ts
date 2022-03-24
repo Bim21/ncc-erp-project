@@ -1,3 +1,4 @@
+import { Utils } from './Utils';
 import { Injector, ElementRef } from '@angular/core';
 import { AppConsts } from '@shared/AppConsts';
 import {
@@ -18,6 +19,7 @@ export abstract class AppComponentBase {
 
     APP_ENUM = APP_ENUMS;
     APP_CONST = AppConsts;
+    Utils = Utils;
     localizationSourceName = AppConsts.localization.defaultLocalizationSourceName;
 
     localization: LocalizationService;

@@ -24,6 +24,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Services.Timesheet;
 using Abp.Domain.Repositories;
 using Abp.Authorization.Users;
+using ProjectManagement.APIs.ResourceRequests.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -81,7 +82,7 @@ namespace ProjectManagement.APIs.Projects
                             PmId = p.PMId,
                             PmName = p.PM.Name,
                             PmFullName = p.PM.FullName,
-                            PmAvatarPath = "/avatars/" + p.PM.AvatarPath,
+                            PmAvatarPath = p.PM.AvatarPath,
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
@@ -92,6 +93,22 @@ namespace ProjectManagement.APIs.Projects
                             RequireTimesheetFile = p.RequireTimesheetFile
                         };
             return await query.GetGridResult(query, input);
+        }
+
+
+
+        [HttpGet]
+        public async Task<List<ProjectInfoDto>> GetAllProjectInfo()
+        {
+            var query = WorkScope.GetAll<Project>()
+                .Select(x => new ProjectInfoDto
+                {
+                    ProjectId = x.Id,
+                    ProjectName = x.Name,
+                    ProjectType = x.ProjectType,
+                    ProjectStatus = x.Status,
+                });
+            return await query.ToListAsync();
         }
 
         [HttpGet]
@@ -144,7 +161,7 @@ namespace ProjectManagement.APIs.Projects
                                     PmFullName = x.PM.FullName,
                                     PmUserName = x.PM.UserName,
                                     PmEmailAddress = x.PM.EmailAddress,
-                                    PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                    PmAvatarPath = x.PM.AvatarPath,
                                     PmBranch = x.PM.Branch,
                                     PmUserType = x.PM.UserType,
                                     CurrencyId = x.CurrencyId,
@@ -364,7 +381,7 @@ namespace ProjectManagement.APIs.Projects
                             PmId = p.PMId,
                             PmName = p.PM.Name,
                             PmFullName = p.PM.FullName,
-                            PmAvatarPath = "/avatars/" + p.PM.AvatarPath,
+                            PmAvatarPath = p.PM.AvatarPath,
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
@@ -471,7 +488,7 @@ namespace ProjectManagement.APIs.Projects
                                     PmFullName = x.PM.FullName,
                                     PmUserName = x.PM.UserName,
                                     PmEmailAddress = x.PM.EmailAddress,
-                                    PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                    PmAvatarPath = x.PM.AvatarPath,
                                     PmBranch = x.PM.Branch,
                                     PmUserType = x.PM.UserType,
                                 });
@@ -512,7 +529,7 @@ namespace ProjectManagement.APIs.Projects
                             PmId = p.PMId,
                             PmName = p.PM.Name,
                             PmFullName = p.PM.FullName,
-                            PmAvatarPath = "/avatars/" + p.PM.AvatarPath,
+                            PmAvatarPath = p.PM.AvatarPath,
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
@@ -541,7 +558,7 @@ namespace ProjectManagement.APIs.Projects
                                     PmFullName = x.PM.FullName,
                                     PmUserName = x.PM.UserName,
                                     PmEmailAddress = x.PM.EmailAddress,
-                                    PmAvatarPath = "/avatars/" + x.PM.AvatarPath,
+                                    PmAvatarPath = x.PM.AvatarPath,
                                     PmBranch = x.PM.Branch,
                                     PmUserType = x.PM.UserType,
                                 });

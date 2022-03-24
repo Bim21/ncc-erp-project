@@ -219,9 +219,15 @@ export const APP_ENUMS = {
         Daily : 0,
         Monthly : 1,
         Hour : 2
+    },
+    Priority:{
+        Low: 0,
+        Medium: 1,
+        High: 2,
+        Critical: 3
+    },
+    Sortable:{
+        ASC: 0,
+        DESC: 1
     }
-
-
-
-
 }

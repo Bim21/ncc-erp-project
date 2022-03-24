@@ -34,7 +34,8 @@ namespace ProjectManagement.APIs.Skills
         [HttpGet]
         public async Task<List<SkillDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Skill>().Select(x => new SkillDto
+            var query = WorkScope.GetAll<Skill>()
+                .Select(x => new SkillDto
             {
                 Id = x.Id,
                 Name = x.Name

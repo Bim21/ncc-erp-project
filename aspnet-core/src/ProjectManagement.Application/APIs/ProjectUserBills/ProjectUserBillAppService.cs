@@ -76,7 +76,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             Note = x.Note,
                             shadowNote = x.shadowNote,
                             isActive = x.isActive,
-                            AvatarPath = "/avatars/" + x.User.AvatarPath,
+                            AvatarPath = x.User.AvatarPath,
                             FullName = x.User.FullName,
                             Branch = x.User.Branch,
                             EmailAddress = x.User.EmailAddress,
