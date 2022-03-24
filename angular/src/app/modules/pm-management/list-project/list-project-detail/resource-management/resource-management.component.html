@@ -371,15 +371,35 @@
         <div class="card mt-3">
             <mat-expansion-panel expanded=false *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
-                    <strong class="table-title">Resource request</strong>
-                    <button 
-                        *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)" 
-                        [hidden]="!isShowRequest" 
-                        (click)="createRequest();resourceRequestCurrentPage=1; $event.stopPropagation()" 
-                        class="btn bg-blue ml-3 mb-2 btn-sm"
-                    >
-                        <i class="fa fa-plus m-0"></i>
-                    </button>
+                    <div class="col-md-6">
+                        <strong class="table-title">Resource request</strong>
+                        <button 
+                            *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)" 
+                            [hidden]="!isShowRequest" 
+                            (click)="createRequest();resourceRequestCurrentPage=1; $event.stopPropagation()" 
+                            class="btn bg-blue ml-3 mb-2 btn-sm"
+                        >
+                            <i class="fa fa-plus m-0"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2 d-flex justify-content-end align-items-center">
+                                <label class="mr-2 mb-0">Status:</label>
+                            </div>
+                            <div class="col-md-10 ">
+                                <mat-form-field appearance="outline" class="rsp-form-field" (click)="$event.stopPropagation()">
+                                    <mat-select [(ngModel)]="selectStatus" (selectionChange)="getResourceRequestList();">
+                                        <mat-option (click)="$event.stopPropagation()" [value]="-1">All</mat-option>
+                                        <mat-option (click)="$event.stopPropagation()" *ngFor="let status of listStatuses"
+                                            [value]="status.id">
+                                            {{status.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1 p-2">
                     <div class="">
@@ -409,7 +429,7 @@
                                     <td>
                                         <ul class="pl-3  m-0">
                                             <li *ngFor="let skill of item.skills">
-                                                {{skill.skillName}}
+                                                {{skill.name}}
                                             </li>
                                         </ul>
                                     </td>
@@ -419,9 +439,9 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        <b>{{item.requestStartTime | date: "dd/MM/yyyy"}}</b>
+                                        <b>{{item.creationTime | date: "dd/MM/yyyy"}}</b>
                                         <br> 
-                                        <small>{{Utils.getTimeHistory(item.requestStartTime)}}</small>
+                                        <small>{{Utils.getTimeHistory(item.creationTime)}}</small>
                                     </td>
                                     <td class="text-center">
                                         <b>{{item.timeNeed |date: "dd/MM/yyyy"}}</b>
@@ -430,19 +450,19 @@
                                     </td>
                                     <td> 
                                         <div class="row">
-                                            <div class="col-md-10 text-left">
+                                            <div class="col-md-10">
                                                 <div *ngIf="item.planUserInfo">
-                                                    <p class="m-0"><strong>{{item.planUserInfo.plannedEmployee}}</strong></p>
+                                                    <p class="m-0"><strong>{{item.planUserInfo.employee.fullName}}</strong></p>
                                                     <p class="m-0">
                                                         <span class="mr-1"
-                                                            [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.branch]">
-                                                            {{item.planUserInfo.branchName}}
+                                                            [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.employee.branch]">
+                                                            {{item.planUserInfo.employee.branchName}}
                                                         </span>
-                                                        <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.userType]">
-                                                            {{item.planUserInfo.typeName}}
+                                                        <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.employee.userType]">
+                                                            {{item.planUserInfo.employee.userTypeName}}
                                                         </span>
-                                                        <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.userLevel).style">
-                                                            {{item.planUserInfo.levelName}}
+                                                        <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.employee.userLevel).style">
+                                                            {{item.planUserInfo.employee.levelName}}
                                                         </span>
                                                     </p>
                                                     <b>{{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}</b>
@@ -482,7 +502,7 @@
                                     </td>
                                     <td style="white-space: normal; max-width: 250px; min-width: 150px;">
                                         <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-12">
                                                 <pre 
                                                     class="mb-0 p-0  ml-2" 
                                                     style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
@@ -490,9 +510,9 @@
                                                     {{item.dmNote}} 
                                                 </pre>
                                             </div>
-                                            <div class="col-md-2">
+                                            <!-- <div class="col-md-2">
                                                 <i class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </td>
                                     <td class="text-center action-request-resource-tab">
@@ -535,7 +555,7 @@
                                                     class="btn btn-block text-left"
                                                     mat-button
                                                     *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
-                                                    (click)="delete(item);"
+                                                    (click)="deleteRequest(item);"
                                                 >
                                                     <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                                                     Delete
@@ -585,3 +605,37 @@
     </div>
     <!-- </form> -->
 </section>
+
+<!-- The Modal Update Note-->
+<div class="modal" id="myModal" [ngStyle]="{'display':isShowModal}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"> {{typePM}} Note: <span class="text-success">{{modal_title}}</span> </h4>
+                <button type="button" class="close" (click)="closeModal()">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="">Note:</label>
+                    </div>
+                    <div class="col-md-10">
+                        <textarea rows="3" 
+                            cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note"
+                            name="note" type="text" class="form-control" name="DMnote" [(ngModel)]="strNotePM"
+                            #nameEl #name="ngModel"
+                        >
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="updateNote()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

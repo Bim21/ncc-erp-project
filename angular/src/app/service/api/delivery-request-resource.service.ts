@@ -144,15 +144,15 @@ export class DeliveryResourceRequestService extends BaseApiService {
   }
 
   public cancelResourceRequest(id: number): Observable<any>{
-    return this.http.delete<any>(this.rootUrl + '/CancelResourcePlan?projectUserId='+ id);
+    return this.http.post<any>(this.rootUrl + '/Cancel?requestId=' + id, {});
   }
 
   public getSkills(): Observable<any>{
-    return this.http.get<any>(this.rootUrl + '/GetSkills');
+    return this.http.get<any>(this.baseUrl + '/api/services/app/Skill/GetAll');
   }
 
   public getLevels(): Observable<any>{
-    return this.http.get<any>(this.rootUrl + '/GetLevels');
+    return this.http.get<any>(this.rootUrl + '/GetRequestLevels');
   }
 
   public getPriorities(): Observable<any>{
@@ -164,19 +164,19 @@ export class DeliveryResourceRequestService extends BaseApiService {
   }
 
   public getResourceRequestById(id: number): Observable<any>{
-    return this.http.get<any>(this.rootUrl + '/GetResourceRequestById?requestId=' +id)
+    return this.http.get<any>(this.rootUrl + '/GetById?requestId=' +id)
   }
   public updateNotePM(data: any): Observable<any>{
-    return this.http.post<any>(this.rootUrl + '/UpdateRequestPmNote', data)
+    return this.http.post<any>(this.rootUrl + '/UpdatePMNote', data)
   }
   public updateNoteHPM(data: any): Observable<any>{
-    return this.http.post<any>(this.rootUrl + '/UpdateRequestHpmNote', data)
+    return this.http.post<any>(this.rootUrl + '/UpdateHPMNote', data)
   }
   public setDoneRequest(data: any): Observable<any>{
     return this.http.post<any>(this.rootUrl + '/SetDone', data)
   }
-  public getAllResourceRequestByProject(projectId: number): Observable<any>{
-    return this.http.get<any>(this.rootUrl + '/GetAllRequestByProjectId?projectId=' + projectId)
+  public getAllResourceRequestByProject(projectId: number, status: number): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetAllByProject?projectId=' + projectId + '&status=' + status)
   }
 
   public ConfirmOutProject(input: any) {
@@ -200,6 +200,8 @@ export class DeliveryResourceRequestService extends BaseApiService {
     return this.http.post(this.rootUrl + `/AddUserFromPoolToTempProject`,input)
   }
 
-
+  public deleteMyRequest(id): Observable<any>{
+    return this.http.delete<any>(this.rootUrl + '/DeleteMyRequest?resourceRequestId='+id)
+  }
 
 }

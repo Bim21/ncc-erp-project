@@ -40,31 +40,29 @@ export class FormSetDoneComponent extends AppComponentBase implements OnInit {
 
   }
   private getPlannedUser() {
-    this.projectUserService.GetAllWorkingProjectByUserId(this.planUserInfo.userId).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.GetAllWorkingProjectByUserId(this.planUserInfo.employee.id).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.plannedUserList = data.result;
     })
   }
 
   confirm() {
     const request = {
-      resourceRequestId: this.planUserInfo.resourceRequestId,
-      projectUserId: this.planUserInfo.projectUserId,
+      requestId: this.planUserInfo.resourceRequestId,
       startTime: moment(this.planUserInfo.plannedDate).format("YYYY-MM-DD"),
-      timeDone:  moment(this.timeDone).format("YYYY-MM-DD")
     }
     console.log(request)
     if (this.plannedUserList.length > 0) {
         this._resourceRequestService.setDoneRequest(request).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
-          abp.notify.success(`Confirmed for user ${this.planUserInfo.plannedEmployee} join project`)
+          abp.notify.success(`Confirmed for user ${this.planUserInfo.employee.fullName} join project`)
           this.dialogRef.close(true)
         })
     }
     else {
-      abp.message.confirm(`Confirm user <strong>${this.planUserInfo.plannedEmployee}</strong> <strong class="text-success">join</strong> Project`, "", rs => {
+      abp.message.confirm(`Confirm user <strong>${this.planUserInfo.employee.fullName}</strong> <strong class="text-success">join</strong> Project`, "", rs => {
         if (rs) {
             this._resourceRequestService.setDoneRequest(request).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
               this.dialogRef.close(true)
-              abp.notify.success(`Confirmed for user ${this.planUserInfo.plannedEmployee} join project`)
+              abp.notify.success(`Confirmed for user ${this.planUserInfo.employee.fullName} join project`)
             })
         }
       }, true)

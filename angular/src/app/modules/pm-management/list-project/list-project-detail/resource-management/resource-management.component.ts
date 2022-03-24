@@ -63,6 +63,13 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isEditRequest: boolean = false;
   public requestProcess: boolean = false;
   public isShowRequest: boolean = false;
+  public listStatuses: any[] = []
+  public selectStatus: number = 0
+  public isShowModal: string = 'none'
+  public modal_title: string
+  public strNotePM: string
+  public typePM: string
+  public resourceRequestId: number
   // plan resource
   public planResourceProcess: boolean = false;
   public plannedUserList: any = []
@@ -99,7 +106,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getAllUser();
     this.getPlannedtUser();
     this.getAllSkills();
-    this.getLevels();
+    this.getLevelsResourceRequest();
+    this.getStatusesResourceRequest()
   }
   // get data
   private getProjectUser() {
@@ -119,9 +127,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
 
 
-  private getResourceRequestList(): void {
+  public getResourceRequestList(): void {
     if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
-      this.resourceRequestService.getAllResourceRequestByProject(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
+      this.resourceRequestService.getAllResourceRequestByProject(this.projectId, this.selectStatus).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
     }
@@ -522,17 +530,16 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       width: "700px",
       maxHeight:"90vh"
     })
-    show.afterClosed().subscribe(result => {
+    show.afterClosed().subscribe(rs => {
       let resourceRequestId;
-        resourceRequestId = result.data.resourceRequestId
+        resourceRequestId = rs.data.resourceRequestId
       let index = this.resourceRequestList.findIndex(x => x.id == resourceRequestId)
-      if(index >= 0){
-        if(result.type == 'delete'){
-          this.getResourceRequestList()
-        }
-        else{
-          this.resourceRequestList[index].planUserInfo = result.data
-        }
+      if(rs.type == 'delete'){
+        this.getResourceRequestList()
+      }
+      else{
+        if(index >= 0)
+          this.resourceRequestList[index].planUserInfo = rs.data.result
       }
     });
   }
@@ -546,12 +553,90 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     return data
   }
 
+  cancelRequest(id){
+    abp.message.confirm(
+      'Are you sure cancel request?',
+      '',
+      (result) => {
+        if(result){
+          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
+            if(res.success){
+              abp.notify.success('Cancel Request Success!')
+              this.getResourceRequestList()
+            }
+            else{
+              abp.notify.error(res.result)
+            }
+          })
+        }
+      }
+    )
+  }
+
+  getStatusesResourceRequest(){
+    this.resourceRequestService.getStatuses().subscribe(res => {
+      this.listStatuses = res.result
+    })
+  }
+
+  deleteRequest(item: any){
+    console.log(item)
+    abp.message.confirm(
+      "Delete request: " + item.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.resourceRequestService.deleteMyRequest(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted request: " + item.name);
+            this.getResourceRequestList();
+          });
+
+        }
+      }
+
+    );
+  }
+
+  public openModal(name, typePM, content, id){
+    this.typePM = typePM
+    this.modal_title = name
+    this.strNotePM = content
+    this.resourceRequestId = id
+    this.isShowModal = 'block'
+  }
+
+  public closeModal(){
+    this.isShowModal = 'none'
+  }
+
+  public updateNote(){
+    let request = {
+      resourceRequestId: this.resourceRequestId,
+      note: this.strNotePM,
+    }
+    if(this.typePM == 'PM'){
+      this.resourceRequestService.updateNotePM(request).subscribe(res => {
+        if(res.success){
+          abp.notify.success('Update Note Successfully!')
+          let index = this.resourceRequestList.findIndex(x => x.id == request.resourceRequestId);
+          if(index >= 0){
+            this.resourceRequestList[index].pmNote = this.strNotePM;
+          }
+        }
+        else{
+          abp.notify.error(res.result)
+        }
+      })
+    }
+    this.closeModal()
+  }
+
   getAllSkills(){
     this.resourceRequestService.getSkills().subscribe((data) => {
       this.listSkills = data.result;
     })
   }
-  getLevels(){
+  getLevelsResourceRequest(){
     this.resourceRequestService.getLevels().subscribe(res => {
       this.listLevels = res.result
     })

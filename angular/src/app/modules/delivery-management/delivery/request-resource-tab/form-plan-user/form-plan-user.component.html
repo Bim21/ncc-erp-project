@@ -16,9 +16,9 @@
                             <input matInput [(ngModel)]="search" name="searchUserName"
                                 (keydown)="$event.stopPropagation()" placeholder="Search" #searchUser>{{searchUser.focus()}}
                         </mat-form-field>
-                        <ng-container *ngFor="let user of listUsers | listFilter: 'name' : search : 'name' : 'email'">
-                            <mat-option [value]="user.userId">
-                                {{user.fullname}} - {{user.email}}
+                        <ng-container *ngFor="let user of listUsers | listFilter: 'fullName' : search : 'fullName' : 'emailAddress'">
+                            <mat-option [value]="user.id">
+                                {{user.fullName}} - {{user.emailAddress}}
                             </mat-option>
                         </ng-container>
                     </mat-select>
@@ -36,7 +36,7 @@
             <div class="col-md-9">
                 <mat-form-field appearance="outline" class="w-100">
                     <input matInput placeholder="Time join" [matDatepicker]="picker" name="startTime" name="timeNedd"
-                        #timeJoinNg="ngModel" [(ngModel)]="resourcePlan.joinDate" required>
+                        #timeJoinNg="ngModel" [(ngModel)]="resourcePlan.startTime" required>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>

@@ -1,13 +1,13 @@
 export class ResourcePlanDto{
     constructor(){
-        this.projectUserId = null;
-        this.joinDate = '';
+        this.projectUserId = 0;
+        this.startTime = new Date();
         this.userId = 0;
-        this.resourceRequestId = null
+        this.resourceRequestId = 0
     }
-    public projectUserId: number
-    public userId: number
-    public joinDate: any
-    public resourceRequestId: any
-    public userName: string
+    public projectRole?: number
+    public projectUserId?: number
+    public resourceRequestId?: number
+    public startTime?: any
+    public userId?: number
 }

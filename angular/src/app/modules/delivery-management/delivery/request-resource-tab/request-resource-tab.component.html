@@ -187,7 +187,7 @@
                             <td>
                                 <ul class="pl-3  m-0">
                                     <li *ngFor="let skill of item.skills">
-                                        {{skill.skillName}}
+                                        {{skill.name}}
                                     </li>
                                 </ul>
                             </td>
@@ -197,9 +197,9 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <b>{{item.requestStartTime | date: "dd/MM/yyyy"}}</b>
+                                <b>{{item.creationTime | date: "dd/MM/yyyy"}}</b>
                                 <br> 
-                                <small>{{Utils.getTimeHistory(item.requestStartTime)}}</small>
+                                <small>{{Utils.getTimeHistory(item.creationTime)}}</small>
                             </td>
                             <!-- <td class="text-center"> <strong>{{item.plannedNumberOfPersonnel}}</strong></td> -->
                             <td class="text-center">
@@ -211,17 +211,17 @@
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div *ngIf="item.planUserInfo">
-                                            <p class="m-0"><strong>{{item.planUserInfo.plannedEmployee}}</strong></p>
+                                            <p class="m-0"><strong>{{item.planUserInfo.employee.fullName}}</strong></p>
                                             <p class="m-0">
                                                 <span class="mr-1"
-                                                    [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.branch]">
-                                                    {{item.planUserInfo.branchName}}
+                                                    [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.employee.branch]">
+                                                    {{item.planUserInfo.employee.branchName}}
                                                 </span>
-                                                <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.userType]">
-                                                    {{item.planUserInfo.typeName}}
+                                                <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.employee.userType]">
+                                                    {{item.planUserInfo.employee.userTypeName}}
                                                 </span>
-                                                <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.userLevel).style">
-                                                    {{item.planUserInfo.levelName}}
+                                                <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.employee.userLevel).style">
+                                                    {{item.planUserInfo.employee.levelName}}
                                                 </span>
                                             </p>
                                             <b>{{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}</b>
@@ -264,8 +264,10 @@
                             </td>
                             <td class="text-center">
                                 <span
-                                    [ngClass]="APP_CONST.resourceRequestStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]">{{
-                                    getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
+                                    [ngClass]="APP_CONST.resourceRequestStyle[getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]"
+                                >
+                                    {{getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}
+                                </span>
                                     <br>
                                 <span *ngIf="item.statusName == 'DONE'">{{item.timeDone | date: "dd/MM/yyyy"}}</span>
                             </td>
@@ -289,7 +291,7 @@
                                         <button
                                             class="btn btn-block text-left"
                                             mat-button
-                                            (click)="cancelRequest(item);"
+                                            (click)="cancelRequest(item.id);"
                                         >
                                             <i class="fa fa-times text-warning vertical-align-baseline"></i>
                                             Cancel

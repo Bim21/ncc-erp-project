@@ -73,6 +73,15 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   SaveAndClose() {
     this.isLoading = true;
     // this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
+    let request = {
+      name: '',
+      projectId: this.resourceRequestDto.projectId,
+      timeNeed: this.resourceRequestDto.timeNeed,
+      level: this.resourceRequestDto.level,
+      priority: this.resourceRequestDto.priority,
+      id: this.resourceRequestDto.id,
+      skillIds: this.resourceRequestDto.skillIds
+    }
     if (this.resourceRequestDto.timeDone) {
       this.resourceRequestDto.timeDone = moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
     }
@@ -80,14 +89,15 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY-MM-DD")
     }
     if (this.data.command == "create") {
-      this.resourceRequestDto.id = 0
-      this.resourceRequestDto.status = 0
-      this.resourceRequestService.create(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
+      request.id = 0
+      let createRequest = { ...request, quantity: this.resourceRequestDto.quantity};
+      this.resourceRequestService.create(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.resourceRequestDto);
       }, () => this.isLoading = false)
     } else {
-      this.resourceRequestService.update(this.resourceRequestDto).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
+      this.resourceRequestService.update(request).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
+        let updateRequest = {...request, }
         abp.notify.success("Update Successfully!");
         this.dialogRef.close(res.result);
       }, () => this.isLoading = false)

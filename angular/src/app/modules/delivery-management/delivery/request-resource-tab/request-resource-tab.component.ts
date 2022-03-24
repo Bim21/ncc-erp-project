@@ -44,7 +44,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     {name: 'Project', sortName: 'projectName', defaultSort: ''},
     {name: 'Skill'},
     {name: 'Level', sortName: 'level', defaultSort: ''},
-    {name: 'Time request', sortName: 'requestStartTime', defaultSort: ''},
+    {name: 'Time request', sortName: 'creationTime', defaultSort: ''},
     {name: 'Time need', sortName: 'timeNeed', defaultSort: ''},
     {name: 'Planned resource'},
     {name: 'PM Note'},
@@ -170,23 +170,22 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       width: "700px",
       maxHeight:"90vh"
     })
-    show.afterClosed().subscribe(result => {
+    show.afterClosed().subscribe(rs => {
       let resourceRequestId;
-        resourceRequestId = result.data.resourceRequestId
+      resourceRequestId = rs.data.resourceRequestId
       let index = this.listRequest.findIndex(x => x.id == resourceRequestId)
-      if(index >= 0){
-        if(result.type == 'delete'){
-          this.refresh()
-        }
-        else{
-          this.listRequest[index].planUserInfo = result.data
-        }
+      if(rs.type == 'delete'){
+        this.refresh()
       }
+      else{
+        if(index >= 0)
+          this.listRequest[index].planUserInfo = rs.data.result
+      }
+      
     });
   }
   async getPlanResource(item){
     let data = new ResourcePlanDto();
-    data.projectUserId = 0;
     data.resourceRequestId = item.id;
     if(!item.planUserInfo) return data;
     let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
@@ -214,8 +213,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public updateNote(){
     let request = {
       resourceRequestId: this.resourceRequestId,
-      pmNote: '',
-      hpmNote: ''
+      note: '',
     }
     if(this.typePM == 'PM'){
       this.updatePMNote(request,this.strNote)
@@ -227,7 +225,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   updatePMNote(request, note){
-    request.pmNote = note
+    request.note = note
     this.resourceRequestService.updateNotePM(request).subscribe(res => {
       if(res.success){
         abp.notify.success('Update Note Successfully!')
@@ -243,7 +241,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   updateHPMNote(request, note){
-    request.hpmNote = note
+    request.note = note
     this.resourceRequestService.updateNoteHPM(request).subscribe(res => {
       if(res.success){
         abp.notify.success('Update Note Successfully!')

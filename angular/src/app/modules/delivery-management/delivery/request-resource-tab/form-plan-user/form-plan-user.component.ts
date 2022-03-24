@@ -6,6 +6,7 @@ import { DeliveryResourceRequestService } from '@app/service/api/delivery-reques
 import { RequestResourceDto } from '@app/service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import * as moment from 'moment';
+import { UserService } from '@app/service/api/user.service';
 
 @Component({
   selector: 'app-form-plan-user',
@@ -23,6 +24,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
     public dialogRef: MatDialogRef<FormPlanUserComponent>,
     private resourceRequestService: DeliveryResourceRequestService,
     private ref: ChangeDetectorRef,
+    private _userService: UserService
   ) 
   {
     super(injector);
@@ -46,13 +48,11 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
 
   getAllUser(){
     let unassigned = {
-      userId: -1,
-      surname: '',
-      name: 'Unassigned',
-      fullname: 'Unassigned',
-      email: ''
+      id: -1,
+      fullName: 'Unassigned',
+      emailAddress: ''
     }
-    this.resourceRequestService.getPlanResourceUser().subscribe(res => {
+    this._userService.getAllActiveUser().subscribe(res => {
       this.listUsers = res.result
       if(this.typePlan == 'update'){
         this.listUsers.unshift(unassigned)
@@ -62,13 +62,12 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
 
   SaveAndClose(){
     let user = this.listUsers.find(x => x.userId == this.resourcePlan.userId)
-    this.resourcePlan.userName = user.fullname
-    this.resourcePlan.joinDate = moment(this.resourcePlan.joinDate).format('YYYY/MM/DD')
+    this.resourcePlan.startTime = moment(this.resourcePlan.startTime).format('YYYY/MM/DD')
     if(this.typePlan == 'create'){
       this.resourceRequestService.createPlanUser(this.resourcePlan).subscribe(res => {
         if(res.success){
           abp.notify.success("Plan Success")
-          this.dialogRef.close({ type: '', data: res.result})
+          this.dialogRef.close({ type: '', data: {resourceRequestId: this.resourcePlan.resourceRequestId, result: res.result}})
         }
         else{
           abp.notify.error(res.result)
@@ -80,7 +79,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
         this.resourceRequestService.deletePlanUser(this.resourcePlan.projectUserId).subscribe(res => {
           if(res.success){
             abp.notify.success("Plan Success")
-            this.dialogRef.close({ type: 'delete', data: {resourceRequestId: this.resourcePlan.resourceRequestId}})
+            this.dialogRef.close({ type: 'delete', data: {resourceRequestId: this.resourcePlan.resourceRequestId, result: null}})
           }
           else{
             abp.notify.error(res.result)
@@ -91,7 +90,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
         this.resourceRequestService.updatePlanUser(this.resourcePlan).subscribe(res => {
           if(res.success){
             abp.notify.success("Update Success")
-            this.dialogRef.close({ type: '', data: res.result})
+            this.dialogRef.close({ type: '', data: {resourceRequestId: this.resourcePlan.resourceRequestId, result: res.result}})
           }
           else{
             abp.notify.error(res.result)
