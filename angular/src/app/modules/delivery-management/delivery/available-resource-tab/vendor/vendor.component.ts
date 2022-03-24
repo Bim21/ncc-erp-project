@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../service/api/resource-manager.service';
 import { PagedRequestDto } from './../../../../../../shared/paged-listing-component-base';
 import { SkillDto } from './../../../../../service/model/list-project.dto';
 import { PlanResourceComponent } from './../plan-resource/plan-resource.component';
@@ -87,7 +88,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   public availableResourceList: availableResourceDto[] = [];
 
   constructor(public injector: Injector,
-    private availableRerourceService: DeliveryResourceRequestService,
+    private availableRerourceService: ResourceManagerService,
     private dialog: MatDialog,
     private skillService: SkillService,
     private _modalService: BsModalService,

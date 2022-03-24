@@ -14,3 +14,15 @@
   ::ng-deep .mat-radio-button  .mat-radio-label-content{
       padding-left: 5px;
   }
+
+.vertical-align-baseline{
+    vertical-align: baseline !important;
+}
+
+::ng-deep table thead th i:hover {
+    color: black;
+}
+
+::ng-deep #tbl-resource-request thead th{
+    vertical-align: top;
+}

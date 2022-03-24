@@ -996,6 +996,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     ref.afterClosed().subscribe(rs => {
       if (rs) {
        this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+       this.getChangedResource()
       }
     })
   }
@@ -1014,8 +1015,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       })
       ref.afterClosed().subscribe(rs => {
         if (rs) {
-          // this.getPlannedtUser()
-          // this.getProjectUser()
+          this.getChangedResource()
+          this.getFuturereport()
+          this.getCurrentResourceOfProject(this.projectInfo.projectCode)
         }
       })
     }
@@ -1034,8 +1036,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
         ref.afterClosed().subscribe(rs => {
           if (rs) {
-            // this.getProjectUser()
-            // this.getPlannedtUser()
+            this.getChangedResource()
+            this.getFuturereport()
+            this.getCurrentResourceOfProject(this.projectInfo.projectCode)
           }
         })
       })
@@ -1051,7 +1054,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if (result) {
           this.projectUserService.CancelResourcePlan(user.id).subscribe(rs => {
             abp.notify.success(`Cancel plan for user ${user.fullName}`)
-            this.getPlannedtUser()
+            this.getFuturereport()
           })
         }
       },

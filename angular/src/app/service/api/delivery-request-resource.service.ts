@@ -44,9 +44,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
       request
     );
   }
-  public planUser(item: any): Observable<any> {
-    return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
-  }
+ 
   public availableResourceFuture(request: PagedRequestDto): Observable<any> {
     return this.http.post<any>(
       this.rootUrl + '/AvailableResourceFuture',
@@ -73,75 +71,9 @@ export class DeliveryResourceRequestService extends BaseApiService {
     option: string
   ): Observable<any> {
     return this.http.post<any>(
-      this.rootUrl + `/GetAllPaging?order=${option}`,
+      this.rootUrl + `/GetAllPaging`,
       request
     );
-  }
-
-
-  public GetVendorResource(
-    request: PagedRequestDto
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + '/GetVendorResource',
-      request
-    );
-  }
-
-  public GetAllPoolResource(
-    request: any, skillId?: any
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + '/GetAllPoolResource',
-      request
-    );
-  }
-  public GetAllResource(
-    request: PagedRequestDto
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + '/GetAllResource',
-      request
-    );
-  }
-
-  public CancelResourcePlan(
-    id: number
-  ): Observable<any> {
-    return this.http.delete<any>(
-      this.rootUrl + '/CancelResourcePlan?projectUserId=' + id,
-
-    );
-  }
-
-  public updatePoolNote(
-    poolNote: any
-  ): Observable<any> {
-    return this.http.put<any>(
-      this.rootUrl + '/UpdateUserPoolNote', poolNote
-
-    );
-  }
-
-  public ConfirmOutProject(input: any) {
-    return this.http.post(this.rootUrl + `/ConfirmOutProject`, input)
-
-  }
-  public ConfirmJoinProject(projectUserId: number, startTime: any) {
-    return this.http.get(this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`)
-  }
-
-
-  public EditProjectUserPlan( input:any) {
-    return this.http.post(this.rootUrl + `/EditProjectUserPlan`,input)
-  }
-
-  public PlanNewResourceToProject( input:any) {
-    return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
-  }
-
-  public AddUserToTempProject( input:any) {
-    return this.http.post(this.rootUrl + `/AddUserFromPoolToTempProject`,input)
   }
 
 

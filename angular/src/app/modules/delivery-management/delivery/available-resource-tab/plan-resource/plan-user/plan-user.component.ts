@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../../service/api/resource-manager.service';
 import { ProjectUserService } from './../../../../../../service/api/project-user.service';
 import { catchError } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -24,7 +25,7 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
-    private availableResourceService: DeliveryResourceRequestService,
+    private resourceService: ResourceManagerService,
     public injector: Injector,
     public dialogRef: MatDialogRef<PlanUserComponent>,
     private projectUserService: ProjectUserService) { super(injector) }
@@ -48,13 +49,13 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
     this.isLoading = true
     this.planUser.startTime = moment(this.planUser.startTime).format("YYYY-MM-DD");
     if (this.data.command != "edit") {
-      this.availableResourceService.planUser(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
+      this.resourceService.planUser(this.planUser).pipe(catchError(this.resourceService.handleError)).subscribe((res) => {
         abp.notify.success("Planed Successfully!");
         this.dialogRef.close(this.planUser);
       }, () => this.isLoading = false);
     }
     else {
-      this.availableResourceService.EditProjectUserPlan(this.planUser).pipe(catchError(this.availableResourceService.handleError)).subscribe((res) => {
+      this.resourceService.EditProjectUserPlan(this.planUser).pipe(catchError(this.resourceService.handleError)).subscribe((res) => {
         abp.notify.success("Planed Successfully!");
         this.dialogRef.close(this.planUser);
       }, () => this.isLoading = false);

@@ -2977,11 +2977,17 @@ namespace ProjectManagement.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsRecruitmentSend")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
+
+                    b.Property<byte>("Level")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(1000)")
@@ -2991,8 +2997,14 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
 
+                    b.Property<byte>("Priority")
+                        .HasColumnType("tinyint");
+
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("RecruitmentUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -3877,7 +3889,7 @@ namespace ProjectManagement.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Entities.ResourceRequest", "ResourceRequest")
-                        .WithMany()
+                        .WithMany("ProjectUsers")
                         .HasForeignKey("ResourceRequestId");
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
@@ -3914,7 +3926,7 @@ namespace ProjectManagement.Migrations
             modelBuilder.Entity("ProjectManagement.Entities.ResourceRequestSkill", b =>
                 {
                     b.HasOne("ProjectManagement.Entities.ResourceRequest", "ResourceRequest")
-                        .WithMany()
+                        .WithMany("ResourceRequestSkills")
                         .HasForeignKey("ResourceRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

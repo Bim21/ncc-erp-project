@@ -28,6 +28,10 @@ export class UserService extends BaseApiService {
       );
     }
   }
+
+  public getAllActiveUser(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetAllActiveUser');
+  }
   public uploadImageFile(file, id): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);

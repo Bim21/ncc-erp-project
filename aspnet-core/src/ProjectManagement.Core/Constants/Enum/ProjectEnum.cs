@@ -93,7 +93,7 @@ namespace ProjectManagement.Constants.Enum
             PENDING = 0,
             DONE = 1,
             CANCELLED = 2,
-            APPROVE = 3
+            //APPROVE = 3
         }
         public enum ProjectIssueSource
         {
@@ -153,6 +153,7 @@ namespace ProjectManagement.Constants.Enum
         }
         public enum UserLevel : byte
         {
+            AnyLevel = 100,
             Intern_0 = 0,
             Intern_600K = 1,
             Intern_2M = 2,
@@ -168,8 +169,17 @@ namespace ProjectManagement.Constants.Enum
             MiddlePlus = 12,
             SeniorMinus = 13,
             Senior = 14,
-            SeniorPlus = 15,
+            Principal = 15,
         }
+
+        public enum Priority : byte
+        {
+            Low = 0,
+            Medium = 1,
+            High = 2,
+            Critical = 3
+        }
+
         public enum UserType
         {
             Internship = 0,
