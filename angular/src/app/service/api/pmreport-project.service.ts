@@ -7,7 +7,8 @@ import { BaseApiService } from './base-api.service';
   providedIn: 'root'
 })
 export class PMReportProjectService extends BaseApiService {
-
+  
+  public projectHealth: string
 
   changeUrl() {
     return 'PMReportProject'
@@ -33,7 +34,7 @@ export class PMReportProjectService extends BaseApiService {
   public problemsOfTheWeekForReport(projectId: number, pmReportId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/ProblemsOfTheWeekForReport?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
-  public updateHealth(pmReportProjectId: number, projectHealth: number): Observable<any> {
+  public updateHealth(pmReportProjectId: any, projectHealth: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/UpdateHealth?pmReportProjectId=' + pmReportProjectId + '&projectHealth=' + projectHealth)
   }
   public reverseDelete(pmReportProjectId: number, { }): Observable<any> {
@@ -52,6 +53,16 @@ export class PMReportProjectService extends BaseApiService {
     }
     return this.http.put<any>(this.rootUrl + `/UpdateNote`, requestBody);
   }
+
+  public updateAutomationNote(note: string, pmReportProjectId: number): Observable<any> {
+    let requestBody ={
+      note:  note,
+      id: pmReportProjectId
+    }
+    return this.http.put<any>(this.rootUrl + `/UpdateAutomationNote`, requestBody);
+  }
+
+
   public GetInfoProject(pmReportProjectId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/GetInfoProject?pmReportProjectId=${pmReportProjectId}`);
 

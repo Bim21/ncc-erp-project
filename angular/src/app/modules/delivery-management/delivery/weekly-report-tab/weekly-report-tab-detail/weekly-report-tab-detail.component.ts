@@ -20,6 +20,9 @@ import * as echarts from 'echarts';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { GetTimesheetWorkingComponent, WorkingTimeDto } from './get-timesheet-working/get-timesheet-working.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
+import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -55,6 +58,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
   @ViewChild("timmer") timmerCount;
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger;
+  contextMenuPosition = { x: '0px', y: '0px' };
+
   public itemPerPage: number = 20;
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
@@ -86,7 +93,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public projectId: number;
   public projectIdReport: number;
   public isEditingNote: boolean = false;
+  public isEditingAutomationNote:boolean = false
   public generalNote: string = "";
+  public automationNote:string =""
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
@@ -107,7 +116,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isRefresh: boolean = false
   isStart: boolean = false
 
-  constructor(private pmReportProjectService: PMReportProjectService,
+  constructor(public pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
     injector: Injector,
@@ -192,9 +201,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.tempPmReportProjectList = data.result;
         this.projectId = this.pmReportProjectList[0]?.projectId
         this.generalNote = this.pmReportProjectList[0]?.note
+        this.automationNote = this.pmReportProjectList[0]?.automationNote
         // this.totalNormalWorkingTime = this.pmReportProjectList[0]?.totalNormalWorkingTime
         this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
         this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
+        this.pmReportProjectService.projectHealth = this.projectHealth
         this.pmReportProjectId = this.pmReportProjectList[0]?.id
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
@@ -216,6 +227,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.isLoading = false;
         this.GetTimesheetWeeklyChartOfProject(this.projectInfo.projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+        this.router.navigate(
+          [], 
+          {
+            relativeTo: this.route,
+            queryParams: {
+              name: this.projectInfo.projectName,
+              client: this.projectInfo.clientName,
+              pmName: this.projectInfo.pmName,
+              pmReportProjectId: this.pmReportProjectId,
+              projectHealth: this.projectHealth
+            }, 
+            queryParamsHandling: 'merge', // remove to replace all query params by provided
+          });
       },
         () => { this.isLoading = false })
     }
@@ -224,7 +248,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectId = projectReport.id
     this.projectId = projectReport.projectId;
     this.isEditingNote = false;
+    this.isEditingAutomationNote = false
     this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth]
+    this.pmReportProjectService.projectHealth = this.projectHealth
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
@@ -235,7 +261,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     // this.totalNormalWorkingTime = projectReport.totalNormalWorkingTime
     this.totalOverTime = projectReport.totalOverTime
     this.generalNote = projectReport.note
+    this.automationNote = projectReport.automationNote
 
+   
     this.getProjectInfo();
     this.getChangedResource();
     this.getFuturereport();
@@ -275,6 +303,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.problemList = data.result.result;
 
           this.projectHealth = data.result.projectHealth;
+          this.pmReportProjectService.projectHealth = this.projectHealth
 
         } else {
           this.problemList = [];
@@ -294,6 +323,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
     this.projectId = this.pmReportProjectList[0]?.projectId
     this.generalNote = this.pmReportProjectList[0].note
+    this.automationNote = this.pmReportProjectList[0].automationNote
     // this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
 
@@ -326,20 +356,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     })
 
   }
-  updateHealth(projectHealth) {
-    this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
-      .subscribe((data) => {
-        this.pmReportProjectList.forEach(item => {
-          if (item.id == this.pmReportProjectId) {
-            item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
-          }
-          abp.notify.success("Update successfull")
-        })
-        this.getChangedResource();
-        this.getFuturereport();
-        this.getProjectProblem()
-      })
-  }
+
   //weekly
   public addWeekReport() {
     let newReport = {} as projectUserDto
@@ -587,6 +604,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
+  
       this.pmReportProjectList.forEach(item => {
         if (item.id == this.pmReportProjectId) {
           item.note = this.generalNote;
@@ -602,6 +620,31 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
     })
   }
+
+
+  public updateAutoNote() {
+    this.pmReportProjectService.updateAutomationNote(this.automationNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
+      abp.notify.success("Update successful!")
+      this.isEditingAutomationNote = false;
+  
+      this.pmReportProjectList.forEach(item => {
+        if (item.id == this.pmReportProjectId) {
+          item.automationNote = this.automationNote
+        }
+      })
+    })
+  }
+  cancelUpdateAutoNote() {
+    this.isEditingAutomationNote = false;
+    this.pmReportProjectList.forEach(item => {
+      if (item.id == this.pmReportProjectId) {
+        this.automationNote = item.automationNote
+      }
+    })
+  }
+
+
+
   getPercentage(report, data) {
     report.allocatePercentage = data
   }
@@ -672,10 +715,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         hasOfficalDataOT = false
       }
 
-      console.log(normalAndOTchartData?.normalWoringHours)
-      console.log(officalChartData?.normalWoringHours)
-
-      console.log("aaaaaaa",hasOfficalDataNormal)
       option = {
         title: {
           text: 'Timesheet'
@@ -928,6 +967,96 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
     })
   }
+  showActions(e) {
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu()
 
+
+  }
+  showActionsPlan(e) {
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu()
+
+
+  }
+
+  // Current project action
+
+  releaseUser(user) {
+    let ref = this.dialog.open(ReleaseUserDialogComponent, {
+      width: "700px",
+      data: {
+        user: user
+      }
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+       this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+      }
+    })
+  }
+
+
+  //  planned resource action
+
+  confirm(user) {
+    if (user.allocatePercentage <= 0) {
+      let ref = this.dialog.open(ReleaseUserDialogComponent, {
+        width: "700px",
+        data: {
+          user: user,
+          type: "confirmOut"
+        },
+      })
+      ref.afterClosed().subscribe(rs => {
+        if (rs) {
+          // this.getPlannedtUser()
+          // this.getProjectUser()
+        }
+      })
+    }
+    else if (user.allocatePercentage > 0) {
+      let workingProject = [];
+      this.projectUserService.GetAllWorkingProjectByUserId(user.userId).subscribe(data => {
+        workingProject = data.result
+        let ref = this.dialog.open(ConfirmPopupComponent, {
+          width: '700px',
+          data: {
+            workingProject: workingProject,
+            user: user,
+            type: "confirmJoin"
+          }
+        })
+
+        ref.afterClosed().subscribe(rs => {
+          if (rs) {
+            // this.getProjectUser()
+            // this.getPlannedtUser()
+          }
+        })
+      })
+    }
+  }
+
+  cancelResourcePlan(user) {
+    abp.message.confirm(
+      `Cancel plan for user <strong>${user.fullName}</strong> <strong class = "${user.allocatePercentage > 0 ? 'text-success' : 'text-danger'}">
+      ${user.allocatePercentage > 0 ? 'Join project' : 'Out project'}</strong>?`,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.CancelResourcePlan(user.id).subscribe(rs => {
+            abp.notify.success(`Cancel plan for user ${user.fullName}`)
+            this.getPlannedtUser()
+          })
+        }
+      },
+      true
+    )
+  }
 
 }

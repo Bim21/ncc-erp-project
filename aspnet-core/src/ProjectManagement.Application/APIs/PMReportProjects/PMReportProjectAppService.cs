@@ -65,6 +65,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PMId = x.PMId,
                     PmName = x.PM.Name,
                     Note = x.Note,
+                    AutomationNote = x.AutomationNote,
                     PmBranch = x.PM.Branch,
                     PmEmailAddress = x.PM.EmailAddress,
                     PmAvatarPath = x.PM.AvatarPath,
@@ -479,6 +480,24 @@ namespace ProjectManagement.APIs.PMReportProjects
             }
 
             pmReportProject.Note = input.Note;
+            await WorkScope.UpdateAsync(pmReportProject);
+            return input;
+        }
+
+        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_UpdateNote,
+          PermissionNames.PmManager_PMReportProject_UpdateNote)]
+        public async Task<UpdateNoteDto> UpdateAutomationNote(UpdateNoteDto input)
+        {
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>()
+                .Include(x => x.PMReport)
+                .SingleOrDefaultAsync(x => x.Id == input.Id);
+
+            if (!pmReportProject.PMReport.IsActive)
+            {
+                throw new UserFriendlyException("Report has been closed !");
+            }
+
+            pmReportProject.AutomationNote = input.Note;
             await WorkScope.UpdateAsync(pmReportProject);
             return input;
         }

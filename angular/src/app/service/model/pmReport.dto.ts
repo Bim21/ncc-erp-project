@@ -24,6 +24,7 @@ export class pmReportProjectDto {
     pmId: number;
     pmName: string;
     note: string;
+    automationNote:string;
     id?: number;
     createMode?: boolean;
     setBackground?: boolean;
