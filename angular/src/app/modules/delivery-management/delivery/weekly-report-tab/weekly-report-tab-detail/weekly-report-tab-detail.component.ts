@@ -319,16 +319,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
 
     });
-
-
     this.projectId = this.pmReportProjectList[0]?.projectId
     this.generalNote = this.pmReportProjectList[0].note
     this.automationNote = this.pmReportProjectList[0].automationNote
-    // this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
 
     this.pmReportProjectId = this.pmReportProjectList[0].id
-    // this.pmReportProjectList[0].setBackground = true
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == this.pmReportProjectList[0].projectId) {
         element.setBackground = true;
@@ -336,10 +332,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         element.setBackground = false;
       }
     });
-    this.getProjectInfo();
-    this.getChangedResource();
-    this.getFuturereport();
-    this.getProjectProblem()
+    // this.getProjectInfo();
+    // this.getChangedResource();
+    // this.getFuturereport();
+    // this.getProjectProblem()
     this.searchUser = ""
   }
 
