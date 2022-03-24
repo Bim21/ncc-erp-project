@@ -175,4 +175,6 @@
   ::ng-deep .form-search-role .mat-form-field{
     display: block;
   }
-  
+  .label , label{
+    margin-left: 3px !important;
+  }
