@@ -9,4 +9,5 @@ export class ResourcePlanDto{
     public userId: number
     public joinDate: any
     public resourceRequestId: any
+    public userName: string
 }

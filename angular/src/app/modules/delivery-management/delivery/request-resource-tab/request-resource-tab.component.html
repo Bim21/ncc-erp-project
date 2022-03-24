@@ -19,8 +19,8 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <div class="row">
-                    <div class="col-md-4 col-sm-12 pt-1">
+                <div class="row" id="search-resource-request">
+                    <div class="col-xl-4 col-sm-12 pt-1 search-text">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="input-group">
@@ -63,81 +63,100 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7 col-sm-12" style="text-align: end;">
+                    <div class="col-xl-7 col-lg-12 select-search" style="text-align: end;">
                         <div class="row">
-                            <div class="col-md-4 col-sm-12">
-                                <label class="mr-2 mb-0">Status:</label>
-                                <mat-form-field appearance="outline">
-                                    <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
-                                        <mat-option [value]="-1">All</mat-option>
-                                        <mat-option *ngFor="let status of listStatuses"
-                                            [value]="status.id">
-                                            {{status.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+                            <div class="col-xl-4 col-lg-4">
+                                <div class="row">
+                                    <div class="col-md-2 col-xl-4 d-flex rsp-label justify-content-end align-items-center">
+                                        <label class="mr-2 mb-0">Status:</label>
+                                    </div>
+                                    <div class="col-md-10 col-xl-8 rsp-group-form-field">
+                                        <mat-form-field appearance="outline" class="rsp-form-field">
+                                            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onChangeStatus()">
+                                                <mat-option [value]="-1">All</mat-option>
+                                                <mat-option *ngFor="let status of listStatuses"
+                                                    [value]="status.id">
+                                                    {{status.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
-                                <label class="mr-2 mb-0">Level:</label>
-                                <mat-form-field appearance="outline">
-                                    <mat-select [(ngModel)]="selectedLevel" (selectionChange)="refresh()">
-                                        <mat-option [value]="-1">All</mat-option>
-                                        <mat-option *ngFor="let level of listLevels"
-                                            [value]="level.id">
-                                            {{level.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+                            <div class="col-xl-4 col-lg-4">
+                                <div class="row">
+                                    <div class="col-md-2 col-xl-4 d-flex rsp-label justify-content-end align-items-center">
+                                        <label class="mr-2 mb-0">Level:</label>
+                                    </div>
+                                    <div class="col-md-10 col-xl-8 rsp-group-form-field">
+                                        <mat-form-field appearance="outline" class="rsp-form-field">
+                                            <mat-select [(ngModel)]="selectedLevel" (selectionChange)="refresh()">
+                                                <mat-option [value]="-1">All</mat-option>
+                                                <mat-option *ngFor="let level of listLevels"
+                                                    [value]="level.id">
+                                                    {{level.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
-                                <label class="mr-2 mb-0">Skills:</label>
-                                <mat-form-field appearance="outline">
-                                    <mat-select placeholder="search skill" multiple (selectionChange)="refresh()" [(ngModel)]="skillIds">
-                                        <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
-                                            <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
-                                                <div class="col-4">
-                                                    <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                            <div class="col-xl-4 col-lg-4">
+                                <div class="row">
+                                    <div class="col-md-2 col-xl-4 d-flex rsp-label justify-content-end align-items-center">
+                                        <label class="mr-2 mb-0">Skills:</label>
+                                    </div>
+                                    <div class="col-md-10 col-xl-8 rsp-group-form-field">
+                                        <mat-form-field appearance="outline" class="rsp-form-field">
+                                            <mat-select placeholder="search skill" multiple (selectionChange)="refresh()" [(ngModel)]="skillIds">
+                                                <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
+                                                    <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
+                                                        <div class="col-4">
+                                                            <label style=" white-space: nowrap;" class="mt-2 mr-2">Search type:</label>
+                                                        </div>
+                                                        <div class="col-8 pt-2">
+                                                            <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
+                                                            <mat-radio-button [value]="false">Or</mat-radio-button>
+                                                        </div>
+                                                    </mat-radio-group>
                                                 </div>
-                                                <div class="col-8 pt-2">
-                                                    <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
-                                                    <mat-radio-button [value]="false">Or</mat-radio-button>
-                                                </div>
-                                            </mat-radio-group>
-                                        </div>
-                                        <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
-                                            {{skill.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
+                                                <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
+                                                    {{skill.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1 pt-1" style="text-align: end;">
-                        <button type="button" class="btn btn-light" matTooltip="Clear Filter"><i class="fa fa-times"></i>Clear</button>
+                    <div class="col-xl-1 pt-1 clear" style="text-align: end;">
+                        <div class="row">
+                            <div class="rsp-total-rows" style="display: none;">
+                                <label class="mb-0">Total:</label>
+                                <label class="mb-0">&nbsp;{{totalItems}}</label>
+                            </div>
+                            <div class="col-md-12 clear-button">
+                                <button type="button" class="btn btn-light" matTooltip="Clear Filter" (click)="clearAllFilter()"><i class="fa fa-times"></i>Clear</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="card-body table-responsive pb-4">
-                <!-- <div class="d-flex">
-                    <label class="mb-1 mr-2">Order by: </label>
-                    <mat-radio-group [(ngModel)]="selectedOption" aria-label="Select an option" (change)="refresh()">
-                        <mat-radio-button class="mx-2" value="PROJECT">Project</mat-radio-button>
-                        <mat-radio-button class="mx-2" value="TIMENEED">Time need</mat-radio-button>
-                        <mat-radio-button class="mx-2" value="SKILL">Skill</mat-radio-button>
-                    </mat-radio-group>
-                </div> -->
-                <!-- <div class="fixTableHead"> -->
-                <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap mt-2">
+                <table [busy]="isLoading" style="border-collapse: collapse;" class="table table-hover text-nowrap mt-2" id="tbl-resource-request">
                     <thead>
                         <tr>
-                            <th *ngFor="let thead of theadTable; let i = index" [ngStyle]="styleObject(thead)">
-                                <div class="row">
-                                    <div class="col-md-8 text-left">
+                            <th *ngFor="let thead of theadTable; let i = index" [ngStyle]="styleThead(thead)">
+                                <div class="row sortHeader">
+                                    <div class="col-xl-8 col-lg-12 rsp-th-name text-left">
                                         {{thead.name}}
                                     </div>
-                                    <div class="col-md-4 text-right" *ngIf="i != 0 && thead.sortName" style="vertical-align: middle;">
-                                        <app-sortable [data]="{sort: thead.sortName, typeSort: thead.defaultSort}" (sortEvent)="sortTable($event)"></app-sortable>
+                                    <div class="col-xl-4 col-lg-12 rsp-th-sort text-right" *ngIf="i != 0 && thead.sortName" style="vertical-align: middle;">
+                                        <ng-container>
+                                            <app-sortable #sortThead [data]="{sort: thead.sortName, typeSort: thead.defaultSort}" (sortEvent)="sortTable($event)"></app-sortable>
+                                        </ng-container>
                                     </div>
                                 </div>
                             </th>
@@ -155,9 +174,16 @@
                             <td class="text-center">
                                 <p class="tag" [ngClass]="APP_CONST.priorityRequest[item.priority]">{{item.priorityName}}</p>
                             </td>
-                            <!-- <td class="text-left" style="white-space: normal; max-width: 250px;"><span class="hyperlink"
-                                    (click)="showDetail(item)">{{ item.name }}</span></td> -->
-                            <td class="text-center">{{item.projectName}}</td>
+                            <td class="text-center">
+                                {{item.projectName}}
+                                <br>
+                                <span [ngClass]=" APP_CONST.ProjectTypeStyle[getByEnum(item.projectType,APP_ENUM.ProjectType)]">
+                                    {{item.projectTypeName}}
+                                </span>
+                                <span *ngIf="item.projectStatus =='Potential'" [ngClass]=" APP_CONST.statusStyle[getByEnum(item.status,APP_ENUM.ProjectStatus)]">
+                                    {{item.projectStatusName}}
+                                </span>
+                            </td>
                             <td>
                                 <ul class="pl-3  m-0">
                                     <li *ngFor="let skill of item.skills">
@@ -183,17 +209,30 @@
                             </td>
                             <td> 
                                 <div class="row">
-                                    <div class="col-md-9" *ngIf="item.planUserInfo">
-                                        <b>{{item.planUserInfo.plannedEmployee}} </b>
-                                        <br>
-                                        {{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}
+                                    <div class="col-md-10">
+                                        <div *ngIf="item.planUserInfo">
+                                            <p class="m-0"><strong>{{item.planUserInfo.plannedEmployee}}</strong></p>
+                                            <p class="m-0">
+                                                <span class="mr-1"
+                                                    [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.branch]">
+                                                    {{item.planUserInfo.branchName}}
+                                                </span>
+                                                <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.userType]">
+                                                    {{item.planUserInfo.typeName}}
+                                                </span>
+                                                <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.userLevel).style">
+                                                    {{item.planUserInfo.levelName}}
+                                                </span>
+                                            </p>
+                                            <b>{{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}</b>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3 text-right" *ngIf="item.statusName == 'PENDING'">
+                                    <div class="col-md-2 text-right" *ngIf="item.statusName == 'PENDING'">
                                         <i class="fa fa-edit" (click)="showModalPlanUser(item)"></i>
                                     </div>
                                 </div>
                             </td>
-                            <td style="white-space: normal; max-width: 250px;">
+                            <td style="white-space: normal; max-width: 250px; min-width: 150px;">
                                 <div class="row">
                                     <div class="col-md-10">
                                         <pre 
@@ -208,7 +247,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td style="white-space: normal; max-width: 250px;">
+                            <td style="white-space: normal; max-width: 250px; min-width: 150px;">
                                 <div class="row">
                                     <div class="col-md-10">
                                         <pre 
@@ -229,7 +268,6 @@
                                     getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}</span>
                                     <br>
                                 <span *ngIf="item.statusName == 'DONE'">{{item.timeDone | date: "dd/MM/yyyy"}}</span>
-
                             </td>
                             <td class="text-center action-request-resource-tab">
                                 <button *ngIf="item.statusName != 'DONE' && !item.isRecruitmentSend" mat-button [matMenuTriggerFor]="menu">
@@ -239,20 +277,21 @@
                                     <!-- case 1: Status is inprogress -->
                                     <div *ngIf="item.statusName == 'PENDING'">
                                         <button
+                                            *ngIf="item.planUserInfo"
                                             class="btn btn-block text-left"
                                             mat-button
                                             (click)="setDoneRequest(item);"
                                         >
-                                            <i class="vertical-align-baseline"></i>
+                                            <i class="fa fa-check text-success vertical-align-baseline"></i>
                                             Set Done
                                         </button>
-                                        <br>
+                                        <br *ngIf="item.planUserInfo">
                                         <button
                                             class="btn btn-block text-left"
                                             mat-button
                                             (click)="cancelRequest(item);"
                                         >
-                                            <i class="fa fa-times vertical-align-baseline"></i>
+                                            <i class="fa fa-times text-warning vertical-align-baseline"></i>
                                             Cancel
                                         </button>
                                         <br>
@@ -272,7 +311,7 @@
                                             *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
                                             (click)="delete(item);"
                                         >
-                                            <i class="fa fa-trash vertical-align-baseline"></i>
+                                            <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                                             Delete
                                         </button>
                                     </div>
@@ -286,19 +325,24 @@
                                     </div>
                                     <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
                                     <div *ngIf="item.statusName == 'PENDING' && !item.isRecruitmentSend" class="text-left">
-                                        <button class="btn btn-block text-left" mat-button>
+                                        <button class="btn btn-block text-left" mat-button (click)="sendRecruitment()">
                                             Send recruitment
                                         </button>
                                     </div>
                                     <!-- case 5: Status is cancel-->
                                     <div *ngIf="item.statusName == 'CANCELLED'" class="text-left">
-                                        <button class="btn btn-block text-left" mat-button>
+                                        <button
+                                            class="btn btn-block text-left"
+                                            mat-button
+                                            *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                            (click)="delete(item);"
+                                        >
+                                            <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                                             Delete
                                         </button>
                                     </div>
                                 </mat-menu>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -332,7 +376,7 @@
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4 col-12 text-center">
-                        <p class="mb-0 my-2">
+                        <p class="mb-0 my-2 total-rows">
                             {{ "TotalRecordsCount" | localize: totalItems }}
                         </p>
                     </div>
@@ -348,40 +392,36 @@
     </div>
 </section>
 
-<!-- The Modal -->
+<!-- The Modal Update Note-->
 <div class="modal" id="myModal" [ngStyle]="{'display':isShowModal}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-            <h4 class="modal-title"> {{typePM}} Note: <span class="text-success">{{modal_title}}</span> </h4>
-            <button type="button" class="close" (click)="closeModal()">&times;</button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="">Note:</label>
-                </div>
-                <div class="col-md-10">
-                    <textarea rows="3" 
-                        cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note"
-                        name="note" type="text" class="form-control" name="DMnote" [(ngModel)]="strNote"
-                        #nameEl #name="ngModel"
-                    >
-                    </textarea>
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"> {{typePM}} Note: <span class="text-success">{{modal_title}}</span> </h4>
+                <button type="button" class="close" (click)="closeModal()">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="">Note:</label>
+                    </div>
+                    <div class="col-md-10">
+                        <textarea rows="3" 
+                            cdkTextareaAutosize #autosize="cdkTextareaAutosize" placeholder="Enter note"
+                            name="note" type="text" class="form-control" name="DMnote" [(ngModel)]="strNote"
+                            #nameEl #name="ngModel"
+                        >
+                        </textarea>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Modal footer -->
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
-            <button type="button" class="btn btn-primary" (click)="updateNote()">Save</button>
-        </div>
-
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="updateNote()">Save</button>
+            </div>
         </div>
     </div>
 </div>

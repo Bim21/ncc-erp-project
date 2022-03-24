@@ -30,6 +30,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.resourcePlan = this.input;
+    console.log(this.resourcePlan)
     if(this.resourcePlan.userId){
       this.typePlan = 'update'
     }
@@ -60,6 +61,8 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
   }
 
   SaveAndClose(){
+    let user = this.listUsers.find(x => x.userId == this.resourcePlan.userId)
+    this.resourcePlan.userName = user.fullname
     this.resourcePlan.joinDate = moment(this.resourcePlan.joinDate).format('YYYY/MM/DD')
     if(this.typePlan == 'create'){
       this.resourceRequestService.createPlanUser(this.resourcePlan).subscribe(res => {

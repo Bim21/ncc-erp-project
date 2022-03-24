@@ -150,7 +150,31 @@ export class Utils{
       }
     }
 
-    public static timeFuture(timeFuture: any){
+    public static getProjectTypefromEnum(projectType: number, enumObject: any) {
+      for (const key in enumObject) {
+        if (enumObject[key] == projectType) {
+          return key;
+        }
+      }
+    }
 
+    public static getByEnum(enumValue: number, enumObject: any) {
+      for (const key in enumObject) {
+        if (enumObject[key] == enumValue) {
+          return key;
+        }
+      }
+    }
+  
+    public static changeTextProjectType(projectType: string) {
+      return projectType === 'TAM' ? 'T&M' : projectType
+    }
+
+    public static getValueByEnum(enumValue: number, enumObject) {
+      for (const key in enumObject) {
+        if (enumObject[key] == enumValue) {
+          return key;
+        }
+      }
     }
 }

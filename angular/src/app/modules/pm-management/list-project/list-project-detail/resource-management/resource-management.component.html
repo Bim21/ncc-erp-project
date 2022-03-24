@@ -369,118 +369,211 @@
     <!-- <form #projectUserForm ="ngForm"   class="form-horizontal" autocomplete="off"> -->
     <div class="container-fluid">
         <div class="card mt-3">
-
             <mat-expansion-panel expanded=false *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <strong class="table-title">Resource request</strong>
-                    <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)" [hidden]="!isShowRequest" (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()" class="btn bg-blue ml-3 mb-2 btn-sm">
+                    <button 
+                        *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)" 
+                        [hidden]="!isShowRequest" 
+                        (click)="createRequest();resourceRequestCurrentPage=1; $event.stopPropagation()" 
+                        class="btn bg-blue ml-3 mb-2 btn-sm"
+                    >
                         <i class="fa fa-plus m-0"></i>
                     </button>
-
                 </mat-expansion-panel-header>
                 <div class="table-responsive mb-1 p-2">
                     <div class="">
-
-
                         <table style="border-collapse: collapse ; table-layout:fixed !important" class="table table-hover text-nowrap" [busy]="isLoading">
                             <thead class="bg-light">
                                 <tr style="border: none;">
                                     <th class="stt">#</th>
-                                    <th>Request name</th>
-                                    <th style="width: 160px;">Thời gian cần</th>
-                                    <th>PM Note</th>
-                                    <th>HPM note</th>
-                                    <th style="width: 220px;">Status</th>
+                                    <th>Skill</th>
+                                    <th>Level</th>
+                                    <th>Time Request</th>
+                                    <th>Time Need</th>
+                                    <th style="width: 200px;">Planned Resource</th>
+                                    <th>Status</th>
+                                    <th style="width: 100px;">Priority</th>
+                                    <th>PM note</th>
+                                    <th>HR/DM note</th>
                                     <th style="width: 180px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let request of resourceRequestList  |paginate:{
+                                <tr *ngFor="let item of resourceRequestList  |paginate:{
                                     id: 'projecRequest',
                                     itemsPerPage: itemPerPage,
                                     currentPage: resourceRequestCurrentPage
                                     } ; let i = index">
                                     <td><span>{{ i +1 }}</span></td>
-                                    <td class="text-left">
-                                        <p style="white-space: normal; max-width: 300px;" *ngIf="!request.createMode">
-                                            {{request.name}}</p>
-                                        <div *ngIf="request.createMode" class="form-group row required">
-                                            <input required placeholder="leave a comment *" class="form-control mt-2" type="text" [(ngModel)]="request.name" #requestName="ngModel" #requestNameEl>
-                                            <abp-validation-summary [control]="requestName" [controlEl]="requestNameEl">
-                                            </abp-validation-summary>
-                                        </div>
-                                    </td>
-
-
                                     <td>
-                                        <p *ngIf="!request.createMode">{{request.timeNeed | date:"dd/MM/yyyy"}}</p>
-                                        <div style="margin-top: 7px;" *ngIf="request.createMode" class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <input matInput [matDatepicker]="picker" placeholder="chose a date *" [(ngModel)]="request.timeNeed" name="requestTimeNeed" #requestTimeNeed="ngModel" required>
-                                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                                <mat-datepicker #picker></mat-datepicker>
-                                            </mat-form-field>
-                                            <mat-error class="mt-1" *ngIf="requestTimeNeed.hasError('required') && requestTimeNeed.touched" style="font-size: 13px;">
-                                                This field is required
-                                            </mat-error>
-
-                                        </div>
-                                    </td>
-                                    <td style="white-space: normal; max-width: 300px; " class="text-left">
-                                        <pre *ngIf="!request.createMode" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                        font-family: sans-serif; align-self:flex-start; line-height: initial; font-size: 14px;">
-                                          {{request.pmNote}}</pre>
-                                        <div *ngIf="request.createMode" class="form-group row required">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2" placeholder="leave a comment" [(ngModel)]="request.pmNote" matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                    </td>
-                                    <td style="white-space: normal; max-width: 210px;">
-                                        <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                        font-family: sans-serif; align-self:flex-start; line-height: initial; font-size: 14px;">
-                                          {{request.dmNote}}</pre>
+                                        <ul class="pl-3  m-0">
+                                            <li *ngFor="let skill of item.skills">
+                                                {{skill.skillName}}
+                                            </li>
+                                        </ul>
                                     </td>
                                     <td class="text-center">
-                                        <p [ngClass]="APP_CONST.resourceRequestStyle[getByEnum(request.status,APP_ENUM.ResourceRequestStatus)]" *ngIf="!request.createMode">
-                                            {{getByEnum(request.status,APP_ENUM.ResourceRequestStatus)}}</p>
-                                        <p [ngClass]="APP_CONST.statusStyle['PENDING']" class="mt-1" *ngIf="request.createMode && !isEditRequest">PENDING</p>
-                                        <div *ngIf="request.createMode && isEditRequest" class="form-group ">
-                                            <mat-form-field appearance="outline" style="width: 180px;">
-                                                <mat-select [(ngModel)]="request.status">
-                                                    <mat-option *ngFor="let item of requestStatusList" [value]="APP_ENUM.ResourceRequestStatus[item]">
-                                                        {{item}}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-
-
+                                        <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.level).style">
+                                            {{item.levelName}}
+                                        </span>
                                     </td>
-                                    <td>
-                                        <div *ngIf="!request.createMode">
-                                            <button *ngIf="permission.isGranted(PmManager_ResourceRequest_Update)" [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1" (click)="editProjectRerequest(request)"> <i
-                                                    class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button *ngIf="permission.isGranted(PmManager_ResourceRequest_Delete)" [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1" (click)="removeProjectRerequest(request)"> <i
-                                                    class="fas fa-trash"></i>delete</button>
-
-
+                                    <td class="text-center">
+                                        <b>{{item.requestStartTime | date: "dd/MM/yyyy"}}</b>
+                                        <br> 
+                                        <small>{{Utils.getTimeHistory(item.requestStartTime)}}</small>
+                                    </td>
+                                    <td class="text-center">
+                                        <b>{{item.timeNeed |date: "dd/MM/yyyy"}}</b>
+                                        <br>
+                                        <small>{{Utils.getTimeHistory(item.timeNeed)}}</small>
+                                    </td>
+                                    <td> 
+                                        <div class="row">
+                                            <div class="col-md-10 text-left">
+                                                <div *ngIf="item.planUserInfo">
+                                                    <p class="m-0"><strong>{{item.planUserInfo.plannedEmployee}}</strong></p>
+                                                    <p class="m-0">
+                                                        <span class="mr-1"
+                                                            [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.branch]">
+                                                            {{item.planUserInfo.branchName}}
+                                                        </span>
+                                                        <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.userType]">
+                                                            {{item.planUserInfo.typeName}}
+                                                        </span>
+                                                        <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.userLevel).style">
+                                                            {{item.planUserInfo.levelName}}
+                                                        </span>
+                                                    </p>
+                                                    <b>{{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}</b>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 text-right" *ngIf="item.statusName == 'PENDING'">
+                                                <i class="fa fa-edit" (click)="showModalPlanUser(item)"></i>
+                                            </div>
                                         </div>
-                                        <div *ngIf="request.createMode" class="pt-2">
-                                            <button [disabled]="!request?.name || !request?.timeNeed " class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveProjectRerequest(request)">
-                                                <i style="color: green;" class="fas fa-check fa-2x "></i>
-                                            </button>
-
-                                            <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelProjectRerequest()"></i>
-
+                                    </td>
+                                    <td class="text-center">
+                                        <span
+                                            [ngClass]="APP_CONST.resourceRequestStyle[Utils.getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)]"
+                                        >
+                                            {{Utils.getValueByEnum(item.status, APP_ENUM.ResourceRequestStatus)}}
+                                        </span>
+                                            <br>
+                                        <span *ngIf="item.statusName == 'DONE'">{{item.timeDone | date: "dd/MM/yyyy"}}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <p class="tag" [ngClass]="APP_CONST.priorityRequest[item.priority]">{{item.priorityName}}</p>
+                                    </td>
+                                    <td style="white-space: normal; max-width: 250px; min-width: 150px;">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <pre 
+                                                    class="mb-0 p-0  ml-2" 
+                                                    style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                                >
+                                                    {{item.pmNote}}
+                                                </pre>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <i class="fa fa-edit" (click)="openModal(item.name, 'PM', item.pmNote, item.id)"></i>
+                                            </div>
                                         </div>
+                                    </td>
+                                    <td style="white-space: normal; max-width: 250px; min-width: 150px;">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <pre 
+                                                    class="mb-0 p-0  ml-2" 
+                                                    style=" white-space: pre-line;font-family: sans-serif; align-self:flex-start; line-height: initial;"
+                                                >
+                                                    {{item.dmNote}} 
+                                                </pre>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <i class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center action-request-resource-tab">
+                                        <button *ngIf="item.statusName != 'DONE' && !item.isRecruitmentSend" mat-button [matMenuTriggerFor]="menu">
+                                            <i class="fas fa-bars fa-lg"></i>
+                                        </button>
+                                        <mat-menu #menu="matMenu" class="p-2">
+                                            <!-- case 1: Status is inprogress -->
+                                            <div *ngIf="item.statusName == 'PENDING'">
+                                                <button
+                                                    *ngIf="item.planUserInfo"
+                                                    class="btn btn-block text-left"
+                                                    mat-button
+                                                    (click)="setDoneRequest(item);"
+                                                >
+                                                    <i class="fa fa-check text-success vertical-align-baseline"></i>
+                                                    Set Done
+                                                </button>
+                                                <br *ngIf="item.planUserInfo">
+                                                <button
+                                                    class="btn btn-block text-left"
+                                                    mat-button
+                                                    (click)="cancelRequest(item);"
+                                                >
+                                                    <i class="fa fa-times text-warning vertical-align-baseline"></i>
+                                                    Cancel
+                                                </button>
+                                                <br>
+                                                <button 
+                                                    class="btn btn-block text-left"
+                                                    mat-button
+                                                    *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
+                                                    (click)="editRequest(item);"
+                                                >
+                                                    <i class="fa fa-edit vertical-align-baseline"></i>
+                                                    Edit
+                                                </button>
+                                                <br>
+                                                <button
+                                                    class="btn btn-block text-left"
+                                                    mat-button
+                                                    *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                                    (click)="delete(item);"
+                                                >
+                                                    <i class="fa fa-trash text-danger vertical-align-baseline"></i>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                            <!-- case 2: Status is inprogress and IsRecruitmentSend is TRUE-->
+                                            <!-- case 6: Status is cancel and IsRecruitmentSend is TRUE-->
+                                            <!-- case 4: Status is done and IsRecruitmentSend is TRUE-->
+                                            <div *ngIf="showActionViewRecruitment(item.statusName, item.recruitment)" class="text-left">
+                                                <button class="btn btn-block text-left" mat-button>
+                                                    View recruitment
+                                                </button>
+                                            </div>
+                                            <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
+                                            <div *ngIf="item.statusName == 'PENDING' && !item.isRecruitmentSend" class="text-left">
+                                                <button class="btn btn-block text-left" mat-button (click)="sendRecruitment()">
+                                                    Send recruitment
+                                                </button>
+                                            </div>
+                                            <!-- case 5: Status is cancel-->
+                                            <div *ngIf="item.statusName == 'CANCELLED'" class="text-left">
+                                                <button
+                                                    class="btn btn-block text-left"
+                                                    mat-button
+                                                    *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                                    (click)="delete(item);"
+                                                >
+                                                    <i class="fa fa-trash text-danger vertical-align-baseline"></i>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </mat-menu>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
                 <pagination-controls autoHide="true" id="projecRequest" (pageChange)="resourceRequestCurrentPage = $event">
                 </pagination-controls>
             </mat-expansion-panel>

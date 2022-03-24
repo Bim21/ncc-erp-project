@@ -22,3 +22,7 @@
 ::ng-deep table thead th i:hover {
     color: black;
 }
+
+::ng-deep #tbl-resource-request thead th{
+    vertical-align: top;
+}

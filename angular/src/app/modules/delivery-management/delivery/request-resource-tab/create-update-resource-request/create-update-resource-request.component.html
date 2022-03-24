@@ -5,7 +5,7 @@
     <abp-modal-header *ngIf="data.command=='edit'" title="Edit request: {{title}}" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
-        <div class="form-group row required">
+        <div *ngIf="typeControl == 'request'" class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
                 Project:
             </label>
@@ -19,7 +19,6 @@
                                 (keydown)="$event.stopPropagation()" placeholder="Search" #search>{{search.focus()}}
                         </mat-form-field>
                         <ng-container *ngFor="let project of listProject | listFilter: 'name' : searchProject">
-
                             <mat-option [value]="project.id">
                                 {{project.name}}
                             </mat-option>
@@ -104,10 +103,6 @@
                         </ng-container>
                     </mat-select>
                 </mat-form-field>
-                <!-- <mat-error class="mt-1" *ngIf="priorityValid.hasError('required') && priorityValid.touched"
-                    style="font-size: 13px;">
-                    This field is required
-                </mat-error> -->
             </div>
         </div>
 

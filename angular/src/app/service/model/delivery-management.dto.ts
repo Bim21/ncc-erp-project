@@ -20,8 +20,7 @@ export class RequestResourceDto {
   level?: any;
   priority?: any;
   quantity: number;
-  plannedEmployee?: string
-  plannedDate?: any
+  planUserInfo: any
 }
 export class ResourceRequestDetailDto {
   userId: number;

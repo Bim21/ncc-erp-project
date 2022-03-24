@@ -172,9 +172,13 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public updateNoteHPM(data: any): Observable<any>{
     return this.http.post<any>(this.rootUrl + '/UpdateRequestHpmNote', data)
   }
-  public setDoneRequest(id: number): Observable<any>{
-    return this.http.get<any>(this.rootUrl )
+  public setDoneRequest(data: any): Observable<any>{
+    return this.http.post<any>(this.rootUrl + '/SetDone', data)
   }
+  public getAllResourceRequestByProject(projectId: number): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetAllRequestByProjectId?projectId=' + projectId)
+  }
+
   public ConfirmOutProject(input: any) {
     return this.http.post(this.rootUrl + `/ConfirmOutProject`, input)
 

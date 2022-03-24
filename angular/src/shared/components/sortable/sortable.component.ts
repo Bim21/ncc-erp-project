@@ -36,6 +36,11 @@ export class SortableComponent extends AppComponentBase implements OnInit {
 }
 
 export class SortableModel{
+  constructor(_sort, _sortDirection, _typeSort){
+    this.sort = _sort
+    this.sortDirection = _sortDirection
+    this.typeSort = _typeSort
+  }
   sortDirection: any
   sort: string
   typeSort: string

@@ -18,6 +18,11 @@ import * as moment from 'moment';
 import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { ReleaseUserDialogComponent } from './release-user-dialog/release-user-dialog.component';
 import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
+import { DeliveryResourceRequestService } from '@app/service/api/delivery-request-resource.service';
+import { CreateUpdateResourceRequestComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/create-update-resource-request/create-update-resource-request.component';
+import { ResourcePlanDto } from '@app/service/model/resource-plan.dto';
+import { FormPlanUserComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
+import { RequestResourceDto } from '@app/service/model/delivery-management.dto';
 
 @Component({
   selector: 'app-resource-management',
@@ -29,10 +34,13 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
   PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
   PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
-
   PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
   PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
   PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
+  DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
+  DeliveryManagement_ResourceRequest_Update = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update;
+  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
+
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -41,8 +49,6 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
-
-
   // project user
   public projectUserList: projectUserDto[] = [];
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole)
@@ -52,7 +58,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public projectUserProcess: boolean = false;
   public isShowProjectUser: boolean = true;
   // resource request
-  public resourceRequestList: projectResourceRequestDto[] = [];
+  public resourceRequestList: RequestResourceDto[] = [];
   public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public isEditRequest: boolean = false;
   public requestProcess: boolean = false;
@@ -64,15 +70,22 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isShowCurrentResouce: boolean = true;
   public isEditPlannedResource: boolean = false
   public searchPlanResource: string = ""
-
   public tomorrowDate = new Date();
+  //skills, levels
+  public listSkills: any[] = []
+  public listLevels: any[] = []
 
-
-
-
-  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
-  constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
-    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog) {
+  constructor(
+    injector: Injector, 
+    private projectUserService: ProjectUserService, 
+    private projectUserBillService: ProjectUserBillService, 
+    private userService: UserService,
+    private projectRequestService: ProjectResourceRequestService, 
+    private route: ActivatedRoute, 
+    private dialog: MatDialog,
+    private resourceRequestService: DeliveryResourceRequestService
+  ) 
+  {
       super(injector)
       this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
   }
@@ -85,7 +98,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getResourceRequestList();
     this.getAllUser();
     this.getPlannedtUser();
-
+    this.getAllSkills();
+    this.getLevels();
   }
   // get data
   private getProjectUser() {
@@ -107,7 +121,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
 
   private getResourceRequestList(): void {
     if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
-      this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
+      this.resourceRequestService.getAllResourceRequestByProject(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
     }
@@ -167,15 +181,6 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     newUser.createMode = true;
     this.projectUserList.unshift(newUser)
     this.projectUserProcess = true;
-  }
-
-
-  public getValueByEnum(enumValue: number, enumObject) {
-    for (const key in enumObject) {
-      if (enumObject[key] == enumValue) {
-        return key;
-      }
-    }
   }
 
   saveProjectUser(user: any) {
@@ -282,14 +287,6 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     // this.userForProjectUser = this.userForUserBill.filter(user => userProjectList.indexOf(user.id) == -1)
   }
   // resource request
-
-  public addResourcceRequest(): void {
-    let newResource = {} as projectResourceRequestDto
-    newResource.createMode = true;
-    this.requestProcess = true;
-    this.resourceRequestList.unshift(newResource)
-  }
-
 
   public saveProjectRerequest(request: projectResourceRequestDto): void {
     delete request["createMode"]
@@ -481,6 +478,94 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   onPlanUserSelect(user, u) {
     user.userSkills = u.userSkills
     user.userId = u.id
+  }
+
+  public createRequest() {
+    this.showDialog("create", {});
+  }
+  public editRequest(item: any) {
+    this.showDialog("edit", item);
+  }
+
+  showDialog(command: string, request: any) {
+    let resourceRequest = {
+      id: request.id ? request.id : null,
+      projectId: this.projectId 
+    }
+    const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
+      data: {
+        command: command,
+        item: resourceRequest,
+        skills: this.listSkills,
+        levels: this.listLevels,
+        typeControl: 'requestProject'
+      },
+      width: "700px",
+      maxHeight: '90vh',
+    })
+    show.afterClosed().subscribe(result => {
+      if(command == 'create' && result)
+        this.getResourceRequestList()
+      else if(command == 'edit'){
+        let index = this.resourceRequestList.findIndex(x => x.id == result.id)
+        if(index >= 0){
+          this.resourceRequestList[index] = result
+        }
+      }
+    });
+  }
+
+  async showModalPlanUser(item: any){
+    let data = await this.getPlanResource(item);
+    const show = this.dialog.open(FormPlanUserComponent, {
+      data,
+      width: "700px",
+      maxHeight:"90vh"
+    })
+    show.afterClosed().subscribe(result => {
+      let resourceRequestId;
+        resourceRequestId = result.data.resourceRequestId
+      let index = this.resourceRequestList.findIndex(x => x.id == resourceRequestId)
+      if(index >= 0){
+        if(result.type == 'delete'){
+          this.getResourceRequestList()
+        }
+        else{
+          this.resourceRequestList[index].planUserInfo = result.data
+        }
+      }
+    });
+  }
+  async getPlanResource(item){
+    let data = new ResourcePlanDto();
+    data.projectUserId = 0;
+    data.resourceRequestId = item.id;
+    if(!item.planUserInfo) return data;
+    let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
+    data = res.result
+    return data
+  }
+
+  getAllSkills(){
+    this.resourceRequestService.getSkills().subscribe((data) => {
+      this.listSkills = data.result;
+    })
+  }
+  getLevels(){
+    this.resourceRequestService.getLevels().subscribe(res => {
+      this.listLevels = res.result
+    })
+  }
+
+  showActionViewRecruitment(status, isRecruitment){
+    if(
+      isRecruitment &&
+      (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE')
+    )
+    {
+      return true
+    }
+    return false
   }
 }
 

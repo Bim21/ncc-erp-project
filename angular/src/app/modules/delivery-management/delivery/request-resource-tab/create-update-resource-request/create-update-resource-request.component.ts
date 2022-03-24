@@ -26,10 +26,10 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   public title
   public searchProject: string = ""
   public isAddingSkill: boolean = false
-
   listSkill: any[] = []
   listSkillDetail: any[] = []
   public selectedSkill: any[] = []
+  public typeControl: string //include: request, requestProject
   constructor(
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -43,19 +43,20 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
 
   ngOnInit(): void {
     this.getAllProject();
-    if(this.data.item.id){
-      this.getResourceRequestById(this.data.item.id)
+    this.typeControl = this.data.typeControl
+    if(this.data.command == 'create'){
+      this.resourceRequestDto = new RequestResourceDto()
+      //if create from resource request project then command = 'create' & projectId != 0
+      //assign projectId in dto = projectId
+      if(this.data.item.projectId > 0){
+        this.resourceRequestDto.projectId = this.data.item.projectId
+      }
     }
     else{
-      this.resourceRequestDto = new RequestResourceDto()
+      this.getResourceRequestById(this.data.item.id)
     }
     this.listSkill = this.data.skills
     this.userLevelList = this.data.levels
-  }
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    
   }
 
   getResourceRequestById(id: number){
