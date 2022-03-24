@@ -870,7 +870,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
         }
 
-        private async Task<KomuUserInfoDto> getSessionKomuUserInfo()
+        public async Task<KomuUserInfoDto> getSessionKomuUserInfo()
         {
             return await getKomuUserInfo(AbpSession.UserId.Value);
 
