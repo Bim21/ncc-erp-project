@@ -291,7 +291,6 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 throw new UserFriendlyException($"Start Time must be less than or equal {DateTimeUtils.ToString(startTime)}");
             }
-
             var employee = await getKomuUserInfo(futurePU.UserId);
      
 
@@ -312,25 +311,26 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
-        public void ValidateUserWorkingInThisProject(long userId, long projectId)
+        public async Task<ProjectUser> ValidateUserWorkingInThisProject(long userId, long projectId)
         {
-            var isUserWorkingInThisProject =  _workScope.GetAll<ProjectUser>()
+            var userWorkingInThisProject = await _workScope.GetAll<ProjectUser>()
                  .Where(s => s.UserId == userId)
                  .Where(s => s.ProjectId == projectId)
                  .Where(s => s.Status == ProjectUserStatus.Present)
                  .Where(s => s.AllocatePercentage > 0)
-                 .Where(s => s.Project.Status == ProjectStatus.InProgress)
-                 .Any();
-            if (!isUserWorkingInThisProject)
+                 .Where(s => s.Project.Status == ProjectStatus.InProgress).FirstOrDefaultAsync();
+                 
+            if (userWorkingInThisProject == null)
             {
                 throw new UserFriendlyException("This user is not working in this Project, so you can't plan him out project");
             }
+            return userWorkingInThisProject;
         }
 
         public async Task<ProjectUser> ConfirmOutProject(ConfirmOutProjectDto input)
         {
             var outPUExt = await GetPUExt(input.ProjectUserId);
-            ValidateUserWorkingInThisProject(outPUExt.PU.UserId, outPUExt.PU.ProjectId);
+            await ValidateUserWorkingInThisProject(outPUExt.PU.UserId, outPUExt.PU.ProjectId);
 
             if (outPUExt == null || outPUExt.PU == null)
             {

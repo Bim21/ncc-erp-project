@@ -13,13 +13,16 @@ import { finalize, catchError } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, Input } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import * as moment from 'moment';
+import * as echarts from 'echarts';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { GetTimesheetWorkingComponent, WorkingTimeDto } from './get-timesheet-working/get-timesheet-working.component';
-import * as echarts from 'echarts';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
+import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -55,6 +58,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
   @ViewChild("timmer") timmerCount;
+  @ViewChild(MatMenuTrigger)
+  menu: MatMenuTrigger;
+  contextMenuPosition = { x: '0px', y: '0px' };
+
   public itemPerPage: number = 20;
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
@@ -86,12 +93,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public projectId: number;
   public projectIdReport: number;
   public isEditingNote: boolean = false;
+  public isEditingAutomationNote:boolean = false
   public generalNote: string = "";
+  public automationNote:string =""
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
   public projectInfo = {} as ProjectInfoDto
-  public projectCurrentResource: any
+  public projectCurrentResource: any = []
+  public mondayOf5weeksAgo: any
+  public lastWeekSunday: any
+  public tempResourceList: any[] = []
+  public officalResourceList: any[] = []
+
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
   sidebarExpanded: boolean;
@@ -102,7 +116,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isRefresh: boolean = false
   isStart: boolean = false
 
-  constructor(private pmReportProjectService: PMReportProjectService,
+  constructor(public pmReportProjectService: PMReportProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
     injector: Injector,
@@ -115,6 +129,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     super(injector)
   }
   ngOnInit(): void {
+    let currentDate = new Date()
+    currentDate.setDate(currentDate.getDate() - (currentDate.getDay() + 6) % 7);
+    currentDate.setDate(currentDate.getDate() - 7);
+
+    this.mondayOf5weeksAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    this.mondayOf5weeksAgo = moment(this.mondayOf5weeksAgo.setDate(this.mondayOf5weeksAgo.getDate() - 28)).format("YYYY-MM-DD")
+    this.lastWeekSunday = moment(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)).format("YYYY-MM-DD");
+    console.log("dateeeeeeeeeee:", this.mondayOf5weeksAgo)
+    console.log("dateeeeeeeeeee:", this.lastWeekSunday)
+
     if (this.router.url.includes("weeklyReportTabDetail")) {
       this.pmReportService.currentMessage.subscribe(message => {
         this.projectType = message;
@@ -132,7 +156,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this._layoutStore.sidebarExpanded.subscribe((value) => {
         this.sidebarExpanded = value;
       });
-      this.buildChar()
+      // this.buildChar()
+      this.buildBillChar()
+
     }
   }
   public startTimmer() {
@@ -175,18 +201,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.tempPmReportProjectList = data.result;
         this.projectId = this.pmReportProjectList[0]?.projectId
         this.generalNote = this.pmReportProjectList[0]?.note
-        this.totalNormalWorkingTime = this.pmReportProjectList[0]?.totalNormalWorkingTime
+        this.automationNote = this.pmReportProjectList[0]?.automationNote
+        // this.totalNormalWorkingTime = this.pmReportProjectList[0]?.totalNormalWorkingTime
         this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
         this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
+        this.pmReportProjectService.projectHealth = this.projectHealth
         this.pmReportProjectId = this.pmReportProjectList[0]?.id
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
         }
         this.getProjectInfo();
-        this.getWeeklyReport();
+        this.getChangedResource();
         this.getFuturereport();
         this.getProjectProblem();
-        this.getCurrentResourceOfProject();
         this.search()
       }))
     }
@@ -196,20 +223,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if (this.pmReportProjectId) {
       this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
-        this.isLoading = false;
-        if (this.router.url.includes("weeklyReportTabDetail")) {
-          this.router.navigate(
-            [],
-            {
-              relativeTo: this.route,
-              queryParams: {
-                name: this.projectInfo.projectName,
-                client: this.projectInfo.clientName, pmName: this.projectInfo.pmName
-              },
-              queryParamsHandling: 'merge'
-            });
 
-        }
+        this.isLoading = false;
+        this.GetTimesheetWeeklyChartOfProject(this.projectInfo.projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday)
+        this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+        this.router.navigate(
+          [], 
+          {
+            relativeTo: this.route,
+            queryParams: {
+              name: this.projectInfo.projectName,
+              client: this.projectInfo.clientName,
+              pmName: this.projectInfo.pmName,
+              pmReportProjectId: this.pmReportProjectId,
+              projectHealth: this.projectHealth
+            }, 
+            queryParamsHandling: 'merge', // remove to replace all query params by provided
+          });
       },
         () => { this.isLoading = false })
     }
@@ -218,7 +248,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectId = projectReport.id
     this.projectId = projectReport.projectId;
     this.isEditingNote = false;
+    this.isEditingAutomationNote = false
     this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth]
+    this.pmReportProjectService.projectHealth = this.projectHealth
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
@@ -226,15 +258,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         element.setBackground = false;
       }
     });
-    this.totalNormalWorkingTime = projectReport.totalNormalWorkingTime
+    // this.totalNormalWorkingTime = projectReport.totalNormalWorkingTime
     this.totalOverTime = projectReport.totalOverTime
     this.generalNote = projectReport.note
+    this.automationNote = projectReport.automationNote
 
+   
     this.getProjectInfo();
-    this.getWeeklyReport();
+    this.getChangedResource();
     this.getFuturereport();
     this.getProjectProblem();
-    this.getCurrentResourceOfProject();
     this.isEditWeeklyReport = false;
     this.isEditFutureReport = false;
     this.isEditProblem = false;
@@ -246,7 +279,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
 
-  public getWeeklyReport() {
+  public getChangedResource() {
     if (this.projectId) {
       this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.pmReportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.weeklyReportList = data.result;
@@ -270,6 +303,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.problemList = data.result.result;
 
           this.projectHealth = data.result.projectHealth;
+          this.pmReportProjectService.projectHealth = this.projectHealth
 
         } else {
           this.problemList = [];
@@ -289,7 +323,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
     this.projectId = this.pmReportProjectList[0]?.projectId
     this.generalNote = this.pmReportProjectList[0].note
-    this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
+    this.automationNote = this.pmReportProjectList[0].automationNote
+    // this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
 
     this.pmReportProjectId = this.pmReportProjectList[0].id
@@ -302,10 +337,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
     });
     this.getProjectInfo();
-    this.getWeeklyReport();
+    this.getChangedResource();
     this.getFuturereport();
     this.getProjectProblem()
-    this.getCurrentResourceOfProject();
     this.searchUser = ""
   }
 
@@ -322,20 +356,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     })
 
   }
-  updateHealth(projectHealth) {
-    this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
-      .subscribe((data) => {
-        this.pmReportProjectList.forEach(item => {
-          if (item.id == this.pmReportProjectId) {
-            item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
-          }
-          abp.notify.success("Update successfull")
-        })
-        this.getWeeklyReport();
-        this.getFuturereport();
-        this.getProjectProblem()
-      })
-  }
+
   //weekly
   public addWeekReport() {
     let newReport = {} as projectUserDto
@@ -354,8 +375,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         report.startTime = moment(report.startTime).format("YYYY-MM-DD")
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
-          this.getWeeklyReport();
-          this.getCurrentResourceOfProject();
+          this.getChangedResource();
+          this.getCurrentResourceOfProject(this.projectInfo.projectCode);
           this.isEditWeeklyReport = false;
           this.processWeekly = false;
           this.searchUser = ""
@@ -370,8 +391,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success("created new weekly report");
         this.processWeekly = false;
         report.createMode = false;
-        this.getWeeklyReport();
-        this.getCurrentResourceOfProject();
+        this.getChangedResource();
+        this.getCurrentResourceOfProject(this.projectInfo.projectCode);
         this.searchUser = ""
 
       },
@@ -384,7 +405,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public cancelWeekReport() {
     this.processWeekly = false;
     this.isEditWeeklyReport = false;
-    this.getWeeklyReport();
+    this.getChangedResource();
     this.searchUser = ""
   }
   updateWeekReport(report) {
@@ -402,7 +423,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if (result) {
           this.projectUserService.removeProjectUser(report.id).pipe(catchError(this.projectUserService.handleError)).subscribe(() => {
             abp.notify.success("Deleted Report");
-            this.getWeeklyReport();
+            this.getChangedResource();
           });
         }
       }
@@ -430,7 +451,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
           abp.notify.success(`updated user: ${report.userName}`);
           this.getFuturereport();
-          this.getCurrentResourceOfProject();
+          this.getCurrentResourceOfProject(this.projectInfo.projectCode);
           this.isEditFutureReport = false;
           this.processFuture = false
           this.searchUser = ""
@@ -452,7 +473,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processFuture = false;
         report.createMode = false;
         this.getFuturereport();
-        this.getCurrentResourceOfProject();
+        this.getCurrentResourceOfProject(this.projectInfo.projectCode);
         this.searchUser = ""
       },
         () => {
@@ -490,8 +511,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getFuturereport();
-        this.getWeeklyReport();
-        this.getCurrentResourceOfProject();
+        this.getChangedResource();
+        this.getCurrentResourceOfProject(this.projectInfo.projectCode);
       }
     });
 
@@ -583,6 +604,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
+  
       this.pmReportProjectList.forEach(item => {
         if (item.id == this.pmReportProjectId) {
           item.note = this.generalNote;
@@ -598,14 +620,58 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
     })
   }
+
+
+  public updateAutoNote() {
+    this.pmReportProjectService.updateAutomationNote(this.automationNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
+      abp.notify.success("Update successful!")
+      this.isEditingAutomationNote = false;
+  
+      this.pmReportProjectList.forEach(item => {
+        if (item.id == this.pmReportProjectId) {
+          item.automationNote = this.automationNote
+        }
+      })
+    })
+  }
+  cancelUpdateAutoNote() {
+    this.isEditingAutomationNote = false;
+    this.pmReportProjectList.forEach(item => {
+      if (item.id == this.pmReportProjectId) {
+        this.automationNote = item.automationNote
+      }
+    })
+  }
+
+
+
   getPercentage(report, data) {
     report.allocatePercentage = data
   }
-  getCurrentResourceOfProject() {
+  charts = []
+  getCurrentResourceOfProject(projectCode) {
     if (this.projectId) {
+      this.tempResourceList = []
+      this.officalResourceList = []
+      var d = new Date();
+      d.setDate(d.getDate() - (d.getDay() + 6) % 7);
+      d.setDate(d.getDate() - 7);
+      let lastWeekMonday = moment(new Date(d.getFullYear(), d.getMonth(), d.getDate())).format("YYYY-MM-DD")
       this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
         .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
+          this.totalNormalWorkingTime = 0
+          this.totalOverTime = 0
           this.projectCurrentResource = data.result
+          this.projectCurrentResource.forEach(user => {
+            if (user.isPool) {
+              this.tempResourceList.push(user.emailAddress)
+            }
+            else {
+              this.officalResourceList.push(user.emailAddress)
+            }
+            this.GetTimesheetWeeklyChartOfUserInProject(projectCode, user, this.mondayOf5weeksAgo, this.lastWeekSunday)
+            this.GetTimesheetOfUserInProject(projectCode, user, lastWeekMonday, this.lastWeekSunday)
+          })
         })
     }
   }
@@ -620,75 +686,380 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
     dialogRef.afterClosed().subscribe((result: WorkingTimeDto) => {
       if (result) {
-        this.totalNormalWorkingTime = result.normalWorkingTime
-        this.totalOverTime = result.overTime
+        // this.totalNormalWorkingTime = result.normalWorkingTime
+        // this.totalOverTime = result.overTime
       }
     });
   }
 
 
 
-  //  echarts.use([GridComponent, LineChart, CanvasRenderer, UniversalTransition]);
 
 
-  buildChar() {
+  buildProjectTSChart(normalAndOTchartData, officalChartData, TempChartData) {
+    setTimeout(() => {
+      var chartDom = document.getElementById('timesheet-chart')!;
+      var myChart = echarts.init(chartDom);
+      var option: echarts.EChartsOption;
 
+      let hasOtValue = normalAndOTchartData.overTimeHours.some(item => item > 0)
+      let hasOfficalDataNormal = officalChartData?.normalWoringHours.some(item => item > 0)
+      let hasOfficalDataOT = officalChartData?.overTimeHours.some(item => item > 0)
+      let hasTempDataNormal = TempChartData?.normalWoringHours.some(item => item > 0)
+      let hasTempDataOT = TempChartData?.overTimeHours.some(item => item > 0)
 
-    // type EChartsOption = echarts.ComposeOption<
-    //   GridComponentOption | LineSeriesOption
-    // >;
+      if (JSON.stringify(normalAndOTchartData?.normalWoringHours) == JSON.stringify(officalChartData?.normalWoringHours)) {
+        hasOfficalDataNormal = false
+      }
+      if (JSON.stringify(normalAndOTchartData?.overTimeHours) == JSON.stringify(officalChartData?.overTimeHours)) {
+        hasOfficalDataOT = false
+      }
 
-    var chartDom = document.getElementById('timesheet-chart')!;
-    var myChart = echarts.init(chartDom);
-    var option: echarts.EChartsOption;
-
-    option = {
-
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['Normal', 'OT'],
-        
-      },
-      color: ['green', 'red'],
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      // toolbox: {
-      //   feature: {
-      //     saveAsImage: {}
-      //   }
-      // },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: ['November', 'December', 'January', 'February', 'March']
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [
-        {
-          lineStyle: {color: 'green'},
-          name: 'Normal',
-          type: 'line',
-          stack: 'Total',
-          data: [100, 182, 170, 234, 300, 350, 240]
+      option = {
+        title: {
+          text: 'Timesheet'
         },
-        {
-          lineStyle: {color: 'red'},
-          name: 'OT',
-          type: 'line',
-          stack: 'Total',
-          data: [120, 152, 101, 134, 90, 230, 160]
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['Normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+            , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
+            `${hasTempDataOT ? 'OT Temp' : ''}`],
+        },
+        color: ['green', 'red', 'blue', 'orange', 'yellow', 'purple'],
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
 
-      ]
-    };
-    option && myChart.setOption(option);
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: normalAndOTchartData.labels
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            lineStyle: { color: 'green' },
+            name: 'Normal',
+            type: 'line',
+            data: normalAndOTchartData?.normalWoringHours
+          },
+          {
+            lineStyle: { color: 'red' },
+            name: 'OT',
+            type: 'line',
+            data: hasOtValue ? normalAndOTchartData?.overTimeHours : []
+          },
+          {
+            lineStyle: { color: 'blue' },
+            name: 'Normal Offical',
+            type: 'line',
+            data: hasOtValue ? officalChartData?.normalWoringHours : []
+          }, {
+            lineStyle: { color: 'orange' },
+            name: 'OT Offical',
+            type: 'line',
+            data: hasOtValue ? officalChartData?.overTimeHours : []
+          }, {
+            lineStyle: { color: 'yellow' },
+            name: 'Normal Temp',
+            type: 'line',
+            data: hasOtValue ? TempChartData?.normalWoringHours : []
+          }, {
+            lineStyle: { color: 'purple' },
+            name: 'OT Temp',
+            type: 'line',
+            data: hasOtValue ? TempChartData?.overTimeHours : []
+          },
+
+        ]
+      };
+      option && myChart.setOption(option);
+    }, 1)
+
   }
+
+  buildBillChar() {
+
+
+    setTimeout(() => {
+      var chartDom = document.getElementById('bill-chart')!;
+      var myChart = echarts.init(chartDom);
+      var option: echarts.EChartsOption;
+
+      option = {
+        title: {
+          text: 'Bill info'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['Week', 'Month'],
+
+        },
+        color: ['#1955cf', '#b86e25'],
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        // toolbox: {
+        //   feature: {
+        //     saveAsImage: {}
+        //   }
+        // },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['November', 'December', 'January', 'February', 'March']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            lineStyle: { color: '#1955cf' },
+            name: 'Week',
+            type: 'line',
+            stack: 'Total',
+            data: [100, 182, 170, 234, 300, 350, 240]
+          },
+          {
+            lineStyle: { color: '#b86e25' },
+            name: 'Month',
+            type: 'line',
+            stack: 'Total',
+            data: [120, 152, 101, 134, 90, 230, 160]
+          },
+
+        ]
+      };
+      option && myChart.setOption(option);
+    }, 1)
+
+
+  }
+
+  public genarateUserChart(user, chartData) {
+
+    // var chartDom = document.getElementById(user.userId.toString());
+    // var myChart = echarts.init(chartDom);
+
+    setTimeout(() => {
+
+      let chartDom = document.getElementById('user' + user.userId);
+
+      let myChart = echarts.init(chartDom);
+      let option: echarts.EChartsOption;
+      option = {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          top: "6%",
+          left: '3%',
+          right: '4%',
+          bottom: '2%',
+          containLabel: true
+        },
+        xAxis: {
+          data: chartData.labels,
+          show: false
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          max: 60,
+          show: false
+        },
+        series: [
+          {
+            // showSymbol: false,
+            symbolSize: 2,
+            data: chartData.normalWoringHours,
+            type: 'line',
+            name: 'timesheet',
+          }
+        ]
+      };
+      option && myChart.setOption(option);
+
+
+    }, 1)
+
+
+
+
+
+
+    // option && myChart.setOption(option);
+
+  }
+
+
+
+  // TimesheetWeeklyChart
+  async GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime) {
+    let chartData = {} as any
+    await this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
+      chartData.normalAndOT = rs.result
+    })
+    if (this.officalResourceList.length > 0) {
+      let officalRequestBody = {
+        projectCode: this.projectInfo.projectCode,
+        emails: this.officalResourceList,
+        startDate: startTime,
+        endDate: endTime
+      }
+      await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(officalRequestBody).toPromise().then(rs => {
+        chartData.offical = rs.result
+      })
+
+    }
+
+    if (this.tempResourceList.length > 0) {
+      let tempRequestBody = {
+        projectCode: this.projectInfo.projectCode,
+        emails: this.tempResourceList,
+        startDate: startTime,
+        endDate: endTime
+      }
+      await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(tempRequestBody).toPromise().then(rs => {
+        chartData.temp = rs.result
+      })
+    }
+
+    this.buildProjectTSChart(chartData.normalAndOT, chartData.offical, chartData.temp)
+  }
+
+  GetTimesheetWeeklyChartOfUserInProject(projectCode, user, startTime, endTime) {
+    this.pmReportProjectService.GetTimesheetWeeklyChartOfUserInProject(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
+      this.genarateUserChart(user, rs.result)
+    })
+  }
+  GetTimesheetOfUserInProject(projectCode, user, startTime, endTime) {
+    this.pmReportProjectService.GetTimesheetOfUserInProject(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
+      user.normalWorkingTime = rs.result? rs.result.normalWorkingTime : 0
+      user.overTime = rs.result? rs.result.overTime : 0
+      this.totalNormalWorkingTime += user.normalWorkingTime
+      this.totalOverTime += user.overTime
+    })
+  }
+
+  GetTimesheetWeeklyChartOfUserGroupInProject(emailList) {
+    // monday at 5 weeks ago =  last week mondy - 5 week (35 days)
+
+    let requestBody = {
+      projectCode: this.projectInfo.projectCode,
+      emails: emailList,
+      startDate: this.mondayOf5weeksAgo,
+      endDate: this.lastWeekSunday
+    }
+    this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(requestBody).subscribe(r => {
+
+    })
+  }
+  showActions(e) {
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu()
+
+
+  }
+  showActionsPlan(e) {
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu()
+
+
+  }
+
+  // Current project action
+
+  releaseUser(user) {
+    let ref = this.dialog.open(ReleaseUserDialogComponent, {
+      width: "700px",
+      data: {
+        user: user
+      }
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+       this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+       this.getChangedResource()
+      }
+    })
+  }
+
+
+  //  planned resource action
+
+  confirm(user) {
+    if (user.allocatePercentage <= 0) {
+      let ref = this.dialog.open(ReleaseUserDialogComponent, {
+        width: "700px",
+        data: {
+          user: user,
+          type: "confirmOut"
+        },
+      })
+      ref.afterClosed().subscribe(rs => {
+        if (rs) {
+          this.getChangedResource()
+          this.getFuturereport()
+          this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+        }
+      })
+    }
+    else if (user.allocatePercentage > 0) {
+      let workingProject = [];
+      this.projectUserService.GetAllWorkingProjectByUserId(user.userId).subscribe(data => {
+        workingProject = data.result
+        let ref = this.dialog.open(ConfirmPopupComponent, {
+          width: '700px',
+          data: {
+            workingProject: workingProject,
+            user: user,
+            type: "confirmJoin"
+          }
+        })
+
+        ref.afterClosed().subscribe(rs => {
+          if (rs) {
+            this.getChangedResource()
+            this.getFuturereport()
+            this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+          }
+        })
+      })
+    }
+  }
+
+  cancelResourcePlan(user) {
+    abp.message.confirm(
+      `Cancel plan for user <strong>${user.fullName}</strong> <strong class = "${user.allocatePercentage > 0 ? 'text-success' : 'text-danger'}">
+      ${user.allocatePercentage > 0 ? 'Join project' : 'Out project'}</strong>?`,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectUserService.CancelResourcePlan(user.id).subscribe(rs => {
+            abp.notify.success(`Cancel plan for user ${user.fullName}`)
+            this.getFuturereport()
+          })
+        }
+      },
+      true
+    )
+  }
+
 }
