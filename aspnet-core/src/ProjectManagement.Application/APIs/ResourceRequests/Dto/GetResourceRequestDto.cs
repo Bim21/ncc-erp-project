@@ -14,9 +14,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
     public class GetResourceRequestDto : EntityDto<long>
     {
         public string Name { get; set; }
-        public long ProjectId { get; set; }
-        [ApplySearchAttribute]
-        public string ProjectName { get; set; }
         public ResourceRequestStatus Status { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime TimeNeed { get; set; }
@@ -32,6 +29,28 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public bool IsRecruitmentSend { get; set; }
         public string RecruitmentUrl { get; set; }        
         public PlanUserInfoDto PlanUserInfo { get; set; }
+        public long ProjectId { get; set; }
+        [ApplySearchAttribute]
+        public string ProjectName { get; set; }
+        public ProjectType ProjectType { get; set; }
+        public ProjectStatus ProjectStatus { get; set; }
+
+        public string PrjectTypeName
+        {
+            get
+            {
+                return CommonUtil.ProjectTypeName(ProjectType);
+            }
+
+        }
+
+        public string PrjectStatusName
+        {
+            get
+            {
+                return CommonUtil.ProjectStatusName(ProjectStatus);
+            }
+        }
 
         public string KomuInfo()
         {
@@ -91,8 +110,10 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
                 return CommonUtil.UserLevelName(Level);
             }
         }
-                
+            
+        
     }
+      
 
     public class PlanUserInfoDto
     {

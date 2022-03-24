@@ -155,7 +155,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 .FirstOrDefaultAsync();
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<GetResourceRequestDto> Update(UpdateResourceRequestDto input)
         {
             if (input.SkillIds == null || input.SkillIds.IsEmpty())
@@ -199,7 +199,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 .FirstOrDefaultAsync();
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<GetResourceRequestDto> UpdateMyRequest(UpdateResourceRequestDto input)
         {
             await checkRequestIsForMyProject(input.Id, input.ProjectId);
@@ -279,7 +279,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         public async Task<UpdateRequestNoteDto> UpdatePMNote(UpdateRequestNoteDto input)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
-            
+
             resourceRequest.PMNote = input.Note;
 
             await WorkScope.UpdateAsync(resourceRequest);
@@ -297,7 +297,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             await WorkScope.UpdateAsync(resourceRequest);
 
             return input;
-        }    
+        }
 
 
 
@@ -410,7 +410,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var request = await WorkScope.GetAll<ResourceRequest>()
                 .Where(s => s.Id == input.ResourceRequestId.Value)
-                .Select(s => new {s.ProjectId })
+                .Select(s => new { s.ProjectId })
                 .FirstOrDefaultAsync();
 
             if (request == default)
@@ -435,7 +435,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             projectUser.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
             CurrentUnitOfWork.SaveChanges();
-                        
+
             var requestDto = await IQGetResourceRequest()
                 .Where(s => s.Id == input.ResourceRequestId)
                 .FirstOrDefaultAsync();
@@ -493,8 +493,8 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
 
             CurrentUnitOfWork.SaveChanges();
-        
-        }                       
+
+        }
 
         #region IQueryable
         private IQueryable<GetResourceRequestDto> IQGetResourceRequest()
@@ -505,11 +505,17 @@ namespace ProjectManagement.APIs.ResourceRequests
                             DMNote = request.DMNote,
                             Id = request.Id,
                             IsRecruitmentSend = request.IsRecruitmentSend,
-                            Name = request.Name,
+
                             ProjectName = request.Project.Name,
+                            ProjectId = request.ProjectId,
+                            ProjectType = request.Project.ProjectType,
+                            ProjectStatus = request.Project.Status,
+
+                            Name = request.Name,
+
                             PMNote = request.PMNote,
                             Priority = request.Priority,
-                            ProjectId = request.ProjectId,
+
                             RecruitmentUrl = request.RecruitmentUrl,
                             TimeNeed = request.TimeNeed,
                             TimeDone = request.TimeDone,
@@ -531,9 +537,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                                     Id = s.UserId,
                                     AvatarPath = s.User.AvatarPath,
                                 },
-                                
+
                                 PlannedDate = s.StartTime,
-                                
+
                             }).FirstOrDefault(),
                         };
             return query;

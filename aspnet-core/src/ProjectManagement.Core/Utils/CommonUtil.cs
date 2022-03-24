@@ -123,5 +123,26 @@ namespace ProjectManagement.Utils
             }
             return Enum.GetName(typeof(UserType), type);
         }
+
+        public static string ProjectTypeName(ProjectType projectType)
+        {
+            switch (projectType)
+            {
+                case ProjectType.TimeAndMaterials:
+                    return "T&M";
+            }
+            return Enum.GetName(typeof(ProjectType), projectType);
+
+        }
+
+        public static string ProjectStatusName(ProjectStatus status)
+        {            
+            if (status == ProjectStatus.InProgress)
+            {
+                return "";
+            }
+            return Enum.GetName(typeof(ProjectStatus), status);
+
+        }
     }
 }

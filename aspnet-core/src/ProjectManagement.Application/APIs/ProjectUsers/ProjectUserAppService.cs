@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
+using ProjectManagement.APIs.ResourceRequests.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
@@ -378,6 +379,20 @@ namespace ProjectManagement.APIs.ProjectUsers
             var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);
 
             await WorkScope.DeleteAsync(projectUser);
+        }
+
+        [HttpGet]
+        public List<IDNameDto> GetProjectUserRoles()
+        {
+
+            return Enum.GetValues(typeof(ProjectUserRole))
+                             .Cast<ProjectUserRole>()
+                             .Select(p => new IDNameDto()
+                             {
+                                 Id = p.GetHashCode(),
+                                 Name = p.ToString()
+                             })
+                             .ToList();
         }
 
     }

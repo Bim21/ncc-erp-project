@@ -24,6 +24,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Services.Timesheet;
 using Abp.Domain.Repositories;
 using Abp.Authorization.Users;
+using ProjectManagement.APIs.ResourceRequests.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -92,6 +93,22 @@ namespace ProjectManagement.APIs.Projects
                             RequireTimesheetFile = p.RequireTimesheetFile
                         };
             return await query.GetGridResult(query, input);
+        }
+
+
+
+        [HttpGet]
+        public async Task<List<ProjectInfoDto>> GetAllProjectInfo()
+        {
+            var query = WorkScope.GetAll<Project>()
+                .Select(x => new ProjectInfoDto
+                {
+                    ProjectId = x.Id,
+                    ProjectName = x.Name,
+                    ProjectType = x.ProjectType,
+                    ProjectStatus = x.Status,
+                });
+            return await query.ToListAsync();
         }
 
         [HttpGet]
