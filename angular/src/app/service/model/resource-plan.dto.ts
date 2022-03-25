@@ -1,9 +1,9 @@
 export class ResourcePlanDto{
-    constructor(){
-        this.projectUserId = 0;
+    constructor(_resourceRequestId, _projectUserId){
+        this.projectUserId = _projectUserId;
         this.startTime = new Date();
         this.userId = 0;
-        this.resourceRequestId = 0
+        this.resourceRequestId = _resourceRequestId
     }
     public projectRole?: number
     public projectUserId?: number

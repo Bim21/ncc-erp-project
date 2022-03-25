@@ -119,11 +119,13 @@ export class DeliveryResourceRequestService extends BaseApiService {
   public getResourceRequestById(id: number): Observable<any>{
     return this.http.get<any>(this.rootUrl + '/GetById?requestId=' +id)
   }
-  public updateNotePM(data: any): Observable<any>{
-    return this.http.post<any>(this.rootUrl + '/UpdatePMNote', data)
-  }
-  public updateNoteHPM(data: any): Observable<any>{
-    return this.http.post<any>(this.rootUrl + '/UpdateHPMNote', data)
+  public updateNote(data: any, type: string): Observable<any>{
+    if(type == 'PM'){
+      return this.http.post<any>(this.rootUrl + '/UpdatePMNote', data)
+    }
+    else {
+      return this.http.post<any>(this.rootUrl + '/UpdateHPMNote', data)
+    }
   }
   public setDoneRequest(data: any): Observable<any>{
     return this.http.post<any>(this.rootUrl + '/SetDone', data)

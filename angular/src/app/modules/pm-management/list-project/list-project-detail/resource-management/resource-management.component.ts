@@ -511,13 +511,14 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       width: "700px",
       maxHeight: '90vh',
     })
-    show.afterClosed().subscribe(result => {
-      if(command == 'create' && result)
+    show.afterClosed().subscribe(rs => {
+      if(!rs) return
+      if(command == 'create')
         this.getResourceRequestList()
       else if(command == 'edit'){
-        let index = this.resourceRequestList.findIndex(x => x.id == result.id)
+        let index = this.resourceRequestList.findIndex(x => x.id == rs.id)
         if(index >= 0){
-          this.resourceRequestList[index] = result
+          this.resourceRequestList[index] = rs
         }
       }
     });
@@ -531,26 +532,22 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       maxHeight:"90vh"
     })
     show.afterClosed().subscribe(rs => {
-      let resourceRequestId;
-        resourceRequestId = rs.data.resourceRequestId
-      let index = this.resourceRequestList.findIndex(x => x.id == resourceRequestId)
+      if(!rs) return
       if(rs.type == 'delete'){
         this.getResourceRequestList()
       }
       else{
+        let index = this.resourceRequestList.findIndex(x => x.id == rs.data.resourceRequestId)
         if(index >= 0)
           this.resourceRequestList[index].planUserInfo = rs.data.result
       }
     });
   }
   async getPlanResource(item){
-    let data = new ResourcePlanDto();
-    data.projectUserId = 0;
-    data.resourceRequestId = item.id;
+    let data = new ResourcePlanDto(item.id, 0);
     if(!item.planUserInfo) return data;
     let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
-    data = res.result
-    return data
+    return res.result
   }
 
   cancelRequest(id){
@@ -580,7 +577,6 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
 
   deleteRequest(item: any){
-    console.log(item)
     abp.message.confirm(
       "Delete request: " + item.name + "?",
       "",
@@ -614,20 +610,21 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       resourceRequestId: this.resourceRequestId,
       note: this.strNotePM,
     }
-    if(this.typePM == 'PM'){
-      this.resourceRequestService.updateNotePM(request).subscribe(res => {
-        if(res.success){
-          abp.notify.success('Update Note Successfully!')
-          let index = this.resourceRequestList.findIndex(x => x.id == request.resourceRequestId);
-          if(index >= 0){
-            this.resourceRequestList[index].pmNote = this.strNotePM;
-          }
+    this.resourceRequestService.updateNote(request,this.typePM).subscribe(rs => {
+      if(rs.success){
+        abp.notify.success('Update Note Successfully!')
+        let index = this.resourceRequestList.findIndex(x => x.id == request.resourceRequestId);
+        if(index >= 0){
+          if(this.typePM == 'PM')
+            this.resourceRequestList[index].pmNote = request.note;
+          else
+            this.resourceRequestList[index].dmNote = request.note;
         }
-        else{
-          abp.notify.error(res.result)
-        }
-      })
-    }
+      }
+      else{
+        abp.notify.error(rs.result)
+      }
+    })
     this.closeModal()
   }
 
