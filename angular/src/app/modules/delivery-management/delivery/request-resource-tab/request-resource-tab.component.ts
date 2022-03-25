@@ -267,22 +267,31 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = this.tempListRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
-
-      objFilter.forEach((item) => {
-        if(!item.isTrue){
-          request.filterItems = this.clearFilter(request, item.name, '')
-        }
-      })
-
-      this.resetDataFilter(requestBody)
+    },
+    (error)=> {
+      abp.notify.error(error)
     })
+    let rsFilter = this.resetDataSearch(requestBody, request, objFilter)
+    request = rsFilter.request
+    requestBody = rsFilter.requestBody
   }
 
-  resetDataFilter(requestBody: any){
+  resetDataSearch(requestBody: any, request: any, objFilter: any){
+    objFilter.forEach((item) => {
+      if(!item.isTrue){
+        request.filterItems = this.clearFilter(request, item.name, '')
+      }
+    })
     requestBody.skillIds = null
     requestBody.sort = null
     requestBody.sortDirection = null
     this.isLoading = false;
+
+    return {
+      request,
+      requestBody,
+      objFilter
+    }
   }
 
   clearAllFilter(){
