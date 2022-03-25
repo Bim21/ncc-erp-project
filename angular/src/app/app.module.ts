@@ -165,6 +165,7 @@ import { FormPlanUserComponent } from './modules/delivery-management/delivery/re
 import { FormSetDoneComponent } from './modules/delivery-management/delivery/request-resource-tab/form-set-done/form-set-done.component';
 import { ConfirmPlanDialogComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 import { AddUserToTempProjectDialogComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/add-user-to-temp-project-dialog/add-user-to-temp-project-dialog.component';
+import { AddFutureResourceDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-future-resource-dialog/add-future-resource-dialog.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -312,6 +313,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     FormSetDoneComponent,
     ConfirmPlanDialogComponent,
     AddUserToTempProjectDialogComponent,
+    AddFutureResourceDialogComponent,
   ],
   imports: [
     CommonModule,
