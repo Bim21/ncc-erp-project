@@ -289,7 +289,7 @@ namespace ProjectManagement.Services.ResourceManager
 
             if (startTime.Date > DateTimeUtils.GetNow().Date)
             {
-                throw new UserFriendlyException($"Start Time must be less than or equal {DateTimeUtils.ToString(startTime)}");
+                throw new UserFriendlyException($"Start Time must be less than or equal today");
             }
             var employee = await getKomuUserInfo(futurePU.UserId);
      
@@ -345,7 +345,7 @@ namespace ProjectManagement.Services.ResourceManager
 
             if (input.StartTime.Date > DateTimeUtils.GetNow().Date)
             {
-                throw new UserFriendlyException($"Start Time must be less than or equal {DateTimeUtils.ToString(input.StartTime)}");
+                throw new UserFriendlyException($"Start Time must be less than or equal Today");
             }
 
             var activeReportId = await GetActiveReportId();
