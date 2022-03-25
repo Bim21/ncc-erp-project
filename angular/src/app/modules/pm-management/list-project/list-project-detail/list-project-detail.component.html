@@ -16,7 +16,7 @@
                         Weekly Report
                     </a>
                     <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ProjectFile)" [ngClass]="currentUrl.includes('project-bill-tab')?'active':''" mat-tab-link (click)="routingProjectBillTab()">
-                        Project bill
+                        Bill Info
                     </a>
                     <!-- <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ProjectChecklist)" [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
                         Project Checklist
