@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../../service/api/resource-manager.service';
 import { DeliveryResourceRequestService } from './../../../../../../service/api/delivery-request-resource.service';
 import { UserService } from './../../../../../../service/api/user.service';
 import { IUser } from './../../../../../../service/model/user.inteface';
@@ -28,8 +29,7 @@ export class AddNoteDialogComponent implements OnInit, OnDestroy {
   @Output() onSave = new EventEmitter<null>();
 
   subscription: Subscription[] = [];
-
-  constructor(public bsModalRef: BsModalRef, public userService: UserService, private resourceService:DeliveryResourceRequestService) {}
+  constructor(public bsModalRef: BsModalRef, public userService: UserService, private resourceService:ResourceManagerService) {}
 
   ngOnInit(): void {
     if (this.id) {

@@ -109,6 +109,7 @@ export class ProjectInfoDto {
   pmName: string;
   totalBill: number;
   totalResource: number;
+  projectCode:string;
 }
 export class TrainingProjectDto {
   name: string;

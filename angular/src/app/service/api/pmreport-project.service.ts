@@ -7,7 +7,8 @@ import { BaseApiService } from './base-api.service';
   providedIn: 'root'
 })
 export class PMReportProjectService extends BaseApiService {
-
+  
+  public projectHealth: string
 
   changeUrl() {
     return 'PMReportProject'
@@ -33,7 +34,7 @@ export class PMReportProjectService extends BaseApiService {
   public problemsOfTheWeekForReport(projectId: number, pmReportId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/ProblemsOfTheWeekForReport?projectId=${projectId}&pmReportId=${pmReportId}`);
   }
-  public updateHealth(pmReportProjectId: number, projectHealth: number): Observable<any> {
+  public updateHealth(pmReportProjectId: any, projectHealth: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/UpdateHealth?pmReportProjectId=' + pmReportProjectId + '&projectHealth=' + projectHealth)
   }
   public reverseDelete(pmReportProjectId: number, { }): Observable<any> {
@@ -52,12 +53,22 @@ export class PMReportProjectService extends BaseApiService {
     }
     return this.http.put<any>(this.rootUrl + `/UpdateNote`, requestBody);
   }
+
+  public updateAutomationNote(note: string, pmReportProjectId: number): Observable<any> {
+    let requestBody ={
+      note:  note,
+      id: pmReportProjectId
+    }
+    return this.http.put<any>(this.rootUrl + `/UpdateAutomationNote`, requestBody);
+  }
+
+
   public GetInfoProject(pmReportProjectId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/GetInfoProject?pmReportProjectId=${pmReportProjectId}`);
 
   }
   public GetCurrentResourceOfProject(projectId:number){
-    return this.http.get<any>(this.rootUrl + `/GetCurrentResourceOfProject?projectId=${projectId}`);
+    return this.http.get<any>(this.rootUrl + `/GetWorkingResourceOfProject?projectId=${projectId}`);
 
   }
 
@@ -86,5 +97,22 @@ export class PMReportProjectService extends BaseApiService {
 
   public PlanNewResourceToProject( input:any) {
     return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
+  }
+
+
+  // Chart api
+  public GetTimesheetWeeklyChartOfProject(projectCode:any, startDate: string, endDate:string): Observable<any> {
+    return this.http.get(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetWeeklyChartOfProject?projectCode=${projectCode}&startDate=${startDate}&endDate=${endDate}`)
+  }
+  
+
+  public GetTimesheetWeeklyChartOfUserInProject(projectCode:string,emailAddress:any, startDate: string, endDate:string): Observable<any> {
+    return this.http.get(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetWeeklyChartOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
+  }
+  public GetTimesheetOfUserInProject(projectCode:string,emailAddress:any, startDate: string, endDate:string): Observable<any> {
+    return this.http.get(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
+  }
+  public GetTimesheetWeeklyChartOfUserGroupInProject(input:any): Observable<any> {
+    return this.http.post(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetWeeklyChartOfUserGroupInProject`, input)
   }
 }

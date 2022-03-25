@@ -18,6 +18,7 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public long PMId { get; set; }
         public string PmName { get; set; }
         public string Note { get; set; }
+        public string AutomationNote { get; set; }
         public string PmEmailAddress { get; set; }
         public string PmUserName { get; set; }
         public string PmFullName { get; set; }

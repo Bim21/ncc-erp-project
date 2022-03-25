@@ -1,3 +1,4 @@
+import { ResourceManagerService } from './../../../../../service/api/resource-manager.service';
 import { UserService } from './../../../../../service/api/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillService } from './../../../../../service/api/skill.service';
@@ -86,7 +87,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public availableResourceList: availableResourceDto[] = [];
 
   constructor(public injector: Injector,
-    private availableRerourceService: DeliveryResourceRequestService,
+    private availableRerourceService: ResourceManagerService,
     private dialog: MatDialog,
     private skillService: SkillService,
     private _modalService: BsModalService,

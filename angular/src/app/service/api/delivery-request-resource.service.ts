@@ -44,9 +44,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
       request
     );
   }
-  public planUser(item: any): Observable<any> {
-    return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
-  }
+ 
   public availableResourceFuture(request: PagedRequestDto): Observable<any> {
     return this.http.post<any>(
       this.rootUrl + '/AvailableResourceFuture',
@@ -75,51 +73,6 @@ export class DeliveryResourceRequestService extends BaseApiService {
     return this.http.post<any>(
       this.rootUrl + `/GetAllPaging`,
       request
-    );
-  }
-
-
-  public GetVendorResource(
-    request: PagedRequestDto
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + '/GetVendorResource',
-      request
-    );
-  }
-
-  public GetAllPoolResource(
-    request: any, skillId?: any
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + '/GetAllPoolResource',
-      request
-    );
-  }
-  public GetAllResource(
-    request: PagedRequestDto
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + '/GetAllResource',
-      request
-    );
-  }
-
-  public CancelResourcePlan(
-    id: number
-  ): Observable<any> {
-    return this.http.delete<any>(
-      this.rootUrl + '/CancelResourcePlan?projectUserId=' + id,
-
-    );
-  }
-
-  public updatePoolNote(
-    poolNote: any
-  ): Observable<any> {
-    return this.http.put<any>(
-      this.rootUrl + '/UpdateUserPoolNote', poolNote
-
     );
   }
 

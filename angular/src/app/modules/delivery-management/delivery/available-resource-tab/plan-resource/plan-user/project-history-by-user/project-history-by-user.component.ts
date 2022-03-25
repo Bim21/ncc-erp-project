@@ -40,11 +40,13 @@ export class ProjectHistoryByUserComponent
     this.getProjectHistoryByUser();
   }
   public getProjectHistoryByUser() {
+    this.isLoading = true
     this.projectUserService
       .getProjectHistoryByUser(this.userId)
       .pipe(catchError(this.projectUserService.handleError))
       .subscribe((data) => {
         this.projectsHistoryUser = data.result;
+        this.isLoading = false
       });
   }
   ngOnDestroy() {

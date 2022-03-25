@@ -29,18 +29,14 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   projectInfo = {} as ProjectInfoDto
   projectName: string
   projectCode: string
-  projectTypeList = [
-    "ALL",
-    "OUTSOURCING",
-    "TRAINING",
-    "PRODUCT"
-  ]
+  public projectHealthList: string[] =  Object.keys(this.APP_ENUM.ProjectHealth);
   projectHealth
   projectId
   isTimmerCounting: boolean = false
   isStopCounting: boolean = false
   isRefresh: boolean = false
   isStart: boolean = false
+  pmReportProjectId:string
   public problemIssueList: string[] = []
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
@@ -49,9 +45,12 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   }
   projectType = this.reportService.messageSource.getValue();
   ngOnInit(): void {
+     
+
       this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
       this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
       this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
+      this.projectHealth = this.route.snapshot.queryParamMap.get("projectHealth")
    
     this.projectName = this.route.snapshot.queryParamMap.get("projectName")
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
@@ -81,7 +80,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
             this.isShowReportBar = true;
             this.getPmReportList();
             this._layoutStore.setSidebarExpanded(true);
-
+  
           }
           else {
             this.isShowReportBar = false;
@@ -89,6 +88,10 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
             this.reportService.changeMessage("OUTSOURCING")
           }
           if(this.isShowReportBar){
+            this.projectHealth = this.pmReportProjectService.projectHealth
+            console.log("111",this.projectHealth)
+            console.log("222",this.projectHealthList)
+            this.pmReportProjectId = this.route.snapshot.queryParamMap.get("pmReportProjectId")
             this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
             this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
             this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
@@ -164,5 +167,18 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
 
 
 
+  }
+  updateHealth(projectHealth) {
+    this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
+      .subscribe((data) => {
+        this.pmReportProjectService.projectHealth = projectHealth
+        // this.pmReportProjectList.forEach(item => {
+        //   if (item.id == this.pmReportProjectId) {
+        //     item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
+        //   }
+        //   abp.notify.success("Update successfull")
+        // })
+        abp.notify.success("update successful")
+      })
   }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220324043758_Add_AutomationNote_column_to_PMReportProject_table")]
+    partial class Add_AutomationNote_column_to_PMReportProject_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2977,17 +2979,11 @@ namespace ProjectManagement.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsRecruitmentSend")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
-
-                    b.Property<byte>("Level")
-                        .HasColumnType("tinyint");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(1000)")
@@ -2997,14 +2993,8 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
 
-                    b.Property<byte>("Priority")
-                        .HasColumnType("tinyint");
-
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("RecruitmentUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -3889,7 +3879,7 @@ namespace ProjectManagement.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Entities.ResourceRequest", "ResourceRequest")
-                        .WithMany("ProjectUsers")
+                        .WithMany()
                         .HasForeignKey("ResourceRequestId");
 
                     b.HasOne("ProjectManagement.Authorization.Users.User", "User")
@@ -3926,7 +3916,7 @@ namespace ProjectManagement.Migrations
             modelBuilder.Entity("ProjectManagement.Entities.ResourceRequestSkill", b =>
                 {
                     b.HasOne("ProjectManagement.Entities.ResourceRequest", "ResourceRequest")
-                        .WithMany("ResourceRequestSkills")
+                        .WithMany()
                         .HasForeignKey("ResourceRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
