@@ -12,7 +12,7 @@
                 <input matInput [(ngModel)]="searchSkill" name="searchPMName" placeholder="Search" #search
                     (keydown)="$event.stopPropagation(); filterSkill()">{{search.focus()}}
             </mat-form-field>
-                <mat-option *ngFor="let skill of skillList" [value]="skill.id">
+                <mat-option *ngFor="let skill of skillList" [value]="skill.id" (onSelectionChange)="onSkillSelect(skill,$event)">
                     {{skill.name}}</mat-option>
             </mat-select>
         </mat-form-field>
