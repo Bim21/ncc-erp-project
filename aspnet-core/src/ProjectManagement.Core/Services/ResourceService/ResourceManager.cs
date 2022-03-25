@@ -345,7 +345,7 @@ namespace ProjectManagement.Services.ResourceManager
 
             if (input.StartTime.Date > DateTimeUtils.GetNow().Date)
             {
-                throw new UserFriendlyException($"Start Time must be less than or equal Today");
+                throw new UserFriendlyException($"Start Time must be less than or equal today");
             }
 
             var activeReportId = await GetActiveReportId();
