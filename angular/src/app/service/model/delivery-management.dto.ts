@@ -1,6 +1,6 @@
 export class RequestResourceDto {
   constructor(){
-    this.level = -1;
+    this.level = 100;
     this.quantity = 1;
     this.priority =1;
     this.timeNeed = new Date()
