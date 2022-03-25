@@ -82,6 +82,14 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
 
   }
 
+  focusOutPM(){
+    this.searchPM = '';
+  }
+
+  focusOutCustomer(){
+    this.searchClient = '';
+  }
+
   public saveAndClose(): void {
     this.isLoading = true
     this.project.startTime = moment(this.project.startTime).format("YYYY-MM-DD");

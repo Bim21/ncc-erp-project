@@ -157,4 +157,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     this.isAddingSkill = false
 
   }
+  focusOut(){
+    this.searchProject = '';
+  }
 }

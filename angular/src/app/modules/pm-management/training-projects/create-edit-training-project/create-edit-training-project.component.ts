@@ -79,5 +79,9 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
       }, () => this.isLoading = false);
     }
   }
+  
+  focusOut(){
+    this.searchPM = '';
+  }
 
 }

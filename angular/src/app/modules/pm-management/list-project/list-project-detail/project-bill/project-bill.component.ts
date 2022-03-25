@@ -129,5 +129,8 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       }
     );
   }
+  public focusOut(){
+    this.searchUserBill  = '';
+  }
 
 }
