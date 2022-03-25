@@ -71,8 +71,9 @@ export class ListProjectDetailComponent extends AppComponentBase implements OnIn
     this.router.navigate(['weeklyreport'], {
       relativeTo: this.route, queryParams: {
         id: this.requestId,
+        type: this.projectType,
         projectName: this.projectName,
-        projectCode:this.projectCode
+        projectCode:this.projectCode,
       },
       // replaceUrl: true
     })
