@@ -222,7 +222,11 @@ namespace ProjectManagement.Roles
 
         public async Task<IActionResult> GetAllUserNotInRole(int RoleId)
         {
-            var listUsersInRole = await _userRoleRepository.GetAll().Select(x => x.UserId).Distinct().ToListAsync();
+            var listUsersInRole = await _userRoleRepository.GetAll()
+                .Where(x => x.RoleId == RoleId)
+                .Select(x => x.UserId)
+                .Distinct()
+                .ToListAsync();
             var qallUsersNotInRole = from u in _workScope.GetAll<User>()
                             where !listUsersInRole.Contains(u.Id) && 
                                   (u.UserType != UserType.FakeUser || u.UserType != UserType.Vendor)
