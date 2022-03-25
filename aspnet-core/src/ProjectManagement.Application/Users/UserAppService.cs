@@ -111,7 +111,7 @@ namespace ProjectManagement.Users
                             UserLevel = u.UserLevel,
                             Branch = u.Branch,
                             IsActive = u.IsActive,
-                            FullName = u.FullName,
+                            FullName = u.Name+ " " + u.Surname,
                             CreationTime = u.CreationTime,
                             RoleNames = _roleManager.Roles
                             .Where(r => u.Roles
