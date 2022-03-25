@@ -296,6 +296,10 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
     }
   }  
 
+  focusOut(){
+    this.searchUser = "";
+  }
+
   getAllUserLevel(){
     this._roleService.getAllUserLevel().subscribe((res) => {
       this.listUserLevel = res.result

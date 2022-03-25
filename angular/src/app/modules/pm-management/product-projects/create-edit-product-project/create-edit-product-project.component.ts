@@ -81,4 +81,8 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
       }, () => this.isLoading = false);
     }
   }
+  
+  focusOut(){
+    this.searchPM = '';
+  }
 }

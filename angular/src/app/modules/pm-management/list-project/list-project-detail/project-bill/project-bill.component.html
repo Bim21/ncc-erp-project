@@ -49,7 +49,7 @@
                                         <div *ngIf="bill.createMode">
 
                                             <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select [(ngModel)]="bill.userId" name="userBill"
+                                                <mat-select (closed)="focusOut()" [(ngModel)]="bill.userId" name="userBill"
                                                     placeholder="select an user *" required #userBill="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
