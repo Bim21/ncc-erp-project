@@ -93,7 +93,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
   }
 
   public deletePlanUser(id: number): Observable<any>{
-    return this.http.delete<any>(this.rootUrl + '/DeleteResourceRequestPlan?Id=' + id)
+    return this.http.delete<any>(this.rootUrl + '/DeleteResourceRequestPlan?requestId=' + id)
   }
 
   public cancelResourceRequest(id: number): Observable<any>{
