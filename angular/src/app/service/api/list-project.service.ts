@@ -46,4 +46,9 @@ public UpdateTrainingProject(item: any): Observable<any> {
 public CreateTrainingProject(item: any): Observable<any> {
   return this.http.post<any>(this.rootUrl + '/CreateTrainingProject', item);
 }
+
+public updateStatusProject(item: any): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/updateStatusProject',item)
+}
+
 }

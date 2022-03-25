@@ -146,6 +146,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
         pmId: item.pmId,
         id: item.id,
         status: item.status,
+        clientId: item.clientId
       }
     }
     const dialogRef = this.dialog.open(CreateEditTrainingProjectComponent, {
@@ -198,5 +199,46 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
     this.refresh();
   }
+  protected updateStatusProject(project: any): void {
+    let titleConfirm = '';
+    let statusChange = 1;
+    if(project.status == this.APP_ENUM.ProjectStatus.Closed){
+      titleConfirm = "InProgress project: " + project.name + "?";
+      statusChange = this.APP_ENUM.ProjectStatus.InProgress;
+    }
+    else{
+      titleConfirm = "Closed project: " + project.name + "?";
+      statusChange = this.APP_ENUM.ProjectStatus.Closed;
+    }
+    let item = {
+      id: project.id,
+      status: statusChange
+    }
 
+    abp.message.confirm(
+      titleConfirm,
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectService.updateStatusProject(item).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+            abp.notify.success("Update status project: " + project.name);
+            if(res.result == "update-only-project-tool"){
+              abp.notify.success("Update status project: "+ project.name);
+            }
+            else if(res.result == null || res.result == ""){
+              abp.message.success(`<p>Update status project name <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+              <p style='color:#28a745'>Update status project name <b>${project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+             'Update status project result',true);
+            }
+            else{
+              abp.message.error(`<p>Update status project <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+              <p style='color:#dc3545'>${res.result}</p>`, 
+              'Update status project result',true);
+            }
+            this.refresh()
+          });
+        }
+      }
+    );
+  }
 }

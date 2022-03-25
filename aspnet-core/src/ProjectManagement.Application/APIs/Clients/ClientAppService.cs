@@ -101,5 +101,11 @@ namespace ProjectManagement.APIs.Clients
             var clients = await WorkScope.GetAll<Client>().Select(x => new {Id = x.Id, Name = x.Name}).ToListAsync();
             return new OkObjectResult(clients);
         }
+
+        [HttpGet]
+        public async Task<long> getIdClientByCodeNcc()
+        {
+            return  await WorkScope.GetAll<Client>().Where(x => x.Code == "NCC").Select(x => x.Id).FirstOrDefaultAsync();
+        }
     }
 }

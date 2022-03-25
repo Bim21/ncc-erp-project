@@ -54,6 +54,18 @@ namespace ProjectManagement.Services.Timesheet
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateProject", item);
         }
 
+        public async Task<string> updateProject(string code, string EmailPM, ProjectStatus status)
+        {
+            var item = new
+            {
+                Code = code,
+                EmailPM = EmailPM,
+                Status = status,
+            };
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/UpdateProject", item);
+        }
+
+
         public async Task<TotalWorkingTimeOfWeekDto> GetWorkingHourFromTimesheet(string projectCode, DateTime startDate, DateTime endDate)
         {
             return await GetAsync<TotalWorkingTimeOfWeekDto>($"api/services/app/ProjectManagement/GetTotalWorkingTime?projectCode={projectCode}&startDate={startDate.ToString("yyyy/MM/dd")}&endDate={endDate.ToString("yyyy/MM/dd")}");

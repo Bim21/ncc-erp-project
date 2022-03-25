@@ -102,6 +102,13 @@ export const APP_ENUMS = {
         FIXPRICE: 2,
         NoBill: 4,
     },
+
+    CurrencyChargeProjectType: {
+        ODC: 0,
+        TAM: 1,
+        FIXPRICE: 2,
+    },
+
     ProjectUserStatus:
     {
         Present: 0,
