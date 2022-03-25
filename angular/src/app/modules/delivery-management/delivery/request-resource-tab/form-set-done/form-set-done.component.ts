@@ -32,17 +32,16 @@ export class FormSetDoneComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.planUserInfo = this.data
-    console.log(this.planUserInfo)
     this.getPlannedUser()
   }
 
-  save(){
-
-  }
   private getPlannedUser() {
-    this.projectUserService.GetAllWorkingProjectByUserId(this.planUserInfo.employee.id).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      this.plannedUserList = data.result;
-    })
+    this.projectUserService
+      .GetAllWorkingProjectByUserId(this.planUserInfo.employee.id)
+      .pipe(catchError(this.projectUserService.handleError))
+      .subscribe(data => {
+        this.plannedUserList = data.result;
+      })
   }
 
   confirm() {

@@ -114,13 +114,14 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       width: "700px",
       maxHeight: '90vh',
     })
-    show.afterClosed().subscribe(result => {
-      if(command == 'create' && result)
+    show.afterClosed().subscribe(rs => {
+      if(!rs) return
+      if(command == 'create')
         this.refresh()
       else if(command == 'edit'){
-        let index = this.listRequest.findIndex(x => x.id == result.id)
+        let index = this.listRequest.findIndex(x => x.id == rs.id)
         if(index >= 0){
-          this.listRequest[index] = result
+          this.listRequest[index] = rs
         }
       }
     });
@@ -132,7 +133,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.showDialog("edit", item);
   }
   public setDoneRequest(item){
-    let data = {...item.planUserInfo, requestName: item.name, resourceRequestId: item.id}
+    let data = {
+      ...item.planUserInfo, 
+      requestName: item.name, 
+      resourceRequestId: item.id
+    }
     const showModal = this.dialog.open(FormSetDoneComponent, {
       data,
       width: "700px",
@@ -171,13 +176,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       maxHeight:"90vh"
     })
     show.afterClosed().subscribe(rs => {
-      let resourceRequestId;
-      resourceRequestId = rs.data.resourceRequestId
-      let index = this.listRequest.findIndex(x => x.id == resourceRequestId)
+      if(!rs) return
       if(rs.type == 'delete'){
         this.refresh()
       }
       else{
+        let index = this.listRequest.findIndex(x => x.id == rs.data.resourceRequestId)
         if(index >= 0)
           this.listRequest[index].planUserInfo = rs.data.result
       }
@@ -185,12 +189,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     });
   }
   async getPlanResource(item){
-    let data = new ResourcePlanDto();
-    data.resourceRequestId = item.id;
-    if(!item.planUserInfo) return data;
+    let data = new ResourcePlanDto(item.id, 0);
+    if(!item.planUserInfo) 
+      return data;
     let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
-    data = res.result
-    return data
+    return res.result
   }
 
   sendRecruitment(){
@@ -213,45 +216,22 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public updateNote(){
     let request = {
       resourceRequestId: this.resourceRequestId,
-      note: '',
+      note: this.strNote,
     }
-    if(this.typePM == 'PM'){
-      this.updatePMNote(request,this.strNote)
-    }
-    else{
-      this.updateHPMNote(request,this.strNote)
-    }
-    this.closeModal()
-  }
-
-  updatePMNote(request, note){
-    request.note = note
-    this.resourceRequestService.updateNotePM(request).subscribe(res => {
-      if(res.success){
+    this.resourceRequestService.updateNote(request,this.typePM).subscribe(rs => {
+      if(rs.success){
         abp.notify.success('Update Note Successfully!')
         let index = this.listRequest.findIndex(x => x.id == request.resourceRequestId);
         if(index >= 0){
-          this.listRequest[index].pmNote = note;
+          if(this.typePM == 'PM')
+            this.listRequest[index].pmNote = request.note;
+          else
+            this.listRequest[index].dmNote = request.note;
         }
+        this.closeModal()
       }
       else{
-        abp.notify.error(res.result)
-      }
-    })
-  }
-
-  updateHPMNote(request, note){
-    request.note = note
-    this.resourceRequestService.updateNoteHPM(request).subscribe(res => {
-      if(res.success){
-        abp.notify.success('Update Note Successfully!')
-        let index = this.listRequest.findIndex(x => x.id == request.resourceRequestId);
-        if(index >= 0){
-          this.listRequest[index].dmNote = note;
-        }
-      }
-      else{
-        abp.notify.error(res.result)
+        abp.notify.error(rs.result)
       }
     })
   }
@@ -266,6 +246,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       {name: 'status', isTrue: false, value: this.selectedStatus},
       {name: 'level', isTrue: false, value: this.selectedLevel},
     ];
+
     objFilter.forEach((item) => {
       if(!item.isTrue){
         requestBody.filterItems = this.AddFilterItem(requestBody, item.name, item.value)
@@ -275,27 +256,35 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         item.isTrue = true
       }
     })
+
     if(this.sortable.sort){
       requestBody.sort = this.sortable.sort;
       requestBody.sortDirection = this.sortable.sortDirection
     }
+
     this.resourceRequestService.getResourcePaging(requestBody, this.selectedOption).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
-      this.listRequest = data.result.items;
-      this.tempListRequest = data.result.items;
+      this.listRequest = this.tempListRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
+
       objFilter.forEach((item) => {
         if(!item.isTrue){
           request.filterItems = this.clearFilter(request, item.name, '')
         }
       })
-      requestBody.skillIds = null
-      requestBody.sort = null
-      requestBody.sortDirection = null
-      this.isLoading = false;
+
+      this.resetDataFilter(requestBody)
     })
   }
+
+  resetDataFilter(requestBody: any){
+    requestBody.skillIds = null
+    requestBody.sort = null
+    requestBody.sortDirection = null
+    this.isLoading = false;
+  }
+
   clearAllFilter(){
     this.filterItems = []
     this.searchText = ''
@@ -360,13 +349,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   // #endregion
 
   showActionViewRecruitment(status, isRecruitment){
-    if(
-      isRecruitment &&
-      (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE')
-    )
-    {
+    if(isRecruitment && (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE'))
       return true
-    }
     return false
   }
   styleThead(item: any){
