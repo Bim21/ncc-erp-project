@@ -52,8 +52,8 @@
                             <div class="col-6">
                                 <strong style="font-size: 22px;">Pm note: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2">
-                                    <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit mb-2 fa-lg"
-                                        (click)="isEditingNote = true"></i>
+                                    <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
+                                        style="font-size: 17px;" (click)="isEditingNote = true"></i>
                                     <button *ngIf="isEditingNote" class="btn bg-blue mr-1 btn-sm"
                                         (click)="updateNote()">
                                         Save
@@ -66,17 +66,18 @@
                                     style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
                                     {{generalNote}}
                                 </p>
-                                <mat-form-field class="ml-1" style="width:68%" appearance="outline" *ngIf="isEditingNote">
+                                <mat-form-field class="ml-1" style="width:100%" appearance="outline"
+                                    *ngIf="isEditingNote">
                                     <textarea #generalNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                        style="padding-bottom: 20px;" rows="2" id="message" matInput [(ngModel)]="generalNote"
-                                        name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
+                                        style="padding-bottom: 20px;" rows="2" id="message" matInput
+                                        [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
                                 </textarea>
                                 </mat-form-field>
                             </div>
                             <div class="col-6" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
                                 <strong style="font-size: 22px;">Automation test: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2">
-                                    <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote"
+                                    <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
                                         class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
                                     <button *ngIf="isEditingAutomationNote" class="btn bg-blue mr-1 btn-sm"
                                         (click)="updateAutoNote()">
@@ -90,19 +91,19 @@
                                     style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
                                     {{automationNote}}
                                 </p>
-                                <mat-form-field class="ml-1" style="width:68%" appearance="outline"
-                                *ngIf="isEditingAutomationNote">
-                                <textarea #autoNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                    style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
-                                    name="autoNotePM" placeholder="Automation note">{{autoNoteFocus.focus()}}
+                                <mat-form-field class="ml-1" style="width:100%" appearance="outline"
+                                    *ngIf="isEditingAutomationNote">
+                                    <textarea #autoNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                        style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
+                                        name="autoNotePM" placeholder="Automation note">{{autoNoteFocus.focus()}}
                             </textarea>
-                            </mat-form-field>
+                                </mat-form-field>
                             </div>
                         </div>
 
 
-                     
-                      
+
+
                         <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                             <thead class="bg-light">
                                 <tr>
@@ -208,8 +209,9 @@
                             <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
                             <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>
                             <span style="font-size: 21px; margin-left: 21px;">Charged accounts:
-                                <strong [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' " >{{projectInfo.totalBill}}</strong></span>
-                            <div class="fixTableHead" style="max-height: 59vh;">
+                                <strong
+                                    [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' ">{{projectInfo.totalBill}}</strong></span>
+                            <div class="fixTableHead" style="max-height: 72vh;">
                                 <table class="table table-hover ">
                                     <thead>
                                         <tr>
@@ -297,7 +299,7 @@
                     <div class="">
                         <div class="card">
                             <div class="card-body">
-                                <div style="width: 100%; height: 180px;" id="timesheet-chart">
+                                <div style="width: 100%; height: 190px;" id="timesheet-chart">
 
                                 </div>
                             </div>
@@ -305,7 +307,7 @@
                         <div class=" h-100">
                             <div class=" card">
                                 <div class="card-body">
-                                    <div style="width: 100%; height: 180px;" id="bill-chart">
+                                    <div style="width: 100%; height: 190px;" id="bill-chart">
 
                                     </div>
                                 </div>
@@ -313,151 +315,7 @@
 
                             <div class="d-flex">
                                 <div class="w-100">
-
                                     <div class="card">
-                                        <mat-expansion-panel [expanded]="isShowWeeklyList">
-                                            <mat-expansion-panel-header class="m-0"
-                                                (click)="isShowWeeklyList=!isShowWeeklyList">
-
-                                                <h5 class="d-inline-block mb-2">Changed Resource</h5>&nbsp;<strong
-                                                    style="font-size: 18px;">({{weeklyReportList?.length}})</strong>
-                                            </mat-expansion-panel-header>
-
-
-
-                                            <div class=" table-responsive px-4 pb-4">
-                                                <table style="border-collapse: collapse;"
-                                                    class="table table-hover text-nowrap">
-                                                    <thead class="bg-light">
-                                                        <tr>
-                                                            <th>Employee</th>
-                                                            <th style="width: 80px;">Role</th>
-                                                            <th class="col-time">Start date</th>
-                                                            <th>Join/Out</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr  *ngFor="let report of weeklyReportList  |paginate:{
-                                                        id: 'projectUser',
-                                                    itemsPerPage: itemPerPage,
-                                                    currentPage: weeklyCurrentPage
-                                                    } ; let i=index">
-                                                            <td>
-                                                                <div *ngIf="!report.createMode" class="d-flex justify-content-between">
-                                                                    <app-user-info style="width: -webkit-fill-available;"
-                                                                        [userData]="{fullName:report.fullName,branch:report.branch,
-                                                                userType:report.userType,emailAddress:report.emailAddress,avatarPath: report.avatarPath}">
-                                                                    </app-user-info>
-                                                                      
-                                                                </div>
-                                                                <div *ngIf="report.createMode"
-                                                                    class="form-group row required">
-                                                                    <mat-form-field class="w-100" appearance="outline">
-                                                                        <mat-select [(ngModel)]="report.userId"
-                                                                            name="projectEmployee"
-                                                                            placeholder="select user" required
-                                                                            #projectEmployee="ngModel">
-                                                                            <mat-form-field class="w-100 px-3 "
-                                                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                                                <input matInput [(ngModel)]="searchUser"
-                                                                                    name="searchUserName"
-                                                                                    (keydown)="$event.stopPropagation()"
-                                                                                    #search
-                                                                                    placeholder="search">{{search.focus()}}
-                                                                            </mat-form-field>
-                                                                            <mat-option
-                                                                                *ngFor="let user of userList |listFilter : 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'"
-                                                                                [value]="user.id">
-                                                                                {{user.fullName}} -
-                                                                                ({{user.emailAddress}})
-                                                                            </mat-option>
-                                                                        </mat-select>
-                                                                    </mat-form-field>
-                                                                    <mat-error class="mt-1"
-                                                                        *ngIf="projectEmployee.hasError('required') && projectEmployee.touched"
-                                                                        style="font-size: 13px;">
-                                                                        This field is required
-                                                                    </mat-error>
-                                                                </div>
-
-                                                               
-
-                                                            </td>
-
-                                                            <td class="text-center">
-                                                                <div class="" *ngIf="!report.createMode">
-                                                                    <div
-                                                                        [ngClass]="APP_CONST.projectUserRole[report.projectRole]">
-                                                                        {{report.projectRoleName}}
-                                                                    </div>
-                                                                </div>
-                                                                <div *ngIf="report.createMode">
-                                                                    <mat-form-field style="width: 150px;"
-                                                                        class="mx-auto" appearance="outline">
-                                                                        <mat-select [(ngModel)]="report.projectRole"
-                                                                            name="projectrole"
-                                                                            placeholder="select a role" required
-                                                                            #projectPM="ngModel">
-                                                                            <mat-option
-                                                                                *ngFor="let role of projectRoleList"
-                                                                                [value]="APP_ENUM.ProjectUserRole[role]">
-                                                                                {{role}}</mat-option>
-                                                                        </mat-select>
-                                                                    </mat-form-field>
-                                                                    <mat-error class="mt-1"
-                                                                        *ngIf="projectPM.hasError('required') && projectPM.touched"
-                                                                        style="font-size: 13px;">
-                                                                        This field is required
-                                                                    </mat-error>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                <div class="" *ngIf="!report.createMode">
-                                                                    {{report.startTime | date:"dd/MM/yyyy"}}
-                                                                </div>
-                                                                <mat-form-field style="width: 150px;"
-                                                                    appearance="outline" *ngIf="report.createMode">
-                                                                    <input matInput [matDatepicker]="picker"
-                                                                        placeholder="chose a date" required
-                                                                        [(ngModel)]="report.startTime"
-                                                                        name="usercreateDate">
-                                                                    <mat-datepicker-toggle matSuffix [for]="picker">
-                                                                    </mat-datepicker-toggle>
-                                                                    <mat-datepicker #picker></mat-datepicker>
-                                                                </mat-form-field>
-                                                            </td>
-                                                            <td>
-                                                                <div [ngClass]="report.allocatePercentage >0 ?'text-success' : 'text-danger'"
-                                                                    *ngIf="!report.createMode" class="text-center ">
-                                                                    <strong>
-                                                                        {{report.allocatePercentage >0 ?'Join' :
-                                                                        'Out'}}</strong>
-                                                                </div>
-                                                                <div *ngIf="report.createMode">
-
-                                                                    <mat-radio-group
-                                                                        [(ngModel)]="report.allocatePercentage"
-                                                                        aria-label="Select an option"
-                                                                        name="allocatePercentage">
-                                                                        <mat-radio-button [value]="100">Join
-                                                                        </mat-radio-button>
-                                                                        <br />
-                                                                        <mat-radio-button [value]="0">Out
-                                                                        </mat-radio-button>
-                                                                    </mat-radio-group>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <pagination-controls autoHide="true" id="projectUser"
-                                                (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
-                                        </mat-expansion-panel>
-
-                                    </div>
-
-                                    <div class="card mb-0">
                                         <mat-expansion-panel [expanded]="isShowFutureList">
                                             <mat-expansion-panel-header class="m-0"
                                                 (click)="isShowFutureList=!isShowFutureList">
@@ -466,14 +324,14 @@
                                                 <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
                                                     *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create) && isActive"
                                                     [hidden]="processFuture || !isShowFutureList "
-                                                    (click)="addFutureReport(); $event.stopPropagation()"></i>
+                                                    (click)="addPlanResource(); $event.stopPropagation()"></i>
+                                                    
                                             </mat-expansion-panel-header>
                                             <div class="mt-0 table-responsive px-4 pb-4">
                                                 <table style="border-collapse: collapse;"
                                                     class="table table-hover text-nowrap">
                                                     <thead class="bg-light">
                                                         <tr>
-                                                            <th>#</th>
                                                             <th>employee</th>
                                                             <th>Role</th>
                                                             <th class="col-time">Start date</th>
@@ -486,24 +344,36 @@
                                                                 itemsPerPage: itemPerPage,
                                                                 currentPage: futureCurrentPage
                                                                 } ; let i=index">
-                                                            <td><span>{{ i +1 }}</span></td>
                                                             <td>
-                                                                <div *ngIf="!report.createMode" class="d-flex justify-content-between">
-                                                                    <app-user-info style="width: -webkit-fill-available;"
+                                                                <div *ngIf="!report.createMode"
+                                                                    class="d-flex justify-content-between">
+                                                                    <app-user-info
+                                                                        style="width: -webkit-fill-available;"
                                                                         [userData]="{fullName:report.fullName,branch:report.branch,
                                                                         userType:report.userType,emailAddress:report.emailAddress, avatarPath:report.avatarPath}">
                                                                     </app-user-info>
 
-                                                                    <i style="margin-top: 23px ; color: #585858;" class="fas fa-ellipsis-v fa-lg" [matMenuTriggerFor]="menu2"></i>
-                                                                    
-                                                                <mat-menu #menu2="matMenu">
-                                                                    <button  [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="confirm(report)"> <i class="fas fa-check mr-1"></i>Confirm
-                                                                        {{report.allocatePercentage > 0 ? 'Join' : 'Out'}}</button>
-                                                                    <button [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="cancelResourcePlan(report)"> <i
-                                                                            class="fas fa-times mr-1"></i>Cancel Plan</button>
-                                                                    <button [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="editResourcePlan(report)"> <i
-                                                                            class="fas fa-edit mr-1"></i>Edit</button>
-                                                                </mat-menu>
+                                                                    <i style="margin-top: 23px ; color: #585858;"
+                                                                        class="fas fa-ellipsis-v fa-lg"
+                                                                        [matMenuTriggerFor]="menu2"></i>
+
+                                                                    <mat-menu #menu2="matMenu">
+                                                                        <button [disabled]="planResourceProcess"
+                                                                            class="mat-menu-item  w-100"
+                                                                            (click)="confirm(report)"> <i
+                                                                                class="fas fa-check mr-1"></i>Confirm
+                                                                            {{report.allocatePercentage > 0 ? 'Join' :
+                                                                            'Out'}}</button>
+                                                                        <button [disabled]="planResourceProcess"
+                                                                            class="mat-menu-item  w-100"
+                                                                            (click)="cancelResourcePlan(report)"> <i
+                                                                                class="fas fa-times mr-1"></i>Cancel
+                                                                            Plan</button>
+                                                                        <button [disabled]="planResourceProcess"
+                                                                            class="mat-menu-item  w-100"
+                                                                            (click)="editResourcePlan(report)"> <i
+                                                                                class="fas fa-edit mr-1"></i>Edit</button>
+                                                                    </mat-menu>
                                                                 </div>
                                                                 <div *ngIf="report.createMode"
                                                                     class="form-group row required">
@@ -609,6 +479,153 @@
                                         </mat-expansion-panel>
 
                                     </div>
+
+                                    <div class="card">
+                                        <mat-expansion-panel [expanded]="isShowWeeklyList">
+                                            <mat-expansion-panel-header class="m-0"
+                                                (click)="isShowWeeklyList=!isShowWeeklyList">
+
+                                                <h5 class="d-inline-block mb-2">Changed Resource</h5>&nbsp;<strong
+                                                    style="font-size: 18px;">({{weeklyReportList?.length}})</strong>
+                                            </mat-expansion-panel-header>
+
+
+
+                                            <div class=" table-responsive px-4 pb-4">
+                                                <table style="border-collapse: collapse;"
+                                                    class="table table-hover text-nowrap">
+                                                    <thead class="bg-light">
+                                                        <tr>
+                                                            <th>Employee</th>
+                                                            <th style="width: 80px;">Role</th>
+                                                            <th class="col-time">Start date</th>
+                                                            <th>Join/Out</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let report of weeklyReportList  |paginate:{
+                                                        id: 'projectUser',
+                                                    itemsPerPage: itemPerPage,
+                                                    currentPage: weeklyCurrentPage
+                                                    } ; let i=index">
+                                                            <td>
+                                                                <div *ngIf="!report.createMode"
+                                                                    class="d-flex justify-content-between">
+                                                                    <app-user-info
+                                                                        style="width: -webkit-fill-available;"
+                                                                        [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                userType:report.userType,emailAddress:report.emailAddress,avatarPath: report.avatarPath}">
+                                                                    </app-user-info>
+
+                                                                </div>
+                                                                <div *ngIf="report.createMode"
+                                                                    class="form-group row required">
+                                                                    <mat-form-field class="w-100" appearance="outline">
+                                                                        <mat-select [(ngModel)]="report.userId"
+                                                                            name="projectEmployee"
+                                                                            placeholder="select user" required
+                                                                            #projectEmployee="ngModel">
+                                                                            <mat-form-field class="w-100 px-3 "
+                                                                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                                                                <input matInput [(ngModel)]="searchUser"
+                                                                                    name="searchUserName"
+                                                                                    (keydown)="$event.stopPropagation()"
+                                                                                    #search
+                                                                                    placeholder="search">{{search.focus()}}
+                                                                            </mat-form-field>
+                                                                            <mat-option
+                                                                                *ngFor="let user of userList |listFilter : 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'"
+                                                                                [value]="user.id">
+                                                                                {{user.fullName}} -
+                                                                                ({{user.emailAddress}})
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                    </mat-form-field>
+                                                                    <mat-error class="mt-1"
+                                                                        *ngIf="projectEmployee.hasError('required') && projectEmployee.touched"
+                                                                        style="font-size: 13px;">
+                                                                        This field is required
+                                                                    </mat-error>
+                                                                </div>
+
+
+
+                                                            </td>
+
+                                                            <td class="text-center">
+                                                                <div class="" *ngIf="!report.createMode">
+                                                                    <div
+                                                                        [ngClass]="APP_CONST.projectUserRole[report.projectRole]">
+                                                                        {{report.projectRoleName}}
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="report.createMode">
+                                                                    <mat-form-field style="width: 150px;"
+                                                                        class="mx-auto" appearance="outline">
+                                                                        <mat-select [(ngModel)]="report.projectRole"
+                                                                            name="projectrole"
+                                                                            placeholder="select a role" required
+                                                                            #projectPM="ngModel">
+                                                                            <mat-option
+                                                                                *ngFor="let role of projectRoleList"
+                                                                                [value]="APP_ENUM.ProjectUserRole[role]">
+                                                                                {{role}}</mat-option>
+                                                                        </mat-select>
+                                                                    </mat-form-field>
+                                                                    <mat-error class="mt-1"
+                                                                        *ngIf="projectPM.hasError('required') && projectPM.touched"
+                                                                        style="font-size: 13px;">
+                                                                        This field is required
+                                                                    </mat-error>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <div class="" *ngIf="!report.createMode">
+                                                                    {{report.startTime | date:"dd/MM/yyyy"}}
+                                                                </div>
+                                                                <mat-form-field style="width: 150px;"
+                                                                    appearance="outline" *ngIf="report.createMode">
+                                                                    <input matInput [matDatepicker]="picker"
+                                                                        placeholder="chose a date" required
+                                                                        [(ngModel)]="report.startTime"
+                                                                        name="usercreateDate">
+                                                                    <mat-datepicker-toggle matSuffix [for]="picker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #picker></mat-datepicker>
+                                                                </mat-form-field>
+                                                            </td>
+                                                            <td>
+                                                                <div [ngClass]="report.allocatePercentage >0 ?'text-success' : 'text-danger'"
+                                                                    *ngIf="!report.createMode" class="text-center ">
+                                                                    <strong>
+                                                                        {{report.allocatePercentage >0 ?'Join' :
+                                                                        'Out'}}</strong>
+                                                                </div>
+                                                                <div *ngIf="report.createMode">
+
+                                                                    <mat-radio-group
+                                                                        [(ngModel)]="report.allocatePercentage"
+                                                                        aria-label="Select an option"
+                                                                        name="allocatePercentage">
+                                                                        <mat-radio-button [value]="100">Join
+                                                                        </mat-radio-button>
+                                                                        <br />
+                                                                        <mat-radio-button [value]="0">Out
+                                                                        </mat-radio-button>
+                                                                    </mat-radio-group>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <pagination-controls autoHide="true" id="projectUser"
+                                                (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
+                                        </mat-expansion-panel>
+
+                                    </div>
+
+
                                 </div>
 
                             </div>

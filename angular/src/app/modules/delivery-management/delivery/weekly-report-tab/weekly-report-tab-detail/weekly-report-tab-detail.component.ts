@@ -23,6 +23,8 @@ import { GetTimesheetWorkingComponent, WorkingTimeDto } from './get-timesheet-wo
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
 import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
+import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/add-future-resource-dialog.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -93,9 +95,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public projectId: number;
   public projectIdReport: number;
   public isEditingNote: boolean = false;
-  public isEditingAutomationNote:boolean = false
+  public isEditingAutomationNote: boolean = false
   public generalNote: string = "";
-  public automationNote:string =""
+  public automationNote: string = ""
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
@@ -117,6 +119,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isStart: boolean = false
 
   constructor(public pmReportProjectService: PMReportProjectService,
+    private tsProjectService: TimesheetProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
     injector: Injector,
@@ -136,9 +139,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.mondayOf5weeksAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
     this.mondayOf5weeksAgo = moment(this.mondayOf5weeksAgo.setDate(this.mondayOf5weeksAgo.getDate() - 28)).format("YYYY-MM-DD")
     this.lastWeekSunday = moment(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)).format("YYYY-MM-DD");
-    console.log("dateeeeeeeeeee:", this.mondayOf5weeksAgo)
-    console.log("dateeeeeeeeeee:", this.lastWeekSunday)
-
     if (this.router.url.includes("weeklyReportTabDetail")) {
       this.pmReportService.currentMessage.subscribe(message => {
         this.projectType = message;
@@ -148,7 +148,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
 
       );
-
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
       this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
       this.getPmReportProject();
@@ -156,8 +155,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this._layoutStore.sidebarExpanded.subscribe((value) => {
         this.sidebarExpanded = value;
       });
-      // this.buildChar()
-      this.buildBillChar()
 
     }
   }
@@ -190,9 +187,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isTimmerCounting = true
     this.isStopCounting = false
     this.isRefresh = false
-
-
-
   }
   public getPmReportProject(): void {
     if (this.router.url.includes("weeklyReportTabDetail")) {
@@ -227,8 +221,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.isLoading = false;
         this.GetTimesheetWeeklyChartOfProject(this.projectInfo.projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+        this.getDataForBillChart()
         this.router.navigate(
-          [], 
+          [],
           {
             relativeTo: this.route,
             queryParams: {
@@ -237,7 +232,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
               pmName: this.projectInfo.pmName,
               pmReportProjectId: this.pmReportProjectId,
               projectHealth: this.projectHealth
-            }, 
+            },
             queryParamsHandling: 'merge', // remove to replace all query params by provided
           });
       },
@@ -263,7 +258,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.generalNote = projectReport.note
     this.automationNote = projectReport.automationNote
 
-   
+
     this.getProjectInfo();
     this.getChangedResource();
     this.getFuturereport();
@@ -319,16 +314,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
 
     });
-
-
     this.projectId = this.pmReportProjectList[0]?.projectId
     this.generalNote = this.pmReportProjectList[0].note
     this.automationNote = this.pmReportProjectList[0].automationNote
-    // this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
     this.totalOverTime = this.pmReportProjectList[0].totalOverTime
 
     this.pmReportProjectId = this.pmReportProjectList[0].id
-    // this.pmReportProjectList[0].setBackground = true
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == this.pmReportProjectList[0].projectId) {
         element.setBackground = true;
@@ -336,10 +327,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         element.setBackground = false;
       }
     });
-    this.getProjectInfo();
-    this.getChangedResource();
-    this.getFuturereport();
-    this.getProjectProblem()
+    // this.getProjectInfo();
+    // this.getChangedResource();
+    // this.getFuturereport();
+    // this.getProjectProblem()
     this.searchUser = ""
   }
 
@@ -437,51 +428,51 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.userList = data.result;
     })
   }
-  public addFutureReport() {
-    let newReport = {} as projectUserDto
-    newReport.createMode = true;
-    this.futureReportList.unshift(newReport)
-    this.processFuture = true;
-  }
-  public saveFutureReport(report: projectReportDto) {
-    delete report["createMode"]
-    if (this.isEditFutureReport) {
-      this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-        report.startTime = moment(report.startTime).format("YYYY-MM-DD")
-        this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-          abp.notify.success(`updated user: ${report.userName}`);
-          this.getFuturereport();
-          this.getCurrentResourceOfProject(this.projectInfo.projectCode);
-          this.isEditFutureReport = false;
-          this.processFuture = false
-          this.searchUser = ""
-        })
-      },
-        () => {
-          report.createMode = true
-        })
-    }
-    else {
-      // report.isFutureActive = false
-      report.projectId = this.projectId
-      report.isExpense = true;
-      report.status = "2";
-      report.startTime = moment(report.startTime).format("YYYY-MM-DD");
+  // public addFutureReport() {
+  //   let newReport = {} as projectUserDto
+  //   newReport.createMode = true;
+  //   this.futureReportList.unshift(newReport)
+  //   this.processFuture = true;
+  // }
+  // public saveFutureReport(report: projectReportDto) {
+  //   delete report["createMode"]
+  //   if (this.isEditFutureReport) {
+  //     this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+  //       report.startTime = moment(report.startTime).format("YYYY-MM-DD")
+  //       this.projectUserService.update(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+  //         abp.notify.success(`updated user: ${report.userName}`);
+  //         this.getFuturereport();
+  //         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
+  //         this.isEditFutureReport = false;
+  //         this.processFuture = false
+  //         this.searchUser = ""
+  //       })
+  //     },
+  //       () => {
+  //         report.createMode = true
+  //       })
+  //   }
+  //   else {
+  //     // report.isFutureActive = false
+  //     report.projectId = this.projectId
+  //     report.isExpense = true;
+  //     report.status = "2";
+  //     report.startTime = moment(report.startTime).format("YYYY-MM-DD");
 
-      this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-        abp.notify.success("created new future report");
-        this.processFuture = false;
-        report.createMode = false;
-        this.getFuturereport();
-        this.getCurrentResourceOfProject(this.projectInfo.projectCode);
-        this.searchUser = ""
-      },
-        () => {
-          report.createMode = true
-        })
-    }
+  //     this.projectUserService.create(report).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+  //       abp.notify.success("created new future report");
+  //       this.processFuture = false;
+  //       report.createMode = false;
+  //       this.getFuturereport();
+  //       this.getCurrentResourceOfProject(this.projectInfo.projectCode);
+  //       this.searchUser = ""
+  //     },
+  //       () => {
+  //         report.createMode = true
+  //       })
+  //   }
 
-  }
+  // }
   public cancelFutureReport() {
     this.processFuture = false;
     this.isEditFutureReport = false;
@@ -604,7 +595,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.updateNote(this.generalNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
-  
+
       this.pmReportProjectList.forEach(item => {
         if (item.id == this.pmReportProjectId) {
           item.note = this.generalNote;
@@ -626,7 +617,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.updateAutomationNote(this.automationNote, this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingAutomationNote = false;
-  
+
       this.pmReportProjectList.forEach(item => {
         if (item.id == this.pmReportProjectId) {
           item.automationNote = this.automationNote
@@ -731,7 +722,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         grid: {
           left: '3%',
           right: '4%',
-          bottom: '3%',
+          bottom: '1%',
           containLabel: true
         },
 
@@ -785,68 +776,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
 
-  buildBillChar() {
 
-
-    setTimeout(() => {
-      var chartDom = document.getElementById('bill-chart')!;
-      var myChart = echarts.init(chartDom);
-      var option: echarts.EChartsOption;
-
-      option = {
-        title: {
-          text: 'Bill info'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        legend: {
-          data: ['Week', 'Month'],
-
-        },
-        color: ['#1955cf', '#b86e25'],
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        // toolbox: {
-        //   feature: {
-        //     saveAsImage: {}
-        //   }
-        // },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['November', 'December', 'January', 'February', 'March']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            lineStyle: { color: '#1955cf' },
-            name: 'Week',
-            type: 'line',
-            stack: 'Total',
-            data: [100, 182, 170, 234, 300, 350, 240]
-          },
-          {
-            lineStyle: { color: '#b86e25' },
-            name: 'Month',
-            type: 'line',
-            stack: 'Total',
-            data: [120, 152, 101, 134, 90, 230, 160]
-          },
-
-        ]
-      };
-      option && myChart.setOption(option);
-    }, 1)
-
-
-  }
 
   public genarateUserChart(user, chartData) {
 
@@ -947,8 +877,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   GetTimesheetOfUserInProject(projectCode, user, startTime, endTime) {
     this.pmReportProjectService.GetTimesheetOfUserInProject(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
-      user.normalWorkingTime = rs.result? rs.result.normalWorkingTime : 0
-      user.overTime = rs.result? rs.result.overTime : 0
+      user.normalWorkingTime = rs.result ? rs.result.normalWorkingTime : 0
+      user.overTime = rs.result ? rs.result.overTime : 0
       this.totalNormalWorkingTime += user.normalWorkingTime
       this.totalOverTime += user.overTime
     })
@@ -995,8 +925,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     })
     ref.afterClosed().subscribe(rs => {
       if (rs) {
-       this.getCurrentResourceOfProject(this.projectInfo.projectCode)
-       this.getChangedResource()
+        this.getCurrentResourceOfProject(this.projectInfo.projectCode)
+        this.getChangedResource()
       }
     })
   }
@@ -1060,6 +990,124 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       },
       true
     )
+  }
+
+  //
+  getDataForBillChart() {
+    var todayDate: any = new Date();
+    var toDate = this.formatDateYMD(todayDate)
+    let fromDate = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
+    this.tsProjectService.GetBillInfoChart(this.projectId, fromDate, toDate).subscribe(data => {
+      this.buildBillChart(data.result)
+    })
+  }
+
+
+
+  public buildBillChart(chartData) {
+
+    // var chartDom = document.getElementById(user.userId.toString());
+    // var myChart = echarts.init(chartDom);
+
+    setTimeout(() => {
+
+      let chartDom = document.getElementById('bill-chart');
+
+      let myChart = echarts.init(chartDom);
+      let option: echarts.EChartsOption;
+      option = {
+        tooltip: {
+          trigger: 'axis',
+        },
+        title: {
+          text: 'Bill info'
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '1%',
+          containLabel: true
+        },
+        legend: {
+          data: ['manMonths', 'manDays']
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: chartData.labels,
+            boundaryGap: false,
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: 'manMonths',
+
+          },
+          {
+            type: 'value',
+            name: 'manDays',
+
+          }
+        ],
+        series: [
+
+          {
+            name: 'manMonths',
+            type: 'bar',
+            data: chartData.manMonths
+          },
+          {
+            name: 'manDays',
+            type: 'line',
+            yAxisIndex: 1,
+            data: chartData.manDays
+          }
+        ]
+      };
+      option && myChart.setOption(option);
+    }, 1)
+  }
+
+
+  addPlanResource() {
+    let ref = this.dialog.open(AddFutureResourceDialogComponent, {
+      width: "700px",
+      data: {
+        projectId: this.projectId,
+        projectName: this.projectInfo.projectName
+      }
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.getFuturereport()
+      }
+    })
+  }
+  editResourcePlan(resource) {
+    let item = {
+      projectUserId:resource.id,
+      fullName: resource.fullName,
+      projectId: this.projectId,
+      projectRole: resource.projectRole,
+      userId: resource.userId,
+      startDate: resource.startDate,
+      isPool: resource.isPool,
+      allocatePercentage: resource.allocatePercentage,
+      startTime: resource.startTime
+    }
+    let ref = this.dialog.open(AddFutureResourceDialogComponent, {
+      width: "700px",
+      data: {
+        command: "edit",
+        item: item
+      }
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        this.getFuturereport()
+      }
+    })
   }
 
 }

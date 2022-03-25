@@ -33,11 +33,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let bill of userBillList  |paginate:{ 
-                                    id: 'userBill',
-                                    itemsPerPage: itemPerPage,
-                                    currentPage: userBillCurrentPage
-                                    }  ; let i = index">
+                                <tr *ngFor="let bill of userBillList; let i = index">
                                     <td><span>{{ i +1 }}</span></td>
                                     <td class="text-left" style="min-width: 250px;">
                                         <span *ngIf="!bill.createMode">
@@ -189,9 +185,7 @@
                 </div>
 
 
-                <pagination-controls autoHide="true" class="mt-2" id="userBill"
-                    (pageChange)="userBillCurrentPage = $event">
-                </pagination-controls>
+              
             </mat-expansion-panel>
             <mat-expansion-panel>
 
