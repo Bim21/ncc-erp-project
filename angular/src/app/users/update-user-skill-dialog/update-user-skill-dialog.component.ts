@@ -17,6 +17,7 @@ export class UpdateUserSkillDialogComponent implements OnInit {
   skillList:SkillDto[] = []
   tempSkillList:SkillDto[] = []
   subscription: Subscription[] = [];
+  selectedSkills: any[] = []
 
   public searchSkill:string =""
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private userService:UserService,
@@ -26,7 +27,12 @@ export class UpdateUserSkillDialogComponent implements OnInit {
   ngOnInit(): void {
     this.userSkillList = this.data.userSkills.map(skill => skill.skillId)
     this.getAllSkill()
+    this.selectedSkills = [...this.data.userSkills.map(skill => {return {
+      id: skill.skillId,
+      name: skill.skillName
+    }})]
   }
+
   getAllSkill(){
     this.subscription.push(
       this.skillService.getAll().subscribe(data=>{
@@ -49,11 +55,25 @@ export class UpdateUserSkillDialogComponent implements OnInit {
     )
   
   }
+
   filterSkill(){
-    this.skillList = this.tempSkillList.filter(skill => skill.name.toLowerCase().includes(this.searchSkill.toLowerCase()))
+    this.skillList = [...new Set( this.tempSkillList.filter(skill => skill.name.toLowerCase()
+    .includes(this.searchSkill.toLowerCase())).concat(...this.selectedSkills))]
   }
+
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe())
+    this.selectedSkills = []
+  }
+
+  onSkillSelect(skill,e){
+    console.log(e)
+    if(e._selected){
+      this.selectedSkills.push(skill)
+    }
+    else{
+      this.selectedSkills.splice(this.selectedSkills.findIndex(skill),1)
+    }
   }
 
 }
