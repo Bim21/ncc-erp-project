@@ -38,7 +38,7 @@ export class AddUserToTempProjectDialogComponent extends AppComponentBase implem
       projectId: this.user.projectId,
       startTime: this.formatDateYMD(this.user.startTime),
       isPool: true,
-      projectRole: this.user.proejctRole
+      projectRole: this.user.projectRole
     }
     console.log(this.user)
     this.resourceService.AddUserToTempProject(requestBody).pipe(catchError(this.resourceService.handleError)).subscribe(rs=>{
