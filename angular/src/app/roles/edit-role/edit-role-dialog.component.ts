@@ -261,10 +261,11 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
           this._roleService.removeUserFromOutRole(id).subscribe((res) => {
             if(res.success){
               abp.notify.success(res.result)
-              let index = this.listUsers.findIndex(x => x.id == id);
+              let index = this.listUsersForSearch.findIndex(x => x.id == id);
               if(index >= 0){
-                this.listUsers.splice(index,1);
+                this.listUsersForSearch.splice(index,1);
               }
+              this.searchMember()
               this.getAllUserNotInRole()
             }
             else{
