@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 export class Utils{
     public static getUserLevel(level) {
         switch (level) {
@@ -94,6 +95,11 @@ export class Utils{
               style: {'background-color': '#902ee1'}
             }
           }
+          default:
+            return {
+              userLevel: "Any Level",
+              style: {'background-color': '#F7D500'}
+            }
         }
     }
 
