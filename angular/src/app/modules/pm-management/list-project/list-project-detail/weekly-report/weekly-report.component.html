@@ -61,16 +61,18 @@
                     </div>
                 </div>
                 <div class="row p-1">
-                    <div class="col-6">
-                        <strong style="font-size: 22px;">Pm note: </strong>
-                        <div class="d-inline  pt-1 text-right   ml-2">
-                            <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
+                    <div class="col-7">
+                        <strong classs="col-12" style="font-size: 20px;">PM note: </strong>
+                        <div class="d-inline  pt-1 text-right row">
+                            <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg ml-2"
                             style="font-size: 17px;" (click)="isEditingNote = true"></i>
-                            <button *ngIf="isEditingNote" class="btn bg-blue mr-1 btn-sm" (click)="updateNote()">
-                                Save
-                            </button>
-                            <button *ngIf="isEditingNote" class="btn btn-secondary btn-sm" (click)="cancelUpdateNote()">Cancel
-                            </button>
+                            <div class="col-12 text-left">
+                                <button *ngIf="isEditingNote" class="btn btn-secondary btn-sm mr-2" (click)="cancelUpdateNote()">Cancel
+                                </button>
+                                <button *ngIf="isEditingNote" class="btn bg-blue btn-sm btn-sm btn-save" (click)="updateNote()">
+                                    Save
+                                </button>
+                            </div>
                         </div>
                         <p *ngIf="!isEditingNote" style="word-wrap: break-word; white-space: pre-line;font-size: 18px;"
                             class="mt-2">
@@ -84,18 +86,20 @@
                                 </textarea>
                         </mat-form-field>
                     </div>
-                    <div class="col-6">
-                        <strong style="font-size: 22px;">Automation test: </strong>
-                        <div class="d-inline  pt-1 text-right   ml-2">
+                    <div class="col-5" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
+                        <strong style="font-size: 20px;">Automation test: </strong>
+                        <div class="d-inline  pt-1 text-right row">
                             <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
-                            class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
-                            <button *ngIf="isEditingAutomationNote" class="btn bg-blue mr-1 btn-sm"
-                                (click)="updateAutoNote()">
-                                Save
-                            </button>
-                            <button *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote(); ;"
-                                class="btn btn-secondary btn-sm">Cancel
-                            </button>
+                            class="fas fa-edit mb-2 fa-lg ml-2" (click)="isEditingAutomationNote = true"></i>
+                            <div class="col-12 text-left">
+                                <button *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();"
+                                class="btn btn-secondary btn-sm mr-2">Cancel
+                                </button>
+                                <button *ngIf="isEditingAutomationNote" class="btn bg-blue btn-sm btn-sm"
+                                    (click)="updateAutoNote()">
+                                    Save
+                                </button>
+                            </div>
                         </div>
                         <p *ngIf="!isEditingAutomationNote"
                             style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
@@ -113,102 +117,136 @@
 
 
 
-
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                    <thead class="bg-light">
-                        <tr>
-                            <th>#</th>
-                            <th>Issues</th>
-                            <th>Impact</th>
-                            <th>Solution</th>
-                            <th>meetingSolution</th>
-                            <th class="col-time">Status</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let problem of problemList |paginate:{
-                                        id: 'problemPaging',
-                                    itemsPerPage: itemPerPage,
-                                    currentPage: problemCurrentPage
-                                    }; let i =index">
-                            <td>{{i+1}}</td>
-
-                            <td style="white-space: normal;max-width: 200px;">
-
-                                <div *ngIf="!problem.createMode">{{problem.description}}</div>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" required rows="2"
-                                            placeholder="leave a comment" name="description"
-                                            [(ngModel)]="problem.description" matInput></textarea>
-                                    </mat-form-field>
-                                </div>
-                            </td>
-                            <td style="white-space: normal;max-width: 200px;">
-                                <div *ngIf="!problem.createMode">{{problem.impact}}</div>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                            placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
-                                            matInput></textarea>
-                                    </mat-form-field>
-                                </div>
-
-                            </td>
-                            <td style="white-space: normal;max-width: 200px;">
-                                <div *ngIf="!problem.createMode">{{problem.solution}}</div>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                            placeholder="leave a comment" name="solution" [(ngModel)]="problem.solution"
-                                            matInput></textarea>
-                                    </mat-form-field>
-                                </div>
-
-                            </td>
-                            <td style="white-space: normal;max-width: 200px;">
-
-                                <div *ngIf="!problem.createMode">{{problem.meetingSolution}}</div>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field class="w-100" appearance="outline">
-                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                            placeholder="leave a comment" name="meetingSolution"
-                                            [(ngModel)]="problem.meetingSolution" matInput></textarea>
-                                    </mat-form-field>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
-                                    *ngIf="!problem.createMode">{{ problem.status }}</span>
-                                <div>
-
-                                    <div style="font-size: 15px;" *ngIf="problem.totalWeekAgo>1">
-                                        <strong class="text-danger">{{(problem.totalWeekAgo/7).toFixed()}}
-                                        </strong> weeks ago
+                <div>
+                    <h4 class="d-inline-block mb-2">Issues</h4>&nbsp;<strong
+                    style="font-size: 20px;">({{problemList?.length}})</strong>
+                <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
+                    *ngIf=" permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create) && selectedReport.isActive"
+                    [hidden]="processProblem"
+                    (click)="addIssueReport(); $event.stopPropagation()"></i>
+                </div>
+                <div class="fixTableHead" style="max-height: 72vh;">
+                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Issues</th>
+                                <th>Impact</th>
+                                <th>Solution</th>
+                                <th>meetingSolution</th>
+                                <th class="col-time">Status</th>
+                                <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let problem of problemList |paginate:{
+                                            id: 'problemPaging',
+                                        itemsPerPage: itemPerPage,
+                                        currentPage: problemCurrentPage
+                                        }; let i =index">
+                                <td>{{i+1}}</td>
+    
+                                <td style="white-space: normal;max-width: 200px;">
+    
+                                    <div *ngIf="!problem.createMode">{{problem.description}}</div>
+                                    <div *ngIf="problem.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" required rows="2"
+                                                placeholder="leave a comment" name="description"
+                                                [(ngModel)]="problem.description" matInput></textarea>
+                                        </mat-form-field>
                                     </div>
-                                </div>
-                                <div *ngIf="problem.createMode">
-                                    <mat-form-field style="width: 150px;" class="mx-auto" appearance="outline">
-                                        <mat-select [(ngModel)]="problem.status" name="issueStatus"
-                                            placeholder="select a status" required #issueStatus="ngModel">
-                                            <mat-option *ngFor="let status of issueStatusList"
-                                                [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
-                                                {{status}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-error class="mt-1"
-                                        *ngIf="issueStatus.hasError('required') && issueStatus.touched"
-                                        style="font-size: 13px;">
-                                        This field is required
-                                    </mat-error>
-                                </div>
+                                </td>
+                                <td style="white-space: normal;max-width: 200px;">
+                                    <div *ngIf="!problem.createMode">{{problem.impact}}</div>
+                                    <div *ngIf="problem.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                                                placeholder="leave a comment" name="impact" [(ngModel)]="problem.impact"
+                                                matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+    
+                                </td>
+                                <td style="white-space: normal;max-width: 200px;">
+                                    <div *ngIf="!problem.createMode">{{problem.solution}}</div>
+                                    <div *ngIf="problem.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                                                placeholder="leave a comment" name="solution" [(ngModel)]="problem.solution"
+                                                matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+    
+                                </td>
+                                <td style="white-space: normal;max-width: 200px;">
+    
+                                    <div *ngIf="!problem.createMode">{{problem.meetingSolution}}</div>
+                                    <div *ngIf="problem.createMode">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
+                                                placeholder="leave a comment" name="meetingSolution"
+                                                [(ngModel)]="problem.meetingSolution" matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
+                                        *ngIf="!problem.createMode">{{ problem.status }}</span>
+                                    <div>
+    
+                                        <div style="font-size: 15px;" *ngIf="problem.totalWeekAgo>1">
+                                            <strong class="text-danger">{{(problem.totalWeekAgo/7).toFixed()}}
+                                            </strong> weeks ago
+                                        </div>
+                                    </div>
+                                    <div *ngIf="problem.createMode">
+                                        <mat-form-field style="width: 150px;" class="mx-auto" appearance="outline">
+                                            <mat-select [(ngModel)]="problem.status" name="issueStatus"
+                                                placeholder="select a status" required #issueStatus="ngModel">
+                                                <mat-option *ngFor="let status of issueStatusList"
+                                                    [value]="APP_ENUM.PMReportProjectIssueStatus[status]">
+                                                    {{status}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error class="mt-1"
+                                            *ngIf="issueStatus.hasError('required') && issueStatus.touched"
+                                            style="font-size: 13px;">
+                                            This field is required
+                                        </mat-error>
+                                    </div>
+    
+                                </td>
+                                <td class="text-center" *ngIf="selectedReport.isActive">
+                                    <button *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
+                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive" mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
+                                        <i class="fas fa-bars fa-lg"></i>
+                                    </button>
+                                    <mat-menu #menu="matMenu" class="p-2">
+                                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)" (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
+                                            <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
+                                            Edit
+                                        </button>
 
-                            </td>
+                                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
+                                            <i class="fas fa-trash mr-2 fa-lg"></i>
+                                            Delete
+                                        </button>
+                                    </mat-menu>
+                                    <div *ngIf="problem.createMode" class="pt-2">
+                                        <button [disabled]=" !problem.description || !problem.impact || !(problem.status.toString())" class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveProblemReport(problem)">
+                                            <i style="color: green; ;" class="fas fa-check fa-2x"></i>
+                                        </button>
 
-                        </tr>
-                    </tbody>
-                </table>
+                                        <i style="color: red;" class="fas fa-times fa-2x" (click)="cancelProblemReport()"></i>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </div>
             </div>
 
 
@@ -225,9 +263,7 @@
                         <table class="table table-hover ">
                             <thead>
                                 <tr>
-                                    <th style="vertical-align: middle;">Employee
-
-                                    </th>
+                                    <th style="vertical-align: middle;">Employee</th>
                                     <th style="width: 80px; vertical-align: middle;">Role</th>
                                     <th style="width: 80px;">Normal
                                         <div>
@@ -247,8 +283,8 @@
                             <tbody>
                                 <tr (contextmenu)="showActions($event)"
                                     *ngFor="let user of projectCurrentResource; let i =index">
-                                    <td class="d-flex justify-content-between" style="border: none;">
-                                        <div style="width: 84%;">
+                                    <td class="d-flex justify-content-between" style="border: none;width: 380px;">
+                                        <div style="width: 89%;">
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
                                                     userType:1,emailAddress: user.emailAddress,avatarPath: user.avatarPath,
                                                      userLevel: user.userLevel}">
@@ -294,17 +330,9 @@
 
                         </table>
                     </div>
-
-
                 </div>
             </div>
-
-
-
         </div>
-
-
-
         <div style="width: 40%;">
             <div class="">
                 <div class="card">
