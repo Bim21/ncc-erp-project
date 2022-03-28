@@ -205,39 +205,41 @@ namespace ProjectManagement.APIs.Projects
             return input;
         }
 
+        private async Task<bool> UserHasRole(long userId, string roleName)
+        {
+            var quser =
+                    from ur in WorkScope.GetAll<UserRole, long>().Where(u => u.UserId == userId)
+                    join role in WorkScope.GetAll<Role, int>().Where(s => s.Name == roleName)
+                    on ur.RoleId equals role.Id into roles
+                    from r in roles
+                    select r.Id;
+            return quser.Any();
+
+        }
+
         private async Task<string> UpdateRoleProject(long PmId)
         {
             //Set role PM for user when user set PM of project
-            var role = await _roleManager.GetRoleByNameAsync(StaticRoleNames.Tenants.PM);
-            var isRolePM = await (from ur in _userRoleRepository.GetAll()
-                                  where ur.RoleId == role.Id
-                                  where ur.UserId == PmId
-                                  select ur.Id).FirstOrDefaultAsync();
-            if (isRolePM == default)
+            var userHasRole = await UserHasRole(PmId, StaticRoleNames.Tenants.PM);
+            if (!userHasRole)
             {
-                await _userRoleRepository.InsertAsync(new UserRole
+                var roleId = _roleManager.GetRoleByNameAsync(StaticRoleNames.Tenants.PM).Result.Id;
+                WorkScope.Insert<UserRole>(new UserRole
                 {
-                    RoleId = role.Id,
+                    RoleId = roleId,
                     UserId = PmId
                 });
             }
+
             return null;
         }
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
-        private async Task<string> CreateProjectInTimesheet(ProjectDto input)
+        private async Task<string> CreateProjectInTimesheetTool(ProjectDto input)
         {
-
-            await UpdateRoleProject(input.PmId);
-
             var customerCode = await WorkScope.GetAll<Client>().Where(x => x.Id == input.ClientId).Select(x => x.Code).FirstOrDefaultAsync();
             var emailPM = await WorkScope.GetAll<User>().Where(x => x.Id == input.PmId).Select(x => x.EmailAddress).FirstOrDefaultAsync(); ;
-            if (customerCode == default)
-            {
-                //Training + Product
-                customerCode = "NCC";
-            }
             var createProject = await _timesheetService.createProject(input.Name, input.Code, input.StartTime, input.EndTime,
                                                                        customerCode, input.ProjectType, emailPM);
             return createProject;
@@ -246,13 +248,10 @@ namespace ProjectManagement.APIs.Projects
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
-        private async Task<string> UpdateProjectTimesheet(string code, long? PmId, ProjectStatus status)
+        private async Task<string> UpdateProjectTimesheetTool(string code, long PmId, ProjectStatus status)
         {
-            var emailPM = "";
-            if (PmId != null)
-            {
-                emailPM = await WorkScope.GetAll<User>().Where(x => x.Id == PmId).Select(x => x.EmailAddress).FirstOrDefaultAsync();
-            }
+            var emailPM = await WorkScope.GetAll<User>().Where(x => x.Id == PmId).Select(x => x.EmailAddress).FirstOrDefaultAsync();
+
             var updateProject = await _timesheetService.updateProject(code, emailPM, status);
             return updateProject;
         }
@@ -303,7 +302,9 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-            return await CreateProjectInTimesheet(input);
+            await UpdateRoleProject(input.PmId);
+
+            return await CreateProjectInTimesheetTool(input);
         }
 
         [HttpPut]
@@ -357,15 +358,39 @@ namespace ProjectManagement.APIs.Projects
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
             await UpdateRoleProject(input.PmId);
-            var updateProject = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UpdateProject);
-            if (updateProject == "true" && input.Status != ProjectStatus.Potential && (input.Status != statusTemp || input.PmId != pmIdTemp))
+            var checkUpdateProjectTimesheetTool = await CheckUpdateProjectTimesheetTool(input.Status, statusTemp, input.PmId, pmIdTemp);
+            if (checkUpdateProjectTimesheetTool)
             {
-                return await UpdateProjectTimesheet(input.Code, input.PmId, input.Status);
+                return await UpdateProjectTimesheetTool(input.Code, input.PmId, input.Status);
             }
 
             return "update-only-project-tool";
         }
 
+        private async Task<bool> CheckUpdateProjectTimesheetTool(ProjectStatus statusChange, ProjectStatus statusTemp, long? PmIdChange, long? pmIdTemp)
+        {
+            var updateProject = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UpdateProject);
+
+            if (updateProject == "true")
+            {
+                if (PmIdChange == default || PmIdChange == null)
+                {
+                    if (statusChange != ProjectStatus.Potential && statusChange != statusTemp)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (statusChange != ProjectStatus.Potential && (statusChange != statusTemp || PmIdChange != pmIdTemp))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         public class ProjectUpdateStatus
         {
@@ -379,12 +404,14 @@ namespace ProjectManagement.APIs.Projects
         public async Task<string> UpdateStatusProject(ProjectUpdateStatus input)
         {
             var project = await WorkScope.GetAsync<Project>(input.Id);
+            ProjectStatus statusTemp = project.Status;
             project.Status = input.Status;
             await WorkScope.UpdateAsync(ObjectMapper.Map<Project>(project));
-            var updateProject = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UpdateProject);
-            if (updateProject == "true" && input.Status != ProjectStatus.Potential)
+
+            var checkUpdateProjectTimesheetTool = await CheckUpdateProjectTimesheetTool(input.Status, statusTemp, null, null);
+            if (checkUpdateProjectTimesheetTool)
             {
-                return await UpdateProjectTimesheet(project.Code, null, input.Status);
+                return await UpdateProjectTimesheetTool(project.Code, project.PMId, input.Status);
             }
             return "update-only-project-tool";
         }
@@ -511,7 +538,9 @@ namespace ProjectManagement.APIs.Projects
                 EndTime = input.EndTime
             };
 
-            return await CreateProjectInTimesheet(trainingProject);
+            await UpdateRoleProject(input.PmId);
+
+            return await CreateProjectInTimesheetTool(trainingProject);
         }
         [HttpPut]
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
@@ -536,12 +565,12 @@ namespace ProjectManagement.APIs.Projects
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Project>(input, project));
             await UpdateRoleProject(input.PmId);
-            var updateProject = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UpdateProject);
-            if (updateProject == "true" && input.Status != ProjectStatus.Potential && (input.Status != statusTemp || input.PmId != pmIdTemp))
+    
+            var checkUpdateProjectTimesheetTool = await CheckUpdateProjectTimesheetTool(input.Status, statusTemp, input.PmId, pmIdTemp);
+            if (checkUpdateProjectTimesheetTool)
             {
-                return await UpdateProjectTimesheet(input.Code, input.PmId, input.Status);
+                return await UpdateProjectTimesheetTool(input.Code, input.PmId, input.Status);
             }
-
             return "update-only-project-tool";
         }
         [HttpGet]
