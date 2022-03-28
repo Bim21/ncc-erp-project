@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { FormSetDoneComponent } from './form-set-done/form-set-done.component';
 import { SortableComponent, SortableModel } from './../../../../../shared/components/sortable/sortable.component';
 import { AppComponentBase } from 'shared/app-component-base';
@@ -34,6 +35,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public listStatuses: any[] = []
   public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
+  public listProjectUserRoles: any[] = []
   public listPriorities: any[] = []
   public selectedLevel: any = -1
   public isAndCondition:boolean =false;
@@ -81,6 +83,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.getLevels()
     this.getPriorities()
     this.getStatuses()
+    this.getProjectUserRoles()
     this.refresh();
   }
 
@@ -108,7 +111,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         command: command,
         item: resourceRequest, 
         skills: this.listSkills,
-        levels: this.listLevels, 
+        levels: this.listLevels,
         typeControl: 'request'
       },
       width: "700px",
@@ -171,7 +174,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   async showModalPlanUser(item: any){
     let data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
-      data,
+      data: {...data, projectUserRoles: this.listProjectUserRoles},
       width: "700px",
       maxHeight:"90vh"
     })
@@ -307,7 +310,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   onChangeStatus(){
     let status = this.listStatuses.find(x => x.id == this.selectedStatus)
-    if(status.name == 'DONE')
+    if(status && status.name == 'DONE')
     {
       this.sortable = new SortableModel('timeDone', 1, 'DESC')
       this.changeSortableByName('','')
@@ -353,6 +356,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   getStatuses(){
     this.resourceRequestService.getStatuses().subscribe(res => {
       this.listStatuses = res.result
+    })
+  }
+  getProjectUserRoles(){
+    this.resourceRequestService.getProjectUserRoles().subscribe(rs => {
+      this.listProjectUserRoles = rs.result
     })
   }
   // #endregion

@@ -423,7 +423,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             {
                 UserId = input.UserId,
                 ProjectId = request.ProjectId,
-                ProjectRole = ProjectUserRole.DEV,
+                ProjectRole = input.ProjectRole,
                 AllocatePercentage = 100,
                 StartTime = input.StartTime,
                 Status = ProjectUserStatus.Future,
@@ -636,6 +636,18 @@ namespace ProjectManagement.APIs.ResourceRequests
                                  Name = p.ToString()
                              })
                              .ToList();
+        }
+
+        [HttpGet]
+        public List<IDNameDto> GetProjectUserRoles()
+        {
+            return Enum.GetValues(typeof(ProjectUserRole))
+                .Cast<ProjectUserRole>()
+                .Select(q => new IDNameDto
+                {
+                    Id = q.GetHashCode(),
+                    Name= q.ToString()
+                }).ToList();
         }
 
         enum Action : byte

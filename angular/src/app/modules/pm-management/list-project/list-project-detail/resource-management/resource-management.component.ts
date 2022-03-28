@@ -23,6 +23,7 @@ import { CreateUpdateResourceRequestComponent } from '@app/modules/delivery-mana
 import { ResourcePlanDto } from '@app/service/model/resource-plan.dto';
 import { FormPlanUserComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
 import { RequestResourceDto } from '@app/service/model/delivery-management.dto';
+import { FormSetDoneComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-set-done/form-set-done.component';
 
 @Component({
   selector: 'app-resource-management',
@@ -64,7 +65,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public requestProcess: boolean = false;
   public isShowRequest: boolean = false;
   public listStatuses: any[] = []
-  public selectStatus: number = 0
+  public selectStatus: any = 0
   public isShowModal: string = 'none'
   public modal_title: string
   public strNotePM: string
@@ -81,6 +82,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   //skills, levels
   public listSkills: any[] = []
   public listLevels: any[] = []
+  public listProjectUserRoles: any[] = []
 
   constructor(
     injector: Injector, 
@@ -108,6 +110,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     this.getAllSkills();
     this.getLevelsResourceRequest();
     this.getStatusesResourceRequest()
+    this.getProjectUserRoles()
   }
   // get data
   private getProjectUser() {
@@ -128,6 +131,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
 
 
   public getResourceRequestList(): void {
+
     if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
       this.resourceRequestService.getAllResourceRequestByProject(this.projectId, this.selectStatus).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
@@ -527,7 +531,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   async showModalPlanUser(item: any){
     let data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
-      data,
+      data: {...data, projectUserRoles: this.listProjectUserRoles},
       width: "700px",
       maxHeight:"90vh"
     })
@@ -548,6 +552,23 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     if(!item.planUserInfo) return data;
     let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
     return res.result
+  }
+
+  public setDoneRequest(item){
+    let data = {
+      ...item.planUserInfo, 
+      requestName: item.name, 
+      resourceRequestId: item.id
+    }
+    const showModal = this.dialog.open(FormSetDoneComponent, {
+      data,
+      width: "700px",
+      maxHeight: "90vh"
+    })
+    showModal.afterClosed().subscribe((rs) => {
+      if(rs)
+        this.getResourceRequestList()
+    })
   }
 
   cancelRequest(id){
@@ -636,6 +657,12 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   getLevelsResourceRequest(){
     this.resourceRequestService.getLevels().subscribe(res => {
       this.listLevels = res.result
+    })
+  }
+
+  getProjectUserRoles(){
+    this.resourceRequestService.getProjectUserRoles().subscribe(rs => {
+      this.listProjectUserRoles = rs.result
     })
   }
 
