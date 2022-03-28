@@ -21,7 +21,7 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<PMReport> PMReports { get; set; }
         public DbSet<PMReportProject> PMReportProjects { get; set; }
         public DbSet<PMReportProjectIssue> PMReportProjectIssues { get; set; }
-        public DbSet<Project> Projects { get; set; }
+        public DbSet<Projectuser> Projects { get; set; }
         public DbSet<ProjectFile> ProjectFiles { get; set; }
         public DbSet<ProjectCheckList> ProjectCheckLists { get; set; }
         public DbSet<ProjectMilestone> ProjectMilestones { get; set; }

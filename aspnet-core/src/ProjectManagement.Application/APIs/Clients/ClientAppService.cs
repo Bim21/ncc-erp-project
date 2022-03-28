@@ -88,7 +88,7 @@ namespace ProjectManagement.APIs.Clients
         [AbpAuthorize(PermissionNames.Admin_Client_Delete)]
         public async Task Delete(long clientId)
         {
-            var hasProject = await WorkScope.GetAll<Project>().AnyAsync(x => x.ClientId == clientId);
+            var hasProject = await WorkScope.GetAll<Projectuser>().AnyAsync(x => x.ClientId == clientId);
             if (hasProject)
                 throw new UserFriendlyException("Client already has a project !");
 

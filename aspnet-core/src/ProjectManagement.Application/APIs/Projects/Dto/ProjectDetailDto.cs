@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ProjectManagement.APIs.Projects.Dto
 {
-    [AutoMapTo(typeof(Project))]
+    [AutoMapTo(typeof(Projectuser))]
     public class ProjectDetailDto
     {
         public long ProjectId { get; set; }

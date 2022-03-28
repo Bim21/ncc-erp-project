@@ -30,7 +30,7 @@ namespace ProjectManagement.APIs.AuditSessions
                 throw new UserFriendlyException("Start Time can't be greater than End Time.");
             }
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditSession>(input));
-            var activeProject = await WorkScope.GetAll<Project>()
+            var activeProject = await WorkScope.GetAll<Projectuser>()
                                 .Where(x => x.Status != ProjectStatus.Closed )
                                 .ToListAsync();
             //auto thêm các project active
@@ -49,7 +49,7 @@ namespace ProjectManagement.APIs.AuditSessions
         [AbpAuthorize(PermissionNames.SaoDo_AuditSession_AddAuditResult)]
         public async Task<List<AuditResultDto>> AddManyAuditResult(List<long> projectIds, long auditSessionId)
         {
-            var query = await WorkScope.GetAll<Project>()
+            var query = await WorkScope.GetAll<Projectuser>()
                         .Where(x => projectIds.Contains(x.Id))
                         .Select(x => new AuditResultDto
                         {

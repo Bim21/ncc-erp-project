@@ -58,7 +58,7 @@ namespace ProjectManagement.APIs.Projects
             {
                 input.FilterItems.Remove(filterPmId);
             }
-            var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
+            var query = from p in WorkScope.GetAll<Projectuser>().Include(x => x.Currency)
                         .Where(x => isViewAll || x.PMId == AbpSession.UserId.Value)
                         .Where(x => x.ProjectType != ProjectType.TRAINING && x.ProjectType != ProjectType.PRODUCT)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
@@ -100,7 +100,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<ProjectInfoDto>> GetAllProjectInfo()
         {
-            var query = WorkScope.GetAll<Project>()
+            var query = WorkScope.GetAll<Projectuser>()
                 .Select(x => new ProjectInfoDto
                 {
                     ProjectId = x.Id,
@@ -114,7 +114,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAll()
         {
-            var query = WorkScope.GetAll<Project>()
+            var query = WorkScope.GetAll<Projectuser>()
                 .Include(x => x.Currency)
                 //.Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
@@ -142,7 +142,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<GetProjectDto> Get(long projectId)
         {
-            var query = WorkScope.GetAll<Project>().Include(x => x.Currency).Where(x => x.Id == projectId)
+            var query = WorkScope.GetAll<Projectuser>().Include(x => x.Currency).Where(x => x.Id == projectId)
                                 .Select(x => new GetProjectDto
                                 {
                                     Id = x.Id,
@@ -176,7 +176,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewProjectInfor)]
         public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
         {
-            return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
+            return await WorkScope.GetAll<Projectuser>().Where(x => x.Id == projectId)
                               .Select(x => new ProjectDetailDto
                               {
                                   ProjectId = x.Id,
@@ -193,9 +193,9 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_UpdateProjectDetail)]
         public async Task<ProjectDetailDto> UpdateProjectDetail(ProjectDetailDto input)
         {
-            var project = await WorkScope.GetAsync<Project>(input.ProjectId);
+            var project = await WorkScope.GetAsync<Projectuser>(input.ProjectId);
 
-            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDetailDto, Project>(input, project));
+            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDetailDto, Projectuser>(input, project));
             return input;
         }
 
@@ -236,7 +236,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
         public async Task<string> Create(ProjectDto input)
         {
-            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
+            var isExist = await WorkScope.GetAll<Projectuser>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
 
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
@@ -246,7 +246,7 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
 
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Projectuser>(input));
 
             var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
                                 .Where(x => x.ProjectType == input.ProjectType)
@@ -284,10 +284,10 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
         public async Task<ProjectDto> Update(ProjectDto input)
         {
-            var allproject = await WorkScope.GetAll<Project>().Select(x => x.Id).ToListAsync();
-            var project = await WorkScope.GetAsync<Project>(input.Id);
+            var allproject = await WorkScope.GetAll<Projectuser>().Select(x => x.Id).ToListAsync();
+            var project = await WorkScope.GetAsync<Projectuser>(input.Id);
 
-            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
+            var isExist = await WorkScope.GetAll<Projectuser>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
 
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
@@ -324,7 +324,7 @@ namespace ProjectManagement.APIs.Projects
                 }
 
             }
-            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
+            await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Projectuser>(input, project));
             return input;
         }
 
@@ -332,7 +332,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_Delete)]
         public async Task Delete(long projectID)
         {
-            var project = await WorkScope.GetAsync<Project>(projectID);
+            var project = await WorkScope.GetAsync<Projectuser>(projectID);
 
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.ProjectId == projectID);
             if (timesheetProject)
@@ -365,7 +365,7 @@ namespace ProjectManagement.APIs.Projects
             {
                 input.FilterItems.Remove(filterPmId);
             }
-            var query = from p in WorkScope.GetAll<Project>().Include(x => x.Currency)
+            var query = from p in WorkScope.GetAll<Projectuser>().Include(x => x.Currency)
                         .Where(x => x.ProjectType == ProjectType.TRAINING)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
@@ -397,7 +397,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
         public async Task<string> CreateTrainingProject(TrainingProjectDto input)
         {
-            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.Id == input.Id);
+            var isExist = await WorkScope.GetAll<Projectuser>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.Id == input.Id);
 
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
@@ -407,7 +407,7 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
             input.ProjectType = ProjectType.TRAINING;
-            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
+            input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Projectuser>(input));
 
             var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
                                 .Where(x => x.ProjectType == ProjectType.TRAINING)
@@ -456,9 +456,9 @@ namespace ProjectManagement.APIs.Projects
         public async Task<TrainingProjectDto> UpdateTrainingProject(TrainingProjectDto input)
         {
             input.ProjectType = ProjectType.TRAINING;
-            var project = await WorkScope.GetAsync<Project>(input.Id);
+            var project = await WorkScope.GetAsync<Projectuser>(input.Id);
 
-            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
+            var isExist = await WorkScope.GetAll<Projectuser>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
 
             if (isExist)
                 throw new UserFriendlyException("Name or Code already exist !");
@@ -467,14 +467,14 @@ namespace ProjectManagement.APIs.Projects
             {
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
-            await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Project>(input, project));
+            await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Projectuser>(input, project));
             return input;
         }
         [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<GetTrainingProjectDto> GetDetailTrainingProject(long projectId)
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.TRAINING)
+            var query = WorkScope.GetAll<Projectuser>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.TRAINING)
                                 .Select(x => new GetTrainingProjectDto
                                 {
                                     Id = x.Id,
@@ -513,7 +513,7 @@ namespace ProjectManagement.APIs.Projects
             {
                 input.FilterItems.Remove(filterPmId);
             }
-            var query = from p in WorkScope.GetAll<Project>()
+            var query = from p in WorkScope.GetAll<Projectuser>()
                         .Where(x => x.ProjectType == ProjectType.PRODUCT)
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
@@ -544,7 +544,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<ProductProjectDto> GetDetailProductProject(long projectId)
         {
-            var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.PRODUCT)
+            var query = WorkScope.GetAll<Projectuser>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.PRODUCT)
                                 .Select(x => new ProductProjectDto
                                 {
                                     Id = x.Id,

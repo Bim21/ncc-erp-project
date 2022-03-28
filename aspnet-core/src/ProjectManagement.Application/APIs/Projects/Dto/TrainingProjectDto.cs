@@ -8,7 +8,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Projects.Dto
 {
-    [AutoMapTo(typeof(Entities.Project))]
+    [AutoMapTo(typeof(Entities.Projectuser))]
     public class TrainingProjectDto : Entity<long>
     {
         public string Name { get; set; }

@@ -782,7 +782,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
     // var chartDom = document.getElementById(user.userId.toString());
     // var myChart = echarts.init(chartDom);
-
+    let hasOtValue = chartData.overTimeHours.some(item => item > 0)
     setTimeout(() => {
 
       let chartDom = document.getElementById('user' + user.userId);
@@ -816,10 +816,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             symbolSize: 2,
             data: chartData.normalWoringHours,
             type: 'line',
-            name: 'timesheet',
+            name: 'normal',
+          },
+          {
+            showSymbol: false,
+            symbolSize: 2,
+            data: hasOtValue ? chartData.overTimeHours : [],
+            type: 'line',
+            name: 'OT',
+            lineStyle: {color: 'red'}
           }
         ]
       };
+   
       option && myChart.setOption(option);
 
 

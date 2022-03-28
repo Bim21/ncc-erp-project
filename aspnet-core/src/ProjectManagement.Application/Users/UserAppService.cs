@@ -410,7 +410,7 @@ namespace ProjectManagement.Users
         [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
         public override async Task DeleteAsync(EntityDto<long> input)
         {
-            var hasProject = await _workScope.GetAll<Project>().AnyAsync(x => x.PMId == input.Id);
+            var hasProject = await _workScope.GetAll<Projectuser>().AnyAsync(x => x.PMId == input.Id);
             if (hasProject)
                 throw new UserFriendlyException("User is a project manager !");
 

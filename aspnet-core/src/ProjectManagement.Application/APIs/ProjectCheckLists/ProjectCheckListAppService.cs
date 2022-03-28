@@ -56,7 +56,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
         [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_AddByProjectType)]
         public async Task<List<ProjectCheckListDto>> AddByProjectType(ProjectType input)
         {
-            var projectChecklists = await (from p in WorkScope.GetAll<Project>()
+            var projectChecklists = await (from p in WorkScope.GetAll<Projectuser>()
                                              .Where(x => x.ProjectType == input && x.Status != ProjectStatus.Closed && x.Status != ProjectStatus.Potential)
                                            from ci in WorkScope.GetAll<CheckListItem>()
                                            select new ProjectCheckListDto
@@ -75,7 +75,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
         [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_GetCheckListItemByProject)]
         public async Task<List<CheckListItemByProjectDto>> GetCheckListItemByProject(long projectId, long? auditSessionId)
         {// lấy về checklist item thuộc project thuộc đợt
-            var isExistProject = await WorkScope.GetAsync<Project>(projectId);
+            var isExistProject = await WorkScope.GetAsync<Projectuser>(projectId);
             if (auditSessionId.HasValue)
             {
                 var isExistAuditSession = await WorkScope.GetAsync<AuditSession>(auditSessionId.Value);

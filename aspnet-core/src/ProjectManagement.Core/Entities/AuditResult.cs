@@ -15,7 +15,7 @@ namespace ProjectManagement.Entities
         public long AuditSessionId { get; set; }
 
         [ForeignKey(nameof(ProjectId))]
-        public Project Project { get; set; }
+        public Projectuser Project { get; set; }
         public long ProjectId { get; set; }
         [MaxLength(10000)]
         public string Note { get; set; }

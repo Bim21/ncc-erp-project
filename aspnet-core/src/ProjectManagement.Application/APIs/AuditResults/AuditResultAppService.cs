@@ -23,7 +23,7 @@ namespace ProjectManagement.APIs.AuditResults
             {
                 throw new UserFriendlyException("Audit Result already exists.");
             }
-            input.PMId = WorkScope.GetAsync<Project>(input.ProjectId).Result.PMId;
+            input.PMId = WorkScope.GetAsync<Projectuser>(input.ProjectId).Result.PMId;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditResult>(input));
             return input;
         }

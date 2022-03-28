@@ -18,7 +18,7 @@ namespace ProjectManagement.Entities
         public long UserId { get; set; }
 
         [ForeignKey(nameof(ProjectId))]
-        public Project Project { get; set; }
+        public Projectuser Project { get; set; }
         public long ProjectId { get; set; }
 
         public ProjectUserRole ProjectRole { get; set; }

@@ -19,7 +19,7 @@ namespace ProjectManagement.Entities
         public PMReport PMReport { get; set; }
         public long ProjectId { get; set; }
         [ForeignKey(nameof(ProjectId))]
-        public Project Project { get; set; }
+        public Projectuser Project { get; set; }
         public PMReportProjectStatus Status { get; set; }
         public DateTime? TimeSendReport { get; set; }
         public ProjectHealth ProjectHealth { get; set; }

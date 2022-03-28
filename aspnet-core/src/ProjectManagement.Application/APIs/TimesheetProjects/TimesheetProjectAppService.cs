@@ -199,7 +199,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             try
             {
                 var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplate.xlsx");
-                var listProject = await WorkScope.GetAll<Project>().Where(x => invoiceExcelDto.ProjectId.Contains(x.Id)).Include(x => x.Client).Include(x=>x.Currency).ToListAsync();
+                var listProject = await WorkScope.GetAll<Projectuser>().Where(x => invoiceExcelDto.ProjectId.Contains(x.Id)).Include(x => x.Client).Include(x=>x.Currency).ToListAsync();
                 var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
                 var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
 
@@ -347,7 +347,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<List<GetProjectDto>> GetAllProjectForDropDown(long timesheetId)
         {
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId).ToListAsync();
-            var query = WorkScope.GetAll<Project>().Where(x => !timesheetProject.Contains(x.Id))
+            var query = WorkScope.GetAll<Projectuser>().Where(x => !timesheetProject.Contains(x.Id))
                 .Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
@@ -423,7 +423,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
         {
             var billInfomation = new StringBuilder();
-            var projectType = await WorkScope.GetAsync<Project>(input.ProjectId);
+            var projectType = await WorkScope.GetAsync<Projectuser>(input.ProjectId);
             if (projectType.ProjectType == ProjectType.TRAINING) throw new UserFriendlyException("The training project is not suitable !");
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
             if (!timesheet.IsActive)
@@ -459,7 +459,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<List<ProjectDto>> GetAllRemainProjectInTimesheet(long timesheetId)
         {
             var timesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId);
-            var query = WorkScope.GetAll<Project>().Where(x => !timesheetProjects.Contains(x.Id) && x.IsCharge == true && x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+            var query = WorkScope.GetAll<Projectuser>().Where(x => !timesheetProjects.Contains(x.Id) && x.IsCharge == true && x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
                                 .Select(x => new ProjectDto
                                 {
                                     Id = x.Id,
@@ -640,7 +640,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [HttpGet]
         public async Task<IActionResult> GetAllPM()
         {
-            var pms = await WorkScope.GetAll<Project>()
+            var pms = await WorkScope.GetAll<Projectuser>()
                 .Select(u => new
                 {
                     Id = u.PMId,

@@ -391,6 +391,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
           if (rs) {
             this.getProjectUser()
             this.getPlannedtUser()
+            this.getResourceRequestList()
           }
         })
       })
@@ -535,6 +536,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       if(!rs) return
       if(rs.type == 'delete'){
         this.getResourceRequestList()
+        this.getPlannedtUser()
       }
       else{
         let index = this.resourceRequestList.findIndex(x => x.id == rs.data.resourceRequestId)
@@ -560,6 +562,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
             if(res.success){
               abp.notify.success('Cancel Request Success!')
               this.getResourceRequestList()
+              this.getPlannedtUser()
             }
             else{
               abp.notify.error(res.result)

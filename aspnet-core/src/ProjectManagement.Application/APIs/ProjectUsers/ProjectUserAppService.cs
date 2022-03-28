@@ -308,7 +308,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                     await WorkScope.UpdateAsync(item);
                 }
             }
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
+            var project = await WorkScope.GetAll<Projectuser>().FirstOrDefaultAsync(x => x.Id == model.ProjectId);
             if (project == null)
                 throw new UserFriendlyException("Project doesn't exist");
             var pm = await WorkScope.GetAsync<User>(AbpSession.UserId.Value);
