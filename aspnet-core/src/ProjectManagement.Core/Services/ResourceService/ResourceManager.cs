@@ -311,11 +311,12 @@ namespace ProjectManagement.Services.ResourceManager
 
                 var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
                  .Where(s => s.Id == resourceRequest.Id)
-                 .ToListAsync();
-
+                 .FirstOrDefaultAsync();
+                 
                 StringBuilder setDoneKomuMessage = new StringBuilder();
-                setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set done");
-                setDoneKomuMessage.AppendLine($"```{listRequestDto.KomuInfo()}");
+                setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set DONE for request:");
+                setDoneKomuMessage.AppendLine($"{listRequestDto.KomuInfo()} ");
+                setDoneKomuMessage.AppendLine("");
 
                 await SendKomu(setDoneKomuMessage, project.ProjectCode);
             }
