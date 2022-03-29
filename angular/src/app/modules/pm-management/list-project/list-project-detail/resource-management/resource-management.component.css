@@ -52,3 +52,19 @@ span {
 :ng-deep .mat-menu-panel {
   height: fit-content;
 }
+
+.request-table .status-column{
+  width: 90px;
+}
+.request-table .date-column{
+  width: 110px;
+}
+.request-table .skill-column{
+  width: 180px;
+}
+.table-note{
+  white-space: pre-line;
+  word-wrap: break-word;
+  text-align: left;
+}
+

@@ -18,6 +18,8 @@ using ProjectManagement.Entities;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceRequestService;
+using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Utils;
 using System;
@@ -32,16 +34,18 @@ namespace ProjectManagement.Services.ResourceManager
     public class ResourceManager : ApplicationService
     {
         private readonly IWorkScope _workScope;
-        private readonly IAbpSession _abpSession;
         private readonly KomuService _komuService;
         private readonly UserManager _userManager;
+        private readonly ResourceRequestManager _resourceRequestManager;
 
-        public ResourceManager(IWorkScope workScope, IAbpSession abpSession, KomuService komuService, UserManager userManager)
+        public ResourceManager(IWorkScope workScope, IAbpSession abpSession,
+            ResourceRequestManager resourceRequestManager,
+            KomuService komuService, UserManager userManager)
         {
             _workScope = workScope;
-            _abpSession = abpSession;
             _komuService = komuService;
             _userManager = userManager;
+            _resourceRequestManager = resourceRequestManager;
         }
 
         public IQueryable<ProjectOfUserDto> QueryProjectsOfUser()
@@ -276,6 +280,7 @@ namespace ProjectManagement.Services.ResourceManager
         {
             var confirmPUExt = await GetPUExt(projectUserId);
 
+
             if (confirmPUExt == null || confirmPUExt.PU == null)
             {
                 throw new UserFriendlyException("Not found ProjectUser with Id " + projectUserId);
@@ -297,6 +302,24 @@ namespace ProjectManagement.Services.ResourceManager
             var project = await GetKomuProjectInfo(futurePU.ProjectId);
             var activeReportId = await GetActiveReportId();
             var sessionUser = await getSessionKomuUserInfo();
+            var resourceRequest = _workScope.GetAll<ResourceRequest>()
+               .Where(s => s.Id == futurePU.ResourceRequestId)
+               .FirstOrDefault();
+
+            if (resourceRequest != null)
+            {
+                resourceRequest.Status = ResourceRequestStatus.DONE;
+                resourceRequest.TimeDone = DateTimeUtils.GetNow();
+                await _workScope.UpdateAsync(resourceRequest);
+
+                var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
+                 .Where(s => s.Id == resourceRequest.Id)
+                 .FirstOrDefaultAsync();
+
+                await nofityKomuDoneResourceRequest(listRequestDto, sessionUser, project);
+            }
+
+          
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool);
 
             futurePU.Status = ProjectUserStatus.Present;
@@ -310,6 +333,17 @@ namespace ProjectManagement.Services.ResourceManager
             return confirmPUExt;
 
         }
+
+        public async Task nofityKomuDoneResourceRequest(GetResourceRequestDto listRequestDto, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
+        {
+            StringBuilder setDoneKomuMessage = new StringBuilder();
+            setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set DONE for request:");
+            setDoneKomuMessage.AppendLine($"{listRequestDto.KomuInfo()} ");
+            setDoneKomuMessage.AppendLine("");
+
+            await SendKomu(setDoneKomuMessage, project.ProjectCode);
+        }
+
 
         public async Task<ProjectUser> ValidateUserWorkingInThisProject(long userId, long projectId)
         {
@@ -574,6 +608,7 @@ namespace ProjectManagement.Services.ResourceManager
                          UserId = s.UserId,
                          UserName = s.User.UserName
                      }
+                     
                  })
                  .FirstOrDefaultAsync();
         }
@@ -637,7 +672,7 @@ namespace ProjectManagement.Services.ResourceManager
                            EmailAddress = x.EmailAddress,
                            Branch = x.Branch,
                            UserLevel = x.UserLevel,
-                           AvatarPath = "/avatars/" + x.AvatarPath,
+                           AvatarPath = x.AvatarPath,
                            StarRate = x.StarRate,
                            UserSkills = x.UserSkills.Select(s => new UserSkillDto
                            {
@@ -761,7 +796,7 @@ namespace ProjectManagement.Services.ResourceManager
                            EmailAddress = u.EmailAddress,
                            Branch = u.Branch,
                            UserLevel = u.UserLevel,
-                           AvatarPath = "/avatars/" + u.AvatarPath,
+                           AvatarPath = u.AvatarPath,
                            StarRate = u.StarRate,
                            PoolNote = u.PoolNote,
                            UserSkills = u.UserSkills.Select(s => new UserSkillDto
