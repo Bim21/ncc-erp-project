@@ -80,9 +80,9 @@
                         </p>
                         <mat-form-field class="ml-1" style="width:100%" appearance="outline"
                                     *ngIf="isEditingNote">
-                                    <textarea #generalNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                    <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                         style="padding-bottom: 20px;" rows="2" id="message" matInput
-                                        [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
+                                        [(ngModel)]="generalNote" name="notePM" placeholder="General note">
                                 </textarea>
                         </mat-form-field>
                     </div>
@@ -107,9 +107,9 @@
                         </p>
                         <mat-form-field class="ml-1" style="width:100%" appearance="outline"
                         *ngIf="isEditingAutomationNote">
-                        <textarea #autoNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                             style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
-                            name="autoNotePM" placeholder="Automation note">{{autoNoteFocus.focus()}}
+                            name="autoNotePM" placeholder="Automation note">
                         </textarea>
                     </mat-form-field>
                     </div>
