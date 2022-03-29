@@ -310,12 +310,12 @@ namespace ProjectManagement.Services.ResourceManager
                 await _workScope.UpdateAsync(resourceRequest);
 
                 var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
-                 .Where(s => createdRequestIds.Contains(s.Id))
+                 .Where(s => s.Id == resourceRequest.Id)
                  .ToListAsync();
 
                 StringBuilder setDoneKomuMessage = new StringBuilder();
-                setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} s");
-                setDoneKomuMessage.AppendLine($"```{requestDto.KomuInfo()}");
+                setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set done");
+                setDoneKomuMessage.AppendLine($"```{listRequestDto.KomuInfo()}");
 
                 await SendKomu(setDoneKomuMessage, project.ProjectCode);
             }
