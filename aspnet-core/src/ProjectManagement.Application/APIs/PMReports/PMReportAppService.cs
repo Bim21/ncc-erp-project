@@ -98,7 +98,7 @@ namespace ProjectManagement.APIs.PMReports
             var listProjectCode = pmReportProjects
                 .Select(pro=>pro.projectCode).ToList();
 
-            var listTimsheetByProjectCode = await _timesheetService.getTimesheetByListProjectCode(listProjectCode, startTime, endTime);
+            var listTimsheetByProjectCode = await _timesheetService.GetTimesheetByListProjectCode(listProjectCode, startTime, endTime);
             
             Dictionary<String, TotalWorkingTimeOfWeekDto> mapProjectCodeToTimesheet = listTimsheetByProjectCode
                 .GroupBy(s => s.ProjectCode)

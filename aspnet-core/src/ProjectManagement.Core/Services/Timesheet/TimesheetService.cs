@@ -28,7 +28,7 @@ namespace ProjectManagement.Services.Timesheet
             this.logger = logger;
         }
 
-        public async Task<string> createCustomer(string name, string code, string address)
+        public async Task<string> CreateCustomer(string name, string code, string address)
         {
             var item = new
             {
@@ -38,7 +38,7 @@ namespace ProjectManagement.Services.Timesheet
             };
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateCustomer", item);
         }
-        public async Task<string> createProject(string name, string code,
+        public async Task<string> CreateProject(string name, string code,
                             DateTime startTime, DateTime? endTime, string customerCode, ProjectType projectType, string emailPM)
         {
             var item = new
@@ -54,15 +54,19 @@ namespace ProjectManagement.Services.Timesheet
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateProject", item);
         }
 
-        public async Task<string> updateProject(string code, string EmailPM, ProjectStatus status)
+        public async Task<string> ChangePmOfProject(string code, string EmailPM)
         {
             var item = new
             {
                 Code = code,
-                EmailPM = EmailPM,
-                Status = status,
+                EmailPM = EmailPM
             };
-            return await PostAsync<string>($"/api/services/app/ProjectManagement/UpdateProject", item);
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/ChangePmOfProject", item);
+        }
+
+        public async Task<string> CloseProject(string code)
+        {            
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/CloseProject?code=" + code, null);
         }
 
 
@@ -71,7 +75,7 @@ namespace ProjectManagement.Services.Timesheet
             return await GetAsync<TotalWorkingTimeOfWeekDto>($"api/services/app/ProjectManagement/GetTotalWorkingTime?projectCode={projectCode}&startDate={startDate.ToString("yyyy/MM/dd")}&endDate={endDate.ToString("yyyy/MM/dd")}");
         }
 
-        public async Task<List<TotalWorkingTimeOfWeekDto>> getTimesheetByListProjectCode(List<string> listProjectCode, DateTime startDate, DateTime endDate)
+        public async Task<List<TotalWorkingTimeOfWeekDto>> GetTimesheetByListProjectCode(List<string> listProjectCode, DateTime startDate, DateTime endDate)
         {
             return await PostAsync<List<TotalWorkingTimeOfWeekDto>>($"api/services/app/ProjectManagement/GetTimesheetByListProjectCode" +
                 $"?startDate={startDate.ToString("yyyy/MM/dd")}" +
@@ -87,27 +91,28 @@ namespace ProjectManagement.Services.Timesheet
                 httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri));
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretCode));
                 HttpResponseMessage response = new HttpResponseMessage();
-                try 
-                { 
+                try
+                {
                     response = await httpClient.GetAsync(Url);
-                    logger.LogInformation($"Get: {Url} responseCode: {response.StatusCode}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        logger.LogInformation($"Get: {Url} response: { responseContent}");
+                        JObject res = JObject.Parse(responseContent);
+                        var rs = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res["result"]));
+                        return rs;
+                    }
+                    else
+                    {
+                        return default;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    throw new UserFriendlyException($"Khong the ket noi Timesheet {ex.Message}");
-                }
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    logger.LogInformation($"Get: {Url} response: { responseContent}");
-                    JObject res = JObject.Parse(responseContent);
-                    var rs = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res["result"]));
-                    return rs;
-                }
-                else
-                {
+                    logger.LogError($"Exception in GetAsync() url = {Url}\nError = {ex.Message}");
                     return default;
                 }
+                
             }
         }
         private async Task<T> PostAsync<T>(string Url, object input)
@@ -119,23 +124,27 @@ namespace ProjectManagement.Services.Timesheet
                 httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretCode));
                 var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
                 HttpResponseMessage response = new HttpResponseMessage();
-                try { response = await httpClient.PostAsync(Url, contentString); }
+                try { 
+                    response = await httpClient.PostAsync(Url, contentString);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        logger.LogInformation($"Post: {Url} response: { responseContent}");
+                        JObject res = JObject.Parse(responseContent);
+                        var rs = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res["result"]));
+                        return rs;
+                    }
+                    else
+                    {
+                        return default;
+                    }
+                }
                 catch (Exception ex)
                 {
-                    throw new UserFriendlyException("Khong the ket noi Timesheet");
-                }
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    logger.LogInformation($"Post: {Url} response: { responseContent}");
-                    JObject res = JObject.Parse(responseContent);
-                    var rs = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res["result"]));
-                    return rs;
-                }
-                else
-                {
+                   logger.LogError($"Exception in PostAsync() url = {Url}, input={JObject.FromObject(input).ToString()}\nError = {ex.Message}");
                     return default;
                 }
+                
             }
         }
     }

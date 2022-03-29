@@ -27,6 +27,9 @@ using Abp.Authorization.Users;
 using ProjectManagement.APIs.ResourceRequests.Dto;
 using Abp.Configuration;
 using ProjectManagement.Configuration;
+using Abp.Application.Services.Dto;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -34,19 +37,23 @@ namespace ProjectManagement.APIs.Projects
     public class ProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IProjectUserAppService _projectUserAppService;
-        private readonly RoleManager _roleManager;
+        private readonly ResourceManager _resourceManager;
         private readonly TimesheetService _timesheetService;
-        private readonly IRepository<UserRole, long> _userRoleRepository;
         private readonly ISettingManager _settingManager;
-        public ProjectAppService(IProjectUserAppService projectUserAppService, TimesheetService timesheetService, IRepository<UserRole, long> userRoleRepository,
-            RoleManager roleManager, ISettingManager settingManager)
+        private readonly IRepository<UserRole, long> _userRoleRepository;
+        public ProjectAppService(IProjectUserAppService projectUserAppService,
+            TimesheetService timesheetService,
+            IRepository<UserRole, long> userRoleRepository,
+            ResourceManager resourceManager,
+            ISettingManager settingManager)
         {
             _projectUserAppService = projectUserAppService;
             _timesheetService = timesheetService;
             _userRoleRepository = userRoleRepository;
-            _roleManager = roleManager;
+            _resourceManager = resourceManager;
             _settingManager = settingManager;
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
@@ -217,43 +224,61 @@ namespace ProjectManagement.APIs.Projects
 
         }
 
-        private async Task<string> UpdateRoleProject(long PmId)
+        private async Task AddRolePMForUser(long userId)
         {
             //Set role PM for user when user set PM of project
-            var userHasRole = await UserHasRole(PmId, StaticRoleNames.Tenants.PM);
-            if (!userHasRole)
+            var userHasRolePM = await UserHasRole(userId, StaticRoleNames.Tenants.PM);
+            if (!userHasRolePM)
             {
-                var roleId = _roleManager.GetRoleByNameAsync(StaticRoleNames.Tenants.PM).Result.Id;
+                var roleId = await WorkScope.GetAll<Role, int>()
+                    .Where(s => s.Name == StaticRoleNames.Tenants.PM)
+                    .Select(s => s.Id)
+                    .FirstOrDefaultAsync();
+
                 WorkScope.Insert<UserRole>(new UserRole
                 {
                     RoleId = roleId,
-                    UserId = PmId
+                    UserId = userId
                 });
             }
+        }
 
-            return null;
+        private async Task<string> getEmailAddressById(long userId)
+        {
+            return await WorkScope.GetAll<User>()
+                .Where(x => x.Id == userId).Select(x => x.EmailAddress)
+                .FirstOrDefaultAsync();
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
         private async Task<string> CreateProjectInTimesheetTool(ProjectDto input)
         {
-            var customerCode = await WorkScope.GetAll<Client>().Where(x => x.Id == input.ClientId).Select(x => x.Code).FirstOrDefaultAsync();
-            var emailPM = await WorkScope.GetAll<User>().Where(x => x.Id == input.PmId).Select(x => x.EmailAddress).FirstOrDefaultAsync(); ;
-            var createProject = await _timesheetService.createProject(input.Name, input.Code, input.StartTime, input.EndTime,
+            if (!(await IsEnableAutoCreateUpdateToTimsheetTool()))
+            {
+                Logger.Info("CreateProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
+                return null;
+            }
+            var customerCode = await WorkScope.GetAll<Client>()
+                .Where(x => x.Id == input.ClientId).Select(x => x.Code)
+                .FirstOrDefaultAsync();
+
+            var emailPM = await getEmailAddressById(input.PmId);
+
+            return await _timesheetService.CreateProject(input.Name, input.Code, input.StartTime, input.EndTime,
                                                                        customerCode, input.ProjectType, emailPM);
-            return createProject;
         }
 
-
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
-        private async Task<string> UpdateProjectTimesheetTool(string code, long PmId, ProjectStatus status)
+        private async Task<string> ChangePmOfProjectTimesheetTool(string code, long PmId)
         {
-            var emailPM = await WorkScope.GetAll<User>().Where(x => x.Id == PmId).Select(x => x.EmailAddress).FirstOrDefaultAsync();
+            if (!(await IsEnableAutoCreateUpdateToTimsheetTool()))
+            {
+                Logger.Info("ChangePmOfProjectTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
+                return "update-only-project-tool";
+            }
+            var emailPM = await getEmailAddressById(PmId);
 
-            var updateProject = await _timesheetService.updateProject(code, emailPM, status);
-            return updateProject;
+            return await _timesheetService.ChangePmOfProject(code, emailPM);
         }
 
 
@@ -302,21 +327,56 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-            await UpdateRoleProject(input.PmId);
+            await AddRolePMForUser(input.PmId);
 
             return await CreateProjectInTimesheetTool(input);
         }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.PmManager_Project_Close)]
+        public async Task<string> CloseProject(EntityDto<long> input)
+        {
+            var project = await WorkScope.GetAsync<Project>(input.Id);
+            if (project.Status == ProjectStatus.Closed)
+            {
+                throw new UserFriendlyException($"Project {project.Name} is already closed");
+            }
+            project.Status = ProjectStatus.Closed;
+
+            await WorkScope.UpdateAsync(ObjectMapper.Map<Project>(project));
+
+            await _resourceManager.ReleaseAllWorkingUserFromProject(project.Id);
+
+            var isEnableAutoCreateUpdateToTimsheetTool = await IsEnableAutoCreateUpdateToTimsheetTool();
+            if (isEnableAutoCreateUpdateToTimsheetTool)
+            {
+                return await _timesheetService.CloseProject(project.Code);
+            }
+            else
+            {
+                Logger.Info("CloseProject() isEnableAutoCreateUpdateToTimsheetTool=" + isEnableAutoCreateUpdateToTimsheetTool);
+                return "update-only-project-tool";
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<List<UserOfProjectDto>> GetAllWorkingUserFromProject(long projectId)
+        {
+            return await _resourceManager.GetAllWorkingUserFromProject(projectId);
+        }
+
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
         public async Task<string> Update(ProjectDto input)
         {
-            var allproject = await WorkScope.GetAll<Project>().Select(x => x.Id).ToListAsync();
             var project = await WorkScope.GetAsync<Project>(input.Id);
 
-            var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
+            var isDuplicateNameOrCode = await WorkScope.GetAll<Project>()
+                .AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
 
-            if (isExist)
+            if (isDuplicateNameOrCode)
                 throw new UserFriendlyException("Name or Code already exist !");
 
             if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
@@ -324,72 +384,26 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
 
-
             if (input.Status == ProjectStatus.Closed)
             {
-                var getProjectUserbyId = await _projectUserAppService.GetAllByProject(input.Id, false);
-                foreach (var item in getProjectUserbyId)
-                {
-                    if (item.Status == "Present")
-                    {
-                        ProjectUserRole role;
-                        Enum.TryParse(item.ProjectRole, out role);
-                        var projectUser = new ProjectUserDto()
-                        {
-                            UserId = item.UserId,
-                            ProjectId = item.ProjectId,
-                            ProjectRole = role,
-                            AllocatePercentage = 0,
-                            StartTime = DateTime.Now,
-                            Status = ProjectUserStatus.Present,
-                            IsExpense = true,
-                            PMReportId = item.PMReportId,
-                            IsFutureActive = true,
-                        };
-                        await _projectUserAppService.Create(projectUser);
-                    }
-                }
-
+                throw new UserFriendlyException("Please click button Close to close project");
             }
 
-            ProjectStatus statusTemp = project.Status;
-            long pmIdTemp = project.PMId;
-
-
+            long pmIdCurrent = project.PMId;
+            string codeCurrent = project.Code;
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
-            await UpdateRoleProject(input.PmId);
-            var checkUpdateProjectTimesheetTool = await CheckUpdateProjectTimesheetTool(input.Status, statusTemp, input.PmId, pmIdTemp);
-            if (checkUpdateProjectTimesheetTool)
-            {
-                return await UpdateProjectTimesheetTool(input.Code, input.PmId, input.Status);
-            }
 
+            if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
+            {
+                return await ChangePmOfProjectTimesheetTool(project.Code, input.PmId);
+            }
             return "update-only-project-tool";
         }
 
-        private async Task<bool> CheckUpdateProjectTimesheetTool(ProjectStatus statusChange, ProjectStatus statusTemp, long? PmIdChange, long? pmIdTemp)
+        private async Task<bool> IsEnableAutoCreateUpdateToTimsheetTool()
         {
-            var updateProject = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.UpdateProject);
-
-            if (updateProject == "true")
-            {
-                if (PmIdChange == default || PmIdChange == null)
-                {
-                    if (statusChange != ProjectStatus.Potential && statusChange != statusTemp)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (statusChange != ProjectStatus.Potential && (statusChange != statusTemp || PmIdChange != pmIdTemp))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            var dbSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool);
+            return dbSetting == "true";
         }
 
         public class ProjectUpdateStatus
@@ -398,22 +412,6 @@ namespace ProjectManagement.APIs.Projects
 
             public ProjectStatus Status { get; set; }
 
-        }
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
-        public async Task<string> UpdateStatusProject(ProjectUpdateStatus input)
-        {
-            var project = await WorkScope.GetAsync<Project>(input.Id);
-            ProjectStatus statusTemp = project.Status;
-            project.Status = input.Status;
-            await WorkScope.UpdateAsync(ObjectMapper.Map<Project>(project));
-
-            var checkUpdateProjectTimesheetTool = await CheckUpdateProjectTimesheetTool(input.Status, statusTemp, null, null);
-            if (checkUpdateProjectTimesheetTool)
-            {
-                return await UpdateProjectTimesheetTool(project.Code, project.PMId, input.Status);
-            }
-            return "update-only-project-tool";
         }
 
         [HttpDelete]
@@ -538,7 +536,7 @@ namespace ProjectManagement.APIs.Projects
                 EndTime = input.EndTime
             };
 
-            await UpdateRoleProject(input.PmId);
+            await AddRolePMForUser(input.PmId);
 
             return await CreateProjectInTimesheetTool(trainingProject);
         }
@@ -559,20 +557,26 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
 
+            if (input.Status == ProjectStatus.Closed)
+            {
+                throw new UserFriendlyException("Please click button Close to close project");
+            }
 
-            ProjectStatus statusTemp = project.Status;
-            long pmIdTemp = project.PMId;
+            ProjectStatus statusCurrent = project.Status;
+            long pmIdCurrent = project.PMId;
+            string codeCurrent = project.Code;
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Project>(input, project));
-            await UpdateRoleProject(input.PmId);
-    
-            var checkUpdateProjectTimesheetTool = await CheckUpdateProjectTimesheetTool(input.Status, statusTemp, input.PmId, pmIdTemp);
-            if (checkUpdateProjectTimesheetTool)
+            await AddRolePMForUser(input.PmId);
+
+            if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
             {
-                return await UpdateProjectTimesheetTool(input.Code, input.PmId, input.Status);
+                return await ChangePmOfProjectTimesheetTool(project.Code, input.PmId);
             }
             return "update-only-project-tool";
+
         }
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<GetTrainingProjectDto> GetDetailTrainingProject(long projectId)

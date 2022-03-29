@@ -200,13 +200,8 @@
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
                                         </button>
-                                        <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.Closed && permission.isGranted(PmManager_Project_Update)" 
-                                            (click)="updateStatusProject(project)">
-                                            <i class="fas fa-check mr-1"></i>
-                                            <span>{{ "InProgress" | localize }}</span>
-                                        </button>
-                                        <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.InProgress && permission.isGranted(PmManager_Project_Update)" 
-                                            (click)="updateStatusProject(project)">
+                                        <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.InProgress && permission.isGranted(PmManager_Project_Close)" 
+                                            (click)="closeProject(project)">
                                             <i class="fas fa-check mr-1"></i>
                                             <span>{{ "Closed" | localize }}</span>
                                         </button>

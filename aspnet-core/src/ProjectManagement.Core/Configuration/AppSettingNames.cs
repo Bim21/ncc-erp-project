@@ -11,7 +11,7 @@
         public const string FinanceSecretCode = "App.FinanceSecreCode";
         public const string TimesheetUri = "App.TimesheetUri";
         public const string TimesheetSecretCode = "App.TimesheetSecretCode";
-        public const string UpdateProject = "UpdateProject";
+        public const string AutoUpdateProjectInfoToTimesheetTool = "AutoUpdateProjectInfoToTimesheetTool";
         public const string HRMUri = "App.HRMUri";
         public const string HRMSecretCode = "App.HRMSecretCode";
         public const string CanSendDay= "App.CanSendDay";

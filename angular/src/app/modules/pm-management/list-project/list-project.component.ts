@@ -28,6 +28,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
   PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
   PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  PmManager_Project_Close = PERMISSIONS_CONSTANT.PmManager_Project_Close;
   PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
   PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
   PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
@@ -273,46 +274,49 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     this.refresh();
   }
 
-  protected updateStatusProject(project: any): void {
-    let titleConfirm = '';
-    let statusChange = 1;
-    if(project.status == this.APP_ENUM.ProjectStatus.Closed){
-      titleConfirm = "InProgress project: " + project.name + "?";
-      statusChange = this.APP_ENUM.ProjectStatus.InProgress;
+  presentPUs(arr) {
+    if(arr.length == 0){
+      return "";
     }
-    else{
-      titleConfirm = "Closed project: " + project.name + "?";
-      statusChange = this.APP_ENUM.ProjectStatus.Closed;
-    }
+    arr = arr.map((item) => {
+      return `- User ${item.fullName}`;
+    })
+    return `<div style='text-align:left'> And release following resources: <br/> ${arr.join('<br/>')} </div>`
+  }
+
+  protected closeProject(project: any): void {
     let item = {
-      id: project.id,
-      status: statusChange
+      id: project.id    
     }
 
-    abp.message.confirm(
-      titleConfirm,
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.listProjectService.updateStatusProject(item).pipe(catchError(this.listProjectService.handleError)).subscribe((res) => {
-            abp.notify.success("Update status project: " + project.name);
-            if(res.result == "update-only-project-tool"){
-              abp.notify.success("Update status project: "+ project.name);
-            }
-            else if(res.result == null || res.result == ""){
-              abp.message.success(`<p>Update status project name <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-              <p style='color:#28a745'>Update status project name <b>${project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
-             'Update status project result',true);
-            }
-            else{
-              abp.message.error(`<p>Update status project <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-              <p style='color:#dc3545'>${res.result}</p>`, 
-              'Update status project result',true);
-            }
-            this.refresh()
-          });
-        }
-      }
-    );
+    this.listProjectService.getAllWorkingUserFromProject(project.id).pipe(catchError(this.listProjectService.handleError)).subscribe((res) => {
+      let message = this.presentPUs(res.result);
+      abp.message.confirm(
+        `${message}`,
+        `Are your sure close project: ${project.name}?`,
+        (result: boolean) => {
+          if (result) {
+            this.listProjectService.closeProject(item).pipe(catchError(this.listProjectService.handleError)).subscribe((res) => {
+              abp.notify.success("Update status project: " + project.name);
+              if(res.result == "update-only-project-tool"){
+                abp.notify.success("Update status project: "+ project.name);
+              }
+              else if(res.result == null || res.result == ""){
+                abp.message.success(`<p>Update status project name <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+                <p style='color:#28a745'>Update status project name <b>${project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+               'Update status project result',true);
+              }
+              else{
+                abp.message.error(`<p>Update status project <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+                <p style='color:#dc3545'>${res.result}</p>`, 
+                'Update status project result',true);
+              }
+              this.refresh()
+            });
+          }
+        },
+        true
+      );
+    });
   }
 }

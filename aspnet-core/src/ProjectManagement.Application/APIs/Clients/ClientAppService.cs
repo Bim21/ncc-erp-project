@@ -66,7 +66,7 @@ namespace ProjectManagement.APIs.Clients
 
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Client>(input));
 
-            var createCustomer = await _timesheetService.createCustomer(input.Name, input.Code, input.Address);
+            var createCustomer = await _timesheetService.CreateCustomer(input.Name, input.Code, input.Address);
             return createCustomer;
         }
         [HttpPut]
