@@ -1,15 +1,14 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
 using NccCore.Uitls;
-using ProjectManagement.APIs.Skills.Dto;
-using ProjectManagement.Users.Dto;
+
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.APIs.ResourceRequests.Dto
+namespace ProjectManagement.Services.ResourceRequestService.Dto
 {
     public class GetResourceRequestDto : EntityDto<long>
     {
@@ -25,7 +24,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         public string PMNote { get; set; }
         [ApplySearchAttribute]
         public string DMNote { get; set; }
-        public List<SkillDto> Skills { get; set; }
+        public List<ResourceRequestSkillDto> Skills { get; set; }
         public bool IsRecruitmentSend { get; set; }
         public string RecruitmentUrl { get; set; }        
         public PlanUserInfoDto PlanUserInfo { get; set; }
