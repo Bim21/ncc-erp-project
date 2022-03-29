@@ -272,7 +272,7 @@ namespace ProjectManagement.Users
         {
             var user = await _userManager.GetUserByIdAsync(input.UserId);
 
-            if (input.RoleNames != null && !input.RoleNames.IsEmpty())
+            if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
