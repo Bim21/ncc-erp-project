@@ -198,7 +198,7 @@
                                         <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.InProgress && permission.isGranted(PmManager_Project_Close)" 
                                             (click)="closeProject(project)">
                                             <i class="fas fa-check mr-1"></i>
-                                            <span>{{ "Closed" | localize }}</span>
+                                            <span>{{ "Close" | localize }}</span>
                                         </button>
                                     </mat-menu>
                                 </td>
