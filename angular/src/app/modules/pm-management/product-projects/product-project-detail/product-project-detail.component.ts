@@ -19,6 +19,8 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
 
   public currentUrl: string= '';
   requestId: string = "";
+  projectName:string;
+  projectCode:string;
   constructor(public router : Router,
     public injector : Injector,
     private route: ActivatedRoute) {super(injector) }
@@ -27,12 +29,16 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
     this.currentUrl =this.router.url
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
     this.requestId = this.route.snapshot.queryParamMap.get("id");
+    this.projectName = this.route.snapshot.queryParamMap.get("projectName");
+    this.projectCode = this.route.snapshot.queryParamMap.get("projectCode");
  
   }
   public routingGeneralTab(){
     this.router.navigate(['product-project-general'],{
       relativeTo:this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
     })
   }
@@ -40,7 +46,9 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   public routingResourceTab() {
     this.router.navigate(['product-resource-management'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -51,7 +59,9 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   public routingMilestoneTab() {
     this.router.navigate(['product-milestone'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -59,7 +69,9 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   public routingWeeklyReportTab(){
     this.router.navigate(['product-weekly-report'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -67,7 +79,9 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   public routingProjectChecklistTab(){
     this.router.navigate(['product-project-checklist'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -75,7 +89,9 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   public routingTimesheetTab(){
     this.router.navigate(['product-timesheet-tab'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -84,14 +100,18 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
   public routingDescriptionTab(){
     this.router.navigate(['product-description-tab'],{
       relativeTo: this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       }
     })
   }
   public routingFileTab(){
     this.router.navigate(['project-file-tab'],{
       relativeTo: this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       }
     })
   }

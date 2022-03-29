@@ -223,6 +223,11 @@
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
                                         </button>
+                                        <button mat-menu-item *ngIf="project.status != APP_ENUM.ProjectStatus.Closed && permission.isGranted(PmManager_Project_Close)" 
+                                            (click)="closeProject(project)">
+                                            <i class="fas fa-check mr-1"></i>
+                                            <span>{{ "Close" | localize }}</span>
+                                        </button>
                                     </mat-menu>
                                 </td>
                             </tr>

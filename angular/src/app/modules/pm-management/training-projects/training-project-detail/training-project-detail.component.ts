@@ -18,6 +18,8 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   PmManager_CanViewMenu_ProjectFile= PERMISSIONS_CONSTANT.PmManager_CanViewMenu_ProjectFile
   currentUrl: string = "";
   requestId: string = "";
+  projectName:string;
+  projectCode:string;
   constructor(public router : Router,
     public injector : Injector,
     private route: ActivatedRoute) { super(injector)}
@@ -26,12 +28,15 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
     this.currentUrl =this.router.url
     this.router.events.subscribe(res => this.currentUrl = this.router.url)
     this.requestId = this.route.snapshot.queryParamMap.get("id");
- 
+    this.projectName = this.route.snapshot.queryParamMap.get("projectName");
+    this.projectCode = this.route.snapshot.queryParamMap.get("projectCode");
   }
   public routingGeneralTab(){
     this.router.navigate(['training-project-general'],{
       relativeTo:this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
     })
   }
@@ -39,7 +44,9 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   public routingResourceTab() {
     this.router.navigate(['training-resource-management'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -50,7 +57,9 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   public routingMilestoneTab() {
     this.router.navigate(['training-milestone'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -58,7 +67,9 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   public routingWeeklyReportTab(){
     this.router.navigate(['training-weekly-report'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -66,7 +77,9 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   public routingProjectChecklistTab(){
     this.router.navigate(['training-project-checklist'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -74,7 +87,9 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   public routingTimesheetTab(){
     this.router.navigate(['training-timesheet-tab'], {
       relativeTo: this.route, queryParams: {
-        id: this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       },
       // replaceUrl: true
     })
@@ -83,14 +98,18 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
   public routingDescriptionTab(){
     this.router.navigate(['training-description-tab'],{
       relativeTo: this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       }
     })
   }
   public routingFileTab(){
     this.router.navigate(['project-file-tab'],{
       relativeTo: this.route, queryParams:{
-        id:this.requestId
+        id:this.requestId,
+        projectName: this.projectName,
+        projectCode:this.projectCode
       }
     })
   }

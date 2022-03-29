@@ -117,7 +117,20 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
     }
     else {
       this.projectService.update(this.project).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
-        abp.notify.success("Edited project: "+this.project.name);
+        abp.notify.success("Edited: " + this.project.name);
+        if(res.result == "update-only-project-tool"){
+          abp.notify.success("Edited project: "+this.project.name);
+        }
+        else if(res.result == null || res.result == ""){
+          abp.message.success(`<p>Edited project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+          <p style='color:#28a745'>Edited project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+         'Edit project result',true);
+        }
+        else{
+          abp.message.error(`<p>Edited project <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+          <p style='color:#dc3545'>${res.result}</p>`, 
+          'Edit project result',true);
+        }
         this.dialogRef.close(this.project);
       }, () => this.isLoading = false);
     }

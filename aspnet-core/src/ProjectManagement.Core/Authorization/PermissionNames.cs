@@ -73,6 +73,7 @@ namespace ProjectManagement.Authorization
         public const string PmManager_Project_ViewProjectInfor = "PmManager.Project.ViewProjectInfor";
         public const string PmManager_Project_Create = "PmManager.Project.Create";
         public const string PmManager_Project_Update = "PmManager.Project.Update";
+        public const string PmManager_Project_Close = "PmManager.Project.Close";
         public const string PmManager_Project_Delete = "PmManager.Project.Delete";
         public const string PmManager_Project_UpdateProjectDetail = "PmManager.Project.UpdateProjectDetail";
 
@@ -416,6 +417,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.PmManager_Project_ViewProjectInfor,
                     PermissionNames.PmManager_Project_Create,
                     PermissionNames.PmManager_Project_Update,
+                    PermissionNames.PmManager_Project_Close,
                     PermissionNames.PmManager_Project_Delete,
                     PermissionNames.PmManager_Project_UpdateProjectDetail,
 
@@ -731,6 +733,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project" },
+                 new SystemPermission{ Name =  PermissionNames.PmManager_Project_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_UpdateProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update For Project Detail" },
                  new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewProjectInfor, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Information" },
@@ -1056,6 +1059,7 @@ namespace ProjectManagement.Authorization
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Detail Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project" },
+                                    new SystemPermission{ Name =  PermissionNames.PmManager_Project_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete Project" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_UpdateProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update For Project Detail" },
                                     new SystemPermission{ Name =  PermissionNames.PmManager_Project_ViewProjectInfor, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Information" },

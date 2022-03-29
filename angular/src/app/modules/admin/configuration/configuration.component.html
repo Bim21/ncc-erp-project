@@ -344,6 +344,13 @@
             </mat-form-field>
               
           </div>
+
+          <div class="col-md-12">
+            <mat-checkbox class="example-margin" (change)="enableAutoUpdateProjectInfoToTimesheetTool($event.checked)"
+              [checked]="configuration.autoUpdateProjectInfoToTimesheetTool == 'true'">
+              Enable Auto update project info to timesheet tool
+            </mat-checkbox>
+          </div>
         </div>
       </mat-expansion-panel>
     </div>
