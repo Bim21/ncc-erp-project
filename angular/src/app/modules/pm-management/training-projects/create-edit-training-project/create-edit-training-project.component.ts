@@ -39,7 +39,6 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
     this.getAllPM();
     this.getAllClient();
     if (this.data.command == "edit") {
-      console.log("this.project111111",this.project);
       this.project = this.data.dialogData
       this.isEditStatus = true
     }
