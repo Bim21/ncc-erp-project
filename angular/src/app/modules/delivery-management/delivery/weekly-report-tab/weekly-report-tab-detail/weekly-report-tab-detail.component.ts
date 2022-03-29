@@ -714,11 +714,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           trigger: 'axis'
         },
         legend: {
-          data: ['Normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
             , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
             `${hasTempDataOT ? 'OT Temp' : ''}`],
         },
-        color: ['green', 'red', 'blue', 'orange', 'yellow', 'purple'],
+        color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
           left: '3%',
           right: '4%',
@@ -737,13 +737,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         series: [
           {
             lineStyle: { color: 'green' },
-            name: 'Normal',
+            name: 'Total normal',
             type: 'line',
             data: normalAndOTchartData?.normalWoringHours
           },
           {
             lineStyle: { color: 'red' },
-            name: 'OT',
+            name: 'Total OT',
             type: 'line',
             data: hasOtValue ? normalAndOTchartData?.overTimeHours : []
           },
@@ -751,22 +751,22 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             lineStyle: { color: 'blue' },
             name: 'Normal Offical',
             type: 'line',
-            data: hasOtValue ? officalChartData?.normalWoringHours : []
+            data: hasOfficalDataNormal ? officalChartData?.normalWoringHours : []
           }, {
             lineStyle: { color: 'orange' },
             name: 'OT Offical',
             type: 'line',
-            data: hasOtValue ? officalChartData?.overTimeHours : []
+            data: hasOfficalDataOT ? officalChartData?.overTimeHours : []
           }, {
-            lineStyle: { color: 'yellow' },
+            lineStyle: { color: '#787a7a' },
             name: 'Normal Temp',
             type: 'line',
-            data: hasOtValue ? TempChartData?.normalWoringHours : []
+            data: hasTempDataNormal ? TempChartData?.normalWoringHours : []
           }, {
             lineStyle: { color: 'purple' },
             name: 'OT Temp',
             type: 'line',
-            data: hasOtValue ? TempChartData?.overTimeHours : []
+            data: hasTempDataOT ? TempChartData?.overTimeHours : []
           },
 
         ]

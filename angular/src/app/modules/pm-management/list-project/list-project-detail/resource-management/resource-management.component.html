@@ -190,7 +190,7 @@
                                         </div>
                                         <div *ngIf="user.createMode || user.editMode" class="pt-2">
                                             <button
-                                                [disabled]="!(user?.userId || user.userInfo )|| !user?.projectRole || !user?.startTime "
+                                                [disabled]="!(user?.userId || user.userInfo )|| (!user?.projectRole && user?.projectRole != 0)|| !user?.startTime "
                                                 class=" mr-3 submit-btn" style="background: none; border: none;"
                                                 (click)="saveProjectUser(user)">
                                                 <i style="color: green; ;" class="fas fa-check fa-2x"></i>

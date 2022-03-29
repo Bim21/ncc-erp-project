@@ -82,8 +82,11 @@ namespace ProjectManagement.APIs.PMReportProjects
         [HttpGet]
         public async Task<object> GetInfoProject(long pmReportProjectId)
         {
-            var projectUser = WorkScope.GetAll<ProjectUser>().Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0);
-            var projectUserBill = WorkScope.GetAll<ProjectUserBill>().Where(x => x.isActive);
+            var projectUser = WorkScope.GetAll<ProjectUser>()
+                .Where(x => x.User.UserType != UserType.FakeUser)
+                .Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0);
+            var projectUserBill = WorkScope.GetAll<ProjectUserBill>()
+                .Where(x => x.isActive);
 
             var query = WorkScope.GetAll<PMReportProject>().Where(x => x.Id == pmReportProjectId)
                                         .Select(x => new
