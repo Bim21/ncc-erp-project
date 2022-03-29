@@ -1,13 +1,12 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Uitls;
-using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
-namespace ProjectManagement.Users.Dto
+namespace ProjectManagement.Services.ResourceRequestService.Dto
 { 
     public class UserBaseDto: EntityDto<long>
     {
