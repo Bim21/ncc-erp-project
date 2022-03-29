@@ -297,8 +297,6 @@ namespace ProjectManagement.Services.ResourceManager
                 throw new UserFriendlyException($"Start Time must be less than or equal today");
             }
             var employee = await getKomuUserInfo(futurePU.UserId);
-
-
             var project = await GetKomuProjectInfo(futurePU.ProjectId);
             var activeReportId = await GetActiveReportId();
             var sessionUser = await getSessionKomuUserInfo();
