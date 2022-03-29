@@ -1,6 +1,15 @@
 <form class="form-horizontal" autocomplete="off" #resourceRequestForm="ngForm" novalidate>
-    <abp-modal-header class="pt-0" title="{{this.data?.command == 'edit' ? 'Edit plan for project' : 'Add plan for project'}}: {{data.projectName}}" (onCloseClick)="dialogRef.close()">
-    </abp-modal-header>
+   <div class="card-header">
+        <h3 class="pt-0">
+            <span>
+                {{this.data?.command == 'edit' ? 'Edit plan for user:  ': 'Add plan for project: '}} 
+            </span>
+            <strong>
+                {{this.data?.command == 'edit' ? data?.item?.fullName : data.projectName}} 
+            </strong>
+        </h3>
+        
+   </div>
     <div class="modal-body">
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="tenancyName">
