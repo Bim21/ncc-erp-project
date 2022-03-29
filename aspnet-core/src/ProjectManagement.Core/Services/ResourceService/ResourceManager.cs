@@ -19,6 +19,7 @@ using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceRequestService;
+using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Utils;
 using System;
@@ -312,13 +313,8 @@ namespace ProjectManagement.Services.ResourceManager
                 var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
                  .Where(s => s.Id == resourceRequest.Id)
                  .FirstOrDefaultAsync();
-                 
-                StringBuilder setDoneKomuMessage = new StringBuilder();
-                setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set DONE for request:");
-                setDoneKomuMessage.AppendLine($"{listRequestDto.KomuInfo()} ");
-                setDoneKomuMessage.AppendLine("");
 
-                await SendKomu(setDoneKomuMessage, project.ProjectCode);
+                await nofityKomuDoneResourceRequest(listRequestDto, sessionUser, project);
             }
 
           
@@ -336,16 +332,15 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
-        //private async Task nofityKomuDoneResourceRequest(StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
-        //{
-        //    sbKomuMessage.AppendLine();
-        //    sbKomuMessage.Append($"{sessionUser.KomuAccountInfo} confirmed {employee.KomuAccountInfo} ");
-        //    sbKomuMessage.Append($"work in {project.KomuProjectInfo} {CommonUtil.ProjectUserWorkTypeKomu(joinPU.IsPool)} ");
-        //    sbKomuMessage.Append($"on {DateTimeUtils.ToString(joinPU.StartTime)}");
+        public async Task nofityKomuDoneResourceRequest(GetResourceRequestDto listRequestDto, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
+        {
+            StringBuilder setDoneKomuMessage = new StringBuilder();
+            setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set DONE for request:");
+            setDoneKomuMessage.AppendLine($"{listRequestDto.KomuInfo()} ");
+            setDoneKomuMessage.AppendLine("");
 
-        //    await SendKomu(sbKomuMessage, project.ProjectCode);
-
-        //}
+            await SendKomu(setDoneKomuMessage, project.ProjectCode);
+        }
 
 
         public async Task<ProjectUser> ValidateUserWorkingInThisProject(long userId, long projectId)

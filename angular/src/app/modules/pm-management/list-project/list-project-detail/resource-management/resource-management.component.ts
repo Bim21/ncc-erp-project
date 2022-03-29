@@ -539,6 +539,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         this.getPlannedtUser()
       }
       else{
+        this.getPlannedtUser()
         let index = this.resourceRequestList.findIndex(x => x.id == rs.data.resourceRequestId)
         if(index >= 0)
           this.resourceRequestList[index].planUserInfo = rs.data.result
