@@ -59,11 +59,6 @@ namespace ProjectManagement.Services.ResourceManager
                 });
         }
 
-        //public IQueryable<UserOfProjectDto> QueryUsersOfPRoject()
-        //{
-        //    return _workScope.GetAll<ProjectUser>()
-        //        .Select(x => MapToUserofProjectDto(x));
-        //}
 
         public async Task<List<UserOfProjectDto>> GetWorkingUsersOfProject(long projectId)
         {
@@ -484,57 +479,6 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
-
-        public async Task<IQueryable<UserOfProjectDto>> QueryPlansOfProject1(long projectId)
-        {
-
-            var configuration = new MapperConfiguration(cfg =>
-             cfg.CreateMap<ProjectUser, UserOfProjectDto>()
-                .ForMember(m => m.FullName, s => s.MapFrom(x => x.User.FullName))
-                .ForMember(d => d.UserSkills, o => o.MapFrom(s => s.User.UserSkills.Select(s => new UserSkillDto
-                {
-                    SkillId = s.SkillId,
-                    SkillName = s.Skill.Name
-                }).ToList()))
-            );
-
-
-            var activeReportId = await GetActiveReportId();
-
-            var queryPu = _workScope.GetAll<ProjectUser>()
-                .Where(x => x.Status == ProjectUserStatus.Future)
-                .Where(x => x.PMReportId == activeReportId)
-                .Where(s => s.ProjectId == projectId)
-                .ProjectTo<UserOfProjectDto>(configuration)
-                //new PlanedResourceDto
-                //{
-                //    Id = s.Id,
-                //    ProjectId = s.ProjectId,
-                //    UserId = s.UserId,
-                //    AvatarPath = s.User.AvatarPath != null ? "/avatars/" + s.User.AvatarPath : "",
-                //    FullName = s.User.FullName,
-                //    EmailAddress = s.User.EmailAddress,
-                //    Branch = s.User.Branch,
-                //    UserLevel = s.User.UserLevel,
-                //    UserType = s.User.UserType,
-                //    AllocatePercentage = s.AllocatePercentage,
-                //    IsPool = s.IsPool,
-                //    ProjectRole = s.ProjectRole,
-                //    StartTime = s.StartTime,
-                //    StarRate = s.User.StarRate,
-                //    Note = s.Note,
-                //    UserSkills = s.User.UserSkills.Select(s => new UserSkillDto
-                //    {
-                //        SkillId = s.SkillId,
-                //        SkillName = s.Skill.Name
-                //    }).ToList()
-
-
-                //}
-                .OrderByDescending(x => x.StartTime);
-
-            return queryPu;
-        }
 
         public async Task<ProjectUser> AddFuturePUAndNofity(InputPlanResourceDto input)
         {
@@ -1037,21 +981,5 @@ namespace ProjectManagement.Services.ResourceManager
             return presentPUs;
         }
 
-        public async Task<List<UserOfProjectDto>> GetAllWorkingUserFromProject(long projectId)
-        {
-
-            var presentPUs = await _workScope.GetAll<ProjectUser>()
-                .Where(s => s.ProjectId == projectId)
-                .Where(s => s.Status == ProjectUserStatus.Present)
-                .Where(s => s.AllocatePercentage > 0)
-                .Where(s => s.User.UserType != UserType.FakeUser)
-                .Select(s => new UserOfProjectDto
-                {
-                    FullName = s.User.FullName
-                })
-                .ToListAsync();
-
-            return presentPUs;
-        }
     }
 }

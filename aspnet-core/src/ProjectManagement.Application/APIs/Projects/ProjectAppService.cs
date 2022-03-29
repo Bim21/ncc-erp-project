@@ -363,7 +363,7 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<UserOfProjectDto>> GetAllWorkingUserFromProject(long projectId)
         {
-            return await _resourceManager.GetAllWorkingUserFromProject(projectId);
+            return await _resourceManager.GetWorkingUsersOfProject(projectId);
         }
 
 
