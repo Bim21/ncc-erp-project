@@ -670,7 +670,7 @@ namespace ProjectManagement.Services.ResourceManager
                            EmailAddress = x.EmailAddress,
                            Branch = x.Branch,
                            UserLevel = x.UserLevel,
-                           AvatarPath = "/avatars/" + x.AvatarPath,
+                           AvatarPath = x.AvatarPath,
                            StarRate = x.StarRate,
                            UserSkills = x.UserSkills.Select(s => new UserSkillDto
                            {
@@ -794,7 +794,7 @@ namespace ProjectManagement.Services.ResourceManager
                            EmailAddress = u.EmailAddress,
                            Branch = u.Branch,
                            UserLevel = u.UserLevel,
-                           AvatarPath = "/avatars/" + u.AvatarPath,
+                           AvatarPath = u.AvatarPath,
                            StarRate = u.StarRate,
                            PoolNote = u.PoolNote,
                            UserSkills = u.UserSkills.Select(s => new UserSkillDto
