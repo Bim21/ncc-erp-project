@@ -87,7 +87,7 @@ namespace ProjectManagement.Services.ResourceManager
                 Id = s.Id,
                 ProjectId = s.ProjectId,
                 UserId = s.UserId,
-                AvatarPath = s.User.AvatarPath != null ? "/avatars/" + s.User.AvatarPath : "",
+                AvatarPath = s.User.AvatarPath,
                 FullName = s.User.FullName,
                 EmailAddress = s.User.EmailAddress,
                 Branch = s.User.Branch,
