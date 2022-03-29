@@ -227,6 +227,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.getFuturereport();
       this.getProjectProblem();
       this.getPmReportProject();
+      this.getChangedResource();
     })
   }
 
