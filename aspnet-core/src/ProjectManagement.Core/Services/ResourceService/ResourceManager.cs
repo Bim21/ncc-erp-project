@@ -18,6 +18,7 @@ using ProjectManagement.Entities;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Utils;
 using System;
@@ -32,16 +33,18 @@ namespace ProjectManagement.Services.ResourceManager
     public class ResourceManager : ApplicationService
     {
         private readonly IWorkScope _workScope;
-        private readonly IAbpSession _abpSession;
         private readonly KomuService _komuService;
         private readonly UserManager _userManager;
+        private readonly ResourceRequestManager _resourceRequestManager;
 
-        public ResourceManager(IWorkScope workScope, IAbpSession abpSession, KomuService komuService, UserManager userManager)
+        public ResourceManager(IWorkScope workScope, IAbpSession abpSession,
+            ResourceRequestManager resourceRequestManager,
+            KomuService komuService, UserManager userManager)
         {
             _workScope = workScope;
-            _abpSession = abpSession;
             _komuService = komuService;
             _userManager = userManager;
+            _resourceRequestManager = resourceRequestManager;
         }
 
         public IQueryable<ProjectOfUserDto> QueryProjectsOfUser()
@@ -292,28 +295,32 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 throw new UserFriendlyException($"Start Time must be less than or equal today");
             }
-
-            var resourceRequest = _workScope.GetAll<ResourceRequest>()
-               .Where(s => s.ProjectId == futurePU.ProjectId)
-               .Select(s => new 
-               {
-                   Request = s,
-                   PlannedUser = s.ProjectUsers.OrderByDescending(x => x.CreationTime).FirstOrDefault()
-               })
-               .Where(s => s.PlannedUser.Id == futurePU.Id)
-               .FirstOrDefault();
-
-            if (resourceRequest != null)
-            {
-                resourceRequest.Request.Status = ResourceRequestStatus.DONE;
-                resourceRequest.Request.TimeDone = DateTimeUtils.GetNow();
-                await _workScope.UpdateAsync(resourceRequest.Request);
-            }
-
             var employee = await getKomuUserInfo(futurePU.UserId);
             var project = await GetKomuProjectInfo(futurePU.ProjectId);
             var activeReportId = await GetActiveReportId();
             var sessionUser = await getSessionKomuUserInfo();
+            var resourceRequest = _workScope.GetAll<ResourceRequest>()
+               .Where(s => s.Id == futurePU.ResourceRequestId)
+               .FirstOrDefault();
+
+            if (resourceRequest != null)
+            {
+                resourceRequest.Status = ResourceRequestStatus.DONE;
+                resourceRequest.TimeDone = DateTimeUtils.GetNow();
+                await _workScope.UpdateAsync(resourceRequest);
+
+                var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
+                 .Where(s => createdRequestIds.Contains(s.Id))
+                 .ToListAsync();
+
+                StringBuilder setDoneKomuMessage = new StringBuilder();
+                setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} s");
+                setDoneKomuMessage.AppendLine($"```{requestDto.KomuInfo()}");
+
+                await SendKomu(setDoneKomuMessage, project.ProjectCode);
+            }
+
+          
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool);
 
             futurePU.Status = ProjectUserStatus.Present;
@@ -327,6 +334,18 @@ namespace ProjectManagement.Services.ResourceManager
             return confirmPUExt;
 
         }
+
+        //private async Task nofityKomuDoneResourceRequest(StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
+        //{
+        //    sbKomuMessage.AppendLine();
+        //    sbKomuMessage.Append($"{sessionUser.KomuAccountInfo} confirmed {employee.KomuAccountInfo} ");
+        //    sbKomuMessage.Append($"work in {project.KomuProjectInfo} {CommonUtil.ProjectUserWorkTypeKomu(joinPU.IsPool)} ");
+        //    sbKomuMessage.Append($"on {DateTimeUtils.ToString(joinPU.StartTime)}");
+
+        //    await SendKomu(sbKomuMessage, project.ProjectCode);
+
+        //}
+
 
         public async Task<ProjectUser> ValidateUserWorkingInThisProject(long userId, long projectId)
         {
@@ -591,6 +610,7 @@ namespace ProjectManagement.Services.ResourceManager
                          UserId = s.UserId,
                          UserName = s.User.UserName
                      }
+                     
                  })
                  .FirstOrDefaultAsync();
         }

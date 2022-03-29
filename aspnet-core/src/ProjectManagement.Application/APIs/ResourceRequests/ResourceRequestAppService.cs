@@ -24,6 +24,8 @@ using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceRequestService;
+using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Users;
 using ProjectManagement.Users.Dto;
@@ -45,6 +47,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         private readonly PMReportProjectIssueAppService _pMReportProjectIssueAppService;
         private readonly IUserAppService _userAppService;
         private readonly ResourceManager _resourceManager;
+        private readonly ResourceRequestManager _resourceRequestManager;
+
 
         private readonly UserManager _userManager;
         private ISettingManager _settingManager;
@@ -56,6 +60,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             KomuService komuService,
             UserManager userManager,
             ResourceManager resourceManager,
+            ResourceRequestManager resourceRequestManager,
             ISettingManager settingManager,
             IUserAppService userAppService)
         {
@@ -66,13 +71,14 @@ namespace ProjectManagement.APIs.ResourceRequests
             _settingManager = settingManager;
             _userAppService = userAppService;
             _userManager = userManager;
+            _resourceRequestManager = resourceRequestManager;
         }
 
         [HttpPost]
         [AbpAuthorize]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
-            var query = IQGetResourceRequest();
+            var query = _resourceRequestManager.IQGetResourceRequest();
 
             if (input.SkillIds == null || input.SkillIds.IsEmpty())
             {
@@ -98,7 +104,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize]
         public async Task<List<GetResourceRequestDto>> GetAllByProject(long projectId, ResourceRequestStatus? status)
         {
-            var query = IQGetResourceRequest()
+            var query = _resourceRequestManager.IQGetResourceRequest()
                 .Where(x => x.ProjectId == projectId)
                 .Where(s => !status.HasValue || s.Status == status)
                 .OrderByDescending(x => x.CreationTime);
@@ -138,7 +144,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
             CurrentUnitOfWork.SaveChanges();
 
-            var listRequestDto = await IQGetResourceRequest()
+            var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
                 .Where(s => createdRequestIds.Contains(s.Id))
                 .ToListAsync();
 
@@ -150,7 +156,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpGet]
         public async Task<GetResourceRequestDto> GetById(long requestId)
         {
-            return await IQGetResourceRequest()
+            return await _resourceRequestManager.IQGetResourceRequest()
                 .Where(q => q.Id == requestId)
                 .FirstOrDefaultAsync();
         }
@@ -194,7 +200,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 await WorkScope.DeleteAsync<ResourceRequestSkill>(requestSkillId);
             }
             await CurrentUnitOfWork.SaveChangesAsync();
-            return await IQGetResourceRequest()
+            return await _resourceRequestManager.IQGetResourceRequest()
                 .Where(s => s.Id == input.Id)
                 .FirstOrDefaultAsync();
         }
@@ -260,7 +266,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             await WorkScope.UpdateAsync(resourceRequest);
 
 
-            var requestDto = await IQGetResourceRequest()
+            var requestDto = await _resourceRequestManager.IQGetResourceRequest()
                 .Where(s => s.Id == requestId)
                 .FirstOrDefaultAsync();
 
@@ -327,6 +333,8 @@ namespace ProjectManagement.APIs.ResourceRequests
             request.Request.Status = ResourceRequestStatus.DONE;
             request.Request.TimeDone = DateTimeUtils.GetNow();
             await WorkScope.UpdateAsync(request.Request);
+
+
 
             return input;
         }
@@ -436,7 +444,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             projectUser.Id = await WorkScope.InsertAndGetIdAsync(projectUser);
             CurrentUnitOfWork.SaveChanges();
 
-            var requestDto = await IQGetResourceRequest()
+            var requestDto = await _resourceRequestManager.IQGetResourceRequest()
                 .Where(s => s.Id == input.ResourceRequestId)
                 .FirstOrDefaultAsync();
 
@@ -461,7 +469,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             await WorkScope.UpdateAsync(projectUser);
             CurrentUnitOfWork.SaveChanges();
 
-            return (await IQGetResourceRequest()
+            return (await _resourceRequestManager.IQGetResourceRequest()
                 .Where(s => s.Id == input.ResourceRequestId)
                 .FirstOrDefaultAsync()).PlanUserInfo;
         }
@@ -496,55 +504,54 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         }
 
-        #region IQueryable
-        private IQueryable<GetResourceRequestDto> IQGetResourceRequest()
-        {
-            var query = from request in WorkScope.GetAll<ResourceRequest>()
-                        select new GetResourceRequestDto
-                        {
-                            DMNote = request.DMNote,
-                            Id = request.Id,
-                            IsRecruitmentSend = request.IsRecruitmentSend,
+        //#region IQueryable
+        //private IQueryable<GetResourceRequestDto> IQGetResourceRequest()
+        //{
+        //    var query = from request in WorkScope.GetAll<ResourceRequest>()
+        //                select new GetResourceRequestDto
+        //                {
+        //                    DMNote = request.DMNote,
+        //                    Id = request.Id,
+        //                    IsRecruitmentSend = request.IsRecruitmentSend,
 
-                            ProjectName = request.Project.Name,
-                            ProjectId = request.ProjectId,
-                            ProjectType = request.Project.ProjectType,
-                            ProjectStatus = request.Project.Status,
+        //                    ProjectName = request.Project.Name,
+        //                    ProjectId = request.ProjectId,
+        //                    ProjectType = request.Project.ProjectType,
+        //                    ProjectStatus = request.Project.Status,
 
-                            Name = request.Name,
+        //                    Name = request.Name,
 
-                            PMNote = request.PMNote,
-                            Priority = request.Priority,
+        //                    PMNote = request.PMNote,
+        //                    Priority = request.Priority,
 
-                            RecruitmentUrl = request.RecruitmentUrl,
-                            TimeNeed = request.TimeNeed,
-                            TimeDone = request.TimeDone,
-                            Status = request.Status,
-                            Level = request.Level,
-                            CreationTime = request.CreationTime,
+        //                    RecruitmentUrl = request.RecruitmentUrl,
+        //                    TimeNeed = request.TimeNeed,
+        //                    TimeDone = request.TimeDone,
+        //                    Status = request.Status,
+        //                    Level = request.Level,
+        //                    CreationTime = request.CreationTime,
 
-                            Skills = request.ResourceRequestSkills.Select(p => new SkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
-                            PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
-                            {
-                                ProjectUserId = s.Id,
-                                Employee = new UserBaseDto
-                                {
-                                    Branch = s.User.Branch,
-                                    UserLevel = s.User.UserLevel,
-                                    UserType = s.User.UserType,
-                                    FullName = s.User.FullName,
-                                    EmailAddress = s.User.EmailAddress,
-                                    Id = s.UserId,
-                                    AvatarPath = s.User.AvatarPath,
-                                },
+        //                    Skills = request.ResourceRequestSkills.Select(p => new SkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
+        //                    PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
+        //                    {
+        //                        ProjectUserId = s.Id,
+        //                        Employee = new UserBaseDto
+        //                        {
+        //                            Branch = s.User.Branch,
+        //                            UserLevel = s.User.UserLevel,
+        //                            UserType = s.User.UserType,
+        //                            FullName = s.User.FullName,
+        //                            EmailAddress = s.User.EmailAddress,
+        //                            Id = s.UserId,
+        //                            AvatarPath = s.User.AvatarPath,
+        //                        },
 
-                                PlannedDate = s.StartTime,
+        //                        PlannedDate = s.StartTime,
 
-                            }).FirstOrDefault(),
-                        };
-            return query;
-        }
-        #endregion
+        //                    }).FirstOrDefault(),
+        //                };
+        //    return query;
+        //}
 
         private IQueryable<long> QueryResourceRequestIdsHaveAnySkill(List<long> skillIds)
         {

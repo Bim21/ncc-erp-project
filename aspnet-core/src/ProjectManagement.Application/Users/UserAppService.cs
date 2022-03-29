@@ -46,6 +46,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Constants.Enum;
 using NccCore.Helper;
 using ProjectManagement.Services.ResourceService.Dto;
+using ProjectManagement.Services.ResourceRequestService.Dto;
 
 namespace ProjectManagement.Users
 {
