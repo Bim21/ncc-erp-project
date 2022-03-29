@@ -761,7 +761,7 @@ namespace ProjectManagement.Services.ResourceManager
                            EmailAddress = u.EmailAddress,
                            Branch = u.Branch,
                            UserLevel = u.UserLevel,
-                           AvatarPath =  u.AvatarPath,
+                           AvatarPath = u.AvatarPath,
                            StarRate = u.StarRate,
                            PoolNote = u.PoolNote,
                            UserSkills = u.UserSkills.Select(s => new UserSkillDto
