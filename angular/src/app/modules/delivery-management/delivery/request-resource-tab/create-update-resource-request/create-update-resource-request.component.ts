@@ -81,16 +81,10 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   SaveAndClose() {
     this.isLoading = true;
     // this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
-    if (this.resourceRequestDto.timeDone) {
-      this.resourceRequestDto.timeDone = moment(this.resourceRequestDto.timeDone).format("YYYY/MM/DD");
-    }
-    if(this.resourceRequestDto.timeNeed){
-      this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY-MM-DD")
-    }
     let request = {
       name: '',
       projectId: this.resourceRequestDto.projectId,
-      timeNeed: this.resourceRequestDto.timeNeed,
+      timeNeed: this.formatDateYMD(this.resourceRequestDto.timeNeed),
       level: this.resourceRequestDto.level,
       priority: this.resourceRequestDto.priority,
       id: this.resourceRequestDto.id,
