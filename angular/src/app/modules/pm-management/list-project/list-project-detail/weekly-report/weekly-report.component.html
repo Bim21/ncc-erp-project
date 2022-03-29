@@ -391,7 +391,7 @@
                                                                 userType:report.userType,emailAddress:report.emailAddress, avatarPath:report.avatarPath}">
                                                             </app-user-info>
 
-                                                            <i style="margin-top: 23px ; color: #585858;"
+                                                            <i  *ngIf="selectedReport.isActive"  style="margin-top: 23px ; color: #585858;"
                                                                 class="fas fa-ellipsis-v fa-lg"
                                                                 [matMenuTriggerFor]="menu2"></i>
 
