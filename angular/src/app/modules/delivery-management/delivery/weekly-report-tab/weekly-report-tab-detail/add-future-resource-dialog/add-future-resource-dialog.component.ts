@@ -34,12 +34,9 @@ export class AddFutureResourceDialogComponent extends AppComponentBase implement
     console.log(this.data)
     this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
     if (this.data.command != "edit") {
-      this.planUser.startTime = moment(this.tomorrowDate).format("YYYY-MM-DD");
-      this.planUser.isPool = false
-      this.planUser.allocatePercentage = 100
+      this.planUser.projectId = this.data.projectId
     }
     else {
-      this.planUser.startTime = moment(this.planUser.startTime).format("YYYY-MM-DD");
       this.planUser = this.data.item
     }
     this.getAllUser()

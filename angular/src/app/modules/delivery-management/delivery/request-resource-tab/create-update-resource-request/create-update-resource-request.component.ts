@@ -8,7 +8,7 @@ import { RequestResourceDto, ResourceRequestDetailDto } from './../../../../../s
 import { AppComponentBase } from '@shared/app-component-base';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit, Inject, Injector } from '@angular/core';
+import { Component, OnInit, Inject, Injector, ChangeDetectorRef } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash'
 
@@ -34,8 +34,10 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
-    private resourceRequestService: DeliveryResourceRequestService, private skillService: SkillService,
+    private resourceRequestService: DeliveryResourceRequestService, 
+    private skillService: SkillService,
     public dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>,
+    public ref: ChangeDetectorRef
   ) 
   {
     super(injector);
@@ -57,6 +59,12 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     }
     this.listSkill = this.data.skills
     this.userLevelList = this.data.levels
+  }
+
+  ngAfterViewChecked(): void {
+    //Called after every check of the component's view. Applies to components only.
+    //Add 'implements AfterViewChecked' to the class.
+    this.ref.detectChanges()
   }
 
   getResourceRequestById(id: number){

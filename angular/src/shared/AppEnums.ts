@@ -178,7 +178,7 @@ export const APP_ENUMS = {
         MiddlePlus: 12,
         SeniorMinus: 13,
         Senior: 14,
-        SeniorPlus: 15,
+        Principal: 15,
     },
     UserType: {
         TTS: 0,
