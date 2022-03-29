@@ -11,7 +11,7 @@ namespace ProjectManagement.Entities
     {
         public int? TenantId { get; set; }
         [ForeignKey(nameof(ProjectId))]
-        public Projectuser Project { get; set; }
+        public Project Project { get; set; }
         public long ProjectId { get; set; }
 
         [ForeignKey(nameof(CheckListItemId))]

@@ -96,8 +96,6 @@ namespace ProjectManagement.APIs.PMReportProjects
                                             TotalResource = projectUser.Where(r => r.ProjectId == x.ProjectId).Count(),
                                             TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                                             TotalOverTime = x.TotalOverTime,
-                                            pmNote = x.Note,
-                                            AutomationNote = x.AutomationNote
                                         });
 
             return await query.FirstOrDefaultAsync();

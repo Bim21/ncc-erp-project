@@ -73,7 +73,7 @@ namespace ProjectManagement.APIs.Currencies
         [AbpAuthorize(PermissionNames.Admin_Currency_Delete)]
         public async Task Delete(long currencyId)
         {
-            var hasProject = await WorkScope.GetAll<Projectuser>().AnyAsync(x => x.CurrencyId == currencyId);
+            var hasProject = await WorkScope.GetAll<Project>().AnyAsync(x => x.CurrencyId == currencyId);
             if (hasProject)
                 throw new UserFriendlyException("Currency already has a project !");
 

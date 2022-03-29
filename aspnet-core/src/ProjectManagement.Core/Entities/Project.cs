@@ -12,7 +12,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
 {
-    public class Projectuser : FullAuditedEntity<long>, IMayHaveTenant
+    public class Project : FullAuditedEntity<long>, IMayHaveTenant
     {
         public int? TenantId { get; set; }
         [MaxLength(255)]

@@ -136,7 +136,7 @@ namespace ProjectManagement.Services.ResourceManager
 
         public async Task<KomuProjectInfoDto> GetKomuProjectInfo(long projectId)
         {
-            return await _workScope.GetAll<Projectuser>()
+            return await _workScope.GetAll<Project>()
                 .Where(s => s.Id == projectId)
                 .Select(s => new KomuProjectInfoDto
                 {

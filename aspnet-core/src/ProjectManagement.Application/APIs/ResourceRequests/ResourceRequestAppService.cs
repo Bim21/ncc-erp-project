@@ -504,55 +504,6 @@ namespace ProjectManagement.APIs.ResourceRequests
 
         }
 
-        //#region IQueryable
-        //private IQueryable<GetResourceRequestDto> IQGetResourceRequest()
-        //{
-        //    var query = from request in WorkScope.GetAll<ResourceRequest>()
-        //                select new GetResourceRequestDto
-        //                {
-        //                    DMNote = request.DMNote,
-        //                    Id = request.Id,
-        //                    IsRecruitmentSend = request.IsRecruitmentSend,
-
-        //                    ProjectName = request.Project.Name,
-        //                    ProjectId = request.ProjectId,
-        //                    ProjectType = request.Project.ProjectType,
-        //                    ProjectStatus = request.Project.Status,
-
-        //                    Name = request.Name,
-
-        //                    PMNote = request.PMNote,
-        //                    Priority = request.Priority,
-
-        //                    RecruitmentUrl = request.RecruitmentUrl,
-        //                    TimeNeed = request.TimeNeed,
-        //                    TimeDone = request.TimeDone,
-        //                    Status = request.Status,
-        //                    Level = request.Level,
-        //                    CreationTime = request.CreationTime,
-
-        //                    Skills = request.ResourceRequestSkills.Select(p => new SkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
-        //                    PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
-        //                    {
-        //                        ProjectUserId = s.Id,
-        //                        Employee = new UserBaseDto
-        //                        {
-        //                            Branch = s.User.Branch,
-        //                            UserLevel = s.User.UserLevel,
-        //                            UserType = s.User.UserType,
-        //                            FullName = s.User.FullName,
-        //                            EmailAddress = s.User.EmailAddress,
-        //                            Id = s.UserId,
-        //                            AvatarPath = s.User.AvatarPath,
-        //                        },
-
-        //                        PlannedDate = s.StartTime,
-
-        //                    }).FirstOrDefault(),
-        //                };
-        //    return query;
-        //}
-
         private IQueryable<long> QueryResourceRequestIdsHaveAnySkill(List<long> skillIds)
         {
             if (skillIds == null || skillIds.IsEmpty())

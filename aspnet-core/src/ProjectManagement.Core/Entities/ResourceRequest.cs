@@ -16,7 +16,7 @@ namespace ProjectManagement.Entities
         [MaxLength(1000)]
         public string Name { get; set; }
         [ForeignKey(nameof(ProjectId))]
-        public Projectuser Project { get; set; }
+        public Project Project { get; set; }
         public long ProjectId { get; set; }
         public DateTime TimeNeed { get; set; }
         public ResourceRequestStatus Status { get; set; }

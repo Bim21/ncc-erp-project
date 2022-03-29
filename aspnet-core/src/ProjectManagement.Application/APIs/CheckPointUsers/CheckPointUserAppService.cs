@@ -194,7 +194,7 @@ namespace ProjectManagement.APIs.CheckPointUsers
                                           UserId = g.Key.UserId,
                                           ProjectId = g.Key.ProjectId
                                       }).ToListAsync();
-            var mapPMProjects = await WorkScope.GetAll<Projectuser>()
+            var mapPMProjects = await WorkScope.GetAll<Project>()
                                         .Select(x => new
                                         {
                                             ProjectId = x.Id,

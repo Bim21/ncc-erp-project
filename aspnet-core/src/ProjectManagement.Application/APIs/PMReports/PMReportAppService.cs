@@ -213,7 +213,7 @@ namespace ProjectManagement.APIs.PMReports
                 .GroupBy(s => s.ProjectId)
                 .ToDictionary(s => s.Key, s => s.Select(s => s.Issues).ToList());
 
-            var activeProjects = await WorkScope.GetAll<Projectuser>()
+            var activeProjects = await WorkScope.GetAll<Project>()
                 .Where(x => x.Status == ProjectStatus.InProgress)
                 .ToListAsync();
 
