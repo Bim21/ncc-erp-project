@@ -76,13 +76,13 @@
                         </div>
                         <p *ngIf="!isEditingNote" style="word-wrap: break-word; white-space: pre-line;font-size: 18px;"
                             class="mt-2">
-                            {{generalNote}}
+                            {{projectInfo.pmNote}}
                         </p>
                         <mat-form-field class="ml-1" style="width:100%" appearance="outline"
                                     *ngIf="isEditingNote">
                                     <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                                         style="padding-bottom: 20px;" rows="2" id="message" matInput
-                                        [(ngModel)]="generalNote" name="notePM" placeholder="General note">
+                                        [(ngModel)]="projectInfo.pmNote" name="notePM" placeholder="General note">
                                 </textarea>
                         </mat-form-field>
                     </div>
@@ -103,12 +103,12 @@
                         </div>
                         <p *ngIf="!isEditingAutomationNote"
                             style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
-                            {{automationNote}}
+                            {{projectInfo.automationNote}}
                         </p>
                         <mat-form-field class="ml-1" style="width:100%" appearance="outline"
                         *ngIf="isEditingAutomationNote">
                         <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                            style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
+                            style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="projectInfo.automationNote"
                             name="autoNotePM" placeholder="Automation note">
                         </textarea>
                     </mat-form-field>

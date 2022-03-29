@@ -113,8 +113,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public projectIdReport: number;
   public isEditingNote: boolean = false;
   public isEditingAutomationNote:boolean = false
-  public generalNote: string = "";
-  public automationNote:string =""
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
@@ -219,7 +217,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.pmReportList = data.result;
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
       this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
-      this.generalNote = this.selectedReport.note
       this.allowSendReport = this.selectedReport.note == null || this.selectedReport.note == '' ? false : true;
       this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
       this.getProjectInfo();
@@ -315,35 +312,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       })
     }
   }
-  // public search() {
-  //   this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
-  //     return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-  //       item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
 
-  //   });
-
-
-  //   this.projectId = this.pmReportProjectList[0]?.projectId
-  //   this.generalNote = this.pmReportProjectList[0].note
-  //   this.automationNote = this.pmReportProjectList[0].automationNote
-  //   // this.totalNormalWorkingTime = this.pmReportProjectList[0].totalNormalWorkingTime
-  //   this.totalOverTime = this.pmReportProjectList[0].totalOverTime
-
-  //   this.pmReportProjectId = this.pmReportProjectList[0].id
-  //   // this.pmReportProjectList[0].setBackground = true
-  //   this.pmReportProjectList.forEach(element => {
-  //     if (element.projectId == this.pmReportProjectList[0].projectId) {
-  //       element.setBackground = true;
-  //     } else {
-  //       element.setBackground = false;
-  //     }
-  //   });
-  //   this.getProjectInfo();
-  //   this.getChangedResource();
-  //   this.getFuturereport();
-  //   this.getProjectProblem()
-  //   this.searchUser = ""
-  // }
 
   public markRead(project) {
     this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
@@ -598,42 +567,28 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   }
 
   public updateNote() {
-    if (this.generalNote) {
-      this.generalNote == ""
-    }
-    this.reportService.updateNote(this.generalNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
+    this.reportService.updateNote(this.projectInfo.pmNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
-      this.selectedReport.note = this.generalNote
-      this.allowSendReport = this.generalNote ? true : false
+      this.allowSendReport = this.projectInfo.pmNote ? true : false
     })
   }
   public cancelUpdateNote() {
     this.isEditingNote = false;
-    this.generalNote = this.selectedReport.note
-    this.allowSendReport = this.generalNote ? true : false
+    this.allowSendReport = this.projectInfo.pmNote ? true : false
+    this.getProjectInfo();
   }
 
 
   public updateAutoNote() {
-    this.pmReportProjectService.updateAutomationNote(this.automationNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
+    this.pmReportProjectService.updateAutomationNote(this.projectInfo.automationNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingAutomationNote = false;
-  
-      this.pmReportProjectList.forEach(item => {
-        if (item.id == this.selectedReport.pmReportProjectId) {
-          item.automationNote = this.automationNote
-        }
-      })
     })
   }
   cancelUpdateAutoNote() {
     this.isEditingAutomationNote = false;
-    this.pmReportProjectList.forEach(item => {
-      if (item.id == this.selectedReport.pmReportProjectId) {
-        this.automationNote = item.automationNote
-      }
-    })
+    this.getProjectInfo();
   }
 
 
@@ -689,7 +644,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
-    this.generalNote = this.selectedReport.note
     this.isEditingNote = false;
     this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
   }
