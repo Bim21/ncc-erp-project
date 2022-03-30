@@ -112,22 +112,22 @@ export class Utils{
           return ''
         }
         if(time == 1){
-          return '1 in day';
+          return 'in 1 day';
         }
         else if(time <= 7){
-          return time + ' in days';
+          return 'in ' + time + ' days';
         }
         else if(time <= 30){
           let week = Math.round(time/7)
-          return week > 1 ? week + ' in weeks' : week + ' in week'
+          return week > 1 ? 'in ' + week + ' weeks' : 'in' + week + ' week'
         }
         else if(time <= 365){
           let month = Math.round(time/30)
-          return month > 1 ? month + ' in months' : month + ' in month'
+          return month > 1 ? 'in ' + month + ' months' : 'in ' + month + ' month'
         }
         else{
           let year = Math.round(time/365)
-          return year > 1 ? year + ' in years' : year + ' in year'
+          return year > 1 ? 'in ' + year + ' years' : 'in ' + year + ' year'
         }
       }
       else{
