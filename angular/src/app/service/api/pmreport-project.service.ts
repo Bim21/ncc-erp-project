@@ -102,17 +102,15 @@ export class PMReportProjectService extends BaseApiService {
 
   // Chart api
   public GetTimesheetWeeklyChartOfProject(projectCode:any, startDate: string, endDate:string): Observable<any> {
-    return this.http.get(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetWeeklyChartOfProject?projectCode=${projectCode}&startDate=${startDate}&endDate=${endDate}`)
+    return this.http.get(this.configURI.timesheetURI +`api/services/app/Public/GetTimesheetWeeklyChartOfProject?projectCode=${projectCode}&startDate=${startDate}&endDate=${endDate}`)
   }
-  
-
   public GetTimesheetWeeklyChartOfUserInProject(projectCode:string,emailAddress:any, startDate: string, endDate:string): Observable<any> {
-    return this.http.get(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetWeeklyChartOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
+    return this.http.get(this.configURI.timesheetURI + `api/services/app/Public/GetTimesheetWeeklyChartOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
   }
   public GetTimesheetOfUserInProject(projectCode:string,emailAddress:any, startDate: string, endDate:string): Observable<any> {
-    return this.http.get(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
+    return this.http.get(this.configURI.timesheetURI +`api/services/app/Public/GetTimesheetOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
   }
   public GetTimesheetWeeklyChartOfUserGroupInProject(input:any): Observable<any> {
-    return this.http.post(`http://timesheetapi.nccsoft.vn/api/services/app/Public/GetTimesheetWeeklyChartOfUserGroupInProject`, input)
+    return this.http.post(this.configURI.timesheetURI +`api/services/app/Public/GetTimesheetWeeklyChartOfUserGroupInProject`, input)
   }
 }

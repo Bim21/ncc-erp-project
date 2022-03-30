@@ -6,6 +6,7 @@ import { filter as _filter, merge as _merge } from 'lodash-es';
 import { AppConsts } from '@shared/AppConsts';
 import { AppSessionService } from '@shared/session/app-session.service';
 import { environment } from './environments/environment';
+import { ConfigUriService } from '@app/service/api/config-uri.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ export class AppInitializer {
   constructor(
     private _injector: Injector,
     private _platformLocation: PlatformLocation,
-    private _httpClient: HttpClient
+    private _httpClient: HttpClient,
+    private configURIService: ConfigUriService
   ) { }
 
   init(): () => Promise<boolean> {
@@ -163,8 +165,14 @@ export class AppInitializer {
         AppConsts.appBaseUrl = response.appBaseUrl;
         AppConsts.remoteServiceBaseUrl = response.remoteServiceBaseUrl;
         AppConsts.localeMappings = response.localeMappings;
-
+        this.getConfigURI(AppConsts.remoteServiceBaseUrl)
         callback();
       });
+  }
+
+  private getConfigURI(baseUrl:string){
+    this.configURIService.GetConfigUri(baseUrl).subscribe(data=>{
+      AppConsts.configURI = data.result
+    })
   }
 }

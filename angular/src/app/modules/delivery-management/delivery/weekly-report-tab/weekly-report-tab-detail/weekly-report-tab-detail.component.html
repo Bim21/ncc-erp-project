@@ -54,12 +54,12 @@
                                 <div class="d-inline  pt-1 text-right   ml-2 text-nowrap">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
                                         style="font-size: 17px;" (click)="isEditingNote = true"></i>
-                                    <button *ngIf="isEditingNote" class="btn bg-blue mr-1 btn-sm"
+                                        <button *ngIf="isEditingNote" (click)="cancelUpdateNote(); ;"
+                                        class="btn btn-secondary btn-sm mr-1">Cancel
+                                    </button>
+                                    <button *ngIf="isEditingNote" class="btn bg-blue btn-sm"
                                         (click)="updateNote()">
                                         Save
-                                    </button>
-                                    <button *ngIf="isEditingNote" (click)="cancelUpdateNote(); ;"
-                                        class="btn btn-secondary btn-sm">Cancel
                                     </button>
                                 </div>
                                 <p *ngIf="!isEditingNote"
@@ -79,13 +79,14 @@
                                 <div class="d-inline  pt-1 text-right ml-2 text-nowrap">
                                     <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
                                         class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
-                                    <button *ngIf="isEditingAutomationNote" class="btn bg-blue mr-1 btn-sm"
+                                        <button *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote(); ;"
+                                        class="btn btn-secondary btn-sm mr-1">Cancel
+                                    </button>
+                                        <button *ngIf="isEditingAutomationNote" class="btn bg-blue btn-sm"
                                         (click)="updateAutoNote()">
                                         Save
                                     </button>
-                                    <button *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote(); ;"
-                                        class="btn btn-secondary btn-sm">Cancel
-                                    </button>
+                                    
                                 </div>
                                 <p *ngIf="!isEditingAutomationNote"
                                     style="word-wrap: break-word; white-space: pre-line;font-size: 18px;" class="mt-2">
