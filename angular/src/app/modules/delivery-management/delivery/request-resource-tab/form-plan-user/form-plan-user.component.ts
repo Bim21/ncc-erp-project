@@ -16,7 +16,9 @@ import { UserService } from '@app/service/api/user.service';
 export class FormPlanUserComponent extends AppComponentBase implements OnInit {
   public search: string = '';
   public listUsers: any[] = [];
+  public listProjectUserRoles: any[] = []
   public resourcePlan = {} as ResourcePlanDto
+  public timeJoin: any;
   public typePlan: string = 'create';
   constructor(
     injector: Injector,
@@ -32,6 +34,8 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.resourcePlan = this.input;
+    this.timeJoin = this.resourcePlan.startTime
+    this.listProjectUserRoles = this.input.projectUserRoles
     if(this.resourcePlan.userId){
       this.typePlan = 'update'
     }
@@ -60,6 +64,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
   }
 
   SaveAndClose(){
+    this.resourcePlan.startTime = this.timeJoin
     this.resourcePlan.startTime = moment(this.resourcePlan.startTime).format('YYYY/MM/DD')
     let data = {
       resourceRequestId: this.resourcePlan.resourceRequestId,
@@ -102,5 +107,9 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
         })
       }
     }
+  }
+
+  cancel(){
+    this.dialogRef.close()
   }
 }

@@ -461,13 +461,11 @@
                                 <label class="mr-2 mb-0">Status:</label>
                             </div>
                             <div class="col-md-10 ">
-                                <mat-form-field appearance="outline" class="rsp-form-field"
-                                    (click)="$event.stopPropagation()">
-                                    <mat-select [(ngModel)]="selectStatus"
-                                        (selectionChange)="getResourceRequestList();">
-                                        <mat-option (click)="$event.stopPropagation()" [value]="-1">All</mat-option>
-                                        <mat-option (click)="$event.stopPropagation()"
-                                            *ngFor="let status of listStatuses" [value]="status.id">
+                                <mat-form-field appearance="outline" class="rsp-form-field" (click)="$event.stopPropagation()">
+                                    <mat-select [(ngModel)]="selectStatus" (selectionChange)="getResourceRequestList();">
+                                        <mat-option value="">All</mat-option>
+                                        <mat-option (click)="$event.stopPropagation()" *ngFor="let status of listStatuses"
+                                            [value]="status.id">
                                             {{status.name}}
                                         </mat-option>
                                     </mat-select>
