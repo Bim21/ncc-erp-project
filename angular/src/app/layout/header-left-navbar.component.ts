@@ -38,6 +38,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   isStart: boolean = false
   pmReportProjectId:string
   public problemIssueList: string[] = []
+  public searchPmReport: string ="";
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
     private pmReportProjectService: PMReportProjectService) {

@@ -143,6 +143,8 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<List<PMReportDto>> GetAll()
         {
             var query = WorkScope.GetAll<PMReport>()
+                .OrderByDescending(x => x.IsActive)
+                .OrderByDescending(x => x.CreationTime)
                 .Select(x => new PMReportDto
                 {
                     Id = x.Id,
@@ -428,6 +430,7 @@ namespace ProjectManagement.APIs.PMReports
                 Type = pmReport.Type,
                 Year = pmReport.Year
             };
+
         }
     }
 }
