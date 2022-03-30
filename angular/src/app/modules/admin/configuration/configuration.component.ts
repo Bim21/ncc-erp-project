@@ -79,6 +79,9 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   enableNoticeToKomu(value){
     this.configuration.noticeToKomu = value.toString();
   }
+  enableAutoUpdateProjectInfoToTimesheetTool(value){
+    this.configuration.autoUpdateProjectInfoToTimesheetTool = value.toString();
+  }
   checkNoticeToKomu() {
     if (this.configuration.noticeToKomu == 'true' && this.isEditKomuSecretCode) return true;
     return false;
@@ -105,4 +108,5 @@ export class ConfigurationDto {
   hrmSecretCode: string;
   defaultWorkingHours: string;
   noticeToKomu: string;
+  autoUpdateProjectInfoToTimesheetTool: string
 }

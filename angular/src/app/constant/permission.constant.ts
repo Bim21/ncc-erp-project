@@ -112,6 +112,7 @@ export const PERMISSIONS_CONSTANT = {
     PmManager_Project_Create: "PmManager.Project.Create",
     PmManager_Project_Delete: "PmManager.Project.Delete",
     PmManager_Project_Update: "PmManager.Project.Update",
+    PmManager_Project_Close: "PmManager.Project.Close",
     PmManager_Project_ViewAll: "PmManager.Project.ViewAll",
     PmManager_Project_ViewDetail: "PmManager.Project.ViewDetail",
     PmManager_Project_ViewOnlyMe: "PmManager.Project.ViewOnlyMe",

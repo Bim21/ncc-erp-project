@@ -138,7 +138,7 @@
                                         <!-- <span class="hyperlink"
                                             (click)="showDetail(project.id)">{{ project.name }}
                                         </span> -->
-                                        <a [routerLink]="['/app/product-project-detail/product-project-general']" [queryParams]="{id: project.id}" >
+                                        <a [routerLink]="['/app/product-project-detail/product-project-general']" [queryParams]="{id: project.id,projectName: project.name, projectCode: project.code}" >
                                             {{ project.name }}
                                         </a>
                                         <span class="project-code">
@@ -199,6 +199,11 @@
                                             (click)="delete(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
+                                        </button>
+                                        <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.InProgress && permission.isGranted(PmManager_Project_Close)" 
+                                            (click)="closeProject(project)">
+                                            <i class="fas fa-check mr-1"></i>
+                                            <span>{{ "Close" | localize }}</span>
                                         </button>
                                     </mat-menu>
                                 </td>

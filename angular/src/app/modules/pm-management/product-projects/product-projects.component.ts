@@ -23,6 +23,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
   PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
   PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  PmManager_Project_Close = PERMISSIONS_CONSTANT.PmManager_Project_Close;
   PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
   PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
   PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
@@ -149,7 +150,8 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
         endTime: item.endTime,
         pmId: item.pmId,
         id: item.id,
-        status: item.status
+        status: item.status,
+        clientId: item.clientId
       }
     }
     const dialogRef = this.dialog.open(CreateEditProductProjectComponent, {
@@ -195,6 +197,52 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   handleSortWeeklyReportClick () {
     this.sortWeeklyReport = (this.sortWeeklyReport + 1) % 3;
     this.refresh();
+  }
+
+  presentPUs(arr) {
+    if(arr.length == 0){
+      return "";
+    }
+    arr = arr.map((item) => {
+      return `- User ${item.fullName}`;
+    })
+    return `<div style='text-align:left'> And release following resources: <br/> ${arr.join('<br/>')} </div>`
+  }
+
+  protected closeProject(project: any): void {
+    let item = {
+      id: project.id    
+    }
+
+    this.projectService.getAllWorkingUserFromProject(project.id).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+      let message = this.presentPUs(res.result);
+      abp.message.confirm(
+        `${message}`,
+        `Are your sure close project: ${project.name}?`,
+        (result: boolean) => {
+          if (result) {
+            this.projectService.closeProject(item).pipe(catchError(this.projectService.handleError)).subscribe((res) => {
+              abp.notify.success("Update status project: " + project.name);
+              if(res.result == "update-only-project-tool"){
+                abp.notify.success("Update status project: "+ project.name);
+              }
+              else if(res.result == null || res.result == ""){
+                abp.message.success(`<p>Update status project name <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+                <p style='color:#28a745'>Update status project name <b>${project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+               'Update status project result',true);
+              }
+              else{
+                abp.message.error(`<p>Update status project <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+                <p style='color:#dc3545'>${res.result}</p>`, 
+                'Update status project result',true);
+              }
+              this.refresh()
+            });
+          }
+        },
+        true
+      );
+    });
   }
 
 }
