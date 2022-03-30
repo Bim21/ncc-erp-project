@@ -393,6 +393,8 @@ namespace ProjectManagement.APIs.Projects
             string codeCurrent = project.Code;
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
 
+            await AddRolePMForUser(input.PmId);
+
             if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
             {
                 return await ChangePmOfProjectTimesheetTool(project.Code, input.PmId);
