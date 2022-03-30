@@ -60,17 +60,17 @@ export class UserInfoComponent extends AppComponentBase implements OnInit {
         }
       case 1:
         return {
-          userLevel: "Intern_600k",
+          userLevel: "Intern_1",
           style: {'background-color': '#8F9779'}
         }
       case 2:
         return {
-          userLevel: "Intern_2M",
+          userLevel: "Intern_2",
           style: {'background-color': '#665D1E', 'color': 'white'}
         }
       case 3: {
         return {
-          userLevel: "Intern_4M",
+          userLevel: "Intern_3",
           style: {'background-color': '#777'}
         }
       }

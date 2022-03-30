@@ -80,6 +80,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public isEditPlannedResource: boolean = false
   public searchPlanResource: string = ""
   public tomorrowDate = new Date();
+  public searchPlannedResource: string = ""
   //skills, levels
   public listSkills: any[] = []
   public listLevels: any[] = []

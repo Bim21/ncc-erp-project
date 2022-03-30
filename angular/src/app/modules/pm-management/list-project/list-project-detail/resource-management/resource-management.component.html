@@ -70,7 +70,7 @@
                                                     placeholder="select account *" required #projectEmployee="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                        <input matInput [(ngModel)]="searchUser" name="searchUserName"
+                                                        <input matInput [(ngModel)]="searchUser" name="searchCurrentResource"
                                                             placeholder="Search" (keydown)="$event.stopPropagation()"
                                                             #search>{{search.focus()}}
                                                     </mat-form-field>
@@ -268,13 +268,13 @@
                                                             #projectEmployee="ngModel">
                                                             <mat-form-field class="w-100 px-3 "
                                                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                                                                <input matInput [(ngModel)]="searchUser"
-                                                                    name="searchUserName" placeholder="Search"
+                                                                <input matInput [(ngModel)]="searchPlannedResource"
+                                                                    name="searchPlannedResource" placeholder="Search"
                                                                     (keydown)="$event.stopPropagation()"
                                                                     #search>{{search.focus()}}
                                                             </mat-form-field>
                                                             <mat-option
-                                                                *ngFor="let u of userForProjectUser |listFilter: 'fullName'  :searchUser : 'emailAddress' : 'surname' : 'name'"
+                                                                *ngFor="let u of userForProjectUser |listFilter: 'fullName' : searchPlannedResource : 'emailAddress' : 'surname' : 'name'"
                                                                 [value]="u.id" (click)="onPlanUserSelect(user,u)">
                                                                 {{u.fullName}} - ({{u.emailAddress}})</mat-option>
                                                         </mat-select>
