@@ -46,6 +46,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Constants.Enum;
 using NccCore.Helper;
 using ProjectManagement.Services.ResourceService.Dto;
+using ProjectManagement.Services.ResourceRequestService.Dto;
 
 namespace ProjectManagement.Users
 {
@@ -271,7 +272,7 @@ namespace ProjectManagement.Users
         {
             var user = await _userManager.GetUserByIdAsync(input.UserId);
 
-            if (input.RoleNames != null && !input.RoleNames.IsEmpty())
+            if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }

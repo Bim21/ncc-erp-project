@@ -49,9 +49,9 @@
                     <div class="px-4 pb-2 pt-2 card"
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
-                            <div class="col-6">
-                                <strong style="font-size: 22px;">Pm note: </strong>
-                                <div class="d-inline  pt-1 text-right   ml-2">
+                            <div class="col-8">
+                                <strong style="font-size: 20px;">Pm note: </strong>
+                                <div class="d-inline  pt-1 text-right   ml-2 text-nowrap">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
                                         style="font-size: 17px;" (click)="isEditingNote = true"></i>
                                     <button *ngIf="isEditingNote" class="btn bg-blue mr-1 btn-sm"
@@ -74,9 +74,9 @@
                                 </textarea>
                                 </mat-form-field>
                             </div>
-                            <div class="col-6" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
-                                <strong style="font-size: 22px;">Automation test: </strong>
-                                <div class="d-inline  pt-1 text-right   ml-2">
+                            <div class="col-4" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
+                                <strong style="font-size: 20px;">Automation test: </strong>
+                                <div class="d-inline  pt-1 text-right ml-2 text-nowrap">
                                     <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
                                         class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
                                     <button *ngIf="isEditingAutomationNote" class="btn bg-blue mr-1 btn-sm"
@@ -221,11 +221,11 @@
                                             <th style="width: 80px; vertical-align: middle;">Role</th>
                                             <th style="width: 80px;">Normal
                                                 <div>
-                                                    <strong>(Total: {{totalNormalWorkingTime}}h) </strong>
+                                                    <strong>({{totalNormalWorkingTime}}h) </strong>
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
-                                                <div>(Total:
+                                                <div>(
                                                     <strong [ngClass]="totalOverTime>0?'text-danger':''"
                                                         style="font-size: 17px;">{{totalOverTime}}h
                                                     </strong>)
@@ -240,7 +240,7 @@
                                             <td class="d-flex justify-content-between" style="border: none;">
                                                 <div style="width: 84%;">
                                                     <app-user-info [userData]="{fullName:user.fullName,branch:0,
-                                                    userType:1,emailAddress: user.emailAddress,avatarPath: user.avatarPath,
+                                                    userType: user.userType, avatarPath: user.avatarPath,
                                                      userLevel: user.userLevel}">
                                                     </app-user-info>
                                                 </div>
@@ -276,7 +276,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style="width: 180px; height: 70px;" [id]="'user' + user.userId">
+                                                <div style="width: 180px; height: 60px;" [id]="'user' + user.userId">
                                                 </div>
                                             </td>
                                         </tr>

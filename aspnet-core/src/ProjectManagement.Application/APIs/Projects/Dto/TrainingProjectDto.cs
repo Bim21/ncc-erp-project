@@ -18,6 +18,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }
         public long PmId { get; set; }
+        public long? ClientId { get; set; }
         public string BriefDescription { get; set; }
         public string DetailDescription { get; set; }
         public string TechnologyUsed { get; set; }

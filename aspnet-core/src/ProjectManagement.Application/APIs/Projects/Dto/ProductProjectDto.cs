@@ -4,6 +4,8 @@ using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
+
+
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Projects.Dto
@@ -14,6 +16,8 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string Name { get; set; }
         [ApplySearchAttribute]
         public string Code { get; set; }
+        public long? ClientId { get; set; }
+
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public ProjectStatus Status { get; set; }

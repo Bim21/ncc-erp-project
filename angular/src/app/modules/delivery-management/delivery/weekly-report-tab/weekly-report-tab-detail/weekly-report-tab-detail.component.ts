@@ -714,11 +714,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           trigger: 'axis'
         },
         legend: {
-          data: ['Normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
             , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
             `${hasTempDataOT ? 'OT Temp' : ''}`],
         },
-        color: ['green', 'red', 'blue', 'orange', 'yellow', 'purple'],
+        color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
           left: '3%',
           right: '4%',
@@ -737,13 +737,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         series: [
           {
             lineStyle: { color: 'green' },
-            name: 'Normal',
+            name: 'Total normal',
             type: 'line',
             data: normalAndOTchartData?.normalWoringHours
           },
           {
             lineStyle: { color: 'red' },
-            name: 'OT',
+            name: 'Total OT',
             type: 'line',
             data: hasOtValue ? normalAndOTchartData?.overTimeHours : []
           },
@@ -751,22 +751,22 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             lineStyle: { color: 'blue' },
             name: 'Normal Offical',
             type: 'line',
-            data: hasOtValue ? officalChartData?.normalWoringHours : []
+            data: hasOfficalDataNormal ? officalChartData?.normalWoringHours : []
           }, {
             lineStyle: { color: 'orange' },
             name: 'OT Offical',
             type: 'line',
-            data: hasOtValue ? officalChartData?.overTimeHours : []
+            data: hasOfficalDataOT ? officalChartData?.overTimeHours : []
           }, {
-            lineStyle: { color: 'yellow' },
+            lineStyle: { color: '#787a7a' },
             name: 'Normal Temp',
             type: 'line',
-            data: hasOtValue ? TempChartData?.normalWoringHours : []
+            data: hasTempDataNormal ? TempChartData?.normalWoringHours : []
           }, {
             lineStyle: { color: 'purple' },
             name: 'OT Temp',
             type: 'line',
-            data: hasOtValue ? TempChartData?.overTimeHours : []
+            data: hasTempDataOT ? TempChartData?.overTimeHours : []
           },
 
         ]
@@ -782,7 +782,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
     // var chartDom = document.getElementById(user.userId.toString());
     // var myChart = echarts.init(chartDom);
-
+    let hasOtValue = chartData.overTimeHours.some(item => item > 0)
     setTimeout(() => {
 
       let chartDom = document.getElementById('user' + user.userId);
@@ -816,10 +816,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             symbolSize: 2,
             data: chartData.normalWoringHours,
             type: 'line',
-            name: 'timesheet',
+            name: 'normal',
+          },
+          {
+            showSymbol: false,
+            symbolSize: 2,
+            data: hasOtValue ? chartData.overTimeHours : [],
+            type: 'line',
+            name: 'OT',
+            lineStyle: {color: 'red'}
           }
         ]
       };
+   
       option && myChart.setOption(option);
 
 

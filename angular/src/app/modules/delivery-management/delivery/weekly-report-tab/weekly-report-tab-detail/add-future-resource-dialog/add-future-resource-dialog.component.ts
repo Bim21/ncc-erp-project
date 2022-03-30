@@ -22,7 +22,8 @@ export class AddFutureResourceDialogComponent extends AppComponentBase implement
   public projectRoleList = Object.keys(this.APP_ENUM.ProjectUserRole);
   public searchProject: string = ""
   public tomorrowDate = new Date();
-  public userList: any[] = []
+  public userList: any[] = [];
+  public searchUser:string = "";
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private resourceService: ResourceManagerService,
@@ -35,6 +36,8 @@ export class AddFutureResourceDialogComponent extends AppComponentBase implement
     this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
     if (this.data.command != "edit") {
       this.planUser.projectId = this.data.projectId
+      this.planUser.allocatePercentage = 100;
+      this.planUser.isPool = false;
     }
     else {
       this.planUser = this.data.item

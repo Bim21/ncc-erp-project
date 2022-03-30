@@ -102,6 +102,13 @@ export const APP_ENUMS = {
         FIXPRICE: 2,
         NoBill: 4,
     },
+
+    CurrencyChargeProjectType: {
+        ODC: 0,
+        TAM: 1,
+        FIXPRICE: 2,
+    },
+
     ProjectUserStatus:
     {
         Present: 0,
@@ -171,7 +178,7 @@ export const APP_ENUMS = {
         MiddlePlus: 12,
         SeniorMinus: 13,
         Senior: 14,
-        SeniorPlus: 15,
+        Principal: 15,
     },
     UserType: {
         TTS: 0,

@@ -22,7 +22,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public float? TotalWorkingDay { get; set; }
         public int TotalIsRequiredFile { get; set; }
         public int TotalHasFile { get; set; }
-        public int WorkingDayOfUser { get; set; }
+        public double WorkingDayOfUser { get; set; }
         public double ManMonth { 
             get {
                 return Math.Round((double) (WorkingDayOfUser/(TotalWorkingDay.HasValue ? TotalWorkingDay.Value : 22)), 2);

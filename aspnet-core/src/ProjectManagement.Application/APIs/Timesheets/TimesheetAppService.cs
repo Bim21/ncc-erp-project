@@ -33,7 +33,8 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
             var qtimesheetProject = WorkScope.GetAll<TimesheetProject>();
-            var qtimesheetProjectBill = WorkScope.GetAll<TimesheetProjectBill>();
+            var qtimesheetProjectBill = WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(s => s.IsActive);
             var query = WorkScope.GetAll<Timesheet>().OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
                 .Select(x => new GetTimesheetDto
                 {
@@ -43,16 +44,19 @@ namespace ProjectManagement.APIs.TimeSheets
                     Year = x.Year,
                     IsActive = x.IsActive,
                     CreatedInvoice = x.CreatedInvoice,
-                    TotalProject = qtimesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
-                    TotalHasFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
-                                                            y.FilePath != null && 
-                                                            y.Project.RequireTimesheetFile)
-                                                    .Count(),
                     TotalWorkingDay = x.TotalWorkingDay,
-                    WorkingDayOfUser = qtimesheetProjectBill.Where(s => s.TimesheetId == x.Id && s.IsActive).Count(),
-                    TotalIsRequiredFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
-                                                            y.Project.RequireTimesheetFile)
-                                                    .Count(),
+
+                    TotalProject = qtimesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
+
+                    TotalHasFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
+                                                            y.FilePath != null &&
+                                                            y.Project.RequireTimesheetFile).Count(),
+
+                    WorkingDayOfUser = qtimesheetProjectBill.Where(s => s.TimesheetId == x.Id).Sum(s => s.WorkingTime),
+
+                    TotalIsRequiredFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id)
+                    .Where(s => s.Project.RequireTimesheetFile).Count(),
+
                 });
 
             return await query.GetGridResult(query, input);
@@ -150,13 +154,13 @@ namespace ProjectManagement.APIs.TimeSheets
                     };
                     await WorkScope.InsertAndGetIdAsync(timesheetProject);
                 }
-                return new { failList, input};
+                return new { failList, input };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new UserFriendlyException("error: " + e.Message);
             }
-            
+
         }
 
         [HttpPut]
@@ -207,7 +211,7 @@ namespace ProjectManagement.APIs.TimeSheets
                 throw new UserFriendlyException("Timesheet has attached file !");
 
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).ToListAsync();
-            foreach(var item in timesheetProject)
+            foreach (var item in timesheetProject)
             {
                 await WorkScope.DeleteAsync(item);
             }
@@ -221,6 +225,6 @@ namespace ProjectManagement.APIs.TimeSheets
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);
             timesheet.IsActive = !timesheet.IsActive;
             await WorkScope.UpdateAsync(timesheet);
-        }       
+        }
     }
 }
