@@ -223,17 +223,10 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
-      this.getPmReportProject();
       this.getChangedResource();
     })
   }
 
-  public getPmReportProject(): void {
-      this.pmReportProjectService.GetAllByPmReport(this.selectedReport.reportId, this.projectType).subscribe((data => {
-        this.pmReportProjectList = data.result;
-        this.automationNote = this.pmReportProjectList.find((item)=>item.projectId==this.projectId).automationNote;
-      }))
-  }
   
   public sendWeeklyreport() {
     abp.message.confirm(
