@@ -672,6 +672,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       }
 
       option = {
+        width:'90%',
         title: {
           text: 'Timesheet'
         },
@@ -679,11 +680,14 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           trigger: 'axis'
         },
         legend: {
-          data: ['Normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          orient: 'vertical',
+          top: '12%',
+          left:'10%',
+          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
             , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-            `${hasTempDataOT ? 'OT Temp' : ''}`],
+            `${hasTempDataOT ? 'OT Temp' : ''}`],            
         },
-        color: ['green', 'red', 'blue', 'orange', 'yellow', 'purple'],
+        color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
           left: '3%',
           right: '4%',
@@ -702,13 +706,13 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         series: [
           {
             lineStyle: { color: 'green' },
-            name: 'Normal',
+            name: 'Total normal',
             type: 'line',
             data: normalAndOTchartData?.normalWoringHours
           },
           {
             lineStyle: { color: 'red' },
-            name: 'OT',
+            name: 'Total OT',
             type: 'line',
             data: hasOtValue ? normalAndOTchartData?.overTimeHours : []
           },
@@ -716,22 +720,22 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             lineStyle: { color: 'blue' },
             name: 'Normal Offical',
             type: 'line',
-            data: hasOtValue ? officalChartData?.normalWoringHours : []
+            data: hasOfficalDataNormal ? officalChartData?.normalWoringHours : []
           }, {
             lineStyle: { color: 'orange' },
             name: 'OT Offical',
             type: 'line',
-            data: hasOtValue ? officalChartData?.overTimeHours : []
+            data: hasOfficalDataOT ? officalChartData?.overTimeHours : []
           }, {
-            lineStyle: { color: 'yellow' },
+            lineStyle: { color: '#787a7a' },
             name: 'Normal Temp',
             type: 'line',
-            data: hasOtValue ? TempChartData?.normalWoringHours : []
+            data: hasTempDataNormal ? TempChartData?.normalWoringHours : []
           }, {
             lineStyle: { color: 'purple' },
             name: 'OT Temp',
             type: 'line',
-            data: hasOtValue ? TempChartData?.overTimeHours : []
+            data: hasTempDataOT ? TempChartData?.overTimeHours : []
           },
 
         ]
@@ -743,6 +747,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
 
   public genarateUserChart(user, chartData) {
+    let hasOtValue = chartData.overTimeHours.some(item => item > 0)
 
     // var chartDom = document.getElementById(user.userId.toString());
     // var myChart = echarts.init(chartDom);
@@ -780,7 +785,15 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             symbolSize: 2,
             data: chartData.normalWoringHours,
             type: 'line',
-            name: 'timesheet',
+            name: 'normal',
+          },
+          {
+            showSymbol: false,
+            symbolSize: 2,
+            data: hasOtValue ? chartData.overTimeHours : [],
+            type: 'line',
+            name: 'OT',
+            lineStyle: {color: 'red'}
           }
         ]
       };
@@ -1000,7 +1013,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             containLabel: true
           },
           legend: {
-            data: ['manMonths', 'manDays']
+            data: ['ManMonths', 'ManDays']
           },
           xAxis: [
             {
@@ -1012,24 +1025,24 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           yAxis: [
             {
               type: 'value',
-              name: 'manMonths',
+              name: 'ManMonths',
   
             },
             {
               type: 'value',
-              name: 'manDays',
+              name: 'ManDays',
   
             }
           ],
           series: [
   
             {
-              name: 'manMonths',
+              name: 'ManMonths',
               type: 'bar',
               data: chartData.manMonths
             },
             {
-              name: 'manDays',
+              name: 'ManDays',
               type: 'line',
               yAxisIndex: 1,
               data: chartData.manDays
