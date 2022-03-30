@@ -23,4 +23,7 @@ export class ClientService extends BaseApiService{
   public getAllClient(): Observable<any>{
     return this.http.get<any>(this.rootUrl + '/getAllClient');
   }
+  public getIdClientByCodeNcc(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/getIdClientByCodeNcc');
+  }
 }

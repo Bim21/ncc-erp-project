@@ -16,6 +16,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.FinanceSecretCode,"Uqhfwwg%fyef@HUSAA744fiegyeR",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.TimesheetUri,"http://uat.timesheetapi.nccsoft.vn:2021/",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.TimesheetSecretCode,"Xnsks4@llslhl%hjsksCCHHA145",scopes:SettingScopes.Application|SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool,"true",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.HRMUri,"http://hrm-api.dev.nccsoft.vn/",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.HRMSecretCode,"Xnsks4@llslhl%hjsksCCHHA145",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.CanSendDay,"2",scopes:SettingScopes.Application|SettingScopes.Tenant),

@@ -33,7 +33,8 @@ namespace ProjectManagement.APIs.TimeSheets
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
             var qtimesheetProject = WorkScope.GetAll<TimesheetProject>();
-            var qtimesheetProjectBill = WorkScope.GetAll<TimesheetProjectBill>();
+            var qtimesheetProjectBill = WorkScope.GetAll<TimesheetProjectBill>()
+                .Where(s => s.IsActive);
             var query = WorkScope.GetAll<Timesheet>().OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
                 .Select(x => new GetTimesheetDto
                 {
@@ -43,16 +44,19 @@ namespace ProjectManagement.APIs.TimeSheets
                     Year = x.Year,
                     IsActive = x.IsActive,
                     CreatedInvoice = x.CreatedInvoice,
-                    TotalProject = qtimesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
-                    TotalHasFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
-                                                            y.FilePath != null && 
-                                                            y.Project.RequireTimesheetFile)
-                                                    .Count(),
                     TotalWorkingDay = x.TotalWorkingDay,
-                    WorkingDayOfUser = qtimesheetProjectBill.Where(s => s.TimesheetId == x.Id && s.IsActive).Count(),
-                    TotalIsRequiredFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
-                                                            y.Project.RequireTimesheetFile)
-                                                    .Count(),
+
+                    TotalProject = qtimesheetProject.Where(y => y.TimesheetId == x.Id).Count(),
+
+                    TotalHasFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id &&
+                                                            y.FilePath != null &&
+                                                            y.Project.RequireTimesheetFile).Count(),
+
+                    WorkingDayOfUser = qtimesheetProjectBill.Where(s => s.TimesheetId == x.Id).Sum(s => s.WorkingTime),
+
+                    TotalIsRequiredFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id)
+                    .Where(s => s.Project.RequireTimesheetFile).Count(),
+
                 });
 
             return await query.GetGridResult(query, input);
@@ -84,79 +88,76 @@ namespace ProjectManagement.APIs.TimeSheets
             {
                 throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
             }
-            try
+
+            var failList = new List<string>();
+            var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
+            if (nameExist)
             {
-                var failList = new List<string>();
-                var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
-                if (nameExist)
-                {
-                    throw new UserFriendlyException("Name is already exist !");
-                }
+                throw new UserFriendlyException("Name is already exist !");
+            }
 
-                var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
-                if (alreadyCreated)
-                {
-                    throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
-                }
-                input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Timesheet>(input));
-                var timesheet = await WorkScope.GetAsync<Timesheet>(input.Id);
-                var project = await WorkScope.GetAll<Project>().Where(x => x.IsCharge == true).ToListAsync();
-                foreach (var item in project)
-                {
-                    var billInfomation = new StringBuilder();
-                    var projectUserBills = WorkScope.GetAll<ProjectUserBill>().Include(x => x.User)
-                        .Where(x => x.ProjectId == item.Id && (!x.EndTime.HasValue || x.EndTime.Value.Date > timesheet.CreationTime.Date || (x.EndTime.Value.Month >= timesheet.Month && x.EndTime.Value.Year >= timesheet.Year)));
-                    ;
-                    //.Select(x => new
-                    //{
-                    //    FullName = x.User.FullName,
-                    //    BillRole = x.BillRole,
-                    //    BillRate = x.BillRate,
-                    //    Note = x.Note,
-                    //    ShadowNote = x.shadowNote
-                    //});
+            var alreadyCreated = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Year == input.Year && x.Month == input.Month);
+            if (alreadyCreated)
+            {
+                throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
+            }
 
-                    foreach (var b in projectUserBills)
+            var timesheet = new Timesheet
+            {
+                Name = input.Name,
+                IsActive = true,
+                Year = input.Year,
+                Month = input.Month,
+                TotalWorkingDay = input.TotalWorkingDay
+            };
+
+            input.Id = await WorkScope.InsertAndGetIdAsync(timesheet);
+            timesheet.Id = input.Id;
+
+            var timesheetStartDate = new DateTime(timesheet.Year, timesheet.Month, 1).Date;
+            var timesheetEndDate = timesheetStartDate.AddMonths(1).AddDays(-1);
+
+            var mapProjectIdToBillInfo = await WorkScope.GetAll<ProjectUserBill>()
+                .Where(s => s.Project.IsCharge == true)
+                .Where(s => s.isActive)
+                .Where(s => !s.EndTime.HasValue || s.EndTime.Value.Date <= timesheetEndDate)
+                .GroupBy(s => s.ProjectId)
+                .Select(s => new
+                {
+                    ProjectId = s.Key,
+                    ListBillInfo = s.Select(x => new { x.UserId, x.BillRate, x.BillRole, x.StartTime, x.EndTime }).ToList()
+                })
+               .ToDictionaryAsync(s => s.ProjectId);
+
+            foreach (var item in mapProjectIdToBillInfo)
+            {
+                var projectId = item.Key;
+                var listBillInfo = item.Value.ListBillInfo;
+                var timesheetProject = new TimesheetProject
+                {
+                    ProjectId = projectId,
+                    TimesheetId = timesheet.Id,
+                };
+
+                foreach (var b in listBillInfo)
+                {
+                    var timesheetProjectBill = new TimesheetProjectBill
                     {
-                        try
-                        {
-                            billInfomation.Append($"<b>{b.User.FullName}</b> - {b.BillRole} - {b.BillRate} - {b.Note} - {b.shadowNote} <br>");
-                            var timesheetProjectBill = new TimeSheetProjectBillDto
-                            {
-                                ProjectId = b.ProjectId,
-                                TimeSheetId = input.Id,
-                                UserId = b.UserId,
-                                BillRole = b.BillRole,
-                                BillRate = b.BillRate,
-                                StartTime = b.StartTime,
-                                EndTime = b.EndTime,
-                                Note = b.Note,
-                                ShadowNote = b.shadowNote,
-                                IsActive = b.isActive
-                            };
-                            await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<TimesheetProjectBill>(timesheetProjectBill));
-                        }
-                        catch (Exception e)
-                        {
-                            failList.Add($"error UserId = {b.UserId}" + e.Message);
-                        }
-                    }
-
-                    var timesheetProject = new TimesheetProject
-                    {
-                        ProjectId = item.Id,
-                        TimesheetId = input.Id,
-                        ProjectBillInfomation = $"{billInfomation}"
+                        ProjectId = projectId,
+                        TimesheetId = timesheet.Id,
+                        UserId = b.UserId,
+                        BillRole = b.BillRole,
+                        BillRate = b.BillRate,
+                        StartTime = b.StartTime,
+                        EndTime = b.EndTime,
+                        IsActive = true
                     };
-                    await WorkScope.InsertAndGetIdAsync(timesheetProject);
+                    await WorkScope.InsertAsync(timesheetProjectBill);
                 }
-                return new { failList, input};
             }
-            catch(Exception e)
-            {
-                throw new UserFriendlyException("error: " + e.Message);
-            }
-            
+
+            return new { failList, input };
+
         }
 
         [HttpPut]
@@ -194,33 +195,49 @@ namespace ProjectManagement.APIs.TimeSheets
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Delete)]
         public async Task Delete(long timesheetId)
         {
-            var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
+            var ts = await WorkScope.GetAll<TimesheetProject>()
+                .Where(s => s.TimesheetId == timesheetId)
+                .Select(s => new
+                {
+                    s.Timesheet.IsActive,
+                    s.FilePath
+                }).FirstOrDefaultAsync();
 
-            if (!timesheet.IsActive)
+            if (!ts.IsActive)
             {
                 throw new UserFriendlyException("Timesheet not active !");
             }
 
-            var hasTimesheetproject = await WorkScope.GetAll<TimesheetProject>().AnyAsync(x => x.TimesheetId == timesheetId && x.FilePath != null);
-
-            if (hasTimesheetproject)
+            if (ts.FilePath != null)
                 throw new UserFriendlyException("Timesheet has attached file !");
 
-            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).ToListAsync();
-            foreach(var item in timesheetProject)
-            {
-                await WorkScope.DeleteAsync(item);
-            }
-
-            await WorkScope.DeleteAsync(timesheet);
+            await ForceDelete(timesheetId);
         }
 
+       
+
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ForceDelete)]
+        public async Task ForceDelete(long timesheetId)
+        {
+            var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
+
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).ToListAsync();
+            foreach (var item in timesheetProject)
+            {
+                item.IsDeleted = true;
+            }
+
+            timesheet.IsDeleted = true;
+            CurrentUnitOfWork.SaveChanges();
+        }
+        
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ReverseActive)]
         public async Task ReverseActive(long id)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);
             timesheet.IsActive = !timesheet.IsActive;
             await WorkScope.UpdateAsync(timesheet);
-        }       
+        }
     }
 }

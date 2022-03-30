@@ -56,6 +56,7 @@ import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { SaoDoComponent } from './modules/saodo-management/sao-do/sao-do.component';
 import { ListProjectGeneralComponent } from './modules/pm-management/list-project/list-project-detail/list-project-general/list-project-general.component';
+import { ProjectGeneralComponent } from './modules/pm-management/project-detail/project-general/project-general.component';
 import { SkillComponent } from './modules/admin/skill/skill.component';
 import { ConfigurationComponent } from './modules/admin/configuration/configuration.component';
 import { CurrencyComponent } from './modules/admin/currency/currency.component';
@@ -187,7 +188,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
             children: [
                 {
                     path: "list-project-general",
-                    component: ListProjectGeneralComponent,
+                    component: ProjectGeneralComponent,
                     canActivate: [AppRouteGuard],
               },
               {
@@ -239,7 +240,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
             children: [
               {
                 path: "training-project-general",
-              component: TrainingProjectGeneralComponent,
+              component: ProjectGeneralComponent,
               canActivate: [AppRouteGuard],
             },
             {
@@ -290,7 +291,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
             children: [
               {
                 path: "product-project-general",
-              component: ProductProjectGeneralComponent,
+              component: ProjectGeneralComponent,
               canActivate: [AppRouteGuard],
             },
             {

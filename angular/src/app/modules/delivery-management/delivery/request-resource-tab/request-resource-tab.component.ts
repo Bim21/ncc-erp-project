@@ -1,3 +1,4 @@
+import { result } from 'lodash-es';
 import { FormSetDoneComponent } from './form-set-done/form-set-done.component';
 import { SortableComponent, SortableModel } from './../../../../../shared/components/sortable/sortable.component';
 import { AppComponentBase } from 'shared/app-component-base';
@@ -14,6 +15,7 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from '@app/service/model/list-project.dto';
 import { FormPlanUserComponent } from './form-plan-user/form-plan-user.component';
 import * as moment from 'moment';
+import { IDNameDto } from '@app/service/model/id-name.dto';
 
 @Component({
   selector: 'app-request-resource-tab',
@@ -34,6 +36,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public listStatuses: any[] = []
   public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
+  public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
   public selectedLevel: any = -1
   public isAndCondition:boolean =false;
@@ -81,6 +84,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.getLevels()
     this.getPriorities()
     this.getStatuses()
+    this.getProjectUserRoles()
     this.refresh();
   }
 
@@ -108,7 +112,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         command: command,
         item: resourceRequest, 
         skills: this.listSkills,
-        levels: this.listLevels, 
+        levels: this.listLevels,
         typeControl: 'request'
       },
       width: "700px",
@@ -169,9 +173,9 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   async showModalPlanUser(item: any){
-    let data = await this.getPlanResource(item);
+    const data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
-      data,
+      data: {...data, projectUserRoles: this.listProjectUserRoles},
       width: "700px",
       maxHeight:"90vh"
     })
@@ -307,7 +311,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   onChangeStatus(){
     let status = this.listStatuses.find(x => x.id == this.selectedStatus)
-    if(status.name == 'DONE')
+    if(status && status.name == 'DONE')
     {
       this.sortable = new SortableModel('timeDone', 1, 'DESC')
       this.changeSortableByName('','')
@@ -355,6 +359,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       this.listStatuses = res.result
     })
   }
+  getProjectUserRoles(){
+    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
+      this.listProjectUserRoles = rs.result
+    })
+  }
   // #endregion
 
   showActionViewRecruitment(status, isRecruitment){
@@ -380,7 +389,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
   protected delete(item: RequestResourceDto): void {
     abp.message.confirm(
-      "Delete request: " + item.name + "?",
+      "Delete request " + item.name + "?",
       "",
       (result: boolean) => {
         if (result) {

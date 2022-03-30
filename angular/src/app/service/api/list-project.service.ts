@@ -46,4 +46,13 @@ public UpdateTrainingProject(item: any): Observable<any> {
 public CreateTrainingProject(item: any): Observable<any> {
   return this.http.post<any>(this.rootUrl + '/CreateTrainingProject', item);
 }
+
+public closeProject(item: any): Observable<any> {
+  return this.http.post<any>(this.rootUrl + '/CloseProject',item)
+}
+
+public getAllWorkingUserFromProject(id: any): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetAllWorkingUserFromProject?projectId=' + id);
+}
+
 }

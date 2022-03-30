@@ -13,6 +13,7 @@ namespace ProjectManagement.Configuration.Dto
         public string FinanceSecretCode { get; set; }
         public string TimesheetUri { get; set; }
         public string TimesheetSecretCode { get; set; }
+        public string AutoUpdateProjectInfoToTimesheetTool { get; set; }
         public string HRMUri { get; set; }
         public string HRMSecretCode { get; set; }
         public string CanSendDay { get; set; }
