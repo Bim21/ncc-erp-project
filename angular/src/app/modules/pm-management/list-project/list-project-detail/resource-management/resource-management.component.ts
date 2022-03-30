@@ -1,3 +1,4 @@
+import { IDNameDto } from './../../../../../service/model/id-name.dto';
 import { MatDialog } from '@angular/material/dialog';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
@@ -82,7 +83,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   //skills, levels
   public listSkills: any[] = []
   public listLevels: any[] = []
-  public listProjectUserRoles: any[] = []
+  public listProjectUserRoles: IDNameDto[] = []
 
   constructor(
     injector: Injector, 
@@ -661,7 +662,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
 
   getProjectUserRoles(){
-    this.resourceRequestService.getProjectUserRoles().subscribe(rs => {
+    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
       this.listProjectUserRoles = rs.result
     })
   }

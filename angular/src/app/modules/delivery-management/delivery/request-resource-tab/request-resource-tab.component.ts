@@ -15,6 +15,7 @@ import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from '@app/service/model/list-project.dto';
 import { FormPlanUserComponent } from './form-plan-user/form-plan-user.component';
 import * as moment from 'moment';
+import { IDNameDto } from '@app/service/model/id-name.dto';
 
 @Component({
   selector: 'app-request-resource-tab',
@@ -35,7 +36,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public listStatuses: any[] = []
   public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
-  public listProjectUserRoles: any[] = []
+  public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
   public selectedLevel: any = -1
   public isAndCondition:boolean =false;
@@ -172,7 +173,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   async showModalPlanUser(item: any){
-    let data = await this.getPlanResource(item);
+    const data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
       data: {...data, projectUserRoles: this.listProjectUserRoles},
       width: "700px",
@@ -359,7 +360,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     })
   }
   getProjectUserRoles(){
-    this.resourceRequestService.getProjectUserRoles().subscribe(rs => {
+    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
       this.listProjectUserRoles = rs.result
     })
   }
