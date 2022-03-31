@@ -117,25 +117,31 @@ namespace ProjectManagement.APIs.TimeSheets
             var timesheetStartDate = new DateTime(timesheet.Year, timesheet.Month, 1).Date;
             var timesheetEndDate = timesheetStartDate.AddMonths(1).AddDays(-1);
 
-            var mapProjectIdToBillInfo = await WorkScope.GetAll<ProjectUserBill>()
+            var q = await WorkScope.GetAll<ProjectUserBill>()
                 .Where(s => s.Project.IsCharge == true)
                 .Where(s => s.isActive)
                 .Where(s => !s.EndTime.HasValue || s.EndTime.Value.Date <= timesheetEndDate)
-                .GroupBy(s => s.ProjectId)
                 .Select(s => new
                 {
-                    ProjectId = s.Key,
-                    ListBillInfo = s.Select(x => new { x.UserId, x.BillRate, x.BillRole, x.StartTime, x.EndTime }).ToList()
-                })
-               .ToDictionaryAsync(s => s.ProjectId);
+                    s.ProjectId,
+                    s.UserId,
+                    s.BillRate,
+                    s.BillRole,
+                    s.StartTime,
+                    s.EndTime
+                }).ToListAsync();
+
+            var listProjectIdToBillInfo = q.GroupBy(s => s.ProjectId)
+                .Select(s => new {ProjectId = s.Key, ListBillInfo = s.ToList()});
+            
 
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
             var listTimesheetProject = new List<TimesheetProject>();
 
-            foreach (var item in mapProjectIdToBillInfo)
+            foreach (var item in listProjectIdToBillInfo)
             {
-                var projectId = item.Key;
-                var listBillInfo = item.Value.ListBillInfo;
+                var projectId = item.ProjectId;
+                var listBillInfo = item.ListBillInfo;
                 var timesheetProject = new TimesheetProject
                 {
                     ProjectId = projectId,
