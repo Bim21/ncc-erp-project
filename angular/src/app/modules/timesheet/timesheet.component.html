@@ -111,6 +111,12 @@
                                         <i class="fas fa-trash fa-lg mr-1"></i>
                                         Delete
                                     </button>
+                                    <button
+                                        *ngIf="item.isActive==true && permission.isGranted(Timesheet_Timesheet_ForceDelete)"
+                                        class="mat-menu-item  w-100" (click)="forceDelete(item)" #forceDeleteBtn>
+                                        <i class="fas fa-trash-alt fa-lg mr-1"></i>
+                                        Force Delete
+                                    </button>
                                     <button 
                                     *ngIf=" permission.isGranted(Timesheet_Timesheet_ReverseActive)"
                                     class="mat-menu-item  w-100" (click)="changeStatus(item)" >
