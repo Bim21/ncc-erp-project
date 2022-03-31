@@ -14,70 +14,50 @@ import { Subscription } from 'rxjs';
 })
 export class UpdateUserSkillDialogComponent implements OnInit {
   userSkillList: any[] = []
-  skillList:SkillDto[] = []
-  tempSkillList:SkillDto[] = []
+  skillList: SkillDto[] = []
+  tempSkillList: SkillDto[] = []
   subscription: Subscription[] = [];
-  selectedSkills: any[] = []
 
-  public searchSkill:string =""
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private userService:UserService,
-   public dialogRef: MatDialogRef<UpdateUserSkillDialogComponent>,
-   private skillService:SkillService) { }
+  public searchSkill: string = ""
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private userService: UserService,
+    public dialogRef: MatDialogRef<UpdateUserSkillDialogComponent>,
+    private skillService: SkillService) { }
 
   ngOnInit(): void {
     this.userSkillList = this.data.userSkills.map(skill => skill.skillId)
     this.getAllSkill()
-    this.selectedSkills = [...this.data.userSkills.map(skill => {return {
-      id: skill.skillId,
-      name: skill.skillName
-    }})]
   }
 
-  getAllSkill(){
+  getAllSkill() {
     this.subscription.push(
-      this.skillService.getAll().subscribe(data=>{
+      this.skillService.getAll().subscribe(data => {
         this.skillList = data.result
         this.tempSkillList = this.skillList
       })
     )
-   
+
   }
-  saveAndClose(){
+  saveAndClose() {
     let requestBody = {
       userId: this.data.id,
       userSkills: this.userSkillList
     }
     this.subscription.push(
-      this.userService.updateUserSkills(requestBody).pipe(catchError(this.userService.handleError)).subscribe(rs=>{
+      this.userService.updateUserSkills(requestBody).pipe(catchError(this.userService.handleError)).subscribe(rs => {
         abp.notify.success(`Update skill for user ${this.data.fullName}`)
         this.dialogRef.close(true)
       })
     )
-  
   }
 
-  filterSkill(){
-    this.skillList =  this.tempSkillList.filter(skill => skill.name.toLowerCase()
-      .includes(this.searchSkill.toLowerCase())).concat([...this.selectedSkills])
+  filterSkill() {
+    let selectedSkills = this.tempSkillList.filter(skill=>this.userSkillList.includes(skill.id))
+   this.skillList = this.tempSkillList.filter(skill => skill.name.toLowerCase()
+    .includes(this.searchSkill.toLowerCase())).filter(s => !this.userSkillList.includes(s.id))
+         this.skillList.unshift(...selectedSkills)
   }
 
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe())
-    this.selectedSkills = []
   }
-
-  onSkillSelect(skill,e){
-    console.log(e)
-
-    if(e.source.selected){
-      this.selectedSkills.push(skill)
-    console.log("push")
-
-
-    }
-    else{
-      this.selectedSkills.splice(this.selectedSkills.findIndex(skill),1)
-    }
-  }
-
 }
