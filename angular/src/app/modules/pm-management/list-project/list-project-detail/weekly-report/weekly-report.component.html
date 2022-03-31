@@ -272,7 +272,7 @@
                                 <tr (contextmenu)="showActions($event)"
                                     *ngFor="let user of projectCurrentResource; let i =index">
                                     <td class="d-flex justify-content-between" style="border: none;width: 380px;">
-                                        <div style="width: 89%;">
+                                        <div style="width: 80%;">
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
                                                     userType:user.userType,emailAddress: user.emailAddress,avatarPath: user.avatarPath,
                                                      userLevel: user.userLevel}">
@@ -291,7 +291,7 @@
                                                 (click)="releaseUser(user)">
                                                 <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                         </mat-menu>
-                                        <div style="width: 16%; display: flex; align-items: center;"> <strong
+                                        <div style="width: 20%; display: flex; align-items: center;"> <strong
                                                 [ngClass]="user.isPool ? 'text-secondary' : 'text-primary'">
                                                 {{user.workType }}</strong></div>
                                     </td>
