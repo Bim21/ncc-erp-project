@@ -707,6 +707,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
 
       option = {
+        width:'90%',
         title: {
           text: 'Timesheet'
         },
@@ -727,6 +728,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         },
 
         xAxis: {
+          axisLabel: {
+            padding: [4, 0, 0, 0]
+          },
           type: 'category',
           boundaryGap: false,
           data: normalAndOTchartData.labels
@@ -1038,10 +1042,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           containLabel: true
         },
         legend: {
-          data: ['manMonths', 'manDays']
+          data: ['ManMonths', 'ManDays']
         },
         xAxis: [
           {
+            axisLabel: {
+              padding: [4, 0, 0, 0]
+            },
             type: 'category',
             data: chartData.labels,
             boundaryGap: false,
@@ -1050,24 +1057,24 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         yAxis: [
           {
             type: 'value',
-            name: 'manMonths',
+            name: 'ManMonths',
 
           },
           {
             type: 'value',
-            name: 'manDays',
+            name: 'ManDays',
 
           }
         ],
         series: [
 
           {
-            name: 'manMonths',
+            name: 'ManMonths',
             type: 'bar',
             data: chartData.manMonths
           },
           {
-            name: 'manDays',
+            name: 'ManDays',
             type: 'line',
             yAxisIndex: 1,
             data: chartData.manDays
