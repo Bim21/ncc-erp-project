@@ -129,6 +129,9 @@ namespace ProjectManagement.APIs.TimeSheets
                 })
                .ToDictionaryAsync(s => s.ProjectId);
 
+            var listTimesheetProjectBill = new List<TimesheetProjectBill>();
+            var listTimesheetProject = new List<TimesheetProject>();
+
             foreach (var item in mapProjectIdToBillInfo)
             {
                 var projectId = item.Key;
@@ -138,6 +141,8 @@ namespace ProjectManagement.APIs.TimeSheets
                     ProjectId = projectId,
                     TimesheetId = timesheet.Id,
                 };
+
+                listTimesheetProject.Add(timesheetProject);                       
 
                 foreach (var b in listBillInfo)
                 {
@@ -152,9 +157,13 @@ namespace ProjectManagement.APIs.TimeSheets
                         EndTime = b.EndTime,
                         IsActive = true
                     };
-                    await WorkScope.InsertAsync(timesheetProjectBill);
+                    listTimesheetProjectBill.Add(timesheetProjectBill);
+                    //await WorkScope.InsertAsync(timesheetProjectBill);
                 }
             }
+
+            await WorkScope.InsertRangeAsync(listTimesheetProject);
+            await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
 
             return new { failList, input };
 
@@ -229,7 +238,7 @@ namespace ProjectManagement.APIs.TimeSheets
             }
 
             timesheet.IsDeleted = true;
-            CurrentUnitOfWork.SaveChanges();
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
         
         [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ReverseActive)]
