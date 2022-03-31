@@ -1,3 +1,4 @@
+import { ConfigURIDto } from './../model/configURI.dto';
 import { AppConsts } from './../../../shared/AppConsts';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -8,6 +9,7 @@ import { PagedRequestDto } from './../../../shared/paged-listing-component-base'
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 export abstract class BaseApiService {
+    public configURI = AppConsts.configURI
     protected baseUrl = AppConsts.remoteServiceBaseUrl;
 
     protected get rootUrl() {

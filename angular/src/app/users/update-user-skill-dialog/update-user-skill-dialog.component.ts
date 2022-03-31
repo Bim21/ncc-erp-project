@@ -57,8 +57,8 @@ export class UpdateUserSkillDialogComponent implements OnInit {
   }
 
   filterSkill(){
-    this.skillList = [...new Set( this.tempSkillList.filter(skill => skill.name.toLowerCase()
-    .includes(this.searchSkill.toLowerCase())).concat(...this.selectedSkills))]
+    this.skillList =  this.tempSkillList.filter(skill => skill.name.toLowerCase()
+      .includes(this.searchSkill.toLowerCase())).concat([...this.selectedSkills])
   }
 
   ngOnDestroy(): void {
@@ -68,8 +68,12 @@ export class UpdateUserSkillDialogComponent implements OnInit {
 
   onSkillSelect(skill,e){
     console.log(e)
-    if(e._selected){
+
+    if(e.source.selected){
       this.selectedSkills.push(skill)
+    console.log("push")
+
+
     }
     else{
       this.selectedSkills.splice(this.selectedSkills.findIndex(skill),1)

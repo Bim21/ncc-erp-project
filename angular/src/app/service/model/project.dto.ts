@@ -110,6 +110,8 @@ export class ProjectInfoDto {
   totalBill: number;
   totalResource: number;
   projectCode:string;
+  automationNote: string;
+  pmNote: string;
 }
 export class TrainingProjectDto {
   name: string;

@@ -41,9 +41,13 @@
         <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Pm Report: </mat-label>
-
-                <mat-select [(ngModel)]="pmReport" (selectionChange)="routingReportDetail()">
-                    <mat-option *ngFor="let report of pmReportList" [value]="report">
+                <mat-select [(ngModel)]="pmReport" placeholder="select a report" (selectionChange)="routingReportDetail()">
+                    <mat-form-field class="w-100 px-3 "
+                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                        <input matInput [(ngModel)]="searchPmReport" name="searchPmReportName"
+                        (keydown)="$event.stopPropagation()" placeholder="search">
+                    </mat-form-field>
+                    <mat-option *ngFor="let report of pmReportList | listFilter: 'name' :searchPmReport" [value]="report">
                         <div class="row">
                             <div class="col-10 text-overflow">
                                 {{report.name}}

@@ -1,8 +1,11 @@
+import { ConfigURIDto } from "@app/service/model/configURI.dto";
+
 export class AppConsts {
 
     static remoteServiceBaseUrl: string;
     static appBaseUrl: string;
     static appBaseHref: string; // returns angular's base-href parameter value if used during the publish
+    static configURI = {} as ConfigURIDto
 
     static localeMappings: any = [];
 
