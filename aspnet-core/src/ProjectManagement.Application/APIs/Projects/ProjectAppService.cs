@@ -535,7 +535,8 @@ namespace ProjectManagement.APIs.Projects
                 ProjectType = ProjectType.TRAINING,
                 PmId = input.PmId,
                 StartTime = input.StartTime,
-                EndTime = input.EndTime
+                EndTime = input.EndTime,
+                ClientId = input.ClientId
             };
 
             await AddRolePMForUser(input.PmId);
