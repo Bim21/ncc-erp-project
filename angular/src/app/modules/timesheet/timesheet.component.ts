@@ -19,7 +19,8 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   Timesheet_Timesheet_Delete = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Delete;
   Timesheet_Timesheet_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
   Timesheet_Timesheet_ViewAll = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewAll;
-  Timesheet_Timesheet_ReverseActive = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ReverseActive
+  Timesheet_Timesheet_ReverseActive = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ReverseActive;
+  Timesheet_Timesheet_ForceDelete = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ForceDelete;
   public timesheetList: TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -149,5 +150,19 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
       return true
     }
     return false
+  }
+  forceDelete(timesheet){
+    abp.message.confirm(
+      "Force Delete report: " + timesheet.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.timesheetService.ForceDelete(timesheet.id).pipe(catchError(this.timesheetService.handleError)).subscribe(() => {
+            abp.notify.success("Force Deleted project: " + timesheet.name);
+            this.refresh()
+          });
+        }
+      }
+    );
   }
 }

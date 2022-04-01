@@ -86,7 +86,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
       if(this.resourcePlan.userId == -1){
         this.resourceRequestService.deletePlanUser(this.resourcePlan.resourceRequestId).subscribe(res => {
           if(res.success){
-            abp.notify.success("Plan Success")
+            abp.notify.success("Plan successfully")
             this.dialogRef.close({ type: 'delete', data})
           }
           else{
@@ -97,7 +97,7 @@ export class FormPlanUserComponent extends AppComponentBase implements OnInit {
       else{
         this.resourceRequestService.updatePlanUser(this.resourcePlan).subscribe(res => {
           if(res.success){
-            abp.notify.success("Update Success")
+            abp.notify.success("Update successfully")
             data.result = res.result
             this.dialogRef.close({ type: '', data})
           }

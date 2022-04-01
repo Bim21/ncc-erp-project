@@ -77,7 +77,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
   @ViewChild("timmer") timmerCount;
   @ViewChild(MatMenuTrigger)
-  menu: MatMenuTrigger;
+  menuRelease: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
   public itemPerPage: number = 20;
@@ -689,6 +689,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         },
 
         xAxis: {
+          axisLabel: {
+            padding: [4, 0, 0, 0]
+          },
           type: 'category',
           boundaryGap: false,
           data: normalAndOTchartData.labels
@@ -871,15 +874,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     e.preventDefault();
     this.contextMenuPosition.x = e.clientX + 'px';
     this.contextMenuPosition.y = e.clientY + 'px';
-    this.menu.openMenu()
-
-
-  }
-  showActionsPlan(e) {
-    e.preventDefault();
-    this.contextMenuPosition.x = e.clientX + 'px';
-    this.contextMenuPosition.y = e.clientY + 'px';
-    this.menu.openMenu()
+    this.menuRelease.openMenu();
 
 
   }
@@ -1010,6 +1005,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           },
           xAxis: [
             {
+              axisLabel: {
+                padding: [4, 0, 0, 0]
+              },
               type: 'category',
               data: chartData.labels,
               boundaryGap: false,

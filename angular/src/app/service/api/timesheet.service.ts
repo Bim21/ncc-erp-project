@@ -19,9 +19,16 @@ export class TimesheetService extends BaseApiService{
     return this.http.delete<any>(this.rootUrl + '/Delete', {
         params: new HttpParams().set('timesheetId', id)
     })
-}
-public ReverseActive(id:number): Observable<any> {
-  return this.http.post<any>(this.rootUrl + '/ReverseActive?id='+id, {});
-}
+  }
+  public ReverseActive(id:number): Observable<any> {
+    return this.http.post<any>(this.rootUrl + '/ReverseActive?id='+id, {});
+  }
+  
+  public ForceDelete(id: any): Observable<any> {
+    return this.http.delete<any>(this.rootUrl + '/ForceDelete?', {
+      params: new HttpParams().set('timesheetId', id)
+  })
+  }
+
 
 }

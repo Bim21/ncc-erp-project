@@ -389,12 +389,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
   protected delete(item: RequestResourceDto): void {
     abp.message.confirm(
-      "Delete request " + item.name + "?",
+      "Delete this request?",
       "",
       (result: boolean) => {
         if (result) {
           this.resourceRequestService.delete(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted request: " + item.name);
+            abp.notify.success(" Delete request successfully");
             this.refresh();
           });
 

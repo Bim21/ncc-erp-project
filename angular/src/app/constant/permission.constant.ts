@@ -222,6 +222,7 @@ export const PERMISSIONS_CONSTANT = {
     Timesheet_Timesheet_Get: "Timesheet.Timesheet.Get",
     Timesheet_Timesheet_Update: "Timesheet.Timesheet.Update",
     Timesheet_Timesheet_ViewAll: "Timesheet.Timesheet.ViewAll",
+    Timesheet_Timesheet_ForceDelete: "Timesheet.Timesheet.ForceDelete",
 
 
     Timesheet_TimesheetProject: "Timesheet.TimesheetProject",
