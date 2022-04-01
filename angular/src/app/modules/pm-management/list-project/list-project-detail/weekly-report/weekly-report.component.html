@@ -207,11 +207,11 @@
     
                                 </td>
                                 <td class="text-center" *ngIf="selectedReport.isActive">
-                                    <button *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
-                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive" mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
-                                        <i class="fas fa-bars fa-lg"></i>
+                                    <button [matMenuTriggerFor]="menuAction" *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
+                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive" mat-button  [disabled]="processProblem">
+                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
-                                    <mat-menu #menu="matMenu" class="p-2">
+                                    <mat-menu #menuAction="matMenu" class="p-2">
                                         <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)" (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
@@ -274,19 +274,19 @@
                                     <td class="d-flex justify-content-between" style="border: none;width: 380px;">
                                         <div style="width: 89%;">
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
-                                                    userType:user.userType,emailAddress: user.emailAddress,avatarPath: user.avatarPath,
+                                                    userType:user.userType,avatarPath: user.avatarPath,
                                                      userLevel: user.userLevel}">
                                             </app-user-info>
                                         </div>
                                         <div style="visibility: hidden; position: fixed"
                                             [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y"
-                                            [matMenuTriggerFor]="menu">
+                                            [matMenuTriggerFor]="menuRelease">
                                         </div>
-                                        <button mat-icon-button [matMenuTriggerFor]="menu"
+                                        <button mat-icon-button [matMenuTriggerFor]="menuRelease"
                                             style="outline: none; margin-bottom: 5px;"
                                             aria-label="Example icon-button with a menu">
                                         </button>
-                                        <mat-menu #menu="matMenu">
+                                        <mat-menu #menuRelease="matMenu">
                                             <button [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                 (click)="releaseUser(user)">
                                                 <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
