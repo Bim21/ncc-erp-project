@@ -11,7 +11,7 @@ import { projectProblemDto, projectReportDto } from './../../../../../service/mo
 import { finalize, catchError } from 'rxjs/operators';
 
 import { ActivatedRoute } from '@angular/router';
-import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
+import { pmReportProjectDto} from './../../../../../service/model/pmReport.dto';
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
 import { Component, OnInit, Injector, ViewChild, Input } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
@@ -106,7 +106,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public mondayOf5weeksAgo: any
   public lastWeekSunday: any
   public tempResourceList: any[] = []
-  public officalResourceList: any[] = []
+  public officalResourceList: any[] = [];
 
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
@@ -139,17 +139,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.mondayOf5weeksAgo = moment(this.mondayOf5weeksAgo.setDate(this.mondayOf5weeksAgo.getDate() - 28)).format("YYYY-MM-DD")
     this.lastWeekSunday = moment(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)).format("YYYY-MM-DD");
     if (this.router.url.includes("weeklyReportTabDetail")) {
-      this.pmReportService.currentProjectHealth.subscribe(projectHealth => {
-        this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data)=>{
-          this.pmReportProjectList = data.result;
-          this.pmReportProjectList.forEach(element => {
-            if (element.projectId == this.projectId) {
-              element.setBackground = true;
-            } else {
-              element.setBackground = false;
-            }
-          });
-        })
+      this.pmReportService.currentProjectHealth.subscribe((data) => {
+        if (data) {
+          const pmReportPro = this.pmReportProjectList.find(e => e.id == data.pmReportProjectId);
+          if (pmReportPro) {
+            pmReportPro.projectHealth = this.problemIssueList[data.projectHealth];
+          }
+        }
       }
       );
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
@@ -711,7 +707,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
 
       option = {
-        width:'90%',
+        width: '90%',
         title: {
           text: 'Timesheet'
         },
@@ -832,11 +828,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             data: hasOtValue ? chartData.overTimeHours : [],
             type: 'line',
             name: 'OT',
-            lineStyle: {color: 'red'}
+            lineStyle: { color: 'red' }
           }
         ]
       };
-   
+
       option && myChart.setOption(option);
 
 
@@ -1106,7 +1102,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   editResourcePlan(resource) {
     let item = {
-      projectUserId:resource.id,
+      projectUserId: resource.id,
       fullName: resource.fullName,
       projectId: this.projectId,
       projectRole: resource.projectRole,

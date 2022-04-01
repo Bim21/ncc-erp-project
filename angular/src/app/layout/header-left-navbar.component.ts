@@ -1,3 +1,4 @@
+import { pmReportProjectHealthDto } from './../service/model/pmReport.dto';
 import { ProjectInfoDto } from './../service/model/project.dto';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -30,7 +31,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   projectName: string
   projectCode: string
   public projectHealthList: string[] =  Object.keys(this.APP_ENUM.ProjectHealth);
-  projectHealth = this.reportService.projectHealth.getValue();
+  projectHealth;
   projectId
   isTimmerCounting: boolean = false
   isStopCounting: boolean = false
@@ -159,14 +160,15 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.isRefresh = false
   }
 
-  changeProjectHealth(projectHealth) {
-    this.reportService.changeProjectHealth(projectHealth)
+  changeProjectHealth(pmReportProjectId,projectHealth) {
+    let data = {pmReportProjectId,projectHealth} as pmReportProjectHealthDto;
+    this.reportService.changeProjectHealth(data)
   }
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
       .subscribe((data) => {
         this.pmReportProjectService.projectHealth = projectHealth
-        this.changeProjectHealth(projectHealth)
+        this.changeProjectHealth( this.pmReportProjectId,projectHealth)
         abp.notify.success("update successful")
       })
   }
