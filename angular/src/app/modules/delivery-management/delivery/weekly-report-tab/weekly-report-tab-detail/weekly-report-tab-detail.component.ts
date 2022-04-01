@@ -135,18 +135,22 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let currentDate = new Date()
     currentDate.setDate(currentDate.getDate() - (currentDate.getDay() + 6) % 7);
     currentDate.setDate(currentDate.getDate() - 7);
-
     this.mondayOf5weeksAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
     this.mondayOf5weeksAgo = moment(this.mondayOf5weeksAgo.setDate(this.mondayOf5weeksAgo.getDate() - 28)).format("YYYY-MM-DD")
     this.lastWeekSunday = moment(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)).format("YYYY-MM-DD");
     if (this.router.url.includes("weeklyReportTabDetail")) {
-      this.pmReportService.currentMessage.subscribe(message => {
-        this.projectType = message;
-        if (this.pmReportId) {
-          this.getPmReportProject();
-        }
+      this.pmReportService.currentProjectHealth.subscribe(projectHealth => {
+        this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data)=>{
+          this.pmReportProjectList = data.result;
+          this.pmReportProjectList.forEach(element => {
+            if (element.projectId == this.projectId) {
+              element.setBackground = true;
+            } else {
+              element.setBackground = false;
+            }
+          });
+        })
       }
-
       );
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
       this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";

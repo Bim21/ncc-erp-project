@@ -30,7 +30,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   projectName: string
   projectCode: string
   public projectHealthList: string[] =  Object.keys(this.APP_ENUM.ProjectHealth);
-  projectHealth
+  projectHealth = this.reportService.projectHealth.getValue();
   projectId
   isTimmerCounting: boolean = false
   isStopCounting: boolean = false
@@ -44,7 +44,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     private pmReportProjectService: PMReportProjectService) {
     super(injector)
   }
-  projectType = this.reportService.messageSource.getValue();
   ngOnInit(): void {
      
 
@@ -85,13 +84,9 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
           }
           else {
             this.isShowReportBar = false;
-            this.projectType = this.reportService.messageSource.getValue();
-            this.reportService.changeMessage("OUTSOURCING")
           }
           if(this.isShowReportBar){
             this.projectHealth = this.pmReportProjectService.projectHealth
-            console.log("111",this.projectHealth)
-            console.log("222",this.projectHealthList)
             this.pmReportProjectId = this.route.snapshot.queryParamMap.get("pmReportProjectId")
             this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
             this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
@@ -103,9 +98,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
 
         }
       )
-  }
-  newMessage(type) {
-    this.reportService.changeMessage(type)
   }
   getPmReportList() {
     this.reportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
@@ -165,20 +157,16 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.isTimmerCounting = true
     this.isStopCounting = false
     this.isRefresh = false
+  }
 
-
-
+  changeProjectHealth(projectHealth) {
+    this.reportService.changeProjectHealth(projectHealth)
   }
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
       .subscribe((data) => {
         this.pmReportProjectService.projectHealth = projectHealth
-        // this.pmReportProjectList.forEach(item => {
-        //   if (item.id == this.pmReportProjectId) {
-        //     item.projectHealth = this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth)
-        //   }
-        //   abp.notify.success("Update successfull")
-        // })
+        this.changeProjectHealth(projectHealth)
         abp.notify.success("update successful")
       })
   }
