@@ -715,7 +715,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           trigger: 'axis'
         },
         legend: {
-          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
             , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
             `${hasTempDataOT ? 'OT Temp' : ''}`],
         },
