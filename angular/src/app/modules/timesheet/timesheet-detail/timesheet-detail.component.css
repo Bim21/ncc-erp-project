@@ -40,3 +40,6 @@
 ::ng-deep #title-page-tsdetail .breadcrumb-item+.breadcrumb-item::before{
   content: '>';
 }
+::ng-deep mat-checkbox .mat-checkbox-layout{
+  margin-bottom: 10px;
+}
