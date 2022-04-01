@@ -573,6 +573,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     showModal.afterClosed().subscribe((rs) => {
       if(rs)
         this.getResourceRequestList()
+        this.getPlannedtUser()
+        this.getProjectUser()
     })
   }
 

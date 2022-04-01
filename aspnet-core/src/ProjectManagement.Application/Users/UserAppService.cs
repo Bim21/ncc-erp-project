@@ -567,9 +567,12 @@ namespace ProjectManagement.Users
         }
 
         [HttpGet]
-        public async Task<List<UserDto>> GetAllUserActive(bool onlyStaff, bool isFake = false)
+        public async Task<List<UserDto>> GetAllUserActive(bool onlyStaff)
         {
-            var query = _workScope.GetAll<User>().Where(u => u.IsActive && isFake ? true : (u.UserType != UserType.FakeUser))
+            var query = _workScope.GetAll<User>()
+                .Where(u => u.IsActive)
+                .Where(x => x.UserType != UserType.Vendor)
+                .Where(x => x.UserType != UserType.FakeUser)
                 .Where(x => onlyStaff ? x.UserType != UserType.Internship : true)
                 .Select(u => new UserDto
                 {
