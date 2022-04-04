@@ -37,7 +37,7 @@
             </label>
             <div class="col-md-9 ">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-select placeholder="skill" multiple [(ngModel)]="resourceRequestDto.skillIds" name="SkillList" #skill="ngModel">
+                    <mat-select placeholder="Select skill" multiple [(ngModel)]="resourceRequestDto.skillIds" name="SkillList" #skill="ngModel">
                         <mat-option *ngFor="let skill of listSkill" [value]="skill.id">
                             {{skill.name}}
                         </mat-option>
