@@ -340,12 +340,12 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   public removeProjectRerequest(request: projectResourceRequestDto): void {
     abp.message.confirm(
-      `Delete request: ${request.name}`,
+      `Delete this request?`,
       "",
       (result: boolean) => {
         if (result) {
           this.projectRequestService.deleteProjectRequest(request.id).pipe(catchError(this.projectRequestService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted request: " + request.name);
+            abp.notify.success("Delete request successfully");
             this.getResourceRequestList();
           });
 

@@ -65,7 +65,7 @@
                                         <div *ngIf="user.createMode" class="form-group row required">
 
                                             <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select [(ngModel)]="user.userInfo"
+                                                <mat-select (closed)=" searchUser = ''" [(ngModel)]="user.userInfo"
                                                     (ngModelChange)="onUserSelect(user)" name="projectEmployee"
                                                     placeholder="select account *" required #projectEmployee="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
@@ -263,7 +263,7 @@
                                                 <div *ngIf="user.createMode" class="form-group row required">
 
                                                     <mat-form-field class="w-100" appearance="outline">
-                                                        <mat-select [(ngModel)]="user.userId" name="projectEmployee"
+                                                        <mat-select (closed)="searchPlannedResource=''" [(ngModel)]="user.userId" name="projectEmployee"
                                                             placeholder="select account *" required
                                                             #projectEmployee="ngModel">
                                                             <mat-form-field class="w-100 px-3 "
