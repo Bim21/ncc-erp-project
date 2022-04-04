@@ -272,7 +272,7 @@
                                 <span *ngIf="item.statusName == 'DONE'">{{item.timeDone | date: "dd/MM/yyyy"}}</span>
                             </td>
                             <td class="text-center action-request-resource-tab">
-                                <button *ngIf="item.statusName != 'DONE' && !item.isRecruitmentSend" mat-button [matMenuTriggerFor]="menu">
+                                <button *ngIf="isShowButtonMenuAction(item)" mat-button [matMenuTriggerFor]="menu">
                                     <i class="fas fa-bars fa-lg"></i>
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">

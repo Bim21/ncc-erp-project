@@ -403,6 +403,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
     );
   }
+  isShowButtonMenuAction(item){
+    if((item.statusName != 'DONE' && !item.isRecruitmentSend) || item.statusName != 'CANCELLED')
+      return true;
+    return false;
+  }
 }
 
 export class THeadTable{

@@ -622,6 +622,10 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     );
   }
 
+  sendRecruitment(){
+    abp.message.info('Chức năng này sẽ được cập nhật trong bản release sắp tới', 'Thông báo')
+  }
+
   public openModal(name, typePM, content, id){
     this.typePM = typePM
     this.modal_title = name

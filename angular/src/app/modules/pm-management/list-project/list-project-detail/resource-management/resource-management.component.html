@@ -604,7 +604,7 @@
                                                 </button>
                                                 <br *ngIf="item.planUserInfo">
                                                 <button class="btn btn-block text-left" mat-button
-                                                    (click)="cancelRequest(item);">
+                                                    (click)="cancelRequest(item.id);">
                                                     <i class="fa fa-times text-warning vertical-align-baseline"></i>
                                                     Cancel
                                                 </button>
@@ -644,7 +644,7 @@
                                             <div *ngIf="item.statusName == 'CANCELLED'" class="text-left">
                                                 <button class="btn btn-block text-left" mat-button
                                                     *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
-                                                    (click)="delete(item);">
+                                                    (click)="deleteRequest(item);">
                                                     <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                                                     Delete
                                                 </button>
