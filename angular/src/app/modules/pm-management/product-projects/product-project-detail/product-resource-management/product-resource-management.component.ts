@@ -46,6 +46,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
+  public searchPlannedResource :string ='';
 
 
   // project user
@@ -641,7 +642,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   cancelPlanResourceProcess(user) {
     this.getPlannedtUser();
     this.planResourceProcess = false
-    this.searchUser = ""
+    this.searchPlannedResource = ""
   }
 
 
