@@ -111,13 +111,10 @@ namespace ProjectManagement.APIs.Projects
         public async Task<IActionResult> GetOutsourcingPMs()
         {
             var pms = await WorkScope.GetAll<Project>()
-                .Where(u=>u.ProjectType != ProjectType.PRODUCT && u.ProjectType != ProjectType.TRAINING)
-                .Select(u => new
+                .Where(u => u.ProjectType != ProjectType.PRODUCT && u.ProjectType != ProjectType.TRAINING)
+                .Select(u => new PMDto
                 {
                     Id = u.PMId,
-                    UserName = u.PM.UserName,
-                    Name = u.PM.Name,
-                    Surname = u.PM.Surname,
                     EmailAddress = u.PM.EmailAddress,
                     FullName = u.PM.FullName,
                     AvatarPath = u.PM.AvatarPath,
@@ -133,12 +130,9 @@ namespace ProjectManagement.APIs.Projects
         {
             var pms = await WorkScope.GetAll<Project>()
                 .Where(u => u.ProjectType == ProjectType.PRODUCT)
-                .Select(u => new
+                .Select(u => new PMDto
                 {
                     Id = u.PMId,
-                    UserName = u.PM.UserName,
-                    Name = u.PM.Name,
-                    Surname = u.PM.Surname,
                     EmailAddress = u.PM.EmailAddress,
                     FullName = u.PM.FullName,
                     AvatarPath = u.PM.AvatarPath,
@@ -154,12 +148,9 @@ namespace ProjectManagement.APIs.Projects
         {
             var pms = await WorkScope.GetAll<Project>()
                 .Where(u => u.ProjectType == ProjectType.TRAINING)
-                .Select(u => new
+                .Select(u => new PMDto
                 {
                     Id = u.PMId,
-                    UserName = u.PM.UserName,
-                    Name = u.PM.Name,
-                    Surname = u.PM.Surname,
                     EmailAddress = u.PM.EmailAddress,
                     FullName = u.PM.FullName,
                     AvatarPath = u.PM.AvatarPath,
