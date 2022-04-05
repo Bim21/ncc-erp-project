@@ -673,12 +673,11 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           trigger: 'axis'
         },
         legend: {
-          orient: 'vertical',
-          top: '12%',
-          left:'10%',
-          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
-            , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-            `${hasTempDataOT ? 'OT Temp' : ''}`],            
+          left:'25%',
+          width:'80%',
+          data: ['Total normal' ,'Total OT' ,'Normal Offical'
+            ,'OT Offical', 'Normal Temp',
+            'OT Temp'],       
         },
         color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
