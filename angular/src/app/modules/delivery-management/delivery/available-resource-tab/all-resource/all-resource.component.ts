@@ -296,6 +296,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
         data: {
           workingProject: data.result,
           user: plan,
+          fromPage: "allResource"
         }
       })
 

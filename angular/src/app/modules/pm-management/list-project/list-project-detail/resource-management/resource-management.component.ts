@@ -198,7 +198,6 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
 
   saveProjectUser(user: any) {
-  console.log("userrrr", user)
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
     }
@@ -241,7 +240,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     user.projectId = this.projectId
     delete user["createMode"]
-    this.projectUserService.AddUserToProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.AddUserToOutSourcingProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
@@ -389,7 +388,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
           data: {
             workingProject: workingProject,
             user: user,
-            type: "confirmJoin"
+            type: "confirmJoin",
+            page: "outsource"
           }
         })
 

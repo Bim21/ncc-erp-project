@@ -58,7 +58,8 @@ namespace ProjectManagement.APIs.Resource
 
 
         [HttpPost]
-        [AbpAuthorize]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_CreatePlan, PermissionNames.Resource_TabAllResource_CreatePlan,
+            PermissionNames.Resource_TabVendor_CreatePlan)]
         public async Task PlanEmployeeJoinOrOutProject(InputPlanResourceDto input)
         {
             if (input.AllocatePercentage <= 0)
@@ -70,46 +71,85 @@ namespace ProjectManagement.APIs.Resource
         }
 
         [HttpPost]
-        [AbpAuthorize()]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_ConfirmOut, PermissionNames.Resource_TabAllResource_ConfirmOut,
+            PermissionNames.Resource_TabVendor_ConfirmOut)]
         public async Task ConfirmOutProject(ConfirmOutProjectDto input)
         {
             await _resourceManager.ConfirmOutProject(input);
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject)]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_EditTempProject)]
         public async Task AddUserFromPoolToTempProject(AddResourceToProjectDto input)
         {
-            await _resourceManager.CreatePresentProjectUserAndNofity(input);
+            var allowConfirmMoveEmployeeToOtherProject
+               = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.CreatePresentProjectUserAndNofity(input, allowConfirmMoveEmployeeToOtherProject);
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject
-            , PermissionNames.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject)]
-        public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        [AbpAuthorize(PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject,
+            PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject,
+            PermissionNames.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Resource_TabVendor_ConfirmPickEmployeeFromPoolToProject,
+            PermissionNames.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther
+            )]
+        //public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        //{
+        //    var allowConfirmMoveEmployeeToOtherProject
+        //      = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource__ConfirmMoveEmployeeWorkingOnAProjectToOther);
+        //    await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+        //}
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject,
+            PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther)]
+        public async Task ConfirmJoinProjectFromTabPool(long projectUserId, DateTime startTime)
         {
-            await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+            var allowConfirmMoveEmployeeToOtherProject
+              = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject,
+           PermissionNames.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther)]
+        public async Task ConfirmJoinProjectFromTabAllResource(long projectUserId, DateTime startTime)
+        {
+            var allowConfirmMoveEmployeeToOtherProject
+             = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Resource_TabVendor_ConfirmPickEmployeeFromPoolToProject,
+           PermissionNames.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther)]
+        public async Task ConfirmJoinProjectFromTabVendor(long projectUserId, DateTime startTime)
+        {
+            var allowConfirmMoveEmployeeToOtherProject
+             = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
 
         [HttpPost]
-        [AbpAuthorize()]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_EditPlan,
+            PermissionNames.Resource_TabAllResource_EditPlan,
+            PermissionNames.Resource_TabVendor_EditPlan)]
         public async Task EditProjectUserPlan(EditProjectUserDto input)
         {
             await _resourceManager.EditProjectUserPlan(input);
         }
 
-
-
-
         [HttpPost]
-        [AbpAuthorize]
+        [AbpAuthorize(PermissionNames.Resource_TabVendor)]
         public async Task<GridResult<GetAllResourceDto>> GetVendorResource(InputGetResourceDto input)
         {
             return await _resourceManager.GetResources(input, true);
         }
 
         [HttpPost]
-        [AbpAuthorize]
+        [AbpAuthorize(PermissionNames.Resource_TabAllResource)]
         public async Task<GridResult<GetAllResourceDto>> GetAllResource(InputGetResourceDto input)
         {
             return await _resourceManager.GetResources(input, false);
@@ -117,7 +157,7 @@ namespace ProjectManagement.APIs.Resource
 
 
         [HttpPost]
-        [AbpAuthorize]
+        [AbpAuthorize(PermissionNames.Resource_TabPool)]
         public async Task<GridResult<GetAllPoolResourceDto>> GetAllPoolResource(InputGetResourceDto input)
         {
             return await _resourceManager.GetAllPoolResource(input);
@@ -125,8 +165,7 @@ namespace ProjectManagement.APIs.Resource
 
 
         [HttpDelete]
-        [AbpAuthorize]
-        public async Task CancelResourcePlan(long projectUserId)
+        public async Task CancelResourcePlan(long projectUserId, bool allowCancelAnyPlan)
         {
             var pu = await WorkScope.GetAll<ProjectUser>()
                 .Include(s => s.User)
@@ -151,7 +190,7 @@ namespace ProjectManagement.APIs.Resource
             }
             if (projectUser.CreatorUserId != AbpSession.UserId.Value)
             {
-                bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ResourceRequest_CancelAnyPlanResource);
+              
                 if (!allowCancelAnyPlan)
                 {
                     throw new UserFriendlyException(String.Format("You don't have permission to cancel resource plan of other people!"));
@@ -177,7 +216,31 @@ namespace ProjectManagement.APIs.Resource
 
         }
 
+
         [HttpPut]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_CancelAnyPlan, PermissionNames.Resource_TabPool_CancelMyPlan)]
+        public async Task CancelPoolResourcePlan(long projectUserId)
+        {
+            bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_CancelAnyPlan);
+            await CancelResourcePlan(projectUserId, allowCancelAnyPlan);
+        }
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Resource_TabAllResource_CancelAnyPlan, PermissionNames.Resource_TabAllResource_CancelMyPlan)]
+        public async Task CancelAllResourcePlan(long projectUserId)
+        {
+            bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabAllResource_CancelAnyPlan);
+            await CancelResourcePlan(projectUserId, allowCancelAnyPlan);
+        }
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Resource_TabVendor_CancelAnyPlan, PermissionNames.Resource_TabVendor_CancelMyPlan)]
+        public async Task CancelVendorResourcPlan(long projectUserId)
+        {
+            bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabVendor_CancelAnyPlan);
+            await CancelResourcePlan(projectUserId, allowCancelAnyPlan);
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_EditNote)]
         public async Task updateUserPoolNote(UpdateUserPoolNoteDto input)
         {
             var user = await _userManager.GetUserByIdAsync(input.UserId);

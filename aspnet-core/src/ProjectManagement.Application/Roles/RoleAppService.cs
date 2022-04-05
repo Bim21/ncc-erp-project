@@ -23,7 +23,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectManagement.Roles
 {
-    [AbpAuthorize(PermissionNames.Pages_Roles)]
+    [AbpAuthorize(PermissionNames.Admin_Roles)]
     public class RoleAppService : AsyncCrudAppService<Role, RoleDto, int, PagedRoleResultRequestDto, CreateRoleDto, RoleDto>, IRoleAppService
     {
         private readonly RoleManager _roleManager;
@@ -44,6 +44,7 @@ namespace ProjectManagement.Roles
             _userRoleRepository = userRoleRepository;
         }
 
+        [AbpAuthorize(PermissionNames.Admin_Roles_Create)]
         public override async Task<RoleDto> CreateAsync(CreateRoleDto input)
         {
             CheckCreatePermission();
@@ -76,6 +77,7 @@ namespace ProjectManagement.Roles
             return new ListResultDto<RoleListDto>(ObjectMapper.Map<List<RoleListDto>>(roles));
         }
 
+        [AbpAuthorize(PermissionNames.Admin_Roles_Edit)]
         public override async Task<RoleDto> UpdateAsync(RoleDto input)
         {
             CheckUpdatePermission();

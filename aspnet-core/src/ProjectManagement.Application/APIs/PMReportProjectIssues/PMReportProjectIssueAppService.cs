@@ -20,8 +20,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
     public class PMReportProjectIssueAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek,
-            PermissionNames.PmManager_PMReportProjectIssue_ProblemsOfTheWeek)]
+        [AbpAuthorize]
         public async Task<List<GetPMReportProjectIssueDto>> ProblemsOfTheWeek(long ProjectId, long pmReportId)
         {
             var query = from prpi in WorkScope.GetAll<PMReportProjectIssue>()
@@ -44,8 +43,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Create,
-            PermissionNames.PmManager_PMReportProjectIssue_Create)]
+        [AbpAuthorize]
         public async Task<PMReportProjectIssueDto> Create(PMReportProjectIssueDto input, long projectId)
         {
             var pmReportProjectActive = await WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive && x.ProjectId == projectId).FirstOrDefaultAsync();
@@ -58,8 +56,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Update,
-            PermissionNames.PmManager_PMReportProjectIssue_Update)]
+        [AbpAuthorize]
         public async Task<PMReportProjectIssueDto> Update(PMReportProjectIssueDto input)
         {
             var pmReportProjectIssue = await WorkScope.GetAsync<PMReportProjectIssue>(input.Id);
@@ -69,8 +66,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         } 
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProjectIssue_Delete,
-            PermissionNames.PmManager_PMReportProjectIssue_Delete)]
+        [AbpAuthorize]
         public async Task Delete(long pmReportProjectIssueId)
         {
             await WorkScope.DeleteAsync<PMReportProjectIssue>(pmReportProjectIssueId);

@@ -297,6 +297,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
         data: {
           workingProject: data.result,
           user: plan,
+          fromPage: "vendor"
         }
       })
 

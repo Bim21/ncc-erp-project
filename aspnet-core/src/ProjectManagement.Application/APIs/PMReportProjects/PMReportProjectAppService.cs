@@ -44,14 +44,13 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport,
-            PermissionNames.PmManager_PMReportProject_GetAllByPmReport)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId,string projectType="OUTSOURCING")
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail)]
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, string projectType = "OUTSOURCING")
         {
             var query = WorkScope.GetAll<PMReportProject>()
                 .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill)
                 .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
-                .WhereIf(projectType == "TRAINING",x => x.Project.ProjectType == ProjectType.TRAINING)
+                .WhereIf(projectType == "TRAINING", x => x.Project.ProjectType == ProjectType.TRAINING)
                 .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT)
                 .Select(x => new GetPMReportProjectDto
                 {
@@ -75,7 +74,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     Seen = x.Seen,
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                     TotalOverTime = x.TotalOverTime
-                }).OrderBy(x => x.PmFullName); 
+                }).OrderBy(x => x.PmFullName);
             return await query.ToListAsync();
         }
 
@@ -107,8 +106,6 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek, 
-            PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture)]
         public async Task<List<UserOfProjectDto>> GetWorkingResourceOfProject(long projectId)
         {
             //var totalPercent = from pu in WorkScope.GetAll<ProjectUser>().Where(x => x.Project.Status != ProjectStatus.Closed)
@@ -139,8 +136,6 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet,
-            PermissionNames.PmManager_PMReportProject_GetWorkingTimeFromTimesheet)]
         public async Task<TotalWorkingTimeOfWeekDto> GetWorkingTimeFromTimesheet(long pmReportProjectId, DateTime startTime, DateTime endTime)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>()
@@ -154,16 +149,14 @@ namespace ProjectManagement.APIs.PMReportProjects
 
             await WorkScope.UpdateAsync(pmReportProject);
 
-            return new TotalWorkingTimeOfWeekDto 
-            { 
+            return new TotalWorkingTimeOfWeekDto
+            {
                 NormalWorkingTime = result.NormalWorkingTime,
-                OverTime = result.OverTime 
+                OverTime = result.OverTime
             };
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_GetAllByPmReport,
-            PermissionNames.PmManager_PMReportProject_GetAllByPmReport)]
         public async Task<GetResultpmReportProjectIssue> ProblemsOfTheWeekForReport(long ProjectId, long pmReportId)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
@@ -196,14 +189,17 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_UpdatePmReportProjectHealth,
-            PermissionNames.PmManager_PMReportProject_UpdatePmReportProjectHealth)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth)
+        ]
         public async Task UpdateHealth(long pmReportProjectId, ProjectHealth projectHealth)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
                                         .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
 
-            if(!pmReportProject.PMReport.IsActive)
+            if (!pmReportProject.PMReport.IsActive)
             {
                 throw new UserFriendlyException("Report has been closed !");
             }
@@ -241,11 +237,14 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek,
-            PermissionNames.PmManager_PMReportProject_ResourceChangesDuringTheWeek)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_ChangedResource,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource)
+        ]
         public async Task<List<GetProjectUserDto>> ResourceChangesDuringTheWeek(long projectId, long pmReportId)
         {
-            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId )
+            var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
                             .Where(x => x.Status == ProjectUserStatus.Present).OrderByDescending(x => x.CreationTime)
                             .Where(x => x.User.UserType != UserType.FakeUser)
                             .Select(x => new GetProjectUserDto
@@ -276,8 +275,11 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture,
-            PermissionNames.PmManager_PMReportProject_ResourceChangesInTheFuture)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_PlannedResource,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource)
+        ]
         public async Task<List<GetProjectUserDto>> ResourceChangesInTheFuture(long projectId, long pmReportId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
@@ -347,7 +349,9 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize()]
         public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
         {
-            await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+            var allowConfirmMoveEmployeeToOtherProject
+            = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
 
         [HttpPost]
@@ -366,8 +370,11 @@ namespace ProjectManagement.APIs.PMReportProjects
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_SendReport,
-            PermissionNames.PmManager_PMReportProject_SendReport)]
+        [AbpAuthorize(
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport)
+        ]
         public async Task SendReport(long projectId, long pmReportId)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
@@ -387,12 +394,10 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Create,
-            PermissionNames.PmManager_PMReportProject_Create)]
         public async Task<PMReportProjectDto> Create(PMReportProjectDto input)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(input.PMReportId);
-            if(!pmReport.IsActive)
+            if (!pmReport.IsActive)
             {
                 throw new UserFriendlyException("PMReport is locked !");
             }
@@ -407,8 +412,6 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Update,
-            PermissionNames.PmManager_PMReportProject_Update)]
         public async Task<PMReportProjectDto> Update(PMReportProjectDto input)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(input.Id);
@@ -427,8 +430,6 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_Delete,
-            PermissionNames.PmManager_PMReportProject_Delete)]
         public async Task Delete(long pmPeportProjectId)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmPeportProjectId);
@@ -468,13 +469,16 @@ namespace ProjectManagement.APIs.PMReportProjects
                             Note = l.Note,
                             ProjectHealth = l.ProjectHealth.ToString()
                         };
-                        
+
 
             return await query.ToListAsync();
         }
 
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_UpdateNote,
-            PermissionNames.PmManager_PMReportProject_UpdateNote)]
+        [AbpAuthorize(
+              PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
+              PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
+              PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)
+          ]
         public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport).SingleOrDefaultAsync(x => x.Id == input.Id);
@@ -489,8 +493,9 @@ namespace ProjectManagement.APIs.PMReportProjects
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReportProject_UpdateNote,
-          PermissionNames.PmManager_PMReportProject_UpdateNote)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
+              PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
+              PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)]
         public async Task<UpdateNoteDto> UpdateAutomationNote(UpdateNoteDto input)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>()

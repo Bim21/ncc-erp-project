@@ -49,6 +49,21 @@ export class ProjectUserService extends BaseApiService {
       this.rootUrl + `/AddUserToProject`, user
     );
   }
+  AddUserToOutSourcingProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToOutSourcingProject`, user
+    );
+  }
+  AddUserToProductProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToProductProject`, user
+    );
+  }
+  AddUserToTrainingProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToTrainingProject`, user
+    );
+  }
   UpdateCurrentResourceDetail(user): Observable<any> {
     return this.http.put<any>(
       this.rootUrl + `/UpdateCurrentResourceDetail`, user

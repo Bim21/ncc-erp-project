@@ -52,10 +52,28 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   }
   confirm() {
     if (this.user.allocatePercentage > 0) {
-      this.puService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
-        abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-        this.dialogRef.close(true)
-      })
+      if(this.data.fromPage == "pool"){
+        this.puService.ConfirmJoinProjectFromTabPool(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
+          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+          this.dialogRef.close(true)
+        })
+      }
+
+      if(this.data.fromPage == "allResource"){
+        this.puService.ConfirmJoinProjectFromTabAllResource(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
+          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+          this.dialogRef.close(true)
+        })
+      }
+
+      if(this.data.fromPage == "vendor"){
+        this.puService.ConfirmJoinProjectFromTabVendor(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
+          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+          this.dialogRef.close(true)
+        })
+      }
+
+      
     }
     else {
       let requestBody = {

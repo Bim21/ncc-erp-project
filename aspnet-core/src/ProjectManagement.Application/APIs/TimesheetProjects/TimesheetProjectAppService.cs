@@ -58,7 +58,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllByproject)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
         public async Task<List<GetTimesheetProjectDto>> GetAllByProject(long projectId)
         {
             var query = from ts in WorkScope.GetAll<Timesheet>()
@@ -77,7 +77,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_ViewInvoice)]
         public async Task<List<GetDetailInvoiceDto>> ViewInvoice(long timesheetId)
         {
             var query = from c in WorkScope.GetAll<Client>()
@@ -94,7 +93,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_CreateInvoice)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoice)]
         public async Task<MergeInvoiceDto> CreateInvoice(MergeInvoiceDto input)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
@@ -192,8 +191,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             await WorkScope.UpdateAsync(timesheet);
             return input;
         }
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_ExportInvoice)]
-
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoice)]
         public async Task<FileBase64Dto> ExportInvoice(InvoiceExcelDto invoiceExcelDto)
         {
             try
@@ -368,8 +366,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetOfAllProject,           
-            PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
             var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
@@ -377,7 +374,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 input.FilterItems.Remove(filterItem);
             }
-            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject);
+            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
@@ -419,7 +416,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Create)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_AddProjectToTimesheet)]
         public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
         {
             var billInfomation = new StringBuilder();
@@ -455,7 +452,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_GetAllRemainProjectInTimesheet)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
         public async Task<List<ProjectDto>> GetAllRemainProjectInTimesheet(long timesheetId)
         {
             var timesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetId).Select(x => x.ProjectId);
@@ -475,7 +472,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Update)]
         public async Task<TimesheetProjectDto> Update(TimesheetProjectDto input)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(input.TimesheetId);
@@ -494,7 +490,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_Delete)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_Delete)]
         public async Task Delete(long timesheetProjectId)
         {
             var timeSheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Timesheet).FirstOrDefaultAsync(x => x.Id == timesheetProjectId);
@@ -519,7 +515,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_UploadFileTimesheetProject)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_UploadTimesheetFile)]
         public async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
         {
             String path = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "timesheets");
@@ -606,7 +602,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_DownloadFileTimesheetProject)]
         public async Task<object> DownloadFileTimesheetProject(long timesheetProjectId)
         {
             var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
@@ -625,6 +620,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_UpdateNote)]
         public async Task<IActionResult> UpdateNote(UpdateTsProjectNoteDto input)
         {
             var projectTimesheet = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);

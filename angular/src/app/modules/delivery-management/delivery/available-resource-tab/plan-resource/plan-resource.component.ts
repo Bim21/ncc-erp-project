@@ -359,6 +359,7 @@ export class PlanResourceComponent
         data: {
           workingProject: data.result,
           user: plan,
+          fromPage: "pool"
         }
       })
 

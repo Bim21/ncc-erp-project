@@ -176,7 +176,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
 
   saveProjectUser(user: any) {
-  console.log("userrrr", user)
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
     }
@@ -219,7 +218,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     user.projectId = this.projectId
     delete user["createMode"]
-    this.projectUserService.AddUserToProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.AddUserToProductProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
