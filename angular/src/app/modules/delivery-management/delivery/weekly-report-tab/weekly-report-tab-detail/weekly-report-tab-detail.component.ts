@@ -715,9 +715,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           trigger: 'axis'
         },
         legend: {
-          data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
-            , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-            `${hasTempDataOT ? 'OT Temp' : ''}`],
+          left:'25%',
+          width:'80%',
+          data: ['Total normal' ,'Total OT' ,'Normal Offical'
+            ,'OT Offical', 'Normal Temp',
+            'OT Temp'], 
         },
         color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
@@ -1030,7 +1032,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       let option: echarts.EChartsOption;
       option = {
         tooltip: {
-          trigger: 'axis',
+          // trigger: 'axis',
         },
         title: {
           text: 'Bill info'
@@ -1056,11 +1058,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         ],
         yAxis: [
           {
+            axisLabel: {
+              padding: [0, 13, 0, 13]
+            },
             type: 'value',
             name: 'ManMonths',
 
           },
           {
+            axisLabel: {
+              padding: [0, 13, 0, 13]
+            },
             type: 'value',
             name: 'ManDays',
 
@@ -1069,6 +1077,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         series: [
 
           {
+            barWidth: 30,
             name: 'ManMonths',
             type: 'bar',
             data: chartData.manMonths
