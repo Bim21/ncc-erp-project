@@ -46,10 +46,10 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
   }
 
   public clientList: ClientDto[] = [];
-  Admin_Client_Create = PERMISSIONS_CONSTANT.Admin_Client_Create;
-  Admin_Client_Delete = PERMISSIONS_CONSTANT.Admin_Client_Delete;
-  Admin_Client_Edit = PERMISSIONS_CONSTANT.Admin_Client_Edit;
-  Admin_Client_ViewAll = PERMISSIONS_CONSTANT.Admin_Client_ViewAll;
+  Admin_Clients_Create = PERMISSIONS_CONSTANT.Admin_Clients_Create;
+  Admin_Clients_Edit = PERMISSIONS_CONSTANT.Admin_Clients_Edit;
+  Admin_Clients_Delete = PERMISSIONS_CONSTANT.Admin_Clients_Delete;
+
   constructor(private clientService: ClientService,
     injector: Injector,
     private dialog: MatDialog) { super(injector) }

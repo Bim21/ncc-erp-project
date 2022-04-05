@@ -1,11 +1,11 @@
 <section class="content px-2 py-2 m-0" style="background-color: #f1f1f1;">
     <div class="container-fluid">
         <div class=" mt-2 ">
-            <mat-expansion-panel [expanded]="isShowProjectUser" *ngIf="permission.isGranted(PmManager_ProjectUser)">
+            <mat-expansion-panel [expanded]="isShowProjectUser" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <strong class="table-title">Current resource</strong>
-                        <button *ngIf="!projectUserProcess && permission.isGranted(PmManager_ProjectUser_Create)"
+                        <button *ngIf="!projectUserProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource)"
                             [hidden]="projectUserProcess || !isShowProjectUser"
                             (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate"
                             class="btn bg-blue ml-3 btn-sm mb-2">
@@ -13,7 +13,7 @@
 
                         </button>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory)">
                         <div class="col-md-6" *ngIf="isShowProjectUser">
                             <section class="example-section">
                                 <mat-checkbox class="example-margin" [checked]="viewHistory"
@@ -178,11 +178,11 @@
                                                 <i class="fas fa-bars fa-lg"></i>
                                             </button>
                                             <mat-menu #menu="matMenu" class="p-2">
-                                                <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)"
+                                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit)"
                                                     [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                     (click)="editProjectUser(user)"> <i
                                                         class="fas fa-edit"></i>Edit</button>
-                                                <button [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                     (click)="releaseUser(user)">
                                                     <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                             </mat-menu>
@@ -213,11 +213,11 @@
 
             <!-- Planned user -->
             <mat-expansion-panel class="mt-3" [expanded]="isShowCurrentResouce"
-                *ngIf="permission.isGranted(PmManager_ProjectUser)">
+                *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowCurrentResouce = !isShowCurrentResouce ">
                     <div class="col-md-6">
                         <strong class="table-title">Planned resource</strong>
-                        <button *ngIf="!planResourceProcess " [hidden]="!isShowCurrentResouce"
+                        <button *ngIf="!planResourceProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan)" [hidden]="!isShowCurrentResouce"
                             (click)="addPlanResource();resourceListCurrentPage=1;$event.stopPropagation()"
                             class="btnCreate" class="btn bg-blue ml-3 mb-2 btn-sm">
                             <i class="fa fa-plus m-0"></i>
@@ -397,15 +397,20 @@
                                                 <i class="fas fa-bars fa-lg"></i>
                                             </button>
                                             <mat-menu #menu="matMenu" class="p-2">
-                                                <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)"
+                                                <button *ngIf="user.allocatePercentage > 0 && (permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject)
+                                                    ||  permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))"
                                                     [disabled]="planResourceProcess" class="mat-menu-item  w-100"
                                                     (click)="confirm(user)"> <i class="fas fa-check"></i>Confirm
-                                                    {{user.allocatePercentage > 0 ? 'Join' : 'Out'}}</button>
-                                                <button *ngIf="permission.isGranted(PmManager_ProjectUser_Delete)"
+                                                    Join</button>
+                                                    <button *ngIf="user.allocatePercentage <= 0 && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut)"
+                                                    [disabled]="planResourceProcess" class="mat-menu-item  w-100"
+                                                    (click)="confirm(user)"> <i class="fas fa-check"></i>Confirm
+                                                    Out</button>
+                                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan)"
                                                     [disabled]="planResourceProcess" class="mat-menu-item  w-100"
                                                     (click)="cancelResourcePlan(user)"> <i
                                                         class="fas fa-times"></i>Cancel Plan</button>
-                                                <button [disabled]="planResourceProcess" class="mat-menu-item  w-100"
+                                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit)" [disabled]="planResourceProcess" class="mat-menu-item  w-100"
                                                     (click)="editResourcePlan(user)"> <i
                                                         class="fas fa-edit"></i>Edit</button>
                                             </mat-menu>
@@ -444,11 +449,11 @@
     <div class="container-fluid">
         <div class="card mt-3">
             <mat-expansion-panel expanded=false
-                *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
+                *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest)">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <div class="col-md-6">
                         <strong class="table-title">Resource request</strong>
-                        <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)"
+                        <button *ngIf="!requestProcess  &&  permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest)"
                             [hidden]="!isShowRequest"
                             (click)="createRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                             class="btn bg-blue ml-3 mb-2 btn-sm">
@@ -546,7 +551,7 @@
                                                     <b>{{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}</b>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 text-right" *ngIf="item.statusName == 'PENDING'">
+                                            <div *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest) && item.statusName == 'PENDING'" class="col-md-2 text-right" >
                                                 <i class="fa fa-edit" (click)="showModalPlanUser(item)"></i>
                                             </div>
                                         </div>
@@ -571,7 +576,7 @@
                                                     {{item.pmNote}}
                                                 </p>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-2" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit)">
                                                 <i class="fa fa-edit"
                                                     (click)="openModal(item.name, 'PM', item.pmNote, item.id)"></i>
                                             </div>
@@ -597,27 +602,27 @@
                                         <mat-menu #menu="matMenu" class="p-2">
                                             <!-- case 1: Status is inprogress -->
                                             <div *ngIf="item.statusName == 'PENDING'">
-                                                <button *ngIf="item.planUserInfo" class="btn btn-block text-left"
+                                                <button *ngIf="item.planUserInfo && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone)" class="btn btn-block text-left"
                                                     mat-button (click)="setDoneRequest(item);">
                                                     <i class="fa fa-check text-success vertical-align-baseline"></i>
                                                     Set Done
                                                 </button>
                                                 <br *ngIf="item.planUserInfo">
-                                                <button class="btn btn-block text-left" mat-button
+                                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CancelRequest)" class="btn btn-block text-left" mat-button
                                                     (click)="cancelRequest(item);">
                                                     <i class="fa fa-times text-warning vertical-align-baseline"></i>
                                                     Cancel
                                                 </button>
                                                 <br>
                                                 <button class="btn btn-block text-left" mat-button
-                                                    *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
+                                                    *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit)"
                                                     (click)="editRequest(item);">
                                                     <i class="fa fa-edit vertical-align-baseline"></i>
                                                     Edit
                                                 </button>
                                                 <br>
                                                 <button class="btn btn-block text-left" mat-button
-                                                    *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                                    *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete)"
                                                     (click)="deleteRequest(item);">
                                                     <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                                                     Delete
@@ -635,7 +640,7 @@
                                             <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
                                             <div *ngIf="item.statusName == 'PENDING' && !item.isRecruitmentSend"
                                                 class="text-left">
-                                                <button class="btn btn-block text-left" mat-button
+                                                <button  *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment)" class="btn btn-block text-left" mat-button
                                                     (click)="sendRecruitment()">
                                                     Send recruitment
                                                 </button>
@@ -643,7 +648,7 @@
                                             <!-- case 5: Status is cancel-->
                                             <div *ngIf="item.statusName == 'CANCELLED'" class="text-left">
                                                 <button class="btn btn-block text-left" mat-button
-                                                    *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                                    *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete)"
                                                     (click)="delete(item);">
                                                     <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                                                     Delete

@@ -8,8 +8,15 @@ import { AppConfigurationService } from '../../../service/api/app-configuration.
   styleUrls: ['./configuration.component.css'],
 })
 export class ConfigurationComponent extends AppComponentBase implements OnInit {
-  Admin_Configuration_Edit = PERMISSIONS_CONSTANT.Admin_Configuration_Edit;
-  Admin_Configuration = PERMISSIONS_CONSTANT.Admin_Configuration;
+  Admin_Configuartions_Edit = PERMISSIONS_CONSTANT.Admin_Configuartions_Edit;
+  Admin_Configuartions_ViewKomuSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewKomuSetting;
+  Admin_Configuartions_ViewProjectSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewProjectSetting;
+  Admin_Configuartions_ViewHrmSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewHrmSetting;
+  Admin_Configuartions_ViewTimesheetSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewTimesheetSetting;
+  Admin_Configuartions_ViewFinanceSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewFinanceSetting;
+  Admin_Configuartions_ViewSendReportSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewSendReportSetting;
+  Admin_Configuartions_ViewGoogleClientAppSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewGoogleClientAppSetting;
+  Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting;
 
   configuration = {} as ConfigurationDto;
   googleToken: string = '';

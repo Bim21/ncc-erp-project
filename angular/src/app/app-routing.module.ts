@@ -87,13 +87,11 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
           {
             path: "users",
             component: UsersComponent,
-            data: { permission: "Pages.Users" },
             canActivate: [AppRouteGuard],
           },
           {
             path: "roles",
             component: RolesComponent,
-            data: { permission: "Pages.Roles" },
             canActivate: [AppRouteGuard],
           },
           {
@@ -104,13 +102,11 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
           {
             path: "tenants",
             component: TenantsComponent,
-            data: { permission: "Pages.Tenants" },
             canActivate: [AppRouteGuard],
           },
           {
             path: "clients",
             component: ClientComponent,
-            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
           {
@@ -121,13 +117,11 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
           {
             path: "currency",
             component: CurrencyComponent,
-            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
           {
             path: "skills",
             component: SkillComponent,
-            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
           { path: "about", component: AboutComponent },
@@ -136,13 +130,11 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
           {
             path: "timesheet",
             component: TimesheetComponent,
-            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
           {
             path: "invoice",
             component: InvoiceComponent,
-            data: { permission: "" },
             canActivate: [AppRouteGuard],
           },
 

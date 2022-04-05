@@ -47,49 +47,49 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l('Admin'),
         '',
         'fas fa-user-cog',
-        'Admin.CanViewMenu',
+        'Admin',
         [
           new MenuItem(
             this.l('Tenants'),
             '/app/tenants',
             'fas fa-building',
-            'Pages.Tenants'
+            'Admin.Tenants'
           ),
           new MenuItem(
             this.l('Clients'),
             '/app/clients',
             'fas fa-users',
-            'Admin.Client'
+            'Admin.Clients'
           ),
           new MenuItem(
             this.l('Configurations'),
             '/app/configurations',
             'fas fa-cog',
-            'Admin.Configuration'
+            'Admin.Configuartions'
           ),
           new MenuItem(
             this.l('Skills'),
             '/app/skills',
             'fas fa-users',
-            'Admin.Skill'
+            'Admin.Skills'
           ),
           new MenuItem(
             this.l('Currencies'),
             '/app/currency',
             'fas fa-money-check',
-            'Admin.Currency'
+            'Admin.Currencies'
           ),
           new MenuItem(
             this.l('Users'),
             '/app/users',
             'fas fa-users',
-            'Pages.Users'
+            'Admin.Users'
           ),
           new MenuItem(
             this.l('Roles'),
             '/app/roles',
             'fas fa-theater-masks',
-            'Pages.Roles'
+            'Admin.Roles'
           ),
         ]
       ),
@@ -97,25 +97,25 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l('Projects'),
         '',
         'fas fa-user-tie',
-        'PmManager.CanViewMenu',
+        'Projects',
         [
           new MenuItem(
             this.l('Outsourcing Projects'),
             '/app/list-project',
             'fas fa-project-diagram',
-            'PmManager.Project'
+            'Projects.OutsourcingProjects'
           ),
           new MenuItem(
             this.l('Training Projects'),
             '/app/training-projects',
             'fas fa-chalkboard',
-            'PmManager.Project'
+            'Projects.ProductProjects'
           ),
           new MenuItem(
             this.l('Product Projects'),
             '/app/product-projects',
             'fab fa-product-hunt',
-            'PmManager.Project'
+            'Projects.TrainingProjects'
           ),
         ]
       ),
@@ -150,93 +150,26 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l('Weekly Reports'),
         '/app/weekly-report',
         'fas fa-chalkboard-teacher',
-        'Deliverymanagement.CanViewMenu.WeeklyReport'
+        'WeeklyReport'
       ),
       new MenuItem(
         this.l('Resource Requests'),
         '/app/resource-request',
         'fab fa-chromecast',
-        'Deliverymanagement.CanViewMenu.ResourceManagement'
+        'ResourceRequest'
       ),
       new MenuItem(
         this.l('Resources'),
         '/app/available-resource/pool',
         'fas fa-hockey-puck',
-        'DeliveryManagement.ResourceRequest.AvailableResource'
+        'Resource'
       ),
       new MenuItem(
         this.l('Timesheets'),
         '/app/timesheet',
         'fas fa-calendar-alt',
-        'Timesheet.CanViewMenu'
+        'Timesheets'
       ),
-      // new MenuItem(
-      //   this.l("CheckPoint"),
-      //   "",
-      //   "fas fa-tasks",
-      //   "", [
-      //   new MenuItem(
-      //     this.l("Phase"),
-      //     "/app/phase",
-      //     "fas fa-clipboard-list",
-      //     "",
-      //   ),
-      //   new MenuItem(
-      //     this.l("Category"),
-      //     "",
-      //     "fas fa-clipboard-list",
-      //     "", [
-      //     new MenuItem(
-      //       this.l("Category Criteria"),
-      //       "/app/category-criteria",
-      //       "fas fa-clipboard-list",
-      //       ""
-      //     ),
-
-      //   ]
-      //   ),
-
-      //   new MenuItem(
-      //     this.l("Đánh giá thành viên"),
-      //     "/app/review-user",
-      //     "fas fa-clipboard-list",
-      //     ""
-
-      //   ),
-      //   new MenuItem(
-      //     this.l("Đánh giá bản thân"),
-      //     "/app/review-yourself",
-      //     "fas fa-clipboard-list",
-      //     "",
-      //   )
-
-      //   ,
-      //   new MenuItem(
-      //     this.l("Tags"),
-      //     "/app/tags",
-      //     "fas fa-clipboard-list",
-      //     "",
-      //   ),
-
-      //   // new MenuItem(
-      //   //   this.l("Setup đánh giá"),
-      //   //   "/app/setup-reviewer",
-      //   //   "fas fa-clipboard-list",
-      //   //   ""
-
-      //   // )
-
-      //   // ,
-      //   // new MenuItem(
-      //   //   this.l("Kết quả đánh giá"),
-      //   //   "/app/result-reviewer",
-      //   //   "fas fa-clipboard-list",
-      //   //   ""
-
-      //   // )
-
-      // ]
-      // ),
     ];
   }
 

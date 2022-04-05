@@ -332,7 +332,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("You have to plan resource for this request first");
             }
 
-            await _resourceManager.ConfirmJoinProject(request.PlanUserInfo.Id, input.StartTime);
+            await _resourceManager.ConfirmJoinProject(request.PlanUserInfo.Id, input.StartTime, true);
 
             request.Request.Status = ResourceRequestStatus.DONE;
             request.Request.TimeDone = DateTimeUtils.GetNow();

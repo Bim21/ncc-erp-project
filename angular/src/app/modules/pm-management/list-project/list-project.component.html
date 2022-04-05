@@ -6,7 +6,7 @@
             </div>
             <div class="col-6 text-right">
                 <button type="button" class="btn bg-blue" (click)="createProject()"
-                    *ngIf="permission.isGranted(PmManager_Project_Create)">
+                    *ngIf="permission.isGranted(Projects_OutsourcingProjects_Create)">
                     <i class="fa fa-plus-square"></i>
                     Create
                 </button>
@@ -47,7 +47,7 @@
 
                                     <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
                                         (selectionChange)="refresh()"
-                                        [disabled]="permission.isGranted( PmManager_Project_ViewOnlyMe) && !permission.isGranted(PmManager_Project_ViewAll)">
+                                        [disabled]="permission.isGranted( Projects_OutsourcingProjects_ViewMyProjectOnly) && !permission.isGranted(Projects_OutsourcingProjects_ViewAllProject)">
                                         <mat-form-field class="w-100 px-3 "
                                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                             <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"
@@ -143,10 +143,13 @@
                                 <td>
                                     <div class="project-wrap">
                                         <div class="project-name-wrap"> 
-                                            <a [routerLink]="['/app/list-project-detail/weeklyreport']" [queryParams]="{id: project.id, type: project.projectType, 
+                                            <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" [routerLink]="['/app/list-project-detail/weeklyreport']" [queryParams]="{id: project.id, type: project.projectType, 
                                                 projectName: project.name, projectCode: project.code}" >
                                                 {{ project.name }}
                                             </a>
+                                            <span *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)">
+                                                {{ project.name }}
+                                            </span>
                                             <span class="project-code">
                                                 {{ project.code }}
                                             </span>
@@ -212,18 +215,18 @@
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
                                         <button (click)="editProject(project)"
-                                            *ngIf="permission.isGranted(PmManager_Project_Update)"
+                                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_Edit)"
                                             class="mat-menu-item  w-100 ">
                                             <i class="fas fa-pencil-alt mr-1"></i>
                                             Edit
                                         </button>
                                         <button (click)="delete(project)"
-                                            *ngIf="permission.isGranted(PmManager_Project_Delete)"
+                                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_Delete)"
                                             class="mat-menu-item  w-100 ">
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
                                         </button>
-                                        <button mat-menu-item *ngIf="project.status != APP_ENUM.ProjectStatus.Closed && permission.isGranted(PmManager_Project_Close)" 
+                                        <button mat-menu-item *ngIf="project.status != APP_ENUM.ProjectStatus.Closed && permission.isGranted(Projects_OutsourcingProjects_Close)" 
                                             (click)="closeProject(project)">
                                             <i class="fas fa-check mr-1"></i>
                                             <span>{{ "Close" | localize }}</span>

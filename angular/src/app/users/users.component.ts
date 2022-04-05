@@ -77,18 +77,19 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   isActive: boolean | null;
   skillsParam: DropDownDataDto[] = []
   skill = ""
-  isviewOnlyMe: boolean = false
   advancedFiltersVisible = false;
   public userProjectHistory: IUSerProjectHistory[] = []
-  Pages_Users_Create = PERMISSIONS_CONSTANT.Pages_Users_Create;
-  Pages_Users_Delete = PERMISSIONS_CONSTANT.Pages_Users_Delete;
-  Pages_Users_ImportUserFromFile = PERMISSIONS_CONSTANT.Pages_Users_ImportUserFromFile;
-  Pages_Users_Update = PERMISSIONS_CONSTANT.Pages_Users_Update;
-  Pages_Users_UpdateAvatar = PERMISSIONS_CONSTANT.Pages_Users_UpdateAvatar;
-  Pages_Users_UpdateMySkills = PERMISSIONS_CONSTANT.Pages_Users_UpdateMySkills
-  Pages_Users_ViewOnlyMe = PERMISSIONS_CONSTANT.Pages_Users_ViewOnlyMe
-  Pages_Users_AutoUpdateUserFromHRM = PERMISSIONS_CONSTANT.Pages_Users_AutoUpdateUserFromHRM
-  Pages_Users_ViewAll = PERMISSIONS_CONSTANT.Pages_Users_ViewAll
+  Admin_Users_Create = PERMISSIONS_CONSTANT.Admin_Users_Create;
+  Admin_Users_SyncDataFromHrm = PERMISSIONS_CONSTANT.Admin_Users_SyncDataFromHrm;
+  Admin_Users_ViewProjectHistory = PERMISSIONS_CONSTANT.Admin_Users_ViewProjectHistory;
+  Admin_Users_Edit = PERMISSIONS_CONSTANT.Admin_Users_Edit;
+  Admin_Users_UpdateSkill = PERMISSIONS_CONSTANT.Admin_Users_UpdateSkill;
+  Admin_Users_UpdateRole = PERMISSIONS_CONSTANT.Admin_Users_UpdateRole;
+  Admin_Users_ActiveAndDeactive = PERMISSIONS_CONSTANT.Admin_Users_ActiveAndDeactive;
+  Admin_Users_UploadAvatar = PERMISSIONS_CONSTANT.Admin_Users_UploadAvatar;
+  Admin_Users_ResetPassword = PERMISSIONS_CONSTANT.Admin_Users_ResetPassword;
+  Admin_Users_DeleteFakeUser = PERMISSIONS_CONSTANT.Admin_Users_DeleteFakeUser;
+
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,
@@ -180,9 +181,6 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   ngOnInit() {
     this.refresh()
     this.getAllSkills()
-    if (this.permission.isGranted(this.Pages_Users_ViewOnlyMe)) {
-      this.isviewOnlyMe = true
-    }
   }
 
   private showResetPasswordUserDialog(id?: number): void {
