@@ -1,4 +1,3 @@
-import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { PagedResultDto } from './../../../../shared/paged-listing-component-base';
 import { AppSessionService } from './../../../../shared/session/app-session.service';
 import { result } from 'lodash-es';
@@ -95,7 +94,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   constructor(injector: Injector, public dialog: MatDialog, private userService: UserService,
     public listProjectService: ListProjectService ,
-    private timesheetProjectService: TimesheetProjectService,
     public sessionService:AppSessionService) {
     super(injector);
     this.pmId = Number(this.sessionService.userId);
@@ -171,7 +169,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   public getAllPM(): void {
-    this.timesheetProjectService.getAllPM().pipe(catchError(this.userService.handleError))
+    this.listProjectService.GetOutsourcingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })

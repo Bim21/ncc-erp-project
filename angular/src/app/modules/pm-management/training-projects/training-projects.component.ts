@@ -1,4 +1,3 @@
-import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { PERMISSIONS_CONSTANT } from './../../../constant/permission.constant';
 import { AppSessionService } from './../../../../shared/session/app-session.service';
@@ -122,8 +121,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     public injector: Injector,
     public router: Router,
     private projectService: ListProjectService,
-    private userService: UserService,
-    private timesheetProjectService: TimesheetProjectService) {
+    private userService: UserService,) {
     super(injector);
     this.pmId = Number(this.sessionService.userId);
   }
@@ -133,7 +131,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     this.getAllPM();
   }
   public getAllPM(): void {
-    this.timesheetProjectService.getAllPM().pipe(catchError(this.userService.handleError))
+    this.projectService.GetTrainingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })

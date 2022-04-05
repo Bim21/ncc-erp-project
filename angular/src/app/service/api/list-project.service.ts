@@ -55,4 +55,16 @@ public getAllWorkingUserFromProject(id: any): Observable<any> {
   return this.http.get<any>(this.rootUrl + '/GetAllWorkingUserFromProject?projectId=' + id);
 }
 
+public GetOutsourcingPMs(): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetOutsourcingPMs');
+}
+
+public GetTrainingPMs(): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetTrainingPMs');
+}
+
+public GetProductPMs(): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetProductPMs');
+}
+
 }

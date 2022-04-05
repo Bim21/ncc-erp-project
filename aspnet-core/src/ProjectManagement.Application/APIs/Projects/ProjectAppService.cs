@@ -108,7 +108,69 @@ namespace ProjectManagement.APIs.Projects
             return await query.GetGridResult(query, input);
         }
 
-
+        public async Task<IActionResult> GetOutsourcingPMs()
+        {
+            var pms = await WorkScope.GetAll<Project>()
+                .Where(u=>u.ProjectType != ProjectType.PRODUCT && u.ProjectType != ProjectType.TRAINING)
+                .Select(u => new
+                {
+                    Id = u.PMId,
+                    UserName = u.PM.UserName,
+                    Name = u.PM.Name,
+                    Surname = u.PM.Surname,
+                    EmailAddress = u.PM.EmailAddress,
+                    FullName = u.PM.FullName,
+                    AvatarPath = u.PM.AvatarPath,
+                    UserType = u.PM.UserType,
+                    UserLevel = u.PM.UserLevel,
+                    Branch = u.PM.Branch,
+                })
+                .Distinct()
+                .ToListAsync();
+            return new OkObjectResult(pms);
+        }
+        public async Task<IActionResult> GetProductPMs()
+        {
+            var pms = await WorkScope.GetAll<Project>()
+                .Where(u => u.ProjectType == ProjectType.PRODUCT)
+                .Select(u => new
+                {
+                    Id = u.PMId,
+                    UserName = u.PM.UserName,
+                    Name = u.PM.Name,
+                    Surname = u.PM.Surname,
+                    EmailAddress = u.PM.EmailAddress,
+                    FullName = u.PM.FullName,
+                    AvatarPath = u.PM.AvatarPath,
+                    UserType = u.PM.UserType,
+                    UserLevel = u.PM.UserLevel,
+                    Branch = u.PM.Branch,
+                })
+                .Distinct()
+                .ToListAsync();
+            return new OkObjectResult(pms);
+        }
+        public async Task<IActionResult> GetTrainingPMs()
+        {
+            var pms = await WorkScope.GetAll<Project>()
+                .Where(u => u.ProjectType == ProjectType.TRAINING)
+                .Select(u => new
+                {
+                    Id = u.PMId,
+                    UserName = u.PM.UserName,
+                    Name = u.PM.Name,
+                    Surname = u.PM.Surname,
+                    EmailAddress = u.PM.EmailAddress,
+                    FullName = u.PM.FullName,
+                    AvatarPath = u.PM.AvatarPath,
+                    UserType = u.PM.UserType,
+                    UserLevel = u.PM.UserLevel,
+                    Branch = u.PM.Branch,
+                })
+                .Distinct()
+                .ToListAsync();
+            return new OkObjectResult(pms);
+        }
 
         [HttpGet]
         public async Task<List<ProjectInfoDto>> GetAllProjectInfo()
