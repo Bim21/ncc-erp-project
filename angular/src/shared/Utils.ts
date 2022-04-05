@@ -98,7 +98,7 @@ export class Utils {
       default:
         return {
           userLevel: "Any Level",
-          style: { 'background-color': '#F7D500' }
+          style: { 'background-color': '#17a2b8' }
         }
     }
   }
