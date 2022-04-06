@@ -437,7 +437,7 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException("Start time cannot be greater than end time !");
             }
 
-            if (input.Status == ProjectStatus.Closed)
+            if (input.Status == ProjectStatus.Closed && project.Status != ProjectStatus.Closed)
             {
                 throw new UserFriendlyException("Please click button Close to close project");
             }
