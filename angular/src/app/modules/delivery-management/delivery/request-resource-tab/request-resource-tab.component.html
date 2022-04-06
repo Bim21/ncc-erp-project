@@ -5,7 +5,7 @@
                 <h3>Resource request</h3>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Create)"
+                <button *ngIf="permission.isGranted(ResourceRequest_CreateNewRequest)"
                     (click)="createRequest()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                     Create
@@ -227,7 +227,7 @@
                                             <b>{{item.planUserInfo.plannedDate|date: "dd/MM/yyyy"}}</b>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 text-right" *ngIf="item.statusName == 'PENDING'">
+                                    <div class="col-md-2 text-right" *ngIf="item.statusName == 'PENDING' && permission.isGranted(ResourceRequest_PlanNewResourceForRequest)">
                                         <i class="fa fa-edit" (click)="showModalPlanUser(item)"></i>
                                     </div>
                                 </div>
@@ -242,8 +242,8 @@
                                             {{item.pmNote}}
                                         </pre>
                                     </div>
-                                    <div class="col-md-2">
-                                        <i class="fa fa-edit" (click)="openModal(item.name, 'PM', item.pmNote, item.id)"></i>
+                                    <div class="col-md-2" *ngIf="permission.isGranted(ResourceRequest_Edit)">
+                                        <i  class="fa fa-edit" (click)="openModal(item.name, 'PM', item.pmNote, item.id)"></i>
                                     </div>
                                 </div>
                             </td>
@@ -257,8 +257,8 @@
                                             {{item.dmNote}} 
                                         </pre>
                                     </div>
-                                    <div class="col-md-2">
-                                        <i class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
+                                    <div class="col-md-2" *ngIf="permission.isGranted(ResourceRequest_Edit)">
+                                        <i  class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
                                     </div>
                                 </div>
                             </td>
@@ -277,7 +277,7 @@
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
                                     <!-- case 1: Status is inprogress -->
-                                    <div *ngIf="item.statusName == 'PENDING'">
+                                    <div *ngIf="item.statusName == 'PENDING' && permission.isGranted(ResourceRequest_SetDone)">
                                         <button
                                             *ngIf="item.planUserInfo"
                                             class="btn btn-block text-left"
@@ -288,7 +288,7 @@
                                             Set Done
                                         </button>
                                         <br *ngIf="item.planUserInfo">
-                                        <button
+                                        <button *ngIf="permission.isGranted(ResourceRequest_Cancel)"
                                             class="btn btn-block text-left"
                                             mat-button
                                             (click)="cancelRequest(item.id);"
@@ -300,7 +300,7 @@
                                         <button 
                                             class="btn btn-block text-left"
                                             mat-button
-                                            *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Update)"
+                                            *ngIf="permission.isGranted(ResourceRequest_Edit)"
                                             (click)="editRequest(item);"
                                         >
                                             <i class="fa fa-edit vertical-align-baseline"></i>
@@ -310,7 +310,7 @@
                                         <button
                                             class="btn btn-block text-left"
                                             mat-button
-                                            *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                            *ngIf="permission.isGranted(ResourceRequest_Delete)"
                                             (click)="delete(item);"
                                         >
                                             <i class="fa fa-trash text-danger vertical-align-baseline"></i>
@@ -327,7 +327,7 @@
                                     </div>
                                     <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
                                     <div *ngIf="item.statusName == 'PENDING' && !item.isRecruitmentSend" class="text-left">
-                                        <button class="btn btn-block text-left" mat-button (click)="sendRecruitment()">
+                                        <button *ngIf="permission.isGranted(ResourceRequest_SendRecruitment)" class="btn btn-block text-left" mat-button (click)="sendRecruitment()">
                                             Send recruitment
                                         </button>
                                     </div>
@@ -336,7 +336,7 @@
                                         <button
                                             class="btn btn-block text-left"
                                             mat-button
-                                            *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_Delete)"
+                                            *ngIf="permission.isGranted(ResourceRequest_Delete)"
                                             (click)="delete(item);"
                                         >
                                             <i class="fa fa-trash text-danger vertical-align-baseline"></i>

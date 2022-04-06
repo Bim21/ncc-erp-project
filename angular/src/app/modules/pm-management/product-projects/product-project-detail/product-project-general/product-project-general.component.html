@@ -5,7 +5,7 @@
                 <h3>General</h3>
             </div>
             <div class="col-6 text-right ">
-                <a *ngIf="permission.isGranted(PmManager_Project_Update)" class="btn bg-primary  mt-3" [hidden]="!readMode" (click)="editRequest()">
+                <a class="btn bg-primary  mt-3" [hidden]="!readMode" (click)="editRequest()">
                     <i class="fas fa-edit"></i>
                     Edit
                 </a>

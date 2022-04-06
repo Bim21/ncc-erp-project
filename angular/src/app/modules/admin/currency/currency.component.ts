@@ -40,10 +40,10 @@ export class CurrencyComponent extends PagedListingComponentBase<CurrencyCompone
       }
     )
   }
-  public Admin_Currency_Create = PERMISSIONS_CONSTANT.Admin_Currency_Create;
-  public Admin_Currency_Delete = PERMISSIONS_CONSTANT.Admin_Currency_Delete;
-  public Admin_Currency_Edit =  PERMISSIONS_CONSTANT.Admin_Currency_Edit;
-  public Admin_Currency_ViewAll = PERMISSIONS_CONSTANT.Admin_Currency_ViewAll;
+  public Admin_Currencies_Create = PERMISSIONS_CONSTANT.Admin_Currencies_Create;
+  public Admin_Currencies_Edit = PERMISSIONS_CONSTANT.Admin_Currencies_Edit;
+  public Admin_Currencies_Delete = PERMISSIONS_CONSTANT.Admin_Currencies_Delete;
+ 
   public searchText="";
   public listCurrency: CurrencyDto[]=[];
   constructor(public injector:Injector, private currencyService: CurrencyService , 

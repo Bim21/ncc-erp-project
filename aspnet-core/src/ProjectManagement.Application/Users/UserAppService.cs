@@ -98,7 +98,7 @@ namespace ProjectManagement.Users
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Pages_Users_ViewAll)]
+        [AbpAuthorize(PermissionNames.Admin_Users)]
         public async Task<GridResult<GetAllUserDto>> GetAllPaging(InputGetAllUserDto input)
         {
             var quser = from u in _workScope.All<User>()
@@ -152,6 +152,7 @@ namespace ProjectManagement.Users
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.Admin_Users_ViewProjectHistory)]
         public async Task<List<ProjectHistoryDto>> GetHistoryProjectsByUserId(long userId)
         {
             return await _workScope.GetAll<ProjectUser>().Where(s => s.UserId == userId)
@@ -171,6 +172,8 @@ namespace ProjectManagement.Users
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.Admin_Users_UpdateSkill)]
+
         public async Task updateUserSkill(UpdateUserSkillDto input)
         {
             var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.UserId).ToListAsync();
@@ -199,13 +202,14 @@ namespace ProjectManagement.Users
 
 
         [HttpPut]
+        [AbpAuthorize(PermissionNames.Admin_Users_ActiveAndDeactive)]
         public async Task updateUserActive(long userId, bool isActive)
         {
             await _userManager.UpdateUserActive(userId, isActive);
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
+        [AbpAuthorize(PermissionNames.Admin_Users_DeleteFakeUser)]
         public async Task DeleteFakeUser(long userId)
         {
             var user = await _userManager.GetUserByIdAsync(userId);
@@ -217,7 +221,7 @@ namespace ProjectManagement.Users
         }
 
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Create)]
+        [AbpAuthorize(PermissionNames.Admin_Users_Create)]
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
         {
             CheckCreatePermission();
@@ -255,7 +259,7 @@ namespace ProjectManagement.Users
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
+        [AbpAuthorize(PermissionNames.Admin_Users_Edit)]
         public async Task<IActionResult> UpdateUserInfo(CreateUpdateUserDto input)
         {
             var user = await _userManager.GetUserByIdAsync(input.Id);
@@ -267,7 +271,7 @@ namespace ProjectManagement.Users
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
+        [AbpAuthorize(PermissionNames.Admin_Users_UpdateRole)]
         public async Task<IActionResult> UpdateUserRole(UpdateUserRoleDto input)
         {
             var user = await _userManager.GetUserByIdAsync(input.UserId);
@@ -283,10 +287,10 @@ namespace ProjectManagement.Users
 
 
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Update)]
+        [AbpAuthorize(PermissionNames.Admin_Users_Edit)]
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
-            bool isUpdateAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Pages_Users_Update);
+            bool isUpdateAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Admin_Users_Edit);
 
             CheckUpdatePermission();
 
@@ -408,7 +412,7 @@ namespace ProjectManagement.Users
             return employeeInfo;
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
+        [AbpAuthorize(PermissionNames.Admin_Users_DeleteFakeUser)]
         public override async Task DeleteAsync(EntityDto<long> input)
         {
             var hasProject = await _workScope.GetAll<Project>().AnyAsync(x => x.PMId == input.Id);
@@ -499,7 +503,6 @@ namespace ProjectManagement.Users
         {
             identityResult.CheckErrors(LocalizationManager);
         }
-
         public async Task<bool> ChangePassword(ChangePasswordDto input)
         {
             if (_abpSession.UserId == null)
@@ -535,7 +538,7 @@ namespace ProjectManagement.Users
 
         //}
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Delete)]
+        [AbpAuthorize(PermissionNames.Admin_Users_ResetPassword)]
         public async Task<bool> ResetPassword(ResetPasswordDto input)
         {
             
@@ -618,7 +621,7 @@ namespace ProjectManagement.Users
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Pages_Users_UpdateAvatar)]
+        [AbpAuthorize(PermissionNames.Admin_Users_UploadAvatar)]
         public async Task<string> UpdateAvatar([FromForm] AvatarDto input)
         {
             String path = Path.Combine(_webHostEnvironment.WebRootPath, "avatars");
@@ -666,7 +669,6 @@ namespace ProjectManagement.Users
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Pages_Users_ImportUserFromFile)]
         public async Task<Object> ImportUserFromFile([FromForm] FileInputDto input)
         {
             if (input == null)
@@ -744,7 +746,7 @@ namespace ProjectManagement.Users
             }
             return new { successList, failedList };
         }
-        [AbpAuthorize(PermissionNames.Pages_Users_AutoUpdateUserFromHRM)]
+        [AbpAuthorize(PermissionNames.Admin_Users_SyncDataFromHrm)]
         public async Task<object> AutoUpdateUserFromHRM()
         {
             var hrmUsers = await _hrmService.GetUserFromHRM();

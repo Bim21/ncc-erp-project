@@ -14,6 +14,7 @@ import {
 } from '@shared/service-proxies/service-proxies';
 import { CreateRoleDialogComponent } from './create-role/create-role-dialog.component';
 import { EditRoleDialogComponent } from './edit-role/edit-role-dialog.component';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 class PagedRolesRequestDto extends PagedRequestDto {
   keyword: string;
@@ -26,6 +27,9 @@ class PagedRolesRequestDto extends PagedRequestDto {
 export class RolesComponent extends PagedListingComponentBase<RoleDto> {
   roles: RoleDto[] = [];
   keyword = '';
+  Admin_Roles_Create = PERMISSIONS_CONSTANT.Admin_Roles_Create;
+  Admin_Roles_Edit = PERMISSIONS_CONSTANT.Admin_Roles_Edit;
+  Admin_Roles_Delete = PERMISSIONS_CONSTANT.Admin_Roles_Delete;
 
   constructor(
     injector: Injector,

@@ -20,7 +20,7 @@ import { catchError } from 'rxjs/operators';
 import { projectUserBillDto, projectResourceRequestDto, projectUserDto } from './../../../../../service/model/project.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
-import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { ConfirmFromPage, ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-product-resource-management',
@@ -28,16 +28,14 @@ import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/l
   styleUrls: ['./product-resource-management.component.css']
 })
 export class ProductResourceManagementComponent extends AppComponentBase implements OnInit {
-  PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
-  PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
-  PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
-  PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
+  // PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
+  // PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
+  // PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
+  // PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
 
-  PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
-  PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
-  PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
-  DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
-  DeliveryManagement_ResourceRequest_Update = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update;
+  // PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
+  // PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
+  // PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -86,7 +84,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
 
 
 
-  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
+  // PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog,
     private resourceRequestService: DeliveryResourceRequestService,
@@ -111,11 +109,9 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
   // get data
   private getProjectUser() {
-    if (this.permission.isGranted(this.PmManager_ProjectUser)) {
       this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         this.projectUserList = data.result;
       })
-    }
 
   }
 
@@ -127,12 +123,10 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
 
 
-  private getResourceRequestList(): void {
-    if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
-      this.resourceRequestService.getAllResourceRequestByProject(this.projectId, this.selectStatus).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
+  public getResourceRequestList(): void {
+      this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
-    }
   }
 
   private getAllUser() {
@@ -201,7 +195,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
 
   saveProjectUser(user: any) {
-  console.log("userrrr", user)
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
     }
@@ -218,7 +211,8 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
               width: "700px",
               data: {
                 workingProject : workingProject,
-                user: user
+                user: user,
+                page: ConfirmFromPage.product_workingResource
               }
             }
             )
@@ -244,7 +238,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     user.projectId = this.projectId
     delete user["createMode"]
-    this.projectUserService.AddUserToProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.AddUserToProductProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
@@ -592,7 +586,8 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
           data: {
             workingProject: workingProject,
             user: user,
-            type: "confirmJoin"
+            type: "confirmJoin",
+            page: ConfirmFromPage.product_weekly
           }
         })
 

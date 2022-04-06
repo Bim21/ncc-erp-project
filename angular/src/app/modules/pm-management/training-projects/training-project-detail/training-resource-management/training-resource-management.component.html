@@ -1,11 +1,11 @@
 <section class="content px-2 py-2 m-0" style="background-color: #f1f1f1;">
     <div class="container-fluid">
         <div class=" mt-2 ">
-            <mat-expansion-panel [expanded]="isShowProjectUser" *ngIf="permission.isGranted(PmManager_ProjectUser)">
+            <mat-expansion-panel [expanded]="isShowProjectUser" >
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <strong class="table-title">Current resource</strong>
-                        <button *ngIf="!projectUserProcess && permission.isGranted(PmManager_ProjectUser_Create)" [hidden]="projectUserProcess || !isShowProjectUser" (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate" class="btn bg-blue ml-3 btn-sm mb-2">
+                        <button *ngIf="!projectUserProcess " [hidden]="projectUserProcess || !isShowProjectUser" (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate" class="btn bg-blue ml-3 btn-sm mb-2">
                             <i class="fa fa-plus m-0"></i>
 
                         </button>
@@ -176,7 +176,7 @@
 
 
             <!-- Planned user -->
-            <mat-expansion-panel class="mt-3" [expanded]="isShowCurrentResouce" *ngIf="permission.isGranted(PmManager_ProjectUser)">
+            <mat-expansion-panel class="mt-3" [expanded]="isShowCurrentResouce">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowCurrentResouce = !isShowCurrentResouce ">
                     <div class="col-md-6">
                         <strong class="table-title">Planned resource</strong>
@@ -370,10 +370,10 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel expanded=false *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
+            <mat-expansion-panel expanded=false>
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest">
                     <strong class="table-title">Resource request</strong>
-                    <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)" [hidden]="!isShowRequest" (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()" class="btn bg-blue ml-3 mb-2 btn-sm">
+                    <button *ngIf="!requestProcess " [hidden]="!isShowRequest" (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()" class="btn bg-blue ml-3 mb-2 btn-sm">
                         <i class="fa fa-plus m-0"></i>
                     </button>
 

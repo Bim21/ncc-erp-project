@@ -15,7 +15,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
     [AbpAuthorize]
     public class ProjectCheckListAppService : ProjectManagementAppServiceBase
     {
-        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_Create)]
+        [AbpAuthorize]
         public async Task<ProjectCheckListDto> Create(ProjectCheckListDto input)
         {
             var isExist = await WorkScope.GetAll<ProjectCheckList>()
@@ -28,7 +28,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_Delete)]
+        [AbpAuthorize]
         public async Task Delete(long ProjectId, long CheckListItemId)
         {
             var isExist = await WorkScope.GetAll<ProjectCheckList>()
@@ -40,7 +40,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             await WorkScope.DeleteAsync(isExist);
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_ReverseActive)]
+        [AbpAuthorize]
         public async Task ReverseActive(long ProjectId, long CheckListItemId)
         {
             var isExist = await WorkScope.GetAll<ProjectCheckList>()
@@ -53,7 +53,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             await WorkScope.UpdateAsync(isExist);
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_AddByProjectType)]
+        [AbpAuthorize]
         public async Task<List<ProjectCheckListDto>> AddByProjectType(ProjectType input)
         {
             var projectChecklists = await (from p in WorkScope.GetAll<Project>()
@@ -72,7 +72,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             return projectChecklists;
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_GetCheckListItemByProject)]
+        [AbpAuthorize]
         public async Task<List<CheckListItemByProjectDto>> GetCheckListItemByProject(long projectId, long? auditSessionId)
         {// lấy về checklist item thuộc project thuộc đợt
             var isExistProject = await WorkScope.GetAsync<Project>(projectId);
@@ -123,7 +123,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
             return checkListInProjects;
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_ProjectChecklist_AddCheckListItemByProject)]
+        [AbpAuthorize]
         public async Task<List<ProjectCheckListDto>> AddCheckListItemByProject(long projectId, List<long> checkListItemIds)
         {
             var result = new List<ProjectCheckListDto>();

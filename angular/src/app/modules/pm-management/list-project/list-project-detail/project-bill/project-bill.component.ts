@@ -26,11 +26,9 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public userBillCurrentPage:number = 1
 
 
-  PmManager_ProjectUserBill = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill;
-  PmManager_ProjectUserBill_GetAllbyProject = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_GetAllbyProject;
-  PmManager_ProjectUserBill_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Create;
-  PmManager_ProjectUserBill_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Delete;
-  PmManager_ProjectUserBill_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUserBill_Update;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete;
   constructor(private projectUserBillService: ProjectUserBillService, private route:ActivatedRoute,
      injector: Injector, private userService: UserService) {
     super(injector)
@@ -108,12 +106,9 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
   private getUserBill(): void {
-    if (this.permission.isGranted(this.PmManager_ProjectUserBill_GetAllbyProject)) {
       this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
         this.userBillList = data.result
       })
-    }
-
   }
   public removeUserBill(userBill: projectUserBillDto): void {
     abp.message.confirm(

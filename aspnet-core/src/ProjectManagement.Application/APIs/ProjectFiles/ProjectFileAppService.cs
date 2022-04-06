@@ -26,7 +26,9 @@ namespace ProjectManagement.APIs.ProjectFiles
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [AbpAuthorize(PermissionNames.PmManager_ProjectFile_UploadNewFile)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile)]
         [HttpPost]
         public async Task<IActionResult> UploadFiles([FromForm] ProjectInputFileDto input)
         {
@@ -70,7 +72,9 @@ namespace ProjectManagement.APIs.ProjectFiles
                 return new BadRequestObjectResult(ex);
             }
         }
-        [AbpAuthorize(PermissionNames.PmManager_ProjectFile_DeleteFile)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile,
+          PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_DeleteFile,
+          PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_DeleteFile)]
         private async Task DeleteProjectFile(string fileName, long projectId)
         {
             string pathFile = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "projects", fileName);
@@ -81,6 +85,9 @@ namespace ProjectManagement.APIs.ProjectFiles
                 await WorkScope.DeleteAsync(item);
             }
         }
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile,
+         PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_UploadFile,
+         PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_UploadFile)]
         private async Task AddProjectFile(string fileName, long projectId, List<IFormFile> files, string pathFolder)
         {
             string pathFile = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "projects", fileName);
@@ -98,7 +105,9 @@ namespace ProjectManagement.APIs.ProjectFiles
                 FilePath = filePath
             });
         }
-        [AbpAuthorize(PermissionNames.PmManager_ProjectFile_ViewAllFiles)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile,
+         PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile,
+         PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile)]
         public async Task<IActionResult> GetFiles(long projectId)
         {
             try
@@ -124,7 +133,9 @@ namespace ProjectManagement.APIs.ProjectFiles
                 return new BadRequestObjectResult(ex);
             }
         }
-        [AbpAuthorize(PermissionNames.PmManager_ProjectFile_DeleteFile)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile,
+          PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile,
+          PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile)]
         public async Task DeleteFile(string fileName, long projectId)
         {
             String pathFile = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "projects", fileName);

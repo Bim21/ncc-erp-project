@@ -20,7 +20,7 @@ namespace ProjectManagement.Configuration
             return await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId);
         }
 
-        [AbpAuthorize(PermissionNames.Admin_Configuration_ViewAll)]
+        [AbpAuthorize(PermissionNames.Admin_Configuartions)]
         public async Task<AppSettingDto> Get()
         {
             return new AppSettingDto
@@ -50,7 +50,7 @@ namespace ProjectManagement.Configuration
             };
         }
 
-        [AbpAuthorize(PermissionNames.Admin_Configuration_Edit)]
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_Edit)]
         public async Task<AppSettingDto> Change(AppSettingDto input)
         {
             if (string.IsNullOrEmpty(input.ClientAppId) ||

@@ -62,11 +62,16 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public resourceRequestId: number
   public sortable = new SortableModel('priority',0,'ASC')
 
-  DeliveryManagement_ResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest;
-  DeliveryManagement_ResourceRequest_Create = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Create;
-  DeliveryManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Delete;
-  DeliveryManagement_ResourceRequest_Update = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_Update;
-  DeliveryManagement_ResourceRequest_ViewDetailResourceRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest;
+  ResourceRequest_CreateNewRequest = PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest;
+  ResourceRequest_PlanNewResourceForRequest = PERMISSIONS_CONSTANT.ResourceRequest_PlanNewResourceForRequest;
+  ResourceRequest_UpdateResourceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_UpdateResourceRequestPlan;
+  ResourceRequest_RemoveResouceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_RemoveResouceRequestPlan;
+  ResourceRequest_SetDone = PERMISSIONS_CONSTANT.ResourceRequest_SetDone;
+  ResourceRequest_Cancel = PERMISSIONS_CONSTANT.ResourceRequest_Cancel;
+  ResourceRequest_Edit = PERMISSIONS_CONSTANT.ResourceRequest_Edit;
+  ResourceRequest_Delete = PERMISSIONS_CONSTANT.ResourceRequest_Delete;
+  ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment;
+
 
   @ViewChildren('sortThead') private elementRefSortable: QueryList<any>;
   constructor(

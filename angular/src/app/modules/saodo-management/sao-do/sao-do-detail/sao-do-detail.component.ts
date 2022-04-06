@@ -26,10 +26,7 @@ export class SaoDoDetailComponent extends AppComponentBase  implements OnInit {
   public saodoId:any;
   public saodoName='';
   public projectName:any;
-  SaoDo_AuditResultPeople = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople;
-  SaoDo_AuditResultPeople_Create = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Create;
-  SaoDo_AuditResultPeople_Update = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Update;
-  SaoDo_AuditResultPeople_Delete = PERMISSIONS_CONSTANT.SaoDo_AuditResultPeople_Delete;
+
 
 
 

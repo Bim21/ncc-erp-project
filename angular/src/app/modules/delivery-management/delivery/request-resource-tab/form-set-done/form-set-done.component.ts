@@ -18,8 +18,8 @@ export class FormSetDoneComponent extends AppComponentBase implements OnInit {
   public historyUser: string;
   public allowConfirm:boolean  =true
   public timeDone: any = new Date();
-  PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject
-  PmManager_ProjectUser_ConfirmPickUserFromPoolToProject = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ConfirmPickUserFromPoolToProject
+  // PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject
+  // PmManager_ProjectUser_ConfirmPickUserFromPoolToProject = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ConfirmPickUserFromPoolToProject
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _resourceRequestService: DeliveryResourceRequestService, 
@@ -68,17 +68,17 @@ export class FormSetDoneComponent extends AppComponentBase implements OnInit {
     }
   }
 
-  checkConfirmPermission() {
-    if (!this.permission.isGranted(this.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject)) {
-      this.plannedUserList.forEach(pu => {
-        if (pu.isPool == false) {
-          this.allowConfirm = false
-          return 
-        }
-      }
-      )
-    }
-  }
+  // checkConfirmPermission() {
+  //   if (!this.permission.isGranted(this.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject)) {
+  //     this.plannedUserList.forEach(pu => {
+  //       if (pu.isPool == false) {
+  //         this.allowConfirm = false
+  //         return 
+  //       }
+  //     }
+  //     )
+  //   }
+  // }
 
   cancel(){
     this.dialogRef.close(false);

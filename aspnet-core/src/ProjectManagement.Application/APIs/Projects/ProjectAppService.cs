@@ -55,10 +55,10 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ViewAllProject, PermissionNames.Projects_OutsourcingProjects_ViewMyProjectOnly)]
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
         {
-            bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.PmManager_Project_ViewAll);
+            bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ViewAllProject);
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
             int valueStatus = -1;
@@ -205,7 +205,6 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
         public async Task<GetProjectDto> Get(long projectId)
         {
             var query = WorkScope.GetAll<Project>().Include(x => x.Currency).Where(x => x.Id == projectId)
@@ -239,7 +238,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewProjectInfor)]
+        [AbpAuthorize(PermissionNames.Projects)]
         public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
         {
             return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
@@ -256,7 +255,6 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_Project_UpdateProjectDetail)]
         public async Task<ProjectDetailDto> UpdateProjectDetail(ProjectDetailDto input)
         {
             var project = await WorkScope.GetAsync<Project>(input.ProjectId);
@@ -336,7 +334,6 @@ namespace ProjectManagement.APIs.Projects
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
         public async Task<string> Create(ProjectDto input)
         {
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
@@ -386,7 +383,6 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Close)]
         public async Task<string> CloseProject(EntityDto<long> input)
         {
             var project = await WorkScope.GetAsync<Project>(input.Id);
@@ -421,7 +417,6 @@ namespace ProjectManagement.APIs.Projects
 
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
         public async Task<string> Update(ProjectDto input)
         {
             var project = await WorkScope.GetAsync<Project>(input.Id);
@@ -470,7 +465,9 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Delete)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_Delete,
+            PermissionNames.Projects_ProductProjects_Delete,
+            PermissionNames.Projects_TrainingProjects_Delete)]
         public async Task Delete(long projectID)
         {
             var project = await WorkScope.GetAsync<Project>(projectID);
@@ -491,7 +488,7 @@ namespace ProjectManagement.APIs.Projects
         }
         #region PAGE TRAINING PROJECT
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ViewAllProject, PermissionNames.Projects_TrainingProjects_ViewMyProjectOnly)]
         public async Task<GridResult<GetTrainingProjectDto>> GetAllTrainingProjectPaging(GridParam input)
         {
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
@@ -536,7 +533,7 @@ namespace ProjectManagement.APIs.Projects
             return await query.GetGridResult(query, input);
         }
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Create)]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_Create)]
         public async Task<string> CreateTrainingProject(TrainingProjectDto input)
         {
             var isExist = await WorkScope.GetAll<Project>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.Id == input.Id);
@@ -597,7 +594,7 @@ namespace ProjectManagement.APIs.Projects
             return await CreateProjectInTimesheetTool(trainingProject);
         }
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_Project_Update)]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_Edit)]
         public async Task<string> UpdateTrainingProject(TrainingProjectDto input)
         {
             input.ProjectType = ProjectType.TRAINING;
@@ -634,7 +631,7 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail)]
         public async Task<GetTrainingProjectDto> GetDetailTrainingProject(long projectId)
         {
             var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.TRAINING)
@@ -661,7 +658,7 @@ namespace ProjectManagement.APIs.Projects
 
         #region PAGE PRODUCT PROJECT
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewAll, PermissionNames.PmManager_Project_ViewonlyMe)]
+        [AbpAuthorize(PermissionNames.Projects_ProductProjects_ViewAllProject, PermissionNames.Projects_ProductProjects_ViewMyProjectOnly)]
         public async Task<GridResult<ProductProjectDto>> GetAllProductProjectPaging(GridParam input)
         {
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
@@ -705,7 +702,7 @@ namespace ProjectManagement.APIs.Projects
             return await query.GetGridResult(query, input);
         }
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_Project_ViewDetail)]
+        [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail)]
         public async Task<ProductProjectDto> GetDetailProductProject(long projectId)
         {
             var query = WorkScope.GetAll<Project>().Where(x => x.Id == projectId).Where(x => x.ProjectType == ProjectType.PRODUCT)

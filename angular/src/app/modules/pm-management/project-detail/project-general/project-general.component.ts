@@ -35,7 +35,7 @@ export class ProjectGeneralComponent extends AppComponentBase implements OnInit 
   public currencyList: CurrencyDto[]=[];
   public isShowCurrencyCharge: boolean = false;
   public chargeTypeList : string[]= Object.keys(this.APP_ENUM.ChargeType)
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  // PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
   constructor(injector: Injector, private userService: UserService, private clientService: ClientService,
      private projectService: ListProjectService, private route: ActivatedRoute, private currencyService: CurrencyService) {
     super(injector);

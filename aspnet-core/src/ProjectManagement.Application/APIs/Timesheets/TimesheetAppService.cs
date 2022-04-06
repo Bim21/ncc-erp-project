@@ -29,7 +29,7 @@ namespace ProjectManagement.APIs.TimeSheets
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ViewAll)]
+        [AbpAuthorize(PermissionNames.Timesheets)]
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
         {
             var qtimesheetProject = WorkScope.GetAll<TimesheetProject>();
@@ -63,7 +63,6 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Get)]
         public async Task<TimesheetDto> Get(long timesheetId)
         {
             var query = WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId)
@@ -81,7 +80,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Create)]
+        [AbpAuthorize(PermissionNames.Timesheets_Create)]
         public async Task<object> Create(TimesheetDto input)
         {
             if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
@@ -174,7 +173,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Update)]
+        [AbpAuthorize(PermissionNames.Timesheets_Edit)]
         public async Task<TimesheetDto> Update(TimesheetDto input)
         {
             if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
@@ -205,7 +204,7 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_Delete)]
+        [AbpAuthorize(PermissionNames.Timesheets_Delete)]
         public async Task Delete(long timesheetId)
         {
             var ts = await WorkScope.GetAll<TimesheetProject>()
@@ -230,7 +229,7 @@ namespace ProjectManagement.APIs.TimeSheets
        
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ForceDelete)]
+        [AbpAuthorize(PermissionNames.Timesheets_ForceDelete)]
         public async Task ForceDelete(long timesheetId)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
@@ -245,7 +244,7 @@ namespace ProjectManagement.APIs.TimeSheets
             await CurrentUnitOfWork.SaveChangesAsync();
         }
         
-        [AbpAuthorize(PermissionNames.Timesheet_Timesheet_ReverseActive)]
+        [AbpAuthorize(PermissionNames.Timesheets_CloseAndActive)]
         public async Task ReverseActive(long id)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);

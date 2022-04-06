@@ -66,10 +66,18 @@ export class ResourceManagerService extends BaseApiService{
     return this.http.post(this.rootUrl + `/ConfirmOutProject`, input)
 
   }
-  public ConfirmJoinProject(projectUserId: number, startTime: any) {
-    return this.http.get(this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`)
+  // public ConfirmJoinProject(projectUserId: number, startTime: any) {
+  //   return this.http.get(this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`)
+  // }
+  public ConfirmJoinProjectFromTabPool(projectUserId: number, startTime: any) {
+    return this.http.get(this.rootUrl + `/ConfirmJoinProjectFromTabPool?projectUserId=${projectUserId}&startTime=${startTime}`)
   }
-
+  public ConfirmJoinProjectFromTabAllResource(projectUserId: number, startTime: any) {
+    return this.http.get(this.rootUrl + `/ConfirmJoinProjectFromTabAllResource?projectUserId=${projectUserId}&startTime=${startTime}`)
+  }
+  public ConfirmJoinProjectFromTabVendor(projectUserId: number, startTime: any) {
+    return this.http.get(this.rootUrl + `/ConfirmJoinProjectFromTabVendor?projectUserId=${projectUserId}&startTime=${startTime}`)
+  }
 
   public EditProjectUserPlan( input:any) {
     return this.http.post(this.rootUrl + `/EditProjectUserPlan`,input)

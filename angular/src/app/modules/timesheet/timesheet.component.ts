@@ -14,13 +14,13 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./timesheet.component.css']
 })
 export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> implements OnInit {
-  Timesheet_Timesheet = PERMISSIONS_CONSTANT.Timesheet_Timesheet;
-  Timesheet_Timesheet_Create = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Create;
-  Timesheet_Timesheet_Delete = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Delete;
-  Timesheet_Timesheet_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
-  Timesheet_Timesheet_ViewAll = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewAll;
-  Timesheet_Timesheet_ReverseActive = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ReverseActive;
-  Timesheet_Timesheet_ForceDelete = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ForceDelete;
+  Timesheets_ViewList = PERMISSIONS_CONSTANT.Timesheets_ViewList;
+  Timesheets_Create = PERMISSIONS_CONSTANT.Timesheets_Create;
+  Timesheets_Edit = PERMISSIONS_CONSTANT.Timesheets_Edit;
+  Timesheets_Delete = PERMISSIONS_CONSTANT.Timesheets_Delete;
+  Timesheets_ForceDelete = PERMISSIONS_CONSTANT.Timesheets_ForceDelete;
+  Timesheets_CloseAndActive = PERMISSIONS_CONSTANT.Timesheets_CloseAndActive;
+  
   public timesheetList: TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -142,9 +142,9 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   }
   showColumnAction(){
     if(
-      this.permission.isGranted(this.Timesheet_Timesheet_Update) || 
-      this.permission.isGranted(this.Timesheet_Timesheet_Delete) || 
-      this.permission.isGranted(this.Timesheet_Timesheet_ReverseActive)
+      this.permission.isGranted(this.Timesheets_Edit) || 
+      this.permission.isGranted(this.Timesheets_Delete) || 
+      this.permission.isGranted(this.Timesheets_CloseAndActive)
     )
     {
       return true

@@ -21,7 +21,6 @@ namespace ProjectManagement.APIs.CheckListItems
     public class CheckListItemAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_ViewAll)]
         public async Task<GridResult<CheckListItemDetailDto>> GetAllPaging(GridParam input)
         {
 
@@ -78,7 +77,6 @@ namespace ProjectManagement.APIs.CheckListItems
             }).ToListAsync();
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Create)]
         public async Task<CheckListItemDetailDto> Create(CheckListItemDetailDto input)
         {
             var isExist = await WorkScope.GetAll<CheckListItem>().AnyAsync(x => x.Code.ToLower() == input.Code.ToLower());
@@ -101,7 +99,6 @@ namespace ProjectManagement.APIs.CheckListItems
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Update)]
         public async Task<CheckListItemDetailDto> Update(CheckListItemDetailDto input)
         {
             var checkExist = await WorkScope.GetAll<CheckListItem>()
@@ -141,7 +138,6 @@ namespace ProjectManagement.APIs.CheckListItems
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.CheckList_CheckListItem_Delete)]
         public async Task Delete(long id)
         {
             // delete mandatory

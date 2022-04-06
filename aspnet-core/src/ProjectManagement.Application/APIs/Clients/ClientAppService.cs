@@ -26,7 +26,7 @@ namespace ProjectManagement.APIs.Clients
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Client_ViewAll)]
+        [AbpAuthorize(PermissionNames.Admin_Clients)]
         public async Task<GridResult<ClientDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Client>()
@@ -56,7 +56,7 @@ namespace ProjectManagement.APIs.Clients
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Client_Create)]
+        [AbpAuthorize(PermissionNames.Admin_Clients_Create)]
         public async Task<string> Create(ClientDto input)
         {
             var isExist = await WorkScope.GetAll<Client>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
@@ -70,7 +70,7 @@ namespace ProjectManagement.APIs.Clients
             return createCustomer;
         }
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Admin_Client_Edit)]
+        [AbpAuthorize(PermissionNames.Admin_Clients_Edit)]
         public async Task<ClientDto> Update(ClientDto input)
         {
             var client = await WorkScope.GetAsync<Client>(input.Id);           
@@ -85,7 +85,7 @@ namespace ProjectManagement.APIs.Clients
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Admin_Client_Delete)]
+        [AbpAuthorize(PermissionNames.Admin_Clients_Delete)]
         public async Task Delete(long clientId)
         {
             var hasProject = await WorkScope.GetAll<Project>().AnyAsync(x => x.ClientId == clientId);

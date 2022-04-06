@@ -22,7 +22,6 @@ namespace ProjectManagement.APIs.AuditSessions
     [AbpAuthorize]
     public class AuditSessionAppService : ProjectManagementAppServiceBase
     {
-        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Create)]
         public async Task<AuditSessionDto> Create(AuditSessionDto input)
         {
             if(input.StartTime > input.EndTime)
@@ -46,7 +45,6 @@ namespace ProjectManagement.APIs.AuditSessions
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_AddAuditResult)]
         public async Task<List<AuditResultDto>> AddManyAuditResult(List<long> projectIds, long auditSessionId)
         {
             var query = await WorkScope.GetAll<Project>()
@@ -65,7 +63,6 @@ namespace ProjectManagement.APIs.AuditSessions
             return query;
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Update)]
         public async Task<AuditSessionDto> Update(AuditSessionDto input)
         {
             var isExist = await WorkScope.GetAsync<AuditSession>(input.Id);
@@ -74,7 +71,6 @@ namespace ProjectManagement.APIs.AuditSessions
             return input;
         }
         
-        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_ViewAll)]
         [HttpPost]
         public async Task<GridResult<AuditSessionResultDto>> GetAllPaging(GridParam input)
         {
@@ -103,7 +99,6 @@ namespace ProjectManagement.APIs.AuditSessions
             return await query.GetGridResult(query, input);
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_View)]
         public async Task<List<AuditSessionDetailDto>> Get(long Id, string searchText)
         {
             var checkExist = await WorkScope.GetAsync<AuditSession>(Id);
@@ -134,7 +129,6 @@ namespace ProjectManagement.APIs.AuditSessions
             return AuditResults;
         }
 
-        [AbpAuthorize(PermissionNames.SaoDo_AuditSession_Delete)]
         public async Task Delete(long id)
         {
             var delAuditResult = await WorkScope.GetAll<AuditResult>().Where(x => x.AuditSessionId == id && x.Status != AuditResultStatus.New).ToListAsync();

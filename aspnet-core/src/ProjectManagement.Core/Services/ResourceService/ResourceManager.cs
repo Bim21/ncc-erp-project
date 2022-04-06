@@ -161,7 +161,8 @@ namespace ProjectManagement.Services.ResourceManager
 
 
 
-        private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project, long activeReportId, bool isPresentPool)
+        private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee,
+            KomuProjectInfoDto project, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject)
         {
             var sbKomuMessage = new StringBuilder();
             var currentPUs = await _workScope.GetAll<ProjectUser>()
@@ -171,7 +172,7 @@ namespace ProjectManagement.Services.ResourceManager
              .Where(s => s.Project.Status == ProjectStatus.InProgress)
              .Where(s => s.AllocatePercentage > 0)
              .ToListAsync();
-            if (await PermissionChecker.IsGrantedAsync(PermissionNames.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject) == false)
+            if (!allowConfirmMoveEmployeeToOtherProject)
             {
                 foreach (var pu in currentPUs)
                 {
@@ -227,7 +228,7 @@ namespace ProjectManagement.Services.ResourceManager
             return sbKomuMessage;
         }
 
-        public async Task<ProjectUser> CreatePresentProjectUserAndNofity(AddResourceToProjectDto input)
+        public async Task<ProjectUser> CreatePresentProjectUserAndNofity(AddResourceToProjectDto input, bool allowConfirmMoveEmployeeToOtherProject)
         {
             var activeReportId = await GetActiveReportId();
 
@@ -239,7 +240,7 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 throw new UserFriendlyException("You can not add user to closed project");
             }
-            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, input.IsPool);
+            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject);
 
             var joinPU = new ProjectUser
             {
@@ -271,7 +272,7 @@ namespace ProjectManagement.Services.ResourceManager
 
         }
 
-        public async Task<ProjectUserExt> ConfirmJoinProject(long projectUserId, DateTime startTime)
+        public async Task<ProjectUserExt> ConfirmJoinProject(long projectUserId, DateTime startTime, bool allowConfirmMoveEmployeeToOtherProject)
         {
             var confirmPUExt = await GetPUExt(projectUserId);
 
@@ -313,7 +314,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
           
-            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool);
+            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool, allowConfirmMoveEmployeeToOtherProject);
 
             futurePU.Status = ProjectUserStatus.Present;
             futurePU.StartTime = startTime;

@@ -13,6 +13,7 @@ import {
 } from '@shared/service-proxies/service-proxies';
 import { CreateTenantDialogComponent } from './create-tenant/create-tenant-dialog.component';
 import { EditTenantDialogComponent } from './edit-tenant/edit-tenant-dialog.component';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 class PagedTenantsRequestDto extends PagedRequestDto {
   keyword: string;
@@ -24,6 +25,10 @@ class PagedTenantsRequestDto extends PagedRequestDto {
   animations: [appModuleAnimation()]
 })
 export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
+  Admin_Tenants_Create = PERMISSIONS_CONSTANT.Admin_Tenants_Create;
+  Admin_Tenants_Edit = PERMISSIONS_CONSTANT.Admin_Tenants_Edit;
+  Admin_Tenants_Delete = PERMISSIONS_CONSTANT.Admin_Tenants_Delete;
+
   tenants: TenantDto[] = [];
   keyword = '';
   isActive: boolean | null;

@@ -19,7 +19,6 @@ export class ProjectChecklistComponent extends AppComponentBase implements OnIni
   public projectType: any;
   
   public listChecklistItem=[];
-  CheckList_ProjectChecklist_AddCheckListItemByProject=PERMISSIONS_CONSTANT.CheckList_ProjectChecklist_AddCheckListItemByProject;
 
   constructor(private projectChecklistService:ProjectChecklistService, 
     public route: ActivatedRoute,

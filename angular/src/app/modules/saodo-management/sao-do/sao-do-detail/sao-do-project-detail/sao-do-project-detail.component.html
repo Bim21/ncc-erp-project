@@ -17,12 +17,10 @@
                         <div class="col-2"> <strong>Đánh giá chung: </strong></div>
                         <div class="col-10">
                             <pre *ngIf="!isEditingNote" class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                 font-family: sans-serif; align-self:flex-start; line-height: initial;"
-                                     >
+                                 font-family: sans-serif; align-self:flex-start; line-height: initial;">
                                    {{note}}
                                </pre>
-                               <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" [(ngModel)]="note" [hidden]="!isEditingNote" 
-                                type="text" class="form-control" style="padding-bottom: 20px;"  rows="2" cdkTextareaAutosize  name="notePM" placeholder="Đánh giá chung"></textarea>
+                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" [(ngModel)]="note" [hidden]="!isEditingNote" type="text" class="form-control" style="padding-bottom: 20px;" rows="2" cdkTextareaAutosize name="notePM" placeholder="Đánh giá chung"></textarea>
                         </div>
 
 
@@ -30,16 +28,13 @@
                     </div>
                     <div class="col-3 text-right">
                         <div class="text-right">
-                            <button *ngIf="!isEditingNote && permission.isGranted(SaoDo_AuditResult_UpdateNote)" (click)="isEditingNote=true" type="button"
-                                class="btn bg-blue">
+                            <button (click)="isEditingNote=true" type="button" class="btn bg-blue">
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
-                            <button *ngIf="isEditingNote" (click)="saveNote();isEditingNote=false" type="button"
-                                style="margin-right: 20px;" class="btn bg-blue">
+                            <button *ngIf="isEditingNote" (click)="saveNote();isEditingNote=false" type="button" style="margin-right: 20px;" class="btn bg-blue">
                                 Save
                             </button>
-                            <button *ngIf="isEditingNote" (click)="cancelNote();"
-                                class="btn btn-default">Cancel</button>
+                            <button *ngIf="isEditingNote" (click)="cancelNote();" class="btn btn-default">Cancel</button>
 
                         </div>
                     </div>
@@ -72,18 +67,14 @@
                                 <td>{{item.personInCharge}}</td>
                                 <td>
                                     <div>
-                                        <div *ngFor="let form of item.people" class="form-horizontal mb-2 p-2"
-                                            style="border: 1px solid black;">
+                                        <div *ngFor="let form of item.people" class="form-horizontal mb-2 p-2" style="border: 1px solid black;">
 
                                             <p class="mt-2" *ngIf="!form.createMode"><strong>Người vi phạm:
                                                 </strong>{{form.userName}}</p>
-                                            <mat-form-field *ngIf="form.createMode" appearance="outline"
-                                                class="d-block">
-                                                <mat-select placeholder="Tên người vi phạm" [name]="form.id"
-                                                    [(ngModel)]="form.userId" #ngvipham>
+                                            <mat-form-field *ngIf="form.createMode" appearance="outline" class="d-block">
+                                                <mat-select placeholder="Tên người vi phạm" [name]="form.id" [(ngModel)]="form.userId" #ngvipham>
                                                     <ng-container>
-                                                        <mat-option *ngFor="let user of projectUserList"
-                                                            [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
+                                                        <mat-option *ngFor="let user of projectUserList" [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                     </ng-container>
 
                                                 </mat-select>
@@ -94,12 +85,10 @@
 
                                                 <div class="col-md-12">
                                                     <mat-form-field appearance="outline" class="d-block">
-                                                        <mat-select [name]="form.id" placeholder="Tên người vi phạm"
-                                                            [(ngModel)]="form.curatorId">
+                                                        <mat-select [name]="form.id" placeholder="Tên người vi phạm" [(ngModel)]="form.curatorId">
                                                             <mat-option>None</mat-option>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.id != ngvipham"
-                                                                    [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
+                                                                <mat-option *ngIf="user.id != ngvipham" [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -107,17 +96,12 @@
 
                                             </div>
                                             <div *ngIf="!form.createMode" class="text-center">
-                                                <button *ngIf="permission.isGranted(SaoDo_AuditResult_Update)" [disabled]="isEditing" class="btn btn-sm bg-secondary mr-1"
-                                                    mat-raised-button style="margin-right:20px ;"
-                                                    (click)="editPeople(form);">Edit</button>
-                                                <button *ngIf="permission.isGranted(SaoDo_AuditResult_Delete)" [disabled]="isEditing" class="btn btn-sm bg-danger ml-1"
-                                                    mat-raised-button (click)="deletePeople(form)">Delete</button>
+                                                <button *ngIf="permission.isGranted(SaoDo_AuditResult_Update)" [disabled]="isEditing" class="btn btn-sm bg-secondary mr-1" mat-raised-button style="margin-right:20px ;" (click)="editPeople(form);">Edit</button>
+                                                <button *ngIf="permission.isGranted(SaoDo_AuditResult_Delete)" [disabled]="isEditing" class="btn btn-sm bg-danger ml-1" mat-raised-button (click)="deletePeople(form)">Delete</button>
                                             </div>
                                             <div *ngIf="form.createMode" class=" text-center ">
-                                                <button (click)="save(item.id,form);"
-                                                    class="btn btn-primary btn-action mr-1 ml-3">Save</button>
-                                                <button  (click)="cancel();" isAllowed=true;
-                                                    class="btn btn-default btn-action">Cancel</button>
+                                                <button (click)="save(item.id,form);" class="btn btn-primary btn-action mr-1 ml-3">Save</button>
+                                                <button (click)="cancel();" isAllowed=true; class="btn btn-default btn-action">Cancel</button>
 
                                             </div>
                                         </div>
@@ -127,13 +111,10 @@
                                     </div>
                                     <div *ngIf="permission.isGranted(SaoDo_AuditResult_Create)">
                                         <form class="form-horizontal">
-                                            <div class="modal-body"
-                                                style="display: flex;flex-direction: column;align-items: center;">
+                                            <div class="modal-body" style="display: flex;flex-direction: column;align-items: center;">
                                                 <div class="form-group row required">
                                                     <mat-form-field appearance="outline">
-                                                        <mat-select [disabled]="isEditing"
-                                                            (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
-                                                            name="ngsaipham" placeholder="Tên người vi phạm" #ngvipham>
+                                                        <mat-select [disabled]="isEditing" (selectionChange)="onChange(ngvipham.value, ngliendoi.value)" name="ngsaipham" placeholder="Tên người vi phạm" #ngvipham>
                                                             <ng-container *ngFor="let user of projectUserList">
                                                                 <mat-option [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})
                                                                 </mat-option>
@@ -142,16 +123,12 @@
                                                         </mat-select>
                                                     </mat-form-field>
                                                 </div>
-                                                <div  class="form-group row required">
+                                                <div class="form-group row required">
                                                     <mat-form-field appearance="outline">
-                                                        <mat-select [disabled]="isEditing"
-                                                            (selectionChange)="onChange(ngvipham.value, ngliendoi.value)"
-                                                            name="ngliendoi" placeholder="Tên người liên đới"
-                                                            #ngliendoi>
+                                                        <mat-select [disabled]="isEditing" (selectionChange)="onChange(ngvipham.value, ngliendoi.value)" name="ngliendoi" placeholder="Tên người liên đới" #ngliendoi>
                                                             <mat-option>None</mat-option>
                                                             <ng-container *ngFor="let user of projectUserList">
-                                                                <mat-option *ngIf="user.id != ngvipham.value"
-                                                                    [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
+                                                                <mat-option *ngIf="user.id != ngvipham.value" [value]="user.id">{{user.fullName}} - ({{user.emailAddress}})</mat-option>
                                                             </ng-container>
                                                         </mat-select>
                                                     </mat-form-field>
@@ -159,9 +136,7 @@
 
 
                                                 <div class="form-group row required">
-                                                    <button  [disabled]="!projectUser.userId"
-                                                        class="btn bg-blue" mat-raised-button
-                                                        (click)="submit(item)">Submit</button>
+                                                    <button [disabled]="!projectUser.userId" class="btn bg-blue" mat-raised-button (click)="submit(item)">Submit</button>
                                                 </div>
                                             </div>
 

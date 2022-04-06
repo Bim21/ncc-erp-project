@@ -1,11 +1,11 @@
 <section class="content px-2 py-2 m-0" style="background-color: #f1f1f1;">
     <div class="container-fluid">
         <div class=" mt-2 ">
-            <mat-expansion-panel [expanded]="isShowProjectUser" *ngIf="permission.isGranted(PmManager_ProjectUser)">
+            <mat-expansion-panel [expanded]="isShowProjectUser" >
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowProjectUser = !isShowProjectUser">
                     <div class="col-md-6">
                         <strong class="table-title">Current resource</strong>
-                        <button *ngIf="!projectUserProcess && permission.isGranted(PmManager_ProjectUser_Create)" [hidden]="projectUserProcess || !isShowProjectUser" (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate" class="btn bg-blue ml-3 btn-sm mb-2">
+                        <button *ngIf="!projectUserProcess" [hidden]="projectUserProcess || !isShowProjectUser" (click)="addProjectUser();userListCurrentPage=1;$event.stopPropagation()" class="btnCreate" class="btn bg-blue ml-3 btn-sm mb-2">
                             <i class="fa fa-plus m-0"></i>
 
                         </button>
@@ -149,7 +149,7 @@
                                                 <i class="fas fa-bars fa-lg"></i>
                                             </button>
                                             <mat-menu #menu="matMenu" class="p-2">
-                                                <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)" [disabled]="projectUserProcess" class="mat-menu-item  w-100" (click)="editProjectUser(user)"> <i
+                                                <button  [disabled]="projectUserProcess" class="mat-menu-item  w-100" (click)="editProjectUser(user)"> <i
                                                         class="fas fa-edit"></i>Edit</button>
                                                 <button [disabled]="projectUserProcess" class="mat-menu-item  w-100" (click)="releaseUser(user)">
                                                     <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
@@ -176,7 +176,7 @@
 
 
             <!-- Planned user -->
-            <mat-expansion-panel class="mt-3" [expanded]="isShowCurrentResouce" *ngIf="permission.isGranted(PmManager_ProjectUser)">
+            <mat-expansion-panel class="mt-3" [expanded]="isShowCurrentResouce" >
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowCurrentResouce = !isShowCurrentResouce ">
                     <div class="col-md-6">
                         <strong class="table-title">Planned resource</strong>
@@ -331,9 +331,9 @@
                                                 <i class="fas fa-bars fa-lg"></i>
                                             </button>
                                             <mat-menu #menu="matMenu" class="p-2">
-                                                <button *ngIf="permission.isGranted(PmManager_ProjectUser_Update)" [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="confirm(user)"> <i class="fas fa-check"></i>Confirm
+                                                <button * [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="confirm(user)"> <i class="fas fa-check"></i>Confirm
                                                     {{user.allocatePercentage > 0 ? 'Join' : 'Out'}}</button>
-                                                <button *ngIf="permission.isGranted(PmManager_ProjectUser_Delete)" [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="cancelResourcePlan(user)"> <i
+                                                <button  [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="cancelResourcePlan(user)"> <i
                                                         class="fas fa-times"></i>Cancel Plan</button>
                                                 <button [disabled]="planResourceProcess" class="mat-menu-item  w-100" (click)="editResourcePlan(user)"> <i
                                                         class="fas fa-edit"></i>Edit</button>
@@ -370,13 +370,13 @@
     <div class="container-fluid">
         <div class="card mt-3">
             <mat-expansion-panel expanded=true
-            *ngIf="permission.isGranted(PmManager_ResourceRequest_ViewAllByProject)">
+            >
             <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowRequest=!isShowRequest;">
                 <div class="col-md-6">
                     <strong class="table-title">Resource request</strong>
-                    <button *ngIf="!requestProcess  &&  permission.isGranted(PmManager_ResourceRequest_Create)"
+                    <button 
                         [hidden]="!isShowRequest"
-                        (click)="createRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
+                        (click)="addResourcceRequest();resourceRequestCurrentPage=1; $event.stopPropagation()"
                         class="btn bg-blue ml-3 mb-2 btn-sm">
                         <i class="fa fa-plus m-0"></i>
                     </button>
@@ -388,7 +388,7 @@
                         </div>
                         <div class="col-md-10 ">
                             <mat-form-field appearance="outline" class="rsp-form-field" (click)="$event.stopPropagation()">
-                                <mat-select [(ngModel)]="selectStatus" (selectionChange)="getResourceRequestList();">
+                                <mat-select [(ngModel)]="selectStatus" (selectionChange)="getResourceRequestList()">
                                     <mat-option value="">All</mat-option>
                                     <mat-option (click)="$event.stopPropagation()" *ngFor="let status of listStatuses"
                                         [value]="status.id">
@@ -510,10 +510,22 @@
                                                 {{item.dmNote}}
                                             </p>
                                         </div>
+
+                                    </div>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="!request.createMode">
+                                            <button  [disabled]="requestProcess" class="btn btn-sm bg-secondary mr-1" (click)="editProjectRerequest(request)"> <i
+                                                    class="fas fa-pencil-alt"></i>Edit</button>
+                                            <button  [disabled]="requestProcess" class="btn btn-sm bg-danger ml-1" (click)="removeProjectRerequest(request)"> <i
+                                                    class="fas fa-trash"></i>delete</button>
+
+
+                                        </div>
                                         <!-- <div class="col-md-2">
                                             <i class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
                                         </div> -->
-                                    </div>
+                                    
                                 </td>
                                 <td class="text-center action-request-resource-tab">
                                     <button *ngIf="item.statusName != 'DONE' && !item.isRecruitmentSend" mat-button

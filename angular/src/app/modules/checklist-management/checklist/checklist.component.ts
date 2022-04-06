@@ -15,11 +15,7 @@ import { ChecklistDto } from '@app/service/model/checklist.dto';
 })
 export class ChecklistComponent extends PagedListingComponentBase<any> implements OnInit {
 
-  CheckList_CheckListItem = PERMISSIONS_CONSTANT.CheckList_CheckListItem;
-  CheckList_CheckListItem_Create = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Create;
-  CheckList_CheckListItem_Delete = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Delete;
-  CheckList_CheckListItem_Update = PERMISSIONS_CONSTANT.CheckList_CheckListItem_Update;
-  CheckList_CheckListItem_ViewAll = PERMISSIONS_CONSTANT.CheckList_CheckListItem_ViewAll;
+
   checklistList: ChecklistDto[] = []
   public projectTypeList: any[] = Object.keys(this.APP_ENUM.ProjectType);
   

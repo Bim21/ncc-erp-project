@@ -19,14 +19,15 @@ import * as moment from 'moment';
   styleUrls: ['./product-projects.component.css']
 })
 export class ProductProjectsComponent extends PagedListingComponentBase<any> implements OnInit {
-  PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
-  PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
-  PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
-  PmManager_Project_Close = PERMISSIONS_CONSTANT.PmManager_Project_Close;
-  PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
-  PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
-  PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
+  Projects_ProductProjects_ViewAllProject = PERMISSIONS_CONSTANT.Projects_ProductProjects_ViewAllProject;
+  Projects_ProductProjects_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Projects_ProductProjects_ViewMyProjectOnly;
+  Projects_ProductProjects_Create = PERMISSIONS_CONSTANT.Projects_ProductProjects_Create;
+  Projects_ProductProjects_Edit = PERMISSIONS_CONSTANT.Projects_ProductProjects_Edit;
+  Projects_ProductProjects_Delete = PERMISSIONS_CONSTANT.Projects_ProductProjects_Delete;
+  Projects_ProductProjects_Close = PERMISSIONS_CONSTANT.Projects_ProductProjects_Close;
+  Projects_ProductProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail;
+
+
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },

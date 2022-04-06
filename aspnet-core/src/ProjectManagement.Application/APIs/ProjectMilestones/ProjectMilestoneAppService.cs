@@ -15,7 +15,7 @@ namespace ProjectManagement.APIs.ProjectMilestones
     public class ProjectMilestoneAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectMilestone_ViewAll)]
+        [AbpAuthorize()]
         public async Task<GridResult<GetProjectMilestoneDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<ProjectMilestone>()
@@ -34,14 +34,14 @@ namespace ProjectManagement.APIs.ProjectMilestones
             return await query.GetGridResult(query, input);
         }
 
-        [AbpAuthorize(PermissionNames.PmManager_ProjectMilestone_Create)]
+        [AbpAuthorize()]
         public async Task<ProjectMilestoneDto> Create(ProjectMilestoneDto input)
         {
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<ProjectMilestone>(input));
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.PmManager_ProjectMilestone_Update)]
+        [AbpAuthorize()]
         public async Task<ProjectMilestoneDto> Update(ProjectMilestoneDto input)
         {
             var isExist = await WorkScope.GetAsync<ProjectMilestone>(input.Id);
@@ -50,7 +50,7 @@ namespace ProjectManagement.APIs.ProjectMilestones
             return input;
         }
 
-        [AbpAuthorize(PermissionNames.PmManager_ProjectMilestone_Delete)]
+        [AbpAuthorize()]
         public async Task Delete(long id)
         {
             await WorkScope.DeleteAsync<ProjectMilestone>(id);

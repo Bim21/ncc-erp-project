@@ -20,14 +20,13 @@ import * as moment from 'moment';
   styleUrls: ['./training-projects.component.css']
 })
 export class TrainingProjectsComponent extends PagedListingComponentBase<TrainingProjectsComponent> implements OnInit {
-  PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
-  PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
-  PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
-  PmManager_Project_Close = PERMISSIONS_CONSTANT.PmManager_Project_Close;
-  PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
-  PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
-  PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
+  Projects_TrainingProjects_ViewAllProject = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ViewAllProject;
+  Projects_TrainingProjects_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ViewMyProjectOnly;
+  Projects_TrainingProjects_Create = PERMISSIONS_CONSTANT.Projects_TrainingProjects_Create;
+  Projects_TrainingProjects_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_Edit;
+  Projects_TrainingProjects_Delete = PERMISSIONS_CONSTANT.Projects_TrainingProjects_Delete;
+  Projects_TrainingProjects_Close = PERMISSIONS_CONSTANT.Projects_TrainingProjects_Close;
+  Projects_TrainingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail;
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
     // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
