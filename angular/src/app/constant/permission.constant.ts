@@ -370,6 +370,8 @@ export const PERMISSIONS_CONSTANT = {
     Timesheets_CloseAndActive : "Timesheets.CloseOrActive",
 
     Timesheets_TimesheetDetail : "Timesheets.TimesheetDetail",
+    Timesheets_TimesheetDetail_ViewAll : "Timesheets.TimesheetDetail_ViewAl",
+    Timesheets_TimesheetDetail_ViewMyProjectOnly : "Timesheets.TimesheetDetail.ViewMyProjectOnly",
     Timesheets_TimesheetDetail_ViewBillRate : "Timesheets.TimesheetDetail.ViewBillRate",
     Timesheets_TimesheetDetail_AddProjectToTimesheet : "Timesheets.TimesheetDetail.AddProjectToTimesheet",
     Timesheets_TimesheetDetail_UploadTimesheetFile : "Timesheets.TimesheetDetail.UploadTimesheetFile",

@@ -37,14 +37,10 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
 
   public pmReportList:pmReportDto[]=[];
   public closeReportMessage;
-  DeliveryManagement_PMReport_CloseReport=PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
-  DeliveryManagement_PMReportProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject;
-  DeliveryManagement_PMReport_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_Create
-  DeliveryManagement_PMReport_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_Delete
-  DeliveryManagement_PMReport_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_Update
-  DeliveryManagement_PMReport_StatisticsReport = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_StatisticsReport
-  DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet
-
+  WeeklyReport_CollectTimesheet = PERMISSIONS_CONSTANT.WeeklyReport_CollectTimesheet;
+  WeeklyReport_Rename = PERMISSIONS_CONSTANT.WeeklyReport_Rename
+  WeeklyReport_View = PERMISSIONS_CONSTANT.WeeklyReport_View
+  WeeklyReport_ReportDetail = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail
 
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
@@ -62,7 +58,7 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
 
   }
   showDetail(item:any){
-    if(this.permission.isGranted(this.DeliveryManagement_PMReportProject)){
+    if(this.permission.isGranted(this.WeeklyReport_ReportDetail)){
       this.router.navigate(['app/weeklyReportTabDetail'], {
         queryParams: {
           id:item.id,

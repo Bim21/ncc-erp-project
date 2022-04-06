@@ -169,11 +169,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   public getAllPM(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+    this.listProjectService.GetOutsourcingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })
   }
+  
   createProject() {
     this.showDialogListProject('create');
   }

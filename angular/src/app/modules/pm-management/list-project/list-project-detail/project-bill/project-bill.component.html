@@ -2,10 +2,10 @@
     <div class="container-fluid">
         <div class="card mt-3">
 
-            <mat-expansion-panel [expanded]="!isShowUserBill" *ngIf="permission.isGranted(PmManager_ProjectUserBill)">
+            <mat-expansion-panel [expanded]="!isShowUserBill" >
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Danh sách Bill Dự án</h4>
-                    <button *ngIf="!userBillProcess && permission.isGranted(PmManager_ProjectUserBill_Create)"
+                    <button *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create)"
                         [hidden]="isShowUserBill" style="border: none;" class="btn bg-blue ml-3"
                         (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
                         <i class="fa fa-plus-square mr-1"></i>Create
@@ -21,11 +21,11 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="stt">#</th>
-                                    <th>Nhân viên</th>
+                                    <th>Employee</th>
                                     <th>Charge Role</th>
                                     <th>Rate</th>
-                                    <th>Bắt đầu charge</th>
-                                    <th>Kết thúc charge</th>
+                                    <th>Start charge</th>
+                                    <th>End charge</th>
                                     <th>Is Charge</th>
                                     <th>Note</th>
                                     <th>Shadow note</th>
@@ -154,11 +154,11 @@
                                     </td>
                                     <td>
                                         <div *ngIf="!bill.createMode">
-                                            <button *ngIf="permission.isGranted(PmManager_ProjectUserBill_Update)"
+                                            <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editUserBill(bill)"><i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button *ngIf="permission.isGranted(PmManager_ProjectUserBill_Delete)"
+                                            <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeUserBill(bill)"><i
                                                     class="fas fa-trash"></i>delete</button>

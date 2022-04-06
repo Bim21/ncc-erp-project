@@ -17,13 +17,13 @@ import * as moment from 'moment';
   styleUrls: ['./sao-do.component.css']
 })
 export class SaoDoComponent extends PagedListingComponentBase<SaodoDto> implements OnInit {
-  SaoDo_AuditSession = PERMISSIONS_CONSTANT.SaoDo_AuditSession;
-  SaoDo_AuditSession_AddAuditResult = PERMISSIONS_CONSTANT.SaoDo_AuditSession_AddAuditResult;
-  SaoDo_AuditSession_Create = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Create;
-  SaoDo_AuditSession_Delete = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Delete;
-  SaoDo_AuditSession_Update = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Update;
-  SaoDo_AuditSession_View = PERMISSIONS_CONSTANT.SaoDo_AuditSession_View;
-  SaoDo_AuditSession_ViewAll = PERMISSIONS_CONSTANT.SaoDo_AuditSession_ViewAll;
+  // SaoDo_AuditSession = PERMISSIONS_CONSTANT.SaoDo_AuditSession;
+  // SaoDo_AuditSession_AddAuditResult = PERMISSIONS_CONSTANT.SaoDo_AuditSession_AddAuditResult;
+  // SaoDo_AuditSession_Create = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Create;
+  // SaoDo_AuditSession_Delete = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Delete;
+  // SaoDo_AuditSession_Update = PERMISSIONS_CONSTANT.SaoDo_AuditSession_Update;
+  // SaoDo_AuditSession_View = PERMISSIONS_CONSTANT.SaoDo_AuditSession_View;
+  // SaoDo_AuditSession_ViewAll = PERMISSIONS_CONSTANT.SaoDo_AuditSession_ViewAll;
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Đợt", },
     { propertyName: 'countFail', comparisions: [0, 1, 2, 3, 4], displayName: "Tổng sai phạm", },

@@ -1,5 +1,5 @@
 <div class="card-body">
-    <label *ngIf="permission.isGranted(PmManager_ProjectFile_UploadNewFile)" class="upload-btn"><i
+    <label *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile)" class="upload-btn"><i
             class="fas fa-upload mr-1"></i> Upload file
         <input type="file" size="60" type="file" multiple (change)="selectFile($event)">
     </label>
@@ -14,7 +14,7 @@
                     <td class="text-center">{{i+1}}</td>
                     <td> <span class="hyperlink" (click)="downloadFile(file)">{{file.fileName}}</span> <i
                             class="fas fa-times fa-lg ml-1" (click)="removeFile(file)"
-                            *ngIf="permission.isGranted(PmManager_ProjectFile_DeleteFile)"></i>
+                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile)"></i>
                     </td>
                 </tr>
             </tbody>

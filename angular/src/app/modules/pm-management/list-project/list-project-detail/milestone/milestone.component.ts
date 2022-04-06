@@ -54,11 +54,7 @@ export class MilestoneComponent extends PagedListingComponentBase<MilestoneDto> 
   public isEditing:boolean=false;
   public projectId:any;
   public newMilestone={} as MilestoneDto;
-  PmManager_ProjectMilestone= PERMISSIONS_CONSTANT.PmManager_ProjectMilestone;
-  PmManager_ProjectMilestone_Create= PERMISSIONS_CONSTANT.PmManager_ProjectMilestone_Create;
-  PmManager_ProjectMilestone_Delete= PERMISSIONS_CONSTANT.PmManager_ProjectMilestone_Delete;
-  PmManager_ProjectMilestone_Update= PERMISSIONS_CONSTANT.PmManager_ProjectMilestone_Update;
-  PmManager_ProjectMilestone_ViewAll= PERMISSIONS_CONSTANT.PmManager_ProjectMilestone_ViewAll;
+
 
   constructor(injector: Injector,
     private milestoneService: ProjectMilestoneService, private route:ActivatedRoute) { super(injector) }

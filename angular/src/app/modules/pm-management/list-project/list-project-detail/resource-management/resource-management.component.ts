@@ -18,7 +18,7 @@ import { finalize, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
 import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { ReleaseUserDialogComponent } from './release-user-dialog/release-user-dialog.component';
-import { ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
+import { ConfirmFromPage, ConfirmPopupComponent } from './confirm-popup/confirm-popup.component';
 import { DeliveryResourceRequestService } from '@app/service/api/delivery-request-resource.service';
 import { CreateUpdateResourceRequestComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/create-update-resource-request/create-update-resource-request.component';
 import { ResourcePlanDto } from '@app/service/model/resource-plan.dto';
@@ -230,7 +230,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
               width: "700px",
               data: {
                 workingProject : workingProject,
-                user: user
+                user: user,
+                page: ConfirmFromPage.outsource_workingResource
+
               }
             }
             )
@@ -355,12 +357,12 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   public removeProjectRerequest(request: projectResourceRequestDto): void {
     abp.message.confirm(
-      `Delete request: ${request.name}`,
+      `Delete this request?`,
       "",
       (result: boolean) => {
         if (result) {
           this.projectRequestService.deleteProjectRequest(request.id).pipe(catchError(this.projectRequestService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted request: " + request.name);
+            abp.notify.success("Delete request successfully");
             this.getResourceRequestList();
           });
 
@@ -405,7 +407,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
             workingProject: workingProject,
             user: user,
             type: "confirmJoin",
-            page: "outsource"
+            page: ConfirmFromPage.outsource_PlannedResource
           }
         })
 
@@ -636,6 +638,10 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       }
 
     );
+  }
+
+  sendRecruitment(){
+    abp.message.info('Chức năng này sẽ được cập nhật trong bản release sắp tới', 'Thông báo')
   }
 
   public openModal(name, typePM, content, id){

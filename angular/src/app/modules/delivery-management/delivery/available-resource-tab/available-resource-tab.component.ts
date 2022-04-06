@@ -11,7 +11,9 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 export class AvailableResourceTabComponent extends AppComponentBase implements OnInit {
   currentUrl: string = ""
 
-  DeliveryManagement_ResourceRequest_ViewVendorResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ViewVendorResource
+  Resource_TabPool = PERMISSIONS_CONSTANT.Resource_TabPool
+  Resource_TabAllResource = PERMISSIONS_CONSTANT.Resource_TabAllResource
+  Resource_TabVendor = PERMISSIONS_CONSTANT.Resource_TabVendor
   constructor(injector: Injector, private router: Router, private route: ActivatedRoute) {
     super(injector);
     this.currentUrl =this.router.url

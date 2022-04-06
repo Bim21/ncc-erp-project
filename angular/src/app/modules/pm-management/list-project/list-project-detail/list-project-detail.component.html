@@ -9,21 +9,12 @@
                     <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement)" [ngClass]="currentUrl.includes('resourcemanagement')?'active':''" mat-tab-link (click)="routingResourceTab()">
                         Resource Management 
                     </a>
-                    <!-- <a *ngIf="permission.isGranted(PmManager_CanViewMenu_Milestone)" [ngClass]="currentUrl.includes('milestone')?'active':''" mat-tab-link (click)="routingMilestoneTab()">
-                        Milestone
-                    </a> -->
                     <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport)" [ngClass]="currentUrl.includes('weeklyreport')?'active':''" mat-tab-link (click)="routingWeeklyReportTab()">
                         Weekly Report
                     </a>
                     <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo)" [ngClass]="currentUrl.includes('project-bill-tab')?'active':''" mat-tab-link (click)="routingProjectBillTab()">
                         Bill Info
                     </a>
-                    <!-- <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ProjectChecklist)" [ngClass]="currentUrl.includes('projectchecklist')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
-                        Project Checklist
-                    </a> -->
-                    <!-- <a *ngIf="permission.isGranted(PmManager_CanViewMenu_Timesheet)" [ngClass]="currentUrl.includes('timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
-                        Timesheet
-                    </a> -->
                     <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription)" [ngClass]="currentUrl.includes('description-tab')?'active':''" mat-tab-link (click)="routingDescriptionTab()">
                         Project Description 
                     </a>

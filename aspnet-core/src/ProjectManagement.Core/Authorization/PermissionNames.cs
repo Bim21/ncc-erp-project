@@ -379,6 +379,10 @@ namespace ProjectManagement.Authorization
         public const string Timesheets_CloseAndActive = "Timesheets.CloseOrActive";
 
         public const string Timesheets_TimesheetDetail = "Timesheets.TimesheetDetail";
+        public const string Timesheets_TimesheetDetail_ViewAll = "Timesheets.TimesheetDetail.ViewAll";
+        public const string Timesheets_TimesheetDetail_ViewMyProjectOnly = "Timesheets.TimesheetDetail.ViewMyProjectOnly";
+
+
         public const string Timesheets_TimesheetDetail_ViewBillRate = "Timesheets.TimesheetDetail.ViewBillRate";
         public const string Timesheets_TimesheetDetail_AddProjectToTimesheet = "Timesheets.TimesheetDetail.AddProjectToTimesheet";
         public const string Timesheets_TimesheetDetail_UploadTimesheetFile = "Timesheets.TimesheetDetail.UploadTimesheetFile";
@@ -770,6 +774,9 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheets_CloseAndActive ,
 
                     PermissionNames.Timesheets_TimesheetDetail ,
+                    PermissionNames.Timesheets_TimesheetDetail_ViewAll ,
+                    PermissionNames.Timesheets_TimesheetDetail_ViewMyProjectOnly ,
+
                     PermissionNames.Timesheets_TimesheetDetail_ViewBillRate ,
                     PermissionNames.Timesheets_TimesheetDetail_AddProjectToTimesheet ,
                     PermissionNames.Timesheets_TimesheetDetail_UploadTimesheetFile ,
@@ -1161,6 +1168,8 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Timesheets_CloseAndActive ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close/Active"},
 
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet Detail"},
+                 new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_ViewAll ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet View All Project Timesheet"},
+                 new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_ViewMyProjectOnly ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet View My Project Only"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_ViewBillRate ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Bill Rate"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_AddProjectToTimesheet ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project To Timesheet"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UploadTimesheetFile ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload Timesheet File"},
@@ -1730,6 +1739,8 @@ namespace ProjectManagement.Authorization
 
                                 new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet Detail",
                                     Childrens = new List<SystemPermission>() {
+                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_ViewAll, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Timesheet Project"},
+                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_ViewMyProjectOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_ViewBillRate, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Bill Rate"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_AddProjectToTimesheet ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Project To Timesheet"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UploadTimesheetFile ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload Timesheet File"},

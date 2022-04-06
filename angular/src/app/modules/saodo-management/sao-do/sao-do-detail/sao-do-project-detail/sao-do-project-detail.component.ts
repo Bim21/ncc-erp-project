@@ -29,11 +29,11 @@ export class SaoDoProjectDetailComponent extends AppComponentBase implements OnI
   public note='';
   public auditResultId='';
   public listCheckList:projectChecklistDto[]=[];
-  SaoDo_AuditResult_Create=PERMISSIONS_CONSTANT.SaoDo_AuditResult_Create;
-  SaoDo_AuditResult_Delete=PERMISSIONS_CONSTANT.SaoDo_AuditResult_Delete;
-  SaoDo_AuditResult_GetNote=PERMISSIONS_CONSTANT.SaoDo_AuditResult_GetNote;
-  SaoDo_AuditResult_Update=PERMISSIONS_CONSTANT.SaoDo_AuditResult_Update;
-  SaoDo_AuditResult_UpdateNote=PERMISSIONS_CONSTANT.SaoDo_AuditResult_UpdateNote;
+  // SaoDo_AuditResult_Create=PERMISSIONS_CONSTANT.SaoDo_AuditResult_Create;
+  // SaoDo_AuditResult_Delete=PERMISSIONS_CONSTANT.SaoDo_AuditResult_Delete;
+  // SaoDo_AuditResult_GetNote=PERMISSIONS_CONSTANT.SaoDo_AuditResult_GetNote;
+  // SaoDo_AuditResult_Update=PERMISSIONS_CONSTANT.SaoDo_AuditResult_Update;
+  // SaoDo_AuditResult_UpdateNote=PERMISSIONS_CONSTANT.SaoDo_AuditResult_UpdateNote;
 
   constructor(private route: ActivatedRoute , injector:Injector,
     private projectChecklistService:ProjectChecklistService,

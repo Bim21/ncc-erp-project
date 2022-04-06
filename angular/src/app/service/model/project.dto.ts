@@ -71,6 +71,9 @@ export class projectResourceRequestDto {
   note: string;
   id: number;
   createMode?: boolean;
+  planUserInfo:any
+  pmNote?: string;
+  dmNote?: string;
 }
 export class projectUserBillDto {
   userId: number;

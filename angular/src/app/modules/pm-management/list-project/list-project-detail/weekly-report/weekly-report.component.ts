@@ -22,7 +22,7 @@ import * as moment from 'moment';
 import { PmReportService } from '@app/service/api/pm-report.service';
 import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { ReleaseUserDialogComponent } from '../resource-management/release-user-dialog/release-user-dialog.component';
-import { ConfirmPopupComponent } from '../resource-management/confirm-popup/confirm-popup.component';
+import { ConfirmFromPage, ConfirmPopupComponent } from '../resource-management/confirm-popup/confirm-popup.component';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 
 
@@ -676,12 +676,11 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           trigger: 'axis'
         },
         legend: {
-          orient: 'vertical',
-          top: '12%',
-          left:'10%',
-          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
-            , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-            `${hasTempDataOT ? 'OT Temp' : ''}`],            
+          left:'25%',
+          width:'80%',
+          data: ['Total normal' ,'Total OT' ,'Normal Offical'
+            ,'OT Offical', 'Normal Temp',
+            'OT Temp'],       
         },
         color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
@@ -928,7 +927,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           data: {
             workingProject: workingProject,
             user: user,
-            type: "confirmJoin"
+            type: "confirmJoin",
+            page: ConfirmFromPage.outsource_weekly
           }
         })
 

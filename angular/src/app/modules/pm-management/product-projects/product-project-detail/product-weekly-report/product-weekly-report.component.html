@@ -34,7 +34,7 @@
                                     </mat-form-field>
                                     <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
                                         [disabled]="!allowSendReport"
-                                        *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport  ">
+                                        *ngIf="selectedReport.isActive && isSentReport  ">
                                         <i class="fas fa-paper-plane ml-2"></i> Send report
                                     </button>
                                     <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive"
@@ -56,7 +56,7 @@
                             <div class="col-10">
                                 <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" style="margin-left: 10px !important;" class="ml-3" appearance="outline">
                                     <mat-select
-                                        [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"
+                                        [disabled]="!selectedReport.isActive "
                                         name="flag" placeholder="Project health" [(ngModel)]="projectHealth"
                                         >
                                         <ng-container *ngFor="let flag of problemIssueList"
@@ -128,14 +128,14 @@
         </div>
 
 
-        <div *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_ProblemsOfTheWeek)">
+        <div >
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="d-inline">Các vấn đề trong tuần</h4>
                             <button
-                            *ngIf="permission.isGranted(PmManager_PMReportProjectIssue_Create) && selectedReport.isActive  "
+                            *ngIf=" selectedReport.isActive  "
                                 [hidden]="processProblem" (click)="addIssueReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create
@@ -320,13 +320,13 @@
         </div>
 
 
-        <div *ngIf="permission.isGranted(PmManager_PMReportProject_ResourceChangesDuringTheWeek)">
+        <div >
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <h4 style="display: inline;">Resource đã thay đổi trong tuần vừa qua</h4>
                         <button
-                        *ngIf="permission.isGranted(PmManager_PMReportProject_Create) && selectedReport.isActive"
+                        *ngIf=" selectedReport.isActive"
                             [hidden]="processWeekly" (click)="addWeekReport()" class=" btn btn-primary ml-3">
                             <i class="fa fa-plus-square"></i> Create
                         </button>
@@ -486,13 +486,13 @@
                 <pagination-controls autoHide="true" id="projectUser" (pageChange)="weeklyCurrentPage = $event">
                 </pagination-controls>
             </div>
-            <div *ngIf="permission.isGranted(PmManager_PMReportProject_ResourceChangesInTheFuture)">
+            <div >
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
                             <h4 style="display: inline;">Resource dự kiến thay đổi trong tương lai</h4>
                             <button
-                            *ngIf="permission.isGranted(PmManager_PMReportProject_Create) && selectedReport.isActive "
+                            *ngIf="selectedReport.isActive "
                                 [hidden]="processFuture" (click)="addFutureReport()" class="btn btn-primary  ml-3">
                                 <i class="fa fa-plus-square"></i>
                                 Create

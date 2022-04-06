@@ -1,9 +1,9 @@
-<section class="content px-2 pt-2 " >
+<section class="content px-2 pt-2 ">
     <div class="container-fluid">
         <div class="row mb-4 card">
             <div class="col-12">
                 <nav mat-tab-nav-bar style="position: sticky; z-index: 10; top: 56px; background: white;">
-                    <a *ngIf="permission.isGranted(DeliveryManagement_CanViewMenu_WeeklyReport)"
+                    <!-- <a 
                      [ngClass]="currentUrl.includes('weekly-report-tab')?'active':''"  mat-tab-link (click)="routingWeeklyReportTab()" >
                         Weekly Report
                     </a>
@@ -13,7 +13,7 @@
                     </a>
                     <a [ngClass]="currentUrl.includes('available-resource-tab')?'active':''"  mat-tab-link (click)="routingAvailableResourceTab()" *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_AvailableResource)">
                         Available Resource
-                    </a>
+                    </a> -->
                 </nav>
                 <router-outlet></router-outlet>
             </div>

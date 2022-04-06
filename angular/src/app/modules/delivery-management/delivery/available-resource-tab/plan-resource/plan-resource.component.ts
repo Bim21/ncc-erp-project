@@ -29,8 +29,8 @@ import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dia
 import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
-import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 import { ConfirmPlanDialogComponent } from './plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
+import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-plan-resource',
@@ -46,13 +46,19 @@ export class PlanResourceComponent
   private subscription: Subscription[] = [];
   public selectedSkillId: number[]
   public isAndCondition: boolean = false
-  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
-  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
-
-  DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject
-  DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject
-  DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject
-  DeliveryManagement_ProjectUser_PickUserFromPoolToProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_PickUserFromPoolToProject
+  Resource_TabPool = PERMISSIONS_CONSTANT.Resource_TabPool
+  Resource_TabPool_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabPool_ViewHistory
+  Resource_TabPool_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabPool_CreatePlan
+  Resource_TabPool_EditPlan = PERMISSIONS_CONSTANT.Resource_TabPool_EditPlan
+  Resource_TabPool_ConfirmPickEmployeeFromPoolToProject = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject
+  Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabPool_ConfirmOut = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmOut
+  Resource_TabPool_CancelMyPlan = PERMISSIONS_CONSTANT.Resource_TabPool_CancelMyPlan
+  Resource_TabPool_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabPool_CancelAnyPlan
+  Resource_TabPool_EditTempProject = PERMISSIONS_CONSTANT.Resource_TabPool_EditTempProject
+  Resource_TabPool_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabPool_UpdateSkill
+  Resource_TabPool_EditNote = PERMISSIONS_CONSTANT.Resource_TabPool_EditNote
+  
   protected list(
     request: PagedRequestDto,
     pageNumber: number,
@@ -359,7 +365,8 @@ export class PlanResourceComponent
         data: {
           workingProject: data.result,
           user: plan,
-          fromPage: "pool"
+          fromPage: ConfirmFromPage.poolResource,
+          
         }
       })
 

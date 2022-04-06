@@ -42,8 +42,7 @@ export class ResourceRequestDetailComponent extends PagedListingComponentBase<an
   public resourceRequestList: ResourceRequestDetailDto[] = [];
   public userAvailableList: userAvailableDto[] = [];
   public userAvailable = {} as userAvailableDto;
-  DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_SearchAvailableUserForRequest;
-  DeliveryManagement_ResourceRequest_AddUserToRequest = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_AddUserToRequest;
+
 
 
   constructor(private route: ActivatedRoute,

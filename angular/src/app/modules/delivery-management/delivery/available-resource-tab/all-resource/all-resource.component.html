@@ -143,8 +143,8 @@
                                         <span style="font-size: 15px; color: #494d50">{{project.startTime | date:
                                             "dd/MM/yyyy"}}</span>
                                     </p>
-                                    <i class=" fas fa-history pointer" style="color: #6b7278;"
-                                        *ngIf="!item.isshowProjectHistory" matTooltip="View project history"
+                                    <i  class=" fas fa-history pointer" style="color: #6b7278;"
+                                        *ngIf="!item.isshowProjectHistory && permission.isGranted(Resource_TabAllResource_ViewHistory)" matTooltip="View project history"
                                         (click)="getHistoryProjectsByUserId(item)"></i>
                                     <div *ngIf="item.isshowProjectHistory"
                                         [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
@@ -181,19 +181,22 @@
                                                     </span>
                                                 </button>
                                                 <mat-menu #planMenu="matMenu">
-                                                    <button mat-menu-item
+                                                    <button mat-menu-item *ngIf="permission.isGranted(Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject)
+                                                    || permission.isGranted(Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther)
+                                                    || permission.isGranted(Resource_TabAllResource_ConfirmOut)" 
                                                         (click)="confirm(plan, item.userId, item.fullName)"><i
                                                             class="fas fa-check mr-1 text-success"></i>Confirm</button>
-                                                    <button mat-menu-item
+                                                    <button mat-menu-item *ngIf="permission.isGranted(Resource_TabAllResource_CancelMyPlan) 
+                                                    || permission.isGranted(Resource_TabAllResource_CancelAnyPlan)"
                                                         (click)="CancelResourcePlan(plan,item.fullName)">
                                                         <i class="fas fa-times mr-1 text-danger"></i> Cancel
                                                         plan</button>
-                                                    <button mat-menu-item (click)="editUserPlan(plan,item)"> <i
+                                                    <button *ngIf="permission.isGranted(Resource_TabAllResource_EditPlan)" mat-menu-item (click)="editUserPlan(plan,item)"> <i
                                                             class="fas fa-edit mr-1 text-secondary"></i> Edit</button>
                                                 </mat-menu>
                                             </div>
                                         </div>
-                                        <div style="width: 14%;" class="text-right ml-1">
+                                        <div *ngIf="permission.isGranted(Resource_TabAllResource_CreatePlan)" style="width: 14%;" class="text-right ml-1">
                                             <i class="fas fa-plus text-primary" (click)="planUser(item)"
                                                 matTooltip="Plan user"></i>
                                         </div>
@@ -208,7 +211,7 @@
 
                                             </p>
                                         </div>
-                                        <div style="width: 10%; text-align: right;">
+                                        <div *ngIf="permission.isGranted(Resource_TabAllResource_UpdateSkill)" style="width: 10%; text-align: right;">
                                             <i class="fas fa-edit" (click)="updateUserSkill(item)"
                                                 matTooltip="Edit skill"></i>
                                         </div>

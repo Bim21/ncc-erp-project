@@ -11,7 +11,7 @@ import { projectProblemDto, projectReportDto } from './../../../../../service/mo
 import { finalize, catchError } from 'rxjs/operators';
 
 import { ActivatedRoute } from '@angular/router';
-import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
+import { pmReportProjectDto} from './../../../../../service/model/pmReport.dto';
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
 import { Component, OnInit, Injector, ViewChild, Input } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
@@ -22,7 +22,7 @@ import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { GetTimesheetWorkingComponent, WorkingTimeDto } from './get-timesheet-working/get-timesheet-working.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
-import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { ConfirmFromPage, ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/add-future-resource-dialog.component';
 @Component({
@@ -31,22 +31,22 @@ import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/a
   styleUrls: ['./weekly-report-tab-detail.component.css']
 })
 export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<WeeklyReportTabDetailComponent> implements OnInit {
-  DeliveryManagement_PMReportProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReport_CloseReport;
-  DeliveryManagement_PMReportProject_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Create;
-  DeliveryManagement_PMReportProject_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Delete;
-  DeliveryManagement_PMReportProject_GetAll = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAll;
-  DeliveryManagement_PMReportProject_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_Update;
-  DeliveryManagement_PMReportProject_GetAllByPmProject = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_GetAllByPmProject;
-  DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesDuringTheWeek;
-  DeliveryManagement_PMReportProject_ResourceChangesInTheFuture = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_ResourceChangesInTheFuture;
-  DeliveryManagement_PMReportProject_SendReport = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProject_SendReport;
-  DeliveryManagement_PMReportProjectIssue = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue;
-  DeliveryManagement_PMReportProjectIssue_Create = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Create;
-  DeliveryManagement_PMReportProjectIssue_Delete = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Delete;
-  DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_ProblemsOfTheWeek;
-  DeliveryManagement_PMReportProjectIssue_Update = PERMISSIONS_CONSTANT.DeliveryManagement_PMReportProjectIssue_Update;
-  DeliveryManagement_ResourceRequest_ApproveUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_ApproveUser;
-  DeliveryManagement_ResourceRequest_RejectUser = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_RejectUser
+  WeeklyReport_ReportDetail_UpdateNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateNote;
+  WeeklyReport_ReportDetail_UpdateProjectHealth = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateProjectHealth;
+  WeeklyReport_ReportDetail_Issue = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue;
+  WeeklyReport_ReportDetail_Issue_AddMeetingNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_AddMeetingNote;
+  WeeklyReport_ReportDetail_Issue_SetDone = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_SetDone;
+  WeeklyReport_ReportDetail_CurrentResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource;
+  WeeklyReport_ReportDetail_CurrentResource_Release = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_Release;
+  WeeklyReport_ReportDetail_PlannedResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource;
+  WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan;
+  WeeklyReport_ReportDetail_PlannedResource_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_Edit;
+  WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject;
+  WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther;
+  WeeklyReport_ReportDetail_PlannedResource_ConfirmOut = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmOut;
+  WeeklyReport_ReportDetail_PlannedResource_CancelPlan = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_CancelPlan;
+  WeeklyReport_ReportDetail_ChangedResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ChangedResource;
+
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // this.pmReportProjectService.GetAllByPmReport(this.pmReportId, request).pipe(finalize(()=>{
     //   finishedCallback();
@@ -106,7 +106,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public mondayOf5weeksAgo: any
   public lastWeekSunday: any
   public tempResourceList: any[] = []
-  public officalResourceList: any[] = []
+  public officalResourceList: any[] = [];
 
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
@@ -135,18 +135,18 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let currentDate = new Date()
     currentDate.setDate(currentDate.getDate() - (currentDate.getDay() + 6) % 7);
     currentDate.setDate(currentDate.getDate() - 7);
-
     this.mondayOf5weeksAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
     this.mondayOf5weeksAgo = moment(this.mondayOf5weeksAgo.setDate(this.mondayOf5weeksAgo.getDate() - 28)).format("YYYY-MM-DD")
     this.lastWeekSunday = moment(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)).format("YYYY-MM-DD");
     if (this.router.url.includes("weeklyReportTabDetail")) {
-      this.pmReportService.currentMessage.subscribe(message => {
-        this.projectType = message;
-        if (this.pmReportId) {
-          this.getPmReportProject();
+      this.pmReportService.currentProjectHealth.subscribe((data) => {
+        if (data) {
+          const pmReportPro = this.pmReportProjectList.find(e => e.id == data.pmReportProjectId);
+          if (pmReportPro) {
+            pmReportPro.projectHealth = this.problemIssueList[data.projectHealth];
+          }
         }
       }
-
       );
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
       this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
@@ -707,7 +707,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       }
 
       option = {
-        width:'90%',
+        width: '90%',
         title: {
           text: 'Timesheet'
         },
@@ -715,9 +715,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           trigger: 'axis'
         },
         legend: {
-          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
-            , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-            `${hasTempDataOT ? 'OT Temp' : ''}`],
+          left:'25%',
+          width:'80%',
+          data: ['Total normal' ,'Total OT' ,'Normal Offical'
+            ,'OT Offical', 'Normal Temp',
+            'OT Temp'], 
         },
         color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
@@ -828,11 +830,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             data: hasOtValue ? chartData.overTimeHours : [],
             type: 'line',
             name: 'OT',
-            lineStyle: {color: 'red'}
+            lineStyle: { color: 'red' }
           }
         ]
       };
-   
+
       option && myChart.setOption(option);
 
 
@@ -973,7 +975,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           data: {
             workingProject: workingProject,
             user: user,
-            type: "confirmJoin"
+            type: "confirmJoin",
+            page: ConfirmFromPage.weeklyReport
           }
         })
 
@@ -1030,7 +1033,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       let option: echarts.EChartsOption;
       option = {
         tooltip: {
-          trigger: 'axis',
+          // trigger: 'axis',
         },
         title: {
           text: 'Bill info'
@@ -1056,11 +1059,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         ],
         yAxis: [
           {
+            axisLabel: {
+              padding: [0, 13, 0, 13]
+            },
             type: 'value',
             name: 'ManMonths',
 
           },
           {
+            axisLabel: {
+              padding: [0, 13, 0, 13]
+            },
             type: 'value',
             name: 'ManDays',
 
@@ -1069,6 +1078,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         series: [
 
           {
+            barWidth: 30,
             name: 'ManMonths',
             type: 'bar',
             data: chartData.manMonths
@@ -1102,7 +1112,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   editResourcePlan(resource) {
     let item = {
-      projectUserId:resource.id,
+      projectUserId: resource.id,
       fullName: resource.fullName,
       projectId: this.projectId,
       projectRole: resource.projectRole,

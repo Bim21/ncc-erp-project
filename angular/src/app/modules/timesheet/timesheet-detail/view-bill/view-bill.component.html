@@ -15,7 +15,7 @@
       <button
         class="btn btn-create-neutral ml-2"
         [disabled]="isEdittingRows"
-        *ngIf="!isEdit && permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)"
+        *ngIf="!isEdit && permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Create)"
         (click)="create()"
         [disabled]="this.data.isComplete"
       >
@@ -23,7 +23,7 @@
       </button>
       <button
         class="btn btn-editall-neutral ml-2"
-        *ngIf="!isEdittingRows && billDetail.length && !isEdit"
+        *ngIf="!isEdittingRows && billDetail.length && !isEdit && permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Edit)"
         (click)="editMultiRows()"
         [disabled]="this.data.isComplete"
       >
@@ -31,8 +31,6 @@
       </button>
       <div *ngIf="isEdittingRows" class="pt-1 ml-4">
         <button
-          *ngIf="!permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation) && 
-            permission.isGranted(Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM)"
           [disabled]="!timesheetDetailForm.valid"
           class="mr-3 submit-btn"
           style="background: none; border: none"
@@ -41,7 +39,7 @@
           <i style="color: green" class="fas fa-check fa-2x"></i>
         </button>
         <button
-        *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)"
+        
           [disabled]="!timesheetDetailForm.valid"
           class="mr-3 submit-btn"
           style="background: none; border: none"
@@ -80,7 +78,7 @@
                 style="width: 150px;"
                 *ngIf="
                   permission.isGranted(
-                    Timesheet_Timesheet_ViewProjectBillInfomation
+                    Timesheets_TimesheetDetail_ViewBillRate
                   )
                 "
               >
@@ -114,7 +112,7 @@
                   >
                   </app-user-info>
                 </span>
-                <div *ngIf="(bill.createMode || isEdittingRows) && permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
+                <div *ngIf="(bill.createMode || isEdittingRows) ">
                   <mat-form-field class="w-100" appearance="outline">
                     <mat-select
                       [(ngModel)]="bill.userId"
@@ -159,7 +157,7 @@
                     This field is required
                   </mat-error>
                 </div>
-                <span *ngIf="(bill.createMode || isEdittingRows) && !permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
+                <span *ngIf="(bill.createMode || isEdittingRows) ">
                   <app-user-info
                     [userData]="{
                       fullName: bill.fullName,
@@ -177,7 +175,7 @@
                 <span *ngIf="!bill.createMode && !isEdittingRows">{{
                   bill.billRole
                 }}</span>
-                <div *ngIf="(bill.createMode || isEdittingRows) && permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">
+                <div *ngIf="(bill.createMode || isEdittingRows) ">
                   <input
                     style="min-width: 110px"
                     required
@@ -196,7 +194,7 @@
                   >
                   </abp-validation-summary>
                 </div>
-                <span *ngIf="(bill.createMode || isEdittingRows) && !permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)">{{
+                <span *ngIf="(bill.createMode || isEdittingRows) ">{{
                   bill.billRole
                 }}</span>
               </td>
@@ -204,7 +202,7 @@
                 class="text-center"
                 *ngIf="
                   permission.isGranted(
-                    Timesheet_Timesheet_ViewProjectBillInfomation
+                    Timesheets_TimesheetDetail_ViewBillRate
                   )
                 "
               >
@@ -232,22 +230,6 @@
                   </abp-validation-summary>
                 </div>
               </td>
-              <!-- <td> -->
-              <!-- <span *ngIf="!bill.createMode">{{getCurrencyName(currencyList, bill.currency)}}</span> -->
-              <!-- <div *ngIf="bill.createMode"  class="col-md-5 ">
-                                    <mat-form-field appearance="outline">
-                                        <mat-select [(ngModel)]="bill.currency" name="currency" placeholder="select currency" required
-                                            #currency="ngModel">
-                                            <mat-option *ngFor="let currency of currencyList" [value]="currency.id">
-                                                {{currency.name}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                    <mat-error class="mt-1" *ngIf="currency.hasError('required') && currency.touched" style="font-size: 13px;">
-                                        This field is required
-                                    </mat-error>
-                                </div> -->
-
-              <!-- </td> -->
               <td class="text-center">
                 <span *ngIf="!bill.createMode && !isEdittingRows">
                   {{ bill.workingTime }}
@@ -306,7 +288,7 @@
               </td>
               <td class="text-center">
                 <div *ngIf="!bill.createMode">
-                  <button
+                  <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Edit)"
                     [disabled]="
                       userBillProcess ||
                       isEdit ||
@@ -321,7 +303,7 @@
                 </div>
                 <div *ngIf="bill.createMode" class="pt-1 mt-1">
                   <button
-                    *ngIf="permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)"
+                    
                     [disabled]="!bill?.userId || !timesheetDetailForm.valid"
                     class="mr-3 submit-btn"
                     style="background: none; border: none"
@@ -330,8 +312,7 @@
                     <i style="color: green" class="fas fa-check fa-2x"></i>
                   </button>
                   <button
-                    *ngIf="!permission.isGranted(Timesheet_Timesheet_ViewProjectBillInfomation)&&
-                            permission.isGranted(Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM)"
+                    
                     [disabled]="!bill?.userId || !timesheetDetailForm.valid"
                     class="mr-3 submit-btn"
                     style="background: none; border: none"

@@ -5,7 +5,7 @@
                 <h1>Timesheets</h1>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(Timesheet_Timesheet_Create)" (click)="createTimeSheet()"
+                <button *ngIf="permission.isGranted(Timesheets_Create)" (click)="createTimeSheet()"
                     class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                     Create
@@ -100,25 +100,25 @@
                                 </button>
                                 <mat-menu #menu="matMenu" class="p-2">
                                     <button
-                                        *ngIf="item.isActive==true && permission.isGranted(Timesheet_Timesheet_Update)"
+                                        *ngIf="item.isActive==true && permission.isGranted(Timesheets_Edit)"
                                         class="mat-menu-item  w-100" (click)="editTimesheet(item)">
                                         <i class="fas fa-pencil-alt fa-lg mr-1"></i>
                                         Edit
                                     </button>
                                     <button
-                                        *ngIf="item.isActive==true && permission.isGranted(Timesheet_Timesheet_Delete)"
+                                        *ngIf="item.isActive==true && permission.isGranted(Timesheets_Delete)"
                                         class="mat-menu-item  w-100" (click)="delete(item)" #deleteBtn>
                                         <i class="fas fa-trash fa-lg mr-1"></i>
                                         Delete
                                     </button>
                                     <button
-                                        *ngIf="item.isActive==true && permission.isGranted(Timesheet_Timesheet_ForceDelete)"
+                                        *ngIf="item.isActive==true && permission.isGranted(Timesheets_ForceDelete)"
                                         class="mat-menu-item  w-100" (click)="forceDelete(item)" #forceDeleteBtn>
                                         <i class="fas fa-trash-alt fa-lg mr-1"></i>
                                         Force Delete
                                     </button>
                                     <button 
-                                    *ngIf=" permission.isGranted(Timesheet_Timesheet_ReverseActive)"
+                                    *ngIf=" permission.isGranted(Timesheets_CloseAndActive)"
                                     class="mat-menu-item  w-100" (click)="changeStatus(item)" >
                                     <i *ngIf="!item.isActive" class="fas fa-check fa-lg mr-1"></i>
                                     <i *ngIf="item.isActive" class="fas fa-times fa-lg mr-1"></i>
