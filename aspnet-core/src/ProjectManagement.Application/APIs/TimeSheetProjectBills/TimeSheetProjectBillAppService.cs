@@ -307,7 +307,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                                 {
                                     UserId = x.Id,
                                     FullName = x.FullName,
-                                    Email = x.FullName
+                                    Email = x.EmailAddress
                                 }).ToList();
             return users;
         }
