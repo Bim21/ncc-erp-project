@@ -215,6 +215,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   }
 
   public getAllPmReport() {
+
   
     this.pmReportProjectService.GetAllByProject(this.projectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
@@ -640,6 +641,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
+    this.getProjectInfo();
     this.isEditingNote = false;
     this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
   }

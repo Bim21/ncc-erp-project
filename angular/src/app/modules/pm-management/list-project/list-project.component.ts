@@ -113,9 +113,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     let check = false;
     let checkFilterPM = false;
 
-
-    if(this.permission.isGranted( this.PmManager_Project_ViewOnlyMe) && !this.permission.isGranted(this.PmManager_Project_ViewAll)){
+    if(this.permission.isGranted( this.Projects_OutsourcingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_OutsourcingProjects_ViewAllProject)){
       this.pmId = Number(this.sessionService.userId);
+    }else{
+      if(request.searchText){
+        this.pmId = -1;
+      }
     }
 
     if(this.sortWeeklyReport) {
