@@ -348,6 +348,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
 
+  setDone(issue){
+    this.pmReportProjectService.SetDoneIssue(issue.id).subscribe((res)=>{
+      if(res){
+        abp.notify.success("Update Successfully!")
+      }
+      this.getProjectProblem();
+    })
+  }
+
   //weekly
   public addWeekReport() {
     let newReport = {} as projectUserDto

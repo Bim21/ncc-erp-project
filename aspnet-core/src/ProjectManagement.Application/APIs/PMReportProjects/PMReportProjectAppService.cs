@@ -213,6 +213,15 @@ namespace ProjectManagement.APIs.PMReportProjects
         }
 
         [HttpGet]
+        public async Task SetDoneIssue(long id)
+        {
+            var pmReportProject = await WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.Id == id).FirstOrDefaultAsync();
+            pmReportProject.Status = PMReportProjectIssueStatus.Done;
+            await WorkScope.UpdateAsync(pmReportProject);
+
+        }
+
+        [HttpGet]
         public async Task<List<GetPMReportProjectDto>> GetAllPmReportProjectForDropDown()
         {
             var query = WorkScope.GetAll<PMReportProject>().Include(x => x.PM)

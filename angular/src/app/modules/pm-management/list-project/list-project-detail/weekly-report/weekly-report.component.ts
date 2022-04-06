@@ -964,6 +964,15 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
  
   }
 
+  setDone(issue){
+    this.pmReportProjectService.SetDoneIssue(issue.id).subscribe((res)=>{
+      if(res){
+        abp.notify.success("Update Successfully!")
+      }
+      this.getProjectProblem();
+    })
+  }
+
     //
     getDataForBillChart() {
       var todayDate: any = new Date();
