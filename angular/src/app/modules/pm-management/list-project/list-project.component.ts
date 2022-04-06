@@ -24,14 +24,14 @@ import * as moment from 'moment';
 
 export class ListProjectComponent extends PagedListingComponentBase<any> implements OnInit {
 
-  PmManager_Project = PERMISSIONS_CONSTANT.PmManager_Project;
-  PmManager_Project_Create = PERMISSIONS_CONSTANT.PmManager_Project_Create;
-  PmManager_Project_Delete = PERMISSIONS_CONSTANT.PmManager_Project_Delete;
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
-  PmManager_Project_Close = PERMISSIONS_CONSTANT.PmManager_Project_Close;
-  PmManager_Project_ViewAll = PERMISSIONS_CONSTANT.PmManager_Project_ViewAll;
-  PmManager_Project_ViewDetail = PERMISSIONS_CONSTANT.PmManager_Project_ViewDetail;
-  PmManager_Project_ViewOnlyMe = PERMISSIONS_CONSTANT.PmManager_Project_ViewOnlyMe;
+  Projects_OutsourcingProjects_ViewAllProject = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewAllProject;
+  Projects_OutsourcingProjects_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewMyProjectOnly;
+  Projects_OutsourcingProjects_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Create;
+  Projects_OutsourcingProjects_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Edit;
+  Projects_OutsourcingProjects_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Delete;
+  Projects_OutsourcingProjects_Close = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Close;
+  Projects_OutsourcingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail;
+ 
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
@@ -169,11 +169,12 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   public getAllPM(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+    this.listProjectService.GetOutsourcingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })
   }
+  
   createProject() {
     this.showDialogListProject('create');
   }

@@ -8,6 +8,7 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProjectUserService } from '@app/service/api/project-user.service';
 import * as moment from 'moment';
+import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-confirm-plan-dialog',
@@ -16,10 +17,12 @@ import * as moment from 'moment';
 })
 export class ConfirmPlanDialogComponent extends AppComponentBase implements OnInit {
 
-  DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject
-  DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_ConfirmPickUserFromPoolToProject
-  DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_MoveEmployeeToOtherProject
-  DeliveryManagement_ProjectUser_PickUserFromPoolToProject = PERMISSIONS_CONSTANT.DeliveryManagement_ProjectUser_PickUserFromPoolToProject
+  Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther
 
   public allowConfirm: boolean = true
   public startDate
@@ -37,13 +40,20 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   }
 
   ngOnInit(): void {
-
     this.user = this.data.user
     this.workingProject = this.data.workingProject
     this.startDate = moment(this.data.user.startTime).format("YYYY-MM-DD")
     if (this.data.user.allocatePercentage > 0) {
       this.title = `Confirm <strong>${this.user.fullName}</strong> <strong class ="text-success">join</strong> <strong>${this.user.projectName}</strong>`
-      this.checkConfirmPermission()
+      if(this.data.fromPage == ConfirmFromPage.poolResource){
+        this.checkConfirmPermission(this.permission.isGranted(this.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+      }
+      if(this.data.fromPage == ConfirmFromPage.allResource){
+        this.checkConfirmPermission(this.permission.isGranted(this.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+      }
+      if(this.data.fromPage == ConfirmFromPage.vendor){
+        this.checkConfirmPermission(this.permission.isGranted(this.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+      }
     }
     else if (this.data.user.allocatePercentage <= 0) {
       this.title = `Confirm <strong>${this.user.fullName}</strong> <strong class="text-danger">Out</strong> <strong>${this.user.projectName}</strong>`
@@ -52,10 +62,28 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   }
   confirm() {
     if (this.user.allocatePercentage > 0) {
-      this.puService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
-        abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-        this.dialogRef.close(true)
-      })
+      if(this.data.fromPage == ConfirmFromPage.vendor){
+        this.puService.ConfirmJoinProjectFromTabPool(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
+          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+          this.dialogRef.close(true)
+        })
+      }
+
+      if(this.data.fromPage == ConfirmFromPage.vendor){
+        this.puService.ConfirmJoinProjectFromTabAllResource(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
+          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+          this.dialogRef.close(true)
+        })
+      }
+
+      if(this.data.fromPage == ConfirmFromPage.vendor){
+        this.puService.ConfirmJoinProjectFromTabVendor(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
+          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+          this.dialogRef.close(true)
+        })
+      }
+
+      
     }
     else {
       let requestBody = {
@@ -68,9 +96,8 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
       })
     }
   }
-  checkConfirmPermission() {
-    console.log(this.user.isPool)
-    if (this.permission.isGranted(this.DeliveryManagement_ProjectUser_ConfirmMoveEmployeeToOtherProject) == false) {
+  checkConfirmPermission(hasMovePermission:boolean) {
+    if (hasMovePermission) {
       this.workingProject.forEach(pu => {
         if (!pu.isPool) {
           this.allowConfirm = false

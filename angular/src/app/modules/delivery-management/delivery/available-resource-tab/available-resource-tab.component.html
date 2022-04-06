@@ -3,14 +3,13 @@
         <div class="row mb-4 card">
             <div class="col-12">
                 <nav mat-tab-nav-bar>
-                    <a [ngClass]="currentUrl.includes('pool')?'active':''"  mat-tab-link (click)="routingPlanResourceTab()">
+                    <a *ngIf="permission.isGranted(Resource_TabPool)" [ngClass]="currentUrl.includes('pool')?'active':''" mat-tab-link (click)="routingPlanResourceTab()">
                        Pool
                     </a>
-                    <a [ngClass]="currentUrl.includes('all-resource')?'active':''"  mat-tab-link (click)="routingAllResourceTab()">
+                    <a *ngIf="permission.isGranted(Resource_TabAllResource)" [ngClass]="currentUrl.includes('all-resource')?'active':''" mat-tab-link (click)="routingAllResourceTab()">
                         All Resource
                     </a>
-                    <a *ngIf="permission.isGranted(DeliveryManagement_ResourceRequest_ViewVendorResource)" 
-                     [ngClass]="currentUrl.includes('vendor')?'active':''"  mat-tab-link (click)="routingVendorTab()">
+                    <a *ngIf="permission.isGranted(Resource_TabVendor)" [ngClass]="currentUrl.includes('vendor')?'active':''" mat-tab-link (click)="routingVendorTab()">
                         Vendor
                     </a>
                 </nav>

@@ -33,7 +33,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
             this.timeSheetProjectBillAppService = timeSheetProjectBillAppService;
         }
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_GetAllPaging)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo)]
         public async Task<GridResult<GetProjectUserBillDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<ProjectUserBill>()
@@ -57,7 +59,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_GetAllByproject)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo)]
         public async Task<List<GetProjectUserBillDto>> GetAllByProject(long projectId)
         {
             var query = WorkScope.GetAll<ProjectUserBill>().Where(x => x.ProjectId == projectId).OrderByDescending(x => x.CreationTime)
@@ -86,7 +90,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_Create)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Create,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Create)]
         public async Task<ProjectUserBillDto> Create(ProjectUserBillDto input)
         {
             if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
@@ -117,7 +123,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_Update)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Edit,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Edit)]
         public async Task<ProjectUserBillDto> Update(ProjectUserBillDto input)
         {
             var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(input.Id);
@@ -131,7 +139,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUserBill_Delete)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Delete,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Delete)]
         public async Task Delete(long projectUserBillId)
         {
             var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(projectUserBillId);

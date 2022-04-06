@@ -13,8 +13,30 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
   styleUrls: ['./confirm-popup.component.css']
 })
 export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
-  PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject
-  PmManager_ProjectUser_ConfirmPickUserFromPoolToProject = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ConfirmPickUserFromPoolToProject
+
+  Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther
+  Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther
+  Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther
+
+
+  Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
   
   public startDate
   public user
@@ -43,7 +65,7 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
       this.title = `Add user: <strong>${this.user.fullName}</strong> to project`
     }
     this.workingProject = this.data.workingProject
-    this.checkConfirmPermission()
+    this.checkPermissionForEachPage()
   }
   confirm() {
     if (this.data.workingProject.length > 0) {
@@ -54,10 +76,7 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
         })
       }
       else if(this.data.type == 'confirmJoin'){
-        this.projectUserService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
-          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-          this.dialogRef.close(true)
-        })
+        this.confirmJoin()
       }
       else{
         this.dialogRef.close(true)
@@ -74,21 +93,79 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
             })
           }
           else {
-            this.projectUserService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
-              this.dialogRef.close(true)
-              abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-            })
-
+            this.confirmJoin()
           }
-
-
         }
       }, true)
     }
   }
+  
+  confirmJoinSuccessResult(){
+    abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+    this.dialogRef.close(true)
+  }
+  confirmJoin(){
+    if(this.data.page == ConfirmFromPage.outsource_workingResource 
+      || this.data.page == ConfirmFromPage.outsource_PlannedResource
+      || this.data.page == ConfirmFromPage.outsource_weekly ){
+      this.projectUserService.ConfirmJoinProjectOutsourcing(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+        this.confirmJoinSuccessResult()
+      })
+    }
+    if(this.data.page == ConfirmFromPage.product_workingResource
+      || this.data.page == ConfirmFromPage.product_PlannedResource
+      || this.data.page == ConfirmFromPage.product_weekly){
+      this.projectUserService.ConfirmJoinProjectProduct(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+        this.confirmJoinSuccessResult()
+      })
+    }
+    if(this.data.page == ConfirmFromPage.training_workingResource
+      || this.data.page == ConfirmFromPage.training_PlannedResource
+      || this.data.page == ConfirmFromPage.training_weekly){
+      this.projectUserService.ConfirmJoinProjectTraining(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.projectUserService.handleError)).subscribe(rs => {
+        this.confirmJoinSuccessResult()
+      })
+    }
+  }
 
-  checkConfirmPermission() {
-    if (this.permission.isGranted(this.PmManager_ProjectUser_ConfirmMoveEmployeeToOtherProject) == false) {
+  checkPermissionForEachPage(){
+    if(this.data.page == ConfirmFromPage.outsource_workingResource){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.product_workingResource){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.training_workingResource){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther))
+    }
+
+
+    if(this.data.page == ConfirmFromPage.outsource_PlannedResource){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.outsource_weekly){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.product_PlannedResource){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.product_weekly){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.training_PlannedResource){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.training_weekly){
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+    if(this.data.page == ConfirmFromPage.weeklyReport){
+      this.checkConfirmPermission(this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+    }
+   
+  }
+
+  checkConfirmPermission(confirmMovePermisson) {
+    if (!confirmMovePermisson) {
       this.data.workingProject.forEach(pu => {
         if (pu.isPool == false) {
           this.allowConfirm = false
@@ -98,4 +175,22 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
       )
     }
   }
+}
+export const ConfirmFromPage = {
+  outsource_workingResource: 1,
+  outsource_PlannedResource: 2,
+  outsource_weekly: 3,
+
+  product_workingResource: 4,
+  product_PlannedResource: 5,
+  product_weekly: 6,
+
+  training_workingResource: 7,
+  training_PlannedResource: 8,
+  training_weekly: 9,
+
+  weeklyReport: 10,
+  poolResource: 11,
+  allResource:12,
+  vendor:13
 }

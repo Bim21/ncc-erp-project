@@ -68,3 +68,7 @@ export class ReportIssueDto {
     createdAt: string;
     id: number;
 }
+export class pmReportProjectHealthDto{
+    pmReportProjectId: number;
+    projectHealth: number
+}

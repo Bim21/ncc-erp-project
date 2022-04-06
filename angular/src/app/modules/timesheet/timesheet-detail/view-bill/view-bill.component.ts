@@ -25,8 +25,10 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdittingRows: boolean = false;
   tempUserList = []
   public chargeType = ['d','m','h']
-  Timesheet_Timesheet_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation
-  Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM
+  Timesheets_TimesheetDetail_UpdateBill_Create = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Create
+  Timesheets_TimesheetDetail_UpdateBill_Edit = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Edit
+  Timesheets_TimesheetDetail_UpdateBill_SetDone = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_SetDone
+  Timesheets_TimesheetDetail_ViewBillRate = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
     private projectBillService: TimeSheetProjectBillService, injector: Injector) {

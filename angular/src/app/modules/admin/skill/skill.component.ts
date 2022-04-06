@@ -42,10 +42,10 @@ export class SkillComponent extends PagedListingComponentBase<SkillComponent> im
     )
   }
   public skillList:SkillDto[]=[];
-  Admin_Skill_Create = PERMISSIONS_CONSTANT.Admin_Skill_Create;
-  Admin_Skill_Delete = PERMISSIONS_CONSTANT.Admin_Skill_Delete;
-  Admin_Skill_Update = PERMISSIONS_CONSTANT.Admin_Skill_Update;
-  Admin_Skill_ViewAll = PERMISSIONS_CONSTANT.Admin_Skill_ViewAll;
+  Admin_Skills_Create = PERMISSIONS_CONSTANT.Admin_Skills_Create;
+  Admin_Skills_Edit = PERMISSIONS_CONSTANT.Admin_Skills_Edit;
+  Admin_Skills_Delete = PERMISSIONS_CONSTANT.Admin_Skills_Delete;
+ 
 
   constructor(private skillService:SkillService,
     injector:Injector,

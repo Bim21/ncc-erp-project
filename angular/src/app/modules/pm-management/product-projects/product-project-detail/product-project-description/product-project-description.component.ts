@@ -12,7 +12,6 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./product-project-description.component.css']
 })
 export class ProductProjectDescriptionComponent extends AppComponentBase {
-  PmManager_Project_UpdateProjectDetail = PERMISSIONS_CONSTANT.PmManager_Project_UpdateProjectDetail
   public projectId
   projectDetail = {} as ProjectdetailDto
   constructor(public injector: Injector, private projectService: ListProjectService, private router: Router, private route: ActivatedRoute) {

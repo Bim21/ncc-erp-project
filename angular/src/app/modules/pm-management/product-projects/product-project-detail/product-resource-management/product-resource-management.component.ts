@@ -1,3 +1,9 @@
+import { ResourcePlanDto } from './../../../../../service/model/resource-plan.dto';
+import { IDNameDto } from './../../../../../service/model/id-name.dto';
+import { FormPlanUserComponent } from './../../../../delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
+import { FormSetDoneComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-set-done/form-set-done.component';
+import { CreateUpdateResourceRequestComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/create-update-resource-request/create-update-resource-request.component';
+import { DeliveryResourceRequestService } from '@app/service/api/delivery-request-resource.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateUserSkillDialogComponent } from './../../../../../users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { ReleaseUserDialogComponent } from './../../../list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
@@ -14,7 +20,7 @@ import { catchError } from 'rxjs/operators';
 import { projectUserBillDto, projectResourceRequestDto, projectUserDto } from './../../../../../service/model/project.dto';
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
-import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { ConfirmFromPage, ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-product-resource-management',
@@ -22,14 +28,14 @@ import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/l
   styleUrls: ['./product-resource-management.component.css']
 })
 export class ProductResourceManagementComponent extends AppComponentBase implements OnInit {
-  PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
-  PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
-  PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
-  PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
+  // PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
+  // PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
+  // PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
+  // PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
 
-  PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
-  PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
-  PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
+  // PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
+  // PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
+  // PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -38,6 +44,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
+  public searchPlannedResource :string ='';
 
 
   // project user
@@ -63,13 +70,25 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public searchPlanResource: string = ""
 
   public tomorrowDate = new Date();
+  public selectStatus: any = 0;
+  public listStatuses: any[] = [];
+  public listSkills: any[] = []
+  public listLevels: any[] = []
+  public listProjectUserRoles: IDNameDto[] = []
+  public isShowModal: string = 'none'
+  public modal_title: string
+  public strNotePM: string
+  public typePM: string
+  public resourceRequestId: number
 
 
 
 
-  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
+  // PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
-    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog) {
+    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog,
+    private resourceRequestService: DeliveryResourceRequestService,
+    ) {
       super(injector)
       this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
   }
@@ -82,15 +101,17 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     this.getResourceRequestList();
     this.getAllUser();
     this.getPlannedtUser();
+    this.getAllSkills();
+    this.getStatusesResourceRequest();
+    this.getLevelsResourceRequest();
+    this.getProjectUserRoles()
 
   }
   // get data
   private getProjectUser() {
-    if (this.permission.isGranted(this.PmManager_ProjectUser)) {
       this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         this.projectUserList = data.result;
       })
-    }
 
   }
 
@@ -102,12 +123,10 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
 
 
-  private getResourceRequestList(): void {
-    if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
+  public getResourceRequestList(): void {
       this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
-    }
   }
 
   private getAllUser() {
@@ -176,7 +195,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
 
   saveProjectUser(user: any) {
-  console.log("userrrr", user)
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
     }
@@ -193,7 +211,8 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
               width: "700px",
               data: {
                 workingProject : workingProject,
-                user: user
+                user: user,
+                page: ConfirmFromPage.product_workingResource
               }
             }
             )
@@ -219,7 +238,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     user.projectId = this.projectId
     delete user["createMode"]
-    this.projectUserService.AddUserToProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.AddUserToProductProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
@@ -279,6 +298,42 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     // this.userForProjectUser = this.userForUserBill.filter(user => userProjectList.indexOf(user.id) == -1)
   }
   // resource request
+
+  public createRequest() {
+    this.showDialog("create", {});
+  }
+  public editRequest(item: any) {
+    this.showDialog("edit", item);
+  }
+
+  showDialog(command: string, request: any) {
+    let resourceRequest = {
+      id: request.id ? request.id : null,
+      projectId: this.projectId 
+    }
+    const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
+      data: {
+        command: command,
+        item: resourceRequest,
+        skills: this.listSkills,
+        levels: this.listLevels,
+        typeControl: 'requestProject'
+      },
+      width: "700px",
+      maxHeight: '90vh',
+    })
+    show.afterClosed().subscribe(rs => {
+      if(!rs) return
+      if(command == 'create')
+        this.getResourceRequestList()
+      else if(command == 'edit'){
+        let index = this.resourceRequestList.findIndex(x => x.id == rs.id)
+        if(index >= 0){
+          this.resourceRequestList[index] = rs
+        }
+      }
+    });
+  }
 
   public addResourcceRequest(): void {
     let newResource = {} as projectResourceRequestDto
@@ -340,6 +395,162 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     );
   }
 
+  getStatusesResourceRequest(){
+    this.resourceRequestService.getStatuses().subscribe(res => {
+      this.listStatuses = res.result
+    })
+  }
+  getAllSkills(){
+    this.resourceRequestService.getSkills().subscribe((data) => {
+      this.listSkills = data.result;
+    })
+  }
+  getLevelsResourceRequest(){
+    this.resourceRequestService.getLevels().subscribe(res => {
+      this.listLevels = res.result
+    })
+  }
+
+  getProjectUserRoles(){
+    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
+      this.listProjectUserRoles = rs.result
+    })
+  }
+
+  showActionViewRecruitment(status, isRecruitment){
+    if(
+      isRecruitment &&
+      (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE')
+    )
+    {
+      return true
+    }
+    return false
+  }
+
+  public setDoneRequest(item){
+    let data = {
+      ...item.planUserInfo, 
+      requestName: item.name, 
+      resourceRequestId: item.id
+    }
+    const showModal = this.dialog.open(FormSetDoneComponent, {
+      data,
+      width: "700px",
+      maxHeight: "90vh"
+    })
+    showModal.afterClosed().subscribe((rs) => {
+      if(rs)
+        this.getResourceRequestList()
+        this.getPlannedtUser()
+        this.getProjectUser()
+    })
+  }
+
+  cancelRequest(id){
+    console.log("hllo",id)
+    abp.message.confirm(
+      'Are you sure cancel request?',
+      '',
+      (result) => {
+        if(result){
+          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
+            if(res.success){
+              abp.notify.success('Cancel Request Success!')
+              this.getResourceRequestList()
+              this.getPlannedtUser()
+            }
+            else{
+              abp.notify.error(res.result)
+            }
+          })
+        }
+      }
+    )
+  }
+
+  deleteRequest(item: any){
+    abp.message.confirm(
+      "Delete this request ?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.resourceRequestService.deleteMyRequest(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
+            abp.notify.success("Delete request successfully");
+            this.getResourceRequestList();
+          });
+
+        }
+      }
+
+    );
+  }
+
+  sendRecruitment(){
+    abp.message.info('Chức năng này sẽ được cập nhật trong bản release sắp tới', 'Thông báo')
+  }
+  async getPlanResource(item){
+    let data = new ResourcePlanDto(item.id, 0);
+    if(!item.planUserInfo) return data;
+    let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
+    return res.result
+  }
+
+  async showModalPlanUser(item: any){
+    let data = await this.getPlanResource(item);
+    const show = this.dialog.open(FormPlanUserComponent, {
+      data: {...data, projectUserRoles: this.listProjectUserRoles},
+      width: "700px",
+      maxHeight:"90vh"
+    })
+    show.afterClosed().subscribe(rs => {
+      if(!rs) return
+      if(rs.type == 'delete'){
+        this.getResourceRequestList()
+        this.getPlannedtUser()
+      }
+      else{
+        this.getPlannedtUser()
+        let index = this.resourceRequestList.findIndex(x => x.id == rs.data.resourceRequestId)
+        if(index >= 0)
+          this.resourceRequestList[index].planUserInfo = rs.data.result
+      }
+    });
+  }
+  public openModal(name, typePM, content, id){
+    this.typePM = typePM
+    this.modal_title = name
+    this.strNotePM = content
+    this.resourceRequestId = id
+    this.isShowModal = 'block'
+  }
+  public closeModal(){
+    this.isShowModal = 'none'
+  }
+
+  public updateNote(){
+    let request = {
+      resourceRequestId: this.resourceRequestId,
+      note: this.strNotePM,
+    }
+    this.resourceRequestService.updateNote(request,this.typePM).subscribe(rs => {
+      if(rs.success){
+        abp.notify.success('Update Note Successfully!')
+        let index = this.resourceRequestList.findIndex(x => x.id == request.resourceRequestId);
+        if(index >= 0){
+          if(this.typePM == 'PM')
+            this.resourceRequestList[index].pmNote = request.note;
+          else
+            this.resourceRequestList[index].dmNote = request.note;
+        }
+      }
+      else{
+        abp.notify.error(rs.result)
+      }
+    })
+    this.closeModal()
+  }
+
 
   public filterUser(userId: number) {
     return this.userForProjectUser.filter(item => item.id == userId)[0];
@@ -375,7 +586,8 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
           data: {
             workingProject: workingProject,
             user: user,
-            type: "confirmJoin"
+            type: "confirmJoin",
+            page: ConfirmFromPage.product_weekly
           }
         })
 
@@ -425,7 +637,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   cancelPlanResourceProcess(user) {
     this.getPlannedtUser();
     this.planResourceProcess = false
-    this.searchUser = ""
+    this.searchPlannedResource = ""
   }
 
 

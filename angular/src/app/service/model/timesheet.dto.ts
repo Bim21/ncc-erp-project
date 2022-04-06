@@ -1,8 +1,8 @@
 export class TimesheetDto {
 
     name: string;
-    month: Date;
-    year: Date;
+    month: number;
+    year: number;
     totalProject?: number;
     totalTimesheet?: number;
     totalWorkingDay: number;

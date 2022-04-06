@@ -88,10 +88,10 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <button *ngIf="(item.isActive || permission.isGranted(DeliveryManagement_PMReport_CloseReport) 
-                                    || permission.isGranted(DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet)
-                                    || permission.isGranted(DeliveryManagement_PMReport_Update) 
-                                    || permission.isGranted(DeliveryManagement_PMReport_StatisticsReport))
+                                    <button *ngIf="(item.isActive || permission.isGranted(WeeklyReport_CloseAndAddNew) 
+                                    || permission.isGranted(WeeklyReport_CollectTimesheet)
+                                    || permission.isGranted(WeeklyReport_Rename) 
+                                    || permission.isGranted(WeeklyReport_View))
                                     && item.isActive ==true
                                     " mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                         <i class="fas fa-bars fa-lg"></i>
@@ -99,25 +99,25 @@
                                     <mat-menu #menu="matMenu" class="p-2">
                                         <div class="text-center">
                                             <button
-                                                *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_CloseReport)"
+                                                *ngIf="item.isActive && permission.isGranted(WeeklyReport_CloseAndAddNew)"
                                                 class="mat-menu-item  w-100" (click)="closeReport(item)">
                                                 <i class="fas fa-times mr-1 text-danger fa-lg"></i>
                                                 Close & Add New
                                             </button>
                                         </div>
-                                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProject_GetWorkingTimeFromTimesheet)"
+                                        <button *ngIf="permission.isGranted(WeeklyReport_CollectTimesheet)"
                                         class="mat-menu-item  w-100 " (click)="collectTimesheet(item.id)">
                                         <i class="fas fa-business-time"></i>
                                         Collect timesheet
                                     </button>
                                         <button
-                                            *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_Update)"
+                                            *ngIf="item.isActive && permission.isGranted(WeeklyReport_Rename)"
                                             class="mat-menu-item  w-100 " (click)="editReport(item)">
                                             <i class="fas fa-pencil-alt mr-1"></i>
                                             Rename
                                         </button>
                                         <button
-                                            *ngIf="item.isActive && permission.isGranted(DeliveryManagement_PMReport_StatisticsReport)"
+                                            *ngIf="item.isActive && permission.isGranted(WeeklyReport_View)"
                                             class="mat-menu-item  w-100 " (click)="viewReportInfo(item)">
                                             <i class="fas fa-eye mr-1"></i>
                                             View

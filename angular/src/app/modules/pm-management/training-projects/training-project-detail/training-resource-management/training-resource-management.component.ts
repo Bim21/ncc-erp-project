@@ -15,7 +15,7 @@ import * as moment from 'moment';
 import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
 import { UpdateUserSkillDialogComponent } from '@app/users/update-user-skill-dialog/update-user-skill-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { ConfirmFromPage, ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-training-resource-management',
@@ -23,14 +23,14 @@ import { ConfirmPopupComponent } from '@app/modules/pm-management/list-project/l
   styleUrls: ['./training-resource-management.component.css']
 })
 export class TrainingResourceManagementComponent extends AppComponentBase implements OnInit {
-  PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
-  PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
-  PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
-  PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
+  // PmManager_ProjectUser = PERMISSIONS_CONSTANT.PmManager_ProjectUser_ViewAllByProject;
+  // PmManager_ProjectUser_Create = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Create;
+  // PmManager_ProjectUser_Delete = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Delete;
+  // PmManager_ProjectUser_Update = PERMISSIONS_CONSTANT.PmManager_ProjectUser_Update;
 
-  PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
-  PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
-  PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
+  // PmManager_ResourceRequest_Create = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Create
+  // PmManager_ResourceRequest_Delete = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Delete
+  // PmManager_ResourceRequest_Update = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_Update
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -39,6 +39,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
+  public searchPlannedResource: string = "";
 
 
   // project user
@@ -68,7 +69,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
 
 
 
-  PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
+  // PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
   constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
     private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog) {
       super(injector)
@@ -87,11 +88,9 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
   }
   // get data
   private getProjectUser() {
-    if (this.permission.isGranted(this.PmManager_ProjectUser)) {
       this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         this.projectUserList = data.result;
       })
-    }
 
   }
 
@@ -104,11 +103,9 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
 
 
   private getResourceRequestList(): void {
-    if (this.permission.isGranted(this.PmManager_ResourceRequest_ViewAllByProject)) {
       this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
-    }
   }
 
   private getAllUser() {
@@ -177,7 +174,6 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
   }
 
   saveProjectUser(user: any) {
-  console.log("userrrr", user)
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
     }
@@ -194,7 +190,8 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
               width: "700px",
               data: {
                 workingProject : workingProject,
-                user: user
+                user: user,
+                page: ConfirmFromPage.training_workingResource
               }
             }
             )
@@ -220,7 +217,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     user.projectId = this.projectId
     delete user["createMode"]
-    this.projectUserService.AddUserToProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.AddUserToTrainingProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
@@ -376,7 +373,9 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
           data: {
             workingProject: workingProject,
             user: user,
-            type: "confirmJoin"
+            type: "confirmJoin",
+            page: ConfirmFromPage.training_PlannedResource
+
           }
         })
 
@@ -426,7 +425,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
   cancelPlanResourceProcess(user) {
     this.getPlannedtUser();
     this.planResourceProcess = false
-    this.searchUser = ""
+    this.searchPlannedResource = ""
   }
 
 

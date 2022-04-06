@@ -20,7 +20,7 @@ namespace ProjectManagement.APIs.Skills
     {
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Skill_ViewAll)]
+        [AbpAuthorize(PermissionNames.Admin_Skills)]
         public async Task<GridResult<SkillDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Skill>().Select(x => new SkillDto
@@ -44,7 +44,7 @@ namespace ProjectManagement.APIs.Skills
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Skill_Create)]
+        [AbpAuthorize(PermissionNames.Admin_Skills_Create)]
         public async Task<SkillDto> Create(SkillDto input)
         {
             var isExist = await WorkScope.GetAll<Skill>().AnyAsync(x => x.Name == input.Name);
@@ -57,7 +57,7 @@ namespace ProjectManagement.APIs.Skills
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Admin_Skill_Update)]
+        [AbpAuthorize(PermissionNames.Admin_Skills_Edit)]
         public async Task<SkillDto> Update(SkillDto input)
         {
             var skill = await WorkScope.GetAsync<Skill>(input.Id);
@@ -73,7 +73,7 @@ namespace ProjectManagement.APIs.Skills
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Admin_Skill_Delete)]
+        [AbpAuthorize(PermissionNames.Admin_Skills_Delete)]
         public async Task Delete(long skillId)
         {
             var skill = await WorkScope.GetAsync<Skill>(skillId);

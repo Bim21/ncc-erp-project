@@ -15,7 +15,7 @@ import * as moment from 'moment';
   styleUrls: ['./training-project-general.component.css']
 })
 export class TrainingProjectGeneralComponent extends AppComponentBase implements OnInit {
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  // PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
   public searchPM: string = "";
   public readMode: boolean = true;
   public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus);

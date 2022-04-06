@@ -9,13 +9,13 @@
 </section>
 <section class="content px-2">
   <div class="container-fluid">
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewKomuSetting)">
       <mat-expansion-panel [expanded]="isShowKomuSetting">
         <mat-expansion-panel-header (click)="isShowKomuSetting = !isShowKomuSetting"  class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Komu setting"}}</p>
             <div class="edit-save" *ngIf="isShowKomuSetting">
-              <button
+              <button *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 class="btn bg-blue mr-3"
                 (click)="
                   isEditKomuUrl = !isEditKomuUrl;
@@ -98,13 +98,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewProjectSetting)">
       <mat-expansion-panel [expanded]="isShowProjectSetting">
         <mat-expansion-panel-header (click)="isShowProjectSetting = !isShowProjectSetting" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Project Setting"}}</p>
             <div class="edit-save" *ngIf="isShowProjectSetting">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="
@@ -182,13 +182,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewHrmSetting)">
       <mat-expansion-panel [expanded]="isShowHRMSetting">
         <mat-expansion-panel-header (click)="isShowHRMSetting = !isShowHRMSetting"  class="panel-header">
           <mat-panel-title>
             <p class="title">{{"HRM Setting"}}</p>
             <div class="edit-save" *ngIf="isShowHRMSetting">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="
@@ -265,13 +265,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewTimesheetSetting)">
       <mat-expansion-panel [expanded]="isShowTimesheetSetting">
         <mat-expansion-panel-header (click)="isShowTimesheetSetting = !isShowTimesheetSetting" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Timesheet Setting"}}</p>
             <div class="edit-save" *ngIf="isShowTimesheetSetting">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="
@@ -355,13 +355,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewFinanceSetting)">
       <mat-expansion-panel [expanded]="isShowFinanceSetting">
         <mat-expansion-panel-header (click)="isShowFinanceSetting = !isShowFinanceSetting"  class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Finance Setting"}}</p>
             <div class="edit-save" *ngIf="isShowFinanceSetting">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="
@@ -436,13 +436,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewSendReportSetting)">
       <mat-expansion-panel [expanded]="isShowSendReportSetting">
         <mat-expansion-panel-header (click)="isShowSendReportSetting = !isShowSendReportSetting" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Send Report Setting"}}</p>
             <div class="edit-save" *ngIf="isShowSendReportSetting">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="
@@ -582,13 +582,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewGoogleClientAppSetting)">
       <mat-expansion-panel [expanded]="isShowGoogleClientApp">
         <mat-expansion-panel-header (click)="isShowGoogleClientApp =!isShowGoogleClientApp" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"GoogleClient App"}}</p>
             <div class="edit-save" *ngIf="isShowGoogleClientApp">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="isEditClientId = !isEditClientId; clientId.focus();$event.stopPropagation()"
@@ -635,13 +635,13 @@
       </mat-expansion-panel>
     </div>
 
-    <div class="card">
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting)">
       <mat-expansion-panel [expanded]="isShowDefaultWorking">
         <mat-expansion-panel-header (click)="isShowDefaultWorking = !isShowDefaultWorking" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Default working hours per day"}}</p>
             <div class="edit-save" *ngIf="isShowDefaultWorking">
-              <a
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
                 href="javascript:;"
                 class="btn bg-blue mr-3"
                 (click)="

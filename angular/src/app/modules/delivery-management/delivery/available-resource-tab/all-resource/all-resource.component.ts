@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ProjectUserService } from '@app/service/api/project-user.service';
 import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
+import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-all-resource',
@@ -35,8 +36,15 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public skillsParam = [];
   public selectedSkillId:number[]
   public isAndCondition:boolean =false;
-  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
-  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
+  Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
+  Resource_TabAllResource_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CreatePlan
+  Resource_TabAllResource_EditPlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_EditPlan
+  Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject = PERMISSIONS_CONSTANT.Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject
+  Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther = PERMISSIONS_CONSTANT.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabAllResource_ConfirmOut = PERMISSIONS_CONSTANT.Resource_TabAllResource_ConfirmOut
+  Resource_TabAllResource_CancelMyPlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CancelMyPlan
+  Resource_TabAllResource_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CancelAnyPlan
+  Resource_TabAllResource_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabAllResource_UpdateSkill
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
@@ -296,6 +304,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
         data: {
           workingProject: data.result,
           user: plan,
+          fromPage: ConfirmFromPage.allResource
         }
       })
 

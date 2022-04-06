@@ -42,7 +42,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_ViewAll)]
+        [AbpAuthorize(PermissionNames.WeeklyReport)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
             var pmReportProject = WorkScope.GetAll<PMReportProject>();
@@ -80,6 +80,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.WeeklyReport_CollectTimesheet)]
         public async Task<List<CollectTimesheetDto>> CollectTimesheet(long pmReportId, DateTime startTime, DateTime endTime)
         {
             var pmReportProjects = await WorkScope.GetAll<PMReportProject>()
@@ -171,7 +172,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Create)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_CloseAndAddNew)]
         public async Task<CreatePMReportDto> Create(CreatePMReportDto input)
         {
             var isExist = await WorkScope.GetAll<PMReport>()
@@ -256,7 +257,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Update)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_Rename)]
         public async Task<PMReportDto> Update(PMReportDto input)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(input.Id);
@@ -277,7 +278,6 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Delete)]
         public async Task Delete(long pmReportId)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
@@ -290,7 +290,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_CloseReport)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_CloseAndAddNew)]
         public async Task<string> CloseReport(long pmReportId)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(pmReportId);
@@ -318,7 +318,7 @@ namespace ProjectManagement.APIs.PMReports
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_StatisticsReport)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_View)]
         public async Task<ReportStatisticsDto> StatisticsReport(long pmReportId, DateTime startDate)
         {
             var changeInFuture = new List<TotalFutureUseDto>();
@@ -416,7 +416,7 @@ namespace ProjectManagement.APIs.PMReports
             return result;
         }
 
-        [AbpAuthorize(PermissionNames.DeliveryManagement_PMReport_Get)]
+        [AbpAuthorize]
         public async Task<PMReportDto> Get(long id)
         {
             var pmReport = await WorkScope.GetAsync<PMReport>(id);

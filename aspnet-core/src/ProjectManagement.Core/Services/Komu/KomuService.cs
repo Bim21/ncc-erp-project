@@ -21,6 +21,7 @@ namespace ProjectManagement.Services.Komu
         private string _secretCode;
         private string channelUrl = string.Empty;
         private string channelId = string.Empty;
+        private bool _enableSendToKomu = false;
 
         public KomuService(HttpClient httpClient, ILogger<KomuService> logger, ISettingManager settingManager, IConfiguration configuration)
         {
@@ -30,6 +31,8 @@ namespace ProjectManagement.Services.Komu
             channelId = configuration.GetValue<string>("Channel:ChannelId");
             _baseUrl = settingManager.GetSettingValueForApplication(AppSettingNames.KomuUrl);
             _secretCode = settingManager.GetSettingValueForApplication(AppSettingNames.KomuSecretCode);
+            var noticeToKomu = settingManager.GetSettingValueForApplication(AppSettingNames.NoticeToKomu);
+            _enableSendToKomu = noticeToKomu == "true";
         }
         public async Task<long?> GetKomuUserId(KomuUserDto komuUserDto, string url)
         {
@@ -45,6 +48,11 @@ namespace ProjectManagement.Services.Komu
         }
         public async Task<HttpResponseMessage> NotifyToChannel(KomuMessage input, string channelType)
         {
+            if (!_enableSendToKomu)
+            {
+                logger.LogInformation("_enableSendToKomu=false => stop");
+                return null;
+            }
             if (!string.IsNullOrEmpty(channelUrl) && !string.IsNullOrEmpty(channelId))
             {
                 var contentString = new StringContent(JsonConvert.SerializeObject(new { message = input.Message, channelid = channelId }), Encoding.UTF8, "application/json");
@@ -59,25 +67,27 @@ namespace ProjectManagement.Services.Komu
         private async Task<HttpResponseMessage> PostAsync(string url, StringContent contentString)
         {            
             url = _baseUrl + url;
-            logger.LogInformation($"Komu: {url}");
+            logger.LogInformation($"PostAsync() url={url}");
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Add("X-Secret-Key", _secretCode);
             HttpResponseMessage httpResponse = new HttpResponseMessage();
             try
             {
                 httpResponse = await httpClient.PostAsync(url, contentString);
+                if (httpResponse.IsSuccessStatusCode)
+                {
+                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                    logger.LogInformation($"PostAsync() url={url} Response:StatusCode= {httpResponse.StatusCode}, Content={responseContent}");
+                }
+                return httpResponse;
             }
             catch (Exception e)
             {
-                logger.LogError($"Komu: {url} Response() => {httpResponse.StatusCode}/Error() => {e.Message}");
+                logger.LogInformation($"PostAsync() url={url} Response:StatusCode= {httpResponse.StatusCode}, Error={e.Message}");
                 //throw new UserFriendlyException("Connection to KOMU failed!");
+                return null;
             }
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                logger.LogInformation($"Komu: {url} Response() => {httpResponse.StatusCode}: {responseContent}");
-            }
-            return httpResponse;
+            
         }
     }
 }

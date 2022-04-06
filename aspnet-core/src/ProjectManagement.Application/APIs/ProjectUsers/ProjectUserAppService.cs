@@ -50,7 +50,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             _settingManager = settingManager;
         }
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewAllByProject, PermissionNames.DeliveryManagement_ProjectUser_ViewAllByProject)]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.ProjectId == projectId && x.IsFutureActive)
@@ -122,10 +121,33 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPost]
-        [AbpAuthorize()]
-        public async Task AddUserToProject(AddResourceToProjectDto input)
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject)]
+        public async Task AddUserToOutSourcingProject(AddResourceToProjectDto input)
         {
-            await _resourceManager.CreatePresentProjectUserAndNofity(input);
+            var allowMoveEmployeeToOtherProject 
+                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject)]
+        public async Task AddUserToProductProject(AddResourceToProjectDto input)
+        {
+            var allowMoveEmployeeToOtherProject
+                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject)]
+        public async Task AddUserToTrainingProject(AddResourceToProjectDto input)
+        {
+            var allowMoveEmployeeToOtherProject
+                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
         }
 
 
@@ -156,8 +178,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             await _resourceManager.ReleaseWorkingUserFromProject(input);
         }
 
-
-
         [HttpDelete]
         [AbpAuthorize()]
         public async Task CancelResourcePlan(long projectUserId)
@@ -172,12 +192,49 @@ namespace ProjectManagement.APIs.ProjectUsers
             await _resourceManager.ConfirmOutProject(input);
         }
 
+        //[HttpGet]
+        //[AbpAuthorize()]
+        //public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        //{
+        //    var allowConfirmMoveEmployeeToOtherProject
+        //    = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_);
+        //    await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
+        //}
+
+
         [HttpGet]
-        [AbpAuthorize()]
-        public async Task ConfirmJoinProject(long projectUserId, DateTime startTime)
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject)]
+        public async Task ConfirmJoinProjectOutsourcing(long projectUserId, DateTime startTime)
         {
-            await _resourceManager.ConfirmJoinProject(projectUserId, startTime);
+            var allowConfirmMoveEmployeeToOtherProject
+            = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
+
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject)]
+        public async Task ConfirmJoinProjectProduct(long projectUserId, DateTime startTime)
+        {
+            var allowConfirmMoveEmployeeToOtherProject
+            = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
+        }
+
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject)]
+        public async Task ConfirmJoinProjectTraining(long projectUserId, DateTime startTime)
+        {
+            var allowConfirmMoveEmployeeToOtherProject
+            = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+            await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
+        }
+
+
 
         [HttpPost]
         [AbpAuthorize()]
@@ -215,8 +272,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewDetailProjectUser,
-            PermissionNames.DeliveryManagement_ProjectUser_ViewDetailProjectUser)]
         public async Task<GetProjectUserDto> Get(long projectUserId)
         {
             var query = WorkScope.GetAll<ProjectUser>().Where(x => x.Id == projectUserId)
@@ -243,8 +298,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_ViewDetailProjectUser,
-            PermissionNames.DeliveryManagement_ProjectUser_ViewDetailProjectUser)]
         public async Task<List<GetProjectUserDto>> GetProjectHistoryByUser(long UserId)
         {
             var query = WorkScope
@@ -273,7 +326,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Create, PermissionNames.DeliveryManagement_ProjectUser_Create)]
         public async Task<ProjectUserDto> Create(ProjectUserDto model)
         {
             var isExistProjectUser = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == model.ProjectId && x.UserId == model.UserId
@@ -335,7 +387,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Update, PermissionNames.DeliveryManagement_ProjectUser_Update)]
         public async Task<ProjectUserDto> Update(ProjectUserDto model)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(model.Id);
@@ -373,7 +424,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.PmManager_ProjectUser_Delete, PermissionNames.DeliveryManagement_ProjectUser_Delete)]
         public async Task Delete(long projectUserId)
         {
             var projectUser = await WorkScope.GetAsync<ProjectUser>(projectUserId);

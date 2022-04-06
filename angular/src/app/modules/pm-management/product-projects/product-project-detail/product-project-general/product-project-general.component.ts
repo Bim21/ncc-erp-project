@@ -16,7 +16,7 @@ import { ProductProjectDto } from '@app/service/model/project.dto';
   styleUrls: ['./product-project-general.component.css']
 })
 export class ProductProjectGeneralComponent extends AppComponentBase implements OnInit {
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  // PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
   public searchPM: string = "";
   public readMode: boolean = true;
   public projectStatusList: string[] = Object.keys(this.APP_ENUM.ProjectStatus);

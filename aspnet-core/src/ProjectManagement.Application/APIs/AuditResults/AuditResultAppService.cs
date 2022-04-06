@@ -14,7 +14,6 @@ namespace ProjectManagement.APIs.AuditResults
     [AbpAuthorize]
     public class AuditResultAppService:ProjectManagementAppServiceBase
     {
-        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_Create)]
         public async Task<AuditResultDto> Create(AuditResultDto input)
         {
             var isExist = await WorkScope.GetAll<AuditResult>()
@@ -27,7 +26,6 @@ namespace ProjectManagement.APIs.AuditResults
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<AuditResult>(input));
             return input;
         }
-        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_Update)]
         public async Task<AuditResultDto> Update(AuditResultDto input)
         {
             var isExist = await WorkScope.GetAll<AuditResult>()
@@ -41,18 +39,15 @@ namespace ProjectManagement.APIs.AuditResults
             await WorkScope.UpdateAsync(auditResult);
             return input;
         }
-        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_Delete)]
         public async Task Delete(long id)
         {
             await WorkScope.DeleteAsync<AuditResult>(id);
         }
-        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_GetNote)]
         public async Task<string> GetNote(long id)
         {
             var isExist = await WorkScope.GetAsync<AuditResult>(id);
             return isExist.Note;
         }
-        [AbpAuthorize(PermissionNames.SaoDo_AuditResult_UpdateNote)]
         public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
         {
             var isExist = await WorkScope.GetAsync<AuditResult>(input.Id);

@@ -30,7 +30,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public project = {} as ProjectDto;
   public currencyList: CurrencyDto[]=[];
   public chargeTypeList : string[]= Object.keys(this.APP_ENUM.ChargeType)
-  PmManager_Project_Update = PERMISSIONS_CONSTANT.PmManager_Project_Update;
+  Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit;
   constructor(injector: Injector, private userService: UserService, private clientService: ClientService,
      private projectService: ListProjectService, private route: ActivatedRoute, private currencyService: CurrencyService) {
     super(injector);

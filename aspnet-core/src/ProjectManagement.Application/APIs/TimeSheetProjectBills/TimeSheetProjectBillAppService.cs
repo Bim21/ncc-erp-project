@@ -23,10 +23,9 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
     public class TimeSheetProjectBillAppService : ProjectManagementAppServiceBase
     {
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_GetAll)]
         public async Task<List<GetTimeSheetProjectBillDto>> GetAll(long timesheetId, long projectId)
         {
-            var permissionViewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheet_TimesheetDetail_ViewTimesheetAndBillInfoOfAllProject);
+            var permissionViewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
             var tenantId = WorkScope.GetAll<TimesheetProjectBill>().Select(x => x.TenantId).FirstOrDefault();
             var ass = WorkScope.GetAll<TimesheetProjectBill>().ToList();
             var aass = ass.Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId);
@@ -60,7 +59,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update)]
         public async Task<TimeSheetProjectBillDto> Create(TimeSheetProjectBillDto input)
         {
             var user = await WorkScope.GetAsync<User>(input.UserId);
@@ -81,7 +79,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_Update, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
         public async Task<List<TimeSheetProjectBillDto>> Update(List<TimeSheetProjectBillDto> input)
         {
             //đếm số lượng user trùng
@@ -144,7 +141,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateOnlyMyProjectPM, PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_ChangeUser)]
         public async Task<IActionResult> UpdateTSOfPM(List<UpdateTimesheetPMDto> input)
         {
             var timesheetProjectBillIds = input.Select(x => x.Id).ToList();
@@ -166,7 +162,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             return new OkObjectResult("Save Success!");
         }
 
-        [AbpAuthorize(PermissionNames.Timesheet_TimesheetProject_TimesheetProjectBill_UpdateFromProjectUserBill)]
         public async Task<object> UpdateFromProjectUserBill(long projectId, long timesheetId)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(timesheetId);
@@ -253,7 +248,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             await UpdateProjectBillInformation(projectId, timesheetId);
             return new { sucessList, failList };
         }
-
         private async Task<List<string>> UpdateProjectBillInformation(long projectId, long timesheetId)
         {
             var failList = new List<string>();
@@ -307,7 +301,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                                 {
                                     UserId = x.Id,
                                     FullName = x.FullName,
-                                    Email = x.FullName
+                                    Email = x.EmailAddress
                                 }).ToList();
             return users;
         }

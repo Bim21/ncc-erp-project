@@ -5,7 +5,7 @@
                 <h1>{{'Training Projects' | localize}}</h1>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(PmManager_Project_Create)" class="btn btn-primary"
+                <button *ngIf="permission.isGranted(Projects_TrainingProjects_Create)" class="btn btn-primary"
                     (click)="create()">
                     <i class="fa fa-plus-square"></i>
                     Create
@@ -44,7 +44,7 @@
                                     <mat-label>PM</mat-label>
                                     <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
                                         (selectionChange)="refresh()"
-                                        [disabled]="permission.isGranted( PmManager_Project_ViewOnlyMe) && !permission.isGranted(PmManager_Project_ViewAll)">
+                                        [disabled]="permission.isGranted( Projects_TrainingProjects_ViewMyProjectOnly) && !permission.isGranted(Projects_TrainingProjects_ViewAllProject)">
                                         <mat-form-field class="w-100 px-3 "
                                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                             <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"
@@ -52,7 +52,7 @@
                                         </mat-form-field>
                                         <mat-option [value]="-1">All</mat-option>
                                         <mat-option
-                                            *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'"
+                                            *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress'"
                                             [value]="data.id">
                                             {{data.fullName}} - ({{data.emailAddress}})
                                         </mat-option>
@@ -185,17 +185,17 @@
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
-                                        <button *ngIf="permission.isGranted(PmManager_Project_Update)"
+                                        <button *ngIf="permission.isGranted(Projects_TrainingProjects_Edit)"
                                             (click)="edit(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-pencil-alt mr-1"></i>
                                             Edit
                                         </button>
-                                        <button *ngIf="permission.isGranted(PmManager_Project_Delete)"
+                                        <button *ngIf="permission.isGranted(Projects_TrainingProjects_Delete)"
                                             (click)="delete(project)" class="mat-menu-item  w-100 ">
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
                                         </button>
-                                        <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.InProgress && permission.isGranted(PmManager_Project_Close)" 
+                                        <button mat-menu-item *ngIf="project.status == APP_ENUM.ProjectStatus.InProgress && permission.isGranted(Projects_TrainingProjects_Close)" 
                                             (click)="closeProject(project)">
                                             <i class="fas fa-check mr-1"></i>
                                             <span>{{ "Close" | localize }}</span>

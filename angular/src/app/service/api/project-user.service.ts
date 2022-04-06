@@ -49,6 +49,21 @@ export class ProjectUserService extends BaseApiService {
       this.rootUrl + `/AddUserToProject`, user
     );
   }
+  AddUserToOutSourcingProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToOutSourcingProject`, user
+    );
+  }
+  AddUserToProductProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToProductProject`, user
+    );
+  }
+  AddUserToTrainingProject(user): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/AddUserToTrainingProject`, user
+    );
+  }
   UpdateCurrentResourceDetail(user): Observable<any> {
     return this.http.put<any>(
       this.rootUrl + `/UpdateCurrentResourceDetail`, user
@@ -94,9 +109,19 @@ export class ProjectUserService extends BaseApiService {
     );
   }
 
-  ConfirmJoinProject(projectUserId, startTime): Observable<any> {
+  ConfirmJoinProjectOutsourcing(projectUserId, startTime): Observable<any> {
     return this.http.get<any>(
-      this.rootUrl + `/ConfirmJoinProject?projectUserId=${projectUserId}&startTime=${startTime}`,
+      this.rootUrl + `/ConfirmJoinProjectOutsourcing?projectUserId=${projectUserId}&startTime=${startTime}`,
+    );
+  }
+  ConfirmJoinProjectProduct(projectUserId, startTime): Observable<any> {
+    return this.http.get<any>(
+      this.rootUrl + `/ConfirmJoinProjectProduct?projectUserId=${projectUserId}&startTime=${startTime}`,
+    );
+  }
+  ConfirmJoinProjectTraining(projectUserId, startTime): Observable<any> {
+    return this.http.get<any>(
+      this.rootUrl + `/ConfirmJoinProjectTraining?projectUserId=${projectUserId}&startTime=${startTime}`,
     );
   }
 }

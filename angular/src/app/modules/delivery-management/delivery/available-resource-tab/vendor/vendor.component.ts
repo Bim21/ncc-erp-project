@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 import { ProjectUserService } from '@app/service/api/project-user.service';
+import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 
 @Component({
   selector: 'app-vendor',
@@ -36,8 +37,15 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   public skillsParam = [];
   public selectedSkillId:number[]
   public isAndCondition:boolean =false;
-  DeliveryManagement_ResourceRequest_CancelAnyPlanResource = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelAnyPlanResource
-  DeliveryManagement_ResourceRequest_CancelMyPlanOnly = PERMISSIONS_CONSTANT.DeliveryManagement_ResourceRequest_CancelMyPlanOnly
+  Resource_TabVendor_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabVendor_ViewHistory
+  Resource_TabVendor_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabVendor_CreatePlan
+  Resource_TabVendor_EditPlan = PERMISSIONS_CONSTANT.Resource_TabVendor_EditPlan
+  Resource_TabVendor_ConfirmPickEmployeeFromPoolToProject = PERMISSIONS_CONSTANT.Resource_TabVendor_ConfirmPickEmployeeFromPoolToProject
+  Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther = PERMISSIONS_CONSTANT.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  Resource_TabVendor_ConfirmOut = PERMISSIONS_CONSTANT.Resource_TabVendor_ConfirmOut
+  Resource_TabVendor_CancelMyPlan = PERMISSIONS_CONSTANT.Resource_TabVendor_CancelMyPlan
+  Resource_TabVendor_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabVendor_CancelAnyPlan
+  Resource_TabVendor_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabVendor_UpdateSkill
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
@@ -297,6 +305,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
         data: {
           workingProject: data.result,
           user: plan,
+          fromPage: ConfirmFromPage.vendor,
         }
       })
 

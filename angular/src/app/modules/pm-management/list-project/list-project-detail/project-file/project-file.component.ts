@@ -19,10 +19,9 @@ export class ProjectFileComponent extends AppComponentBase implements OnInit {
   public fileList: any[] = []
   public isLoading: boolean = false
 
-  PmManager_ProjectFile = PERMISSIONS_CONSTANT.PmManager_ProjectFile
-  PmManager_ProjectFile_DeleteFile = PERMISSIONS_CONSTANT.PmManager_ProjectFile_DeleteFile
-  PmManager_ProjectFile_UploadNewFile = PERMISSIONS_CONSTANT.PmManager_ProjectFile_UploadNewFile
-  PmManager_ProjectFile_ViewAllFiles = PERMISSIONS_CONSTANT.PmManager_ProjectFile_ViewAllFiles
+  Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile
+  Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile
+
 
 
   constructor(private projectFileService: ProjectFileService, private route: ActivatedRoute, injector: Injector) {

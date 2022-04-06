@@ -104,7 +104,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   menu: MatMenuTrigger
   contextMenuPosition = { x: '0', y: '0' }
   public readonly FILTER_CONFIG: InputFilterDto[] = [
-    { propertyName: 'pmUserName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
+    { propertyName: 'pmFullName', displayName: "PM Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'projectName', displayName: "Project Name", comparisions: [0, 6, 7, 8] },
     { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType: 2 },
     { propertyName: 'isComplete', displayName: "Status", comparisions: [0], filterType: 5 },
@@ -113,16 +113,16 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   ];
 
 
-  Timesheet_TimesheetProject_Create = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Create;
-  Timesheet_TimesheetProject_Delete = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_Delete;
-  Timesheet_TimesheetProject_DownloadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_DownloadFileTimesheetProject;
-  Timesheet_TimesheetProject_Update = PERMISSIONS_CONSTANT.Timesheet_Timesheet_Update;
-  Timesheet_TimesheetProject_UploadFileTimesheetProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_UploadFileTimesheetProject;
-  Timesheet_TimesheetProject_CreateInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_CreateInvoice;
-  Timesheet_TimesheetProject_ExportInvoice = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ExportInvoice;
-  Timesheet_TimesheetProject_ViewOnlyme = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewOnlyme;
-  Timesheet_TimesheetProject_ViewAllProject = PERMISSIONS_CONSTANT.Timesheet_TimesheetProject_ViewAllProject;
-  Timesheet_TimesheetProject_ViewProjectBillInfomation = PERMISSIONS_CONSTANT.Timesheet_Timesheet_ViewProjectBillInfomation;
+  Timesheets_TimesheetDetail_ViewBillRate = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate;
+  Timesheets_TimesheetDetail_AddProjectToTimesheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_AddProjectToTimesheet;
+  Timesheets_TimesheetDetail_UploadTimesheetFile = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UploadTimesheetFile;
+  Timesheets_TimesheetDetail_ExportInvoice = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoice;
+  Timesheets_TimesheetDetail_UpdateNote = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateNote;
+  Timesheets_TimesheetDetail_Delete = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_Delete;
+  Timesheets_TimesheetDetail_ViewAll = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewAll;
+  Timesheets_TimesheetDetail_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewMyProjectOnly;
+
+
 
 
   constructor(

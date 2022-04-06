@@ -19,7 +19,7 @@ namespace ProjectManagement.APIs.Currencies
     public class CurrencyAppService : ProjectManagementAppServiceBase
     {
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Currency_ViewAll)]
+        [AbpAuthorize(PermissionNames.Admin_Currencies)]
         public async Task<GridResult<CurrencyDto>> GetAllPaging(GridParam input)
         {
             var query = WorkScope.GetAll<Currency>()
@@ -44,7 +44,7 @@ namespace ProjectManagement.APIs.Currencies
             return await query.ToListAsync();
         }
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Currency_Create)]
+        [AbpAuthorize(PermissionNames.Admin_Currencies_Create)]
         public async Task<CurrencyDto> Create(CurrencyDto input)
         {
             var isExist = await WorkScope.GetAll<Currency>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
@@ -56,7 +56,7 @@ namespace ProjectManagement.APIs.Currencies
             return input;
         }
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Admin_Currency_Edit)]
+        [AbpAuthorize(PermissionNames.Admin_Currencies_Edit)]
         public async Task<CurrencyDto> Update(CurrencyDto input)
         {
             var currency = await WorkScope.GetAsync<Currency>(input.Id);
@@ -70,7 +70,7 @@ namespace ProjectManagement.APIs.Currencies
             return input;
         }
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.Admin_Currency_Delete)]
+        [AbpAuthorize(PermissionNames.Admin_Currencies_Delete)]
         public async Task Delete(long currencyId)
         {
             var hasProject = await WorkScope.GetAll<Project>().AnyAsync(x => x.CurrencyId == currencyId);
