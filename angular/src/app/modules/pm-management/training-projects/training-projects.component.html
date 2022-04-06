@@ -52,7 +52,7 @@
                                         </mat-form-field>
                                         <mat-option [value]="-1">All</mat-option>
                                         <mat-option
-                                            *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'"
+                                            *ngFor="let data of pmList | listFilter:  'fullName' : searchPM : 'emailAddress'"
                                             [value]="data.id">
                                             {{data.fullName}} - ({{data.emailAddress}})
                                         </mat-option>

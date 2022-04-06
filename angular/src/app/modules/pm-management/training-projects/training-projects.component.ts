@@ -121,7 +121,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     public injector: Injector,
     public router: Router,
     private projectService: ListProjectService,
-    private userService: UserService) {
+    private userService: UserService,) {
     super(injector);
     this.pmId = Number(this.sessionService.userId);
   }
@@ -131,7 +131,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     this.getAllPM();
   }
   public getAllPM(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+    this.projectService.GetTrainingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })

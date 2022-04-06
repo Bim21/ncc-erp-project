@@ -129,7 +129,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     this.getAllPM();
   }
   public getAllPM(): void {
-    this.userService.GetAllUserActive(true).pipe(catchError(this.userService.handleError))
+    this.projectService.GetProductPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {
         this.pmList = data.result;
       })
