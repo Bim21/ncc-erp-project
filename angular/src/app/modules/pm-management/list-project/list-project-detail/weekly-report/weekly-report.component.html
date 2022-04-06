@@ -9,7 +9,7 @@
                         <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]"
                             style="margin-left: 10px !important;" class="ml-3" appearance="outline">
                             <mat-select
-                                [disabled]="!selectedReport.isActive || !permission.isGranted(PmManager_PMReportProject_UpdatePmReportProjectHealth)"
+                                [disabled]="!selectedReport.isActive || !permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth)"
                                 name="flag" placeholder="Project health" [(ngModel)]="projectHealth">
                                 <ng-container *ngFor="let flag of problemIssueList">
                                     <mat-option style="border: 1px white solid;"
@@ -51,7 +51,7 @@
                         </mat-form-field>
                         <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
                             style="margin-bottom: 10px;" [disabled]="!allowSendReport"
-                            *ngIf="selectedReport.isActive && permission.isGranted(PmManager_PMReportProject_SendReport) && isSentReport">
+                            *ngIf="selectedReport.isActive && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport) && isSentReport">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                         <span class="ml-2" *ngIf="!allowSendReport && selectedReport.isActive"
@@ -67,7 +67,7 @@
                             <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg ml-2"
                             style="font-size: 17px;" (click)="isEditingNote = true"></i>
                             <i *ngIf="isEditingNote" (click)="cancelUpdateNote()"  style="color: red;" class="fas fa-times fa-2x mr-2"></i>
-                            <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingNote" (click)="updateNote()" ></i>
+                            <i *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote) && isEditingNote"  style="color: green ;" class="fas fa-check fa-2x" (click)="updateNote()" ></i>
                         </div>
                         <p *ngIf="!isEditingNote" style="word-wrap: break-word; white-space: pre-line;font-size: 18px; text-align: justify;"
                             class="mt-2">
@@ -84,7 +84,7 @@
                     <div class="col-5" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
                         <strong style="font-size: 20px;">Automation test: </strong>
                         <div class="d-inline ml-2 pt-1 text-right row">
-                            <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
+                            <i *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote) && isEditingAutomationNote" [hidden]="!selectedReport.isActive"  style="font-size: 17px;"
                             class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
                             <i *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();"  style="color: red;" class="fas fa-times fa-2x mr-2"></i>
                             <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingAutomationNote" (click)="updateAutoNote()" ></i>
@@ -104,12 +104,12 @@
                 </div>
 
 
-
+                <div *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue)">
                 <div>
                     <h4 class="d-inline-block mb-2">Issues</h4>&nbsp;<strong
                     style="font-size: 20px;">({{problemList?.length}})</strong>
                 <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
-                    *ngIf=" permission.isGranted(DeliveryManagement_PMReportProjectIssue_Create) && selectedReport.isActive"
+                    *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
                     [hidden]="processProblem"
                     (click)="addIssueReport(); $event.stopPropagation()"></i>
                 </div>
@@ -207,12 +207,12 @@
     
                                 </td>
                                 <td class="text-center" *ngIf="selectedReport.isActive">
-                                    <button [matMenuTriggerFor]="menuAction" *ngIf="!problem.createMode && (permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)
-                                        || permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)) && selectedReport.isActive" mat-button  [disabled]="processProblem">
+                                    <button [matMenuTriggerFor]="menuAction" *ngIf="!problem.createMode && (permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit)
+                                        || permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete)) && selectedReport.isActive" mat-button  [disabled]="processProblem">
                                          <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menuAction="matMenu" class="p-2">
-                                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Update)" (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
+                                        <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit)" (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
@@ -221,7 +221,7 @@
                                             <i class="fas fa-check mr-2 fa-lg "></i>
                                             Done
                                         </button>
-                                        <button *ngIf="permission.isGranted(DeliveryManagement_PMReportProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
+                                        <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
                                             Delete
                                         </button>
@@ -240,11 +240,12 @@
                     </table>  
                 </div>
             </div>
+            </div>
 
 
 
 
-            <div class="card">
+            <div class="card" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource)">
                 <div class="card-body">
                     <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
                     <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>
@@ -291,7 +292,7 @@
                                             >
                                         </button>
                                         <mat-menu #menuRelease="matMenu">
-                                            <button [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                            <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                 (click)="releaseUser(user)">
                                                 <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                         </mat-menu>
@@ -329,8 +330,8 @@
             <div class="">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <div style="width: 100%; height: 190px; padding-right: -10px;" id="timesheet-chart">
+                        <div class="table-responsive px-2">
+                            <div style="width: 100%; height: 190px;" id="timesheet-chart">
 
                             </div>
                         </div>
@@ -339,7 +340,7 @@
                 <div class=" h-100">
                     <div class=" card">
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive px-2" >
                                 <div style="width: 100%; height: 190px;" id="bill-chart">
 
                                 </div>
@@ -350,14 +351,14 @@
 
                     <div class="d-flex">
                         <div class="w-100">
-                            <div class="card">
+                            <div class="card" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource)">
                                 <mat-expansion-panel [expanded]="isShowFutureList">
                                     <mat-expansion-panel-header class="m-0"
                                         (click)="isShowFutureList=!isShowFutureList">
                                         <h5 class="d-inline-block mb-2">Planned Resource</h5>&nbsp;<strong
                                             style="font-size: 18px;">({{futureReportList?.length}})</strong>
                                         <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
-                                            *ngIf=" permission.isGranted(DeliveryManagement_PMReportProject_Create) && selectedReport.isActive"
+                                            *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan) && selectedReport.isActive"
                                             [hidden]="processFuture || !isShowFutureList "
                                             (click)="addPlanResource(); $event.stopPropagation()"></i>
                                             
@@ -393,18 +394,26 @@
                                                                 [matMenuTriggerFor]="menu2"></i>
 
                                                             <mat-menu #menu2="matMenu">
-                                                                <button [disabled]="planResourceProcess"
+                                                                <button *ngIf="report.allocatePercentage > 0 && (permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther)
+                                                                    || permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject))" [disabled]="planResourceProcess"
                                                                     class="mat-menu-item  w-100"
                                                                     (click)="confirm(report)"> <i
                                                                         class="fas fa-check mr-1"></i>Confirm
-                                                                    {{report.allocatePercentage > 0 ? 'Join' :
-                                                                    'Out'}}</button>
-                                                                <button [disabled]="planResourceProcess"
+                                                                    Join</button>
+
+                                                                    <button *ngIf="report.allocatePercentage <= 0 && (permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject)
+                                                                        || permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))" [disabled]="planResourceProcess"
+                                                                    class="mat-menu-item  w-100"
+                                                                    (click)="confirm(report)"> <i
+                                                                        class="fas fa-check mr-1"></i>Confirm
+                                                                        Out</button>
+                                                                    
+                                                                <button *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan)"  [disabled]="planResourceProcess"
                                                                     class="mat-menu-item  w-100"
                                                                     (click)="cancelResourcePlan(report)"> <i
                                                                         class="fas fa-times mr-1"></i>Cancel
                                                                     Plan</button>
-                                                                <button [disabled]="planResourceProcess"
+                                                                <button *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit)" [disabled]="planResourceProcess"
                                                                     class="mat-menu-item  w-100"
                                                                     (click)="editResourcePlan(report)"> <i
                                                                         class="fas fa-edit mr-1"></i>Edit</button>
@@ -515,7 +524,7 @@
 
                             </div>
 
-                            <div class="card">
+                            <div class="card" *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource)">
                                 <mat-expansion-panel [expanded]="isShowWeeklyList">
                                     <mat-expansion-panel-header class="m-0"
                                         (click)="isShowWeeklyList=!isShowWeeklyList">
