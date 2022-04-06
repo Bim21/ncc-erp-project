@@ -28,6 +28,7 @@ export class CreateEditTimesheetComponent extends AppComponentBase implements On
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
     ]
   private currentYear = new Date().getFullYear()
+  private currentMonth = new Date().getMonth()+1;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CreateEditTimesheetComponent>,
     private timesheetService: TimesheetService,
@@ -37,6 +38,9 @@ export class CreateEditTimesheetComponent extends AppComponentBase implements On
   ngOnInit(): void {
     if (this.data.command == "edit") {
       this.timesheet = this.data.item;
+    }else{
+      this.timesheet.year= this.currentYear;
+      this.timesheet.month= this.currentMonth;
     }
     for (let i = this.currentYear - 4; i < this.currentYear + 2; i++) {
       this.listYear.push(i)
