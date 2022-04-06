@@ -54,7 +54,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone;
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CancelRequest = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CancelRequest;
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit;
-  PmManager_ProjProjects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_DeleteectUser = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete;
+  Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete;
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment;
 
   
@@ -269,9 +269,10 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       })
   }
   updateProjectCurrentResource(user) {
+    console.log(user)
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     this.projectUserService.UpdateCurrentResourceDetail(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      abp.notify.success(`updated user: ${user.userName}`);
+      abp.notify.success(`updated user: ${user.fullName}`);
       this.getProjectUser();
       this.isEditUserProject = false;
       user.editMode = false;
