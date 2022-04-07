@@ -53,10 +53,6 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
 
     if(this.permission.isGranted( this.Projects_TrainingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_TrainingProjects_ViewAllProject)){
       this.pmId = Number(this.sessionService.userId);
-    }else{
-      if(request.searchText){
-        this.pmId = -1;
-      }
     }
 
     if(this.sortWeeklyReport) {
@@ -137,6 +133,17 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     this.refresh();
     this.getAllPM();
   }
+  public searchInfoProject(){
+    if (!this.isEnablePMFilter() && this.searchText != ""){
+      this.pmId = -1;
+    }
+    this.refresh();    
+  }
+
+  public isEnablePMFilter(){
+    return this.permission.isGranted( this.Projects_TrainingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_TrainingProjects_ViewAllProject)
+  }
+
   public getAllPM(): void {
     this.projectService.GetTrainingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {

@@ -23,12 +23,12 @@
                 <div class="row g-3">
                     <div class="input-group col-6 pt-1">
                         <div class="input-group-prepend">
-                            <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+                            <button type="button" class="btn bg-blue" (click)="searchInfoProject()">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                         <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-                            (keyup.enter)="getDataPage(1)" />
+                            (keyup.enter)="searchInfoProject()" />
                         <div class="input-group-append">
                             <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                                 <i class="fas" [class.fa-angle-up]="advancedFiltersVisib1le"
@@ -47,7 +47,7 @@
 
                                     <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
                                         (selectionChange)="refresh()"
-                                        [disabled]="permission.isGranted( Projects_OutsourcingProjects_ViewMyProjectOnly) && !permission.isGranted(Projects_OutsourcingProjects_ViewAllProject)">
+                                        [disabled]="isEnablePMFilter()">
                                         <mat-form-field class="w-100 px-3 "
                                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                             <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"

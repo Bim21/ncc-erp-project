@@ -726,9 +726,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         legend: {
           left:'25%',
           width:'80%',
-          data: ['Total normal' ,'Total OT' ,'Normal Offical'
-            ,'OT Offical', 'Normal Temp',
-            'OT Temp'], 
+          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
+          `${hasTempDataOT ? 'OT Temp' : ''}`], 
         },
         color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
