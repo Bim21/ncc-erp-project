@@ -1,4 +1,4 @@
-<div class="row pt-2" style="position: relative;">
+<div class="row pt-2" style="position: relative;" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_View)"> 
     <div style="min-width: 200px; width: 16%; position: fixed;  top:auto ; left:auto; ">
         <div class="card ml-2" style="height: 94vh; overflow-y: auto; overflow-x: hidden;">
             <div class="p-1" style="position: sticky; top: 0; z-index: 50; background-color: white;">

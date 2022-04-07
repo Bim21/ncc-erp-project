@@ -36,6 +36,8 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public skillsParam = [];
   public selectedSkillId:number[]
   public isAndCondition:boolean =false;
+
+  Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
   Resource_TabAllResource_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CreatePlan
   Resource_TabAllResource_EditPlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_EditPlan

@@ -10,11 +10,13 @@ namespace ProjectManagement.Authorization
         public const string Admin = "Admin";
         //Tenants
         public const string Admin_Tenants = "Admin.Tenants";
+        public const string Admin_Tenants_View = "Admin.Tenants.View";
         public const string Admin_Tenants_Create = "Admin.Tenants.Create";
         public const string Admin_Tenants_Edit = "Admin.Tenants.Edit";
         public const string Admin_Tenants_Delete = "Admin.Tenants.Delete";
         //Clients 
         public const string Admin_Clients = "Admin.Clients";
+        public const string Admin_Clients_View = "Admin.Clients.View";
         public const string Admin_Clients_Create = "Admin.Clients.Create";
         public const string Admin_Clients_Edit = "Admin.Clients.Edit";
         public const string Admin_Clients_Delete = "Admin.Clients.Delete";
@@ -31,16 +33,19 @@ namespace ProjectManagement.Authorization
         public const string Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting";
         //Skill 
         public const string Admin_Skills = "Admin.Skills";
+        public const string Admin_Skills_View = "Admin.Skills.View";
         public const string Admin_Skills_Create = "Admin.Skills.Create";
         public const string Admin_Skills_Edit = "Admin.Skills.Edit";
         public const string Admin_Skills_Delete = "Admin.Skills.Delete";
         //Currencies
         public const string Admin_Currencies = "Admin.Currencies";
+        public const string Admin_Currencies_View = "Admin.Currencies.View";
         public const string Admin_Currencies_Create = "Admin.Currencies.Create";
         public const string Admin_Currencies_Edit = "Admin.Currencies.Edit";
         public const string Admin_Currencies_Delete = "Admin.Currencies.Delete";
         //User
         public const string Admin_Users = "Admin.Users";
+        public const string Admin_Users_View = "Admin.Users.View";
         public const string Admin_Users_Create = "Admin.Users.Create";
         public const string Admin_Users_SyncDataFromHrm = "Admin.Users.SyncDataFromHrm";
         public const string Admin_Users_ViewProjectHistory = "Admin.Users.ViewProjectHistory";
@@ -54,6 +59,7 @@ namespace ProjectManagement.Authorization
 
         //role
         public const string Admin_Roles = "Admin.Roles";
+        public const string Admin_Roles_View = "Admin.Roles.View";
         public const string Admin_Roles_Create = "Admin.Roles.Create";
         public const string Admin_Roles_Edit = "Admin.Roles.Edit";
         public const string Admin_Roles_Delete = "Admin.Roles.Delete";
@@ -71,26 +77,33 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail = "Projects.OutsourcingProjects.ProjectDetail";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.Edit";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource = "Projects.OutsourcingProjects.ProjectDetail.CurrentResource";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResource";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.ViewHistory";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.PickEmployeeFromPoolToProject";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.MoveEmployeeWorkingOnAProjectToOther";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResourceFromPool";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResourceFromOtherProject";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.Release";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.CurrentResource.UpdateUserSkill";
+
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.CreateNewPlan";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmPickEmployeeFromPoolToOther";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmMoveEmployeeWorkingOnAProjectToOther";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmOut";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.CancelPlan";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.Edit";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.PlannedResource.UpdateUserSkill";
+
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.ResourceRequest";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.CreateNewRequest";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.PlanNewResourceForRequest";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.SetDone";
@@ -100,20 +113,24 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment = "Projects.OutsourcingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.SendRecruitment";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote = "Projects.OutsourcingProjects.ProjectDetail.UpdateNote";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = "Projects.OutsourcingProjects.ProjectDetail.UpdateProjectHealth";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport = "Projects.OutsourcingProjects.ProjectDetail.SendWeeklyReport";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.AddNewIssue";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Delete";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.SetDone";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.CreateNewPlan";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.ConfirmPickEmployeeFromPoolToProject";
@@ -122,16 +139,24 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.CancelPlan";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ChangedResource";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View";
+
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Create";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Delete";
 
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabTimesheet = "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet";
+
+
         public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription = "Projects.OutsourcingProjects.ProjectDetail.TabProjectDescription";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View = "Projects.OutsourcingProjects.ProjectDetail.TabProjectDescription.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabProjectDescription.Edit";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectFile = "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View = "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile = "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile.UploadFile";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile = "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile.DeleteFile";
 
@@ -140,7 +165,6 @@ namespace ProjectManagement.Authorization
         public const string Projects_ProductProjects = "Projects.ProductProjects";
         public const string Projects_ProductProjects_ViewAllProject = "Projects.ProductProjects.ViewAllProject";
         public const string Projects_ProductProjects_ViewMyProjectOnly = "Projects.ProductProjects.ViewMyProjectOnly";
-
         public const string Projects_ProductProjects_Create = "Projects.ProductProjects.Create";
         public const string Projects_ProductProjects_Edit = "Projects.ProductProjects.Edit";
         public const string Projects_ProductProjects_Delete = "Projects.ProductProjects.Delete";
@@ -148,27 +172,33 @@ namespace ProjectManagement.Authorization
         public const string Projects_ProductProjects_ProjectDetail = "Projects.ProductProjects.ProjectDetail";
 
         public const string Projects_ProductProjects_ProjectDetail_TabGeneral = "Projects.ProductProjects.ProjectDetail.TabGeneral";
+        public const string Projects_ProductProjects_ProjectDetail_TabGeneral_View = "Projects.ProductProjects.ProjectDetail.TabGeneral.View";
         public const string Projects_ProductProjects_ProjectDetail_TabGeneral_Edit = "Projects.ProductProjects.ProjectDetail.TabGeneral.Edit";
 
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement = "Projects.ProductProjects.ProjectDetail.TabResourceManagement";
-        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource";
-        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResource";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource = "Projects.ProductProjects.ProjectDetail.CurrentResource";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_View = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.View";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.ViewHistory";
-        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.PickEmployeeFromPoolToProject";
-        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeWorkingOnAProjectToOther = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.PickEmployeeWorkingOnAProjectToOther";
-        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.MoveEmployeeWorkingOnAProjectToOther";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResourceFromPool";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResourceFromOtherProject";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.Edit";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.Release";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.CurrentResource.UpdateUserSkill";
+
 
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_View = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.View";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.CreateNewPlan";
-        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmPickEmployeeFromPoolToProject";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmPickEmployeeFromPoolToOther";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmMoveEmployeeWorkingOnAProjectToOther";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmOut";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.CancelPlan";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.Edit";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.PlannedResource.UpdateUserSkill";
+
 
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest";
+        public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest.View";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest.CreateNewRequest";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest.PlanNewResourceForRequest";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest.SetDone";
@@ -177,21 +207,26 @@ namespace ProjectManagement.Authorization
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest.Delete";
         public const string Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment = "Projects.ProductProjects.ProjectDetail.TabResourceManagement.ResourceRequest.SendRecruitment";
 
+
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport";
+        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.View";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote = "Projects.ProductProjects.ProjectDetail.UpdateNote";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = "Projects.ProductProjects.ProjectDetail.UpdateProjectHealth";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport = "Projects.ProductProjects.ProjectDetail.SendWeeklyReport";
 
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue";
+        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.View";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.AddNewIssue";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Edit";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Delete";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.SetDone";
 
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
+        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
 
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PlannedResource";
+        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PlannedResource.View";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PlannedResource.CreateNewPlan";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PlannedResource.Edit";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PlannedResource.ConfirmPickEmployeeFromPoolToProject";
@@ -200,16 +235,23 @@ namespace ProjectManagement.Authorization
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PlannedResource.CancelPlan";
 
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ChangedResource";
+        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View";
+
 
         public const string Projects_ProductProjects_ProjectDetail_TabBillInfo = "Projects.ProductProjects.ProjectDetail.TabBillInfo";
+        public const string Projects_ProductProjects_ProjectDetail_TabBillInfo_View = "Projects.ProductProjects.ProjectDetail.TabBillInfo.View";
         public const string Projects_ProductProjects_ProjectDetail_TabBillInfo_Create = "Projects.ProductProjects.ProjectDetail.TabBillInfo.Create";
         public const string Projects_ProductProjects_ProjectDetail_TabBillInfo_Edit = "Projects.ProductProjects.ProjectDetail.TabBillInfo.Edit";
         public const string Projects_ProductProjects_ProjectDetail_TabBillInfo_Delete = "Projects.ProductProjects.ProjectDetail.TabBillInfo.Delete";
 
+        public const string Projects_ProductProjects_ProjectDetail_TabTimesheet = "Projects.ProductProjects.ProjectDetail.TabTimesheet";
+
         public const string Projects_ProductProjects_ProjectDetail_TabProjectDescription = "Projects.ProductProjects.ProjectDetail.TabProjectDescription";
+        public const string Projects_ProductProjects_ProjectDetail_TabProjectDescription_View = "Projects.ProductProjects.ProjectDetail.TabProjectDescription.View";
         public const string Projects_ProductProjects_ProjectDetail_TabProjectDescription_Edit = "Projects.ProductProjects.ProjectDetail.TabProjectDescription.Edit";
 
         public const string Projects_ProductProjects_ProjectDetail_TabProjectFile = "Projects.ProductProjects.ProjectDetail.TabProjectFile";
+        public const string Projects_ProductProjects_ProjectDetail_TabProjectFile_View = "Projects.ProductProjects.ProjectDetail.TabProjectFile.View";
         public const string Projects_ProductProjects_ProjectDetail_TabProjectFile_UploadFile = "Projects.ProductProjects.ProjectDetail.TabProjectFile.UploadFile";
         public const string Projects_ProductProjects_ProjectDetail_TabProjectFile_DeleteFile = "Projects.ProductProjects.ProjectDetail.TabProjectFile.DeleteFile";
 
@@ -226,27 +268,33 @@ namespace ProjectManagement.Authorization
         public const string Projects_TrainingProjects_ProjectDetail = "Projects.TrainingProjects.ProjectDetail";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabGeneral = "Projects.TrainingProjects.ProjectDetail.TabGeneral";
+        public const string Projects_TrainingProjects_ProjectDetail_TabGeneral_View = "Projects.TrainingProjects.ProjectDetail.TabGeneral.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabGeneral_Edit = "Projects.TrainingProjects.ProjectDetail.TabGeneral.Edit";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement";
-        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource";
-        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResource";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource = "Projects.TrainingProjects.ProjectDetail.CurrentResource";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.ViewHistory";
-        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.PickEmployeeFromPoolToProject";
-        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeWorkingOnAProjectToOther = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.PickEmployeeWorkingOnAProjectToOther";
-        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.MoveEmployeeWorkingOnAProjectToOther";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResourceFromPool";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.AddNewResourceFromOtherProject";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.Edit";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.Release";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.CurrentResource.UpdateUserSkill";
+
 
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.CreateNewPlan";
-        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmPickEmployeeFromPoolToProject";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmPickEmployeeFromPoolToOther";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmMoveEmployeeWorkingOnAProjectToOther";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.ConfirmOut";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.CancelPlan";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.Edit";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.PlannedResource.UpdateUserSkill";
+
 
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest";
+        public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.CreateNewRequest";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.PlanNewResourceForRequest";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.SetDone";
@@ -255,21 +303,26 @@ namespace ProjectManagement.Authorization
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.Delete";
         public const string Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment = "Projects.TrainingProjects.ProjectDetail.TabResourceManagement.ResourceRequest.SendRecruitment";
 
+
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport";
+        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote = "Projects.TrainingProjects.ProjectDetail.UpdateNote";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = "Projects.TrainingProjects.ProjectDetail.UpdateProjectHealth";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport = "Projects.TrainingProjects.ProjectDetail.SendWeeklyReport";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue";
+        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.AddNewIssue";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Edit";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Delete";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.SetDone";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
+        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PlannedResource";
+        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.CreateNewPlan";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.Edit";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.ConfirmPickEmployeeFromPoolToProject";
@@ -278,38 +331,51 @@ namespace ProjectManagement.Authorization
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.CancelPlan";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ChangedResource";
+        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View";
+
 
         public const string Projects_TrainingProjects_ProjectDetail_TabBillInfo = "Projects.TrainingProjects.ProjectDetail.TabBillInfo";
+        public const string Projects_TrainingProjects_ProjectDetail_TabBillInfo_View = "Projects.TrainingProjects.ProjectDetail.TabBillInfo.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabBillInfo_Create = "Projects.TrainingProjects.ProjectDetail.TabBillInfo.Create";
         public const string Projects_TrainingProjects_ProjectDetail_TabBillInfo_Edit = "Projects.TrainingProjects.ProjectDetail.TabBillInfo.Edit";
         public const string Projects_TrainingProjects_ProjectDetail_TabBillInfo_Delete = "Projects.TrainingProjects.ProjectDetail.TabBillInfo.Delete";
 
+        public const string Projects_TrainingProjects_ProjectDetail_TabTimesheet = "Projects.TrainingProjects.ProjectDetail.TabTimesheet";
+
+
         public const string Projects_TrainingProjects_ProjectDetail_TabProjectDescription = "Projects.TrainingProjects.ProjectDetail.TabProjectDescription";
+        public const string Projects_TrainingProjects_ProjectDetail_TabProjectDescription_View = "Projects.TrainingProjects.ProjectDetail.TabProjectDescription.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabProjectDescription_Edit = "Projects.TrainingProjects.ProjectDetail.TabProjectDescription.Edit";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabProjectFile = "Projects.TrainingProjects.ProjectDetail.TabProjectFile";
+        public const string Projects_TrainingProjects_ProjectDetail_TabProjectFile_View = "Projects.TrainingProjects.ProjectDetail.TabProjectFile.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabProjectFile_UploadFile = "Projects.TrainingProjects.ProjectDetail.TabProjectFile.UploadFile";
         public const string Projects_TrainingProjects_ProjectDetail_TabProjectFile_DeleteFile = "Projects.TrainingProjects.ProjectDetail.TabProjectFile.DeleteFile";
 
         // Weekly report
         public const string WeeklyReport = "WeeklyReport";
+        public const string WeeklyReport_View = "WeeklyReport.View";
         public const string WeeklyReport_CloseAndAddNew = "WeeklyReport.CloseAndAddNew";
         public const string WeeklyReport_CollectTimesheet = "WeeklyReport.CollectTimesheet";
         public const string WeeklyReport_Rename = "WeeklyReport.Rename";
-        public const string WeeklyReport_View = "WeeklyReport.View";
+        public const string WeeklyReport_ViewInfo = "WeeklyReport.ViewInfo";
 
         public const string WeeklyReport_ReportDetail = "WeeklyReport.ReportDetail";
+        public const string WeeklyReport_ReportDetail_View = "WeeklyReport.ReportDetail.View";
         public const string WeeklyReport_ReportDetail_UpdateNote = "WeeklyReport.ReportDetail.UpdateNote";
         public const string WeeklyReport_ReportDetail_UpdateProjectHealth = "WeeklyReport.ReportDetail.UpdateProjectHealth";
 
         public const string WeeklyReport_ReportDetail_Issue = "WeeklyReport.ReportDetail.Issue";
+        public const string WeeklyReport_ReportDetail_Issue_View = "WeeklyReport.ReportDetail.Issue.View";
         public const string WeeklyReport_ReportDetail_Issue_AddMeetingNote = "WeeklyReport.ReportDetail.Issue.AddMeetingNote";
         public const string WeeklyReport_ReportDetail_Issue_SetDone = "WeeklyReport.ReportDetail.Issue.SetDone";
 
         public const string WeeklyReport_ReportDetail_CurrentResource = "WeeklyReport.ReportDetail.CurrentResource";
+        public const string WeeklyReport_ReportDetail_CurrentResource_View = "WeeklyReport.ReportDetail.CurrentResource.View";
         public const string WeeklyReport_ReportDetail_CurrentResource_Release = "WeeklyReport.ReportDetail.CurrentResource.Release";
 
         public const string WeeklyReport_ReportDetail_PlannedResource = "WeeklyReport.ReportDetail.PlannedResource";
+        public const string WeeklyReport_ReportDetail_PlannedResource_View = "WeeklyReport.ReportDetail.PlannedResource.View";
         public const string WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan = "WeeklyReport.ReportDetail.PlannedResource.CreateNewPlan";
         public const string WeeklyReport_ReportDetail_PlannedResource_Edit = "WeeklyReport.ReportDetail.PlannedResource.Edit";
         public const string WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject = "WeeklyReport.ReportDetail.PlannedResource.ConfirmPickEmployeeFromPoolToProject";
@@ -318,9 +384,12 @@ namespace ProjectManagement.Authorization
         public const string WeeklyReport_ReportDetail_PlannedResource_CancelPlan = "WeeklyReport.ReportDetail.PlannedResource.CancelPlan";
 
         public const string WeeklyReport_ReportDetail_ChangedResource = "WeeklyReport.ReportDetail.ChangedResource";
+        public const string WeeklyReport_ReportDetail_ChangedResource_View = "WeeklyReport.ReportDetail.ChangedResource.View";
+
 
         //Resource Request 
         public const string ResourceRequest = "ResourceRequest";
+        public const string ResourceRequest_View = "ResourceRequest.View";
         public const string ResourceRequest_CreateNewRequest = "ResourceRequest.CreateNewRequest";
         public const string ResourceRequest_PlanNewResourceForRequest = "ResourceRequest.PlanNewResourceForRequest";
         public const string ResourceRequest_UpdateResourceRequestPlan = "ResourceRequest.UpdateResourceRequestPlan";
@@ -334,6 +403,7 @@ namespace ProjectManagement.Authorization
         //Resource
         public const string Resource = "Resource";
         public const string Resource_TabPool = "Resource.TabPool";
+        public const string Resource_TabPool_View = "Resource.TabPool.View";
         public const string Resource_TabPool_ViewHistory = "Resource.TabPool.ViewHistory";
         public const string Resource_TabPool_CreatePlan = "Resource.TabPool.CreatePlan";
         public const string Resource_TabPool_EditPlan = "Resource.TabPool.EditPlan";
@@ -347,6 +417,7 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabPool_EditNote = "Resource.TabPool.EditNote";
 
         public const string Resource_TabAllResource = "Resource.TabAllResource";
+        public const string Resource_TabAllResource_View = "Resource.TabAllResource.View";
         public const string Resource_TabAllResource_ViewHistory = "Resource.TabAllResource.ViewHistory";
         public const string Resource_TabAllResource_CreatePlan = "Resource.TabAllResource.CreatePlan";
         public const string Resource_TabAllResource_EditPlan = "Resource.TabAllResource.EditPlan";
@@ -355,10 +426,10 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabAllResource_ConfirmOut = "Resource.TabAllResource.ConfirmOut";
         public const string Resource_TabAllResource_CancelMyPlan = "Resource.TabAllResource.CancelMyPlan";
         public const string Resource_TabAllResource_CancelAnyPlan = "Resource.TabAllResource.CancelAnyPlan";
-
         public const string Resource_TabAllResource_UpdateSkill = "Resource.TabAllResource.UpdateSkill";
 
         public const string Resource_TabVendor = "Resource.TabVendor";
+        public const string Resource_TabVendor_View = "Resource.TabVendor.View";
         public const string Resource_TabVendor_ViewHistory = "Resource.TabVendor.ViewHistory";
         public const string Resource_TabVendor_CreatePlan = "Resource.TabVendor.CreatePlan";
         public const string Resource_TabVendor_EditPlan = "Resource.TabVendor.EditPlan";
@@ -371,6 +442,7 @@ namespace ProjectManagement.Authorization
 
         //Timesheet
         public const string Timesheets = "Timesheets";
+        public const string Timesheets_View = "Timesheets.View";
         public const string Timesheets_ViewList = "Timesheets.ViewList";
         public const string Timesheets_Create = "Timesheets.Create";
         public const string Timesheets_Edit = "Timesheets.Edit";
@@ -379,6 +451,7 @@ namespace ProjectManagement.Authorization
         public const string Timesheets_CloseAndActive = "Timesheets.CloseOrActive";
 
         public const string Timesheets_TimesheetDetail = "Timesheets.TimesheetDetail";
+        public const string Timesheets_TimesheetDetail_View = "Timesheets.TimesheetDetail.View";
         public const string Timesheets_TimesheetDetail_ViewAll = "Timesheets.TimesheetDetail.ViewAll";
         public const string Timesheets_TimesheetDetail_ViewMyProjectOnly = "Timesheets.TimesheetDetail.ViewMyProjectOnly";
 
@@ -394,6 +467,9 @@ namespace ProjectManagement.Authorization
         public const string Timesheets_TimesheetDetail_UpdateBill_Create = "Timesheets.TimesheetDetail.UpdateBill.Create";
         public const string Timesheets_TimesheetDetail_UpdateBill_Edit = "Timesheets.TimesheetDetail.UpdateBill.Edit";
         public const string Timesheets_TimesheetDetail_UpdateBill_SetDone = "Timesheets.TimesheetDetail.UpdateBill.SetDone";
+
+        public const string Timesheets_TimesheetDetail_UpdateTimsheet = "Timesheets.TimesheetDetail.UpdateTimsheet";
+
     }
 
     public class GrantPermissionRoles
@@ -406,11 +482,13 @@ namespace ProjectManagement.Authorization
                 {
                     PermissionNames.Admin,
                     PermissionNames.Admin_Tenants,
+                    PermissionNames.Admin_Tenants_View,
                     PermissionNames.Admin_Tenants_Create,
                     PermissionNames.Admin_Tenants_Edit,
                     PermissionNames.Admin_Tenants_Delete,
                     //Clients 
                     PermissionNames.Admin_Clients,
+                    PermissionNames.Admin_Clients_View,
                     PermissionNames.Admin_Clients_Create,
                     PermissionNames.Admin_Clients_Edit,
                     PermissionNames.Admin_Clients_Delete,
@@ -427,16 +505,19 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting ,
                     //Skill 
                     PermissionNames.Admin_Skills,
+                    PermissionNames.Admin_Skills_View,
                     PermissionNames.Admin_Skills_Create ,
                     PermissionNames.Admin_Skills_Edit ,
                     PermissionNames.Admin_Skills_Delete ,
                     //Currencies
                     PermissionNames.Admin_Currencies ,
+                    PermissionNames.Admin_Currencies_View ,
                     PermissionNames.Admin_Currencies_Create ,
                     PermissionNames.Admin_Currencies_Edit ,
                     PermissionNames.Admin_Currencies_Delete ,
                     //User
                     PermissionNames.Admin_Users ,
+                    PermissionNames.Admin_Users_View ,
                     PermissionNames.Admin_Users_Create ,
                     PermissionNames.Admin_Users_SyncDataFromHrm ,
                     PermissionNames.Admin_Users_ViewProjectHistory ,
@@ -450,6 +531,7 @@ namespace ProjectManagement.Authorization
 
                     //role
                     PermissionNames.Admin_Roles,
+                    PermissionNames.Admin_Roles_View,
                     PermissionNames.Admin_Roles_Create ,
                     PermissionNames.Admin_Roles_Edit ,
                     PermissionNames.Admin_Roles_Delete,
@@ -468,25 +550,32 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill ,
+
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill ,
+
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone ,
@@ -495,21 +584,25 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment ,
 
+
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
@@ -518,21 +611,29 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View ,
+
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete ,
 
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet ,
+
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_Edit ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile , 
 
                     //Projects > Product Project
 
+                    PermissionNames.Projects ,
                     PermissionNames.Projects_ProductProjects ,
                     PermissionNames.Projects_ProductProjects_ViewAllProject ,
                     PermissionNames.Projects_ProductProjects_ViewMyProjectOnly ,
@@ -544,27 +645,31 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_ProductProjects_ProjectDetail ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral_Edit ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeWorkingOnAProjectToOther ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill ,
+
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone ,
@@ -573,21 +678,25 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment ,
 
+
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
@@ -596,25 +705,35 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View ,
+
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Create ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Edit ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Delete ,
 
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabTimesheet ,
+
+
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription_Edit ,
 
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile ,
+                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_UploadFile ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_DeleteFile , 
 
 
                     //Projects > training Project
 
+                    PermissionNames.Projects ,
                     PermissionNames.Projects_TrainingProjects ,
                     PermissionNames.Projects_TrainingProjects_ViewAllProject ,
                     PermissionNames.Projects_TrainingProjects_ViewMyProjectOnly ,
+
                     PermissionNames.Projects_TrainingProjects_Create ,
                     PermissionNames.Projects_TrainingProjects_Edit ,
                     PermissionNames.Projects_TrainingProjects_Delete ,
@@ -622,27 +741,32 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_TrainingProjects_ProjectDetail ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral_Edit ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeWorkingOnAProjectToOther ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill ,
+
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill ,
+
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone ,
@@ -651,21 +775,25 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment ,
 
+
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
@@ -674,38 +802,52 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View ,
+
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Create ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Edit ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Delete ,
 
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabTimesheet ,
+
+
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_Edit ,
 
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile ,
+                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_UploadFile ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_DeleteFile , 
 
                     // Weekly report
                     PermissionNames.WeeklyReport ,
+                    PermissionNames.WeeklyReport_View ,
                     PermissionNames.WeeklyReport_CloseAndAddNew ,
                     PermissionNames.WeeklyReport_CollectTimesheet ,
                     PermissionNames.WeeklyReport_Rename ,
-                    PermissionNames.WeeklyReport_View ,
+                    PermissionNames.WeeklyReport_ViewInfo ,
+
 
                     PermissionNames.WeeklyReport_ReportDetail ,
+                    PermissionNames.WeeklyReport_ReportDetail_View ,
                     PermissionNames.WeeklyReport_ReportDetail_UpdateNote ,
                     PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth ,
 
                     PermissionNames.WeeklyReport_ReportDetail_Issue ,
+                    PermissionNames.WeeklyReport_ReportDetail_Issue_View ,
                     PermissionNames.WeeklyReport_ReportDetail_Issue_AddMeetingNote ,
                     PermissionNames.WeeklyReport_ReportDetail_Issue_SetDone ,
 
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource ,
+                    PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release ,
 
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource ,
+                    PermissionNames.WeeklyReport_ReportDetail_PlannedResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan ,
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource_Edit ,
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,
@@ -714,8 +856,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource_CancelPlan ,
 
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource ,
+                    PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,
 
                     PermissionNames.ResourceRequest ,
+                    PermissionNames.ResourceRequest_View ,
                     PermissionNames.ResourceRequest_CreateNewRequest ,
                     PermissionNames.ResourceRequest_PlanNewResourceForRequest ,
                     PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,
@@ -729,6 +873,7 @@ namespace ProjectManagement.Authorization
                     //Resource
                     PermissionNames.Resource ,
                     PermissionNames.Resource_TabPool ,
+                    PermissionNames.Resource_TabPool_View ,
                     PermissionNames.Resource_TabPool_ViewHistory ,
                     PermissionNames.Resource_TabPool_CreatePlan ,
                     PermissionNames.Resource_TabPool_EditPlan ,
@@ -742,6 +887,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabPool_EditNote ,
 
                     PermissionNames.Resource_TabAllResource ,
+                    PermissionNames.Resource_TabAllResource_View ,
                     PermissionNames.Resource_TabAllResource_ViewHistory ,
                     PermissionNames.Resource_TabAllResource_CreatePlan ,
                     PermissionNames.Resource_TabAllResource_EditPlan ,
@@ -750,10 +896,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabAllResource_ConfirmOut ,
                     PermissionNames.Resource_TabAllResource_CancelMyPlan ,
                     PermissionNames.Resource_TabAllResource_CancelAnyPlan ,
-
                     PermissionNames.Resource_TabAllResource_UpdateSkill ,
 
                     PermissionNames.Resource_TabVendor ,
+                    PermissionNames.Resource_TabVendor_View ,
                     PermissionNames.Resource_TabVendor_ViewHistory ,
                     PermissionNames.Resource_TabVendor_CreatePlan ,
                     PermissionNames.Resource_TabVendor_EditPlan ,
@@ -766,6 +912,7 @@ namespace ProjectManagement.Authorization
 
                     //Timesheet
                     PermissionNames.Timesheets ,
+                    PermissionNames.Timesheets_View ,
                     PermissionNames.Timesheets_ViewList ,
                     PermissionNames.Timesheets_Create ,
                     PermissionNames.Timesheets_Edit ,
@@ -774,6 +921,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheets_CloseAndActive ,
 
                     PermissionNames.Timesheets_TimesheetDetail ,
+                    PermissionNames.Timesheets_TimesheetDetail_View ,
                     PermissionNames.Timesheets_TimesheetDetail_ViewAll ,
                     PermissionNames.Timesheets_TimesheetDetail_ViewMyProjectOnly ,
 
@@ -789,6 +937,9 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheets_TimesheetDetail_UpdateBill_Edit ,
                     PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone ,
 
+                    PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet ,
+
+
                 }
             }
         };
@@ -803,11 +954,13 @@ namespace ProjectManagement.Authorization
             {
                  new SystemPermission{ Name =  PermissionNames.Admin, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Admin" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tenants" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Tenants_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
                  new SystemPermission{ Name =  PermissionNames.Admin_Clients, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Clients" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Clients_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -824,16 +977,19 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Default Working Hour Per Day Setting" },
 
                  new SystemPermission{ Name =  PermissionNames.Admin_Skills, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "skills" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skills_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skills_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skills_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Currencies" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Currencies_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
                  new SystemPermission{ Name =  PermissionNames.Admin_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Users_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Users_SyncDataFromHrm, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sync Data From HRM" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Users_ViewProjectHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project History" },
@@ -847,6 +1003,7 @@ namespace ProjectManagement.Authorization
 
 
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Roles_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -856,7 +1013,6 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Outsourcing Projects" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewMyProjectOnly ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only" },
-
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -864,26 +1020,31 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Resource Management" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Pick Employee From POOL To Project" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Move Employee Working On A Project To Other" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource From Pool" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource From Other Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "confirm Join: Move Employee Working On A Project To Other" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Out" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
@@ -893,20 +1054,24 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Weekly Report" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update note" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Report" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Issues" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From Pool To Project" },
@@ -915,17 +1080,24 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Bill Info" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab timesheet" },
+
+
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project Description" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
 
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project File" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete File" },
 
@@ -933,7 +1105,7 @@ namespace ProjectManagement.Authorization
                 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Product Projects" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ViewMyProjectOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ViewMyProjectOnly ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -941,26 +1113,31 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Resource Management" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Pick Employee From POOL To Project" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Move Employee Working On A Project To Other" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource From Pool" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource From Other Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "confirm Join: Move Employee Working On A Project To Other" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Out" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
@@ -970,20 +1147,24 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Weekly Report" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update note" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Report" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Issues" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From Pool To Project" },
@@ -994,24 +1175,27 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Bill Info" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timesheet" },
+
+
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project Description" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
 
-
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project File" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_UploadFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectFile_DeleteFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete File" },
 
-
-
                 //  Training Projects
-                new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Product Projects" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Training Projects" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ViewMyProjectOnly, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ViewMyProjectOnly ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -1019,26 +1203,31 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Resource Management" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Pick Employee From POOL To Project" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Move Employee Working On A Project To Other" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource From Pool" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource From Other Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "confirm Join: Move Employee Working On A Project To Other" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Out" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
@@ -1048,20 +1237,24 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Weekly Report" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update note" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Report" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Issues" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From Pool To Project" },
@@ -1072,37 +1265,48 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Bill Info" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timesheet" },
+
+
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project Description" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
 
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project File" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_UploadFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectFile_DeleteFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete File" },
 
                 //  Weekly Report
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Weekly Report" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Wiew" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_CloseAndAddNew, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Clost And Add New" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_CollectTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Collect Timesheet" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_Rename, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Rename" },
-                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Wiew Info" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ViewInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Wiew Info" },
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Report Detail" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health" },
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Issues" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue_AddMeetingNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Meeting Note" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project" },
@@ -1111,13 +1315,14 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_CancelPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan" },
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ChangedResource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource"},
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
 
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
-
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Cancel ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
@@ -1127,6 +1332,7 @@ namespace ProjectManagement.Authorization
 
                  new SystemPermission{ Name =  PermissionNames.Resource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Pool"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabPool_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_ViewHistory ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
@@ -1140,6 +1346,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
 
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "All Resource"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_ViewHistory ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
@@ -1151,6 +1358,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
 
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "All Resource"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_ViewHistory ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
@@ -1162,7 +1370,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
 
                  new SystemPermission{ Name =  PermissionNames.Timesheets ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Timesheet"},
-                 new SystemPermission{ Name =  PermissionNames.Timesheets_ViewList ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View List"},
+                 new SystemPermission{ Name =  PermissionNames.Timesheets_ViewList ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_Create ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
@@ -1184,6 +1392,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
 
+                 new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet"},
+
+
             };
             public static List<SystemPermission> TreePermissions = new List<SystemPermission>()
             {
@@ -1195,6 +1406,7 @@ namespace ProjectManagement.Authorization
                          new SystemPermission { Name =  PermissionNames.Admin_Tenants, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tenants",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Tenants_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Tenants_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -1203,6 +1415,7 @@ namespace ProjectManagement.Authorization
                           new SystemPermission { Name =  PermissionNames.Admin_Clients, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Clients",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Clients_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -1227,14 +1440,16 @@ namespace ProjectManagement.Authorization
                             new SystemPermission { Name =  PermissionNames.Admin_Skills, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Skills",
                             Childrens = new List<SystemPermission>()
                             {
-                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
-                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Komu Setting"},
-                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project Setting"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Skills_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                             }
                         },
                                new SystemPermission { Name =  PermissionNames.Admin_Currencies, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Currencies",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Currencies_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Currencies_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
@@ -1243,6 +1458,7 @@ namespace ProjectManagement.Authorization
                                 new SystemPermission { Name =  PermissionNames.Admin_Users, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Users",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Users_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Users_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Users_SyncDataFromHrm, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Sync User From HRM"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Users_ViewProjectHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Project History"},
@@ -1259,6 +1475,7 @@ namespace ProjectManagement.Authorization
                                 new SystemPermission { Name =  PermissionNames.Admin_Roles, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Roles",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Roles_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
@@ -1285,9 +1502,8 @@ namespace ProjectManagement.Authorization
                                  {
                                     new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General",
                                      Childrens = new List<SystemPermission>(){
-                                        new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail",
-                                        }
-
+                                        new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                                        new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"}
                                     },
                                  },
 
@@ -1295,27 +1511,31 @@ namespace ProjectManagement.Authorization
                                      Childrens = new List<SystemPermission>(){
                                         new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                         Childrens = new List<SystemPermission>(){
-                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
-                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Pick Employee From POOL To Project"},
-                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Move Employee Working On A Project To Other"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource: From POOL"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource: From Other Project"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                                         }
                                         },
 
                                            new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource , MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resources",
                                              Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Move Employee Working On A Project To Other"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "ConfirmOut"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                                         }
                                         },
                                           new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request",
                                              Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CreateNewRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_PlanNewResourceForRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
@@ -1332,11 +1552,13 @@ namespace ProjectManagement.Authorization
 
                                      new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Weekly report",
                                      Childrens = new List<SystemPermission>(){
+                                        new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                         new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"},
                                         new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health"},
                                         new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Report"},
                                         new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Issues",
                                         Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit "},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
@@ -1345,11 +1567,13 @@ namespace ProjectManagement.Authorization
                                         },
                                          new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                             Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"},
                                         },
                                         },
                                            new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource , MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resources",
                                              Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Move Employee Working On A Project To Other"},
@@ -1359,25 +1583,32 @@ namespace ProjectManagement.Authorization
                                         }
                                         },
                                           new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resources",
-},
+                                          Childrens = new List<SystemPermission>(){
+                                          new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
 
+                                          }
+                                          },
                                     },
                                  },
                                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Bill Info",
                                      Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                                      }
                                  },
+                                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timsheet"},
 
                                    new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project Description",
                                      Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                      }
                                  },
                                    new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project File",
                                      Childrens = new List<SystemPermission>(){
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Upload File"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete File"},
                                      }
@@ -1412,12 +1643,12 @@ namespace ProjectManagement.Authorization
                                      Childrens = new List<SystemPermission>(){
                                         new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                         Childrens = new List<SystemPermission>(){
-                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
-                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Pick Employee From POOL To Project"},
-                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Move Employee Working On A Project To Other"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource: From POOL"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource: From Other Project"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                                         }
                                         },
 
@@ -1429,6 +1660,7 @@ namespace ProjectManagement.Authorization
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "ConfirmOut"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                                         }
                                         },
                                           new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request",
@@ -1476,7 +1708,7 @@ namespace ProjectManagement.Authorization
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                         }
                                         },
-                                          new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resources",
+                                          new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resources"
 },
 
                                     },
@@ -1488,6 +1720,9 @@ namespace ProjectManagement.Authorization
                                              new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                                      }
                                  },
+
+                                   new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timesheet" },
+
 
                                    new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabProjectDescription, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project Description",
                                      Childrens = new List<SystemPermission>(){
@@ -1506,7 +1741,7 @@ namespace ProjectManagement.Authorization
                         },
                     },
 
-         new SystemPermission { Name =  PermissionNames.Projects_TrainingProjects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Outsourcing Projects",
+         new SystemPermission { Name =  PermissionNames.Projects_TrainingProjects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Training Projects",
                             Childrens = new List<SystemPermission>()
                             {
                                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project"},
@@ -1530,12 +1765,12 @@ namespace ProjectManagement.Authorization
                                      Childrens = new List<SystemPermission>(){
                                         new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                         Childrens = new List<SystemPermission>(){
-                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
-                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Pick Employee From POOL To Project"},
-                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Move Employee Working On A Project To Other"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource: From POOL"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Resource: From Other Project"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Edit,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                                         }
                                         },
 
@@ -1547,6 +1782,7 @@ namespace ProjectManagement.Authorization
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmOut, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "ConfirmOut"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_CancelPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Plan"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_UpdateUserSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                                         }
                                         },
                                           new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request",
@@ -1607,6 +1843,9 @@ namespace ProjectManagement.Authorization
                                      }
                                  },
 
+                                   new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timesheet" },
+
+
                                    new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Project Description",
                                      Childrens = new List<SystemPermission>(){
                                              new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
@@ -1627,10 +1866,11 @@ namespace ProjectManagement.Authorization
 
        new SystemPermission { Name =  PermissionNames.WeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Weekly Report",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission { Name =  PermissionNames.WeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                         new SystemPermission { Name =  PermissionNames.WeeklyReport_CloseAndAddNew, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close And Add New"},
                         new SystemPermission { Name =  PermissionNames.WeeklyReport_CollectTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Collect Timesheet"},
                         new SystemPermission { Name =  PermissionNames.WeeklyReport_Rename, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Rename"},
-                        new SystemPermission { Name =  PermissionNames.WeeklyReport_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                        new SystemPermission { Name =  PermissionNames.WeeklyReport_ViewInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Info"},
                          new SystemPermission { Name =  PermissionNames.WeeklyReport_ReportDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Report Detail",
                             Childrens = new List<SystemPermission>()
                             {
@@ -1667,6 +1907,7 @@ namespace ProjectManagement.Authorization
 
        new SystemPermission { Name =  PermissionNames.ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request",
                     Childrens = new List<SystemPermission>() {
+                        new SystemPermission { Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_CreateNewRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
@@ -1685,6 +1926,7 @@ namespace ProjectManagement.Authorization
                         // Tab Pool
                         new SystemPermission { Name =  PermissionNames.Resource_TabPool ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Pool",
                              Childrens = new List<SystemPermission>() {
+                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_ViewHistory ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
@@ -1702,6 +1944,7 @@ namespace ProjectManagement.Authorization
                 // Tab All Resource
                      new SystemPermission { Name =  PermissionNames.Resource_TabAllResource,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab All Resource",
                              Childrens = new List<SystemPermission>() {
+                                new SystemPermission { Name =  PermissionNames.Resource_TabAllResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabAllResource_ViewHistory ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabAllResource_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabAllResource_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
@@ -1717,6 +1960,7 @@ namespace ProjectManagement.Authorization
                 // Tab Vendor
                      new SystemPermission { Name =  PermissionNames.Resource_TabVendor ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Vendor",
                              Childrens = new List<SystemPermission>() {
+                                new SystemPermission { Name =  PermissionNames.Resource_TabVendor_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabVendor_ViewHistory ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View History"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabVendor_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabVendor_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
@@ -1761,6 +2005,8 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                                                                     }
                                 },
+                                new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" }
+
 
 
                     },

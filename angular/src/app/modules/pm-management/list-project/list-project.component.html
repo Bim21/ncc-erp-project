@@ -1,3 +1,4 @@
+<div>
 <section class="content-header pb-1">
     <div class="container-fluid">
         <div class="row">
@@ -23,12 +24,12 @@
                 <div class="row g-3">
                     <div class="input-group col-6 pt-1">
                         <div class="input-group-prepend">
-                            <button type="button" class="btn bg-blue" (click)="searchInfoProject()">
+                            <button type="button" class="btn bg-blue" (click)="searchProject()">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                         <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
-                            (keyup.enter)="searchInfoProject()" />
+                            (keyup.enter)="searchProject()" />
                         <div class="input-group-append">
                             <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                                 <i class="fas" [class.fa-angle-up]="advancedFiltersVisib1le"
@@ -143,8 +144,7 @@
                                 <td>
                                     <div class="project-wrap">
                                         <div class="project-name-wrap"> 
-                                            <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" [routerLink]="['/app/list-project-detail/weeklyreport']" [queryParams]="{id: project.id, type: project.projectType, 
-                                                projectName: project.name, projectCode: project.code}" >
+                                            <a style="cursor: pointer;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(project)" >
                                                 {{ project.name }}
                                             </a>
                                             <span *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)">
@@ -283,3 +283,4 @@
         </div>
     </div>
 </section>
+</div>

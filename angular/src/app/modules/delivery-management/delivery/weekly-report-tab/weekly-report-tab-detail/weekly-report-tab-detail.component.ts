@@ -31,6 +31,7 @@ import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/a
   styleUrls: ['./weekly-report-tab-detail.component.css']
 })
 export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<WeeklyReportTabDetailComponent> implements OnInit {
+  WeeklyReport_ReportDetail_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_View;
   WeeklyReport_ReportDetail_UpdateNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateNote;
   WeeklyReport_ReportDetail_UpdateProjectHealth = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateProjectHealth;
   WeeklyReport_ReportDetail_Issue = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue;
@@ -158,6 +159,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
     }
   }
+  
   public startTimmer() {
     if ((!this.isTimmerCounting && !this.isStopCounting) || this.isRefresh) {
       this.timmerCount.start()

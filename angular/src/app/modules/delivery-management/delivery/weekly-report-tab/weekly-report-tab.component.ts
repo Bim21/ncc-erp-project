@@ -37,11 +37,12 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
 
   public pmReportList:pmReportDto[]=[];
   public closeReportMessage;
+  
   WeeklyReport_CollectTimesheet = PERMISSIONS_CONSTANT.WeeklyReport_CollectTimesheet;
   WeeklyReport_Rename = PERMISSIONS_CONSTANT.WeeklyReport_Rename
   WeeklyReport_View = PERMISSIONS_CONSTANT.WeeklyReport_View
   WeeklyReport_ReportDetail = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail
-
+  WeeklyReport_ViewInfo = PERMISSIONS_CONSTANT.WeeklyReport_ViewInfo
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },

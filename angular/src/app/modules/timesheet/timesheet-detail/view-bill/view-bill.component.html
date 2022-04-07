@@ -6,13 +6,13 @@
   cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
 >
   <abp-modal-header
-    title="Bill Info: {{ data.projectName }}"
+    title="Bill Info: {{ data.billInfo.projectName }}"
     (onCloseClick)="dialogRef.close()"
   >
   </abp-modal-header>
   <div class="modal-body row" id="modal-bill-info">
     <div class="col-11 row mb-1">
-      <button
+      <!-- <button
         class="btn btn-create-neutral ml-2"
         [disabled]="isEdittingRows"
         *ngIf="!isEdit && permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Create)"
@@ -20,17 +20,17 @@
         [disabled]="this.data.isComplete"
       >
         <i class="fa fa-plus-square mr-1"></i>Create
-      </button>
+      </button> -->
       <button
         class="btn btn-editall-neutral ml-2"
         *ngIf="!isEdittingRows && billDetail.length && !isEdit && permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Edit)"
         (click)="editMultiRows()"
-        [disabled]="this.data.isComplete"
+        [disabled]="data.billInfo.isComplete"
       >
         <i class="fas fa-pencil-alt mr-1"></i>Edit All
       </button>
       <div *ngIf="isEdittingRows" class="pt-1 ml-4">
-        <button
+        <button *ngIf="data.action == updateAction.UpdateTimesheet"
           [disabled]="!timesheetDetailForm.valid"
           class="mr-3 submit-btn"
           style="background: none; border: none"
@@ -39,7 +39,7 @@
           <i style="color: green" class="fas fa-check fa-2x"></i>
         </button>
         <button
-        
+        *ngIf="data.action == updateAction.UpdateBillInfo"
           [disabled]="!timesheetDetailForm.valid"
           class="mr-3 submit-btn"
           style="background: none; border: none"
@@ -59,7 +59,7 @@
         class="example-margin"
         (change)="isComplete($event)"
         [disabled]="isEdittingRows || isEdit"
-        [checked]="data.isComplete"
+        [checked]="data.billInfo.isComplete"
         >Done</mat-checkbox
       >
     </section>
@@ -73,13 +73,13 @@
             <tr>
               <th class="stt">#</th>
               <th style="width: 350px;">Employee</th>
-              <th style="width: 150px;">Charge Role</th>
+              <th style="width: 150px;" *ngIf="data.action == updateAction.UpdateBillInfo">Charge Role</th>
               <th
                 style="width: 150px;"
                 *ngIf="
                   permission.isGranted(
                     Timesheets_TimesheetDetail_ViewBillRate
-                  )
+                  ) && data.action == updateAction.UpdateBillInfo
                 "
               >
                 Rate <br> {{getTitleRate()}}
@@ -99,7 +99,6 @@
                 <span>{{ i + 1 }}</span>
               </td>
               <td class="text-left" style="min-width: 200px">
-                <span *ngIf="!bill.createMode && !isEdittingRows">
                   <app-user-info
                     [userData]="{
                       fullName: bill.fullName,
@@ -111,67 +110,8 @@
                     }"
                   >
                   </app-user-info>
-                </span>
-                <div *ngIf="(bill.createMode || isEdittingRows) ">
-                  <mat-form-field class="w-100" appearance="outline">
-                    <mat-select
-                      [(ngModel)]="bill.userId"
-                      [name]="i + 'userBill'"
-                      placeholder="select an user"
-                      #userBill="ngModel"
-                      required
-                      (selectionChange)="onUserSelect(bill)"
-                    >
-                      <mat-form-field
-                        class="w-100 px-3"
-                        style="
-                          position: sticky;
-                          top: 0;
-                          z-index: 2;
-                          background-color: white;
-                        "
-                      >
-                        <input
-                          matInput
-                          [(ngModel)]="bill.searchText"
-                          placeholder="search"
-                          (keydown)="$event.stopPropagation()"
-                          (ngModelChange)="searchUser(bill)"
-                          name="searchBillUser"
-                          #search
-                        />{{ search.focus() }}
-                      </mat-form-field>
-                      <mat-option
-                        *ngFor="let user of bill.userList"
-                        [value]="user.userId"
-                      >
-                        {{ user.fullName }} - ({{ user.email }})
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-error
-                    class="mt-1"
-                    *ngIf="userBill.hasError('required') && userBill.touched"
-                    style="font-size: 13px"
-                  >
-                    This field is required
-                  </mat-error>
-                </div>
-                <span *ngIf="(bill.createMode || isEdittingRows) ">
-                  <app-user-info
-                    [userData]="{
-                      fullName: bill.fullName,
-                      branch: bill.branch,
-                      userType: bill.userType,
-                      emailAddress: bill.emailAddress,
-                      avatarPath: bill.avatarPath, 
-                      userLevel: bill.userLevel
-                    }"
-                  >
-                  </app-user-info>
-                </span>
               </td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="data.action == updateAction.UpdateBillInfo">
                 <span *ngIf="!bill.createMode && !isEdittingRows">{{
                   bill.billRole
                 }}</span>
@@ -203,7 +143,7 @@
                 *ngIf="
                   permission.isGranted(
                     Timesheets_TimesheetDetail_ViewBillRate
-                  )
+                  ) && data.action == updateAction.UpdateBillInfo
                 "
               >
                 <span *ngIf="!bill.createMode && !isEdittingRows"
@@ -292,7 +232,7 @@
                     [disabled]="
                       userBillProcess ||
                       isEdit ||
-                      this.data.isComplete ||
+                      data.billInfo.isComplete ||
                       isEdittingRows
                     "
                     class="btn btn-sm btn-edit-neutral mr-1 mt-3"
@@ -303,7 +243,7 @@
                 </div>
                 <div *ngIf="bill.createMode" class="pt-1 mt-1">
                   <button
-                    
+                  *ngIf="data.action == updateAction.UpdateBillInfo"
                     [disabled]="!bill?.userId || !timesheetDetailForm.valid"
                     class="mr-3 submit-btn"
                     style="background: none; border: none"
@@ -312,7 +252,7 @@
                     <i style="color: green" class="fas fa-check fa-2x"></i>
                   </button>
                   <button
-                    
+                    *ngIf="data.action == updateAction.UpdateTimesheet"
                     [disabled]="!bill?.userId || !timesheetDetailForm.valid"
                     class="mr-3 submit-btn"
                     style="background: none; border: none"

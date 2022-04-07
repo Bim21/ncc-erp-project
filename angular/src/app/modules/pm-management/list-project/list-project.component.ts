@@ -24,6 +24,7 @@ import * as moment from 'moment';
 
 export class ListProjectComponent extends PagedListingComponentBase<any> implements OnInit {
 
+  Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View;
   Projects_OutsourcingProjects_ViewAllProject = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewAllProject;
   Projects_OutsourcingProjects_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewMyProjectOnly;
   Projects_OutsourcingProjects_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Create;
@@ -31,6 +32,10 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   Projects_OutsourcingProjects_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Delete;
   Projects_OutsourcingProjects_Close = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_Close;
   Projects_OutsourcingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
+
+
  
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
@@ -115,6 +120,15 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ): void {
     let check = false;
     let checkFilterPM = false;
+
+    if(this.permission.isGranted( this.Projects_OutsourcingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_OutsourcingProjects_ViewAllProject)){
+      this.pmId = Number(this.sessionService.userId);
+    }else{
+      if(request.searchText){
+        this.pmId = -1;
+      }
+    }
+
     if(this.sortWeeklyReport) {
       request.sort = 'timeSendReport';
       request.sortDirection = this.sortWeeklyReport - 1;
@@ -167,7 +181,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   public isEnablePMFilter(){
     return this.permission.isGranted(this.Projects_OutsourcingProjects_ViewAllProject)
   }
-  public search(){
+  public searchProject(){
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
@@ -328,5 +342,18 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         true
       );
     });
+  }
+
+
+  viewProjectDetail(project){
+    let routingToUrl:string = (this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport)
+     && this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View))
+    ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
+    this.router.navigate([routingToUrl],{queryParams:{
+      id: project.id,
+      type: project.projectType, 
+      projectName: project.name, 
+      projectCode: project.code}
+    })
   }
 }

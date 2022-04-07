@@ -12,6 +12,8 @@ import { Component, OnInit, Injector } from '@angular/core';
   styleUrls: ['./product-project-description.component.css']
 })
 export class ProductProjectDescriptionComponent extends AppComponentBase {
+  Projects_ProductProjects_ProjectDetail_TabProjectDescription_View = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabProjectDescription_View
+  Projects_ProductProjects_ProjectDetail_TabProjectDescription_Edit = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabProjectDescription_Edit
   public projectId
   projectDetail = {} as ProjectdetailDto
   constructor(public injector: Injector, private projectService: ListProjectService, private router: Router, private route: ActivatedRoute) {

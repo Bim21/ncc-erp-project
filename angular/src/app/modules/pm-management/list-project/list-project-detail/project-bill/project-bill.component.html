@@ -1,4 +1,4 @@
-<section class="content px-2 mt-2">
+<section class="content px-2 mt-2"  *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
         <div class="card mt-3">
 
