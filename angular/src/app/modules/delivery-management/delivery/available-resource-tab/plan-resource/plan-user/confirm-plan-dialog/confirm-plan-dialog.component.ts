@@ -62,24 +62,21 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   }
   confirm() {
     if (this.user.allocatePercentage > 0) {
-      if(this.data.fromPage == ConfirmFromPage.vendor){
+      if(this.data.fromPage == ConfirmFromPage.poolResource){
         this.puService.ConfirmJoinProjectFromTabPool(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
-          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-          this.dialogRef.close(true)
+          this.confirmJoinSuccessResult()
         })
       }
 
-      if(this.data.fromPage == ConfirmFromPage.vendor){
+      if(this.data.fromPage == ConfirmFromPage.allResource){
         this.puService.ConfirmJoinProjectFromTabAllResource(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
-          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-          this.dialogRef.close(true)
+          this.confirmJoinSuccessResult()
         })
       }
 
       if(this.data.fromPage == ConfirmFromPage.vendor){
         this.puService.ConfirmJoinProjectFromTabVendor(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.puService.handleError)).subscribe(rs => {
-          abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
-          this.dialogRef.close(true)
+          this.confirmJoinSuccessResult()
         })
       }
 
@@ -96,6 +93,12 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
       })
     }
   }
+
+  confirmJoinSuccessResult(){
+    abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
+    this.dialogRef.close(true)
+  }
+
   checkConfirmPermission(hasMovePermission:boolean) {
     if (hasMovePermission) {
       this.workingProject.forEach(pu => {
