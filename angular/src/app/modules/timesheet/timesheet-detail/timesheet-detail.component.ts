@@ -112,7 +112,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
 
   ];
 
-
   Timesheets_TimesheetDetail_ViewBillRate = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate;
   Timesheets_TimesheetDetail_AddProjectToTimesheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_AddProjectToTimesheet;
   Timesheets_TimesheetDetail_UploadTimesheetFile = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UploadTimesheetFile;
@@ -121,6 +120,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_Delete = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_Delete;
   Timesheets_TimesheetDetail_ViewAll = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewAll;
   Timesheets_TimesheetDetail_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewMyProjectOnly;
+  
 
 
 
@@ -141,7 +141,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.meId = Number(this.appSession.userId);
-    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme) && !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject)){
+    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme) && !this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)){
       this.pmId = this.meId
     }
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
@@ -196,6 +196,16 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         this.refresh()
       }
     })
+  }
+  public searchInfoProject(){
+    if (!this.isEnablePMFilter() && this.searchText != ""){
+      this.pmId = -1;
+    }
+    this.refresh();
+  }
+
+  public isEnablePMFilter(){
+    return this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewMyProjectOnly) && !this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)
   }
 
   // reloadTimesheetFile(id) {
