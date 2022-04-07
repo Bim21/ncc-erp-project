@@ -16,6 +16,7 @@ using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.ProjectTimesheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,15 @@ namespace ProjectManagement.APIs.TimeSheets
     [AbpAuthorize]
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
+
+        private ProjectTimesheetManager timesheetManager;
+
+
+        public TimeSheetAppService(ProjectTimesheetManager timesheetManager)
+        {
+            this.timesheetManager = timesheetManager;
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets)]
         public async Task<GridResult<GetTimesheetDto>> GetAllPaging(GridParam input)
@@ -113,23 +123,9 @@ namespace ProjectManagement.APIs.TimeSheets
             input.Id = await WorkScope.InsertAndGetIdAsync(timesheet);
             timesheet.Id = input.Id;
 
-            var firstDayOfMonth = new DateTime(timesheet.Year, timesheet.Month, 1).Date;
+            var listPUB = await timesheetManager.GetListProjectUserBillDto(timesheet.Year, timesheet.Month, null);
 
-            var q = await WorkScope.GetAll<ProjectUserBill>()
-                .Where(s => s.Project.IsCharge == true)
-                .Where(s => s.isActive)
-                .Where(s => !s.EndTime.HasValue || s.EndTime.Value.Date >= firstDayOfMonth)
-                .Select(s => new
-                {
-                    s.ProjectId,
-                    s.UserId,
-                    s.BillRate,
-                    s.BillRole,
-                    s.StartTime,
-                    s.EndTime
-                }).ToListAsync();
-
-            var listProjectIdToBillInfo = q.GroupBy(s => s.ProjectId)
+            var listProjectIdToBillInfo = listPUB.GroupBy(s => s.ProjectId)
                 .Select(s => new {ProjectId = s.Key, ListBillInfo = s.ToList()});
             
 

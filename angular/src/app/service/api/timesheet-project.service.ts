@@ -18,8 +18,8 @@ export class TimesheetProjectService extends BaseApiService {
   public create(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/Create', item);
   }
-  public update(item: any): Observable<any> {
-    return this.http.put<any>(this.rootUrl + '/Update', item);
+  public setComplete(item: any): Observable<any> {
+    return this.http.put<any>(this.rootUrl + '/SetComplete', item);
   }
   public delete(id: any): Observable<any> {
     return this.http.delete<any>(this.rootUrl + '/Delete', {

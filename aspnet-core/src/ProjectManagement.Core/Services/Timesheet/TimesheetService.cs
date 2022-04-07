@@ -18,10 +18,10 @@ namespace ProjectManagement.Services.Timesheet
     public class TimesheetService
     {
         private readonly HttpClient httpClient;
-        private readonly ILogger<FinanceService> logger;
+        private readonly ILogger<TimesheetService> logger;
         private readonly ISettingManager settingManager;
 
-        public TimesheetService(HttpClient httpClient, ILogger<FinanceService> logger, ISettingManager settingManager)
+        public TimesheetService(HttpClient httpClient, ILogger<TimesheetService> logger, ISettingManager settingManager)
         {
             this.settingManager = settingManager;
             this.httpClient = httpClient;
