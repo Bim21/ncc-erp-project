@@ -374,14 +374,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 input.FilterItems.Remove(filterItem);
             }
-            var viewProjectBillInfo = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
-            var viewMyProjectOnly = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewMyProjectOnly);
-
+            var allowViewBillRate = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
+            var allowViewAllTSProject = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewAll);
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
                                               .Where(x => filterItem == null || x.IsComplete != true)
-                                              .Where(x => viewMyProjectOnly ? x.Project.PMId == AbpSession.UserId : true)
+                                              .Where(x => !allowViewAllTSProject ? x.Project.PMId == AbpSession.UserId : true)
                          select new GetTimesheetDetailDto
                          {
                              Id = tsp.Id,
@@ -402,7 +401,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                     .Select(x => new TimesheetProjectBillInfoDto
                                                     {
                                                         FullName = x.User.FullName,
-                                                        BillRate = viewProjectBillInfo ? x.BillRate : 0,
+                                                        BillRate = allowViewBillRate ? x.BillRate : 0,
                                                         BillRole = x.BillRole,
                                                         WorkingTime = x.WorkingTime,
                                                         Description = x.Note
