@@ -483,6 +483,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
         this.getPlannedtUser()
         this.planResourceProcess = false
         this.isEditPlannedResource = false
+        this.getResourceRequestList()
       })
     }
     else {

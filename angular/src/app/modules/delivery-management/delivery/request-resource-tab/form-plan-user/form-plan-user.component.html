@@ -16,7 +16,7 @@
                             <input matInput [(ngModel)]="search" name="searchUserName"
                                 (keydown)="$event.stopPropagation()" placeholder="Search" #searchUser>{{searchUser.focus()}}
                         </mat-form-field>
-                        <ng-container *ngFor="let user of listUsers | listFilter: 'fullName' : search : 'fullName' : 'emailAddress'">
+                        <ng-container *ngFor="let user of listUsers | listFilter: 'fullName' : search : 'emailAddress'">
                             <mat-option [value]="user.id">
                                 {{user.fullName}} - {{user.emailAddress}}
                             </mat-option>
