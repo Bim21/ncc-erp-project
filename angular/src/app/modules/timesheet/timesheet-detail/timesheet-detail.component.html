@@ -1,4 +1,4 @@
-<section class="content-header pb-1">
+<section class="content-header pb-1" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_View)">
   <div class="container-fluid">
     <div class="row">
       <div class="col-6" id="title-page-tsdetail" style="font-size: 1.5rem;">
@@ -35,12 +35,12 @@
         <div class="row g-3">
           <div class="input-group col-8 pt-1">
             <div class="input-group-prepend">
-              <button type="button" class="btn bg-blue btn-search" (click)="getDataPage(1);">
+              <button type="button" class="btn bg-blue btn-search" (click)="searchInfoProject();">
                 <i class="fas fa-search"></i>
               </button>
             </div>
             <input type="text" class="form-control" name="keyword" placeholder="Search by Project name, PM Name, PM Email, Client Name" [(ngModel)]="searchText"
-              (keyup.enter)="getDataPage(1)" />
+              (keyup.enter)="searchInfoProject()" />
             <div class="input-group-append">
               <button type="button" class="btn btn-default btn-search" (click)="checkAddFilter()">
                 <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
@@ -54,8 +54,7 @@
                     <!-- <label class="label-pm pr-2 mt-3 ">PM:</label> -->
                     <mat-form-field appearance="outline">
                         <mat-label>PM</mat-label>
-                        <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM" [disabled]="permission.isGranted(Timesheets_TimesheetDetail_ViewMyProjectOnly)
-                        && !permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject)"
+                        <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM" [disabled]="isEnablePMFilter()"
                             (selectionChange)="refresh()">
                             <mat-form-field class="w-100 px-3"
                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
