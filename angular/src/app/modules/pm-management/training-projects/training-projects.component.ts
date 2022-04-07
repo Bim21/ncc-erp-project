@@ -51,14 +51,6 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     let check = false
     let checkFilterPM = false;
 
-    if(this.permission.isGranted( this.Projects_TrainingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_TrainingProjects_ViewAllProject)){
-      this.pmId = Number(this.sessionService.userId);
-    }else{
-      if(request.searchText){
-        this.pmId = -1;
-      }
-    }
-
     if(this.sortWeeklyReport) {
       request.sort = 'timeSendReport';
       request.sortDirection = this.sortWeeklyReport - 1;
@@ -134,9 +126,23 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   }
 
   ngOnInit(): void {
+    if(!this.isEnablePMFilter()){
+      this.pmId = Number(this.sessionService.userId);
+    }
     this.refresh();
     this.getAllPM();
   }
+  public searchInfoProject(){
+    if (this.isEnablePMFilter() && this.searchText != ""){
+      this.pmId = -1;
+    }
+    this.refresh();    
+  }
+  public isEnablePMFilter(){
+    return this.permission.isGranted(this.Projects_TrainingProjects_ViewAllProject)
+  }
+
+
   public getAllPM(): void {
     this.projectService.GetTrainingPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {

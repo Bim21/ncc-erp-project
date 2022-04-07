@@ -81,13 +81,6 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
       checkFilterPM = true
 
     }
-    if(this.permission.isGranted( this.Projects_ProductProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_ProductProjects_ViewAllProject)){
-      this.pmId = Number(this.sessionService.userId);
-    }else{
-      if(request.searchText){
-        this.pmId = -1;
-      }
-    }
 
     this.projectService.GetAllProductPaging(request).pipe(finalize(() => {
       finishedCallback()
@@ -133,9 +126,22 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   }
 
   ngOnInit(): void {
+    if(!this.isEnablePMFilter()){
+      this.pmId = Number(this.sessionService.userId);
+    }
     this.refresh();
     this.getAllPM();
   }
+  public searchInfoProject(){
+    if (this.isEnablePMFilter() && this.searchText != ""){
+      this.pmId = -1;
+    }
+    this.refresh();    
+  }
+  public isEnablePMFilter(){
+    return this.permission.isGranted(this.Projects_ProductProjects_ViewAllProject)
+  }
+
   public getAllPM(): void {
     this.projectService.GetProductPMs().pipe(catchError(this.userService.handleError))
       .subscribe(data => {

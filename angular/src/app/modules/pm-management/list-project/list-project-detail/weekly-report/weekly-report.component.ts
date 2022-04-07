@@ -680,9 +680,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         legend: {
           left:'25%',
           width:'80%',
-          data: ['Total normal' ,'Total OT' ,'Normal Offical'
-            ,'OT Offical', 'Normal Temp',
-            'OT Temp'],       
+          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
+          `${hasTempDataOT ? 'OT Temp' : ''}`],             
         },
         color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
         grid: {
@@ -762,6 +762,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         tooltip: {
           trigger: 'axis'
         },
+        
+        
         grid: {
           top: "6%",
           left: '3%',
@@ -780,20 +782,22 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           show: false
         },
         series: [
+          
           {
             // showSymbol: false,
             symbolSize: 2,
             data: chartData.normalWoringHours,
             type: 'line',
-            name: 'normal',
+            name: 'Normal',
           },
           {
-            showSymbol: false,
+            // showSymbol: false,
+            color: ['#dc3545'],
             symbolSize: 2,
             data: hasOtValue ? chartData.overTimeHours : [],
             type: 'line',
             name: 'OT',
-            lineStyle: {color: 'red'}
+            lineStyle: {color: '#dc3545'}
           }
         ]
       };
@@ -1029,11 +1033,17 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           ],
           yAxis: [
             {
+              axisLabel: {
+                padding: [0, 13, 0, 13]
+              },
               type: 'value',
               name: 'ManMonths',
   
             },
             {
+              axisLabel: {
+                padding: [0, 13, 0, 13]
+              },
               type: 'value',
               name: 'ManDays',
   
@@ -1042,6 +1052,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           series: [
   
             {
+              barWidth: 30,
               name: 'ManMonths',
               type: 'bar',
               data: chartData.manMonths
