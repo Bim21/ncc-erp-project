@@ -380,7 +380,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
                                               .Where(x => filterItem == null || x.IsComplete != true)
-                                              .Where(x => (!allowViewAllTSProject) ? x.Project.PMId == AbpSession.UserId : true)
+                                              .Where(x => !allowViewAllTSProject ? x.Project.PMId == AbpSession.UserId : true)
                          select new GetTimesheetDetailDto
                          {
                              Id = tsp.Id,
