@@ -112,11 +112,11 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 var dto = input.Where(s => s.Id == item.Id).FirstOrDefault();
                 if (dto != default)
                 {
-                    if (dto.BillRate <= 0)
-                    {
-                        dto.BillRate = item.BillRate;
-                    }
-                    ObjectMapper.Map(dto, item);
+                    item.BillRate = dto.BillRate;
+                    item.BillRole = dto.BillRole;
+                    item.Note = dto.Note;
+                    item.WorkingTime = dto.WorkingTime;
+                    item.IsActive = dto.IsActive;
                 }
             }
             await CurrentUnitOfWork.SaveChangesAsync();

@@ -509,7 +509,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_Delete)]
         public async Task Delete(long timesheetProjectId)
         {
-            var timeSheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Timesheet).FirstOrDefaultAsync(x => x.Id == timesheetProjectId);
+            var timeSheetProject = await WorkScope.GetAll<TimesheetProject>()
+                .Include(x => x.Timesheet)
+                .FirstOrDefaultAsync(x => x.Id == timesheetProjectId);
 
             if (!timeSheetProject.Timesheet.IsActive)
             {
@@ -523,11 +525,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var timesheetProjectBills = await WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.TimesheetId == timeSheetProject.TimesheetId && x.ProjectId == timeSheetProject.ProjectId)
                 .ToListAsync();
+
             foreach (var tsProjectBill in timesheetProjectBills)
             {
-                await WorkScope.DeleteAsync(tsProjectBill);
+                tsProjectBill.IsDeleted = true;
             }
-            await WorkScope.DeleteAsync(timeSheetProject);
+            timeSheetProject.IsDeleted = true;
+
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         [HttpPost]
@@ -539,8 +544,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 Directory.CreateDirectory(path);
             }
-            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().Include(x => x.Project).Include(x => x.Timesheet)
-                                        .Where(x => x.Id == input.TimesheetProjectId).FirstOrDefaultAsync();
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>()
+                .Include(x => x.Project)
+                .Include(x => x.Timesheet)
+                .Where(x => x.Id == input.TimesheetProjectId)
+                .FirstOrDefaultAsync();
 
             if (!timesheetProject.Timesheet.IsActive)
             {
