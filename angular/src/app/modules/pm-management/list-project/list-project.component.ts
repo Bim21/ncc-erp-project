@@ -100,6 +100,9 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   }
 
   ngOnInit(): void {
+    if(!this.isEnablePMFilter()){
+      this.pmId = Number(this.sessionService.userId);
+    }
     this.getAllUser();
     this.refresh();
     this.getAllPM();
@@ -112,11 +115,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   ): void {
     let check = false;
     let checkFilterPM = false;
-
-    if(this.isEnablePMFilter()){
-      this.pmId = Number(this.sessionService.userId);
-    }
-
     if(this.sortWeeklyReport) {
       request.sort = 'timeSendReport';
       request.sortDirection = this.sortWeeklyReport - 1;
@@ -167,10 +165,10 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       });
   }
   public isEnablePMFilter(){
-    return this.permission.isGranted(this. Projects_OutsourcingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_OutsourcingProjects_ViewAllProject)
+    return this.permission.isGranted(this.Projects_OutsourcingProjects_ViewAllProject)
   }
-  public searchInfoProject(){
-    if (!this.isEnablePMFilter() && this.searchText != ""){
+  public search(){
+    if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
     this.refresh();    
