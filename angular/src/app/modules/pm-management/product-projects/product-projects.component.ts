@@ -81,6 +81,13 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
       checkFilterPM = true
 
     }
+    if(this.permission.isGranted( this.Projects_ProductProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_ProductProjects_ViewAllProject)){
+      this.pmId = Number(this.sessionService.userId);
+    }else{
+      if(request.searchText){
+        this.pmId = -1;
+      }
+    }
 
     this.projectService.GetAllProductPaging(request).pipe(finalize(() => {
       finishedCallback()
