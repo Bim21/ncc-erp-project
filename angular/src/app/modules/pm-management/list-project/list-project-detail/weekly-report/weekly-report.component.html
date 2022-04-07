@@ -216,7 +216,11 @@
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
-
+                                        <button
+                                            (click)="setDone(problem)" class="mat-menu-item  w-100">
+                                            <i class="fas fa-check mr-2 fa-lg "></i>
+                                            Done
+                                        </button>
                                         <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
                                             Delete

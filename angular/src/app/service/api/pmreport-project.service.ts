@@ -62,6 +62,9 @@ export class PMReportProjectService extends BaseApiService {
     return this.http.put<any>(this.rootUrl + `/UpdateAutomationNote`, requestBody);
   }
 
+  public SetDoneIssue( id:any) {
+    return this.http.get(this.rootUrl + `/SetDoneIssue?id=`+id)
+  }
 
   public GetInfoProject(pmReportProjectId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/GetInfoProject?pmReportProjectId=${pmReportProjectId}`);
