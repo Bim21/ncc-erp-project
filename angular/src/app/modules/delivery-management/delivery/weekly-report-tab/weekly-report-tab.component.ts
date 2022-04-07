@@ -43,6 +43,7 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   WeeklyReport_View = PERMISSIONS_CONSTANT.WeeklyReport_View
   WeeklyReport_ReportDetail = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail
   WeeklyReport_ViewInfo = PERMISSIONS_CONSTANT.WeeklyReport_ViewInfo
+  WeeklyReport_CloseAndAddNew = PERMISSIONS_CONSTANT.WeeklyReport_CloseAndAddNew
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },

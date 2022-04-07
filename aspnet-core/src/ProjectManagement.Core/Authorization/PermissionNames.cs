@@ -1874,6 +1874,7 @@ namespace ProjectManagement.Authorization
                          new SystemPermission { Name =  PermissionNames.WeeklyReport_ReportDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Report Detail",
                             Childrens = new List<SystemPermission>()
                             {
+                                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"},
                                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health" },
                                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Issues",
@@ -1898,7 +1899,7 @@ namespace ProjectManagement.Authorization
 
                                     }
                                   },
-                                    new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource"},
+                                    new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource"},
                             }
                         },
 
