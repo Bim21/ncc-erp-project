@@ -115,24 +115,15 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   }
 
   isComplete(e) {
-    if (e.checked == true) {
-      this.data.isComplete = true;
-    } else {
-      this.data.isComplete = false;
-    }
-
-    let data = {
-      projectId: this.data.projectId,
-      timesheetId: this.data.timesheetId,
-      note: this.data.note,
-      projectBillInfomation: this.data.projectBillInfomation,
+    this.data.isComplete = e.checked;
+    let data = {      
       isComplete: this.data.isComplete,
       id: this.data.id
     }
-    this.timesheetProjectService.update(data).subscribe(res => {
+    this.timesheetProjectService.setComplete(data).subscribe(res => {
       abp.notify.success(`Update successfull`);
-      this.getProjectBill();
-      this.searchUserBill = "";
+      // this.getProjectBill();
+      // this.searchUserBill = "";
     })
   }
   saveUserBills() {

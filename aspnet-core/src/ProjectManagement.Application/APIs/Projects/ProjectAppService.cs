@@ -307,7 +307,7 @@ namespace ProjectManagement.APIs.Projects
             if (!(await IsEnableAutoCreateUpdateToTimsheetTool()))
             {
                 Logger.Info("CreateProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
-                return null;
+                return "update-only-project-tool";
             }
             var customerCode = await WorkScope.GetAll<Client>()
                 .Where(x => x.Id == input.ClientId).Select(x => x.Code)
@@ -548,21 +548,24 @@ namespace ProjectManagement.APIs.Projects
             input.ProjectType = ProjectType.TRAINING;
             input.Id = await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Project>(input));
 
-            var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
-                                .Where(x => x.ProjectType == ProjectType.TRAINING)
-                                .Select(x => new ProjectCheckList
-                                {
-                                    ProjectId = input.Id,
-                                    CheckListItemId = x.CheckListItemId,
-                                    IsActive = true,
-                                }).ToListAsync();
+            //var projectCheckLists = await WorkScope.GetAll<CheckListItemMandatory>()
+            //                    .Where(x => x.ProjectType == ProjectType.TRAINING)
+            //                    .Select(x => new ProjectCheckList
+            //                    {
+            //                        ProjectId = input.Id,
+            //                        CheckListItemId = x.CheckListItemId,
+            //                        IsActive = true,
+            //                    }).ToListAsync();
 
-            foreach (var i in projectCheckLists)
-            {
-                await WorkScope.InsertAsync(i);
-            }
+            //foreach (var i in projectCheckLists)
+            //{
+            //    await WorkScope.InsertAsync(i);
+            //}
 
-            var pmReportActive = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
+            var pmReportActive = await WorkScope.GetAll<PMReport>()
+                .OrderByDescending(s => s.Id)
+                .Where(x => x.IsActive)
+                .FirstOrDefaultAsync();
             if (pmReportActive == null)
                 throw new UserFriendlyException("Can't find any active reports !");
 
