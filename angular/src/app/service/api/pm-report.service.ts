@@ -15,6 +15,8 @@ export class PmReportService extends BaseApiService {
   data = {} as pmReportProjectHealthDto;
   public projectHealth = new BehaviorSubject(this.data);
   currentProjectHealth = this.projectHealth.asObservable();
+  public projectType = new BehaviorSubject('OUTSOURCING');
+  currentProjectType = this.projectType.asObservable();
 
   constructor(http: HttpClient) { super(http) }
   public closeReport(id: any): Observable<any> {
@@ -41,6 +43,9 @@ export class PmReportService extends BaseApiService {
   }
   collectTimesheet(pmReportId: number, startTime: string, endTime: string): Observable<any> {
     return this.http.get(this.rootUrl + `/CollectTimesheet?pmReportId=${pmReportId}&startTime=${startTime}&endTime=${endTime}`)
+  }
+  changeProjectType(message: string) {
+    this.projectType.next(message);
   }
 
 
