@@ -124,8 +124,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewMyProjectOnly;
   Timesheets_TimesheetDetail_UpdateTimsheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateTimsheet;
   Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill;
-
-
+  Timesheets_TimesheetDetail_ExportInvoiceForTax = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoiceForTax;
 
   constructor(
     private timesheetService: TimesheetService,
@@ -378,6 +377,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       FileSaver.saveAs(file, data.result.fileName);
     })
   }
+  exportQuickInvoiceForTax(item: any) {
+    let invoiceExcelDto = {
+      timesheetId: this.timesheetId,
+      projectId: [item.projectId]
+    }
+    this.timesheetProjectService.exportInvoiceForTax(invoiceExcelDto).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
+      const file = new Blob([this.s2ab(atob(data.result.base64))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      FileSaver.saveAs(file, data.result.fileName);
+    })
+  }
 
   addProjectToExport(event) {
     if (!event.checked) {
@@ -411,6 +422,22 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       FileSaver.saveAs(file, res.result.fileName);
     })
   }
+
+  exportInvoiceForTax() {
+    let invoiceExcelDto = {
+      timesheetId: this.timesheetId,
+      projectId: this.listExportInvoice
+    }
+    this.timesheetProjectService.exportInvoiceForTax(invoiceExcelDto).subscribe((res) => {
+      const file = new Blob([this.s2ab(atob(res.result.base64))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      this.refresh();
+      this.listExportInvoice=[];
+      FileSaver.saveAs(file, res.result.fileName);
+    })
+  }
+
   public getAllPM(): void {
     this.timesheetProjectService.getAllPM().pipe(catchError(this.userService.handleError))
       .subscribe(data => {

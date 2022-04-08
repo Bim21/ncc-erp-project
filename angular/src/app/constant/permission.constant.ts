@@ -451,6 +451,7 @@ export const PERMISSIONS_CONSTANT = {
        Timesheets_TimesheetDetail_AddProjectToTimesheet: "Timesheets.TimesheetDetail.AddProjectToTimesheet",
        Timesheets_TimesheetDetail_UploadTimesheetFile: "Timesheets.TimesheetDetail.UploadTimesheetFile",
        Timesheets_TimesheetDetail_ExportInvoice: "Timesheets.TimesheetDetail.ExportInvoice",
+       Timesheets_TimesheetDetail_ExportInvoiceForTax: "Timesheets.TimesheetDetail.ExportInvoiceForTax",
        Timesheets_TimesheetDetail_UpdateNote: "Timesheets.TimesheetDetail.UpdateNote",
        Timesheets_TimesheetDetail_Delete: "Timesheets.TimesheetDetail.Delete",
 
