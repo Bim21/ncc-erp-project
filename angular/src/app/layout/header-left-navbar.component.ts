@@ -40,6 +40,14 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   pmReportProjectId:string
   public problemIssueList: string[] = []
   public searchPmReport: string ="";
+  projectType = this.reportService.projectType.getValue();
+  projectTypeList = [
+    "ALL",
+    "OUTSOURCING",
+    "TRAINING",
+    "PRODUCT"
+  ]
+
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
     private pmReportProjectService: PMReportProjectService) {
@@ -85,6 +93,8 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
           }
           else {
             this.isShowReportBar = false;
+            this.projectType = this.reportService.projectType.getValue();
+            this.reportService.changeProjectType("OUTSOURCING")
           }
           if(this.isShowReportBar){
             this.projectHealth = this.pmReportProjectService.projectHealth
@@ -159,6 +169,10 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.isStopCounting = false
     this.isRefresh = false
   }
+  changeProjectType(type){
+    this.reportService.changeProjectType(type)
+  }
+
 
   changeProjectHealth(pmReportProjectId,projectHealth) {
     let data = {pmReportProjectId,projectHealth} as pmReportProjectHealthDto;

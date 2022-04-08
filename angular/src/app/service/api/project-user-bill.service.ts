@@ -20,4 +20,7 @@ export class ProjectUserBillService extends BaseApiService {
   deleteUserBill(id: number): Observable<any> {
     return this.http.delete<any>(this.rootUrl + `/Delete?projectUserBillId=${id}`)
   }
+  getRate(id: number):Observable<any>{
+    return this.http.get<any>(this.rootUrl + `/GetRate?projectId=${id}`);
+  }
 }

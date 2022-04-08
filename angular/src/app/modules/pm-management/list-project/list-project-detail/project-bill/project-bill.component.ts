@@ -4,7 +4,7 @@ import { UserService } from '@app/service/api/user.service';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppComponentBase } from '@shared/app-component-base';
 import { UserDto } from '@shared/service-proxies/service-proxies';
-import { projectUserBillDto } from './../../../../../service/model/project.dto';
+import { projectUserBillDto, ProjectRateDto } from './../../../../../service/model/project.dto';
 import { ProjectUserBillService } from './../../../../../service/api/project-user-bill.service';
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
@@ -23,14 +23,16 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public isShowUserBill: boolean = false;
   public searchUserBill: string = ""
   private projectId: number
-  public userBillCurrentPage:number = 1
+  public userBillCurrentPage: number = 1
+  public rateInfo = {} as ProjectRateDto;
+  public chargeType = ['d', 'm', 'h']
 
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete;
-  constructor(private projectUserBillService: ProjectUserBillService, private route:ActivatedRoute,
-     injector: Injector, private userService: UserService) {
+  constructor(private projectUserBillService: ProjectUserBillService, private route: ActivatedRoute,
+    injector: Injector, private userService: UserService) {
     super(injector)
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
 
@@ -39,7 +41,17 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getUserBill();
     this.getAllFakeUser();
+    this.getRate();
 
+  }
+  getRate() {
+    this.projectUserBillService.getRate(this.projectId).subscribe(data => {
+      this.rateInfo = data.result;
+      console.log('rate', this.rateInfo)
+    })
+  }
+  public getTitleRate() {
+    return '(' + this.rateInfo.currencyName + '/' + this.chargeType[this.rateInfo.chargeType] + ')'
   }
 
   private getAllFakeUser() {
@@ -107,9 +119,9 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
   private getUserBill(): void {
-      this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
-        this.userBillList = data.result
-      })
+    this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
+      this.userBillList = data.result
+    })
   }
   public removeUserBill(userBill: projectUserBillDto): void {
     abp.message.confirm(
@@ -125,8 +137,9 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       }
     );
   }
-  public focusOut(){
-    this.searchUserBill  = '';
+  public focusOut() {
+    this.searchUserBill = '';
   }
+
 
 }
