@@ -115,6 +115,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     userBill.createMode = true;
     this.userBillProcess = true;
     this.isEditUserBill = true;
+    console.log(userBill)
     // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
   private getUserBill(): void {

@@ -455,7 +455,6 @@ export const PERMISSIONS_CONSTANT = {
        Timesheets_TimesheetDetail_Delete: "Timesheets.TimesheetDetail.Delete",
 
        Timesheets_TimesheetDetail_UpdateBill: "Timesheets.TimesheetDetail.UpdateBill",
-       Timesheets_TimesheetDetail_UpdateBill_Create: "Timesheets.TimesheetDetail.UpdateBill.Create",
        Timesheets_TimesheetDetail_UpdateBill_Edit: "Timesheets.TimesheetDetail.UpdateBill.Edit",
        Timesheets_TimesheetDetail_UpdateBill_SetDone: "Timesheets.TimesheetDetail.UpdateBill.SetDone",
 

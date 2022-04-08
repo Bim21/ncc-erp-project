@@ -6,7 +6,7 @@
   cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
 >
   <abp-modal-header
-    title="Bill Info: {{ data.billInfo.projectName }}"
+    title="{{data.action == updateAction.UpdateBillInfo ? 'Update Bill Info:' : 'Update Timesheet:'}} {{ data.billInfo.projectName }}"
     (onCloseClick)="dialogRef.close()"
   >
   </abp-modal-header>
@@ -54,7 +54,7 @@
         ></i>
       </div>
     </div>
-    <section class="example-section col-1 text-center">
+    <section class="example-section col-1 text-center" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_SetDone)">
       <mat-checkbox
         class="example-margin"
         (change)="isComplete($event)"

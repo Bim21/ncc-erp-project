@@ -124,9 +124,9 @@ export class AppConsts {
     static readonly  userLevleStyle =
     {
             Intern_0 : 0,
-            Intern_600K : 1,
-            Intern_2M : 2,
-            Intern_4M : 3,
+            Intern_1 : 1,
+            Intern_2 : 2,
+            Intern_3 : 3,
             FresherMinus : 4,
             Fresher : 5,
             FresherPlus : 6,

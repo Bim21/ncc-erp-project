@@ -21,6 +21,7 @@ import { projectUserBillDto, projectResourceRequestDto, projectUserDto } from '.
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 import { ConfirmFromPage, ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
+import { RequestResourceDto } from '@app/service/model/delivery-management.dto';
 
 @Component({
   selector: 'app-product-resource-management',
@@ -56,6 +57,9 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit;
   Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete;
   Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment;
+
+  
+
   private projectId: number;
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
@@ -64,9 +68,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
-  public searchPlannedResource :string ='';
-
-
   // project user
   public projectUserList: projectUserDto[] = [];
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole)
@@ -76,11 +77,18 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public projectUserProcess: boolean = false;
   public isShowProjectUser: boolean = true;
   // resource request
-  public resourceRequestList: projectResourceRequestDto[] = [];
+  public resourceRequestList: RequestResourceDto[] = [];
   public requestStatusList: string[] = Object.keys(this.APP_ENUM.ResourceRequestStatus);
   public isEditRequest: boolean = false;
   public requestProcess: boolean = false;
   public isShowRequest: boolean = false;
+  public listStatuses: any[] = []
+  public selectStatus: any = 0
+  public isShowModal: string = 'none'
+  public modal_title: string
+  public strNotePM: string
+  public typePM: string
+  public resourceRequestId: number
   // plan resource
   public planResourceProcess: boolean = false;
   public plannedUserList: any = []
@@ -88,27 +96,24 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public isShowCurrentResouce: boolean = true;
   public isEditPlannedResource: boolean = false
   public searchPlanResource: string = ""
-
   public tomorrowDate = new Date();
-  public selectStatus: any = 0;
-  public listStatuses: any[] = [];
+  public searchPlannedResource: string = ""
+  //skills, levels
   public listSkills: any[] = []
   public listLevels: any[] = []
   public listProjectUserRoles: IDNameDto[] = []
-  public isShowModal: string = 'none'
-  public modal_title: string
-  public strNotePM: string
-  public typePM: string
-  public resourceRequestId: number
 
-
-
-
-  // PmManager_ResourceRequest_ViewAllByProject = PERMISSIONS_CONSTANT.PmManager_ResourceRequest_ViewAllByProject
-  constructor(injector: Injector, private projectUserService: ProjectUserService, private projectUserBillService: ProjectUserBillService, private userService: UserService,
-    private projectRequestService: ProjectResourceRequestService, private route: ActivatedRoute, private dialog: MatDialog,
-    private resourceRequestService: DeliveryResourceRequestService,
-    ) {
+  constructor(
+    injector: Injector, 
+    private projectUserService: ProjectUserService, 
+    private projectUserBillService: ProjectUserBillService, 
+    private userService: UserService,
+    private projectRequestService: ProjectResourceRequestService, 
+    private route: ActivatedRoute, 
+    private dialog: MatDialog,
+    private resourceRequestService: DeliveryResourceRequestService
+  ) 
+  {
       super(injector)
       this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
   }
@@ -122,10 +127,9 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     this.getAllUser();
     this.getPlannedtUser();
     this.getAllSkills();
-    this.getStatusesResourceRequest();
     this.getLevelsResourceRequest();
+    this.getStatusesResourceRequest()
     this.getProjectUserRoles()
-
   }
   // get data
   private getProjectUser() {
@@ -144,7 +148,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
 
 
   public getResourceRequestList(): void {
-      this.projectRequestService.getAllResourceRequest(this.projectId).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
+      this.resourceRequestService.getAllResourceRequestByProject(this.projectId, this.selectStatus).pipe(catchError(this.projectRequestService.handleError)).subscribe(data => {
         this.resourceRequestList = data.result
       })
   }
@@ -205,15 +209,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     this.projectUserProcess = true;
   }
 
-
-  public getValueByEnum(enumValue: number, enumObject) {
-    for (const key in enumObject) {
-      if (enumObject[key] == enumValue) {
-        return key;
-      }
-    }
-  }
-
   saveProjectUser(user: any) {
     if (this.isEditUserProject) {
       this.updateProjectCurrentResource(user)
@@ -233,6 +228,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
                 workingProject : workingProject,
                 user: user,
                 page: ConfirmFromPage.product_workingResource
+
               }
             }
             )
@@ -258,7 +254,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     user.projectId = this.projectId
     delete user["createMode"]
-    this.projectUserService.AddUserToProductProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
+    this.projectUserService.AddUserToOutSourcingProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
@@ -269,9 +265,10 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       })
   }
   updateProjectCurrentResource(user) {
+    console.log(user)
     user.startTime = moment(user.startTime).format("YYYY-MM-DD")
     this.projectUserService.UpdateCurrentResourceDetail(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      abp.notify.success(`updated user: ${user.userName}`);
+      abp.notify.success(`updated user: ${user.fullName}`);
       this.getProjectUser();
       this.isEditUserProject = false;
       user.editMode = false;
@@ -319,50 +316,6 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
   // resource request
 
-  public createRequest() {
-    this.showDialog("create", {});
-  }
-  public editRequest(item: any) {
-    this.showDialog("edit", item);
-  }
-
-  showDialog(command: string, request: any) {
-    let resourceRequest = {
-      id: request.id ? request.id : null,
-      projectId: this.projectId 
-    }
-    const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
-      data: {
-        command: command,
-        item: resourceRequest,
-        skills: this.listSkills,
-        levels: this.listLevels,
-        typeControl: 'requestProject'
-      },
-      width: "700px",
-      maxHeight: '90vh',
-    })
-    show.afterClosed().subscribe(rs => {
-      if(!rs) return
-      if(command == 'create')
-        this.getResourceRequestList()
-      else if(command == 'edit'){
-        let index = this.resourceRequestList.findIndex(x => x.id == rs.id)
-        if(index >= 0){
-          this.resourceRequestList[index] = rs
-        }
-      }
-    });
-  }
-
-  public addResourcceRequest(): void {
-    let newResource = {} as projectResourceRequestDto
-    newResource.createMode = true;
-    this.requestProcess = true;
-    this.resourceRequestList.unshift(newResource)
-  }
-
-
   public saveProjectRerequest(request: projectResourceRequestDto): void {
     delete request["createMode"]
     request.timeNeed = moment(request.timeNeed).format("YYYY-MM-DD");
@@ -401,174 +354,18 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   }
   public removeProjectRerequest(request: projectResourceRequestDto): void {
     abp.message.confirm(
-      `Delete request: ${request.name}`,
+      `Delete this request?`,
       "",
       (result: boolean) => {
         if (result) {
           this.projectRequestService.deleteProjectRequest(request.id).pipe(catchError(this.projectRequestService.handleError)).subscribe(() => {
-            abp.notify.success("Deleted request: " + request.name);
-            this.getResourceRequestList();
-          });
-
-        }
-      }
-    );
-  }
-
-  getStatusesResourceRequest(){
-    this.resourceRequestService.getStatuses().subscribe(res => {
-      this.listStatuses = res.result
-    })
-  }
-  getAllSkills(){
-    this.resourceRequestService.getSkills().subscribe((data) => {
-      this.listSkills = data.result;
-    })
-  }
-  getLevelsResourceRequest(){
-    this.resourceRequestService.getLevels().subscribe(res => {
-      this.listLevels = res.result
-    })
-  }
-
-  getProjectUserRoles(){
-    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
-      this.listProjectUserRoles = rs.result
-    })
-  }
-
-  showActionViewRecruitment(status, isRecruitment){
-    if(
-      isRecruitment &&
-      (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE')
-    )
-    {
-      return true
-    }
-    return false
-  }
-
-  public setDoneRequest(item){
-    let data = {
-      ...item.planUserInfo, 
-      requestName: item.name, 
-      resourceRequestId: item.id
-    }
-    const showModal = this.dialog.open(FormSetDoneComponent, {
-      data,
-      width: "700px",
-      maxHeight: "90vh"
-    })
-    showModal.afterClosed().subscribe((rs) => {
-      if(rs)
-        this.getResourceRequestList()
-        this.getPlannedtUser()
-        this.getProjectUser()
-    })
-  }
-
-  cancelRequest(id){
-    console.log("hllo",id)
-    abp.message.confirm(
-      'Are you sure cancel request?',
-      '',
-      (result) => {
-        if(result){
-          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
-            if(res.success){
-              abp.notify.success('Cancel Request Success!')
-              this.getResourceRequestList()
-              this.getPlannedtUser()
-            }
-            else{
-              abp.notify.error(res.result)
-            }
-          })
-        }
-      }
-    )
-  }
-
-  deleteRequest(item: any){
-    abp.message.confirm(
-      "Delete this request ?",
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.resourceRequestService.deleteMyRequest(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
             abp.notify.success("Delete request successfully");
             this.getResourceRequestList();
           });
 
         }
       }
-
     );
-  }
-
-  sendRecruitment(){
-    abp.message.info('Chức năng này sẽ được cập nhật trong bản release sắp tới', 'Thông báo')
-  }
-  async getPlanResource(item){
-    let data = new ResourcePlanDto(item.id, 0);
-    if(!item.planUserInfo) return data;
-    let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
-    return res.result
-  }
-
-  async showModalPlanUser(item: any){
-    let data = await this.getPlanResource(item);
-    const show = this.dialog.open(FormPlanUserComponent, {
-      data: {...data, projectUserRoles: this.listProjectUserRoles},
-      width: "700px",
-      maxHeight:"90vh"
-    })
-    show.afterClosed().subscribe(rs => {
-      if(!rs) return
-      if(rs.type == 'delete'){
-        this.getResourceRequestList()
-        this.getPlannedtUser()
-      }
-      else{
-        this.getPlannedtUser()
-        let index = this.resourceRequestList.findIndex(x => x.id == rs.data.resourceRequestId)
-        if(index >= 0)
-          this.resourceRequestList[index].planUserInfo = rs.data.result
-      }
-    });
-  }
-  public openModal(name, typePM, content, id){
-    this.typePM = typePM
-    this.modal_title = name
-    this.strNotePM = content
-    this.resourceRequestId = id
-    this.isShowModal = 'block'
-  }
-  public closeModal(){
-    this.isShowModal = 'none'
-  }
-
-  public updateNote(){
-    let request = {
-      resourceRequestId: this.resourceRequestId,
-      note: this.strNotePM,
-    }
-    this.resourceRequestService.updateNote(request,this.typePM).subscribe(rs => {
-      if(rs.success){
-        abp.notify.success('Update Note Successfully!')
-        let index = this.resourceRequestList.findIndex(x => x.id == request.resourceRequestId);
-        if(index >= 0){
-          if(this.typePM == 'PM')
-            this.resourceRequestList[index].pmNote = request.note;
-          else
-            this.resourceRequestList[index].dmNote = request.note;
-        }
-      }
-      else{
-        abp.notify.error(rs.result)
-      }
-    })
-    this.closeModal()
   }
 
 
@@ -607,7 +404,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
             workingProject: workingProject,
             user: user,
             type: "confirmJoin",
-            page: ConfirmFromPage.product_weekly
+            page: ConfirmFromPage.product_PlannedResource
           }
         })
 
@@ -615,6 +412,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
           if (rs) {
             this.getProjectUser()
             this.getPlannedtUser()
+            this.getResourceRequestList()
           }
         })
       })
@@ -657,7 +455,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   cancelPlanResourceProcess(user) {
     this.getPlannedtUser();
     this.planResourceProcess = false
-    this.searchPlannedResource = ""
+    this.searchUser = ""
   }
 
 
@@ -677,6 +475,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
         this.getPlannedtUser()
         this.planResourceProcess = false
         this.isEditPlannedResource = false
+        this.getResourceRequestList()
       })
     }
     else {
@@ -710,5 +509,199 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   onPlanUserSelect(user, u) {
     user.userSkills = u.userSkills
     user.userId = u.id
+  }
+
+  public createRequest() {
+    this.showDialog("create", {});
+  }
+  public editRequest(item: any) {
+    this.showDialog("edit", item);
+  }
+
+  showDialog(command: string, request: any) {
+    let resourceRequest = {
+      id: request.id ? request.id : null,
+      projectId: this.projectId 
+    }
+    const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
+      data: {
+        command: command,
+        item: resourceRequest,
+        skills: this.listSkills,
+        levels: this.listLevels,
+        typeControl: 'requestProject'
+      },
+      width: "700px",
+      maxHeight: '90vh',
+    })
+    show.afterClosed().subscribe(rs => {
+      if(!rs) return
+      if(command == 'create')
+        this.getResourceRequestList()
+      else if(command == 'edit'){
+        let index = this.resourceRequestList.findIndex(x => x.id == rs.id)
+        if(index >= 0){
+          this.resourceRequestList[index] = rs
+        }
+      }
+    });
+  }
+
+  async showModalPlanUser(item: any){
+    let data = await this.getPlanResource(item);
+    const show = this.dialog.open(FormPlanUserComponent, {
+      data: {...data, projectUserRoles: this.listProjectUserRoles},
+      width: "700px",
+      maxHeight:"90vh"
+    })
+    show.afterClosed().subscribe(rs => {
+      if(!rs) return
+      if(rs.type == 'delete'){
+        this.getResourceRequestList()
+        this.getPlannedtUser()
+      }
+      else{
+        this.getPlannedtUser()
+        let index = this.resourceRequestList.findIndex(x => x.id == rs.data.resourceRequestId)
+        if(index >= 0)
+          this.resourceRequestList[index].planUserInfo = rs.data.result
+      }
+    });
+  }
+  async getPlanResource(item){
+    let data = new ResourcePlanDto(item.id, 0);
+    if(!item.planUserInfo) return data;
+    let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
+    return res.result
+  }
+
+  public setDoneRequest(item){
+    let data = {
+      ...item.planUserInfo, 
+      requestName: item.name, 
+      resourceRequestId: item.id
+    }
+    const showModal = this.dialog.open(FormSetDoneComponent, {
+      data,
+      width: "700px",
+      maxHeight: "90vh"
+    })
+    showModal.afterClosed().subscribe((rs) => {
+      if(rs)
+        this.getResourceRequestList()
+        this.getPlannedtUser()
+        this.getProjectUser()
+    })
+  }
+
+  cancelRequest(id){
+    abp.message.confirm(
+      'Are you sure cancel request?',
+      '',
+      (result) => {
+        if(result){
+          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
+            if(res.success){
+              abp.notify.success('Cancel Request Success!')
+              this.getResourceRequestList()
+              this.getPlannedtUser()
+            }
+            else{
+              abp.notify.error(res.result)
+            }
+          })
+        }
+      }
+    )
+  }
+
+  getStatusesResourceRequest(){
+    this.resourceRequestService.getStatuses().subscribe(res => {
+      this.listStatuses = res.result
+    })
+  }
+
+  deleteRequest(item: any){
+    abp.message.confirm(
+      "Delete request: " + item.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.resourceRequestService.deleteMyRequest(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted request: " + item.name);
+            this.getResourceRequestList();
+          });
+
+        }
+      }
+
+    );
+  }
+
+  sendRecruitment(){
+    abp.message.info('Chức năng này sẽ được cập nhật trong bản release sắp tới', 'Thông báo')
+  }
+
+  public openModal(name, typePM, content, id){
+    this.typePM = typePM
+    this.modal_title = name
+    this.strNotePM = content
+    this.resourceRequestId = id
+    this.isShowModal = 'block'
+  }
+
+  public closeModal(){
+    this.isShowModal = 'none'
+  }
+
+  public updateNote(){
+    let request = {
+      resourceRequestId: this.resourceRequestId,
+      note: this.strNotePM,
+    }
+    this.resourceRequestService.updateNote(request,this.typePM).subscribe(rs => {
+      if(rs.success){
+        abp.notify.success('Update Note Successfully!')
+        let index = this.resourceRequestList.findIndex(x => x.id == request.resourceRequestId);
+        if(index >= 0){
+          if(this.typePM == 'PM')
+            this.resourceRequestList[index].pmNote = request.note;
+          else
+            this.resourceRequestList[index].dmNote = request.note;
+        }
+      }
+      else{
+        abp.notify.error(rs.result)
+      }
+    })
+    this.closeModal()
+  }
+
+  getAllSkills(){
+    this.resourceRequestService.getSkills().subscribe((data) => {
+      this.listSkills = data.result;
+    })
+  }
+  getLevelsResourceRequest(){
+    this.resourceRequestService.getLevels().subscribe(res => {
+      this.listLevels = res.result
+    })
+  }
+
+  getProjectUserRoles(){
+    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
+      this.listProjectUserRoles = rs.result
+    })
+  }
+
+  showActionViewRecruitment(status, isRecruitment){
+    if(
+      isRecruitment &&
+      (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE')
+    )
+    {
+      return true
+    }
+    return false
   }
 }

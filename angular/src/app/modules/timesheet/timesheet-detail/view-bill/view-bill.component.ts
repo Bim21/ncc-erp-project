@@ -27,7 +27,6 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   tempUserList = []
   public chargeType = ['d','m','h']
   public updateAction = UpdateAction
-  Timesheets_TimesheetDetail_UpdateBill_Create = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Create
   Timesheets_TimesheetDetail_UpdateBill_Edit = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Edit
   Timesheets_TimesheetDetail_UpdateBill_SetDone = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_SetDone
   Timesheets_TimesheetDetail_ViewBillRate = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate

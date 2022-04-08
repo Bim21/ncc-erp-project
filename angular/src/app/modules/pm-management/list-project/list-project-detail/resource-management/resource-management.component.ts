@@ -136,12 +136,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   }
   // get data
   private getProjectUser() {
-    if (this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_ViewHistory)) {
       this.projectUserService.getAllProjectUser(this.projectId, this.viewHistory).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
         this.projectUserList = data.result;
       })
-    }
-
   }
 
   private getPlannedtUser() {
