@@ -85,16 +85,21 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 
         public async Task DeleteTimesheetProjectBill(long projectId, long timesheetId)
         {
-            var TPBIdsToDelete = await _workScope.GetAll<TimesheetProjectBill>()
-                .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)
-                .Select(s => s.Id)
+            var tspbList = await _workScope.GetAll<TimesheetProjectBill>()
+                .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)                
                 .ToListAsync();
 
-            foreach (var id in TPBIdsToDelete)
+            if (tspbList == null || tspbList.Count == 0)
             {
-                await _workScope.DeleteAsync<TimesheetProjectBill>(id);
+                return;
+            }
+            
+            foreach (var item in tspbList)
+            {
+                item.IsDeleted = true;                
             }
 
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public async Task<List<ProjectUserBillDto>> GetListProjectUserBillDto(int year, int month, long? projectId)

@@ -421,9 +421,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_AddProjectToTimesheet)]
-        public async Task<TimesheetProjectDto> Create(TimesheetProjectDto input)
+        public async Task<Object> Create(TimesheetProjectDto input)
         {
-
             var isExist = await WorkScope.GetAll<TimesheetProject>()
                .AnyAsync(x => x.ProjectId == input.ProjectId && x.TimesheetId == input.TimesheetId);
             if (isExist)
@@ -449,6 +448,20 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var listPUB = await _timesheetManager.GetListProjectUserBillDto(timesheet.Year, timesheet.Month, input.ProjectId);
 
+            if (listPUB == null || listPUB.IsEmpty())
+            {
+                throw new UserFriendlyException($"Project has no Bill Account!");
+            }
+
+            var timesheetProject = new TimesheetProject
+            {
+                ProjectId = input.ProjectId,
+                TimesheetId = input.TimesheetId,
+                IsComplete = false,
+            };
+
+            await WorkScope.InsertAsync(timesheetProject);
+
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
 
             foreach (var pub in listPUB)
@@ -471,7 +484,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
 
-            return input;
+            return new {
+                TimesheetProject = timesheetProject,
+                ListTimesheetProjectBill = listTimesheetProjectBill
+            };
         }
 
 
