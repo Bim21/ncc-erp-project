@@ -121,8 +121,10 @@ namespace ProjectManagement.APIs.ProjectUserBills
             if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
-            await WorkScope.UpdateAsync(ObjectMapper.Map(input, projectUserBill));
+            var entity = ObjectMapper.Map(input, projectUserBill);
+            await WorkScope.UpdateAsync(entity);
 
+            await this.timesheetManager.UpdateTimesheetProjectBill(entity);
             return input;
         }
 

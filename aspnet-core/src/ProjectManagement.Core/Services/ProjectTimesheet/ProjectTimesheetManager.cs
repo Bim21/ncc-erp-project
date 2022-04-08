@@ -65,7 +65,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
             var activeTimesheetId = await GetActiveTimesheetId();
             if (activeTimesheetId == default)
             {
-                Logger.LogInformation("CreateTimesheetProjectBill() activeTimesheetId = " + activeTimesheetId);
+                Logger.LogInformation("CreateTimesheetProjectBill() no activeTimesheetId");
                 return;
             }
             var tpb = new TimesheetProjectBill
@@ -82,7 +82,36 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
             await _workScope.InsertAsync(tpb);
         }
-                
+
+        public async Task UpdateTimesheetProjectBill(ProjectUserBill pub)
+        {
+            var activeTimesheetId = await GetActiveTimesheetId();
+            if (activeTimesheetId == default)
+            {
+                Logger.LogInformation("UpdateTimesheetProjectBill() no activeTimesheetId");
+                return;
+            }
+
+            var tpb = await _workScope.GetAll<TimesheetProjectBill>()
+                .Where(s => s.ProjectId == pub.ProjectId)
+                .Where(s => s.TimesheetId == activeTimesheetId)
+                .Where(s => s.UserId == pub.UserId)
+                .FirstOrDefaultAsync();
+
+            if (tpb == default)
+            {
+                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProjectBill ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}, UserId={pub.UserId}");
+                return;
+            }
+
+            tpb.BillRate = pub.BillRate;
+            tpb.BillRole = pub.BillRole;
+            tpb.Currency = pub.Currency;
+            tpb.IsActive = pub.isActive;
+
+            await _workScope.UpdateAsync(tpb);
+        }
+
         public async Task DeleteTimesheetProjectBill(long projectId, long timesheetId)
         {
             var tspbList = await _workScope.GetAll<TimesheetProjectBill>()
