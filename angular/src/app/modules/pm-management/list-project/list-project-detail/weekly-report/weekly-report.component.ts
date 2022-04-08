@@ -213,11 +213,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
   }
 
-  public getWeeklyReport() {
-    this.pmReportProjectService.getChangesDuringWeek(this.projectId, this.selectedReport.reportId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
-      this.weeklyPeportList = data.result;
-    })
-  }
+
 
   public getAllPmReport() {
 
@@ -229,7 +225,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.allowSendReport = this.selectedReport.note == null || this.selectedReport.note == '' ? false : true;
       this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
       this.getProjectInfo();
-      this.getWeeklyReport();
       this.getFuturereport();
       this.getProjectProblem();
       this.getChangedResource();
@@ -643,7 +638,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   }
 
   public onReportchange() {
-    this.getWeeklyReport();
     this.getFuturereport();
     this.getProjectProblem();
     this.getProjectInfo();

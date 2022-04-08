@@ -1,14 +1,15 @@
-<section class="content px-2 mt-2"  *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
+<section class="content px-2 mt-2"  *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
         <div class="card mt-3">
 
             <mat-expansion-panel [expanded]="!isShowUserBill" >
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
-                    <h4 class="d-inline">Danh sách Bill Dự án</h4>
+                    <h4 class="d-inline">Bill accounts:</h4>
                     <button *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create)"
-                        [hidden]="isShowUserBill" style="border: none;" class="btn bg-blue ml-3"
+                        [hidden]="isShowUserBill" style="border: none; height: fit-content;" class="btn bg-blue ml-3 btn-sm mb-2"
                         (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
-                        <i class="fa fa-plus-square mr-1"></i>Create
+                        <i class="fa fa-plus m-0"></i>
+
                     </button>
 
                 </mat-expansion-panel-header>
@@ -80,7 +81,7 @@
 
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <span class="text-center" *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
                                         </span>
                                         <div *ngIf="bill.createMode">
@@ -93,7 +94,7 @@
 
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                         <div *ngIf="bill.createMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
@@ -112,7 +113,7 @@
                                             </mat-error>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <span class="text-center" *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
                                         <div *ngIf="bill.createMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">

@@ -362,8 +362,8 @@
 
                                         </div>
                                         <div *ngIf="user.createMode || user.editMode" class="text-center">
-                                            <mat-radio-group aria-label="Select an option" [(ngModel)]="user.isPool">
-                                                <mat-radio-button class="mr-2 d-block" [value]="false">Offical
+                                            <mat-radio-group [disabled]="user.allocatePercentage <= 0"  aria-label="Select an option" [(ngModel)]="user.isPool">
+                                                <mat-radio-button  class="mr-2 d-block" [value]="false">Offical
                                                 </mat-radio-button>
                                                 <mat-radio-button class="d-block" [value]="true">Temp</mat-radio-button>
                                             </mat-radio-group>

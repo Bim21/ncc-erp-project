@@ -4,11 +4,9 @@
             <div class="col-md-6">
                 <h3>General</h3>
             </div>
-            <div class="col-6 text-right ">
-                <a *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabGeneral_Edit)" 
-                class="btn bg-primary  mt-3" [hidden]="!readMode" (click)="editRequest()">
-                    <i class="fas fa-edit"></i>
-                    Edit
+            <div *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabGeneral_Edit)" class="col-6 text-right ">
+                <a class="btn bg-primary  mt-3" [hidden]="!readMode" (click)="editRequest()">
+                    <i class="fas fa-edit"></i> Edit
                 </a>
             </div>
         </div>
@@ -23,8 +21,7 @@
                     <p>{{project.name}}</p>
                 </div>
                 <div *ngIf="!readMode" class="col-md-5">
-                    <input type="text" class="form-control" name="projectName" id="projectName" minlength="2"
-                        maxlength="64" required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl />
+                    <input type="text" class="form-control" name="projectName" id="projectName" minlength="2" maxlength="64" required [(ngModel)]="project.name" #projectNameModel="ngModel" #projectNameEl />
                     <abp-validation-summary [control]="projectNameModel" [controlEl]="projectNameEl">
                     </abp-validation-summary>
                 </div>
@@ -37,8 +34,7 @@
                     <p>{{project.code}}</p>
                 </div>
                 <div *ngIf="!readMode" class="col-md-5">
-                    <input type="text" class="form-control" name="projectCode" id="projectCode" required
-                        [(ngModel)]="project.code" #projectCode="ngModel" #projectCodeEl />
+                    <input type="text" class="form-control" name="projectCode" id="projectCode" required [(ngModel)]="project.code" #projectCode="ngModel" #projectCodeEl />
                     <abp-validation-summary [control]="projectCode" [controlEl]="projectCodeEl">
                     </abp-validation-summary>
                 </div>
@@ -52,18 +48,15 @@
                 </div>
                 <div *ngIf="!readMode" class="col-md-5 ">
                     <mat-form-field class="w-100" appearance="outline">
-                        <mat-select [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required
-                            #projectPM="ngModel">
-                            <mat-form-field class="w-100 px-3 "
-                                style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                        <mat-select [(ngModel)]="project.pmId" name="projectPM" placeholder="select a PM" required #projectPM="ngModel">
+                            <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                 <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
                             </mat-form-field>
                             <mat-option *ngFor="let pm of pmList | listFilter: 'fullName' : searchPM : 'emailAddress' : 'surname' : 'name'" [value]="pm.id">
                                 {{pm.fullName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched"
-                        style="font-size: 13px;">
+                    <mat-error class="mt-1" *ngIf="projectPM.hasError('required') && projectPM.touched" style="font-size: 13px;">
                         This field is required
                     </mat-error>
                 </div>
@@ -79,16 +72,14 @@
                 </div>
                 <div *ngIf="!readMode" class="col-md-5 ">
                     <mat-form-field class="w-100" appearance="outline">
-                        <mat-select [(ngModel)]="project.status" name="projectStatus"
-                            placeholder="select a project status" required #projectStatus="ngModel">
+                        <mat-select [(ngModel)]="project.status" name="projectStatus" placeholder="select a project status" required #projectStatus="ngModel">
                             <ng-container *ngFor="let status of projectStatusList">
                                 <mat-option [value]="APP_ENUM.ProjectStatus[status]">
                                     {{status}}</mat-option>
                             </ng-container>
                         </mat-select>
                     </mat-form-field>
-                    <mat-error class="mt-1" *ngIf="projectStatus.hasError('required') && projectStatus.touched"
-                        style="font-size: 13px;">
+                    <mat-error class="mt-1" *ngIf="projectStatus.hasError('required') && projectStatus.touched" style="font-size: 13px;">
                         This field is required
                     </mat-error>
                 </div>
@@ -102,8 +93,7 @@
                 </div>
                 <div *ngIf="!readMode" class="col-md-5 datepick">
                     <mat-form-field appearance="outline">
-                        <input matInput [matDatepicker]="picker" [(ngModel)]="project.startTime"
-                            placeholder="choose a date" required name="startTime">
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="project.startTime" placeholder="choose a date" required name="startTime">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -122,8 +112,7 @@
                 </div>
                 <div *ngIf="!readMode" class="col-md-5 datepick">
                     <mat-form-field appearance="outline">
-                        <input matInput [matDatepicker]="picker2" [(ngModel)]="project.endTime"
-                            placeholder="choose a date" name="endTime">
+                        <input matInput [matDatepicker]="picker2" [(ngModel)]="project.endTime" placeholder="choose a date" name="endTime">
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
@@ -134,8 +123,7 @@
                     <button class="btn btn-secondary btn-action mx-2" (click)="readMode = true; getProjectDetail()">
                         Cancel
                     </button>
-                    <button class="btn btn-primary btn-action" [disabled]="!requestDetail.valid || isLoading "
-                        (click)="saveAndClose()">
+                    <button class="btn btn-primary btn-action" [disabled]="!requestDetail.valid || isLoading " (click)="saveAndClose()">
                         Save
                     </button>
                 </div>
