@@ -63,6 +63,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public sortable = new SortableModel('priority',0,'ASC')
 
   ResourceRequest_CreateNewRequest = PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest;
+  ResourceRequest_View = PERMISSIONS_CONSTANT.ResourceRequest_View;
   ResourceRequest_PlanNewResourceForRequest = PERMISSIONS_CONSTANT.ResourceRequest_PlanNewResourceForRequest;
   ResourceRequest_UpdateResourceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_UpdateResourceRequestPlan;
   ResourceRequest_RemoveResouceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_RemoveResouceRequestPlan;

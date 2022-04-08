@@ -46,6 +46,7 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
   }
 
   public clientList: ClientDto[] = [];
+  Admin_Clients_View = PERMISSIONS_CONSTANT.Admin_Clients_View;
   Admin_Clients_Create = PERMISSIONS_CONSTANT.Admin_Clients_Create;
   Admin_Clients_Edit = PERMISSIONS_CONSTANT.Admin_Clients_Edit;
   Admin_Clients_Delete = PERMISSIONS_CONSTANT.Admin_Clients_Delete;

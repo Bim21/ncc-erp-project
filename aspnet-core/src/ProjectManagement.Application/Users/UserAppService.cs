@@ -152,7 +152,7 @@ namespace ProjectManagement.Users
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Admin_Users_ViewProjectHistory)]
+        [AbpAuthorize]
         public async Task<List<ProjectHistoryDto>> GetHistoryProjectsByUserId(long userId)
         {
             return await _workScope.GetAll<ProjectUser>().Where(s => s.UserId == userId)

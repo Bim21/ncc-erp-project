@@ -121,32 +121,32 @@ namespace ProjectManagement.APIs.ProjectUsers
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther,
-            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool)]
         public async Task AddUserToOutSourcingProject(AddResourceToProjectDto input)
         {
             var allowMoveEmployeeToOtherProject 
-                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther);
+                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject);
             await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther,
-            PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject)]
+        [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool)]
         public async Task AddUserToProductProject(AddResourceToProjectDto input)
         {
             var allowMoveEmployeeToOtherProject
-                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther);
+                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject);
             await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther,
-            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_PickEmployeeFromPoolToProject)]
+        [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool)]
         public async Task AddUserToTrainingProject(AddResourceToProjectDto input)
         {
             var allowMoveEmployeeToOtherProject
-                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_MoveEmployeeWorkingOnAProjectToOther);
+                = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject);
             await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
         }
 

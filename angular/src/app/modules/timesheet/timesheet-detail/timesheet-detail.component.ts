@@ -99,6 +99,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public chargeType = ['d','m','h']
   public titleTimesheet: string = ''
   public meId: number;
+  public updateAction = UpdateAction
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -112,6 +113,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
 
   ];
 
+  Timesheets_TimesheetDetail_View = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_View;
   Timesheets_TimesheetDetail_ViewBillRate = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate;
   Timesheets_TimesheetDetail_AddProjectToTimesheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_AddProjectToTimesheet;
   Timesheets_TimesheetDetail_UploadTimesheetFile = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UploadTimesheetFile;
@@ -120,8 +122,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_Delete = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_Delete;
   Timesheets_TimesheetDetail_ViewAll = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewAll;
   Timesheets_TimesheetDetail_ViewMyProjectOnly = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewMyProjectOnly;
-  
-
+  Timesheets_TimesheetDetail_UpdateTimsheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateTimsheet;
+  Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill;
 
 
 
@@ -141,7 +143,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.meId = Number(this.appSession.userId);
-    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme) && !this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)){
+    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme)){
       this.pmId = this.meId
     }
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
@@ -197,16 +199,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
-  public searchInfoProject(){
-    if (!this.isEnablePMFilter() && this.searchText != ""){
-      this.pmId = -1;
-    }
-    this.refresh();
-  }
+ 
 
   public isEnablePMFilter(){
-    return this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewMyProjectOnly) && !this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)
+    return this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)
   }
+  public searchProjectTS(){
+    if (this.isEnablePMFilter() && this.searchText != ""){
+      this.pmId = -1;
+    }
+    this.refresh();    
+  }
+
 
   // reloadTimesheetFile(id) {
   //   this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, this.requestBody).pipe(catchError(this.timesheetProjectService.handleError))
@@ -344,11 +348,15 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     this.isActive = false;
     this.createdInvoice = true;
   }
-  public viewBillDetail(bill) {
+  public viewBillDetail(bill,action) {
     this.menu.closeMenu()
     const show = this.dialog.open(ViewBillComponent, {
       width: "95%",
-      data: bill, 
+      data: {
+        billInfo:bill,
+        action: action
+      }, 
+     
     })
     show.afterClosed().subscribe((res) => {
       this.refresh();
@@ -446,4 +454,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     }  
     return false
   }
+}
+export const UpdateAction = {
+  UpdateBillInfo: 1,
+  UpdateTimesheet: 2
 }

@@ -40,6 +40,7 @@ export class CurrencyComponent extends PagedListingComponentBase<CurrencyCompone
       }
     )
   }
+  public Admin_Currencies_View = PERMISSIONS_CONSTANT.Admin_Currencies_View;
   public Admin_Currencies_Create = PERMISSIONS_CONSTANT.Admin_Currencies_Create;
   public Admin_Currencies_Edit = PERMISSIONS_CONSTANT.Admin_Currencies_Edit;
   public Admin_Currencies_Delete = PERMISSIONS_CONSTANT.Admin_Currencies_Delete;

@@ -14,6 +14,7 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 export class ProjectDescriptionComponent extends AppComponentBase{
   projectId
   projectDetail={} as ProjectdetailDto
+  Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View
   Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_Edit
   constructor(private projectService:ListProjectService, private router:Router, private route:ActivatedRoute, injector:Injector) { 
     super(injector)

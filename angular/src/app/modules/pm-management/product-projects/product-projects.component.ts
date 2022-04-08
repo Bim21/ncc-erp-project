@@ -27,7 +27,6 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   Projects_ProductProjects_Close = PERMISSIONS_CONSTANT.Projects_ProductProjects_Close;
   Projects_ProductProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail;
 
-
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
@@ -80,6 +79,13 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
       request.filterItems = this.clearFilter(request, "pmId", "")
       checkFilterPM = true
 
+    }
+    if(this.permission.isGranted( this.Projects_ProductProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_ProductProjects_ViewAllProject)){
+      this.pmId = Number(this.sessionService.userId);
+    }else{
+      if(request.searchText){
+        this.pmId = -1;
+      }
     }
 
     this.projectService.GetAllProductPaging(request).pipe(finalize(() => {

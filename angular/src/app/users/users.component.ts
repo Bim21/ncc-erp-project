@@ -79,6 +79,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   skill = ""
   advancedFiltersVisible = false;
   public userProjectHistory: IUSerProjectHistory[] = []
+  Admin_Users_View = PERMISSIONS_CONSTANT.Admin_Users_View;
   Admin_Users_Create = PERMISSIONS_CONSTANT.Admin_Users_Create;
   Admin_Users_SyncDataFromHrm = PERMISSIONS_CONSTANT.Admin_Users_SyncDataFromHrm;
   Admin_Users_ViewProjectHistory = PERMISSIONS_CONSTANT.Admin_Users_ViewProjectHistory;

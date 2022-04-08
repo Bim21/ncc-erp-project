@@ -37,6 +37,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   public skillsParam = [];
   public selectedSkillId:number[]
   public isAndCondition:boolean =false;
+  Resource_TabVendor_View = PERMISSIONS_CONSTANT.Resource_TabVendor_View
   Resource_TabVendor_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabVendor_ViewHistory
   Resource_TabVendor_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabVendor_CreatePlan
   Resource_TabVendor_EditPlan = PERMISSIONS_CONSTANT.Resource_TabVendor_EditPlan

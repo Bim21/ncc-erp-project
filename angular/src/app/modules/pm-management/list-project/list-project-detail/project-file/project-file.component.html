@@ -1,4 +1,4 @@
-<div class="card-body">
+<div class="card-body"*ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View)">
     <label *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile)" class="upload-btn"><i
             class="fas fa-upload mr-1"></i> Upload file
         <input type="file" size="60" type="file" multiple (change)="selectFile($event)">

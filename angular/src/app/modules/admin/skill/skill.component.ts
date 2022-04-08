@@ -42,6 +42,7 @@ export class SkillComponent extends PagedListingComponentBase<SkillComponent> im
     )
   }
   public skillList:SkillDto[]=[];
+  public Admin_Skills_View = PERMISSIONS_CONSTANT.Admin_Skills_View;
   Admin_Skills_Create = PERMISSIONS_CONSTANT.Admin_Skills_Create;
   Admin_Skills_Edit = PERMISSIONS_CONSTANT.Admin_Skills_Edit;
   Admin_Skills_Delete = PERMISSIONS_CONSTANT.Admin_Skills_Delete;

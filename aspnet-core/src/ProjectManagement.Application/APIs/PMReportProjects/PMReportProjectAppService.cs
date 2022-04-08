@@ -160,6 +160,10 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<GetResultpmReportProjectIssue> ProblemsOfTheWeekForReport(long ProjectId, long pmReportId)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
+            if(pmReportProject == null)
+            {
+                throw new UserFriendlyException("This project don't have report for this week");
+            }
             var query = from prpi in WorkScope.GetAll<PMReportProjectIssue>()
                          .Where(x => x.PMReportProject.ProjectId == ProjectId && x.PMReportProject.PMReportId == pmReportId)
                          .OrderByDescending(x => x.CreationTime)

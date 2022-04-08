@@ -15,6 +15,9 @@
                     <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo)" [ngClass]="currentUrl.includes('project-bill-tab')?'active':''" mat-tab-link (click)="routingProjectBillTab()">
                         Bill Info
                     </a>
+                    <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabTimesheet)" [ngClass]="currentUrl.includes('training-timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
+                        Timesheet
+                    </a>
                     <a *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription)" [ngClass]="currentUrl.includes('description-tab')?'active':''" mat-tab-link (click)="routingDescriptionTab()">
                         Project Description 
                     </a>

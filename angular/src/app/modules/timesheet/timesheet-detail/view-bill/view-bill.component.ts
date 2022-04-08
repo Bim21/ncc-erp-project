@@ -10,6 +10,7 @@ import { TimeSheetProjectBillService } from './../../../../service/api/time-shee
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject, Injector } from '@angular/core';
 import * as moment from 'moment';
+import { UpdateAction } from '../timesheet-detail.component';
 
 @Component({
   selector: 'app-view-bill',
@@ -25,6 +26,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdittingRows: boolean = false;
   tempUserList = []
   public chargeType = ['d','m','h']
+  public updateAction = UpdateAction
   Timesheets_TimesheetDetail_UpdateBill_Create = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Create
   Timesheets_TimesheetDetail_UpdateBill_Edit = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Edit
   Timesheets_TimesheetDetail_UpdateBill_SetDone = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_SetDone
@@ -37,12 +39,11 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.getProjectBill();
-    this.getAllFakeUser(false);
-    console.log(this.data)
+    // this.getAllFakeUser(false);
   }
   public getProjectBill() {
     this.isLoading = true
-    this.projectBillService.getProjectBill(this.data.projectId, this.data.timesheetId).subscribe(data => {
+    this.projectBillService.getProjectBill(this.data.billInfo.projectId, this.data.billInfo.timesheetId).subscribe(data => {
       this.billDetail = data.result
       this.isLoading = false
       //this.getAllFakeUser(false)
@@ -59,8 +60,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     if (userBill.endTime) {
       userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
     }
-    userBill.timesheetId = this.data.timesheetId;
-    userBill.projectId = this.data.projectId;
+    userBill.timesheetId = this.data.billInfo.timesheetId;
+    userBill.projectId = this.data.billInfo.projectId;
     let bill =
       [{
         "projectId": userBill.projectId,
@@ -78,13 +79,13 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         "id": userBill.id
       }]
     if (this.isCreate) {
-      userBill.projectId = this.data.projectId;
+      userBill.projectId = this.data.billInfo.projectId;
       delete userBill['userList'];
       this.projectBillService.createProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Create successfull`);
         this.getProjectBill();
         this.searchUserBill = "";
-        this.getAllFakeUser(false)
+        // this.getAllFakeUser(false)
       },
         () => {
           userBill.createMode = true;
@@ -102,7 +103,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         abp.notify.success(`Update successfull`)
         this.getProjectBill();
         this.searchUserBill = "";
-        this.getAllFakeUser(true)
+        // this.getAllFakeUser(true)
 
       },
         () => {
@@ -115,10 +116,10 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   }
 
   isComplete(e) {
-    this.data.isComplete = e.checked;
+    this.data.billInfo.isComplete = e.checked;
     let data = {      
-      isComplete: this.data.isComplete,
-      id: this.data.id
+      isComplete: this.data.billInfo.isComplete,
+      id: this.data.billInfo.id
     }
     this.timesheetProjectService.setComplete(data).subscribe(res => {
       abp.notify.success(`Update successfull`);
@@ -130,7 +131,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     let arr = this.billDetail.map((userBill) => {
       return {
         projectId: userBill.projectId,
-        timeSheetId: this.data.timesheetId,
+        timeSheetId: this.data.billInfo.timesheetId,
         userId: userBill.userId,
         billRole: userBill.billRole,
         billRate: userBill.billRate,
@@ -164,20 +165,20 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public editUserBill(userBill: projectUserBillDto): void {
     userBill.createMode = true;
     this.isEdit = true;
-    this.getAllFakeUser(true)
+    // this.getAllFakeUser(true)
   }
-  private getAllFakeUser(isEdited) {
-    this.isLoading = true
-    this.projectBillService.getAllUserUnused(this.data.projectId, this.data.timesheetId, isEdited).pipe(catchError(this.userService.handleError)).subscribe(data => {
-      // this.userForUserBill = data.result;
-      this.billDetail.forEach(item => {
-        item.userList = data.result
-        item.searchText = ""
-      })
-      this.tempUserList = data.result
+  // private getAllFakeUser(isEdited) {
+  //   this.isLoading = true
+  //   this.projectBillService.getAllUserUnused(this.data.billInfo.projectId, this.data.billInfo.timesheetId, isEdited).pipe(catchError(this.userService.handleError)).subscribe(data => {
+  //     // this.userForUserBill = data.result;
+  //     this.billDetail.forEach(item => {
+  //       item.userList = data.result
+  //       item.searchText = ""
+  //     })
+  //     this.tempUserList = data.result
 
-    })
-  }
+  //   })
+  // }
   searchUser(bill) {
     bill.userList = this.tempUserList.filter(item =>
       (this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.email?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))))
@@ -214,12 +215,12 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     bill.createMode = true;
     this.isEdit = true;
     this.isCreate = true;
-    this.getAllFakeUser(false)
+    // this.getAllFakeUser(false)
 
   }
   editMultiRows() {
     this.isEdittingRows = true;
-    this.getAllFakeUser(true)
+    // this.getAllFakeUser(true)
     // this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
     //   this.userForUserBill = data.result;})
 

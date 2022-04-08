@@ -30,7 +30,7 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
   Admin_Roles_Create = PERMISSIONS_CONSTANT.Admin_Roles_Create;
   Admin_Roles_Edit = PERMISSIONS_CONSTANT.Admin_Roles_Edit;
   Admin_Roles_Delete = PERMISSIONS_CONSTANT.Admin_Roles_Delete;
-
+  Admin_Roles_View = PERMISSIONS_CONSTANT.Admin_Roles_View;
   constructor(
     injector: Injector,
     private _rolesService: RoleServiceProxy,

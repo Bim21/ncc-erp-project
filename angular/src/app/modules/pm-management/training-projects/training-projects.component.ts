@@ -51,6 +51,14 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     let check = false
     let checkFilterPM = false;
 
+    if(this.permission.isGranted( this.Projects_TrainingProjects_ViewMyProjectOnly) && !this.permission.isGranted(this.Projects_TrainingProjects_ViewAllProject)){
+      this.pmId = Number(this.sessionService.userId);
+    }else{
+      if(request.searchText){
+        this.pmId = -1;
+      }
+    }
+
     if(this.sortWeeklyReport) {
       request.sort = 'timeSendReport';
       request.sortDirection = this.sortWeeklyReport - 1;

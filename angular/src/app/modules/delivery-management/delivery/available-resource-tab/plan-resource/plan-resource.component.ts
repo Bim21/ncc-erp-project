@@ -46,7 +46,9 @@ export class PlanResourceComponent
   private subscription: Subscription[] = [];
   public selectedSkillId: number[]
   public isAndCondition: boolean = false
+
   Resource_TabPool = PERMISSIONS_CONSTANT.Resource_TabPool
+  Resource_TabPool_View = PERMISSIONS_CONSTANT.Resource_TabPool_View
   Resource_TabPool_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabPool_ViewHistory
   Resource_TabPool_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabPool_CreatePlan
   Resource_TabPool_EditPlan = PERMISSIONS_CONSTANT.Resource_TabPool_EditPlan

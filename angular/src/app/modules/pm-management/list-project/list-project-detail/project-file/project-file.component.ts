@@ -19,6 +19,7 @@ export class ProjectFileComponent extends AppComponentBase implements OnInit {
   public fileList: any[] = []
   public isLoading: boolean = false
 
+  Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View
   Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile
   Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile
 
