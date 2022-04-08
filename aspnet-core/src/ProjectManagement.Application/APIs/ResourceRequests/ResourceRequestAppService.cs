@@ -568,7 +568,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         {
             var result = new List<IDNameDto>();
             result.Add(new IDNameDto { Id = UserLevel.AnyLevel.GetHashCode(), Name = "Any Level" });
-            result.Add(new IDNameDto { Id = UserLevel.Intern_4M.GetHashCode(), Name = "Intern" });
+            result.Add(new IDNameDto { Id = UserLevel.Intern_3.GetHashCode(), Name = "Intern" });
             result.Add(new IDNameDto { Id = UserLevel.Fresher.GetHashCode(), Name = "Fresher" });
             result.Add(new IDNameDto { Id = UserLevel.Junior.GetHashCode(), Name = "Junior" });
             result.Add(new IDNameDto { Id = UserLevel.Middle.GetHashCode(), Name = "Middle" });

@@ -76,7 +76,7 @@ namespace ProjectManagement.Utils
                     return "Principal";
                 case UserLevel.Intern_0:
                     return "Intern_0";
-                case UserLevel.Intern_600K:
+                case UserLevel.Intern_1:
                     return "Intern_1";
                 default:
                     return Enum.GetName(typeof(UserLevel), level);
