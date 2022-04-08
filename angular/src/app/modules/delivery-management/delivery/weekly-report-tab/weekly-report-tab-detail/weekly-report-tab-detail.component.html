@@ -113,9 +113,21 @@
                                     itemsPerPage: itemPerPage,
                                     currentPage: problemCurrentPage
                                     }; let i =index">
-                                    <td>{{i+1}}</td>
+                                    <td style="width: 26px">
+                                        <i style="margin-top: 8px ; color: #585858;"
+                                        class="fas fa-ellipsis-v ml-1"
+                                        [matMenuTriggerFor]="menu3"></i>
 
-                                    <td style="white-space: normal;max-width: 250px;" class="d-flex justify-content-between">
+                                        <mat-menu #menu3="matMenu">
+                                            <button
+                                            (click)="setDone(problem)" class="mat-menu-item  w-100">
+                                            <i class="fas fa-check mr-2 fa-lg "></i>
+                                            Done
+                                        </button>
+                                        </mat-menu>
+                                    </td>
+
+                                    <td style="white-space: normal;max-width: 250px;">
 
                                         <div *ngIf="!problem.createMode">{{problem.description}}</div>
                                         <div *ngIf="problem.createMode">
@@ -125,17 +137,7 @@
                                                     [(ngModel)]="problem.description" matInput></textarea>
                                             </mat-form-field>
                                         </div>
-                                        <i style="margin-top: 23px ; color: #585858;"
-                                                                        class="fas fa-ellipsis-v fa-lg ml-1"
-                                                                        [matMenuTriggerFor]="menu3"></i>
-
-                                                                    <mat-menu #menu3="matMenu">
-                                                                        <button
-                                                                        (click)="setDone(problem)" class="mat-menu-item  w-100">
-                                                                        <i class="fas fa-check mr-2 fa-lg "></i>
-                                                                        Done
-                                                                    </button>
-                                                                    </mat-menu>
+                                        
                                     </td>
                                     <td style="white-space: normal;max-width: 200px;">
                                         <div *ngIf="!problem.createMode">{{problem.impact}}</div>
