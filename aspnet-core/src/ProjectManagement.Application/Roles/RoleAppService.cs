@@ -46,7 +46,8 @@ namespace ProjectManagement.Roles
 
         [AbpAuthorize(PermissionNames.Admin_Roles_Create)]
         public override async Task<RoleDto> CreateAsync(CreateRoleDto input)
-        {
+        {     
+
             CheckCreatePermission();
 
             var role = ObjectMapper.Map<Role>(input);
@@ -54,14 +55,8 @@ namespace ProjectManagement.Roles
 
             CheckErrors(await _roleManager.CreateAsync(role));
 
-            var grantedPermissions = PermissionManager
-                .GetAllPermissions()
-                .Where(p => input.GrantedPermissions.Contains(p.Name))
-                .ToList();
-
-            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
-
             return MapToEntityDto(role);
+
         }
 
         public async Task<ListResultDto<RoleListDto>> GetRolesAsync(GetRolesInput input)
