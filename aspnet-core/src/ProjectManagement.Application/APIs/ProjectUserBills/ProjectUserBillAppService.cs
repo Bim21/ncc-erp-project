@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
@@ -63,6 +64,21 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             UserType = x.User.UserType
                         });
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize]
+        public async Task<ProjectRateDto> GetRate(long projectId)
+        {
+            var query = WorkScope.GetAll<Project>().Include(x => x.Currency).Where(x => x.Id == projectId)
+                                .Select(x => new ProjectRateDto
+                                {
+                                    IsCharge = x.IsCharge,
+                                    ChargeType = x.ChargeType,
+                                    CurrencyName = x.Currency.Name
+
+                                });
+            return await query.FirstOrDefaultAsync();
         }
 
         [HttpPost]
