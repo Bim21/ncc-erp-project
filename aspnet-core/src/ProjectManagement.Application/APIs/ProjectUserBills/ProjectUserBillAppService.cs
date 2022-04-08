@@ -92,6 +92,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
             var duplicatedPUB = await WorkScope.GetAll<ProjectUserBill>()
                 .Where(s => s.UserId == input.UserId)
+                .Where(s => s.ProjectId == input.ProjectId)
                 .Select(s => new { s.User.FullName, s.BillRole, s.isActive, s.BillRate })
                 .FirstOrDefaultAsync();
 
