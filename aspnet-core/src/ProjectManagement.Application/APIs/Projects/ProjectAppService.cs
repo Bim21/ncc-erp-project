@@ -476,9 +476,10 @@ namespace ProjectManagement.APIs.Projects
             if (timesheetProject)
                 throw new UserFriendlyException($"Project has Timesheet Project !");
 
-            var pmReportProject = await WorkScope.GetAll<PMReportProject>().AnyAsync(x => x.ProjectId == projectID);
+            var pmReportProject = await WorkScope.GetAll<PMReportProject>()
+                .AnyAsync(x => x.ProjectId == projectID && x.Status == PMReportProjectStatus.Sent);
             if (pmReportProject)
-                throw new UserFriendlyException($"Project has Weekly Report !");
+                throw new UserFriendlyException($"Project has Weekly Report Sent !");
 
             var projectUser = await WorkScope.GetAll<ProjectUser>().AnyAsync(x => x.ProjectId == projectID);
             if (projectUser)
