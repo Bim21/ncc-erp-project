@@ -59,7 +59,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
+        [AbpAuthorize]
         public async Task<List<GetTimesheetProjectDto>> GetAllByProject(long projectId)
         {
             var query = from ts in WorkScope.GetAll<Timesheet>()
