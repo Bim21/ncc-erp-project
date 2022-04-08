@@ -148,6 +148,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         }
       }
       );
+      this.pmReportService.currentProjectType.subscribe(projectType => {
+        this.projectType = projectType;
+        this.getPmReportProject();
+      }      
+      );
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
       this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
       this.getPmReportProject();
@@ -831,15 +836,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             symbolSize: 2,
             data: chartData.normalWoringHours,
             type: 'line',
-            name: 'normal',
+            name: 'Normal',
           },
           {
-            showSymbol: false,
+            // showSymbol: false,
+            color:['#dc3545'],
             symbolSize: 2,
             data: hasOtValue ? chartData.overTimeHours : [],
             type: 'line',
             name: 'OT',
-            lineStyle: { color: 'red' }
+            lineStyle: { color: '#dc3545' }
           }
         ]
       };
