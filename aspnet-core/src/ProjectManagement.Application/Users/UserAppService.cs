@@ -166,13 +166,12 @@ namespace ProjectManagement.Users
                     StartTime = pu.StartTime,
                     Status = pu.Status,
                 })
-                .OrderBy(s => s.Status)
-                .ThenByDescending(s => s.StartTime)
+                .OrderBy(s => s.StartTime)
                 .ToListAsync();
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Admin_Users_UpdateSkill)]
+        [AbpAuthorize]
 
         public async Task updateUserSkill(UpdateUserSkillDto input)
         {

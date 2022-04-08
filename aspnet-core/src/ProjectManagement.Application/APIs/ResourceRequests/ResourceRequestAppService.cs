@@ -112,7 +112,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_CreateNewRequest)]
+        [AbpAuthorize]
         public async Task<List<GetResourceRequestDto>> Create(CreateResourceRequestDto input)
         {
             if (input.Quantity <= 0)
@@ -162,7 +162,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.ResourceRequest_Edit)]
+        [AbpAuthorize]
         public async Task<GetResourceRequestDto> Update(UpdateResourceRequestDto input)
         {
             if (input.SkillIds == null || input.SkillIds.IsEmpty())
@@ -214,7 +214,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.ResourceRequest_Delete)]
+        [AbpAuthorize]
         public async Task Delete(long resourceRequestId)
         {
             var IsPlannedResource = await WorkScope.GetAll<ProjectUser>()
@@ -257,7 +257,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_Cancel)]
+        [AbpAuthorize]
         public async Task<GetResourceRequestDto> Cancel(long requestId)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(requestId);
@@ -283,7 +283,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_Edit)]
+        [AbpAuthorize]
         public async Task<UpdateRequestNoteDto> UpdatePMNote(UpdateRequestNoteDto input)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
@@ -296,7 +296,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_Edit)]
+        [AbpAuthorize]
         public async Task<UpdateRequestNoteDto> UpdateHPMNote(UpdateRequestNoteDto input)
         {
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
@@ -311,7 +311,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_SetDone)]
+        [AbpAuthorize]
         public async Task<ResourceRequestSetDoneDto> SetDone(ResourceRequestSetDoneDto input)
         {
             var request = await WorkScope.GetAll<ResourceRequest>()
@@ -413,7 +413,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_PlanNewResourceForRequest)]
+        [AbpAuthorize]
         public async Task<PlanUserInfoDto> CreateResourceRequestPlan(ResourceRequestPlanDto input)
         {
             if (!input.ResourceRequestId.HasValue)
@@ -460,7 +460,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_UpdateResourceRequestPlan)]
+        [AbpAuthorize]
         public async Task<PlanUserInfoDto> UpdateResourceRequestPlan(ResourceRequestPlanDto input)
         {
             var projectUser = WorkScope.Get<ProjectUser>(input.ProjectUserId);
@@ -481,7 +481,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         }
 
         [HttpDelete]
-        [AbpAuthorize(PermissionNames.ResourceRequest_RemoveResouceRequestPlan)]
+        [AbpAuthorize]
         public async Task DeleteResourceRequestPlan(long requestId)
         {
             var request = await WorkScope.GetAll<ResourceRequest>()

@@ -1,4 +1,4 @@
-<section class="content px-2 mt-2"  *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
+<section class="content px-2 mt-2"  *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
         <div class="card mt-3">
 
@@ -81,7 +81,7 @@
 
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <span class="text-center" *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
                                         </span>
                                         <div *ngIf="bill.createMode">
@@ -94,7 +94,7 @@
 
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <span *ngIf="!bill.createMode">{{bill.startTime |date:"dd/MM/yyyy"}}</span>
                                         <div *ngIf="bill.createMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
@@ -113,7 +113,7 @@
                                             </mat-error>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <span class="text-center" *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
                                         <div *ngIf="bill.createMode">
                                             <mat-form-field appearance="outline" style="width: 150px;">
@@ -141,7 +141,7 @@
                                                 placeholder="Note" name="billNote" [(ngModel)]="bill.note"></textarea>
                                         </div>
                                     </td>
-                                    <td style="white-space: normal; min-width: 150px;text-align: left;">
+                                    <td  style="white-space: normal; min-width: 150px;text-align: left;">
                                         <span *ngIf="!bill.createMode">
                                             {{bill.shadowNote}}
                                         </span>
@@ -152,7 +152,7 @@
                                                 [(ngModel)]="bill.shadowNote"></textarea>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <div *ngIf="!bill.createMode">
                                             <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"

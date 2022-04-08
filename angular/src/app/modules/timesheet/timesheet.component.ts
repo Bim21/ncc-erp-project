@@ -15,7 +15,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> implements OnInit {
   Timesheets_View = PERMISSIONS_CONSTANT.Timesheets_View;
-  Timesheets_ViewList = PERMISSIONS_CONSTANT.Timesheets_ViewList;
   Timesheets_Create = PERMISSIONS_CONSTANT.Timesheets_Create;
   Timesheets_Edit = PERMISSIONS_CONSTANT.Timesheets_Edit;
   Timesheets_Delete = PERMISSIONS_CONSTANT.Timesheets_Delete;
