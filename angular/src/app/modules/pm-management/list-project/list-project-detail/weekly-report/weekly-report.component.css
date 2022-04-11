@@ -289,3 +289,6 @@ th {
     vertical-align: middle;
     white-space: nowrap;
 }
+.current-resource th, td{
+    padding: 0;    
+}

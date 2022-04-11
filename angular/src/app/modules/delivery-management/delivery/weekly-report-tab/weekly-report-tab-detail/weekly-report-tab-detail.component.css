@@ -139,3 +139,6 @@ th {
     vertical-align: middle;
     white-space: nowrap;
 }
+#current-resource td, th{
+    padding: 0;
+}

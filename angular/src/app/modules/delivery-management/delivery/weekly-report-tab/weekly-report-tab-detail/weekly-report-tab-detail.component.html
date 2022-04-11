@@ -129,7 +129,7 @@
 
                                     <td style="white-space: normal;max-width: 250px;">
 
-                                        <div *ngIf="!problem.createMode">{{problem.description}}</div>
+                                        <div class="text-danger" *ngIf="!problem.createMode">{{problem.description}}</div>
                                         <div *ngIf="problem.createMode">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
@@ -208,7 +208,7 @@
 
 
 
-                    <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource)">
+                    <div class="card" id="current-resource" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource)">
                         <div class="card-body">
                             <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
                             <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>

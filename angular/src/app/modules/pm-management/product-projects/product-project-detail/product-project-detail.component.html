@@ -18,7 +18,7 @@
                     <!-- <a *ngIf="permission.isGranted(PmManager_CanViewMenu_ProjectChecklist)"  [ngClass]="currentUrl.includes('training-timesheet-tab')?'active':''" mat-tab-link (click)="routingProjectChecklistTab()">
                         Project Checklist
                     </a> -->
-                    <a *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabTimesheet)" [ngClass]="currentUrl.includes('training-timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
+                    <a *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabTimesheet)" [ngClass]="currentUrl.includes('product-timesheet-tab')?'active':''" mat-tab-link (click)="routingTimesheetTab()">
                         Timesheet
                     </a>
                     <a *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabProjectDescription)" [ngClass]="currentUrl.includes('training-description-tab')?'active':''" mat-tab-link (click)="routingDescriptionTab()">

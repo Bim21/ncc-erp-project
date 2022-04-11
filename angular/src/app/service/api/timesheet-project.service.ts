@@ -90,4 +90,5 @@ export class TimesheetProjectService extends BaseApiService {
   public GetBillInfoChart(projectId,fromDate?,toDate?): Observable<any>{
     return this.http.get<any>(this.rootUrl + `/GetBillInfoChart?projectId=${projectId}&fromDate=${fromDate}&toDate=${toDate}`);
   }
+  
 }

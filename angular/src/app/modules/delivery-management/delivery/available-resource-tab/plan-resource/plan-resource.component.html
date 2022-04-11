@@ -98,7 +98,7 @@
                                 </td>
                                 <td style="width: 350px;">
                                     <div style="width: 100%; display: flex; flex-direction: row; align-items: center;">
-                                        <app-user-info [userData]="{
+                                        <app-user-info class="w-100" [userData]="{
                         fullName: item.fullName,
                         branch: item.branch,
                         userType: item.userType,
@@ -118,7 +118,7 @@
                                     <div class="d-flex justify-content-between" style="align-items: center;">
                                         <div>
                                             <div *ngFor="let plan of item.plannedProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
-                                                <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="planMenu">
+                                                <button class="btn p-0 text-left" style="white-space: normal;" [matMenuTriggerFor]="planMenu">
                                                     <span [ngClass]="plan.onHover?'on-hover-plan':''">
                                                         <span matTooltip="Potential project" *ngIf="plan.projectStatus==APP_ENUM.ProjectStatus.Potential" 
                                                         class="badge bg-info pointer mr-1">

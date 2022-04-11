@@ -228,7 +228,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.isLoading = false;
         this.GetTimesheetWeeklyChartOfProject(this.projectInfo.projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
-        this.getDataForBillChart()
         this.router.navigate(
           [],
           {
@@ -321,23 +320,20 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
 
     });
-    this.projectId = this.pmReportProjectList[0]?.projectId
-    this.generalNote = this.pmReportProjectList[0].note
-    this.automationNote = this.pmReportProjectList[0].automationNote
-    this.totalOverTime = this.pmReportProjectList[0].totalOverTime
+    // this.projectId = this.pmReportProjectList[0]?.projectId
+    // this.generalNote = this.pmReportProjectList[0].note
+    // this.automationNote = this.pmReportProjectList[0].automationNote
+    // this.totalOverTime = this.pmReportProjectList[0].totalOverTime
 
-    this.pmReportProjectId = this.pmReportProjectList[0].id
-    this.pmReportProjectList.forEach(element => {
-      if (element.projectId == this.pmReportProjectList[0].projectId) {
-        element.setBackground = true;
-      } else {
-        element.setBackground = false;
-      }
-    });
-    // this.getProjectInfo();
-    // this.getChangedResource();
-    // this.getFuturereport();
-    // this.getProjectProblem()
+    // this.pmReportProjectId = this.pmReportProjectList[0].id
+    // this.pmReportProjectList.forEach(element => {
+    //   if (element.projectId == this.pmReportProjectList[0].projectId) {
+    //     element.setBackground = true;
+    //   } else {
+    //     element.setBackground = false;
+    //   }
+    // });
+
     this.searchUser = ""
   }
 
@@ -709,11 +705,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       var myChart = echarts.init(chartDom);
       var option: echarts.EChartsOption;
 
-      let hasOtValue = normalAndOTchartData.overTimeHours.some(item => item > 0)
+      let hasOtValue = normalAndOTchartData?.overTimeHours.some(item => item > 0)
       let hasOfficalDataNormal = officalChartData?.normalWoringHours.some(item => item > 0)
       let hasOfficalDataOT = officalChartData?.overTimeHours.some(item => item > 0)
       let hasTempDataNormal = TempChartData?.normalWoringHours.some(item => item > 0)
       let hasTempDataOT = TempChartData?.overTimeHours.some(item => item > 0)
+      let hasOtNoCharge = normalAndOTchartData?.otNoChargeHours.some(item => item > 0)
 
       if (JSON.stringify(normalAndOTchartData?.normalWoringHours) == JSON.stringify(officalChartData?.normalWoringHours)) {
         hasOfficalDataNormal = false
@@ -733,11 +730,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         legend: {
           left:'25%',
           width:'80%',
-          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-          `${hasTempDataOT ? 'OT Temp' : ''}`], 
+          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
         },
-        color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
+        color: ['black', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
         grid: {
           left: '3%',
           right: '4%',
@@ -758,7 +755,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         },
         series: [
           {
-            lineStyle: { color: 'green' },
+            lineStyle: { color: 'black' },
             name: 'Total normal',
             type: 'line',
             data: normalAndOTchartData?.normalWoringHours
@@ -789,6 +786,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             name: 'OT Temp',
             type: 'line',
             data: hasTempDataOT ? TempChartData?.overTimeHours : []
+          },{
+            lineStyle: { color: 'green' },
+            name: 'OT No Charge',
+            type: 'line',
+            data: hasOtNoCharge ? TempChartData?.otNoChargeHours : []
           },
 
         ]
@@ -805,6 +807,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     // var chartDom = document.getElementById(user.userId.toString());
     // var myChart = echarts.init(chartDom);
     let hasOtValue = chartData.overTimeHours.some(item => item > 0)
+    let hasOtNocharge = chartData.otNoChargeHours.some(item => item > 0)
     setTimeout(() => {
 
       let chartDom = document.getElementById('user' + user.userId);
@@ -848,6 +851,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             type: 'line',
             name: 'OT',
             lineStyle: { color: '#dc3545' }
+          },
+          {
+            // showSymbol: false,
+            color:['orange'],
+            symbolSize: 2,
+            data: hasOtNocharge ? chartData.otNoChargeHours : [],
+            type: 'line',
+            name: 'OT no charge',
+            lineStyle: { color: 'orange' }
           }
         ]
       };
@@ -871,6 +883,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   // TimesheetWeeklyChart
   async GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime) {
     let chartData = {} as any
+    var todayDate: any = new Date();
+    var currentDate = this.formatDateYMD(todayDate)
+    let fiveMonthAgo = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
     await this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
       chartData.normalAndOT = rs.result
     })
@@ -881,10 +896,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         startDate: startTime,
         endDate: endTime
       }
+      let effortRequestBody = {
+        projectCode: this.projectInfo.projectCode,
+        emails: this.officalResourceList,
+        startDate: fiveMonthAgo,
+        endDate: currentDate 
+      }
       await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(officalRequestBody).toPromise().then(rs => {
         chartData.offical = rs.result
       })
 
+      await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
+        chartData.effort = rs.result
+      })
     }
 
     if (this.tempResourceList.length > 0) {
@@ -899,7 +923,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       })
     }
 
+    
+    await this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate).toPromise().then(data => {
+      chartData.billChart = data.result
+    })
+   
     this.buildProjectTSChart(chartData.normalAndOT, chartData.offical, chartData.temp)
+    this.buildBillChart(chartData.billChart, chartData.effort)
+
+
   }
 
   GetTimesheetWeeklyChartOfUserInProject(projectCode, user, startTime, endTime) {
@@ -1025,19 +1057,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     )
   }
 
-  //
-  getDataForBillChart() {
-    var todayDate: any = new Date();
-    var toDate = this.formatDateYMD(todayDate)
-    let fromDate = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
-    this.tsProjectService.GetBillInfoChart(this.projectId, fromDate, toDate).subscribe(data => {
-      this.buildBillChart(data.result)
-    })
-  }
 
 
 
-  public buildBillChart(chartData) {
+
+  public buildBillChart(billData, EffortData) {
 
     // var chartDom = document.getElementById(user.userId.toString());
     // var myChart = echarts.init(chartDom);
@@ -1050,7 +1074,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       let option: echarts.EChartsOption;
       option = {
         tooltip: {
-          // trigger: 'axis',
+          trigger: 'axis',
         },
         title: {
           text: 'Bill info'
@@ -1062,7 +1086,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           containLabel: true
         },
         legend: {
-          data: ['ManMonths', 'ManDays']
+          data: ['Bill.ManMonth', 'Bill.ManDay', `${EffortData?.manDays? 'Effort.ManDay' : ''}`]
         },
         xAxis: [
           {
@@ -1070,7 +1094,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
               padding: [4, 0, 0, 0]
             },
             type: 'category',
-            data: chartData.labels,
+            data: billData.labels,
             boundaryGap: false,
           }
         ],
@@ -1080,7 +1104,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
               padding: [0, 13, 0, 13]
             },
             type: 'value',
-            name: 'ManMonths',
+            name: 'ManMonth',
 
           },
           {
@@ -1088,7 +1112,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
               padding: [0, 13, 0, 13]
             },
             type: 'value',
-            name: 'ManDays',
+            name: 'ManDay',
 
           }
         ],
@@ -1096,15 +1120,21 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
           {
             barWidth: 30,
-            name: 'ManMonths',
+            name: 'Bill.ManMonth',
             type: 'bar',
-            data: chartData.manMonths
+            data: billData.manMonths
           },
           {
-            name: 'ManDays',
+            name: 'Bill.ManDay',
             type: 'line',
             yAxisIndex: 1,
-            data: chartData.manDays
+            data: billData.manDays
+          },
+          {
+            name: 'Effort.ManDay',
+            type: 'line',
+            yAxisIndex: 1,
+            data: EffortData?.manDays
           }
         ]
       };
