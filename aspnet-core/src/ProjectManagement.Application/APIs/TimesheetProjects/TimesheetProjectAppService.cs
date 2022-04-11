@@ -760,8 +760,193 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return worksheet;
         }
 
-        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax)]
+        private async Task<ResultProjectInvoice> ProjectExportForTax(List<Project> listProject, long timesheetId)
+        {
+            var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
+            var listProjectInvoice = new List<ProjectInvoice>();
+            var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
+            List<string> listProjectCode = new List<string> { };
+            foreach (var project in listProject)
+            {
+                var listUserBillProject = new List<TimeSheetProjectBillExcelDto>();
+                var query = (from pub in WorkScope.GetAll<ProjectUserBill>()
+                             join tpb in WorkScope.GetAll<TimesheetProjectBill>() on pub.ProjectId equals tpb.ProjectId
+                             where pub.UserId == tpb.UserId
+                             where tpb.TimesheetId == timesheetId && tpb.ProjectId == project.Id && tpb.IsActive
+                             orderby tpb.CreationTime descending
+                             select new
+                             {
+                                 StartTime = pub.StartTime.Date,
+                                 EndTime = pub.EndTime.Value.Date,
+                                 tpb
+                             });
+                switch (project?.ChargeType)
+                {
+                    case ChargeType.Daily:
+                        listUserBillProject = await query.Select(x => new TimeSheetProjectBillExcelDto
+                        {
+                            FullName = x.tpb.User.FullName,
+                            EmailAddress = x.tpb.User.EmailAddress,
+                            WorkingTime = x.tpb.WorkingTime,
+                            BillRate = x.tpb.BillRate,
+                            LineTotal = x.tpb.WorkingTime * x.tpb.BillRate,
+                            StartTime = x.StartTime,
+                            EndTime = x.EndTime,
+                            ProjectName = project.Name
+                        }).ToListAsync();
+                        break;
+                    case ChargeType.Monthly:
+                        listUserBillProject = await query.Select(x => new TimeSheetProjectBillExcelDto
+                        {
+                            FullName = x.tpb.User.FullName,
+                            EmailAddress = x.tpb.User.EmailAddress,
+                            WorkingTime = x.tpb.WorkingTime,
+                            BillRate = (double)(x.tpb.BillRate / x.tpb.TimeSheet.TotalWorkingDay),
+                            LineTotal = x.tpb.WorkingTime * (double)(x.tpb.BillRate / x.tpb.TimeSheet.TotalWorkingDay),
+                            StartTime = x.StartTime,
+                            EndTime = x.EndTime,
+                            ProjectName = project.Name
+                        }).ToListAsync();
+                        break;
+                    case ChargeType.Hours:
 
+                        listUserBillProject = await query.Select(x => new TimeSheetProjectBillExcelDto
+                        {
+                            FullName = x.tpb.User.FullName,
+                            EmailAddress = x.tpb.User.EmailAddress,
+                            WorkingTime = x.tpb.WorkingTime,
+                            BillRate = x.tpb.BillRate * defaultWorkingHours,
+                            LineTotal = x.tpb.WorkingTime * x.tpb.BillRate * defaultWorkingHours,
+                            StartTime = x.StartTime,
+                            EndTime = x.EndTime,
+                            ProjectName = project.Name
+                        }).ToListAsync();
+                        break;
+                }
+                invoiceUserBilling.AddRange(listUserBillProject);
+
+                var projectInvoice = new ProjectInvoice
+                {
+                    ProjectCode = project.Code,
+                    ProjectName = project.Name,
+                    ListMemberOfProject = listUserBillProject
+                    .Select(x => new MemberOfProject
+                    {
+                        EmailAddress = x.EmailAddress,
+                        WorkingTimeDay = x.WorkingTime,
+                        FullName = x.FullName,
+                        BillRate = x.BillRate,
+                        LineTotal = x.LineTotal,
+                        StartTime = x.StartTime,
+                        EndTime = x.EndTime
+                    }).ToList()
+                };
+                listProjectCode.Add(project.Code);
+                listProjectInvoice.Add(projectInvoice);
+            }
+
+            var resultProjectInvoice = new ResultProjectInvoice
+            {
+                ListProjectInvoice = listProjectInvoice,
+                ListProjectCode = listProjectCode,
+            };
+            return resultProjectInvoice;
+
+        }
+
+        private async Task<List<TimesheetDetailOfUser>> ResultTimesheetDetailOfUserInProject(InvoiceExcelDto invoiceExcelDto)
+        {
+            var listProject = await WorkScope.GetAll<Project>().Where(x => invoiceExcelDto.ProjectId.Contains(x.Id)).Include(x => x.Client).Include(x => x.Currency).ToListAsync();
+            var timesheet = await WorkScope.GetAll<Timesheet>().Where(s => s.Id == invoiceExcelDto.TimesheetId).FirstOrDefaultAsync();
+
+            var resultProjectInvoice = await ProjectExportForTax(listProject, invoiceExcelDto.TimesheetId);
+            var listProjectCode = resultProjectInvoice.ListProjectCode;
+            var listProjectInvoice = resultProjectInvoice.ListProjectInvoice;
+
+            var inputTimesheetTaxDto = new InputTimesheetTaxDto
+            {
+                Year = timesheet.Year,
+                Month = timesheet.Month,
+                ProjectCodes = listProjectCode
+            };
+
+            var getTimesheetDetailForTax = await GetTimesheetDetailForTaxInTimesheetTool(inputTimesheetTaxDto);
+
+            //Detail timesheet of user in project
+            var listTimesheet = getTimesheetDetailForTax.ListTimesheet;
+            var listWorkingDay = getTimesheetDetailForTax.ListWorkingDay;
+            List<DateTime> listWorkingDayProjectUserBill = new List<DateTime> { };
+
+            var listTimesheetDetailOfUser = new List<TimesheetDetailOfUser>();
+
+            foreach (var projectInvoice in listProjectInvoice)
+            {
+                foreach (var memberOfProject in projectInvoice.ListMemberOfProject)
+                {
+                    var timesheetDetailOfUser = new TimesheetDetailOfUser { };
+                    var listTimesheetDetail = new List<TimesheetDetail>();
+                    var firstDayOfMonth = DateTimeUtils.FirstDayOfMonth(new DateTime(timesheet.Year, timesheet.Month, 1));
+                    var lastDayOfMonth = DateTimeUtils.LastDayOfMonth(new DateTime(timesheet.Year, timesheet.Month, 1));
+                    var startBillDate = new DateTime(Math.Max(firstDayOfMonth.Ticks, memberOfProject.StartTime.Ticks));
+                    var endTime = memberOfProject.EndTime.HasValue ? memberOfProject.EndTime.Value : lastDayOfMonth;
+                    var endBillDate = new DateTime(Math.Min(lastDayOfMonth.Ticks, endTime.Ticks));
+
+                    listWorkingDayProjectUserBill = listWorkingDay.Where(x => x.Date >= startBillDate.Date && x.Date <= endBillDate.Date).ToList();
+                    var listTimesheetByProjectAndUser = listTimesheet.Where(x => x.EmailAddress == memberOfProject.EmailAddress)
+                        .Where(x => x.ProjectCode == projectInvoice.ProjectCode).OrderBy(x => x.DateAt).ToList();
+
+                    float totalWorkingHour = 0;
+                    float workingTimeHourDB = 0;
+                    string taskName = "";
+                    string note = "";
+                    float workingHour = 8;
+                    DateTime dateAtLast = DateTime.Today;
+
+                    workingTimeHourDB = memberOfProject.WorkingTimeDay * 8;
+                    taskName = listTimesheetByProjectAndUser.Select(x => x.TaskName).FirstOrDefault();
+                    foreach (var workingDayProjectUserBill in listWorkingDayProjectUserBill)
+                    {
+                        if (workingTimeHourDB == totalWorkingHour) break;
+                        workingHour = Math.Min((workingTimeHourDB - totalWorkingHour), 8);
+                        var timesheetByProjectAndUser = listTimesheetByProjectAndUser.Where(x => x.DateAt.Date == workingDayProjectUserBill.Date).FirstOrDefault();
+
+                        if (timesheetByProjectAndUser != null)
+                        {
+                            taskName = timesheetByProjectAndUser.TaskName;
+                            note = timesheetByProjectAndUser.Note;
+                            dateAtLast = timesheetByProjectAndUser.DateAt;
+                        }
+                        else
+                        {
+                            taskName = listTimesheetByProjectAndUser.Where(x => x.DateAt.Date == dateAtLast.Date).Select(x => x.TaskName).FirstOrDefault();
+                            note = "";
+                        }
+
+                        totalWorkingHour += workingHour;
+                        var timesheetDetail = new TimesheetDetail
+                        {
+                            DateAt = workingDayProjectUserBill.ToString("dd/MM/yyyy"),
+                            WorkingTime = workingHour,
+                            TaskName = taskName,
+                            Note = note,
+                        };
+                        listTimesheetDetail.Add(timesheetDetail);
+                    }
+                    timesheetDetailOfUser.FullName = memberOfProject.FullName.Replace(" ", "");
+                    timesheetDetailOfUser.ProjectName = projectInvoice.ProjectName.Replace(" ", "");
+                    timesheetDetailOfUser.WorkingTimeDay = memberOfProject.WorkingTimeDay;
+                    timesheetDetailOfUser.BillRate = memberOfProject.BillRate;
+                    timesheetDetailOfUser.LineTotal = memberOfProject.LineTotal;
+                    timesheetDetailOfUser.ListTimesheetDetail = listTimesheetDetail;
+                    listTimesheetDetailOfUser.Add(timesheetDetailOfUser);
+                }
+            }
+        
+
+            return listTimesheetDetailOfUser;
+        }
+
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax)]
         public async Task<FileBase64Dto> ExportInvoiceForTax(InvoiceExcelDto invoiceExcelDto)
         {
             try
@@ -780,88 +965,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
                 var timesheet = await WorkScope.GetAll<Timesheet>().Where(s => s.Id == invoiceExcelDto.TimesheetId).FirstOrDefaultAsync();
 
-                foreach (var project in listProject)
-                {
-                    var listUserBillProject = new List<TimeSheetProjectBillExcelDto>();
-                    var query = (from pub in WorkScope.GetAll<ProjectUserBill>()
-                                 join tpb in WorkScope.GetAll<TimesheetProjectBill>() on pub.ProjectId equals tpb.ProjectId
-                                 where pub.UserId == tpb.UserId
-                                 where tpb.TimesheetId == invoiceExcelDto.TimesheetId && tpb.ProjectId == project.Id && tpb.IsActive
-                                 orderby tpb.CreationTime descending
-                                 select new
-                                 {
-                                     StartTime = pub.StartTime.Date,
-                                     EndTime = pub.EndTime.Value.Date,
-                                     tpb
-                                 });
-                    switch (project?.ChargeType)
-                    {
-                        case ChargeType.Daily:
-                            listUserBillProject = await query.Select(x => new TimeSheetProjectBillExcelDto
-                            {
-                                FullName = x.tpb.User.FullName,
-                                EmailAddress = x.tpb.User.EmailAddress,
-                                WorkingTime = x.tpb.WorkingTime,
-                                BillRate = x.tpb.BillRate,
-                                LineTotal = x.tpb.WorkingTime * x.tpb.BillRate,
-                                StartTime = x.StartTime,
-                                EndTime = x.EndTime,
-                                ProjectName = project.Name
-                            }).ToListAsync();
-                            break;
-                        case ChargeType.Monthly:
-                            listUserBillProject = await query.Select(x => new TimeSheetProjectBillExcelDto
-                            {
-                                FullName = x.tpb.User.FullName,
-                                EmailAddress = x.tpb.User.EmailAddress,
-                                WorkingTime = x.tpb.WorkingTime,
-                                BillRate = (double)(x.tpb.BillRate / x.tpb.TimeSheet.TotalWorkingDay),
-                                LineTotal = x.tpb.WorkingTime * (double)(x.tpb.BillRate / x.tpb.TimeSheet.TotalWorkingDay),
-                                StartTime = x.StartTime,
-                                EndTime = x.EndTime,
-                                ProjectName = project.Name
-                            }).ToListAsync();
-                            break;
-                        case ChargeType.Hours:
-
-                            listUserBillProject = await query.Select(x => new TimeSheetProjectBillExcelDto
-                            {
-                                FullName = x.tpb.User.FullName,
-                                EmailAddress = x.tpb.User.EmailAddress,
-                                WorkingTime = x.tpb.WorkingTime,
-                                BillRate = x.tpb.BillRate * defaultWorkingHours,
-                                LineTotal = x.tpb.WorkingTime * x.tpb.BillRate * defaultWorkingHours,
-                                StartTime = x.StartTime,
-                                EndTime = x.EndTime,
-                                ProjectName = project.Name
-                            }).ToListAsync();
-                            break;
-                    }
-                    invoiceUserBilling.AddRange(listUserBillProject);
-                    listProjectCode.Add(project.Code);
-                    var projectInvoice = new ProjectInvoice
-                    {
-                        ProjectCode = project.Code,
-                        ProjectName = project.Name,
-                        ListMemberOfProject = listUserBillProject
-                        .Select(x => new MemberOfProject
-                        {
-                            EmailAddress = x.EmailAddress,
-                            WorkingTimeDay = x.WorkingTime,
-                            FullName = x.FullName,
-                            StartTime = x.StartTime,
-                            EndTime = x.EndTime,
-                        }).ToList()
-                    };
-                    listProjectInvoice.Add(projectInvoice);
-                }
-                var inputTimesheetTaxDto = new InputTimesheetTaxDto
-                {
-                    Year = timesheet.Year,
-                    Month = timesheet.Month,
-                    ProjectCodes = listProjectCode
-                };
-                var getTimesheetDetailForTax = await GetTimesheetDetailForTaxInTimesheetTool(inputTimesheetTaxDto);
+                var listTimesheetDetailOfUser = await ResultTimesheetDetailOfUserInProject(invoiceExcelDto);
 
                 using (var memoryStream = new MemoryStream(File.ReadAllBytes(templateFilePath)))
                 {
@@ -869,79 +973,46 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     {
                         var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
                         var companySetupSheet = excelPackageIn.Workbook.Worksheets[1];
+                        var countListProject = listProject.Count;
+                        int currentRowInvoice = 15;
+                        double sumLineTotal = 0;
+                        var invoiceDetailTable = invoiceSheet.Tables.First();
+                        var invoiceDetailTableStart = invoiceDetailTable.Address.Start;
+                        invoiceSheet.InsertRow(invoiceDetailTableStart.Row + 1, listTimesheetDetailOfUser.Count - 1, invoiceDetailTableStart.Row + listTimesheetDetailOfUser.Count);
 
-                        //Detail
-                        int currentRow = 3;
-                        var listTimesheet = getTimesheetDetailForTax.ListTimesheet;
-                        var listWorkingDay = getTimesheetDetailForTax.ListWorkingDay;
-                        List<DateTime> listWorkingDayProjectUserBill = new List<DateTime> { };
-                        foreach (var projectInvoice in listProjectInvoice)
+                        foreach (var timesheetDetailOfUser in listTimesheetDetailOfUser)
                         {
-                            foreach (var memberOfProject in projectInvoice.ListMemberOfProject)
+                            int currentRow = 3;
+                            //index start table in excel template
+                            var nameSheetDetailTimesheet = timesheetDetailOfUser.FullName + "_" + timesheetDetailOfUser.ProjectName;
+                            if (countListProject == 1)
                             {
-                                var firstDayOfMonth = DateTimeUtils.FirstDayOfMonth(new DateTime(timesheet.Year, timesheet.Month, 1));
-                                var lastDayOfMonth = DateTimeUtils.LastDayOfMonth(new DateTime(timesheet.Year, timesheet.Month, 1));
-                                var startBillDate = new DateTime(Math.Max(firstDayOfMonth.Ticks, memberOfProject.StartTime.Ticks));
-                                var endTime = memberOfProject.EndTime.HasValue ? memberOfProject.EndTime.Value : lastDayOfMonth;
-                                var endBillDate = new DateTime(Math.Min(lastDayOfMonth.Ticks, endTime.Ticks));
-
-                                listWorkingDayProjectUserBill = listWorkingDay.Where(x => x.Date >= startBillDate.Date && x.Date <= endBillDate.Date).ToList();
-                                var listTimesheetByProjectAndUser = listTimesheet.Where(x => x.EmailAddress == memberOfProject.EmailAddress)
-                                    .Where(x => x.ProjectCode == projectInvoice.ProjectCode).OrderBy(x => x.DateAt).ToList();
-
-                                float totalWorkingHour = 0;
-                                float workingTimeHourDB = 0;
-                                string taskName = "";
-                                string note = "";
-                                float workingHour = 8;
-                                DateTime dateAtLast = DateTime.Today;
-
-                                var nameSheetDetailTimesheet = memberOfProject.FullName.Replace(" ", "") + "_" + projectInvoice.ProjectName.Replace(" ", "");
-                                if (listProjectCode.Count == 1)
-                                {
-                                    nameSheetDetailTimesheet = memberOfProject.FullName.Replace(" ", "");
-                                }
-                                var sheetDetailTimesheet = CopySheet(excelPackageIn.Workbook, "Detail", nameSheetDetailTimesheet);
-                                sheetDetailTimesheet.Cells["B1:E1"].Value = $"TIMESHEET DETAIL OF PROJECT {projectInvoice.ProjectName.ToUpper()} - {memberOfProject.FullName.ToUpper()}"; ;
-                                sheetDetailTimesheet.Cells["B1:E1"].Style.WrapText = true;
-
-                                var detailTimesheetTable = sheetDetailTimesheet.Tables.First();
-                                var detailTimesheetTableStart = detailTimesheetTable.Address.Start;
-                                currentRow = detailTimesheetTableStart.Row + 1;
-
-                                workingTimeHourDB = memberOfProject.WorkingTimeDay * 8;
-                                taskName = listTimesheetByProjectAndUser.Select(x => x.TaskName).FirstOrDefault();
-                                foreach (var workingDayProjectUserBill in listWorkingDayProjectUserBill)
-                                {
-                                    if (workingTimeHourDB == totalWorkingHour) break;
-                                    workingHour = Math.Min((workingTimeHourDB - totalWorkingHour), 8);
-                                    var timesheetByProjectAndUser = listTimesheetByProjectAndUser.Where(x => x.DateAt.Date == workingDayProjectUserBill.Date).FirstOrDefault();
-
-                                    if (timesheetByProjectAndUser != null)
-                                    {
-                                        taskName = timesheetByProjectAndUser.TaskName;
-                                        note = timesheetByProjectAndUser.Note;
-                                        dateAtLast = timesheetByProjectAndUser.DateAt;
-                                    }
-                                    else
-                                    {
-                                        taskName = listTimesheetByProjectAndUser.Where(x => x.DateAt.Date == dateAtLast.Date).Select(x => x.TaskName).FirstOrDefault();
-                                        note = "";
-                                    }
-
-                                    totalWorkingHour += workingHour;
-                                    sheetDetailTimesheet.InsertRow(currentRow, 1);
-                                    sheetDetailTimesheet.Cells[currentRow, 2].Value = workingDayProjectUserBill.ToString("dd/MM/yyyy");
-                                    sheetDetailTimesheet.Cells[currentRow, 3].Value = workingHour;
-                                    sheetDetailTimesheet.Cells[currentRow, 4].Value = taskName;
-                                    sheetDetailTimesheet.Cells[currentRow, 5].Value = note;
-
-                                    currentRow++;
-                                }
-                                //
+                                nameSheetDetailTimesheet = timesheetDetailOfUser.FullName;
                             }
-                        }
+                            var sheetDetailTimesheet = CopySheet(excelPackageIn.Workbook, "Detail", nameSheetDetailTimesheet);
+                            sheetDetailTimesheet.Cells["B1:E1"].Value = $"TIMESHEET DETAIL OF PROJECT {timesheetDetailOfUser.ProjectName.ToUpper()} - {timesheetDetailOfUser.FullName.ToUpper()}"; ;
+                            sheetDetailTimesheet.Cells["B1:E1"].Style.WrapText = true;
 
+                            sheetDetailTimesheet.InsertRow(currentRow, timesheetDetailOfUser.ListTimesheetDetail.Count);
+                            foreach (var timesheetDetail in timesheetDetailOfUser.ListTimesheetDetail)
+                            {
+                                //Fill data sheet timesheet detail
+                                sheetDetailTimesheet.Cells[currentRow, 2].Value = timesheetDetail.DateAt;
+                                sheetDetailTimesheet.Cells[currentRow, 3].Value = timesheetDetail.WorkingTime;
+                                sheetDetailTimesheet.Cells[currentRow, 4].Value = timesheetDetail.TaskName;
+                                sheetDetailTimesheet.Cells[currentRow, 5].Value = timesheetDetail.Note;
+                                currentRow++;
+                            }
+
+                            //Fill data sheet invoice
+                            invoiceSheet.Cells[currentRowInvoice, 2].Formula = "=HYPERLINK(\"#" + nameSheetDetailTimesheet + "!A1\",\"" + timesheetDetailOfUser.FullName + "\")";
+                            invoiceSheet.Cells[currentRowInvoice, 3].Value = timesheetDetailOfUser.ProjectName;
+                            invoiceSheet.Cells[currentRowInvoice, 4].Value = timesheetDetailOfUser.WorkingTimeDay;
+                            invoiceSheet.Cells[currentRowInvoice, 5].Value = timesheetDetailOfUser.BillRate;
+                            invoiceSheet.Cells[currentRowInvoice, 6].Value = timesheetDetailOfUser.LineTotal;
+                            sumLineTotal += timesheetDetailOfUser.LineTotal;
+                            currentRowInvoice++;
+                        }
                         invoiceSheet.PrinterSettings.FitToHeight = 0;
                         invoiceSheet.Cells["E2"].Value = listProject[0].Client?.Name;
                         foreach (var project in listProject)
@@ -957,48 +1028,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         invoiceSheet.Cells["D7:E7"].Value = listProject[0].Client?.Address;
                         invoiceSheet.Cells["B3"].Value = DateTime.Now.Date;
                         invoiceSheet.Cells["B4"].Value = $"BILLING PERIOD: {DateTime.Now.Month}/{DateTime.Now.Year}";
-                        var invoiceDetailTable = invoiceSheet.Tables.First();
-                        var invoiceDetailTableStart = invoiceDetailTable.Address.Start;
+                        invoiceSheet.Names["InvoiceNetTotal"].Formula = $"={sumLineTotal}-Discount";
 
-                        if (invoiceUserBilling.Count > 0)
-                        {
-                            invoiceSheet.InsertRow(invoiceDetailTableStart.Row + 1, invoiceUserBilling.Count - 1, invoiceDetailTableStart.Row + invoiceUserBilling.Count);
-                            invoiceSheet.Names["InvoiceNetTotal"].Formula = "=SUM(InvoiceDetails[LINE TOTAL])-Discount";
-
-                            int d = 0;
-                            for (int i = invoiceDetailTableStart.Row + 1; i <= invoiceDetailTable.Address.End.Row; i++)
-                            {
-                                for (int j = invoiceDetailTable.Address.Start.Column; j <= invoiceDetailTable.Address.End.Column; j++)
-                                {
-                                    //add the cell data to the List
-                                    switch (j)
-                                    {
-                                        case 2:
-                                            var nameSheetDetailTimesheet = invoiceUserBilling[d].FullName.Replace(" ", "") + "_" + invoiceUserBilling[d].ProjectName.Replace(" ", "");
-                                            if (listProjectCode.Count == 1)
-                                            {
-                                                nameSheetDetailTimesheet = invoiceUserBilling[d].FullName.Replace(" ", "");
-                                            }
-                                            invoiceSheet.Cells[i, j].Formula = "=HYPERLINK(\"#" + nameSheetDetailTimesheet + "!A1\",\"" + invoiceUserBilling[d].FullName + "\")";
-                                            break;
-                                        case 3:
-                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].ProjectName;
-                                            break;
-                                        case 4:
-                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].WorkingTime;
-                                            break;
-                                        case 5:
-                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].BillRate;
-                                            break;
-                                        default:
-                                            invoiceSheet.Cells[i, j].Value = invoiceUserBilling[d].LineTotal;
-                                            break;
-                                    }
-                                }
-                                d++;
-                            }
-                        }
-                        if (listProjectCode.Count == 1)
+                        if (countListProject == 1)
                         {
                             invoiceSheet.DeleteColumn(3);
                         }
