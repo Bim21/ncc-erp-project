@@ -111,6 +111,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
+  overTimeNoCharge:number = 0;
   sidebarExpanded: boolean;
   isShowCurrentResource: boolean = true;
   searchUser: string = ""
@@ -734,7 +735,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
           `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
         },
-        color: ['black', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
+        color: ['#211f1f', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
         grid: {
           left: '3%',
           right: '4%',
@@ -755,7 +756,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         },
         series: [
           {
-            lineStyle: { color: 'black' },
+            lineStyle: { color: '#211f1f' },
             name: 'Total normal',
             type: 'line',
             data: normalAndOTchartData?.normalWoringHours
@@ -943,8 +944,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pmReportProjectService.GetTimesheetOfUserInProject(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
       user.normalWorkingTime = rs.result ? rs.result.normalWorkingTime : 0
       user.overTime = rs.result ? rs.result.overTime : 0
+      user.overTimeNoCharge = rs.result ? rs.result.overTimeNoCharge : 0
       this.totalNormalWorkingTime += user.normalWorkingTime
       this.totalOverTime += user.overTime
+      this.overTimeNoCharge += user.overTimeNoCharge
     })
   }
 

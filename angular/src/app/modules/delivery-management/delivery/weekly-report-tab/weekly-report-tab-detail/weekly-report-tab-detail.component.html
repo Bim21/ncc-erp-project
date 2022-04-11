@@ -232,7 +232,12 @@
                                                 <div>(
                                                     <strong [ngClass]="totalOverTime>0?'text-danger':''"
                                                         style="font-size: 17px;">{{totalOverTime}}h
-                                                    </strong>)
+                                                    </strong>/
+                                                    
+                                                    <strong [ngClass]="totalOverTime>0?'text-danger':''"
+                                                        style="font-size: 17px;">{{overTimeNoCharge}}h
+                                                    </strong>
+                                                    )
                                                 </div>
                                                 <!-- <th style="width: 50px;">Action</th> -->
                                             <th style="vertical-align: middle;">Timesheet</th>
