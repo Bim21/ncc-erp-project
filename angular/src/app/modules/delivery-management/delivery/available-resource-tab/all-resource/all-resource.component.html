@@ -133,8 +133,7 @@
                                         <span matTooltip="Potential project" *ngIf="project.projectStatus==APP_ENUM.ProjectStatus.Potential" 
                                         class="badge bg-info pointer mr-1">
                                             P</span>
-                                        <strong class="hover-project-name pointer"
-                                            (click)="showProjectDetail(project.projectId,project.projectName)">{{project.projectName}}
+                                        <strong >{{project.projectName}}
                                         </strong>
                                         <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
                                             {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>&nbsp;
