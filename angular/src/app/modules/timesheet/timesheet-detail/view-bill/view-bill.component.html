@@ -23,7 +23,8 @@
       </button> -->
       <button
         class="btn btn-editall-neutral ml-2"
-        *ngIf="!isEdittingRows && billDetail.length && !isEdit && permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Edit)"
+        *ngIf="!isEdittingRows && billDetail.length && !isEdit && (permission.isGranted(Timesheets_TimesheetDetail_UpdateBill)
+        || Timesheets_TimesheetDetail_UpdateTimsheet)"
         (click)="editMultiRows()"
         [disabled]="data.billInfo.isComplete"
       >
@@ -228,7 +229,7 @@
               </td>
               <td class="text-center">
                 <div *ngIf="!bill.createMode">
-                  <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_Edit)"
+                  <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill) || permission.isGranted(Timesheets_TimesheetDetail_UpdateTimsheet)"
                     [disabled]="
                       userBillProcess ||
                       isEdit ||

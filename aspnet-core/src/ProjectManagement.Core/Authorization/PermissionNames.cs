@@ -1893,17 +1893,20 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Project Health" },
                                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Issues",
                                     Childrens = new List<SystemPermission>(){
+                                        new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                         new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue_AddMeetingNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Meeting Note"},
                                         new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_Issue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                                     }
                                   },
                                     new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource",
                                     Childrens = new List<SystemPermission>(){
+                                        new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                         new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"},
 
                                     }
                                   },  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource",
                                     Childrens = new List<SystemPermission>(){
+                                        new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                                         new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Plan"},
                                         new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                         new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project"},
@@ -2008,18 +2011,13 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_ExportInvoice ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Export Invoice"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
-
-
+                                                    new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Bill"},
+                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
+                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                                     }
 
                                 },
-                                new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Bill",
-                                                                    Childrens = new List<SystemPermission>() {
-                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_Edit,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
-                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
-                                                                    }
-                                },
-                                new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" }
+                    
 
 
 

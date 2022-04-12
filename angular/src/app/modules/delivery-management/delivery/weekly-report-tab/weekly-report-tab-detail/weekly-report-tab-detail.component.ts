@@ -36,11 +36,14 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_UpdateNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateNote;
   WeeklyReport_ReportDetail_UpdateProjectHealth = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateProjectHealth;
   WeeklyReport_ReportDetail_Issue = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue;
+  WeeklyReport_ReportDetail_Issue_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_View;
   WeeklyReport_ReportDetail_Issue_AddMeetingNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_AddMeetingNote;
   WeeklyReport_ReportDetail_Issue_SetDone = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_SetDone;
   WeeklyReport_ReportDetail_CurrentResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource;
+  WeeklyReport_ReportDetail_CurrentResource_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_View;
   WeeklyReport_ReportDetail_CurrentResource_Release = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_Release;
   WeeklyReport_ReportDetail_PlannedResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource;
+  WeeklyReport_ReportDetail_PlannedResource_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_View;
   WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan;
   WeeklyReport_ReportDetail_PlannedResource_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_Edit;
   WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject;
@@ -818,7 +821,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       let option: echarts.EChartsOption;
       option = {
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
         },
         grid: {
           top: "6%",

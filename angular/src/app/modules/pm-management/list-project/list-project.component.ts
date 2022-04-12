@@ -349,11 +349,18 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     let routingToUrl:string = (this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport)
      && this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View))
     ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
-    this.router.navigate([routingToUrl],{queryParams:{
+    // this.router.navigate([routingToUrl],{queryParams:{
+    //   id: project.id,
+    //   type: project.projectType, 
+    //   projectName: project.name, 
+    //   projectCode: project.code}
+    // })
+
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
       id: project.id,
       type: project.projectType, 
       projectName: project.name, 
-      projectCode: project.code}
-    })
+      projectCode: project.code} }));
+window.open(url, '_blank');
   }
 }

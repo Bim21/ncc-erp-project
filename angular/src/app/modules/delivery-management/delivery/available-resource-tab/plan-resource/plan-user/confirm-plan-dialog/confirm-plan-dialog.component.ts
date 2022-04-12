@@ -49,6 +49,7 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
         this.checkConfirmPermission(this.permission.isGranted(this.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther))
       }
       if(this.data.fromPage == ConfirmFromPage.allResource){
+        console.log("testttt", this.permission.isGranted(this.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
         this.checkConfirmPermission(this.permission.isGranted(this.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
       }
       if(this.data.fromPage == ConfirmFromPage.vendor){
@@ -100,7 +101,7 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   }
 
   checkConfirmPermission(hasMovePermission:boolean) {
-    if (hasMovePermission) {
+    if (!hasMovePermission) {
       this.workingProject.forEach(pu => {
         if (!pu.isPool) {
           this.allowConfirm = false
