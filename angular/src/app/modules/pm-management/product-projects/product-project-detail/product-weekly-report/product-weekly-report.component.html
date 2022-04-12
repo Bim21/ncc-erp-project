@@ -105,13 +105,13 @@
 
 
                 <div *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View)">
-                <div>
-                    <h4 class="d-inline-block mb-2">Issues</h4>&nbsp;<strong
-                    style="font-size: 20px;">({{problemList?.length}})</strong>
-                <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
-                    *ngIf=" permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
+                <div class="text-right">
+                    <button *ngIf=" permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
                     [hidden]="processProblem"
-                    (click)="addIssueReport(); $event.stopPropagation()"></i>
+                    (click)="addIssueReport()"
+                            class="btn bg-blue ml-3 btn-sm mb-2">
+                        <i class="fa fa-plus m-0"></i>
+                    </button>
                 </div>
                 <div class="fixTableHead" style="max-height: 72vh;">
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
@@ -135,7 +135,7 @@
                                         }; let i =index">
                                 <td>{{i+1}}</td>
     
-                                <td style="white-space: normal;max-width: 200px;">
+                                <td style="white-space: normal;max-width: 200px;" class="text-danger">
     
                                     <div class="break-word" *ngIf="!problem.createMode">{{problem.description}}</div>
                                     <div *ngIf="problem.createMode">
@@ -219,7 +219,7 @@
                                         <button *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone)"
                                             (click)="setDone(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-check mr-2 fa-lg "></i>
-                                            Done
+                                            Change Status
                                         </button>
                                         <button *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
@@ -267,6 +267,10 @@
                                         <div>(
                                             <strong [ngClass]="totalOverTime>0?'text-danger':''"
                                                 style="font-size: 17px;">{{totalOverTime}}h
+                                            </strong>/
+                                                    
+                                            <strong [ngClass]="overTimeNoCharge>0?'text-danger':''"
+                                                style="font-size: 17px;">{{overTimeNoCharge}}h
                                             </strong>)
                                         </div>
                                         <!-- <th style="width: 50px;">Action</th> -->
@@ -357,10 +361,11 @@
                                         (click)="isShowFutureList=!isShowFutureList">
                                         <h5 class="d-inline-block mb-2">Planned Resource</h5>&nbsp;<strong
                                             style="font-size: 18px;">({{futureReportList?.length}})</strong>
-                                        <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
-                                            *ngIf=" permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan) && selectedReport.isActive"
+                                            <button class="btn bg-blue ml-3 btn-sm mb-2" *ngIf=" permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan) && selectedReport.isActive"
                                             [hidden]="processFuture || !isShowFutureList "
-                                            (click)="addPlanResource(); $event.stopPropagation()"></i>
+                                            (click)="addPlanResource(); $event.stopPropagation()">
+                                                <i class="fa fa-plus  m-0"></i>
+                                            </button>  
                                             
                                     </mat-expansion-panel-header>
                                     <div class="mt-0 table-responsive px-4 pb-4">
