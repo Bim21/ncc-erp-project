@@ -197,7 +197,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isRefresh = false
   }
   public getPmReportProject(): void {
-    if (this.router.url.includes("weeklyReportTabDetail")) {
+    if (this.router.url.includes("weeklyReportTabDetail") && this.pmReportId) {
       this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
         this.pmReportProjectList = data.result;
         this.tempPmReportProjectList = data.result;
@@ -886,7 +886,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let chartData = {} as any
     var todayDate: any = new Date();
     var currentDate = this.formatDateYMD(todayDate)
-    let fiveMonthAgo = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
+    let fiveMonthAgo:Date =  new Date(todayDate.setMonth(todayDate.getMonth() - 5))
+
+    fiveMonthAgo = this.getFirstDayOfMonth(fiveMonthAgo.getFullYear(), fiveMonthAgo.getMonth())
     await this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
       chartData.normalAndOT = rs.result
     })
@@ -897,21 +899,22 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         startDate: startTime,
         endDate: endTime
       }
-      let effortRequestBody = {
-        projectCode: this.projectInfo.projectCode,
-        emails: this.officalResourceList,
-        startDate: fiveMonthAgo,
-        endDate: currentDate 
-      }
+   
       await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(officalRequestBody).toPromise().then(rs => {
         chartData.offical = rs.result
       })
 
-      await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
-        chartData.effort = rs.result
-      })
+      
     }
-
+    let effortRequestBody = {
+      projectCode: this.projectInfo.projectCode,
+      emails: this.officalResourceList,
+      startDate: this.formatDateYMD(fiveMonthAgo),
+      endDate: currentDate 
+    }
+   await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
+      chartData.effort = rs.result
+    })
     if (this.tempResourceList.length > 0) {
       let tempRequestBody = {
         projectCode: this.projectInfo.projectCode,
@@ -925,7 +928,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
 
     
-    await this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate).toPromise().then(data => {
+    await this.tsProjectService.GetBillInfoChart(this.projectId, this.formatDateYMD(fiveMonthAgo), currentDate).toPromise().then(data => {
       chartData.billChart = data.result
     })
    
@@ -950,7 +953,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.overTimeNoCharge += user.overTimeNoCharge
     })
   }
-
+   getFirstDayOfMonth(year, month) {
+    return new Date(year, month, 1);
+  }
+  
   GetTimesheetWeeklyChartOfUserGroupInProject(emailList) {
     // monday at 5 weeks ago =  last week mondy - 5 week (35 days)
 
@@ -1089,7 +1095,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           containLabel: true
         },
         legend: {
-          data: ['Bill.ManMonth', 'Bill.ManDay', `${EffortData?.manDays? 'Effort.ManDay' : ''}`]
+          data: ['Bill.ManMonth', 'Bill.ManDay', 'Effort.ManDay']
         },
         xAxis: [
           {
@@ -1137,7 +1143,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             name: 'Effort.ManDay',
             type: 'line',
             yAxisIndex: 1,
-            data: EffortData?.manDays
+            data: EffortData.manDays
           }
         ]
       };
