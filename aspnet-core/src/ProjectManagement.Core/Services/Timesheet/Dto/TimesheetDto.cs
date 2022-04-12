@@ -27,8 +27,8 @@ namespace ProjectManagement.Services.Timesheet.Dto
         public string ProjectCode { get; set; }
         public string ProjectName { get; set; }
     }
-   
-   
+
+
     public class ResultInvoice
     {
         public List<string> ListProjectCode { get; set; }
@@ -41,11 +41,9 @@ namespace ProjectManagement.Services.Timesheet.Dto
         public string FullName { get; set; }
         public string ProjectName { get; set; }
         public float WorkingTimeDay { get; set; }
-        public float? TotalWorkingDay { get; set; }
-        public int DefaultWorkingHours { get; set; }
+
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public ChargeType ChargeType { get; set; }
         public float BillRate { get; set; }
         public double LineTotal
         {
