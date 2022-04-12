@@ -166,7 +166,7 @@ namespace ProjectManagement.Users
                     StartTime = pu.StartTime,
                     Status = pu.Status,
                 })
-                .OrderBy(s => s.StartTime)
+                .OrderByDescending(s => s.StartTime)
                 .ToListAsync();
         }
 

@@ -4,7 +4,7 @@
             <div class="px-4 pb-2 pt-2 card"
                 style="display: flex; flex-direction: column; justify-content: space-between; ">
                 <div class="row p-1">
-                    <div class="col-6">
+                    <div class="col-7 p-0">
                         <label for="" class="mt-1">Status:</label>
                         <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[projectHealth]"
                             style="margin-left: 10px !important;" class="ml-3" appearance="outline">
@@ -26,9 +26,9 @@
                         </mat-form-field>
 
                     </div>
-                    <div class="col-6">
-                        <label for="" class="mt-1">PM report:</label>
+                    <div class="col-5 m-0 p-0">
                         <mat-form-field class="ml-2" style="width: 205px;" appearance="outline">
+                        <mat-label >PM report:</mat-label>
                             <mat-select [(ngModel)]="selectedReport" name="pmReport"
                                 (selectionChange)="onReportchange()" placeholder="select a report" required
                                 #projectEmployee="ngModel">
@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="row p-1">
-                    <div class="col-7">
+                    <div class="col-7 m-0 p-0">
                         <strong classs="col-12" style="font-size: 20px;">PM note: </strong>
                         <div class="d-inline ml-2 pt-1 text-right row">
                             <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingNote && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)" class="fas fa-edit fa-lg ml-2"
@@ -70,7 +70,7 @@
                             <i *ngIf="isEditingNote"  style="color: green ;" class="fas fa-check fa-lg" (click)="updateNote()" ></i>
                         </div>
                         <p *ngIf="!isEditingNote" style="word-wrap: break-word; white-space: pre-line;font-size: 18px; text-align: justify;"
-                            class="mt-2">
+                            class="m-0">
                             {{projectInfo.pmNote}}
                         </p>
                         <mat-form-field class="ml-1" style="width:100%" appearance="outline"
@@ -90,7 +90,7 @@
                             <i style="color: green ;" class="fas fa-check fa-lg" *ngIf="isEditingAutomationNote" (click)="updateAutoNote()" ></i>
                         </div>
                         <p *ngIf="!isEditingAutomationNote"
-                            style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;" class="mt-2">
+                            style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;" class="m-0">
                             {{projectInfo.automationNote}}
                         </p>
                         <mat-form-field class="ml-1" style="width:100%" appearance="outline"
@@ -105,13 +105,13 @@
 
 
                 <div *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View)">
-                <div>
-                    <h4 class="d-inline-block mb-2">Issues</h4>&nbsp;<strong
-                    style="font-size: 20px;">({{problemList?.length}})</strong>
-                <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
-                    *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
+                <div class="text-right">
+                    <button *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
                     [hidden]="processProblem"
-                    (click)="addIssueReport(); $event.stopPropagation()"></i>
+                            (click)="addIssueReport()" 
+                            class="btn bg-blue ml-3 btn-sm mb-2">
+                            <i class="fa fa-plus m-0"></i>
+                        </button>
                 </div>
                 <div class="fixTableHead" style="max-height: 72vh;">
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
@@ -137,7 +137,7 @@
     
                                 <td style="white-space: normal;max-width: 200px;">
     
-                                    <div *ngIf="!problem.createMode">{{problem.description}}</div>
+                                    <div class="text-danger" *ngIf="!problem.createMode">{{problem.description}}</div>
                                     <div *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" required rows="2"
@@ -245,11 +245,11 @@
 
 
 
-            <div class="card" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View)">
+            <div class="card" id="current-resource" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View)">
                 <div class="card-body">
-                    <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
+                    <h5 class="d-inline-block mb-2 font-weight-bold">Current Resource</h5>&nbsp;
                     <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>
-                    <span style="font-size: 21px; margin-left: 21px;">Charged accounts:
+                    <span style="font-size: 19px; margin-left: 21px; font-weight: bold;">Charged accounts:
                         <strong
                         [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' ">{{projectInfo.totalBill}}</strong></span>
                 <div class="fixTableHead" style="max-height: 72vh;">
@@ -274,7 +274,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr (contextmenu)="showActions($event)"
+                                <tr 
                                     *ngFor="let user of projectCurrentResource; let i =index">
                                     <td class="d-flex justify-content-between" style="border: none;width: 380px;">
                                         <div style="width: 80%;">
@@ -355,7 +355,7 @@
                                 <mat-expansion-panel [expanded]="isShowFutureList">
                                     <mat-expansion-panel-header class="m-0"
                                         (click)="isShowFutureList=!isShowFutureList">
-                                        <h5 class="d-inline-block mb-2">Planned Resource</h5>&nbsp;<strong
+                                        <h5 class="d-inline-block mb-2 font-weight-bold">Planned Resource</h5>&nbsp;<strong
                                             style="font-size: 18px;">({{futureReportList?.length}})</strong>
                                         <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
                                             *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan) && selectedReport.isActive"
@@ -529,7 +529,7 @@
                                     <mat-expansion-panel-header class="m-0"
                                         (click)="isShowWeeklyList=!isShowWeeklyList">
 
-                                        <h5 class="d-inline-block mb-2">Changed Resource</h5>&nbsp;<strong
+                                        <h5 class="d-inline-block mb-2 font-weight-bold">Changed Resource</h5>&nbsp;<strong
                                             style="font-size: 18px;">({{weeklyReportList?.length}})</strong>
                                     </mat-expansion-panel-header>
 
