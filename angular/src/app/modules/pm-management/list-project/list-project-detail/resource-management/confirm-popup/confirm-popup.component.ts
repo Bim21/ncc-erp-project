@@ -165,6 +165,8 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
   }
 
   checkConfirmPermission(confirmMovePermisson) {
+    console.log("haaaaaa",confirmMovePermisson)
+    console.log("haaaaaa",this.data.workingProject)
     if (!confirmMovePermisson) {
       this.data.workingProject.forEach(pu => {
         if (pu.isPool == false) {

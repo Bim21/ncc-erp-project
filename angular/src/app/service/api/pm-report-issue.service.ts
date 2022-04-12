@@ -26,4 +26,8 @@ export class PmReportIssueService extends BaseApiService {
   public createReportIssue(projectId: number, reportIssue:any): Observable<any> {
     return this.http.post<any>(this.rootUrl + `/Create?projectId=${projectId}`, reportIssue);
   }
+
+  public EditMeetingNote(input): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/EditMeetingNote`, input);
+  }
 }
