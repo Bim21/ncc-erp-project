@@ -216,7 +216,13 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task SetDoneIssue(long id)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProjectIssue>().Where(x => x.Id == id).FirstOrDefaultAsync();
-            pmReportProject.Status = PMReportProjectIssueStatus.Done;
+            if (pmReportProject.Status == PMReportProjectIssueStatus.InProgress)
+            {
+                pmReportProject.Status = PMReportProjectIssueStatus.Done;
+            }else
+            {
+                pmReportProject.Status = PMReportProjectIssueStatus.InProgress;
+            }          
             await WorkScope.UpdateAsync(pmReportProject);
 
         }

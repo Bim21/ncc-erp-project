@@ -97,6 +97,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public officalResourceList: any[] = []
   public selectedReport = {} as pmReportDto;
   public userList = []
+  overTimeNoCharge:number = 0;
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
   sidebarExpanded: boolean;
@@ -248,7 +249,6 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         this.isLoading = false;
         this.GetTimesheetWeeklyChartOfProject(this.projectInfo.projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday);
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
-        this.getDataForBillChart();
         this.router.navigate(
           [], 
           {
@@ -647,12 +647,12 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
       var myChart = echarts.init(chartDom);
       var option: echarts.EChartsOption;
 
-      let hasOtValue = normalAndOTchartData.overTimeHours.some(item => item > 0)
+      let hasOtValue = normalAndOTchartData?.overTimeHours.some(item => item > 0)
       let hasOfficalDataNormal = officalChartData?.normalWoringHours.some(item => item > 0)
       let hasOfficalDataOT = officalChartData?.overTimeHours.some(item => item > 0)
       let hasTempDataNormal = TempChartData?.normalWoringHours.some(item => item > 0)
       let hasTempDataOT = TempChartData?.overTimeHours.some(item => item > 0)
-
+      let hasOtNoCharge = normalAndOTchartData?.otNoChargeHours.some(item => item > 0)
       if (JSON.stringify(normalAndOTchartData?.normalWoringHours) == JSON.stringify(officalChartData?.normalWoringHours)) {
         hasOfficalDataNormal = false
       }
@@ -671,11 +671,11 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         legend: {
           left:'25%',
           width:'80%',
-          data: ['Total normal', `${hasOtValue ? 'OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
+          data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-          `${hasTempDataOT ? 'OT Temp' : ''}`],             
+          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
         },
-        color: ['green', 'red', 'blue', 'orange', '#787a7a', 'purple'],
+        color: ['#211f1f', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
         grid: {
           left: '3%',
           right: '4%',
@@ -696,7 +696,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         },
         series: [
           {
-            lineStyle: { color: 'green' },
+            lineStyle: { color: '#211f1f' },
             name: 'Total normal',
             type: 'line',
             data: normalAndOTchartData?.normalWoringHours
@@ -727,6 +727,11 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
             name: 'OT Temp',
             type: 'line',
             data: hasTempDataOT ? TempChartData?.overTimeHours : []
+          },{
+            lineStyle: { color: 'green' },
+            name: 'OT No Charge',
+            type: 'line',
+            data: hasOtNoCharge ? TempChartData?.otNoChargeHours : []
           },
 
         ]
@@ -739,7 +744,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
 
   public genarateUserChart(user, chartData) {
     let hasOtValue = chartData.overTimeHours.some(item => item > 0)
-
+    let hasOtNocharge = chartData.otNoChargeHours.some(item => item > 0)
     // var chartDom = document.getElementById(user.userId.toString());
     // var myChart = echarts.init(chartDom);
 
@@ -789,6 +794,15 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
             type: 'line',
             name: 'OT',
             lineStyle: {color: '#dc3545'}
+          },
+          {
+            // showSymbol: false,
+            color:['orange'],
+            symbolSize: 2,
+            data: hasOtNocharge ? chartData.otNoChargeHours : [],
+            type: 'line',
+            name: 'OT no charge',
+            lineStyle: { color: 'orange' }
           }
         ]
       };
@@ -810,7 +824,10 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
 
   // TimesheetWeeklyChart
   async GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime) {
-    let chartData = {} as any
+    let chartData = {} as any;
+    var todayDate: any = new Date();
+    var currentDate = this.formatDateYMD(todayDate);
+    let fiveMonthAgo = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
     await this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
       chartData.normalAndOT = rs.result
     })
@@ -827,6 +844,16 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
 
     }
 
+    let effortRequestBody = {
+      projectCode: this.projectInfo.projectCode,
+      emails: this.officalResourceList,
+      startDate: fiveMonthAgo,
+      endDate: currentDate 
+    }
+    await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
+      chartData.effort = rs.result
+    })
+
     if (this.tempResourceList.length > 0) {
       let tempRequestBody = {
         projectCode: this.projectInfo.projectCode,
@@ -838,8 +865,12 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         chartData.temp = rs.result
       })
     }
+    await this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate).toPromise().then(data => {
+      chartData.billChart = data.result
+    })
 
     this.buildProjectTSChart(chartData.normalAndOT, chartData.offical, chartData.temp)
+    this.buildBillChart(chartData.billChart, chartData.effort)
   }
 
   GetTimesheetWeeklyChartOfUserInProject(projectCode, user, startTime, endTime) {
@@ -851,8 +882,10 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     this.pmReportProjectService.GetTimesheetOfUserInProject(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
       user.normalWorkingTime = rs.result ? rs.result.normalWorkingTime : 0
       user.overTime = rs.result ? rs.result.overTime : 0
+      user.overTimeNoCharge = rs.result ? rs.result.overTimeNoCharge : 0
       this.totalNormalWorkingTime += user.normalWorkingTime
       this.totalOverTime += user.overTime
+      this.overTimeNoCharge += user.overTimeNoCharge
     })
   }
 
@@ -973,19 +1006,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     })
   }
 
-    //
-    getDataForBillChart() {
-      var todayDate: any = new Date();
-      var toDate = this.formatDateYMD(todayDate)
-      let fromDate = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
-      this.tsProjectService.GetBillInfoChart(this.projectId, fromDate, toDate).subscribe(data => {
-        this.buildBillChart(data.result)
-      })
-    }
-  
-  
-  
-    public buildBillChart(chartData) {
+    public buildBillChart(billData,EffortData) {
   
       // var chartDom = document.getElementById(user.userId.toString());
       // var myChart = echarts.init(chartDom);
@@ -1010,7 +1031,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
             containLabel: true
           },
           legend: {
-            data: ['ManMonths', 'ManDays']
+            data: ['Bill.ManMonth', 'Bill.ManDay', `${EffortData?.manDays? 'Effort.ManDay' : ''}`]
           },
           xAxis: [
             {
@@ -1018,7 +1039,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
                 padding: [4, 0, 0, 0]
               },
               type: 'category',
-              data: chartData.labels,
+              data: billData.labels,
               boundaryGap: false,
             }
           ],
@@ -1028,7 +1049,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
                 padding: [0, 13, 0, 13]
               },
               type: 'value',
-              name: 'ManMonths',
+              name: 'ManMonth',
   
             },
             {
@@ -1036,7 +1057,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
                 padding: [0, 13, 0, 13]
               },
               type: 'value',
-              name: 'ManDays',
+              name: 'ManDay',
   
             }
           ],
@@ -1044,15 +1065,21 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   
             {
               barWidth: 30,
-              name: 'ManMonths',
+              name: 'Bill.ManMonth',
               type: 'bar',
-              data: chartData.manMonths
+              data: billData.manMonths
             },
             {
-              name: 'ManDays',
+              name: 'Bill.ManDay',
               type: 'line',
               yAxisIndex: 1,
-              data: chartData.manDays
+              data: billData.manDays
+            },
+            {
+              name: 'Effort.ManDay',
+              type: 'line',
+              yAxisIndex: 1,
+              data: EffortData?.manDays
             }
           ]
         };

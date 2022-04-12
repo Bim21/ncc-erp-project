@@ -29,6 +29,7 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public pmList: UserDto[] = [];
   public project = {} as ProjectDto;
   public currencyList: CurrencyDto[]=[];
+  public isShowCurrencyCharge: boolean = false;
   public chargeTypeList : string[]= Object.keys(this.APP_ENUM.ChargeType)
   Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View;
   Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit;
@@ -53,7 +54,17 @@ export class ListProjectGeneralComponent extends AppComponentBase implements OnI
   public getProjectDetail(): void {
     this.projectService.getProjectById(this.projectId).pipe(catchError(this.projectService.handleError)).subscribe(data => {
       this.project = data.result;
+      this.getShowCurrencyCharge(this.project.projectType);
     })
+  }
+
+  public getShowCurrencyCharge(projectType: number) {
+    for (const key in this.APP_ENUM.CurrencyChargeProjectType) {
+      if (this.APP_ENUM.CurrencyChargeProjectType[key] == projectType) {
+        this.isShowCurrencyCharge = true;
+        return;
+      }
+    }
   }
   public editRequest(): void {
     this.readMode = false

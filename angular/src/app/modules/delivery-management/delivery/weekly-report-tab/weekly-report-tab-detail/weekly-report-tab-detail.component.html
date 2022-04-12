@@ -122,7 +122,7 @@
                                             <button
                                             (click)="setDone(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-check mr-2 fa-lg "></i>
-                                            Done
+                                            Change Status
                                         </button>
                                         </mat-menu>
                                     </td>
@@ -234,7 +234,7 @@
                                                         style="font-size: 17px;">{{totalOverTime}}h
                                                     </strong>/
                                                     
-                                                    <strong [ngClass]="totalOverTime>0?'text-danger':''"
+                                                    <strong [ngClass]="overTimeNoCharge>0?'text-danger':''"
                                                         style="font-size: 17px;">{{overTimeNoCharge}}h
                                                     </strong>
                                                     )
