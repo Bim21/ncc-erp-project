@@ -180,7 +180,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
             children: [
                 {
                     path: "list-project-general",
-                    component: ProjectGeneralComponent,
+                    component: ListProjectGeneralComponent,
                     canActivate: [AppRouteGuard],
               },
               {
@@ -232,7 +232,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
             children: [
               {
                 path: "training-project-general",
-              component: ProjectGeneralComponent,
+              component: TrainingProjectGeneralComponent,
               canActivate: [AppRouteGuard],
             },
             {
@@ -283,7 +283,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
             children: [
               {
                 path: "product-project-general",
-              component: ProjectGeneralComponent,
+              component: ProductProjectGeneralComponent,
               canActivate: [AppRouteGuard],
             },
             {
