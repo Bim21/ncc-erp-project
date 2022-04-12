@@ -71,5 +71,18 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         {
             await WorkScope.DeleteAsync<PMReportProjectIssue>(pmReportProjectIssueId);
         }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_Issue_AddMeetingNote)]
+        public async Task<EditMeetingNoteDto> EditMeetingNote(EditMeetingNoteDto input)
+        {
+            var projectIssue = await WorkScope.GetAll<PMReportProjectIssue>()
+                .Where(x => x.PMReportProjectId == input.Id)
+                .FirstOrDefaultAsync();
+
+            projectIssue.MeetingSolution = input.Note;
+            await WorkScope.UpdateAsync(projectIssue);
+            return input;
+        }
     }
 }

@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="row p-1">
-                    <div class="col-7">
+                    <div class="col-8">
                         <strong classs="col-12" style="font-size: 20px;">PM note: </strong>
                         <div class="d-inline ml-2 pt-1 text-right row">
                             <i [hidden]="!selectedReport.isActive" *ngIf="!isEditingNote && permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)" class="fas fa-edit fa-lg ml-2"
@@ -81,7 +81,7 @@
                                 </textarea>
                         </mat-form-field>
                     </div>
-                    <div class="col-5" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
+                    <div class="col-4" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
                         <strong style="font-size: 20px;">Automation test: </strong>
                         <div class="d-inline ml-2 pt-1 text-right row">
                             <i *ngIf=" permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote) && !isEditingAutomationNote" [hidden]="!selectedReport.isActive"  style="font-size: 17px;"
@@ -137,7 +137,7 @@
     
                                 <td style="white-space: normal;max-width: 200px;" class="text-danger">
     
-                                    <div *ngIf="!problem.createMode">{{problem.description}}</div>
+                                    <div class="break-word" *ngIf="!problem.createMode">{{problem.description}}</div>
                                     <div *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" required rows="2"
@@ -147,7 +147,7 @@
                                     </div>
                                 </td>
                                 <td style="white-space: normal;max-width: 200px;">
-                                    <div *ngIf="!problem.createMode">{{problem.impact}}</div>
+                                    <div class="break-word" *ngIf="!problem.createMode">{{problem.impact}}</div>
                                     <div *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -158,7 +158,7 @@
     
                                 </td>
                                 <td style="white-space: normal;max-width: 200px;">
-                                    <div *ngIf="!problem.createMode">{{problem.solution}}</div>
+                                    <div class="break-word" *ngIf="!problem.createMode">{{problem.solution}}</div>
                                     <div *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -170,7 +170,7 @@
                                 </td>
                                 <td style="white-space: normal;max-width: 200px;">
     
-                                    <div *ngIf="!problem.createMode">{{problem.meetingSolution}}</div>
+                                    <div class="break-word" *ngIf="!problem.createMode">{{problem.meetingSolution}}</div>
                                     <div *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
@@ -318,8 +318,8 @@
                                                 [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div style="width: 180px; height: 60px;" [id]="'user' + user.userId">
+                                    <td style="text-align: -webkit-center;">
+                                        <div style="width: 200px; height: 60px;" [id]="'user' + user.userId">
                                         </div>
                                     </td>
                                 </tr>

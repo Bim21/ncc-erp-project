@@ -25,6 +25,7 @@ import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-proj
 import { ConfirmFromPage, ConfirmPopupComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/add-future-resource-dialog.component';
+import { EditMeetingNoteDialogComponent } from './edit-meeting-note-dialog/edit-meeting-note-dialog.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -1190,6 +1191,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.getFuturereport()
       }
     })
+  }
+  public editMeetingNote(projectIssue){
+    let item = {
+      id: projectIssue.pmReportProjectId,
+      note: projectIssue.meetingSolution
+    }
+    let ref = this.dialog.open(EditMeetingNoteDialogComponent,{
+      width: "600px",
+      data: item
+      
+    })
+    ref.afterClosed().subscribe(rs=>{
+      if(rs){
+        this.getProjectProblem()
+      }
+    })
+ 
   }
 
 }

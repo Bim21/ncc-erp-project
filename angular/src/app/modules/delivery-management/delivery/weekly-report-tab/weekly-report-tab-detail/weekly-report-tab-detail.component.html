@@ -49,7 +49,7 @@
                     <div class="px-4 pb-2 pt-2 card"
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
-                            <div class="col-7">
+                            <div class="col-8">
                                 <strong style="font-size: 20px;">PM note: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2 text-nowrap" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
@@ -69,7 +69,7 @@
                                 </textarea>
                                 </mat-form-field>
                             </div>
-                            <div class="col-5" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
+                            <div class="col-4" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
                                 <strong style="font-size: 20px;">Automation test: </strong>
                                 <div class="d-inline  pt-1 text-right ml-2 text-nowrap" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateProjectHealth)">
                                     <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
@@ -128,48 +128,20 @@
                                     </td>
 
                                     <td style="white-space: normal;max-width: 250px;">
-
-                                        <div class="text-danger" *ngIf="!problem.createMode">{{problem.description}}</div>
-                                        <div *ngIf="problem.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" required
-                                                    rows="2" placeholder="leave a comment" name="description"
-                                                    [(ngModel)]="problem.description" matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                        
+                                        <div class="text-danger break-word">{{problem.description}}</div>
                                     </td>
                                     <td style="white-space: normal;max-width: 200px;">
-                                        <div *ngIf="!problem.createMode">{{problem.impact}}</div>
-                                        <div *ngIf="problem.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                                    placeholder="leave a comment" name="impact"
-                                                    [(ngModel)]="problem.impact" matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-
+                                        <div class="break-word">{{problem.impact}}</div>
                                     </td>
                                     <td style="white-space: normal;max-width: 200px;">
-                                        <div *ngIf="!problem.createMode">{{problem.solution}}</div>
-                                        <div *ngIf="problem.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                                    placeholder="leave a comment" name="solution"
-                                                    [(ngModel)]="problem.solution" matInput></textarea>
-                                            </mat-form-field>
-                                        </div>
-
+                                        <div class="break-word">{{problem.solution}}</div>
                                     </td>
                                     <td style="white-space: normal;max-width: 200px;">
-
-                                        <div *ngIf="!problem.createMode">{{problem.meetingSolution}}</div>
-                                        <div *ngIf="problem.createMode">
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" rows="2"
-                                                    placeholder="leave a comment" name="meetingSolution"
-                                                    [(ngModel)]="problem.meetingSolution" matInput></textarea>
-                                            </mat-form-field>
+                                        <div class="d-flex">
+                                            <div class="col-11 break-word">{{problem.meetingSolution}}</div>
+                                            <div class="col-1 center-item">
+                                            <i class="fas fa-edit mr-1" (click)="editMeetingNote(problem)"></i>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="text-center">
@@ -284,8 +256,8 @@
                                                         [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div style="width: 180px; height: 60px;" [id]="'user' + user.userId">
+                                            <td style="text-align: -webkit-center;">
+                                                <div style="width: 200px; height: 60px;" [id]="'user' + user.userId">
                                                 </div>
                                             </td>
                                         </tr>
