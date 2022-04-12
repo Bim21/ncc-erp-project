@@ -263,16 +263,17 @@
                                             <strong>({{totalNormalWorkingTime}}h) </strong>
                                         </div>
                                     </th>
-                                    <th style="width: 80px;">OT
-                                        <div>(
-                                            <strong [ngClass]="totalOverTime>0?'text-danger':''"
-                                                style="font-size: 17px;">{{totalOverTime}}h
-                                            </strong>/
-                                                    
+                                    <th style="width: 80px; white-space: nowrap;">OT
+                                        <div  [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
                                             <strong [ngClass]="overTimeNoCharge>0?'text-danger':''"
                                                 style="font-size: 17px;">{{overTimeNoCharge}}h
-                                            </strong>)
+                                            </strong>/
+                                            <strong [ngClass]="totalOverTime>0?'text-danger':''"
+                                                style="font-size: 17px;">{{totalOverTime}}h
+                                            </strong>
+                                            )
                                         </div>
+                                        </th>
                                         <!-- <th style="width: 50px;">Action</th> -->
                                     <th style="vertical-align: middle;">Timesheet</th>
                                 </tr>
@@ -313,8 +314,9 @@
                                         <div> <strong>{{user?.normalWorkingTime}}</strong> </div>
                                     </td>
                                     <td class="text-center">
-                                        <div>
+                                        <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
                                             <strong
+                                                [ngClass]="user.overTimeNoCharge>0?'text-warning': ''">{{user.overTimeNoCharge}}</strong>/<strong
                                                 [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
                                         </div>
                                     </td>

@@ -95,7 +95,7 @@
 
 
 
-                        <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue)" style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                        <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                             <thead class="bg-light">
                                 <tr>
                                     <th>#</th>
@@ -180,7 +180,7 @@
 
 
 
-                    <div class="card" id="current-resource" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource)">
+                    <div class="card" id="current-resource" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
                         <div class="card-body">
                             <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
                             <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>
@@ -201,16 +201,16 @@
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
-                                                <div>(
-                                                    <strong [ngClass]="totalOverTime>0?'text-danger':''"
-                                                        style="font-size: 17px;">{{totalOverTime}}h
-                                                    </strong>/
-                                                    
+                                                <div [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
                                                     <strong [ngClass]="overTimeNoCharge>0?'text-danger':''"
                                                         style="font-size: 17px;">{{overTimeNoCharge}}h
+                                                    </strong> / 
+                                                    <strong [ngClass]="totalOverTime>0?'text-danger':''"
+                                                        style="font-size: 17px;">{{totalOverTime}}h
                                                     </strong>
                                                     )
                                                 </div>
+                                            </th>
                                                 <!-- <th style="width: 50px;">Action</th> -->
                                             <th style="vertical-align: middle;">Timesheet</th>
                                         </tr>
@@ -251,8 +251,9 @@
                                                 <div> <strong>{{user?.normalWorkingTime}}</strong> </div>
                                             </td>
                                             <td class="text-center">
-                                                <div>
+                                                <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
                                                     <strong
+                                                        [ngClass]="user.overTimeNoCharge>0?'text-warning': ''">{{user.overTimeNoCharge}}</strong> / <strong
                                                         [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
                                                 </div>
                                             </td>
@@ -300,7 +301,7 @@
 
                             <div class="d-flex">
                                 <div class="w-100">
-                                    <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource)">
+                                    <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_View)">
                                         <mat-expansion-panel [expanded]="isShowFutureList">
                                             <mat-expansion-panel-header class="m-0"
                                                 (click)="isShowFutureList=!isShowFutureList">

@@ -62,18 +62,18 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize]
         public async Task<List<GetTimesheetProjectDto>> GetAllByProject(long projectId)
         {
-            var query = from ts in WorkScope.GetAll<Timesheet>()
-                        join tsp in WorkScope.GetAll<TimesheetProject>().Where(x => x.ProjectId == projectId)
-                        on ts.Id equals tsp.TimesheetId
-                        select new GetTimesheetProjectDto
+            var query = WorkScope.GetAll<TimesheetProject>()
+                        .Where(x => x.ProjectId == projectId)
+                        .OrderByDescending(x =>x.CreationTime)
+                        .Select(tsp => new GetTimesheetProjectDto
                         {
                             Id = tsp.Id,
-                            TimeSheetName = $"T{ts.Month}/{ts.Year}",
+                            TimeSheetName = $"T{tsp.Timesheet.Month}/{tsp.Timesheet.Year}",
                             ProjectId = tsp.ProjectId,
                             TimesheetFile = tsp.FilePath,
                             Note = tsp.Note,
                             HistoryFile = tsp.HistoryFile
-                        };
+                        });
             return await query.ToListAsync();
         }
 
