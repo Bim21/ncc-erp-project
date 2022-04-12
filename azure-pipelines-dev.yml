@@ -79,7 +79,7 @@ stages:
               nvm use 14.15
               node -v
               echo "Copy node-modules"
-              cp -r ~/soft/check_node/project/node_modules/ ./node_modules/
+              unzip -qo ~/soft/check_node/project/node_modules.zip
               cp ~/soft/check_node/project/check.sh ./check.sh
               echo "===Check package.json==="
               bash check.sh
