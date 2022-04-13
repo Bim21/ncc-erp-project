@@ -197,6 +197,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
       if (rs) {
         this.getProjectUser()
         this.getPlannedtUser()
+        this.planResourceProcess = false
       }
     })
   }

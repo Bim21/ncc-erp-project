@@ -24,16 +24,31 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
 
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
   Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
   Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
+  = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  
   WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+  
   Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
   Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther
+
   Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther 
   = PERMISSIONS_CONSTANT.Resource_TabVendor_ConfirmMoveEmployeeWorkingOnAProjectToOther
 
@@ -144,19 +159,19 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
       this.checkConfirmPermission(this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
     }
     if(this.data.page == ConfirmFromPage.outsource_weekly){
-      this.checkConfirmPermission(this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
     }
     if(this.data.page == ConfirmFromPage.product_PlannedResource){
       this.checkConfirmPermission(this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
     }
     if(this.data.page == ConfirmFromPage.product_weekly){
-      this.checkConfirmPermission(this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
     }
     if(this.data.page == ConfirmFromPage.training_PlannedResource){
       this.checkConfirmPermission(this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
     }
     if(this.data.page == ConfirmFromPage.training_weekly){
-      this.checkConfirmPermission(this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+      this.checkConfirmPermission(this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
     }
     if(this.data.page == ConfirmFromPage.weeklyReport){
       this.checkConfirmPermission(this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))

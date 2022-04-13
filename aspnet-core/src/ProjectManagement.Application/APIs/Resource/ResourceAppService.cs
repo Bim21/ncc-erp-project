@@ -58,8 +58,7 @@ namespace ProjectManagement.APIs.Resource
 
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Resource_TabPool_CreatePlan, PermissionNames.Resource_TabAllResource_CreatePlan,
-            PermissionNames.Resource_TabVendor_CreatePlan)]
+        [AbpAuthorize]
         public async Task PlanEmployeeJoinOrOutProject(InputPlanResourceDto input)
         {
             if (input.AllocatePercentage <= 0)
@@ -133,9 +132,7 @@ namespace ProjectManagement.APIs.Resource
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Resource_TabPool_EditPlan,
-            PermissionNames.Resource_TabAllResource_EditPlan,
-            PermissionNames.Resource_TabVendor_EditPlan)]
+        [AbpAuthorize]
         public async Task EditProjectUserPlan(EditProjectUserDto input)
         {
             await _resourceManager.EditProjectUserPlan(input);
