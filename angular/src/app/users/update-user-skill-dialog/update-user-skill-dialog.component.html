@@ -5,7 +5,7 @@
     <label class="col-md-3 col-form-label" for="userSkills">Skills:</label>
     <div class="col-md-9 ">
         <mat-form-field class="w-100" appearance="outline">
-            <mat-select multiple [(ngModel)]="userSkillList" name="userSkills" placeholder="select skill" #userSkills="ngModel">
+            <mat-select multiple [(ngModel)]="userSkillList" required name="userSkills" placeholder="select skill" #userSkills="ngModel">
                 <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
                     <input matInput [(ngModel)]="searchSkill" name="searchPMName" placeholder="Search" #search (input)="$event.stopPropagation();
                      filterSkill()">{{search.focus()}}
@@ -14,7 +14,6 @@
                     {{skill.name}}</mat-option>
             </mat-select>
         </mat-form-field>
-
     </div>
 </div>
 <div class="d-flex justify-content-end">

@@ -137,7 +137,7 @@
                                     <!-- <span class="hyperlink"
                                         (click)="showDetail(project.id)">{{ project.name }}
                                     </span> -->
-                                    <a [routerLink]="['/app/training-project-detail/training-project-general']" [queryParams]="{id: project.id,projectName: project.name, projectCode: project.code}" >
+                                    <a style="cursor: pointer;" *ngIf="permission.isGranted(Projects_TrainingProjects_ProjectDetail)" (click)="viewProjectDetail(project)" >
                                         {{ project.name }}
                                     </a>
                                 </td>

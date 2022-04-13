@@ -146,9 +146,9 @@
               </div>
             </div>
             <div class="col-2 text-right">
-              <a href="javascript:;" class="btn bg-blue" *ngIf="!isCreated" (click)="isCreated = !isCreated">
+              <a href="javascript:;" class="btn bg-blue" (click)="addUserInRole()">
                 <i class="fa fa-plus-square"></i>
-                {{ "Create" | localize }}
+                {{ "Add" | localize }}
               </a>
             </div>
           </div>
@@ -156,33 +156,6 @@
             <div class="col-md-12 scroll-user-role">
               <table class="table table-striped table-hover">
                 <tbody>
-                  <tr *ngIf="isCreated" class="d-flex align-items-center add-user-form-role">
-                    <button type="button" (click)="isCreated = !isCreated; userId = 0;" class="text-danger" mat-icon-button>
-                      <i class="fa fa-times"></i>
-                    </button>
-                    <button type="button" (click)="addUserIntoRole()" class="text-success" mat-icon-button>
-                      <i class="fa fa-check"></i>
-                    </button>
-                    <mat-form-field appearance="outline" floatLabel="never">
-                      <mat-label>User</mat-label>
-                      <mat-select [(ngModel)]="userId" (closed)="focusOut()" [ngModelOptions]="{standalone: true}" placeholder="select a User" >
-                          <mat-form-field
-                            class="w-100 px-3"
-                            style="position: sticky; top: 0; z-index: 2; background-color: white;"
-                          >
-                            <input 
-                              matInput [(ngModel)]="searchUser" [ngModelOptions]="{standalone: true}"
-                              name="search" #search placeholder="Search"
-                              (keydown)="$event.stopPropagation()">
-                          </mat-form-field>
-                          <mat-option
-                              *ngFor="let data of listUsersNotInRole | listFilter:  'name' : searchUser : 'email' : 'surname' : 'name'"
-                              [value]="data.id">
-                              {{data.fullName}} - ({{data.email}})
-                          </mat-option>
-                      </mat-select>
-                  </mat-form-field>
-                  </tr>
                   <tr *ngFor="let member of listUsers">
                     <div class="row">
                       <div class="col-1 col-sm-2 col-md-1 col-lg-1">
