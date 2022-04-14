@@ -103,8 +103,6 @@ namespace ProjectManagement.Services.ResourceManager
                 }).ToList()
             })
             .OrderByDescending(s => s.PUStatus == ProjectUserStatus.Present && s.AllocatePercentage> 0)
-            .ThenByDescending(s => s.AllocatePercentage)
-            .ThenByDescending(s=> s.PUStatus)
             .ThenByDescending(s => s.StartTime);
 
             return queryPu;
