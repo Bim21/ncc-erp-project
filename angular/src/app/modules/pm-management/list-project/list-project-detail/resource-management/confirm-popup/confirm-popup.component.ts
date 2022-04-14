@@ -84,7 +84,7 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
   }
   confirm() {
     if (this.data.workingProject.length > 0) {
-      if (this.data.page == "weekly") {
+      if (this.data.page == ConfirmFromPage.weeklyReport) {
         this.pmReportProService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.pmReportProService.handleError)).subscribe(rs => {
           abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)
           this.dialogRef.close(true)
@@ -101,7 +101,7 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
       abp.message.confirm(`Confirm user <strong>${this.user.fullName}</strong> <strong class="text-success">join</strong> Project`, "", rs => {
         if (rs) {
 
-          if (this.data.page == "weekly") {
+          if (this.data.page == ConfirmFromPage.weeklyReport) {
             this.pmReportProService.ConfirmJoinProject(this.user.id, moment(this.startDate).format("YYYY-MM-DD")).pipe(catchError(this.pmReportProService.handleError)).subscribe(rs => {
               this.dialogRef.close(true)
               abp.notify.success(`Confirmed for user ${this.user.fullName} join project`)

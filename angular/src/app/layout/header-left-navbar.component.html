@@ -22,7 +22,8 @@
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
             <mat-form-field style="font-size: 16px !important;" [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" class="myFilter ml-2" appearance="outline">
-            <mat-select [disabled]="!permission.isGranted(WeeklyReport_ReportDetail_UpdateProjectHealth)" name="flag" placeholder="Project health" name="flag" placeholder="Project health" [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
+                <mat-select  [disabled]="!permission.isGranted(WeeklyReport_ReportDetail_UpdateProjectHealth)"
+                  name="flag" placeholder="Project health" name="flag" placeholder="Project health" [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
                     <ng-container *ngFor="let flag of projectHealthList">
                         <mat-option style="border:1px white solid;" [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]" (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);"
                          [value]="APP_ENUM.ProjectHealth[flag]" >

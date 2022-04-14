@@ -407,8 +407,7 @@
                                                                         class="fas fa-check mr-1"></i>Confirm
                                                                     Join</button>
 
-                                                                    <button *ngIf="report.allocatePercentage <= 0 && (permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmPickEmployeeFromPoolToProject)
-                                                                        || permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))" [disabled]="planResourceProcess"
+                                                                    <button *ngIf="report.allocatePercentage <= 0 && permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PlannedResource_ConfirmOut)" [disabled]="planResourceProcess"
                                                                     class="mat-menu-item  w-100"
                                                                     (click)="confirm(report)"> <i
                                                                         class="fas fa-check mr-1"></i>Confirm

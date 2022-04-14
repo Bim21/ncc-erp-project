@@ -63,6 +63,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public addUserBill(): void {
     let newUserBill = {} as projectUserBillDto
     newUserBill.createMode = true;
+    newUserBill.isActive = true;
     this.userBillProcess = true;
     this.userBillList.unshift(newUserBill)
   }
