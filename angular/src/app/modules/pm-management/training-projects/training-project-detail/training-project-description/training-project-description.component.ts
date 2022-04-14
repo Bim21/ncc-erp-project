@@ -14,6 +14,8 @@ import { Component, OnInit, Injector } from '@angular/core';
 export class TrainingProjectDescriptionComponent extends AppComponentBase {
   public projectId
   projectDetail = {} as ProjectdetailDto
+  Projects_TrainingProjects_ProjectDetail_TabProjectDescription_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_View
+  Projects_TrainingProjects_ProjectDetail_TabProjectDescription_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabProjectDescription_Edit
   constructor(public injector: Injector, private projectService: ListProjectService, private router: Router, private route: ActivatedRoute) {
     super(injector)
   }
