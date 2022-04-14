@@ -54,6 +54,12 @@ namespace ProjectManagement.Services.Timesheet
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateProject", item);
         }
 
+       
+        public async Task<TimesheetTaxDto> GetTimesheetDetailForTax(InputTimesheetTaxDto input)
+        {
+            return await PostAsync<TimesheetTaxDto>($"/api/services/app/Public/GetTimesheetDetailForTax", input);
+        }
+
         public async Task<string> ChangePmOfProject(string code, string EmailPM)
         {
             var item = new
