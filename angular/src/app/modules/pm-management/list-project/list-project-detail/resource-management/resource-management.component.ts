@@ -419,6 +419,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
             this.getProjectUser()
             this.getPlannedtUser()
             this.getResourceRequestList()
+            this.projectUserProcess = false;
           }
         })
       })

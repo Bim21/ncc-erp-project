@@ -1,3 +1,4 @@
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { pmReportProjectHealthDto } from './../service/model/pmReport.dto';
 import { ProjectInfoDto } from './../service/model/project.dto';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
@@ -20,7 +21,7 @@ import { PMReportProjectService } from '@app/service/api/pmreport-project.servic
 })
 export class HeaderLeftNavbarComponent extends AppComponentBase implements OnInit {
   @ViewChild("timmer") timmerCount;
-
+  WeeklyReport_ReportDetail_UpdateProjectHealth = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateProjectHealth;
   sidebarExpanded: boolean;
   isShowReportBar: boolean = false;
   currentUrl: string = "";
