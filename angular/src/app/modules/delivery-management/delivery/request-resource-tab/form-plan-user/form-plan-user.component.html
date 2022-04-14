@@ -52,7 +52,7 @@
             </label>
             <div class="col-md-9">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-select placeholder="role" [(ngModel)]="resourcePlan.projectRole" name="projectRole" #role="ngModel">
+                    <mat-select placeholder="role" [(ngModel)]="resourcePlan.projectRole" name="projectRole" #role="ngModel" required>
                         <mat-option *ngFor="let projectRole of listProjectUserRoles" [value]="projectRole.id">
                             {{projectRole.name}}
                         </mat-option>
