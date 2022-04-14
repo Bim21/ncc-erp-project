@@ -735,7 +735,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
             data: hasTempDataOT ? TempChartData?.overTimeHours : []
           },{
             lineStyle: { color: 'green' },
-            name: 'OT No Charge',
+            name: 'OT NoCharge',
             type: 'line',
             data: hasOtNoCharge ? TempChartData?.otNoChargeHours : []
           },
