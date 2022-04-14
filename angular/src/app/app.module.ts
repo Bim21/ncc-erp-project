@@ -168,6 +168,8 @@ import { ConfirmPlanDialogComponent } from './modules/delivery-management/delive
 import { AddUserToTempProjectDialogComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/add-user-to-temp-project-dialog/add-user-to-temp-project-dialog.component';
 import { AddFutureResourceDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-future-resource-dialog/add-future-resource-dialog.component';
 import { EditMeetingNoteDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/edit-meeting-note-dialog/edit-meeting-note-dialog.component';
+import { TrainingProjectFileComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-file/training-project-file.component';
+import { ProductProjectFileComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-file/product-project-file.component';
 import { AddUserInRoleComponent } from './roles/edit-role/add-user-in-role/add-user-in-role.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -320,6 +322,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddUserToTempProjectDialogComponent,
     AddFutureResourceDialogComponent,
     EditMeetingNoteDialogComponent,
+    TrainingProjectFileComponent,
+    ProductProjectFileComponent,
   ],
   imports: [
     CommonModule,

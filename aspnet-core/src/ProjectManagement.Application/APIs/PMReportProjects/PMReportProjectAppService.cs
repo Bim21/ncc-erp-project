@@ -85,6 +85,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                 .Where(x => x.User.UserType != UserType.FakeUser)
                 .Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0);
             var projectUserBill = WorkScope.GetAll<ProjectUserBill>()
+                .Where(x => x.User.IsDeleted == false)
                 .Where(x => x.isActive);
 
             var query = WorkScope.GetAll<PMReportProject>().Where(x => x.Id == pmReportProjectId)

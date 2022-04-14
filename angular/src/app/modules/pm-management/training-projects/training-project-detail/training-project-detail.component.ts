@@ -106,7 +106,7 @@ export class TrainingProjectDetailComponent extends AppComponentBase implements 
     })
   }
   public routingFileTab(){
-    this.router.navigate(['project-file-tab'],{
+    this.router.navigate(['training-project-file-tab'],{
       relativeTo: this.route, queryParams:{
         id:this.requestId,
         projectName: this.projectName,

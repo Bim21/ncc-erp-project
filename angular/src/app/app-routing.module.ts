@@ -70,6 +70,8 @@ import { ProductProjectChecklistComponent } from './modules/pm-management/produc
 import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
 import * as path from 'path';
 import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.component';
+import { TrainingProjectFileComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-file/training-project-file.component';
+import { ProductProjectFileComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-file/product-project-file.component';
 
 
 @NgModule({
@@ -265,8 +267,8 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
               canActivate: [AppRouteGuard]
             },
             {
-              path: "project-file-tab",
-              component: ProjectFileComponent,
+              path: "training-project-file-tab",
+              component: TrainingProjectFileComponent,
               canActivate: [AppRouteGuard]
             },
             {
@@ -316,8 +318,8 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
               canActivate: [AppRouteGuard]
             },
             {
-              path: "project-file-tab",
-              component: ProjectFileComponent,
+              path: "product-project-file-tab",
+              component: ProductProjectFileComponent,
               canActivate: [AppRouteGuard]
             },
             {

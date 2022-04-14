@@ -110,7 +110,7 @@ export class ProductProjectDetailComponent extends AppComponentBase implements O
     })
   }
   public routingFileTab(){
-    this.router.navigate(['project-file-tab'],{
+    this.router.navigate(['product-project-file-tab'],{
       relativeTo: this.route, queryParams:{
         id:this.requestId,
         projectName: this.projectName,

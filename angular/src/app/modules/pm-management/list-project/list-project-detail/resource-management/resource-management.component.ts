@@ -199,6 +199,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       if (rs) {
         this.getProjectUser()
         this.getPlannedtUser()
+        this.planResourceProcess = false
       }
     })
   }

@@ -194,6 +194,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       if (rs) {
         this.getProjectUser()
         this.getPlannedtUser()
+        this.planResourceProcess = false
       }
     })
   }
