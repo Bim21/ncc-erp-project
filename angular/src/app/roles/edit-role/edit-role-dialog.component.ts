@@ -1,3 +1,5 @@
+import { AddUserInRoleComponent } from './add-user-in-role/add-user-in-role.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { result } from 'lodash-es';
 import {
@@ -79,6 +81,7 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
     private _roleService: RoleServiceProxy,
     private _route: ActivatedRoute,
     private ref: ChangeDetectorRef,
+    private  dialog: MatDialog
   ) {
     super(injector);
     this.dataSource = new MatTreeNestedDataSource<Permission>();
@@ -313,23 +316,18 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
     })
   }
 
-  addUserIntoRole(){
-    let request = {
-      userId: this.userId,
-      roleId: this.id
-    }
-    this._roleService.addUserIntoRole(request).subscribe((res) => {
-      if(res.success){
-        abp.notify.success(res.result)
-        this.isCreated = false
-        this.getAllUserInRole()
-        this.getAllUserNotInRole()
-        this.userId = 0
-      }
-      else{
-        abp.notify.error(res.result)
-      }
+  addUserInRole(){
+    const show = this.dialog.open(AddUserInRoleComponent,{
+      data:{
+        roleId: this.id
+      },
+      width: '500px'
     })
+    show.afterClosed().subscribe(result => {
+      if (result) {
+        this.getAllUserInRole();
+      }
+    });
   }
 
   getAvatar(member) {

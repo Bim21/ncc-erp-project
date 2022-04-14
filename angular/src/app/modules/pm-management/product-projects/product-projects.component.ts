@@ -26,6 +26,8 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   Projects_ProductProjects_Delete = PERMISSIONS_CONSTANT.Projects_ProductProjects_Delete;
   Projects_ProductProjects_Close = PERMISSIONS_CONSTANT.Projects_ProductProjects_Close;
   Projects_ProductProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail;
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
@@ -263,6 +265,18 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
         true
       );
     });
+  }
+
+  viewProjectDetail(project){
+    let routingToUrl:string = (this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport)
+     && this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View))
+    ? "/app/product-project-detail/product-weekly-report" : "/app/product-project-detail/product-project-general"
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
+      id: project.id,
+      type: project.projectType, 
+      projectName: project.name, 
+      projectCode: project.code} }));
+      window.open(url, '_blank');
   }
 
 }

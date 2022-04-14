@@ -23,6 +23,11 @@ namespace NccCore.Uitls
             return new DateTime(date.Year, date.Month, 1);
         }
 
+        public static DateTime LastDayOfMonth(DateTime date)
+        {
+            return FirstDayOfMonth(date).AddMonths(1).AddDays(-1);
+        }
+
         public static List<DateTime> GetListMonth(DateTime startDate, DateTime endDate)
         {
             var date = FirstDayOfMonth(startDate);

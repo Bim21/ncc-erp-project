@@ -19,6 +19,15 @@
           <i class="fa fa-file"></i>
           Export Invoice
         </button>
+        <button 
+          *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)"
+          [disabled]="listExportInvoice?.length <= 0"
+          (click)="exportInvoiceForTax()" 
+          class="btn bg-info mr-2"
+        >
+        <i class="fa fa-file-export"></i>
+          Export Invoice For Tax
+        </button>
         <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_AddProjectToTimesheet)" (click)="createTimeSheet()"
           class="btn bg-blue">
           <i class="fa fa-plus-square"></i>
@@ -224,7 +233,7 @@
                 </td>
                 <td *ngIf="isActive" class="text-center" style="vertical-align: middle">
                   <mat-checkbox
-                    *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice)"
+                    *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice) || permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)"
                     #checkboxExportInvoice
                     class="checkbox-exportInvoice"
                     [value]="item"
@@ -264,6 +273,11 @@
                       " (click)="exportInvocie(item)" class="btn mat-menu-item w-100">
                       <i class="fas fa-file-invoice-dollar mr-1"></i>
                       Export Invoice
+                    </button>
+                    <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)" 
+                        (click)="exportQuickInvoiceForTax(item)" class="btn mat-menu-item w-100">
+                        <i class="fas fa-file-export mr-1"></i>
+                        Export Invoice For Tax
                     </button>
                     <button  *ngIf="
                     permission.isGranted(Timesheets_TimesheetDetail_UpdateNote)

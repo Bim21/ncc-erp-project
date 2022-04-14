@@ -102,8 +102,7 @@ namespace ProjectManagement.Services.ResourceManager
                     SkillName = s.Skill.Name
                 }).ToList()
             })
-            .OrderBy(s => s.PUStatus)
-            .ThenByDescending(s => s.AllocatePercentage)
+            .OrderByDescending(s => s.PUStatus == ProjectUserStatus.Present && s.AllocatePercentage> 0)
             .ThenByDescending(s => s.StartTime);
 
             return queryPu;
