@@ -27,6 +27,9 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   Projects_TrainingProjects_Delete = PERMISSIONS_CONSTANT.Projects_TrainingProjects_Delete;
   Projects_TrainingProjects_Close = PERMISSIONS_CONSTANT.Projects_TrainingProjects_Close;
   Projects_TrainingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View
+  
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
     // { propertyName: 'status', comparisions: [0], displayName: "Trạng thái", filterType: 3, dropdownData: this.statusFilterList },
@@ -266,5 +269,17 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
         true
       );
     });
+  }
+
+  viewProjectDetail(project){
+    let routingToUrl:string = (this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport)
+     && this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View))
+    ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
+      id: project.id,
+      type: project.projectType, 
+      projectName: project.name, 
+      projectCode: project.code} }));
+    window.open(url, '_blank');
   }
 }

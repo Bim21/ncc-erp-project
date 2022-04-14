@@ -60,7 +60,7 @@
                                     Project Type:
                                 </label>
                                 <div *ngIf="readMode" class="col-md-7">
-                                    <div class="form-control text-read m-special">
+                                    <div class="text-read m-special">
                                         <span [ngClass]="APP_CONST.ProjectTypeStyle[getByEnum(project.projectType , APP_ENUM.ProjectType)]"> {{changeTextProjectType(getByEnum(project.projectType , APP_ENUM.ProjectType))}}</span>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                     Project Status:
                                 </label>
                                 <div *ngIf="readMode" class="col-md-7">
-                                    <div class="form-control text-read m-special"><p [ngClass]="APP_CONST.statusStyle[getByEnum(project.status, APP_ENUM.ProjectStatus)]">{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p></div>
+                                    <div class="text-read m-special"><p [ngClass]="APP_CONST.statusStyle[getByEnum(project.status, APP_ENUM.ProjectStatus)]">{{getByEnum(project.status, APP_ENUM.ProjectStatus)}}</p></div>
                                 </div>
                                 <div *ngIf="!readMode" class="col-md-7">
                                     <mat-form-field class="w-100" appearance="outline">
