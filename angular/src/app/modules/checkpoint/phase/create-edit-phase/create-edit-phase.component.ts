@@ -80,14 +80,14 @@ export class CreateEditPhaseComponent extends AppComponentBase implements OnInit
       this.phase.index = 0;
 
       this.phaseSerivce.create(this.phase).pipe(catchError(this.phaseSerivce.handleError)).subscribe((res) => {
-        abp.notify.success("created outcomeRequest ");
+        abp.notify.success("Create phase"+this.phase.name +" successfully");
         this.dialogRef.close(this.phase);
       });
       // 
     }
     else {
       this.phaseSerivce.update(this.phase).pipe(catchError(this.phaseSerivce.handleError)).subscribe((res) => {
-        abp.notify.success("edited outcomeRequest ");
+        abp.notify.success("Phase "+this.phase.name+" has been edited successfully");
         this.dialogRef.close(this.phase);
       });
     }

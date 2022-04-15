@@ -61,13 +61,13 @@ export class CreateEditSetupReviewerComponent extends AppComponentBase implement
     this.reviewer.phaseId=this.phaseId;
     if (this.data.command == "create") {
       this.reviewerService.createReviewer(true,this.reviewer).pipe(catchError(this.reviewerService.handleError)).subscribe((res) => {
-        abp.notify.success("created outcomeRequest ");
+        abp.notify.success("Create reviewer "+this.reviewer.reviewerName+ "successfully");
         this.dialogRef.close(this.reviewer);
       });
     }
     else {
       this.reviewerService.updateReviewer(this.reviewer).pipe(catchError(this.reviewerService.handleError)).subscribe((res) => {
-        abp.notify.success("edited outcomeRequest ");
+        abp.notify.success("Reviewer "+this.reviewer.reviewerName+" has been edited successfully");
         this.dialogRef.close(this.reviewer);
       });
     }

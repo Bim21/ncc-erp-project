@@ -57,7 +57,7 @@ export class CreateEditProjectChecklistComponent extends AppComponentBase implem
       return element.id
     });
     this.projectChecklistService.addCheckListItemByProject(this.projectId, this.arrCheckLists).pipe(catchError(this.projectChecklistService.handleError)).subscribe((res) => {
-      abp.notify.success("created outcomeRequest ");
+      abp.notify.success("Add project checklist successfully");
       this.dialogRef.close(this.arrCheckLists);
       this.isLoading = false;
     }, () => this.isLoading = false);
