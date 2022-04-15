@@ -917,6 +917,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                           Currency = x.Currency,
                           CurrencyId = x.CurrencyId,
                           Client = x.Client,
+                          ChargeType = x.ChargeType
                       }).ToListAsync();
 
                 var listTimesheetDetailOfUser = await GetInvoiceProjectTimesheet(input, listProject);
