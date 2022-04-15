@@ -51,14 +51,14 @@ export class CreateEditTimesheetComponent extends AppComponentBase implements On
     if (this.data.command == "create") {
       this.timesheet.isActive = true;
       this.timesheetService.create(this.timesheet).pipe(catchError(this.timesheetService.handleError)).subscribe((res) => {
-        abp.notify.success("created outcomeRequest ");
+        abp.notify.success("Create timesheet "+ this.timesheet.name +" successfully ");
         this.dialogRef.close(this.timesheet);
       }, () => this.isDisable = false);
       // 
     }
     else {
       this.timesheetService.update(this.timesheet).pipe(catchError(this.timesheetService.handleError)).subscribe((res) => {
-        abp.notify.success("edited outcomeRequest ");
+        abp.notify.success("Timesheet "+ this.timesheet.name +" has been edited successfully");
         this.dialogRef.close(this.timesheet);
       }, () => this.isDisable = false);
     }

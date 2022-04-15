@@ -143,7 +143,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngOnInit(): void {
     this.meId = Number(this.appSession.userId);
-    if(this.permission.isGranted( this.Timesheet_TimesheetProject_ViewOnlyme)){
+    if(!this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)){
       this.pmId = this.meId
     }
     this.timesheetId = this.route.snapshot.queryParamMap.get('id');
@@ -440,20 +440,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       })
     );
   }
-  showButtonMenu(pmId){
-    if(
-      this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject) ||
-      (
-        !this.permission.isGranted(this.Timesheet_TimesheetProject_ViewAllProject) && 
-        this.permission.isGranted(this.Timesheet_TimesheetProject_ViewOnlyme) && 
-        this.meId == pmId
-      )
-    )
-    {
-      return true
-    }  
-    return false
-  }
+
 }
 export const UpdateAction = {
   UpdateBillInfo: 1,

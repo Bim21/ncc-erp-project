@@ -64,14 +64,14 @@ export class CreateEditSaodoComponent extends AppComponentBase implements OnInit
     if (this.data.command == "create") {
       // this.timesheet.isActive=true;
       this.saodoService.create(this.saodo).pipe(catchError(this.saodoService.handleError)).subscribe((res) => {
-        abp.notify.success("created outcomeRequest ");
+        abp.notify.success("Create Saodo successfully");
         this.dialogRef.close(this.saodo);
       }, () => this.isLoading = false);
       // 
     }
     else {
       this.saodoService.update(this.saodo).pipe(catchError(this.saodoService.handleError)).subscribe((res) => {
-        abp.notify.success("edited outcomeRequest ");
+        abp.notify.success("Saodo has been edited successfully");
         this.dialogRef.close(this.saodo);
       }, () => this.isLoading = false);
     }
