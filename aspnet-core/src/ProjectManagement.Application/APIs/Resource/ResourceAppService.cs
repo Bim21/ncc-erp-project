@@ -82,13 +82,12 @@ namespace ProjectManagement.APIs.Resource
         public async Task AddUserFromPoolToTempProject(AddResourceToProjectDto input)
         {
             var allowConfirmMoveEmployeeToOtherProject
-               = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+               = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_EditTempProject);
             await _resourceManager.CreatePresentProjectUserAndNofity(input, allowConfirmMoveEmployeeToOtherProject);
         }
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject,
-            PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther,
             PermissionNames.Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject,
             PermissionNames.Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
             PermissionNames.Resource_TabVendor_ConfirmPickEmployeeFromPoolToProject,
@@ -102,12 +101,11 @@ namespace ProjectManagement.APIs.Resource
         //}
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject,
-            PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther)]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject)]
         public async Task ConfirmJoinProjectFromTabPool(long projectUserId, DateTime startTime)
         {
             var allowConfirmMoveEmployeeToOtherProject
-              = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther);
+              = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject);
             await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
 
@@ -161,7 +159,6 @@ namespace ProjectManagement.APIs.Resource
         }
 
 
-        [HttpDelete]
         public async Task CancelResourcePlan(long projectUserId, bool allowCancelAnyPlan)
         {
             var pu = await WorkScope.GetAll<ProjectUser>()
@@ -214,21 +211,21 @@ namespace ProjectManagement.APIs.Resource
         }
 
 
-        [HttpPut]
+        [HttpDelete]
         [AbpAuthorize(PermissionNames.Resource_TabPool_CancelAnyPlan, PermissionNames.Resource_TabPool_CancelMyPlan)]
         public async Task CancelPoolResourcePlan(long projectUserId)
         {
             bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabPool_CancelAnyPlan);
             await CancelResourcePlan(projectUserId, allowCancelAnyPlan);
         }
-        [HttpPut]
+        [HttpDelete]
         [AbpAuthorize(PermissionNames.Resource_TabAllResource_CancelAnyPlan, PermissionNames.Resource_TabAllResource_CancelMyPlan)]
         public async Task CancelAllResourcePlan(long projectUserId)
         {
             bool allowCancelAnyPlan = await PermissionChecker.IsGrantedAsync(PermissionNames.Resource_TabAllResource_CancelAnyPlan);
             await CancelResourcePlan(projectUserId, allowCancelAnyPlan);
         }
-        [HttpPut]
+        [HttpDelete]
         [AbpAuthorize(PermissionNames.Resource_TabVendor_CancelAnyPlan, PermissionNames.Resource_TabVendor_CancelMyPlan)]
         public async Task CancelVendorResourcPlan(long projectUserId)
         {

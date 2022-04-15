@@ -44,11 +44,26 @@ export class ResourceManagerService extends BaseApiService{
     );
   }
 
-  public CancelResourcePlan(
+  public CancelPoolResourcePlan(
     id: number
   ): Observable<any> {
     return this.http.delete<any>(
-      this.rootUrl + '/CancelResourcePlan?projectUserId=' + id,
+      this.rootUrl + '/CancelPoolResourcePlan?projectUserId=' + id,
+
+    );
+  }
+  public CancelAllResourcePlan(
+    id: number
+  ): Observable<any> {
+    return this.http.delete<any>(
+      this.rootUrl + '/CancelAllResourcePlan?projectUserId=' + id,
+
+    );
+  }  public CancelVendorResourcPlan(
+    id: number
+  ): Observable<any> {
+    return this.http.delete<any>(
+      this.rootUrl + '/CancelVendorResourcPlan?projectUserId=' + id,
 
     );
   }

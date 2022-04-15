@@ -392,10 +392,12 @@ namespace ProjectManagement.Authorization
         public const string ResourceRequest_View = "ResourceRequest.View";
         public const string ResourceRequest_CreateNewRequest = "ResourceRequest.CreateNewRequest";
         public const string ResourceRequest_PlanNewResourceForRequest = "ResourceRequest.PlanNewResourceForRequest";
-        public const string ResourceRequest_UpdateResourceRequestPlan = "ResourceRequest.UpdateResourceRequestPlan";
-        public const string ResourceRequest_RemoveResouceRequestPlan = "ResourceRequest.RemoveResouceRequestPlan";
+        //public const string ResourceRequest_UpdateResourceRequestPlan = "ResourceRequest.UpdateResourceRequestPlan";
+        //public const string ResourceRequest_RemoveResouceRequestPlan = "ResourceRequest.RemoveResouceRequestPlan";
         public const string ResourceRequest_SetDone = "ResourceRequest.SetDone";
         public const string ResourceRequest_Cancel = "ResourceRequest.Cancel";
+        public const string ResourceRequest_EditPmNote = "ResourceRequest.EditPmNote";
+        public const string ResourceRequest_EditDmNote = "ResourceRequest.EditDmNote";
         public const string ResourceRequest_Edit = "ResourceRequest.Edit";
         public const string ResourceRequest_Delete = "ResourceRequest.Delete";
         public const string ResourceRequest_SendRecruitment = "ResourceRequest.SendRecruitment";
@@ -408,11 +410,12 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabPool_CreatePlan = "Resource.TabPool.CreatePlan";
         public const string Resource_TabPool_EditPlan = "Resource.TabPool.EditPlan";
         public const string Resource_TabPool_ConfirmPickEmployeeFromPoolToProject = "Resource.TabPool.ConfirmPickEmployeeFromPoolToProject";
-        public const string Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther = "Resource.TabPool.ConfirmMoveEmployeeWorkingOnAProjectToOther";
+        public const string Resource_TabPool_Release = "Resource.TabPool.Release";
         public const string Resource_TabPool_ConfirmOut = "Resource.TabPool.ConfirmOut";
         public const string Resource_TabPool_CancelMyPlan = "Resource.TabPool.CancelMyPlan";
         public const string Resource_TabPool_CancelAnyPlan = "Resource.TabPool.CancelAnyPlan";
         public const string Resource_TabPool_EditTempProject = "Resource.TabPool.EditTempProject";
+        public const string Resource_TabPool_AddTempProject = "Resource.TabPool.AddTempProject";
         public const string Resource_TabPool_UpdateSkill = "Resource.TabPool.UpdateSkill";
         public const string Resource_TabPool_EditNote = "Resource.TabPool.EditNote";
 
@@ -861,10 +864,12 @@ namespace ProjectManagement.Authorization
                     PermissionNames.ResourceRequest_View ,
                     PermissionNames.ResourceRequest_CreateNewRequest ,
                     PermissionNames.ResourceRequest_PlanNewResourceForRequest ,
-                    PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,
-                    PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,
+                    //PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,
+                    //PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,
                     PermissionNames.ResourceRequest_SetDone ,
                     PermissionNames.ResourceRequest_Cancel ,
+                    PermissionNames.ResourceRequest_EditPmNote ,
+                    PermissionNames.ResourceRequest_EditDmNote ,
                     PermissionNames.ResourceRequest_Edit ,
                     PermissionNames.ResourceRequest_Delete ,
                     PermissionNames.ResourceRequest_SendRecruitment ,
@@ -877,11 +882,12 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabPool_CreatePlan ,
                     PermissionNames.Resource_TabPool_EditPlan ,
                     PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject ,
-                    PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther ,
+                    PermissionNames.Resource_TabPool_Release ,
                     PermissionNames.Resource_TabPool_ConfirmOut ,
                     PermissionNames.Resource_TabPool_CancelMyPlan ,
                     PermissionNames.Resource_TabPool_CancelAnyPlan ,
                     PermissionNames.Resource_TabPool_EditTempProject ,
+                    PermissionNames.Resource_TabPool_AddTempProject ,
                     PermissionNames.Resource_TabPool_UpdateSkill ,
                     PermissionNames.Resource_TabPool_EditNote ,
 
@@ -1321,10 +1327,12 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
-                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
-                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
+                 //new SystemPermission{ Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
+                 //new SystemPermission{ Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Cancel ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_EditPmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit PM Note"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_SendRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment"},
@@ -1337,11 +1345,12 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL to Project"},
-                 new SystemPermission{ Name =  PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Move Employee Working On A Project To Other"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabPool_Release ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release Employee Working Temp On A Project"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_ConfirmOut ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Out"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_CancelMyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_CancelAnyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Temp Project"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabPool_AddTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Temp Project"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
 
@@ -1921,11 +1930,13 @@ namespace ProjectManagement.Authorization
                     Childrens = new List<SystemPermission>() {
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_CreateNewRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request"},
-                        new SystemPermission { Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
-                        new SystemPermission { Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
-                        new SystemPermission { Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
+                        new SystemPermission { Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan Resource For Request"},
+                        //new SystemPermission { Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
+                        //new SystemPermission { Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_Cancel ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel"},
+                        new SystemPermission { Name =  PermissionNames.ResourceRequest_EditPmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit PM Note"},
+                        new SystemPermission { Name =  PermissionNames.ResourceRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_SendRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment"},
@@ -1943,11 +1954,12 @@ namespace ProjectManagement.Authorization
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_CreatePlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create Plan"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Plan"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Pick Employee From POOL To Project"},
-                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Join: Move Employee Working On Project To Other"},
+                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_Release ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release Employee Working Temp On A Project"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_ConfirmOut ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Out"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_CancelMyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_CancelAnyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Temp Project"},
+                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_AddTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Temp Project"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update skill"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
                     },

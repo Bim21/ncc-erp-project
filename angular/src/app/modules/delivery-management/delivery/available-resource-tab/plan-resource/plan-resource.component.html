@@ -118,7 +118,7 @@
                                     <div class="d-flex justify-content-between" style="align-items: center;">
                                         <div>
                                             <div *ngFor="let plan of item.plannedProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
-                                                <button class="btn p-0 text-left" style="white-space: normal;" [matMenuTriggerFor]="planMenu">
+                                                <button class="btn p-0 text-left" style="white-space: normal;" [matMenuTriggerFor]="planMenu" matTooltip="Click to show action">
                                                     <span [ngClass]="plan.onHover?'on-hover-plan':''">
                                                         <span matTooltip="Potential project" *ngIf="plan.projectStatus==APP_ENUM.ProjectStatus.Potential" 
                                                         class="badge bg-info pointer mr-1">
@@ -139,11 +139,15 @@
                                                         (click)="CancelResourcePlan(plan,item.fullName)"></i>
                                                 </span> -->
                                                 </button>
+                                                <!-- <i class="fas fa-ellipsis-v" [matMenuTriggerFor]="planMenu"></i> -->
                                                 <mat-menu #planMenu="matMenu">
-                                                    <button *ngIf="permission.isGranted(Resource_TabPool_ConfirmPickEmployeeFromPoolToProject)
-                                                    || permission.isGranted(Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther)" mat-menu-item (click)="confirm(plan, item.userId, item.fullName)"><i
-                                                            class="fas fa-check mr-1 text-success"></i>Confirm</button>
-                                                    <button *ngIf="permission.isGranted(Resource_TabPool_CancelMyPlan) || permission.isGranted(permission.isGranted(Resource_TabPool_CancelMyPlan))" mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)">
+                                                    <button *ngIf="plan.allocatePercentage > 0 && (permission.isGranted(Resource_TabPool_ConfirmPickEmployeeFromPoolToProject)
+                                                    || permission.isGranted(Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther))" mat-menu-item (click)="confirm(plan, item.userId, item.fullName)"><i
+                                                            class="fas fa-check mr-1 text-success"></i>Confirm Join</button>
+                                                            <button *ngIf="plan.allocatePercentage <= 0 && permission.isGranted(Resource_TabPool_ConfirmOut)
+                                                            " mat-menu-item (click)="confirm(plan, item.userId, item.fullName)"><i
+                                                                    class="fas fa-check mr-1 text-success"></i>Confirm Out</button>
+                                                    <button *ngIf="permission.isGranted(Resource_TabPool_CancelMyPlan) || permission.isGranted(Resource_TabPool_CancelAnyPlan)" mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)">
                                                         <i class="fas fa-times mr-1 text-danger"></i> Cancel
                                                         plan</button>
                                                     <button *ngIf="permission.isGranted(Resource_TabPool_EditPlan)" mat-menu-item (click)="editUserPlan(plan,item)"> <i
@@ -152,34 +156,47 @@
                                             </div>
                                         </div>
                                         <div *ngIf="permission.isGranted(Resource_TabPool_CreatePlan)" style="width: 14%;" class="text-right  ml-1">
-                                            <i class="fas fa-plus text-primary" (click)="planUser(item)" matTooltip="Plan user"></i>
+                                            <i class="fas fa-plus text-primary" (click)="planUser(item)" matTooltip="Create plan for user"></i>
                                         </div>
                                     </div>
 
                                 </td>
                                 <td style="white-space: normal;">
-                                    <div class="d-flex justify-content-between" style="align-items: center;">
-                                        <div>
-                                            <div *ngFor="let plan of item.poolProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false">
-                                                <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="tempMenu">
-                                                    <span [ngClass]="plan.onHover?'on-hover-plan':''">
-                                                        <strong>{{ plan.projectName }}</strong>&nbsp;{{ plan.startTime |
-                                                        date:
-                                                        'dd/MM/yyyy' }}
-                                                    </span>
-                                                </button>
-                                                <mat-menu #tempMenu="matMenu">
-                                                    <button mat-menu-item (click)="releaseUser(plan,item.fullName)"> <i
-                                                            class="fas fa-sign-out-alt mr-1"></i>Release</button>
-                                                </mat-menu>
+                                    <div class="d-flex justify-content-between" style="align-items: center;width: 100%;" >
+                                        <div style="width: 100%;" class="d-flex justify-content-between">
+                                            <div class="d-flex justify-content-between" style="width: 100%;" *ngFor="let plan of item.poolProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false">
+                                                <div style="width: 100%;">
+                                                    <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="tempMenu" matTooltip="Click to show action">
+                                                        <span [ngClass]="plan.onHover?'on-hover-plan':''">
+                                                            <strong>{{ plan.projectName }}</strong>&nbsp;{{ plan.startTime |
+                                                            date:
+                                                            'dd/MM/yyyy' }}
+                                                        </span>
+                                                    </button>
+                                                    <mat-menu #tempMenu="matMenu"> 
+                                                        <button *ngIf="permission.isGranted(Resource_TabPool_Release)" mat-menu-item (click)="releaseUser(plan,item.fullName)"> <i
+                                                                class="fas fa-sign-out-alt mr-1"></i>Release</button>
+                                                        <button *ngIf="permission.isGranted(Resource_TabPool_EditTempProject)" mat-menu-item (click)="addToTempProject(item,plan)"> <i
+                                                                    class="fas fa-edit mr-1"></i>Edit Temp Project</button>
+                                                    </mat-menu>
+                                                </div>
+                                                <div>
+                                                    <div *ngIf="permission.isGranted(Resource_TabPool_EditTempProject) || permission.isGranted(Resource_TabPool_Release)" style="width: 10%;" class="text-right ml-1">
+                                                      
+                                                        <i *ngIf="item.poolProjects.length > 0" class="fas fa-ellipsis-v" [matMenuTriggerFor]="tempMenu"></i>
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
-
                                         </div>
-                                        <div *ngIf="permission.isGranted(Resource_TabPool_EditTempProject)" style="width: 10%;" class="text-right ml-1">
-                                            <i class="fas fa-edit" (click)="addToTempProject(item)" matTooltip="Add user"></i>
+                                        <div *ngIf="permission.isGranted(Resource_TabPool_AddTempProject)">
+                                            <i style="color: #007bff;" *ngIf="item.poolProjects.length == 0 || !item.poolProjects.length" 
+                                            class="fas fa-plus text-primary'"  (click)="addToTempProject(item)" 
+                                            matTooltip="Add Temp Project"></i>
                                         </div>
+                                      
                                     </div>
-
+                                   
                                 </td>
                                 <td style="white-space: normal; max-width: 150px">
                                     <div class="d-flex" style="align-items: center;">

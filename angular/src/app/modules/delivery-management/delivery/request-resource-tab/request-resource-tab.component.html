@@ -243,7 +243,7 @@
                                             {{item.pmNote}}
                                         </pre>
                                     </div>
-                                    <div class="col-md-2" *ngIf="permission.isGranted(ResourceRequest_Edit)">
+                                    <div class="col-md-2" *ngIf="permission.isGranted(ResourceRequest_EditPmNote)">
                                         <i  class="fa fa-edit" (click)="openModal(item.name, 'PM', item.pmNote, item.id)"></i>
                                     </div>
                                 </div>
@@ -258,7 +258,7 @@
                                             {{item.dmNote}} 
                                         </pre>
                                     </div>
-                                    <div class="col-md-2" *ngIf="permission.isGranted(ResourceRequest_Edit)">
+                                    <div class="col-md-2" *ngIf="permission.isGranted(ResourceRequest_EditDmNote)">
                                         <i  class="fa fa-edit" (click)="openModal(item.name, 'HR/DM', item.dmNote, item.id)"></i>
                                     </div>
                                 </div>

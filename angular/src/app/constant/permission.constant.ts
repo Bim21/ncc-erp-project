@@ -387,6 +387,8 @@ export const PERMISSIONS_CONSTANT = {
        ResourceRequest_RemoveResouceRequestPlan: "ResourceRequest.RemoveResouceRequestPlan",
        ResourceRequest_SetDone: "ResourceRequest.SetDone",
        ResourceRequest_Cancel: "ResourceRequest.Cancel",
+       ResourceRequest_EditPmNote: "ResourceRequest.EditPmNote",
+       ResourceRequest_EditDmNote: "ResourceRequest.EditDmNote",
        ResourceRequest_Edit: "ResourceRequest.Edit",
        ResourceRequest_Delete: "ResourceRequest.Delete",
        ResourceRequest_SendRecruitment: "ResourceRequest.SendRecruitment",
@@ -404,6 +406,10 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabPool_CancelMyPlan: "Resource.TabPool.CancelMyPlan",
        Resource_TabPool_CancelAnyPlan: "Resource.TabPool.CancelAnyPlan",
        Resource_TabPool_EditTempProject: "Resource.TabPool.EditTempProject",
+       Resource_TabPool_AddTempProject : "Resource.TabPool.AddTempProject",
+       Resource_TabPool_Release: "Resource.TabPool.Release",
+
+
        Resource_TabPool_UpdateSkill: "Resource.TabPool.UpdateSkill",
        Resource_TabPool_EditNote: "Resource.TabPool.EditNote",
 
