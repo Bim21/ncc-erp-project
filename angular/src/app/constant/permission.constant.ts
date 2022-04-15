@@ -387,6 +387,8 @@ export const PERMISSIONS_CONSTANT = {
        ResourceRequest_RemoveResouceRequestPlan: "ResourceRequest.RemoveResouceRequestPlan",
        ResourceRequest_SetDone: "ResourceRequest.SetDone",
        ResourceRequest_Cancel: "ResourceRequest.Cancel",
+       ResourceRequest_EditPmNote: "ResourceRequest.EditPmNote",
+       ResourceRequest_EditDmNote: "ResourceRequest.EditDmNote",
        ResourceRequest_Edit: "ResourceRequest.Edit",
        ResourceRequest_Delete: "ResourceRequest.Delete",
        ResourceRequest_SendRecruitment: "ResourceRequest.SendRecruitment",

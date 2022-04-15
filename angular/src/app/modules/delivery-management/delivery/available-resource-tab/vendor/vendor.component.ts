@@ -225,7 +225,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
       (result: boolean) => {
         if (result) {
           this.subscription.push(
-            this.availableRerourceService.CancelResourcePlan(projectUser.id).subscribe(rs => {
+            this.availableRerourceService.CancelVendorResourcPlan(projectUser.id).pipe(catchError(this.availableRerourceService.handleError)).subscribe(rs => {
               this.refresh()
               abp.notify.success("Cancel plan for user")
             })

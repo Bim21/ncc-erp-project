@@ -69,6 +69,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   ResourceRequest_RemoveResouceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_RemoveResouceRequestPlan;
   ResourceRequest_SetDone = PERMISSIONS_CONSTANT.ResourceRequest_SetDone;
   ResourceRequest_Cancel = PERMISSIONS_CONSTANT.ResourceRequest_Cancel;
+  ResourceRequest_EditPmNote = PERMISSIONS_CONSTANT.ResourceRequest_EditPmNote;
+  ResourceRequest_EditDmNote = PERMISSIONS_CONSTANT.ResourceRequest_EditDmNote;
   ResourceRequest_Edit = PERMISSIONS_CONSTANT.ResourceRequest_Edit;
   ResourceRequest_Delete = PERMISSIONS_CONSTANT.ResourceRequest_Delete;
   ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment;

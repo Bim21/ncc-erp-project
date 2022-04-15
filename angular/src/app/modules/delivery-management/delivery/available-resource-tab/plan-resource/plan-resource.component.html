@@ -143,7 +143,7 @@
                                                     <button *ngIf="permission.isGranted(Resource_TabPool_ConfirmPickEmployeeFromPoolToProject)
                                                     || permission.isGranted(Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther)" mat-menu-item (click)="confirm(plan, item.userId, item.fullName)"><i
                                                             class="fas fa-check mr-1 text-success"></i>Confirm</button>
-                                                    <button *ngIf="permission.isGranted(Resource_TabPool_CancelMyPlan) || permission.isGranted(permission.isGranted(Resource_TabPool_CancelMyPlan))" mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)">
+                                                    <button *ngIf="permission.isGranted(Resource_TabPool_CancelMyPlan) || permission.isGranted(permission.isGranted(Resource_TabPool_CancelAnyPlan))" mat-menu-item (click)="CancelResourcePlan(plan,item.fullName)">
                                                         <i class="fas fa-times mr-1 text-danger"></i> Cancel
                                                         plan</button>
                                                     <button *ngIf="permission.isGranted(Resource_TabPool_EditPlan)" mat-menu-item (click)="editUserPlan(plan,item)"> <i
