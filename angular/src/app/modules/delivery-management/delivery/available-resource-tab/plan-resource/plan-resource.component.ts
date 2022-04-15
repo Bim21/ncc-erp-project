@@ -52,12 +52,14 @@ export class PlanResourceComponent
   Resource_TabPool_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabPool_ViewHistory
   Resource_TabPool_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabPool_CreatePlan
   Resource_TabPool_EditPlan = PERMISSIONS_CONSTANT.Resource_TabPool_EditPlan
+  Resource_TabPool_AddTempProject = PERMISSIONS_CONSTANT.Resource_TabPool_AddTempProject
   Resource_TabPool_ConfirmPickEmployeeFromPoolToProject = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmPickEmployeeFromPoolToProject
   Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmMoveEmployeeWorkingOnAProjectToOther
   Resource_TabPool_ConfirmOut = PERMISSIONS_CONSTANT.Resource_TabPool_ConfirmOut
   Resource_TabPool_CancelMyPlan = PERMISSIONS_CONSTANT.Resource_TabPool_CancelMyPlan
   Resource_TabPool_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabPool_CancelAnyPlan
   Resource_TabPool_EditTempProject = PERMISSIONS_CONSTANT.Resource_TabPool_EditTempProject
+  Resource_TabPool_Release = PERMISSIONS_CONSTANT.Resource_TabPool_Release
   Resource_TabPool_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabPool_UpdateSkill
   Resource_TabPool_EditNote = PERMISSIONS_CONSTANT.Resource_TabPool_EditNote
   
@@ -326,12 +328,13 @@ export class PlanResourceComponent
     })
   }
   releaseUser(user, name) {
-    console.log("user", user)
     user.fullName = name
     let ref = this.dialog.open(ReleaseUserDialogComponent, {
       width: "700px",
       data: {
-        user: user
+        user: user,
+        action: "Release"
+        
       }
     })
     ref.afterClosed().subscribe(rs => {
@@ -417,8 +420,10 @@ export class PlanResourceComponent
   }
 
 
-  addToTempProject(projectUser) {
-    console.log(projectUser)
+  addToTempProject(projectUser, plan?) {
+    if(plan){
+      projectUser.project = plan
+    }
     let ref = this.dialog.open(AddUserToTempProjectDialogComponent,
       {
         width: "700px",

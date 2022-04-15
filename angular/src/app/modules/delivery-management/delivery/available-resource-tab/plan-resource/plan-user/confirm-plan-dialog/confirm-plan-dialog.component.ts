@@ -31,7 +31,6 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
   public confirmMessage: string = ""
   public projectRoleList = Object.keys(APP_ENUMS.ProjectUserRole);
   public workingProject: any[] = []
-  public canNotWorkTemp: boolean = false;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private puService: ResourceManagerService,
     injector: Injector,
@@ -105,9 +104,6 @@ export class ConfirmPlanDialogComponent extends AppComponentBase implements OnIn
       this.workingProject.forEach(pu => {
         if (!pu.isPool) {
           this.allowConfirm = false
-          if (this.user.isPool) {
-            this.canNotWorkTemp = true
-          }
           return
         }
       }

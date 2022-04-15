@@ -23,6 +23,9 @@ export class AddUserToTempProjectDialogComponent extends AppComponentBase implem
   }
 
   ngOnInit(): void {
+    if(this.data.project){
+      this.user = this.data.project
+    }
     this.user.fullName = this.data.fullName
     this.getAllProject()
   }

@@ -406,6 +406,10 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabPool_CancelMyPlan: "Resource.TabPool.CancelMyPlan",
        Resource_TabPool_CancelAnyPlan: "Resource.TabPool.CancelAnyPlan",
        Resource_TabPool_EditTempProject: "Resource.TabPool.EditTempProject",
+       Resource_TabPool_AddTempProject : "Resource.TabPool.AddTempProject",
+       Resource_TabPool_Release: "Resource.TabPool.Release",
+
+
        Resource_TabPool_UpdateSkill: "Resource.TabPool.UpdateSkill",
        Resource_TabPool_EditNote: "Resource.TabPool.EditNote",
 

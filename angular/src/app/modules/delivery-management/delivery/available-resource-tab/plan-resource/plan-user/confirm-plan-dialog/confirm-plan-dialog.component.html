@@ -41,7 +41,7 @@
         </div>
     </div> -->
 
-    <div *ngIf="workingProject.length >0 && user.allocatePercentage > 0 && allowConfirm && !canNotWorkTemp">
+    <div *ngIf="workingProject.length >0 && user.allocatePercentage > 0 && allowConfirm">
         <p style="font-size: 20px;" class="text-danger"><strong>{{user.fullName}}</strong> is working on the following projects:
         </p>
         <ul>
@@ -57,7 +57,7 @@
         </p>
 
     </div>
-    <div *ngIf="!allowConfirm && !canNotWorkTemp">
+    <div *ngIf="!allowConfirm">
         <p style="font-size: 20px;" class="text-danger"><strong>{{user.fullName}}</strong> is working on the following projects:
         </p>
         <ul>
@@ -72,12 +72,10 @@
             Please contact PM to release <strong>{{user.fullName}}</strong>
         </p>
     </div>
-    <div *ngIf="canNotWorkTemp" class="text-danger" style="font-size: 17px;">
-        <strong>{{user.fullName}}</strong> is Working <strong class="text-primary">[OFFICAL]</strong> in other project, so he can't work <strong class="text-secondary">[TEMP]</strong> for other project now!
-    </div>
+    
 
 
-    <div class="d-flex justify-content-end" *ngIf="allowConfirm && !canNotWorkTemp">
+    <div class="d-flex justify-content-end" *ngIf="allowConfirm">
         <button class="btn btn-secondary mr-2" mat-dialog-close="">
             Cancel
         </button>
@@ -86,7 +84,7 @@
         </button>
     </div>
 
-    <div class="d-flex justify-content-end" *ngIf="!allowConfirm || canNotWorkTemp">
+    <div class="d-flex justify-content-end" *ngIf="!allowConfirm">
         <button class="btn btn-secondary mr-2" mat-dialog-close="">
             Close
         </button>

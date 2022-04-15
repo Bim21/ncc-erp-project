@@ -165,7 +165,7 @@
                                             <div *ngFor="let plan of item.planProjects"
                                                 (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false"
                                                 style="white-space: nowrap;">
-                                                <button class="btn p-0 text-left text-nowrap"
+                                                <button class="btn p-0 text-left text-nowrap" matTooltip="Click to show action"
                                                     [matMenuTriggerFor]="planMenu">
                                                     <span [ngClass]="plan.onHover?'on-hover-plan':''">
                                                         <strong class="mr-1">{{ plan.projectName }}</strong><strong
@@ -180,11 +180,16 @@
                                                     </span>
                                                 </button>
                                                 <mat-menu #planMenu="matMenu">
-                                                    <button mat-menu-item *ngIf="permission.isGranted(Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject)
-                                                    || permission.isGranted(Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther)
-                                                    || permission.isGranted(Resource_TabAllResource_ConfirmOut)" 
+                                                    <button mat-menu-item *ngIf="plan.allocatePercentage > 0 && (permission.isGranted(Resource_TabAllResource_ConfirmPickEmployeeFromPoolToProject)
+                                                    || permission.isGranted(Resource_TabAllResource_ConfirmMoveEmployeeWorkingOnAProjectToOther))
+                                                    " 
                                                         (click)="confirm(plan, item.userId, item.fullName)"><i
-                                                            class="fas fa-check mr-1 text-success"></i>Confirm</button>
+                                                            class="fas fa-check mr-1 text-success"></i>Confirm Join</button>
+
+                                                            <button mat-menu-item *ngIf="plan.allocatePercentage <= 0
+                                                            && permission.isGranted(Resource_TabAllResource_ConfirmOut)" 
+                                                                (click)="confirm(plan, item.userId, item.fullName)"><i
+                                                                    class="fas fa-check mr-1 text-success"></i>Confirm Out</button>
                                                     <button mat-menu-item *ngIf="permission.isGranted(Resource_TabAllResource_CancelMyPlan) 
                                                     || permission.isGranted(Resource_TabAllResource_CancelAnyPlan)"
                                                         (click)="CancelResourcePlan(plan,item.fullName)">

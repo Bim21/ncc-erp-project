@@ -772,6 +772,7 @@ namespace ProjectManagement.Services.ResourceManager
                            .Where(pu => pu.Project.Status != ProjectStatus.Closed)
                            .Select(pu => new ProjectOfUserDto
                            {
+                               ProjectId = pu.ProjectId,
                                ProjectName = pu.Project.Name,
                                ProjectRole = pu.ProjectRole,
                                PmName = pu.Project.PM.Name,

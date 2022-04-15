@@ -415,6 +415,7 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabPool_CancelMyPlan = "Resource.TabPool.CancelMyPlan";
         public const string Resource_TabPool_CancelAnyPlan = "Resource.TabPool.CancelAnyPlan";
         public const string Resource_TabPool_EditTempProject = "Resource.TabPool.EditTempProject";
+        public const string Resource_TabPool_AddTempProject = "Resource.TabPool.AddTempProject";
         public const string Resource_TabPool_UpdateSkill = "Resource.TabPool.UpdateSkill";
         public const string Resource_TabPool_EditNote = "Resource.TabPool.EditNote";
 
@@ -886,6 +887,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabPool_CancelMyPlan ,
                     PermissionNames.Resource_TabPool_CancelAnyPlan ,
                     PermissionNames.Resource_TabPool_EditTempProject ,
+                    PermissionNames.Resource_TabPool_AddTempProject ,
                     PermissionNames.Resource_TabPool_UpdateSkill ,
                     PermissionNames.Resource_TabPool_EditNote ,
 
@@ -1348,6 +1350,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_CancelMyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_CancelAnyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Temp Project"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabPool_AddTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Temp Project"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
 
@@ -1955,7 +1958,8 @@ namespace ProjectManagement.Authorization
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_ConfirmOut ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Confirm Out"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_CancelMyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_CancelAnyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan"},
-                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add User Work Temp On A Project"},
+                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Temp Project"},
+                                new SystemPermission { Name =  PermissionNames.Resource_TabPool_AddTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Temp Project"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update skill"},
                                 new SystemPermission { Name =  PermissionNames.Resource_TabPool_EditNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
                     },
