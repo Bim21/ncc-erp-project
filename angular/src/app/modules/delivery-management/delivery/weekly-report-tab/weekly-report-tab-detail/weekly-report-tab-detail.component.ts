@@ -669,6 +669,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
           this.totalNormalWorkingTime = 0
           this.totalOverTime = 0
+          this.overTimeNoCharge = 0
           this.projectCurrentResource = data.result
           this.projectCurrentResource.forEach(user => {
             if (user.isPool) {
@@ -912,7 +913,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
     let effortRequestBody = {
       projectCode: this.projectInfo.projectCode,
-      emails: this.officalResourceList,
+      emails: this.tempResourceList,
       startDate: this.formatDateYMD(fiveMonthAgo),
       endDate: currentDate 
     }

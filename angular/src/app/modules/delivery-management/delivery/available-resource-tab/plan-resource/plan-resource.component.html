@@ -118,7 +118,9 @@
                                     <div class="d-flex justify-content-between" style="align-items: center;">
                                         <div>
                                             <div *ngFor="let plan of item.plannedProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false" style="white-space: nowrap;">
-                                                <button class="btn p-0 text-left" style="white-space: normal;" [matMenuTriggerFor]="planMenu" matTooltip="Click to show action">
+                                                <button class="btn p-0 text-left" style="white-space: normal;" [matMenuTriggerFor]="planMenu" >
+                                                
+                                                    <i class="fas fa-ellipsis-v fa-xs mr-1" style="font-size: 15px;"></i>
                                                     <span [ngClass]="plan.onHover?'on-hover-plan':''">
                                                         <span matTooltip="Potential project" *ngIf="plan.projectStatus==APP_ENUM.ProjectStatus.Potential" 
                                                         class="badge bg-info pointer mr-1">
@@ -166,7 +168,7 @@
                                         <div style="width: 100%;" class="d-flex justify-content-between">
                                             <div class="d-flex justify-content-between" style="width: 100%;" *ngFor="let plan of item.poolProjects" (mouseenter)="plan.onHover = true;" (mouseleave)="plan.onHover = false">
                                                 <div style="width: 100%;">
-                                                    <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="tempMenu" matTooltip="Click to show action">
+                                                    <button class="btn p-0 text-left text-nowrap" [matMenuTriggerFor]="tempMenu" >
                                                         <span [ngClass]="plan.onHover?'on-hover-plan':''">
                                                             <strong>{{ plan.projectName }}</strong>&nbsp;{{ plan.startTime |
                                                             date:

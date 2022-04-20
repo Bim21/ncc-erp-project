@@ -87,7 +87,7 @@
       </span> ]
         </div>
     </li>
-    <li *ngIf="isShowReportBar" style="margin-left: 40px; cursor: pointer; display: flex;">
+    <li *ngIf="isShowReportBar" style="margin-left: 40px; cursor: pointer; display: flex; white-space: nowrap;">
 
         <div class="count-timer " (click)="startTimmer()" [ngClass]="(!this.isTimmerCounting && ! this.isStopCounting) || this.isRefresh?'pointer':''">
             <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
