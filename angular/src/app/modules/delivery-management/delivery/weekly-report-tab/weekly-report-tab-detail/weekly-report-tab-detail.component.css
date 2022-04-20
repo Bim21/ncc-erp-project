@@ -142,3 +142,6 @@ th {
 #current-resource td, th{
     padding: 0;
 }
+.ot-noCharge{
+    color: #ff7136;
+}
