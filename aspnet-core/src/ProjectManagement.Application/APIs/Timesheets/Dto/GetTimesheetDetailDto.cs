@@ -4,6 +4,7 @@ using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -35,8 +36,35 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public bool HasFile { get; set; }
         public bool? IsComplete { get; set; }
         public bool RequireTimesheetFile { get; set; }
-        public string Currency { get; set; }
-        public ChargeType? ChargeType { get; set; }
+
+        public string ProjectCurrency { get; set; }
+        public ChargeType? ProjectChargeType { get; set; }
+
+        public string Currency
+        {
+            get
+            {
+                var currency = this.ProjectBillInfomation.Select(x => x.Currency).FirstOrDefault();
+                if (currency == default)
+                {
+                    currency = this.ProjectCurrency;
+                }
+                return currency;
+            }
+        }
+        public ChargeType? ChargeType
+        {
+            get
+            {
+                var chargeType = this.ProjectBillInfomation.Select(x => x.ChargeType).FirstOrDefault();
+                if (chargeType == default)
+                {
+                    chargeType = this.ProjectChargeType;
+                }
+                return chargeType;
+            }
+        }
+        public byte? InvoiceNumber { get; set; }
     }
 
 }

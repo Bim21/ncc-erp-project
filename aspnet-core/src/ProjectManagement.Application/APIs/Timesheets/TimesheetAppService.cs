@@ -155,7 +155,9 @@ namespace ProjectManagement.APIs.TimeSheets
                         BillRate = b.BillRate,
                         StartTime = b.StartTime,
                         EndTime = b.EndTime,
-                        IsActive = true
+                        IsActive = true,
+                        CurrencyId = b.CurrencyId,
+                        ChargeType = b.ChargeType,
                     };
                     listTimesheetProjectBill.Add(timesheetProjectBill);
                 }

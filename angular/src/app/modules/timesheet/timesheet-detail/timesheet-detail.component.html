@@ -137,6 +137,7 @@
                 <th>PM</th>
                 <th>Note</th>
                 <th>Bill Info</th>
+                <th>InvoiceNumber</th>
                 <th>Timesheet File</th>
                 <th>Done</th>
                 <th *ngIf="isActive">Actions</th>
@@ -202,6 +203,14 @@
                       {{bill.description?'- '+bill.description:''}}
                     </p>
                     </div>
+                </td>
+                <td style="
+                    white-space: pre-line;
+                    word-wrap: break-word;
+                    min-width: 150;
+                    max-width: 350px;text-align: right;
+                  ">
+                  {{ item.invoiceNumber }}
                 </td>
                 <td class="" style="
                     white-space: normal;

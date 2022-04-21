@@ -140,6 +140,8 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Create",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Edit",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Delete",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_View",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_Edit",
 
        Projects_OutsourcingProjects_ProjectDetail_TabTimesheet : "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet",
 

@@ -26,13 +26,13 @@ namespace ProjectManagement.APIs.ProjectUserBills
     public class ProjectUserBillAppService : ProjectManagementAppServiceBase
     {
         private ProjectTimesheetManager timesheetManager;
-        
+
 
         public ProjectUserBillAppService(ProjectTimesheetManager timesheetManager)
         {
             this.timesheetManager = timesheetManager;
         }
-        
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo,
             PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo,
@@ -53,7 +53,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             BillRate = x.BillRate,
                             StartTime = x.StartTime.Date,
                             EndTime = x.EndTime.Value.Date,
-                            Currency = x.Currency,
+                            //CurrencyName = x.Project.Currency.Name,
                             Note = x.Note,
                             shadowNote = x.shadowNote,
                             isActive = x.isActive,
@@ -64,6 +64,28 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             UserType = x.User.UserType
                         });
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)]
+        public async Task<byte?> GetLastInvoiceNumber(long projectId)
+        {
+            var lastInvoiceNumber = await WorkScope.GetAll<Project>()
+             .Where(s => s.Id == projectId)
+             .Select(s => s.LastInvoiceNumber)
+             .FirstOrDefaultAsync();
+            return lastInvoiceNumber;
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)]
+        public async Task<byte?> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
+        {
+            var project = await WorkScope.GetAsync<Project>(input.ProjectId);
+            var entity = ObjectMapper.Map(input, project);
+            var lastInvoiceNumber = await WorkScope.UpdateAsync(entity);
+
+            return lastInvoiceNumber.LastInvoiceNumber;
         }
 
         [HttpGet]
@@ -100,15 +122,24 @@ namespace ProjectManagement.APIs.ProjectUserBills
             {
                 throw new UserFriendlyException($"Already exist: {duplicatedPUB.FullName} - {duplicatedPUB.BillRole} - {duplicatedPUB.BillRate} - Active: {duplicatedPUB.isActive}");
             }
+            var project = await WorkScope.GetAll<Project>()
+                .Where(s => s.Id == input.ProjectId)
+                .Select(s => new Project
+                {
+                    CurrencyId = s.CurrencyId,
+                    ChargeType = s.ChargeType
+                })
+                .FirstOrDefaultAsync();
 
             var entity = ObjectMapper.Map<ProjectUserBill>(input);
+
             input.Id = await WorkScope.InsertAndGetIdAsync(entity);
 
-            await this.timesheetManager.CreateTimesheetProjectBill(entity);
+            await this.timesheetManager.CreateTimesheetProjectBill(entity, project);
 
             return input;
         }
-       
+
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit,

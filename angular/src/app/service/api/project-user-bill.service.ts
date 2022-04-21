@@ -23,4 +23,10 @@ export class ProjectUserBillService extends BaseApiService {
   getRate(id: number):Observable<any>{
     return this.http.get<any>(this.rootUrl + `/GetRate?projectId=${id}`);
   }
+  getLastInvoiceNumber(id:number):Observable<any>{
+    return this.http.get<any>(this.rootUrl + `/GetLastInvoiceNumber?projectId=${id}`);
+  }
+  updateLastInvoiceNumber(item: any): Observable<any> {
+    return this.http.put<any>(this.rootUrl + '/UpdateLastInvoiceNumber', item);
+  }
 }

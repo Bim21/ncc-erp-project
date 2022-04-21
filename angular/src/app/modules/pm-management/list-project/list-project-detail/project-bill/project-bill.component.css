@@ -1,0 +1,19 @@
+.last-invoice-number{
+    display: flex;
+    padding: 16px 24px 0;
+
+}
+.last-invoice-number .item{
+   margin-right: 16px;
+}
+.last-invoice-number .item.input{
+    width: 50px;
+    overflow: hidden;
+ }
+
+.last-invoice-number .item .title {
+    margin-top: 10px;
+}
+.last-invoice-number .mat-form-field-infix{
+    width: auto !important;
+}

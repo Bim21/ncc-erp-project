@@ -1,5 +1,59 @@
 <section class="content px-2 mt-2"  *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
+        <div class="card" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
+            <div class="last-invoice-number">
+                <div class="item">
+                    <h4 class="title">{{"Last Invoice Number"}}: </h4>
+                </div>
+                <div class="item input">
+                    <mat-form-field class="ml-1" *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)">
+                        <input  readonly="true" class="w-100" type="number" matInput [(ngModel)]="lastInvoiceNumber" />
+                    </mat-form-field>
+                    <mat-form-field class="ml-1" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)">
+                        <input  [disabled]="!isEditLastInvoiceNumber" class="w-100" type="number" matInput [(ngModel)]="lastInvoiceNumber" #lastInvoiceNumberId />
+                    </mat-form-field>
+                </div>
+                <div class="item" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)">
+                    <div class="edit-save">
+                        <a
+                            href="javascript:;"
+                            class="btn bg-blue mr-3"
+                            (click)="
+                                    isEditLastInvoiceNumber = !isEditLastInvoiceNumber;
+                                    lastInvoiceNumberId.focus();$event.stopPropagation()
+                                  "
+                            [hidden]="isEditLastInvoiceNumber"
+                        >
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </a>
+        
+                        <a
+                            href="javascript:;"
+                            class="btn bg-secondary"
+                            (click)="
+                                    isEditLastInvoiceNumber = !isEditLastInvoiceNumber;$event.stopPropagation()
+                                  "
+                            [hidden]="!isEditLastInvoiceNumber"
+                        >
+                            Cancel
+                        </a>
+                        <a
+                            href="javascript:;"
+                            class="btn btn-primary btn-action ml-3"
+                            (click)="
+                                    updateLastInvoiceNumber();
+                                    isEditLastInvoiceNumber = !isEditLastInvoiceNumber;$event.stopPropagation()
+                                  "
+                            [hidden]="!isEditLastInvoiceNumber"
+                        >
+                            Save
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="card mt-3">
 
             <mat-expansion-panel [expanded]="!isShowUserBill" >

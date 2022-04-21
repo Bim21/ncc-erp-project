@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.ProjectTimesheet.Dto
 {
@@ -12,6 +13,8 @@ namespace ProjectManagement.Services.ProjectTimesheet.Dto
         public string BillRole { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public ChargeType? ChargeType { get; set; }
+        public long? CurrencyId { get; set; }
 
     }
 }

@@ -60,7 +60,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
         }
 
 
-        public async Task CreateTimesheetProjectBill(ProjectUserBill pub)
+        public async Task CreateTimesheetProjectBill(ProjectUserBill pub,Project project)
         {
             var activeTimesheetId = await GetActiveTimesheetId();
             if (activeTimesheetId == default)
@@ -74,10 +74,12 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 IsActive = true,
                 BillRate = pub.BillRate,
                 BillRole = pub.BillRole,
-                Currency = pub.Currency,
+                //CurrencyId = pub.CurrencyId,
                 ProjectId = pub.ProjectId,
                 UserId = pub.UserId,
-                WorkingTime = 0
+                WorkingTime = 0,
+                ChargeType = project.ChargeType,
+                CurrencyId = project.CurrencyId
             };
 
             await _workScope.InsertAsync(tpb);
@@ -106,7 +108,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
             tpb.BillRate = pub.BillRate;
             tpb.BillRole = pub.BillRole;
-            tpb.Currency = pub.Currency;
+            //tpb.Currency = pub.Currency;
             tpb.IsActive = pub.isActive;
 
             await _workScope.UpdateAsync(tpb);
@@ -146,7 +148,9 @@ namespace ProjectManagement.Services.ProjectTimesheet
                    BillRate = s.BillRate,
                    BillRole = s.BillRole,
                    StartTime = s.StartTime,
-                   EndTime = s.EndTime
+                   EndTime = s.EndTime,
+                   ChargeType = s.Project.ChargeType,
+                   CurrencyId = s.Project.CurrencyId
                }).ToListAsync();
 
             return q;

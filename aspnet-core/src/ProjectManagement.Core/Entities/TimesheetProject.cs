@@ -24,5 +24,7 @@ namespace ProjectManagement.Entities
         public string ProjectBillInfomation { get; set; }
         public string HistoryFile { get; set; }
         public bool? IsComplete { get; set; }
+
+        public byte InvoiceNumber { get; set; }
     }
 }
