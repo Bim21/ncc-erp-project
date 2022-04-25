@@ -59,6 +59,8 @@ namespace ProjectManagement.APIs.Projects
         public async Task<GridResult<GetProjectDto>> GetAllPaging(GridParam input)
         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ViewAllProject);
+            bool hasViewBillPermission = PermissionChecker.IsGranted(PermissionNames.Projects_OutsourcingProjects_ViewBillInfo);
+
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
             int valueStatus = -1;
@@ -103,8 +105,20 @@ namespace ProjectManagement.APIs.Projects
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
-                            RequireTimesheetFile = p.RequireTimesheetFile
-                        };
+                            RequireTimesheetFile = p.RequireTimesheetFile,
+                            BillInfo = hasViewBillPermission ? WorkScope.GetAll<ProjectUserBill>()
+                            .Where(b => b.ProjectId == p.Id)
+                            .OrderByDescending(b => b.CreationTime)
+                                    .Select(b => new GetBillInfoDto
+                                    {
+                                        BillRole = b.BillRole,
+                                        BillRate = b.BillRate,
+                                        StartTime = b.StartTime,
+                                        EndTime = b.EndTime.Value,
+                                        isActive = b.isActive,
+                                        FullName = b.User.FullName,
+                                    }).ToList() : null
+        };
             return await query.GetGridResult(query, input);
         }
 

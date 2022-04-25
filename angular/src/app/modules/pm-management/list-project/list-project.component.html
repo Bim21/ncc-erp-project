@@ -111,10 +111,8 @@
                             <tr style="border: none;">
                                 <th>#</th>
                                 <th>Projects</th>
-                                <!-- <th>{{'Loại dự án' | localize}}</th> -->
-                                <th>Client</th>
                                 <th>{{'PM' | localize}}</th>
-
+                                <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo)">Bill info</th>
                                 <th style="width: 110px;">Time</th>
                                 <th style="width: 100px;">Is charged</th>
                                 <th style="width: 100px;">Status</th>
@@ -143,16 +141,17 @@
                                 <td class="text-center" style="width: 60px; max-width: 60px;"> {{ i+1 }}</td>
                                 <td>
                                     <div class="project-wrap">
-                                        <div class="project-name-wrap"> 
-                                            <a style="cursor: pointer;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(project)" >
+                                        <div > 
+                                            <a style="cursor: pointer; font-weight: bold;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(project)" >
                                                 {{ project.name }}
                                             </a>
-                                            <span *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)">
+                                            <strong *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)">
                                                 {{ project.name }}
-                                            </span>
-                                            <span class="project-code">
-                                                {{ project.code }}
-                                            </span>
+                                            </strong>
+                                            [{{ project.code }}]
+                                            <div>
+                                                <span>{{project.clientName}}</span>
+                                            </div>
                                         </div>
                                         <div class="project-type-wrap">
                                             <span [ngClass]=" APP_CONST.ProjectTypeStyle[getByEnum(project.projectType,APP_ENUM.ProjectType)]">
@@ -161,13 +160,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <!-- <td class="text-center">
-                                    <span
-                                        [ngClass]=" APP_CONST.ProjectTypeStyle[getByEnum(project.projectType,APP_ENUM.ProjectType)]">
-                                        {{ getByEnum(project.projectType,APP_ENUM.ProjectType) }}
-                                    </span>
-                                </td> -->
-                                <td class="text-center" style="white-space: break-spaces;">{{project.clientName}}</td>
+                               
                                 <td>
                                     <div>
                                         <app-user-info
@@ -175,6 +168,20 @@
                                 userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarPath:project.pmAvatarPath}">
                                         </app-user-info>
                                     </div>
+                                </td>
+                                <td *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo)">
+                                    <div *ngFor="let bill of filterBillInfo(project)" matTooltip="{{bill.fullName + ' ['+bill.billRole +'] '
+                                    +'charged from '+ (bill.startTime | date:'dd/MM/yyyy')  + ( bill.endTime? ' to '+ (bill.endTime | date:'dd/MM/yyyy') : '')
+                                + ' with rate: '+ (bill.billRate | number:'1.0') +' '+ (project.currencyName | lowercase)+'/' + getChargeType(project.chargeType)}}">
+                                        <strong>{{bill.fullName}} </strong> 
+                                        <span>[{{bill.billRole}}] </span> 
+                                        <strong class="text-danger"> {{bill.billRate | number: "1.0"}} </strong>
+                                        <span>{{project.currencyName | lowercase}}/{{getChargeType(project.chargeType)}}</span>
+                                    </div>
+                             
+                                  <i [ngClass]="project.isViewAllBillInfo ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="project.billInfo.length > 5"
+                                    (click)="project.isViewAllBillInfo = !project.isViewAllBillInfo; filterBillInfo(project)"></i>
+
                                 </td>
 
                                 <td class="text-center" >
