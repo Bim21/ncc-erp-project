@@ -139,7 +139,7 @@
                 <th>Bill Info</th>
                 <th>Timesheet File</th>
                 <th>Done</th>
-                <th *ngIf="isActive">Actions</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -231,7 +231,7 @@
                     <i *ngIf="item.isComplete" style="color: green" class="fas fa-check fa-2x"></i>
                   </button>
                 </td>
-                <td *ngIf="isActive" class="text-center" style="vertical-align: middle">
+                <td  class="text-center" style="vertical-align: middle">
                   <mat-checkbox
                     *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice) || permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)"
                     #checkboxExportInvoice
@@ -239,17 +239,13 @@
                     [value]="item"
                     (change)="addProjectToExport($event)"
                   ></mat-checkbox>
-                  <!-- <div
-                    style="visibility: hidden; position: fixed"
-                    [style.left]="contextMenuPosition.x"
-                    [style.top]="contextMenuPosition.y"
-                  ></div> -->
-                  <button mat-button [matMenuTriggerFor]="menu" >
+           
+                  <button  mat-button [matMenuTriggerFor]="menu" >
                     <i class="fas fa-bars fa-lg" style="margin-top:1px"></i>
                   </button>
                   <mat-menu #menu="matMenu" class="p-2">
-                    <button
-                      *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill);"
+                    <button 
+                      *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill) && isActive"
                       class="btn mat-menu-item w-100" 
                       (click)="viewBillDetail(item, updateAction.UpdateBillInfo)" 
                       #importFileBtn
@@ -258,7 +254,7 @@
                       Update Bill
                     </button>
                     <button
-                    *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateTimsheet);"
+                    *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateTimsheet) && isActive"
                       class="btn mat-menu-item w-100" 
                       (click)="viewBillDetail(item, updateAction.UpdateTimesheet)" 
                       #updateTs
@@ -280,7 +276,7 @@
                         Export Invoice For Tax
                     </button>
                     <button  *ngIf="
-                    permission.isGranted(Timesheets_TimesheetDetail_UpdateNote)
+                    permission.isGranted(Timesheets_TimesheetDetail_UpdateNote) && isActive
                   " 
                       class="btn mat-menu-item w-100" (click)="editTimesheet(item);"
                     >
@@ -288,7 +284,7 @@
                       Note
                     </button>
                     <button *ngIf="
-                        permission.isGranted(Timesheets_TimesheetDetail_Delete)
+                        permission.isGranted(Timesheets_TimesheetDetail_Delete) && isActive
                       " class="btn mat-menu-item w-100" (click)="delete(item);" #deleteBtn>
                       <i class="fas fa-trash mr-1"></i>
                       Delete
