@@ -18,7 +18,7 @@
                         {{getProjectTypefromEnum(user.branch,APP_ENUM.UserBranch)}}</span>
                     <span [ngClass]="APP_CONST.userTypeStyle[user.userType]">{{APP_ENUM.UserType[user.userType]}}
                         {{getProjectTypefromEnum(user.userType,APP_ENUM.UserType)}}</span>
-                    <span *ngIf="user.userLevel" class="ml-1 badge text-white" [ngStyle]="getUserLevel().style">{{getUserLevel().userLevel}}
+                    <span *ngIf="user.userLevel || user.userLevel == 0" class="ml-1 badge text-white" [ngStyle]="getUserLevel().style">{{getUserLevel().userLevel}}
                     </span>
                 </p>
                 <p class="text-overflow m-0"><span>{{user?.emailAddress}}</span></p>

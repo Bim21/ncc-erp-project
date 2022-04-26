@@ -57,13 +57,14 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   ngOnInit(): void {
      
 
-      this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
-      this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
-      this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
-      this.projectHealth = this.route.snapshot.queryParamMap.get("projectHealth")
+    this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
+    this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
+    this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
+    this.projectHealth = Number(this.route.snapshot.queryParamMap.get("projectHealth"))
    
     this.projectName = this.route.snapshot.queryParamMap.get("projectName")
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
+    this.projectType = this.route.snapshot.queryParamMap.get("projectType")
 
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;

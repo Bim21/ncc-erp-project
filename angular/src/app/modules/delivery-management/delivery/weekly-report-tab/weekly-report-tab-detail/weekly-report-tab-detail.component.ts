@@ -161,6 +161,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       );
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
       this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
+      let projectTypeFromUrl = this.route.snapshot.queryParamMap.get('projectType')
+      if(projectTypeFromUrl){
+          this.projectType = projectTypeFromUrl
+      }
       this.getPmReportProject();
       this.getUser();
       this._layoutStore.sidebarExpanded.subscribe((value) => {
@@ -242,7 +246,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
               client: this.projectInfo.clientName,
               pmName: this.projectInfo.pmName,
               pmReportProjectId: this.pmReportProjectId,
-              projectHealth: this.projectHealth
+              projectHealth: this.projectHealth,
+              projectType: this.projectType
             },
             queryParamsHandling: 'merge', // remove to replace all query params by provided
           });
