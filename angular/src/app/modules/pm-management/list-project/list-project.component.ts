@@ -60,6 +60,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   public tempPMList: any[] = [];
   public pmId = -1;
   public searchPM: string = "";
+  public isShowBillInfo:boolean = false
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
