@@ -108,6 +108,7 @@ namespace ProjectManagement.APIs.Projects
                             RequireTimesheetFile = p.RequireTimesheetFile,
                             BillInfo = hasViewBillPermission ? WorkScope.GetAll<ProjectUserBill>()
                             .Where(b => b.ProjectId == p.Id)
+                            .Where(b => b.isActive)
                             .OrderByDescending(b => b.CreationTime)
                                     .Select(b => new GetBillInfoDto
                                     {
