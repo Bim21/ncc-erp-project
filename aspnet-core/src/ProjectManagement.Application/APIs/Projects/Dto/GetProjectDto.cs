@@ -40,5 +40,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public DateTime? TimeSendReport { get; set; }
         public DateTime? DateSendReport { get; set; }
         public bool RequireTimesheetFile { get; set; }
+        public List<GetBillInfoDto> BillInfo { get; set; }
     }
 }

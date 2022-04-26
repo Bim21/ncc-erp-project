@@ -34,6 +34,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   Projects_OutsourcingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
+  Projects_OutsourcingProjects_ViewBillInfo = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillInfo
 
 
  
@@ -59,6 +60,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   public tempPMList: any[] = [];
   public pmId = -1;
   public searchPM: string = "";
+  public isShowBillInfo:boolean = false
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -362,5 +364,36 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
       projectName: project.name, 
       projectCode: project.code} }));
 window.open(url, '_blank');
+  }
+
+
+
+  filterBillInfo(project){
+    let billInfoAfterFilter = []
+    if(project.isViewAllBillInfo){
+      billInfoAfterFilter = project.billInfo
+    }
+    else{
+      project.billInfo.forEach((bill, index)=>{
+        if(index < 5){
+          billInfoAfterFilter.push(bill)
+        }
+      })
+    }
+    return billInfoAfterFilter
+  }
+
+  getChargeType(chargeType){
+    switch(chargeType){
+      case this.APP_ENUM.ChargeType.Daily:{
+        return 'd'
+      }
+      case this.APP_ENUM.ChargeType.Monthly:{
+        return 'm'
+      }
+      case this.APP_ENUM.ChargeType.Hour:{
+        return 'h'
+      }
+    }
   }
 }
