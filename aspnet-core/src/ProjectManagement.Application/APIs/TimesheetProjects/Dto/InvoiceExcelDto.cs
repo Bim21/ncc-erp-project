@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities;
+﻿using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants;
@@ -18,15 +19,14 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
         public List<long> ProjectIds { get; set; }
         public string OptionExportInvoice { get; set; }
     }
-    public class InvoiceExcelProject : FullAuditedEntity<long>
+    public class InvoiceExcelProjectDto : EntityDto<long>
     {
         public string Name { get; set; }
 
         public string Code { get; set; }
 
         public long? ClientId { get; set; }
-        [ForeignKey(nameof(ClientId))]
-        public Client Client { get; set; }
+        public Client Client { get; set; }        
         public long? CurrencyId { get; set; }
         [ForeignKey(nameof(CurrencyId))]
         public Currency Currency { get; set; }

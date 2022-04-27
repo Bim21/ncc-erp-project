@@ -1185,20 +1185,20 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
 
-        private async Task<ResultExportInvoice> ExportInvoiceProjecct(List<InvoiceExcelProject> listProject, long timesheetId, string optionExportInvoice)
+        private async Task<ResultExportInvoice> ExportInvoiceProjecct(List<InvoiceExcelProjectDto> listProject, long timesheetId, string optionExportInvoice)
         {
             var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
             var listUserBillProject = new List<ExportInvoiceDto>();
             var invoiceUserBilling = new List<ExportInvoiceDto>();
+            var projectIds = listProject.Select(s => s.Id);
             foreach (var project in listProject)
             {
                 listUserBillProject = await (from pub in WorkScope.GetAll<ProjectUserBill>()
                                              join tpb in WorkScope.GetAll<TimesheetProjectBill>() on pub.ProjectId equals tpb.ProjectId
                                              join tsp in WorkScope.GetAll<TimesheetProject>() on tpb.TimesheetId equals tsp.TimesheetId
                                              where pub.UserId == tpb.UserId
-                                             where tpb.TimesheetId == timesheetId && tpb.ProjectId == project.Id && tpb.IsActive
-                                             where tsp.ProjectId == project.Id
-                                             orderby tpb.CreationTime descending
+                                             where tpb.TimesheetId == timesheetId && projectIds.Contains(tpb.ProjectId)
+                                            
                                              select new
                                              {
                                                  Month = tsp.Timesheet.Month,
@@ -1206,8 +1206,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                  TransferFee = tsp.TransferFee,
                                                  Discount = tsp.Discount,
                                                  InvoiceNumber = tsp.InvoiceNumber,
-                                                 StartTime = pub.StartTime.Date,
-                                                 EndTime = pub.EndTime.Value.Date,
+                                                 StartTime = tpb.StartTime.Date,
+                                                 EndTime = tpb.EndTime.Value.Date,
                                                  tpb,
                                                  WorkingDay = tsp.WorkingDay == 0 ? tsp.Timesheet.TotalWorkingDay.Value : tsp.WorkingDay,
                                              })
@@ -1256,7 +1256,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     .Where(x => input.ProjectIds.Contains(x.Id))
                     .Include(x => x.Client)
                     .Include(x => x.Currency)
-                    .Select(x => new InvoiceExcelProject
+                    .Select(x => new InvoiceExcelProjectDto
                     {
                         Id = x.Id,
                         Code = x.Code,
@@ -1323,7 +1323,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         private ExcelPackage ExportInvoiceSheetInvoice(
          ExcelPackage excelPackageIn,
-         List<InvoiceExcelProject> listProject,
+         List<InvoiceExcelProjectDto> listProject,
          List<ExportInvoiceDto> listUserBillInProject,
          long invoiceNumber,
          float transferFee,
