@@ -66,6 +66,7 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
       address: Client.address,
       invoiceDateSetting: Client.invoiceDateSetting,
       paymentDueBy: Client.paymentDueBy,
+      transferFee: Client.transferFee,
     }
     const show = this.dialog.open(CreateUpdateClientComponent, {
       data: {

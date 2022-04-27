@@ -68,10 +68,11 @@ export class TimesheetProjectService extends BaseApiService {
     }
     return this.http.post<any>(this.rootUrl + '/CreateInvoice', requestBoy);
   }
-  public exportInvoice(timesheetId, projectId): Observable<any> {
+  public exportInvoice(timesheetId, projectId,optionExportInvoice): Observable<any> {
     let invoiceExcelDto = {
       timesheetId: timesheetId,
-      projectId: [projectId]
+      projectIds: [projectId],
+      optionExportInvoice:optionExportInvoice
     }
     return this.http.post(this.rootUrl + `/ExportInvoice`, invoiceExcelDto)
   }
@@ -93,6 +94,11 @@ export class TimesheetProjectService extends BaseApiService {
 
   public exportInvoiceForTax(data: any): Observable<any> {
     return this.http.post(this.rootUrl + "/ExportInvoiceForTax", data);
+  }
+
+  updateTimesheetProject(item: any): Observable<any> {
+    //update invoice number and working day
+    return this.http.put<any>(this.rootUrl + '/UpdateTimesheetProject', item);
   }
 
 }

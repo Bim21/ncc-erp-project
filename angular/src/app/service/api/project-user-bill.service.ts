@@ -29,4 +29,10 @@ export class ProjectUserBillService extends BaseApiService {
   updateLastInvoiceNumber(item: any): Observable<any> {
     return this.http.put<any>(this.rootUrl + '/UpdateLastInvoiceNumber', item);
   }
+  getDiscount(id:number):Observable<any>{
+    return this.http.get<any>(this.rootUrl + `/GetDiscount?projectId=${id}`);
+  }
+  updateDiscount(item: any): Observable<any> {
+    return this.http.put<any>(this.rootUrl + '/UpdateDiscount', item);
+  }
 }

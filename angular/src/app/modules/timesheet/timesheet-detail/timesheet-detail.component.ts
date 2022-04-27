@@ -21,6 +21,8 @@ import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listin
 import { CreateInvoiceComponent } from './create-invoice/create-invoice.component';
 import { UserService } from '@app/service/api/user.service';
 import { ClientService } from '@app/service/api/client.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -89,6 +91,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public isActive: boolean;
   public createdInvoice: boolean;
   public listExportInvoice: any[] = [];
+  public listExportInvoiceChargeType: any[] = [];
+  public isMonthlyToDaily = false;
   public clientId: number = -1;
   public isShowButtonAction: boolean;
   public pmId = -1;
@@ -125,7 +129,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_UpdateTimsheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateTimsheet;
   Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill;
   Timesheets_TimesheetDetail_ExportInvoiceForTax = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoiceForTax;
-
+  Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay;
   constructor(
     private timesheetService: TimesheetService,
     public timesheetProjectService: TimesheetProjectService,
@@ -134,7 +138,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     injector: Injector,
     private ref: ChangeDetectorRef,
     private userService: UserService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private _modalService: BsModalService,
   ) {
     super(injector)
 
@@ -369,8 +374,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     item.showIcon = false
   }
 
-  exportInvocie(item: any) {
-    this.timesheetProjectService.exportInvoice(this.timesheetId, item.projectId).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
+  exportInvocie(item: any,optionExportInvoice:string) {
+    this.timesheetProjectService.exportInvoice(this.timesheetId, item.projectId,optionExportInvoice).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
       const file = new Blob([this.s2ab(atob(data.result.base64))], {
         type: "application/vnd.ms-excel;charset=utf-8"
       });
@@ -380,7 +385,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   exportQuickInvoiceForTax(item: any) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
-      projectId: [item.projectId]
+      projectIds: [item.projectId]
     }
     this.timesheetProjectService.exportInvoiceForTax(invoiceExcelDto).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
       const file = new Blob([this.s2ab(atob(data.result.base64))], {
@@ -393,8 +398,13 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   addProjectToExport(event) {
     if (!event.checked) {
       let index = this.listExportInvoice.indexOf(event.source.value.projectId);
-      if (index > -1)
+      let indexChargeType = this.listExportInvoiceChargeType.indexOf(event.source.value.chargeType);
+      if (index > -1){
         this.listExportInvoice.splice(index, 1);
+      }
+      if (indexChargeType > -1){
+        this.listExportInvoiceChargeType.splice(indexChargeType, 1);
+      }
     }
     else {
       let checkClientId = event.source.value.clientId;
@@ -406,12 +416,20 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
       this.clientId = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
+      this.listExportInvoiceChargeType.push(event.source.value.chargeType);
+    }
+    if(this.listExportInvoiceChargeType.indexOf(this.APP_ENUM.ChargeType.Monthly) !== -1){
+      this.isMonthlyToDaily = true;
+    }
+    else{
+      this.isMonthlyToDaily = false;
     }
   }
-  exportInvoiceClient() {
+  exportInvoiceClient(optionExportInvoice:string) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
-      projectId: this.listExportInvoice
+      projectIds: this.listExportInvoice,
+      optionExportInvoice: optionExportInvoice
     }
     this.timesheetProjectService.exportInvoiceClient(invoiceExcelDto).subscribe((res) => {
       const file = new Blob([this.s2ab(atob(res.result.base64))], {
@@ -426,7 +444,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   exportInvoiceForTax() {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
-      projectId: this.listExportInvoice
+      projectIds: this.listExportInvoice
     }
     this.timesheetProjectService.exportInvoiceForTax(invoiceExcelDto).subscribe((res) => {
       const file = new Blob([this.s2ab(atob(res.result.base64))], {
@@ -466,6 +484,24 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         currency: "VND",
       })
     );
+  }
+
+  updateTimesheetProject(id, invoiceNumber,workingDay,projectName) {
+    let editTimesheetProjectDialog: BsModalRef;
+    editTimesheetProjectDialog = this._modalService.show(EditTimesheetProjectDialogComponent, {
+      class: 'modal',
+      initialState: {
+        id: id,
+        invoiceNumber: invoiceNumber,
+        workingDay: workingDay,
+        projectName: projectName
+      },
+     
+    });
+
+    editTimesheetProjectDialog.content.onSave.subscribe(() => {
+      this.refresh();
+    });
   }
 
 }

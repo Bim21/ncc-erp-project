@@ -25,6 +25,9 @@ namespace ProjectManagement.Entities
         public string HistoryFile { get; set; }
         public bool? IsComplete { get; set; }
 
-        public byte InvoiceNumber { get; set; }
+        public long InvoiceNumber { get; set; }
+        public float TransferFee { get; set; }
+        public float Discount { get; set; }
+        public float WorkingDay { get; set; }
     }
 }

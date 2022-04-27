@@ -15,6 +15,9 @@ namespace ProjectManagement.Services.ProjectTimesheet.Dto
         public DateTime? EndTime { get; set; }
         public ChargeType? ChargeType { get; set; }
         public long? CurrencyId { get; set; }
+        public float Discount { get; set; }
+        public float TransferFee { get; set; }
+        public long LastInvoiceNumber { get; set; }
 
     }
 }

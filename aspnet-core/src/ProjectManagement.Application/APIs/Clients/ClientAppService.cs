@@ -38,7 +38,8 @@ namespace ProjectManagement.APIs.Clients
                     Code = s.Code,
                     Address = s.Address,
                     PaymentDueBy = s.PaymentDueBy,
-                    InvoiceDateSetting = s.InvoiceDateSetting
+                    InvoiceDateSetting = s.InvoiceDateSetting,
+                    TransferFee = s.TransferFee,
                 });
             return await query.GetGridResult(query, input);
         }

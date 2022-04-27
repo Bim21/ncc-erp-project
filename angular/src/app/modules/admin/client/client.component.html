@@ -89,6 +89,7 @@
               <th>Address</th>
               <th>Invoice Date Setting</th>
               <th>Payment Due By</th>
+              <th>Transfer Fee</th>
               <th *ngIf="permission.isGranted(Admin_Clients_Edit) || permission.isGranted(Admin_Clients_Delete)">Actions</th>
             </tr>
           </thead>
@@ -114,6 +115,7 @@
               <td >{{ item.address }}</td>
               <td >{{(getByEnum(item.invoiceDateSetting , APP_ENUM.ClientInvoiceDateSetting))}}</td>
               <td >{{ getPaymentDueBy(item.paymentDueBy) }}</td>
+              <td >{{ item.transferFee }}</td>
               <td *ngIf="permission.isGranted(Admin_Clients_Edit) || permission.isGranted(Admin_Clients_Delete)" style="width: 200px" class="text-center">
                 <button *ngIf="permission.isGranted(Admin_Clients_Edit)"
                   class="btn btn-sm bg-secondary mr-1"

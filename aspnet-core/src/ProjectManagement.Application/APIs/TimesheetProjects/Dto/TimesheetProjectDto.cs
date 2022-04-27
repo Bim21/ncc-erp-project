@@ -16,6 +16,6 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
         public long TimesheetId { get; set; }
         public string Note { get; set; }
         public bool? IsComplete { get; set; }
-        public byte InvoiceNumber { get; set; }
+        public long InvoiceNumber { get; set; }
     }
 }

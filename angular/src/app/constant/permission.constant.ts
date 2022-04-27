@@ -63,6 +63,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects: "Projects.OutsourcingProjects",
        Projects_OutsourcingProjects_ViewAllProject: "Projects.OutsourcingProjects.ViewAllProject",
        Projects_OutsourcingProjects_ViewMyProjectOnly: "Projects.OutsourcingProjects.ViewMyProjectOnly",
+       Projects_OutsourcingProjects_ViewBillInfo: "Projects.OutsourcingProjects.ViewBillInfo",
        Projects_OutsourcingProjects_Create: "Projects.OutsourcingProjects.Create",
        Projects_OutsourcingProjects_Edit: "Projects.OutsourcingProjects.Edit",
        Projects_OutsourcingProjects_Delete: "Projects.OutsourcingProjects.Delete",
@@ -142,6 +143,8 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Delete",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_View",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_Edit",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_View",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_Edit",
 
        Projects_OutsourcingProjects_ProjectDetail_TabTimesheet : "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet",
 
@@ -460,6 +463,7 @@ export const PERMISSIONS_CONSTANT = {
        Timesheets_TimesheetDetail_UploadTimesheetFile: "Timesheets.TimesheetDetail.UploadTimesheetFile",
        Timesheets_TimesheetDetail_ExportInvoice: "Timesheets.TimesheetDetail.ExportInvoice",
        Timesheets_TimesheetDetail_ExportInvoiceForTax: "Timesheets.TimesheetDetail.ExportInvoiceForTax",
+       Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay: "Timesheets.TimesheetDetail.EditInvoiceNumberWorkingDay",
        Timesheets_TimesheetDetail_UpdateNote: "Timesheets.TimesheetDetail.UpdateNote",
        Timesheets_TimesheetDetail_Delete: "Timesheets.TimesheetDetail.Delete",
 

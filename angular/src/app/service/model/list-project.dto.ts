@@ -23,6 +23,7 @@ export interface ClientDto {
     address: string;
     invoiceDateSetting: number;
     paymentDueBy: number;
+    transferFee: number;
 }
 
 export interface SkillDto {

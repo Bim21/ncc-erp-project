@@ -15,6 +15,16 @@
     <Compile Remove="Migrations\20210810103146_add-TimeSendReport-PMReportProject.Designer.cs" />
     <Compile Remove="Migrations\20211203032757_update_table_AbpUser_add_column_StarRate.cs" />
     <Compile Remove="Migrations\20211203032757_update_table_AbpUser_add_column_StarRate.Designer.cs" />
+    <Compile Remove="Migrations\20220421045503_Delete_Currency_And_Add_ChargeType_CurrencyId_column_to_TimesheetProjectBill_table.cs" />
+    <Compile Remove="Migrations\20220421045503_Delete_Currency_And_Add_ChargeType_CurrencyId_column_to_TimesheetProjectBill_table.Designer.cs" />
+    <Compile Remove="Migrations\20220421045642_Add_InvoiceNumber_column_to_TimesheetProject_table.cs" />
+    <Compile Remove="Migrations\20220421045642_Add_InvoiceNumber_column_to_TimesheetProject_table.Designer.cs" />
+    <Compile Remove="Migrations\20220421045752_Add_InvoiceDateSetting_PaymentDueBy_column_to_Client_table.cs" />
+    <Compile Remove="Migrations\20220421045752_Add_InvoiceDateSetting_PaymentDueBy_column_to_Client_table.Designer.cs" />
+    <Compile Remove="Migrations\20220421045826_Add_LastInvoiceNumber_column_to_Project_table.cs" />
+    <Compile Remove="Migrations\20220421045826_Add_LastInvoiceNumber_column_to_Project_table.Designer.cs" />
+    <Compile Remove="Migrations\20220421045928_Delete_Currency_column_to_ProjectUserBill_table.cs" />
+    <Compile Remove="Migrations\20220421045928_Delete_Currency_column_to_ProjectUserBill_table.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />

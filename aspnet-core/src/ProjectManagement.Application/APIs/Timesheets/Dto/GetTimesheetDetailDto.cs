@@ -64,7 +64,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
                 return chargeType;
             }
         }
-        public byte? InvoiceNumber { get; set; }
+        public long InvoiceNumber { get; set; }
+        public float WorkingDay { get; set; }
     }
 
 }

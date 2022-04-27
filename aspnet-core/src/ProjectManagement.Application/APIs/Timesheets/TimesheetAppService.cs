@@ -125,24 +125,36 @@ namespace ProjectManagement.APIs.TimeSheets
 
             var listPUB = await timesheetManager.GetListProjectUserBillDto(timesheet.Year, timesheet.Month, null);
 
-            var listProjectIdToBillInfo = listPUB.GroupBy(s => s.ProjectId)
-                .Select(s => new {ProjectId = s.Key, ListBillInfo = s.ToList()});
-            
+            var listProjectIdToBillInfo = listPUB.GroupBy(s => new { s.ProjectId, s.Discount, s.TransferFee, s.LastInvoiceNumber })
+                .Select(s => new { s.Key.ProjectId, s.Key.Discount, s.Key.TransferFee, s.Key.LastInvoiceNumber, ListBillInfo = s.ToList() });
+
 
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
             var listTimesheetProject = new List<TimesheetProject>();
+            var listProject = new List<Project>();
 
             foreach (var item in listProjectIdToBillInfo)
             {
                 var projectId = item.ProjectId;
+                var lastInvoiceNumber = item.LastInvoiceNumber == 0 ? 1 : item.LastInvoiceNumber + 1;
                 var listBillInfo = item.ListBillInfo;
                 var timesheetProject = new TimesheetProject
                 {
                     ProjectId = projectId,
                     TimesheetId = timesheet.Id,
+                    Discount = item.Discount,
+                    TransferFee = item.TransferFee,
+                    WorkingDay = input.TotalWorkingDay.Value,
+                    InvoiceNumber = lastInvoiceNumber
                 };
 
-                listTimesheetProject.Add(timesheetProject);                       
+                listTimesheetProject.Add(timesheetProject);
+
+                //Update project
+                var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == projectId);
+                project.LastInvoiceNumber = lastInvoiceNumber;
+                listProject.Add(project);
+
 
                 foreach (var b in listBillInfo)
                 {
@@ -162,7 +174,7 @@ namespace ProjectManagement.APIs.TimeSheets
                     listTimesheetProjectBill.Add(timesheetProjectBill);
                 }
             }
-
+            await WorkScope.UpdateRangeAsync(listProject);
             await WorkScope.InsertRangeAsync(listTimesheetProject);
             await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
 
@@ -224,7 +236,7 @@ namespace ProjectManagement.APIs.TimeSheets
             await ForceDelete(timesheetId);
         }
 
-       
+
 
         [HttpDelete]
         [AbpAuthorize(PermissionNames.Timesheets_ForceDelete)]
@@ -241,7 +253,7 @@ namespace ProjectManagement.APIs.TimeSheets
             timesheet.IsDeleted = true;
             await CurrentUnitOfWork.SaveChangesAsync();
         }
-        
+
         [AbpAuthorize(PermissionNames.Timesheets_CloseAndActive)]
         public async Task ReverseActive(long id)
         {

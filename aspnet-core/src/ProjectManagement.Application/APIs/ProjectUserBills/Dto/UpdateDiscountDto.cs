@@ -3,9 +3,9 @@ using ProjectManagement.Entities;
 
 namespace ProjectManagement.APIs.ProjectUserBills.Dto
 {
-    public class UpdateLastInvoiceNumberDto
+    public class UpdateDiscountDto
     {
         public long ProjectId { get; set; }
-        public long LastInvoiceNumber { get; set; }
+        public float Discount { get; set; }
     }
 }

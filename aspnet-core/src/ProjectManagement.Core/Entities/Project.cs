@@ -42,7 +42,8 @@ namespace ProjectManagement.Entities
         public string NewKnowledge { get; set; }
         public string Evaluation { get; set; }
         public bool RequireTimesheetFile { get; set; }
-        public byte? LastInvoiceNumber { get; set; }
+        public long LastInvoiceNumber { get; set; }
+        public float Discount { get; set; }
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
     }
 }

@@ -53,6 +53,60 @@
                 </div>
             </div>
         </div>
+
+        <div class="card" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
+            <div class="last-invoice-number">
+                <div class="item">
+                    <h4 class="title">{{"Discount"}}: </h4>
+                </div>
+                <div class="item input">
+                    <mat-form-field class="ml-1" *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit)">
+                        <input  readonly="true" class="w-100" type="number" matInput [(ngModel)]="discount" />
+                    </mat-form-field>
+                    <mat-form-field class="ml-1" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit)">
+                        <input  [disabled]="!isEditDiscount" class="w-100" type="number" step="0.01" matInput [(ngModel)]="discount" #discountId />
+                    </mat-form-field>
+                </div>
+                <div class="item" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit)">
+                    <div class="edit-save">
+                        <a
+                            href="javascript:;"
+                            class="btn bg-blue mr-3"
+                            (click)="
+                                    isEditDiscount = !isEditDiscount;
+                                    discountId.focus();$event.stopPropagation()
+                                  "
+                            [hidden]="isEditDiscount"
+                        >
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </a>
+        
+                        <a
+                            href="javascript:;"
+                            class="btn bg-secondary"
+                            (click)="
+                                    isEditDiscount = !isEditDiscount;$event.stopPropagation()
+                                  "
+                            [hidden]="!isEditDiscount"
+                        >
+                            Cancel
+                        </a>
+                        <a
+                            href="javascript:;"
+                            class="btn btn-primary btn-action ml-3"
+                            (click)="
+                                    updateDiscount();
+                                    isEditDiscount = !isEditDiscount;$event.stopPropagation()
+                                  "
+                            [hidden]="!isEditDiscount"
+                        >
+                            Save
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="card mt-3">
 

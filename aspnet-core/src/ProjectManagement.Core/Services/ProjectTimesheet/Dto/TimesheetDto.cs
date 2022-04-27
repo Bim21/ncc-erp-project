@@ -10,5 +10,6 @@ namespace ProjectManagement.Services.ProjectTimesheet.Dto
         public int Year { get; set; }
         public int Month { get; set; }
         public bool IsActive { get; set; }
+        public float? TotalWorkingDay { get; set; }
     }
 }

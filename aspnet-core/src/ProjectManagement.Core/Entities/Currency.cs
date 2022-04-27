@@ -11,5 +11,6 @@ namespace ProjectManagement.Entities
         public int? TenantId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public string InvoicePaymentInfo { get; set; }
     }
 }

@@ -207,7 +207,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             try
             {
                 var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplate.xlsx");
-                var listProject = await WorkScope.GetAll<Project>().Where(x => invoiceExcelDto.ProjectId.Contains(x.Id)).Include(x => x.Client).Include(x => x.Currency).ToListAsync();
+                var listProject = await WorkScope.GetAll<Project>().Where(x => invoiceExcelDto.ProjectIds.Contains(x.Id)).Include(x => x.Client).Include(x => x.Currency).ToListAsync();
                 var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
                 var invoiceUserBilling = new List<TimeSheetProjectBillExcelDto>();
 
@@ -425,7 +425,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              RequireTimesheetFile = tsp.Project.RequireTimesheetFile,
                              ProjectCurrency = tsp.Project.Currency.Name,
                              ProjectChargeType = tsp.Project.ChargeType,
-                             InvoiceNumber = tsp.InvoiceNumber
+                             InvoiceNumber = tsp.InvoiceNumber,
+                             WorkingDay = tsp.WorkingDay,
                          }).OrderByDescending(x => x.ClientId);
             return await query.GetGridResult(query, input);
         }
@@ -438,19 +439,24 @@ namespace ProjectManagement.APIs.TimesheetProjects
                    IsCharge = s.IsCharge,
                    ChargeType = s.ChargeType,
                    CurrencyId = s.CurrencyId,
-                   LastInvoiceNumber = s.LastInvoiceNumber
+                   LastInvoiceNumber = s.LastInvoiceNumber,
+                   Discount = s.Discount,
+                   Client = s.Client
                })
               .FirstOrDefaultAsync();
         }
 
-        public async Task<TimesheetProject> CreateTimesheetProject(TimesheetProjectDto input, byte invoiceNumber)
+        public async Task<TimesheetProject> CreateTimesheetProject(TimesheetProjectDto input, long invoiceNumber, float transferFee, float discount, float workingDay)
         {
             var timesheetProject = new TimesheetProject
             {
                 ProjectId = input.ProjectId,
                 TimesheetId = input.TimesheetId,
                 IsComplete = false,
-                InvoiceNumber = (byte)invoiceNumber
+                InvoiceNumber = invoiceNumber,
+                TransferFee = transferFee,
+                Discount = discount,
+                WorkingDay = workingDay
             };
 
             return await WorkScope.InsertAsync(timesheetProject);
@@ -459,9 +465,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         private async Task<Project> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
         {
-            var project = await WorkScope.GetAsync<Project>(input.ProjectId);
-            var entity = ObjectMapper.Map(input, project);
-            return await WorkScope.UpdateAsync(entity);
+            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == input.ProjectId);
+
+            project.LastInvoiceNumber = input.LastInvoiceNumber;
+            return await WorkScope.UpdateAsync<Project>(project);
         }
 
         [HttpPost]
@@ -496,8 +503,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
 
 
-            var invoiceNumber = (byte)(project.LastInvoiceNumber.HasValue ? project.LastInvoiceNumber + 1 : 1);
-            var timesheetProject = await CreateTimesheetProject(input, invoiceNumber);
+            var invoiceNumber = project.LastInvoiceNumber == 0 ? 1 : project.LastInvoiceNumber + 1;
+            float discount = project.Discount;
+            float transferFee = project.Client.TransferFee;
+            var timesheetProject = await CreateTimesheetProject(input, invoiceNumber, transferFee, discount, (float)timesheet.TotalWorkingDay);
 
             var updateLastInvoiceNumberDto = new UpdateLastInvoiceNumberDto
             {
@@ -947,7 +956,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplateForTax.xlsx");
                 var listProject = await WorkScope.GetAll<Project>()
-                    .Where(x => input.ProjectId.Contains(x.Id))
+                    .Where(x => input.ProjectIds.Contains(x.Id))
                     .Include(x => x.Client)
                     .Include(x => x.Currency)
                       .Select(x => new Project
@@ -1177,7 +1186,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
 
-        private async Task<ResultExportInvoice> ExportInvoiceProjecct(List<Project> listProject, long timesheetId)
+        private async Task<ResultExportInvoice> ExportInvoiceProjecct(List<InvoiceExcelProject> listProject, long timesheetId, string optionExportInvoice)
         {
             var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
             var listUserBillProject = new List<ExportInvoiceDto>();
@@ -1187,18 +1196,19 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 listUserBillProject = await (from pub in WorkScope.GetAll<ProjectUserBill>()
                                              join tpb in WorkScope.GetAll<TimesheetProjectBill>() on pub.ProjectId equals tpb.ProjectId
-                                             join t in WorkScope.GetAll<Timesheet>() on tpb.TimesheetId equals t.Id
+                                             join tsp in WorkScope.GetAll<TimesheetProject>() on tpb.TimesheetId equals tsp.TimesheetId
                                              where pub.UserId == tpb.UserId
                                              where tpb.TimesheetId == timesheetId && tpb.ProjectId == project.Id && tpb.IsActive
+                                             where tsp.ProjectId == project.Id
                                              orderby tpb.CreationTime descending
                                              select new
                                              {
-                                                 Month = t.Month,
-                                                 Year = t.Year,
+                                                 Month = tsp.Timesheet.Month,
+                                                 Year = tsp.Timesheet.Year,
                                                  StartTime = pub.StartTime.Date,
                                                  EndTime = pub.EndTime.Value.Date,
                                                  tpb,
-                                                 TotalWorkingDay = t.TotalWorkingDay
+                                                 WorkingDay = tsp.WorkingDay == 0 ? tsp.Timesheet.TotalWorkingDay.Value : tsp.WorkingDay,
                                              })
                                               .Select(x => new ExportInvoiceDto
                                               {
@@ -1206,11 +1216,15 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                   EmailAddress = x.tpb.User.EmailAddress,
                                                   ProjectName = project.Name,
                                                   ProjectCode = project.Code,
-                                                  BillRate = calculateBillRate(x.tpb.BillRate,
+                                                  BillRate = calculateBillRate(optionExportInvoice,
+                                                                                x.tpb.BillRate,
+                                                                                x.tpb.ChargeType == null ? (ChargeType)project.ChargeType : (ChargeType)x.tpb.ChargeType,
+                                                                                x.WorkingDay),
+                                                  WorkingTimeDay = calculateWorkingTime(optionExportInvoice,
+                                                                                x.tpb.WorkingTime,
                                                                                 x.tpb.ChargeType == null ? (ChargeType)project.ChargeType : (ChargeType)x.tpb.ChargeType,
                                                                                 defaultWorkingHours,
-                                                                                x.TotalWorkingDay),
-                                                  WorkingTimeDay = x.tpb.WorkingTime,
+                                                                                x.WorkingDay),
                                                   StartTime = x.StartTime,
                                                   EndTime = x.EndTime,
                                                   ChargeType = x.tpb.ChargeType == null ? (ChargeType)project.ChargeType : (ChargeType)x.tpb.ChargeType,
@@ -1230,16 +1244,37 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return resultProjectInvoice;
         }
 
+        private async Task<long> getInvoiceNumber(long timesheetId, List<long> projectIds)
+        {
+            return await WorkScope.GetAll<TimesheetProject>()
+                 .Where(x => projectIds.Contains(x.ProjectId))
+                 .Where(x => x.TimesheetId == timesheetId)
+                 .Select(x => x.InvoiceNumber).MaxAsync();
+        }
+
+        private async Task<List<InvoiceExcelTimesheetProjectDto>> getTimesheetProject(long timesheetId, List<long> projectIds)
+        {
+            return await WorkScope.GetAll<TimesheetProject>()
+                        .Where(x => projectIds.Contains(x.ProjectId))
+                        .Where(x => x.TimesheetId == timesheetId)
+                        .Select(tsp => new InvoiceExcelTimesheetProjectDto
+                        {
+                            TransferFee = tsp.TransferFee,
+                            Discount = tsp.Discount,
+                            InvoiceNumber = tsp.InvoiceNumber
+                        }).ToListAsync();
+        }
+
         public async Task<FileBase64Dto> ExportInvoice(InvoiceExcelDto input)
         {
             try
             {
-                var templateFilePath = Path.Combine(templateFolder, "InvoiceUserTemplateUpgrade.xlsx");
+                var templateFilePath = Path.Combine(templateFolder, "Invoice.xlsx");
                 var listProject = await WorkScope.GetAll<Project>()
-                    .Where(x => input.ProjectId.Contains(x.Id))
+                    .Where(x => input.ProjectIds.Contains(x.Id))
                     .Include(x => x.Client)
                     .Include(x => x.Currency)
-                    .Select(x => new Project
+                    .Select(x => new InvoiceExcelProject
                     {
                         Id = x.Id,
                         Code = x.Code,
@@ -1250,12 +1285,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         ChargeType = x.ChargeType
                     }).ToListAsync();
 
-                byte invoiceNumberTimesheetProject = await WorkScope.GetAll<TimesheetProject>()
-                  .Where(x => input.ProjectId.Contains(x.ProjectId))
-                  .Where(x => x.TimesheetId == input.TimesheetId).Select(x => x.InvoiceNumber).MaxAsync();
+                var timesheetProject = await getTimesheetProject(input.TimesheetId, input.ProjectIds);
+                var invoiceNumber = timesheetProject.Max(x => x.InvoiceNumber);
+                var transferFee = timesheetProject.Select(x => x.TransferFee).FirstOrDefault();
+                var discount = timesheetProject.Where(x => x.Discount != 0).Select(x => x.Discount).FirstOrDefault();
 
 
-                var resultProjectInvoice = await ExportInvoiceProjecct(listProject, input.TimesheetId);
+                var resultProjectInvoice = await ExportInvoiceProjecct(listProject, input.TimesheetId, input.OptionExportInvoice);
                 var listUserBillInProject = resultProjectInvoice.ListExportInvoice;
 
                 using (var memoryStream = new MemoryStream(File.ReadAllBytes(templateFilePath)))
@@ -1263,19 +1299,30 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     using (var excelPackageIn = new ExcelPackage(memoryStream))
                     {
 
-                        ExportInvoiceSheetInvoice(excelPackageIn, listProject, listUserBillInProject, invoiceNumberTimesheetProject);
-                        ExportSheetCompany(excelPackageIn, listProject);
+                        var today = DateTime.Today;
+
+                        var timesheetMonth = today.Month;
+                        var timesheetYear = today.Year;
+                        if (listUserBillInProject.Count() > 0)
+                        {
+                            timesheetMonth = listUserBillInProject[0].Month;
+                            timesheetYear = listUserBillInProject[0].Year;
+                        }
+
+                        ExportInvoiceSheetInvoice(excelPackageIn, listProject, listUserBillInProject, invoiceNumber, transferFee, discount, listProject[0].Currency);
 
                         var fileBytes = excelPackageIn.GetAsByteArray();
                         string fileBase64 = Convert.ToBase64String(fileBytes);
+
                         string fileName = string.Empty;
+                        string fileNameInvoice = $"_Invoice{invoiceNumber}_{DateTimeUtils.GetFullNameOfMonth(timesheetMonth)}{timesheetYear}";
                         if (listProject.Count() > 1)
                         {
-                            fileName = FilesHelper.SetFileName(listProject[0].Client.Name);
+                            fileName = FilesHelper.SetFileName(listProject[0].Client.Name + fileNameInvoice);
                         }
                         else
                         {
-                            fileName = FilesHelper.SetFileName(listProject[0].Name);
+                            fileName = FilesHelper.SetFileName(listProject[0].Client.Name + "_" + listProject[0].Name + fileNameInvoice);
                         }
 
                         return new FileBase64Dto
@@ -1295,15 +1342,19 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         private ExcelPackage ExportInvoiceSheetInvoice(
          ExcelPackage excelPackageIn,
-         List<Project> listProject,
+         List<InvoiceExcelProject> listProject,
          List<ExportInvoiceDto> listUserBillInProject,
-         byte invoiceNumberTimesheetProject)
+         long invoiceNumber,
+         float transferFee,
+         float discount,
+         Currency currency
+         )
         {
             try
             {
                 var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
                 var countListProject = listProject.Count;
-                int currentRowInvoice = 15;
+                int rowIndex = 15;
                 double sumLineTotal = 0;
                 var invoiceDetailTable = invoiceSheet.Tables.First();
                 var invoiceDetailTableStart = invoiceDetailTable.Address.Start;
@@ -1312,16 +1363,17 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 foreach (var userBillInProject in listUserBillInProject)
                 {
                     //Fill data sheet invoice
-                    invoiceSheet.Cells[currentRowInvoice, 2].Value = userBillInProject.FullName;
-                    invoiceSheet.Cells[currentRowInvoice, 3].Value = userBillInProject.ProjectName;
-                    invoiceSheet.Cells[currentRowInvoice, 4].Value = userBillInProject.BillRate;
-                    invoiceSheet.Cells[currentRowInvoice, 5].Value = userBillInProject.CurrencyName + "/ " + userBillInProject.ChargeType;
-                    invoiceSheet.Cells[currentRowInvoice, 6].Value = userBillInProject.WorkingTimeDay;
-                    invoiceSheet.Cells[currentRowInvoice, 7].Value = userBillInProject.LineTotal;
+                    invoiceSheet.Cells[rowIndex, 2].Value = userBillInProject.FullName;
+                    invoiceSheet.Cells[rowIndex, 3].Value = userBillInProject.ProjectName;
+                    invoiceSheet.Cells[rowIndex, 4].Value = userBillInProject.BillRate;
+                    invoiceSheet.Cells[rowIndex, 5].Value = userBillInProject.CurrencyName + "/ " + userBillInProject.ChargeType;
+                    invoiceSheet.Cells[rowIndex, 6].Value = userBillInProject.WorkingTimeDay;
+                    invoiceSheet.Cells[rowIndex, 7].Value = userBillInProject.LineTotal;
                     sumLineTotal += userBillInProject.LineTotal;
-                    currentRowInvoice++;
+                    rowIndex++;
                 }
                 var client = listProject[0].Client;
+                var invoicePaymentInfo = listProject[0].Currency.InvoicePaymentInfo;
                 invoiceSheet.PrinterSettings.FitToHeight = 0;
                 invoiceSheet.Cells["F6:G6"].Value = client?.Name;
                 invoiceSheet.Cells["F6:G6"].Style.WrapText = true;
@@ -1360,10 +1412,30 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         + DateTimeUtils.GetFullNameOfMonth(timesheetMonthNext) + " "
                         + timesheetYear;
                 }
-                invoiceSheet.Cells["C2"].Value = invoiceNumberTimesheetProject > 0 ? invoiceNumberTimesheetProject : 1;
+                invoiceSheet.Cells["C2"].Value = invoiceNumber > 0 ? invoiceNumber : 1;
                 invoiceSheet.Cells["B3"].Value = invoiceDateSetting;
                 invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {paymentDueBy}";
-                invoiceSheet.Names["InvoiceNetTotal"].Formula = $"={sumLineTotal}-Discount";
+                invoiceSheet.Names["TransferFee"].Value = transferFee;
+                invoiceSheet.Names["InvoiceNetTotal"].Formula = $"={sumLineTotal}+TransferFee";
+                invoiceSheet.Names["DiscountLabel"].Value = $"Discount: ({discount}%)";
+                invoiceSheet.Names["Discount"].Formula = $"=({discount}*InvoiceNetTotal)/100";
+                invoiceSheet.Names["InvoiceTotal"].Formula = $"=InvoiceNetTotal-Discount";
+
+
+                //Fill data payment
+                string[] arrInvoicePaymentInfo = currency.InvoicePaymentInfo.Split("\n");
+                int countInvoicePaymentInfo = arrInvoicePaymentInfo.Count();
+                var currencyName = currency.Name;
+                var indexPayment = invoiceSheet.Names["PaymentDetails"].Start.Row;
+                invoiceSheet.InsertRow(indexPayment, countInvoicePaymentInfo, indexPayment + countInvoicePaymentInfo);
+
+                invoiceSheet.Names["CurrencyTotal"].Value = $"{currencyName} TOTAL";
+
+                for (int i = 0; i < countInvoicePaymentInfo; i++)
+                {
+                    invoiceSheet.Cells["B" + indexPayment].Value = arrInvoicePaymentInfo[i];
+                    indexPayment++;
+                }
 
                 return excelPackageIn;
             }
@@ -1374,7 +1446,55 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
         }
 
+        private static float calculateWorkingTime(string optionExportInvoice, float workingTime, ChargeType chargeType, int defaultWorkingHours, float workingDay)
+        {
+            if (optionExportInvoice == "monthlyToDaily" && chargeType == ChargeType.Monthly)
+            {
+                return workingTime;
+            }
+            else
+            {
+                if (chargeType == ChargeType.Hours)
+                {
+                    return workingTime * defaultWorkingHours;
+                }
+                else if (chargeType == ChargeType.Monthly)
+                {
+                    return workingTime / workingDay;
+                }
+                else
+                {
+                    return workingTime;
+                }
+            }
+        }
+
+        private static float calculateBillRate(string optionExportInvoice, float billRate, ChargeType chargeType, float workingDay)
+        {
+            if (optionExportInvoice == "monthlyToDaily" && chargeType == ChargeType.Monthly)
+            {
+                return billRate / workingDay;
+            }
+
+            return billRate;
+
+        }
 
 
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay)]
+        public async Task<float> UpdateTimesheetProject(UpdateTimesheetProjectDto input)
+        {
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);
+            if (timesheetProject != null)
+            {
+                timesheetProject.WorkingDay = input.WorkingDay;
+                timesheetProject.InvoiceNumber = input.InvoiceNumber;
+                var timesheetProjectUpdate = await WorkScope.UpdateAsync<TimesheetProject>(timesheetProject);
+                return timesheetProjectUpdate.WorkingDay;
+            }
+
+            return default;
+        }
     }
 }

@@ -68,25 +68,61 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)]
-        public async Task<byte?> GetLastInvoiceNumber(long projectId)
+        public async Task<long> GetLastInvoiceNumber(long projectId)
         {
-            var lastInvoiceNumber = await WorkScope.GetAll<Project>()
+            return await WorkScope.GetAll<Project>()
              .Where(s => s.Id == projectId)
              .Select(s => s.LastInvoiceNumber)
              .FirstOrDefaultAsync();
-            return lastInvoiceNumber;
+        }
+
+
+        private async Task<Project> GetProjectById(long projectId)
+        {
+            return await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == projectId);
         }
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)]
-        public async Task<byte?> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
+        public async Task<long> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
         {
-            var project = await WorkScope.GetAsync<Project>(input.ProjectId);
-            var entity = ObjectMapper.Map(input, project);
-            var lastInvoiceNumber = await WorkScope.UpdateAsync(entity);
+            var project = await GetProjectById(input.ProjectId);
+            if (project != null)
+            {
+                project.LastInvoiceNumber = input.LastInvoiceNumber;
+                var projectUpdate = await WorkScope.UpdateAsync<Project>(project);
+                return projectUpdate.LastInvoiceNumber;
+            }
 
-            return lastInvoiceNumber.LastInvoiceNumber;
+            return default;
         }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)]
+        public async Task<float> GetDiscount(long projectId)
+        {
+            return await WorkScope.GetAll<Project>()
+             .Where(s => s.Id == projectId)
+             .Select(s => s.Discount)
+             .FirstOrDefaultAsync();
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit)]
+        public async Task<float> UpdateDiscount(UpdateDiscountDto input)
+        {
+            var project = await GetProjectById(input.ProjectId);
+            if (project != null)
+            {
+                project.Discount = input.Discount;
+                var projectUpdate = await WorkScope.UpdateAsync<Project>(project);
+                return projectUpdate.Discount;
+            }
+
+            return default;
+
+        }
+
 
         [HttpGet]
         [AbpAuthorize]

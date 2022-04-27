@@ -36,7 +36,8 @@ namespace ProjectManagement.Services.ProjectTimesheet
             return await _workScope.GetAll<Entities.Timesheet>()
                 .Where(s => s.IsActive)
                .OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
-               .Select(x => new TimesheetDto {
+               .Select(x => new TimesheetDto
+               {
                    Id = x.Id,
                    Month = x.Month,
                    Year = x.Year,
@@ -54,13 +55,14 @@ namespace ProjectManagement.Services.ProjectTimesheet
                    Id = x.Id,
                    Month = x.Month,
                    Year = x.Year,
-                   IsActive = x.IsActive
+                   IsActive = x.IsActive,
+                   TotalWorkingDay = x.TotalWorkingDay
                })
                .FirstOrDefaultAsync();
         }
 
 
-        public async Task CreateTimesheetProjectBill(ProjectUserBill pub,Project project)
+        public async Task CreateTimesheetProjectBill(ProjectUserBill pub, Project project)
         {
             var activeTimesheetId = await GetActiveTimesheetId();
             if (activeTimesheetId == default)
@@ -117,17 +119,17 @@ namespace ProjectManagement.Services.ProjectTimesheet
         public async Task DeleteTimesheetProjectBill(long projectId, long timesheetId)
         {
             var tspbList = await _workScope.GetAll<TimesheetProjectBill>()
-                .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)                
+                .Where(x => x.ProjectId == projectId && x.TimesheetId == timesheetId)
                 .ToListAsync();
 
             if (tspbList == null || tspbList.Count == 0)
             {
                 return;
             }
-            
+
             foreach (var item in tspbList)
             {
-                item.IsDeleted = true;                
+                item.IsDeleted = true;
             }
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -136,24 +138,35 @@ namespace ProjectManagement.Services.ProjectTimesheet
         public async Task<List<ProjectUserBillDto>> GetListProjectUserBillDto(int year, int month, long? projectId)
         {
             var firstDayOfMonth = new DateTime(year, month, 1).Date;
-            var q = await _workScope.GetAll<ProjectUserBill>()
+            var q = _workScope.GetAll<ProjectUserBill>()
                .Where(s => s.Project.IsCharge == true)
                .Where(s => s.isActive)
-               .Where(s => !projectId.HasValue || s.ProjectId == projectId.Value)
-               .Where(s => !s.EndTime.HasValue || s.EndTime.Value.Date >= firstDayOfMonth)
-               .Select(s => new ProjectUserBillDto
-               {
-                   ProjectId = s.ProjectId,
-                   UserId = s.UserId,
-                   BillRate = s.BillRate,
-                   BillRole = s.BillRole,
-                   StartTime = s.StartTime,
-                   EndTime = s.EndTime,
-                   ChargeType = s.Project.ChargeType,
-                   CurrencyId = s.Project.CurrencyId
-               }).ToListAsync();
+               .Where(s => !s.EndTime.HasValue || s.EndTime.Value.Date >= firstDayOfMonth);
 
-            return q;
+            if (projectId.HasValue)
+            {
+                q = q.Where(s => s.ProjectId == projectId.Value);
+            }
+            else
+            {
+                q = q.Where(s => s.Project.Status == Constants.Enum.ProjectEnum.ProjectStatus.InProgress);
+            }
+
+            return await q.Select(s => new ProjectUserBillDto
+            {
+                ProjectId = s.ProjectId,
+                UserId = s.UserId,
+                BillRate = s.BillRate,
+                BillRole = s.BillRole,
+                StartTime = s.StartTime,
+                EndTime = s.EndTime,
+                ChargeType = s.Project.ChargeType,
+                CurrencyId = s.Project.CurrencyId,
+                Discount = s.Project.Discount,
+                TransferFee = s.Project.Client.TransferFee,
+                LastInvoiceNumber = s.Project.LastInvoiceNumber,
+            }).ToListAsync();
+
         }
 
     }

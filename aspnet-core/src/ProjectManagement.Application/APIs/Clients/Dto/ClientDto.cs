@@ -22,5 +22,6 @@ namespace ProjectManagement.APIs.Clients.Dto
         public string Address { get; set; }
         public InvoiceDateSetting InvoiceDateSetting { get; set; }
         public byte PaymentDueBy { get; set; }
+        public float TransferFee { get; set; }
     }
 }

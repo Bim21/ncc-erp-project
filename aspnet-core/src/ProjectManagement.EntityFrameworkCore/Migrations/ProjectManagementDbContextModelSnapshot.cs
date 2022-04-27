@@ -2157,6 +2157,9 @@ namespace ProjectManagement.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<float>("TransferFee")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Clients");
@@ -2272,6 +2275,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoicePaymentInfo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2587,6 +2593,9 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("DetailDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("Discount")
+                        .HasColumnType("real");
+
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -2599,8 +2608,8 @@ namespace ProjectManagement.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<byte?>("LastInvoiceNumber")
-                        .HasColumnType("tinyint");
+                    b.Property<long>("LastInvoiceNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -3232,6 +3241,9 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<float>("Discount")
+                        .HasColumnType("real");
+
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
@@ -3239,8 +3251,8 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("HistoryFile")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("InvoiceNumber")
-                        .HasColumnType("tinyint");
+                    b.Property<long>("InvoiceNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<bool?>("IsComplete")
                         .HasColumnType("bit");
@@ -3269,6 +3281,12 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long>("TimesheetId")
                         .HasColumnType("bigint");
+
+                    b.Property<float>("TransferFee")
+                        .HasColumnType("real");
+
+                    b.Property<float>("WorkingDay")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
