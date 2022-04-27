@@ -39,7 +39,6 @@ using static ProjectManagement.Constants.Enum.ClientEnum;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
-using OfficeOpenXml.Table;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -1191,7 +1190,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
             var listUserBillProject = new List<ExportInvoiceDto>();
             var invoiceUserBilling = new List<ExportInvoiceDto>();
-            List<string> listProjectCode = new List<string> { };
             foreach (var project in listProject)
             {
                 listUserBillProject = await (from pub in WorkScope.GetAll<ProjectUserBill>()
@@ -1239,7 +1237,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                   InvoiceNumber = x.InvoiceNumber,
                                               }).ToListAsync();
                 invoiceUserBilling.AddRange(listUserBillProject);
-                listProjectCode.Add(project.Code);
             }
 
             var resultProjectInvoice = new ResultExportInvoice
@@ -1249,15 +1246,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             return resultProjectInvoice;
         }
-
-        private async Task<long> getInvoiceNumber(long timesheetId, List<long> projectIds)
-        {
-            return await WorkScope.GetAll<TimesheetProject>()
-                 .Where(x => projectIds.Contains(x.ProjectId))
-                 .Where(x => x.TimesheetId == timesheetId)
-                 .Select(x => x.InvoiceNumber).MaxAsync();
-        }
-
 
         public async Task<FileBase64Dto> ExportInvoice(InvoiceExcelDto input)
         {
@@ -1410,7 +1398,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {paymentDueBy}";
                 invoiceSheet.Names["TransferFee"].Value = transferFee;
                 invoiceSheet.Names["InvoiceNetTotal"].Formula = $"={sumLineTotal}+TransferFee";
-                invoiceSheet.Names["DiscountLabel"].Value = $"Discount: ({discount}%)";
+                invoiceSheet.Names["DiscountLabel"].Value = $"Discount ({discount}%)";
                 invoiceSheet.Names["Discount"].Formula = $"=({discount}*InvoiceNetTotal)/100";
                 invoiceSheet.Names["InvoiceTotal"].Formula = $"=InvoiceNetTotal-Discount";
 
