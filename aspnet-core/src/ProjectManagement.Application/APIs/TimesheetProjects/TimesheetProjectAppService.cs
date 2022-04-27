@@ -1205,6 +1205,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                              {
                                                  Month = tsp.Timesheet.Month,
                                                  Year = tsp.Timesheet.Year,
+                                                 TransferFee = tsp.TransferFee,
+                                                 Discount = tsp.Discount,
+                                                 InvoiceNumber = tsp.InvoiceNumber,
                                                  StartTime = pub.StartTime.Date,
                                                  EndTime = pub.EndTime.Value.Date,
                                                  tpb,
@@ -1230,7 +1233,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                   ChargeType = x.tpb.ChargeType == null ? (ChargeType)project.ChargeType : (ChargeType)x.tpb.ChargeType,
                                                   CurrencyName = x.tpb.CurrencyId == null ? project.Currency.Name : x.tpb.Currency.Name,
                                                   Year = x.Year,
-                                                  Month = x.Month
+                                                  Month = x.Month,
+                                                  TransferFee = x.TransferFee,
+                                                  Discount = x.Discount,
+                                                  InvoiceNumber = x.InvoiceNumber,
                                               }).ToListAsync();
                 invoiceUserBilling.AddRange(listUserBillProject);
                 listProjectCode.Add(project.Code);
@@ -1252,18 +1258,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                  .Select(x => x.InvoiceNumber).MaxAsync();
         }
 
-        private async Task<List<InvoiceExcelTimesheetProjectDto>> getTimesheetProject(long timesheetId, List<long> projectIds)
-        {
-            return await WorkScope.GetAll<TimesheetProject>()
-                        .Where(x => projectIds.Contains(x.ProjectId))
-                        .Where(x => x.TimesheetId == timesheetId)
-                        .Select(tsp => new InvoiceExcelTimesheetProjectDto
-                        {
-                            TransferFee = tsp.TransferFee,
-                            Discount = tsp.Discount,
-                            InvoiceNumber = tsp.InvoiceNumber
-                        }).ToListAsync();
-        }
 
         public async Task<FileBase64Dto> ExportInvoice(InvoiceExcelDto input)
         {
@@ -1285,14 +1279,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
                         ChargeType = x.ChargeType
                     }).ToListAsync();
 
-                var timesheetProject = await getTimesheetProject(input.TimesheetId, input.ProjectIds);
-                var invoiceNumber = timesheetProject.Max(x => x.InvoiceNumber);
-                var transferFee = timesheetProject.Select(x => x.TransferFee).FirstOrDefault();
-                var discount = timesheetProject.Where(x => x.Discount != 0).Select(x => x.Discount).FirstOrDefault();
-
 
                 var resultProjectInvoice = await ExportInvoiceProjecct(listProject, input.TimesheetId, input.OptionExportInvoice);
                 var listUserBillInProject = resultProjectInvoice.ListExportInvoice;
+                var invoiceNumber = listUserBillInProject.Max(x => x.InvoiceNumber);
+                var transferFee = listUserBillInProject.Select(x => x.TransferFee).FirstOrDefault();
+                var discount = listUserBillInProject.Where(x => x.Discount != 0).Select(x => x.Discount).FirstOrDefault();
+
 
                 using (var memoryStream = new MemoryStream(File.ReadAllBytes(templateFilePath)))
                 {

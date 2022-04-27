@@ -28,11 +28,13 @@ namespace ProjectManagement.Services.Timesheet.Dto
                 return WorkingTimeDay * BillRate;
             }
         }
+        public float Discount { get; set; }
+        public float TransferFee { get; set; }
+        public long InvoiceNumber { get; set; }
     }
 
     public class ResultExportInvoice
     {
-
         public string ProjectName { get; set; }
         public List<ExportInvoiceDto> ListExportInvoice { get; set; }
     }

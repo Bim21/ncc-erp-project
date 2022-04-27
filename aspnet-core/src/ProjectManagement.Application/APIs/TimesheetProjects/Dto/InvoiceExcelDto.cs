@@ -35,11 +35,4 @@ namespace ProjectManagement.APIs.TimesheetProjects.Dto
 
         public float Discount { get; set; }
     }
-
-    public class InvoiceExcelTimesheetProjectDto
-    {
-        public float Discount { get; set; }
-        public float TransferFee { get; set; }
-        public long InvoiceNumber { get; set; }
-    }
 }
