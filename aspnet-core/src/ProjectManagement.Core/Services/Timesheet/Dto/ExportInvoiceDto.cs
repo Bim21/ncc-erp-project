@@ -1,5 +1,6 @@
 ﻿using NccCore.Uitls;
 using ProjectManagement.Entities;
+using ProjectManagement.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,50 +10,6 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.Timesheet.Dto
 {
-    public class ExportInvoiceDto
-    {
-        public string ProjectCode { get; set; }
-        public string EmailAddress { get; set; }
-        public string FullName { get; set; }
-        public string ProjectName { get; set; }
-        public float WorkingTimeDay { get; set; }
-        public ChargeType ChargeType { get; set; }
-        public string CurrencyName { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
-        public float BillRate { get; set; }
-        public int Month { get; set; }
-        public int Year { get; set; }
-
-        public double LineTotal
-        {
-            get
-            {
-                return WorkingTimeDay * BillRate;
-            }
-        }
-        public float Discount { get; set; }
-        public float TransferFee { get; set; }
-        public long InvoiceNumber { get; set; }
-    }
-
-    public class ResultExportInvoice
-    {
-        public string ProjectName { get; set; }
-        public List<ExportInvoiceDto> ListExportInvoice { get; set; }
-    }
-
-
-
-
-    public class ResultExportInvoiceDto
-    {
-       
-
-        public List<TimesheetUser> ListExportInvoice { get; set; }
-    }
-
-
     public class InvoiceData
     {
         public InvoiceGeneralInfo Info { get; set; }
@@ -76,7 +33,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
             string projectName = IsInvoiceHaveOneProject() ? "_" + ProjectName() : "";
             var date = new DateTime(Info.Year, Info.Month, 1);
 
-            return $"{Info.ClientName}{projectName}_Invoice{Info.InvoiceNumber}_{date.ToString("yyyyMM")}";
+            return FilesHelper.SetFileName($"{Info.ClientName}{projectName}_Invoice{Info.InvoiceNumber}_{date.ToString("yyyyMM")}");
         }
     }
 
@@ -122,10 +79,10 @@ namespace ProjectManagement.Services.Timesheet.Dto
                 {
                     date = new DateTime(Year, Month, 15).AddMonths(1);//on the date of next month
                 }
-                
-            }
-            return DateTimeUtils.FormatDateToInvoice(date);
 
+            }
+
+            return DateTimeUtils.FormatDateToInvoice(date);
         }
     }
 
@@ -140,12 +97,10 @@ namespace ProjectManagement.Services.Timesheet.Dto
         //public DateTime StartTime { get; set; }
         //public DateTime? EndTime { get; set; }
         public float BillRate { get; set; }
-
+        public int DefaultWorkingHours { get; set; }
         public ExportInvoiceMode Mode { get; set; }
         public float TimesheetWorkingDay { get; set; }
-       
-
-        public float BillRateDisplay => Mode == ExportInvoiceMode.Normal ? BillRate : BillRate / TimesheetWorkingDay;
+        public float BillRateDisplay => (Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) ? BillRate / TimesheetWorkingDay : BillRate;
         public double LineTotal
         {
             get
@@ -157,7 +112,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
 
                 if (ChargeType == ChargeType.Hours)
                 {
-                    return WorkingDay * BillRate * 8;
+                    return WorkingDay * BillRate * DefaultWorkingHours;
                 }
 
                 return WorkingDay * BillRate / TimesheetWorkingDay;
@@ -168,6 +123,6 @@ namespace ProjectManagement.Services.Timesheet.Dto
     public enum ExportInvoiceMode : byte
     {
         Normal = 0,
-        MontlyTodaily = 1
+        MontlyToDaily = 1
     }
 }

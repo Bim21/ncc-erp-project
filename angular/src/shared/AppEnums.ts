@@ -242,4 +242,9 @@ export const APP_ENUMS = {
         LastDateThisMonth: 0,
         FirstDateNextMonth: 1
     },
+    ExportInvoiceMode:
+    {
+        Normal: 0,
+        MontlyToDaily: 1
+    },
 }

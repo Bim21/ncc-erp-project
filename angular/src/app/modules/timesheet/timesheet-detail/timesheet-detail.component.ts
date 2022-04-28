@@ -103,7 +103,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public chargeType = ['d','m','h']
   public titleTimesheet: string = ''
   public meId: number;
-  public updateAction = UpdateAction
+  public updateAction = UpdateAction;
+  public currency: string = "";
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -374,8 +375,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     item.showIcon = false
   }
 
-  exportInvocie(item: any,optionExportInvoice:string) {
-    this.timesheetProjectService.exportInvoice(this.timesheetId, item.projectId,optionExportInvoice).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
+  exportInvocie(item: any,exportInvoiceMode) {
+    this.timesheetProjectService.exportInvoice(this.timesheetId, item.projectId,exportInvoiceMode).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
       const file = new Blob([this.s2ab(atob(data.result.base64))], {
         type: "application/vnd.ms-excel;charset=utf-8"
       });
@@ -408,13 +409,21 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     }
     else {
       let checkClientId = event.source.value.clientId;
+      let checkCurrency = event.source.value.currency;
       if (this.listExportInvoice.length > 0 && this.clientId != checkClientId) {
-        abp.notify.warn("Không thể export invoice cho các clients khác nhau!")
+        abp.notify.warn("Cannot export invoices for different clients!")
+        event.checked = false;
+        event.source._checked = false
+        return;
+      }
+      if (this.listExportInvoice.length > 0 && this.currency != checkCurrency) {
+        abp.notify.warn("Cannot export invoices for different currencies!")
         event.checked = false;
         event.source._checked = false
         return;
       }
       this.clientId = checkClientId;
+      this.currency = checkCurrency;
       this.listExportInvoice.push(event.source.value.projectId);
       this.listExportInvoiceChargeType.push(event.source.value.chargeType);
     }
@@ -425,11 +434,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.isMonthlyToDaily = false;
     }
   }
-  exportInvoiceClient(optionExportInvoice:string) {
+  exportInvoiceClient(exportInvoiceMode) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
       projectIds: this.listExportInvoice,
-      optionExportInvoice: optionExportInvoice
+      mode: exportInvoiceMode
     }
     this.timesheetProjectService.exportInvoiceClient(invoiceExcelDto).subscribe((res) => {
       const file = new Blob([this.s2ab(atob(res.result.base64))], {

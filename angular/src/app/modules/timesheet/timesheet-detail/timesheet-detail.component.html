@@ -25,10 +25,10 @@
           </div>
           <mat-menu #actionsMenu="matMenu">
             
-            <button mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceClient('')">
+            <button mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.Normal)">
               <i class="fa fa-file"></i> Export Invoice
             </button>
-            <button *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceClient('monthlyToDaily')">
+            <button *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
               <i class="fa fa-file-excel"></i> Export Invoice (Monthly to daily)
             </button>
           </mat-menu>
@@ -302,7 +302,7 @@
                         permission.isGranted(
                           Timesheets_TimesheetDetail_ExportInvoice
                         )
-                      " (click)="exportInvocie(item,'')" class="btn mat-menu-item w-100">
+                      " (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.Normal)" class="btn mat-menu-item w-100">
                       <i class="fas fa-file-invoice-dollar mr-1"></i>
                       Export Invoice
                     </button>
@@ -310,7 +310,7 @@
                         permission.isGranted(
                           Timesheets_TimesheetDetail_ExportInvoice
                         ) && item.chargeType == APP_ENUM.ChargeType.Monthly
-                      " (click)="exportInvocie(item,'monthlyToDaily')" class="btn mat-menu-item w-100">
+                      " (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)" class="btn mat-menu-item w-100">
                       <i class="fas fa-file-invoice-dollar mr-1"></i>
                       Export Invoice<span style="font-size:13px">(Monthly to daily)</span>
                     </button>

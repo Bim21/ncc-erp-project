@@ -429,7 +429,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                          }).OrderByDescending(x => x.ClientId);
             return await query.GetGridResult(query, input);
         }
-       
+
 
         public async Task<TimesheetProject> CreateTimesheetProject(TimesheetProjectDto input, long invoiceNumber, float transferFee, float discount, float workingDay)
         {
@@ -447,14 +447,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return await WorkScope.InsertAsync(timesheetProject);
         }
 
-
-        private async Task<Project> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
-        {
-            var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == input.ProjectId);
-
-            project.LastInvoiceNumber = input.LastInvoiceNumber;
-            return await WorkScope.UpdateAsync<Project>(project);
-        }
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_AddProjectToTimesheet)]
@@ -1174,6 +1166,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         private async Task<InvoiceData> GetInvoiceData(InputExportInvoiceDto input)
         {
+            var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
             var result = new InvoiceData();
 
             var qtimesheetProject = WorkScope.All<TimesheetProject>()
@@ -1210,6 +1203,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                CurrencyName = tpb.Currency.Name,
                                                FullName = tpb.User.FullName,
                                                Mode = input.Mode,
+                                               DefaultWorkingHours = defaultWorkingHours,
                                                ProjectName = tpb.Project.Name,
                                                TimesheetWorkingDay = tp.WorkingDay,
                                                WorkingDay = tpb.WorkingTime,
@@ -1222,14 +1216,12 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         private void FillDataToExcelFileInvoiceSheet(ExcelPackage excelPackageIn, InvoiceData data)
         {
-
             var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
-
 
             var tsTable = invoiceSheet.Tables.First();
             var tsTableStart = tsTable.Address.Start;
             invoiceSheet.InsertRow(tsTableStart.Row + 1, data.TimesheetUsers.Count - 1, tsTableStart.Row + data.TimesheetUsers.Count);
-            int rowIndex = 15;
+            int rowIndex = tsTableStart.Row + 1;
 
             double sumLineTotal = 0;
             foreach (var tsUser in data.TimesheetUsers)
@@ -1245,11 +1237,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 rowIndex++;
             }
 
-            //invoiceSheet.PrinterSettings.FitToHeight = 0;
             invoiceSheet.Cells["F6:G6"].Value = data.Info.ClientName;
-            //invoiceSheet.Cells["F6:G6"].Style.WrapText = true;
             invoiceSheet.Cells["F7:G7"].Value = data.Info.ClientAddress;
-
             invoiceSheet.Cells["C2"].Value = data.Info.InvoiceNumber;
             invoiceSheet.Cells["B3"].Value = data.Info.InvoiceDateStr();
             invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {data.Info.PaymentDueByStr()}";
