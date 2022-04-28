@@ -429,21 +429,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                          }).OrderByDescending(x => x.ClientId);
             return await query.GetGridResult(query, input);
         }
-        public async Task<Project> GetProjectById(long projectId)
-        {
-            return await WorkScope.GetAll<Project>()
-               .Where(s => s.Id == projectId)
-               .Select(s => new Project
-               {
-                   IsCharge = s.IsCharge,
-                   ChargeType = s.ChargeType,
-                   CurrencyId = s.CurrencyId,
-                   LastInvoiceNumber = s.LastInvoiceNumber,
-                   Discount = s.Discount,
-                   Client = s.Client
-               })
-              .FirstOrDefaultAsync();
-        }
+       
 
         public async Task<TimesheetProject> CreateTimesheetProject(TimesheetProjectDto input, long invoiceNumber, float transferFee, float discount, float workingDay)
         {
@@ -479,11 +465,17 @@ namespace ProjectManagement.APIs.TimesheetProjects
             if (isExist)
                 throw new UserFriendlyException($"ProjectId {input.ProjectId} already exist in this Timesheet.");
 
-            var project = await GetProjectById(input.ProjectId);
-            var isCharedProject = project.IsCharge;
-            if (isCharedProject != true)
+            var project = await WorkScope.GetAll<Project>()
+                .Where(s => s.Id == input.ProjectId)
+                .Select(s => new
+                {
+                    Project = s,
+                    s.Client.TransferFee
+                }).FirstOrDefaultAsync();
+
+            if (project.Project.IsCharge != true || project.Project.Status != ProjectStatus.InProgress)
             {
-                throw new UserFriendlyException("You can't add No-chagred project to timesheet");
+                throw new UserFriendlyException($"Project Id {input.ProjectId} is No-charged or Not Inprogress. So, you can't add it to the timesheet");
             }
 
             var timesheet = await _timesheetManager.GetTimesheetById(input.TimesheetId);
@@ -502,25 +494,21 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
 
 
-            var invoiceNumber = project.LastInvoiceNumber == 0 ? 1 : project.LastInvoiceNumber + 1;
-            float discount = project.Discount;
-            float transferFee = project.Client.TransferFee;
+            var invoiceNumber = project.Project.LastInvoiceNumber + 1;
+            float discount = project.Project.Discount;
+            float transferFee = project.TransferFee;
+
             var timesheetProject = await CreateTimesheetProject(input, invoiceNumber, transferFee, discount, (float)timesheet.TotalWorkingDay);
 
-            var updateLastInvoiceNumberDto = new UpdateLastInvoiceNumberDto
-            {
-                ProjectId = input.ProjectId,
-                LastInvoiceNumber = invoiceNumber
-            };
-            await UpdateLastInvoiceNumber(updateLastInvoiceNumberDto);
+            project.Project.LastInvoiceNumber = invoiceNumber;
+
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
 
             foreach (var pub in listPUB)
             {
-                var projectId = pub.ProjectId;
                 var timesheetProjectBill = new TimesheetProjectBill
                 {
-                    ProjectId = projectId,
+                    ProjectId = pub.ProjectId,
                     TimesheetId = timesheet.Id,
                     UserId = pub.UserId,
                     BillRole = pub.BillRole,
@@ -528,15 +516,15 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     StartTime = pub.StartTime,
                     EndTime = pub.EndTime,
                     IsActive = true,
-                    ChargeType = project.ChargeType,
-                    CurrencyId = project.CurrencyId,
+                    ChargeType = project.Project.ChargeType,
+                    CurrencyId = project.Project.CurrencyId,
                 };
                 listTimesheetProjectBill.Add(timesheetProjectBill);
 
             }
 
             await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
-
+            await CurrentUnitOfWork.SaveChangesAsync();
             return new
             {
                 TimesheetProject = timesheetProject,
@@ -1232,7 +1220,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
 
-        private void FillDataToExcelFile(ExcelPackage excelPackageIn, InvoiceData data)
+        private void FillDataToExcelFileInvoiceSheet(ExcelPackage excelPackageIn, InvoiceData data)
         {
 
             var invoiceSheet = excelPackageIn.Workbook.Worksheets[0];
@@ -1249,7 +1237,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 //Fill data sheet invoice
                 invoiceSheet.Cells[rowIndex, 2].Value = tsUser.FullName;
                 invoiceSheet.Cells[rowIndex, 3].Value = tsUser.ProjectName;
-                invoiceSheet.Cells[rowIndex, 4].Value = tsUser.BillRate;
+                invoiceSheet.Cells[rowIndex, 4].Value = tsUser.BillRateDisplay;
                 invoiceSheet.Cells[rowIndex, 5].Value = tsUser.CurrencyName + "/" + tsUser.ChargeType;
                 invoiceSheet.Cells[rowIndex, 6].Value = tsUser.WorkingDay;
                 invoiceSheet.Cells[rowIndex, 7].Value = tsUser.LineTotal;
@@ -1262,7 +1250,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             //invoiceSheet.Cells["F6:G6"].Style.WrapText = true;
             invoiceSheet.Cells["F7:G7"].Value = data.Info.ClientAddress;
 
-            invoiceSheet.Cells["C2"].Value = data.Info.InvoiceNumber > 0 ? data.Info.InvoiceNumber : 1;
+            invoiceSheet.Cells["C2"].Value = data.Info.InvoiceNumber;
             invoiceSheet.Cells["B3"].Value = data.Info.InvoiceDateStr();
             invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {data.Info.PaymentDueByStr()}";
             invoiceSheet.Names["TransferFee"].Value = data.Info.TransferFee;
@@ -1298,7 +1286,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 using (var excelPackageIn = new ExcelPackage(memoryStream))
                 {
-                    FillDataToExcelFile(excelPackageIn, data);
+                    FillDataToExcelFileInvoiceSheet(excelPackageIn, data);
                     string fileBase64 = Convert.ToBase64String(excelPackageIn.GetAsByteArray());
 
                     return new FileBase64Dto
@@ -1309,8 +1297,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     };
                 }
             }
-            }
         }
+    }
 
 }
 

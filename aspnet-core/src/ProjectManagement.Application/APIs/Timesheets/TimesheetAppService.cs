@@ -89,16 +89,14 @@ namespace ProjectManagement.APIs.TimeSheets
             return await query.FirstOrDefaultAsync();
         }
 
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.Timesheets_Create)]
-        public async Task<object> Create(TimesheetDto input)
+        private async Task CheckValidCreate(TimesheetDto input)
         {
             if (input.TotalWorkingDay == null || input.TotalWorkingDay <= 0)
             {
                 throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
             }
 
-            var failList = new List<string>();
+           
             var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
             if (nameExist)
             {
@@ -110,7 +108,13 @@ namespace ProjectManagement.APIs.TimeSheets
             {
                 throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
             }
-
+        }
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Timesheets_Create)]
+        public async Task<object> Create(TimesheetDto input)
+        {
+            await CheckValidCreate(input);
+            var failList = new List<string>();
             var timesheet = new Timesheet
             {
                 Name = input.Name,
@@ -125,18 +129,21 @@ namespace ProjectManagement.APIs.TimeSheets
 
             var listPUB = await timesheetManager.GetListProjectUserBillDto(timesheet.Year, timesheet.Month, null);
 
+            var projectIds = listPUB.Select(s => s.ProjectId);
+
+            var mapProject = await WorkScope.GetAll<Project>().Where(s => projectIds.Contains(s.Id)).ToDictionaryAsync(s => s.Id);
+
             var listProjectIdToBillInfo = listPUB.GroupBy(s => new { s.ProjectId, s.Discount, s.TransferFee, s.LastInvoiceNumber })
                 .Select(s => new { s.Key.ProjectId, s.Key.Discount, s.Key.TransferFee, s.Key.LastInvoiceNumber, ListBillInfo = s.ToList() });
 
 
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
             var listTimesheetProject = new List<TimesheetProject>();
-            var listProject = new List<Project>();
 
             foreach (var item in listProjectIdToBillInfo)
             {
                 var projectId = item.ProjectId;
-                var lastInvoiceNumber = item.LastInvoiceNumber == 0 ? 1 : item.LastInvoiceNumber + 1;
+                var lastInvoiceNumber = item.LastInvoiceNumber + 1;
                 var listBillInfo = item.ListBillInfo;
                 var timesheetProject = new TimesheetProject
                 {
@@ -151,33 +158,38 @@ namespace ProjectManagement.APIs.TimeSheets
                 listTimesheetProject.Add(timesheetProject);
 
                 //Update project
-                var project = await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == projectId);
-                project.LastInvoiceNumber = lastInvoiceNumber;
-                listProject.Add(project);
+                if (mapProject.ContainsKey(projectId))
+                {
+                    var project = mapProject[projectId];
+                    project.LastInvoiceNumber = lastInvoiceNumber;
+                }
+                else
+                {
+                    failList.Add("projectId:" + projectId);
+                }
+                
 
-
-                foreach (var b in listBillInfo)
+                foreach (var pub in listBillInfo)
                 {
                     var timesheetProjectBill = new TimesheetProjectBill
                     {
                         ProjectId = projectId,
                         TimesheetId = timesheet.Id,
-                        UserId = b.UserId,
-                        BillRole = b.BillRole,
-                        BillRate = b.BillRate,
-                        StartTime = b.StartTime,
-                        EndTime = b.EndTime,
+                        UserId = pub.UserId,
+                        BillRole = pub.BillRole,
+                        BillRate = pub.BillRate,
+                        StartTime = pub.StartTime,
+                        EndTime = pub.EndTime,
                         IsActive = true,
-                        CurrencyId = b.CurrencyId,
-                        ChargeType = b.ChargeType,
+                        CurrencyId = pub.CurrencyId,
+                        ChargeType = pub.ChargeType,
                     };
                     listTimesheetProjectBill.Add(timesheetProjectBill);
                 }
             }
-            await WorkScope.UpdateRangeAsync(listProject);
             await WorkScope.InsertRangeAsync(listTimesheetProject);
             await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
-
+            await CurrentUnitOfWork.SaveChangesAsync();
             return new { failList, input };
 
         }
