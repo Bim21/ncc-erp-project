@@ -51,6 +51,12 @@ namespace NccCore.Uitls
                 (month);
         }
 
+        public static string FormatDateToInvoice(DateTime date)
+        {
+            var s = date.ToString("D", CultureInfo.GetCultureInfo("en-US"));
+            return s.Substring(s.IndexOf(",") + 2);
+        }
+
 
     }
 }

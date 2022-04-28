@@ -5,6 +5,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Timesheet.Dto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,11 +14,11 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimesheetProjects.Dto
 {
-    public class InvoiceExcelDto
+    public class InputExportInvoiceDto
     {
         public long TimesheetId { get; set; }
         public List<long> ProjectIds { get; set; }
-        public string OptionExportInvoice { get; set; }
+        public ExportInvoiceMode Mode { get; set; }
     }
     public class InvoiceExcelProjectDto : EntityDto<long>
     {

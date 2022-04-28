@@ -1,7 +1,10 @@
-﻿using ProjectManagement.Entities;
+﻿using NccCore.Uitls;
+using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ClientEnum;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.Timesheet.Dto
@@ -46,21 +49,87 @@ namespace ProjectManagement.Services.Timesheet.Dto
     {
        
 
-        public List<TimesheetUserDto> ListExportInvoice { get; set; }
+        public List<TimesheetUser> ListExportInvoice { get; set; }
     }
 
 
-    public class ExportProjectDto
+    public class InvoiceData
     {
-        public long ProjectId { get; set; }
-        public string  ProjectName { get; set; }
+        public InvoiceGeneralInfo Info { get; set; }
+        public List<TimesheetUser> TimesheetUsers { get; set; }
+
+        private bool IsInvoiceHaveOneProject()
+        {
+            return TimesheetUsers.Select(s => s.ProjectName).Distinct().Count() == 1;
+        }
+
+        private string ProjectName()
+        {
+            return TimesheetUsers.Select(s => s.ProjectName).FirstOrDefault();
+        }
+        public string CurrencyName()
+        {
+            return TimesheetUsers.Select(s => s.CurrencyName).FirstOrDefault();
+        }
+        public string ExportFileName()
+        {
+            string projectName = IsInvoiceHaveOneProject() ? "_" + ProjectName() : "";
+            var date = new DateTime(Info.Year, Info.Month, 1);
+
+            return $"{Info.ClientName}{projectName}_Invoice{Info.InvoiceNumber}_{date.ToString("yyyyMM")}";
+        }
+    }
+
+    public class InvoiceGeneralInfo
+    {
         public string ClientName { get; set; }
         public float TransferFee { get; set; }
         public float Discount { get; set; }
+        public long InvoiceNumber { get; set; }
 
+        public string ClientAddress { get; set; }
+        public string PaymentInfo { get; set; }
+        public byte PaymentDueBy { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public InvoiceDateSetting InvoiceDateSetting { get; set; }
+
+        public string[] PaymentInfoArr()
+        {
+            return PaymentInfo.Split("\n");
+        }
+        public string InvoiceDateStr()
+        {
+            var date = new DateTime(Year, Month, 1).AddMonths(1);
+            if (InvoiceDateSetting == InvoiceDateSetting.LastDateThisMonth)
+            {
+                date = date.AddDays(-1);
+            }
+
+            return DateTimeUtils.FormatDateToInvoice(date);
+        }
+
+        public string PaymentDueByStr()
+        {
+            var date = new DateTime(Year, Month, 1).AddMonths(2).AddDays(-1);//last date of next month
+            if (PaymentDueBy >= 1)
+            {
+                try
+                {
+                    date = new DateTime(Year, Month, PaymentDueBy).AddMonths(1);//on the date of next month
+                }
+                catch
+                {
+                    date = new DateTime(Year, Month, 15).AddMonths(1);//on the date of next month
+                }
+                
+            }
+            return DateTimeUtils.FormatDateToInvoice(date);
+
+        }
     }
 
-    public class TimesheetUserDto
+    public class TimesheetUser
     {
         public long UserId { get; set; }
         public string FullName { get; set; }
@@ -74,14 +143,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
 
         public ExportInvoiceMode Mode { get; set; }
         public float TimesheetWorkingDay { get; set; }
-
-        public float Discount { get; set; }
-        public float TransferFee { get; set; }
-        public long InvoiceNumber { get; set; }
-
-        public string ClientAddress { get; set; }
-        public string PaymentInfo { get; set; }
-        public string PaymentDueBy { get; set; }
+       
 
         public float BillRateDisplay => Mode == ExportInvoiceMode.Normal ? BillRate : BillRate / TimesheetWorkingDay;
         public double LineTotal
