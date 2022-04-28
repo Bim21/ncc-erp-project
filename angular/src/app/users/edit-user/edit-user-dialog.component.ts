@@ -1,3 +1,4 @@
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PERMISSIONS_CONSTANT } from './../../constant/permission.constant';
 import { SkillService } from './../../service/api/skill.service';
 import { UserSkillDto } from './../../service/model/skill.dto';
@@ -6,7 +7,8 @@ import {
   Injector,
   OnInit,
   EventEmitter,
-  Output
+  Output,
+  Inject
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -42,14 +44,15 @@ export class EditUserDialogComponent extends AppComponentBase
     injector: Injector,
     private skillService:SkillService,
     public _userService: UserServiceProxy,
-    public bsModalRef: BsModalRef
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<EditUserDialogComponent>,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.getAllSkill();
-    this._userService.get(this.id).subscribe((result) => {
+    this._userService.get(this.data.id).subscribe((result) => {
       this.user = result;
       this.user.userSkills = this.user.userSkills
 
@@ -115,10 +118,9 @@ export class EditUserDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.bsModalRef.hide();
         this.notify.info(this.l('SavedSuccessfully'));
+        this.dialogRef.close(this.user)
 
-        this.onSave.emit();
       });
   }
 }

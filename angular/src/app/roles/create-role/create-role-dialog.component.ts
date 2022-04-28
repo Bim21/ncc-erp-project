@@ -1,12 +1,11 @@
+import { MatDialogRef } from '@angular/material/dialog';
 import {
   Component,
   Injector,
   OnInit,
-  EventEmitter,
-  Output,
+
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   RoleServiceProxy,
@@ -28,12 +27,11 @@ export class CreateRoleDialogComponent extends AppComponentBase
   checkedPermissionsMap: { [key: string]: boolean } = {};
   defaultPermissionCheckedStatus = true;
 
-  @Output() onSave = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
     private _roleService: RoleServiceProxy,
-    public bsModalRef: BsModalRef
+    public dialogRef: MatDialogRef<CreateRoleDialogComponent>,
   ) {
     super(injector);
   }
@@ -91,8 +89,7 @@ export class CreateRoleDialogComponent extends AppComponentBase
       )
       .subscribe(() => {
         this.notify.info(this.l('SavedSuccessfully'));
-        this.bsModalRef.hide();
-        this.onSave.emit();
+        this.dialogRef.close(role)
       });
   }
 }

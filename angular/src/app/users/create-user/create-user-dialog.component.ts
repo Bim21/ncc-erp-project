@@ -1,14 +1,13 @@
+import { MatDialogRef } from '@angular/material/dialog';
 import { UserSkillDto } from './../../service/model/skill.dto';
 import { SkillService } from './../../service/api/skill.service';
 import {
   Component,
   Injector,
   OnInit,
-  EventEmitter,
-  Output
+
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { forEach as _forEach, map as _map } from 'lodash-es';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
@@ -46,13 +45,13 @@ export class CreateUserDialogComponent extends AppComponentBase
     },
   ];
 
-  @Output() onSave = new EventEmitter<any>();
+
 
   constructor(
     injector: Injector,
     public _userService: UserServiceProxy,
-    public bsModalRef: BsModalRef,
-    private skillService:SkillService
+    private skillService:SkillService,
+    public dialogRef: MatDialogRef<CreateUserDialogComponent>,
   ) {
     super(injector);
   }
@@ -114,8 +113,7 @@ export class CreateUserDialogComponent extends AppComponentBase
       )
       .subscribe(() => {
         this.notify.info(this.l('SavedSuccessfully'));
-        this.bsModalRef.hide();
-        this.onSave.emit();
+        this.dialogRef.close(this.user)
       });
   }
   public getByEnum(enumValue: number, enumObject: any) {

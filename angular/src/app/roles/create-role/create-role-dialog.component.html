@@ -6,7 +6,7 @@
 >
   <abp-modal-header
     [title]="'CreateNewRole' | localize"
-    (onCloseClick)="bsModalRef.hide()"
+    (onCloseClick)="dialogRef.close()"
   ></abp-modal-header>
   <div class="modal-body">
     <tabset>
@@ -98,6 +98,6 @@
   <abp-modal-footer
     [cancelDisabled]="saving"
     [saveDisabled]="!createRoleForm.form.valid || saving"
-    (onCancelClick)="bsModalRef.hide()"
+    (onCancelClick)="dialogRef.close()"
   ></abp-modal-footer>
 </form>

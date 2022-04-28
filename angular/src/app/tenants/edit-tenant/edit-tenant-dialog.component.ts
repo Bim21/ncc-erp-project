@@ -1,12 +1,13 @@
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   Component,
   Injector,
   OnInit,
   Output,
-  EventEmitter
+  EventEmitter,
+  Inject
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   TenantServiceProxy,
@@ -27,13 +28,14 @@ export class EditTenantDialogComponent extends AppComponentBase
   constructor(
     injector: Injector,
     public _tenantService: TenantServiceProxy,
-    public bsModalRef: BsModalRef
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<EditTenantDialogComponent>,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
-    this._tenantService.get(this.id).subscribe((result: TenantDto) => {
+    this._tenantService.get(this.data.id).subscribe((result: TenantDto) => {
       this.tenant = result;
     });
   }
@@ -50,8 +52,7 @@ export class EditTenantDialogComponent extends AppComponentBase
       )
       .subscribe(() => {
         this.notify.info(this.l('SavedSuccessfully'));
-        this.bsModalRef.hide();
-        this.onSave.emit();
+        this.dialogRef.close(this.tenant);
       });
   }
 }
