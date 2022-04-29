@@ -3,7 +3,6 @@
   autocomplete="off"
   #timesheetDetailForm="ngForm"
   novalidate
-  cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle
 >
   <abp-modal-header
     title="{{data.action == updateAction.UpdateBillInfo ? 'Update Bill Info:' : 'Update Timesheet:'}} {{ data.billInfo.projectName }}"
@@ -56,7 +55,7 @@
       </div>
     </div>
     <section class="example-section col-1 text-center" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill_SetDone)">
-      <mat-checkbox
+      <mat-checkbox id="done"
         class="example-margin"
         (change)="isComplete($event)"
         [disabled]="isEdittingRows || isEdit"

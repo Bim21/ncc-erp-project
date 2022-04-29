@@ -185,12 +185,16 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   }
 
   private showResetPasswordUserDialog(id?: number): void {
-    this._modalService.show(ResetPasswordDialogComponent, {
-      class: 'modal-lg',
-      initialState: {
-        id: id,
-      },
+    const showCreate = this.dialog.open(ResetPasswordDialogComponent, {
+      data:{id:id},
+      width: "700px",
+      disableClose: true,
     });
+    showCreate.afterClosed().subscribe(res => {
+      if (res) {
+        this.refresh()
+      }
+    })
   }
   getAllSkills() {
     this.skillService.getAll().subscribe((data) => {
@@ -208,29 +212,28 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   }
 
   private showCreateOrEditUserDialog(id?: number): void {
-    let createOrEditUserDialog: BsModalRef;
     if (!id) {
-      createOrEditUserDialog = this._modalService.show(
-        CreateUserDialogComponent,
-        {
-          class: 'modal-lg',
+      const showCreate = this.dialog.open(CreateUserDialogComponent, {
+        width: "700px",
+        disableClose: true,
+      });
+      showCreate.afterClosed().subscribe(res => {
+        if (res) {
+          this.refresh()
         }
-      );
+      })
     } else {
-      createOrEditUserDialog = this._modalService.show(
-        EditUserDialogComponent,
-        {
-          class: 'modal-lg',
-          initialState: {
-            id: id,
-          },
+      const showEdit = this.dialog.open(EditUserDialogComponent, {
+        data: {id: id},
+        width: "700px",
+        disableClose: true,
+      });
+      showEdit.afterClosed().subscribe(res => {
+        if (res) {
+          this.refresh()
         }
-      );
+      })
     }
-
-    createOrEditUserDialog.content.onSave.subscribe(() => {
-      this.refresh();
-    });
   }
   public getByEnum(enumValue: number, enumObject: any) {
     for (const key in enumObject) {

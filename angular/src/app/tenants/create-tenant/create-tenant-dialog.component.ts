@@ -1,12 +1,10 @@
+import { MatDialogRef } from '@angular/material/dialog';
 import {
   Component,
   Injector,
   OnInit,
-  Output,
-  EventEmitter
 } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
   CreateTenantDto,
@@ -21,12 +19,11 @@ export class CreateTenantDialogComponent extends AppComponentBase
   saving = false;
   tenant: CreateTenantDto = new CreateTenantDto();
 
-  @Output() onSave = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
     public _tenantService: TenantServiceProxy,
-    public bsModalRef: BsModalRef
+    public dialogRef: MatDialogRef<CreateTenantDialogComponent>,
   ) {
     super(injector);
   }
@@ -47,8 +44,8 @@ export class CreateTenantDialogComponent extends AppComponentBase
       )
       .subscribe(() => {
         this.notify.info(this.l('SavedSuccessfully'));
-        this.bsModalRef.hide();
-        this.onSave.emit();
+        this.dialogRef.close(this.tenant);
+
       });
   }
 }

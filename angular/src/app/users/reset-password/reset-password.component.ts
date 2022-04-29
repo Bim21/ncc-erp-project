@@ -1,4 +1,5 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Injector, Inject } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { finalize } from 'rxjs/operators';
 import {
@@ -20,7 +21,8 @@ export class ResetPasswordDialogComponent extends AppComponentBase
   constructor(
     injector: Injector,
     private _userService: UserServiceProxy,
-    public bsModalRef: BsModalRef
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<ResetPasswordDialogComponent>,
   ) {
     super(injector);
   }
@@ -46,7 +48,7 @@ export class ResetPasswordDialogComponent extends AppComponentBase
       )
       .subscribe(() => {
         this.notify.info('Password Reset');
-        this.bsModalRef.hide();
+        this.dialogRef.close(this.resetPassword)
       });
   }
 }

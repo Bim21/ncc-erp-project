@@ -44,3 +44,6 @@ button:disabled{
 ::ng-deep #modal-bill-info .fixTableHead .mat-checkbox-checked.mat-accent .mat-checkbox-background{
     background-color: green;
 }
+::ng-deep #done.mat-checkbox-checked.mat-accent .mat-checkbox-background{
+    background-color: green;
+}

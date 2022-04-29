@@ -1,6 +1,6 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Component, Injector } from '@angular/core';
 import { finalize } from 'rxjs/operators';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {
   PagedListingComponentBase,
@@ -37,7 +37,7 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   constructor(
     injector: Injector,
     private _tenantService: TenantServiceProxy,
-    private _modalService: BsModalService
+    private dialog: MatDialog,
   ) {
     super(injector);
   }
@@ -97,29 +97,28 @@ export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   }
 
   showCreateOrEditTenantDialog(id?: number): void {
-    let createOrEditTenantDialog: BsModalRef;
     if (!id) {
-      createOrEditTenantDialog = this._modalService.show(
-        CreateTenantDialogComponent,
-        {
-          class: 'modal-lg',
+      const showCreate = this.dialog.open(CreateTenantDialogComponent, {
+        width: "700px",
+        disableClose: true,
+      });
+      showCreate.afterClosed().subscribe(res => {
+        if (res) {
+          this.refresh()
         }
-      );
+      })
     } else {
-      createOrEditTenantDialog = this._modalService.show(
-        EditTenantDialogComponent,
-        {
-          class: 'modal-lg',
-          initialState: {
-            id: id,
-          },
+      const showEdit = this.dialog.open(EditTenantDialogComponent, {
+        data: {id: id},
+        width: "700px",
+        disableClose: true,
+      });
+      showEdit.afterClosed().subscribe(res => {
+        if (res) {
+          this.refresh()
         }
-      );
+      })
     }
-
-    createOrEditTenantDialog.content.onSave.subscribe(() => {
-      this.refresh();
-    });
   }
 
   clearFilters(): void {

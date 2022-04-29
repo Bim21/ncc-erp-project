@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 import { Component, Injector } from '@angular/core';
 import { finalize } from 'rxjs/operators';
@@ -36,7 +37,8 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
     private _rolesService: RoleServiceProxy,
     private _modalService: BsModalService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private dialog: MatDialog,
   ) {
     super(injector);
   }
@@ -86,16 +88,15 @@ export class RolesComponent extends PagedListingComponentBase<RoleDto> {
   }
 
   showCreateOrEditRoleDialog(): void {
-    let createOrEditRoleDialog: BsModalRef;
-    createOrEditRoleDialog = this._modalService.show(
-      CreateRoleDialogComponent,
-      {
-        class: 'modal-lg',
-      },
-    );
-    createOrEditRoleDialog.content.onSave.subscribe(() => {
-      this.refresh();
+    const show = this.dialog.open(CreateRoleDialogComponent, {
+      width: "700px",
+      disableClose: true,
     });
+    show.afterClosed().subscribe(res => {
+      if (res) {
+        this.refresh()
+      }
+    })
   }
 
   editPage(roleId, name) {
