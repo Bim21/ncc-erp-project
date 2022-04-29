@@ -381,18 +381,21 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         type: "application/vnd.ms-excel;charset=utf-8"
       });
       FileSaver.saveAs(file, data.result.fileName);
+      abp.notify.success("Export Invoice Successfully!");
     })
   }
-  exportQuickInvoiceForTax(item: any) {
+  exportQuickInvoiceForTax(item: any,exportInvoiceMode) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
-      projectIds: [item.projectId]
+      projectIds: [item.projectId],
+      mode: exportInvoiceMode
     }
     this.timesheetProjectService.exportInvoiceForTax(invoiceExcelDto).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(data => {
       const file = new Blob([this.s2ab(atob(data.result.base64))], {
         type: "application/vnd.ms-excel;charset=utf-8"
       });
       FileSaver.saveAs(file, data.result.fileName);
+      abp.notify.success("Export Invoice For Tax Successfully!");
     })
   }
 
@@ -447,13 +450,15 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.refresh();
       this.listExportInvoice=[];
       FileSaver.saveAs(file, res.result.fileName);
+      abp.notify.success("Export Invoice Successfully!");
     })
   }
 
-  exportInvoiceForTax() {
+  exportInvoiceForTax(exportInvoiceMode) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
-      projectIds: this.listExportInvoice
+      projectIds: this.listExportInvoice,
+      mode: exportInvoiceMode
     }
     this.timesheetProjectService.exportInvoiceForTax(invoiceExcelDto).subscribe((res) => {
       const file = new Blob([this.s2ab(atob(res.result.base64))], {
@@ -462,6 +467,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.refresh();
       this.listExportInvoice=[];
       FileSaver.saveAs(file, res.result.fileName);
+      abp.notify.success("Export Invoice For Tax Successfully!");
     })
   }
 

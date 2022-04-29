@@ -14,6 +14,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
     {
         public InvoiceGeneralInfo Info { get; set; }
         public List<TimesheetUser> TimesheetUsers { get; set; }
+        public List<string> ProjectCodes { get; set; }
 
         private bool IsInvoiceHaveOneProject()
         {
@@ -90,12 +91,14 @@ namespace ProjectManagement.Services.Timesheet.Dto
     {
         public long UserId { get; set; }
         public string FullName { get; set; }
+        public string EmailAddress { get; set; }
+        public string ProjectCode { get; set; }
         public string ProjectName { get; set; }
         public float WorkingDay { get; set; }
         public ChargeType ChargeType { get; set; }
         public string CurrencyName { get; set; }
-        //public DateTime StartTime { get; set; }
-        //public DateTime? EndTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public float BillRate { get; set; }
         public int DefaultWorkingHours { get; set; }
         public ExportInvoiceMode Mode { get; set; }
@@ -120,6 +123,28 @@ namespace ProjectManagement.Services.Timesheet.Dto
         }
     }
 
+    public class TimesheetTaxDto
+    {
+        public List<DateTime> ListWorkingDay { get; set; }
+        public List<TimesheetDetail> ListTimesheet { get; set; }
+    }
+
+    public class TimesheetDetailUser
+    {
+        public int ProjectNumber { get; set; }
+        public string FullName { get; set; }
+        public string ProjectName { get; set; }
+        public List<TimesheetDetail> TimesheetDetails { get; set; }
+    }
+    public class TimesheetDetail
+    {
+        public DateTime DateAt { get; set; }
+        public float WorkingTime { get; set; }
+        public string TaskName { get; set; }
+        public string Note { get; set; }
+        public string EmailAddress { get; set; }
+        public string ProjectCode { get; set; }
+    }
     public enum ExportInvoiceMode : byte
     {
         Normal = 0,
