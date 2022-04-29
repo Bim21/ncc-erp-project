@@ -1,3 +1,4 @@
+import { AppConsts } from '@shared/AppConsts';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -50,7 +51,7 @@ import { TenantChangeDialogComponent } from './tenant/tenant-change-dialog.compo
             providers: [
               {
                 id: GoogleLoginProvider.PROVIDER_ID,
-                provider: new GoogleLoginProvider('879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com' 
+                provider: new GoogleLoginProvider(AppConsts.configURI.googleClientAppId 
                 ),
               },
             ],
