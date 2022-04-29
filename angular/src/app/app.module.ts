@@ -1,3 +1,4 @@
+import { AppConsts } from '@shared/AppConsts';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { ProjectChecklistComponent } from './modules/pm-management/list-project/list-project-detail/project-checklist/project-checklist.component';
@@ -365,7 +366,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com'
+              AppConsts.configURI.googleClientAppId
             ),
           },
         ],

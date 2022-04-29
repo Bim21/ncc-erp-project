@@ -17,8 +17,8 @@ namespace ProjectManagement.APIs.Public
         {
             return new GetURIDto
             {
-                TimesheetURI = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri)
+                TimesheetURI = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri),
+                GoogleClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId)
             };
-        }
-    }
+    }   }
 }
