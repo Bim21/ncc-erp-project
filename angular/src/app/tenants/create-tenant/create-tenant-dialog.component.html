@@ -6,7 +6,7 @@
 >
   <abp-modal-header
     [title]="'CreateNewTenant' | localize"
-    (onCloseClick)="bsModalRef.hide()"
+    (onCloseClick)="dialogRef.close()"
   ></abp-modal-header>
   <div class="modal-body">
     <div class="form-group row required">
@@ -114,8 +114,8 @@
     </p>
   </div>
   <abp-modal-footer
-    [cancelDisabled]="saving"
-    [saveDisabled]="!createTenantForm.form.valid || saving"
-    (onCancelClick)="bsModalRef.hide()"
+  [cancelDisabled]="saving"
+  [saveDisabled]="!createTenantForm.form.valid || saving"
+  (onCancelClick)="dialogRef.close()"
   ></abp-modal-footer>
 </form>

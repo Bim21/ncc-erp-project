@@ -404,7 +404,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         event.source._checked = false
         return;
       }
-      this.clientId = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
     }
   }
