@@ -30,5 +30,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
         public bool RequireTimesheetFile { get; set; }
+        public byte? LastInvoiceNumber { get; set; }
     }
 }

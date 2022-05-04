@@ -27,7 +27,8 @@ namespace ProjectManagement.APIs.Currencies
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Code = x.Code
+                    Code = x.Code,
+                    InvoicePaymentInfo = x.InvoicePaymentInfo
                 });
             return await query.GetGridResult(query, input);
         }
@@ -39,7 +40,8 @@ namespace ProjectManagement.APIs.Currencies
               {
                   Id = s.Id,
                   Name = s.Name,
-                  Code = s.Code
+                  Code = s.Code,
+                  InvoicePaymentInfo = s.InvoicePaymentInfo,
               });
             return await query.ToListAsync();
         }

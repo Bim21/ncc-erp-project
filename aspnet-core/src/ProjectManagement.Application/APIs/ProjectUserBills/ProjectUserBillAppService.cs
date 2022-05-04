@@ -26,13 +26,13 @@ namespace ProjectManagement.APIs.ProjectUserBills
     public class ProjectUserBillAppService : ProjectManagementAppServiceBase
     {
         private ProjectTimesheetManager timesheetManager;
-        
+
 
         public ProjectUserBillAppService(ProjectTimesheetManager timesheetManager)
         {
             this.timesheetManager = timesheetManager;
         }
-        
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo,
             PermissionNames.Projects_ProductProjects_ProjectDetail_TabBillInfo,
@@ -53,7 +53,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             BillRate = x.BillRate,
                             StartTime = x.StartTime.Date,
                             EndTime = x.EndTime.Value.Date,
-                            Currency = x.Currency,
+                            //CurrencyName = x.Project.Currency.Name,
                             Note = x.Note,
                             shadowNote = x.shadowNote,
                             isActive = x.isActive,
@@ -65,6 +65,64 @@ namespace ProjectManagement.APIs.ProjectUserBills
                         });
             return await query.ToListAsync();
         }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)]
+        public async Task<long> GetLastInvoiceNumber(long projectId)
+        {
+            return await WorkScope.GetAll<Project>()
+             .Where(s => s.Id == projectId)
+             .Select(s => s.LastInvoiceNumber)
+             .FirstOrDefaultAsync();
+        }
+
+
+        private async Task<Project> GetProjectById(long projectId)
+        {
+            return await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == projectId);
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)]
+        public async Task<long> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
+        {
+            var project = await GetProjectById(input.ProjectId);
+            if (project != null)
+            {
+                project.LastInvoiceNumber = input.LastInvoiceNumber;
+                var projectUpdate = await WorkScope.UpdateAsync<Project>(project);
+                return projectUpdate.LastInvoiceNumber;
+            }
+
+            return default;
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)]
+        public async Task<float> GetDiscount(long projectId)
+        {
+            return await WorkScope.GetAll<Project>()
+             .Where(s => s.Id == projectId)
+             .Select(s => s.Discount)
+             .FirstOrDefaultAsync();
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit)]
+        public async Task<float> UpdateDiscount(UpdateDiscountDto input)
+        {
+            var project = await GetProjectById(input.ProjectId);
+            if (project != null)
+            {
+                project.Discount = input.Discount;
+                var projectUpdate = await WorkScope.UpdateAsync<Project>(project);
+                return projectUpdate.Discount;
+            }
+
+            return default;
+
+        }
+
 
         [HttpGet]
         [AbpAuthorize]
@@ -100,15 +158,24 @@ namespace ProjectManagement.APIs.ProjectUserBills
             {
                 throw new UserFriendlyException($"Already exist: {duplicatedPUB.FullName} - {duplicatedPUB.BillRole} - {duplicatedPUB.BillRate} - Active: {duplicatedPUB.isActive}");
             }
+            var project = await WorkScope.GetAll<Project>()
+                .Where(s => s.Id == input.ProjectId)
+                .Select(s => new Project
+                {
+                    CurrencyId = s.CurrencyId,
+                    ChargeType = s.ChargeType
+                })
+                .FirstOrDefaultAsync();
 
             var entity = ObjectMapper.Map<ProjectUserBill>(input);
+
             input.Id = await WorkScope.InsertAndGetIdAsync(entity);
 
-            await this.timesheetManager.CreateTimesheetProjectBill(entity);
+            await this.timesheetManager.CreateTimesheetProjectBill(entity, project);
 
             return input;
         }
-       
+
 
         [HttpPut]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit,

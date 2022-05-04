@@ -236,5 +236,15 @@ export const APP_ENUMS = {
     Sortable:{
         ASC: 0,
         DESC: 1
-    }
+    },
+    ClientInvoiceDateSetting:
+    {
+        LastDateThisMonth: 0,
+        FirstDateNextMonth: 1
+    },
+    ExportInvoiceMode:
+    {
+        Normal: 0,
+        MontlyToDaily: 1
+    },
 }

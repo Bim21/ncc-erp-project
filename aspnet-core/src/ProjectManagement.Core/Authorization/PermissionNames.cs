@@ -148,6 +148,10 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Create";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Delete";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_View";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_Edit";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_View";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_Edit";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabTimesheet = "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet";
 
@@ -466,6 +470,7 @@ namespace ProjectManagement.Authorization
         public const string Timesheets_TimesheetDetail_ExportInvoiceForTax = "Timesheets.TimesheetDetail.ExportInvoiceForTax";
         public const string Timesheets_TimesheetDetail_UpdateNote = "Timesheets.TimesheetDetail.UpdateNote";
         public const string Timesheets_TimesheetDetail_Delete = "Timesheets.TimesheetDetail.Delete";
+        public const string Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay = "Timesheets.TimesheetDetail.EditInvoiceNumberWorkingDay";
 
         public const string Timesheets_TimesheetDetail_UpdateBill = "Timesheets.TimesheetDetail.UpdateBill";
         public const string Timesheets_TimesheetDetail_UpdateBill_Edit = "Timesheets.TimesheetDetail.UpdateBill.Edit";
@@ -623,6 +628,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet ,
 
@@ -938,6 +947,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax ,
                     PermissionNames.Timesheets_TimesheetDetail_UpdateNote ,
                     PermissionNames.Timesheets_TimesheetDetail_Delete ,
+                     PermissionNames.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay ,
 
                     PermissionNames.Timesheets_TimesheetDetail_UpdateBill ,
                     PermissionNames.Timesheets_TimesheetDetail_UpdateBill_Edit ,
@@ -1094,7 +1104,10 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
-
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "LastInvoiceNumber: View" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "LastInvoiceNumber: Edit" },   
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: View" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: Edit" }, 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab timesheet" },
 
 
@@ -1399,6 +1412,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Export Invoice For Tax"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+                 new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Invoice Number and Working Day of project"},
 
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Bill"},
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
@@ -1609,6 +1623,10 @@ namespace ProjectManagement.Authorization
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "LastInvoiceNumber: View"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "LastInvoiceNumber: Edit"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: View"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: Edit"},
                                      }
                                  },
                                   new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timsheet"},
@@ -2022,9 +2040,10 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Export Invoice For Tax"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
-                                                    new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Bill"},
-                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
-                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
+                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Bill"},
+                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
+                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
+                                        new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Invoice Number and Working Day of project"},
                                     }
 
                                 },

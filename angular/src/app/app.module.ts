@@ -172,6 +172,7 @@ import { EditMeetingNoteDialogComponent } from './modules/delivery-management/de
 import { TrainingProjectFileComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-file/training-project-file.component';
 import { ProductProjectFileComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-file/product-project-file.component';
 import { AddUserInRoleComponent } from './roles/edit-role/add-user-in-role/add-user-in-role.component';
+import { EditTimesheetProjectDialogComponent } from './modules/timesheet/timesheet-detail/edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -325,6 +326,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditMeetingNoteDialogComponent,
     TrainingProjectFileComponent,
     ProductProjectFileComponent,
+    EditTimesheetProjectDialogComponent,
   ],
   imports: [
     CommonModule,

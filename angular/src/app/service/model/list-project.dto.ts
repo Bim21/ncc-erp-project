@@ -21,6 +21,9 @@ export interface ClientDto {
     code: string;
     id: number;
     address: string;
+    invoiceDateSetting: number;
+    paymentDueBy: number;
+    transferFee: number;
 }
 
 export interface SkillDto {

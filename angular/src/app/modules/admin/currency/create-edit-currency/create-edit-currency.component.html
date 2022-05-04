@@ -28,6 +28,23 @@
          </div>
     </div>
 
+    <div class="form-group row required">
+        <label class="col-md-3 col-form-label" for="pm">
+            Invoice Payment Info:
+         </label>
+         <div class="col-md-9">
+            <textarea
+                class="form-control mt-1"
+                placeholder="Invoice Payment Info"
+                name="invoicePaymentInfo"
+                [(ngModel)]="currency.invoicePaymentInfo"
+                maxlength="1000"
+                rows="10"
+                >
+            </textarea>
+         </div>
+    </div>
+
 </div>
 <div align="end" class="row justify-content-end">
     <button class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>

@@ -66,7 +66,8 @@ export class CurrencyComponent extends PagedListingComponentBase<CurrencyCompone
     let currency={
       name: Currency.name,
       code: Currency.code,
-      id: Currency.id
+      id: Currency.id,
+      invoicePaymentInfo: Currency.invoicePaymentInfo
     }
     const show= this.dialog.open(CreateEditCurrencyComponent, {
       data:{

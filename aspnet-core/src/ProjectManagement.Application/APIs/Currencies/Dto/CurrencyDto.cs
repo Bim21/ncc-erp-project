@@ -12,5 +12,6 @@ namespace ProjectManagement.APIs.Currencies.Dto
     {
         public string Name { get; set; }
         public string Code { get; set; }
+        public string InvoicePaymentInfo { get; set; }
     }
 }

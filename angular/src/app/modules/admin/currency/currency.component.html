@@ -63,6 +63,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
+                            <th>Invoice Payment Info</th>
                             <th *ngIf="permission.isGranted(Admin_Currencies_Edit) || permission.isGranted(Admin_Currencies_Delete)">Actions</th>
                         </tr>
                     </thead>
@@ -76,6 +77,13 @@
                               }; let i = index"  >
                             <td class="text-center stt"><span>{{ i +1 }}</span></td>
                             <td class="text-center">{{item.name}}</td>
+                            <td class="text-left"
+                                style="
+                                white-space: pre-line;
+                                word-break: break-all;
+                                max-width: 200px;
+                                min-width: 150px;"
+                            >{{item.invoicePaymentInfo}}</td>
                             <td style="width: 200px;" class="text-center" *ngIf="permission.isGranted(Admin_Currencies_Edit) || permission.isGranted(Admin_Currencies_Delete)">
                                 <button  *ngIf="permission.isGranted(Admin_Currencies_Edit)"
 

@@ -55,7 +55,7 @@ namespace ProjectManagement.Services.Timesheet
         }
 
        
-        public async Task<TimesheetTaxDto> GetTimesheetDetailForTax(InputTimesheetTaxDto input)
+        public async Task<TimesheetTaxDto> GetTimesheetDetailForTax(TimesheetDetailForTaxDto input)
         {
             return await PostAsync<TimesheetTaxDto>($"/api/services/app/Public/GetTimesheetDetailForTax", input);
         }

@@ -25,11 +25,14 @@ namespace ProjectManagement.Entities
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public CurrencyCode Currency { get; set; }
         public string Note { get; set; }
         public string ShadowNote { get; set; }
         public bool IsActive { get; set; }
         public float WorkingTime { get; set; }
 
+        public ChargeType? ChargeType { get; set; }
+        public long? CurrencyId { get; set; }
+        [ForeignKey(nameof(CurrencyId))]
+        public Currency Currency { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ProjectManagement.Services.Timesheet.Dto
 {
-    public class InputTimesheetTaxDto
+    public class TimesheetDetailForTaxDto
     {
         public int Year { get; set; }
         public int Month { get; set; }

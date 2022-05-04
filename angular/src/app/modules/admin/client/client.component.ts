@@ -63,7 +63,10 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
       name: Client.name,
       code: Client.code,
       id: Client.id,
-      address: Client.address
+      address: Client.address,
+      invoiceDateSetting: Client.invoiceDateSetting,
+      paymentDueBy: Client.paymentDueBy,
+      transferFee: Client.transferFee,
     }
     const show = this.dialog.open(CreateUpdateClientComponent, {
       data: {
@@ -86,5 +89,17 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
     this.showDialog("update", client);
 
   }
-
+  public getByEnum(enumValue: number, enumObject: any) {
+    for (const key in enumObject) {
+      if (enumObject[key] == enumValue) {
+        return key;
+      }
+    }
+  }
+  public getPaymentDueBy(paymentDueBy: number) {
+    if (paymentDueBy == 0) {
+      return "Last day this month";
+    }
+    return paymentDueBy;
+  }
 }

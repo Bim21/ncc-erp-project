@@ -8,7 +8,7 @@ namespace ProjectManagement.Helper
     {
         public static string SetFileName(string fileName)
         {
-            return fileName.Replace("/", "").Replace(":", "").Replace(" ", "_")+$"_{DateTime.Now}.xlsx";
+            return fileName.Replace("/", "").Replace(":", "").Replace(" ", "_")+".xlsx";
         }
     }
 }

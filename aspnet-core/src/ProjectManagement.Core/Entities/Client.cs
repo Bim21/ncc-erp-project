@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ClientEnum;
 
 namespace ProjectManagement.Entities
 {
@@ -15,5 +16,8 @@ namespace ProjectManagement.Entities
         [MaxLength(50)]
         public string Code { get; set; }
         public string Address { get; set; }
+        public InvoiceDateSetting InvoiceDateSetting { get; set; }
+        public byte PaymentDueBy { get; set; }
+        public float TransferFee { get; set; }
     }
 }

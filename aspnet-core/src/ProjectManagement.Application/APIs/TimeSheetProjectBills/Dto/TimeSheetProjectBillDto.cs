@@ -24,5 +24,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public string ShadowNote { get; set; }
         public bool IsActive { get; set; }
         public float WorkingTime { get; set; }
+        public ChargeType? ChargeType { get; set; }
+        public long? CurrencyId { get; set; }
     }
 }

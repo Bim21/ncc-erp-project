@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Globalization;
 namespace NccCore.Uitls
 {
     public class DateTimeUtils
@@ -44,5 +44,30 @@ namespace NccCore.Uitls
         {
             return date.ToString("MM-yyyy");
         }
+        public static string GetFullNameOfMonth(int month)
+        {
+            return CultureInfo.CurrentCulture.
+                DateTimeFormat.GetMonthName
+                (month);
+        }
+
+        public static string FormatDateToInvoice(DateTime date)
+        {
+            var s = date.ToString("D", CultureInfo.GetCultureInfo("en-US"));
+            return s.Substring(s.IndexOf(",") + 2);
+        }
+
+        public static long DateDiff(DateTime date1, DateTime date2)
+        {
+            return date1.Ticks - date2.Ticks;
+        }
+
+        public static long DateDiffAbs(DateTime date1, DateTime date2)
+        {
+            return Math.Abs(DateDiff(date1, date2));
+        }
+
+
+
     }
 }

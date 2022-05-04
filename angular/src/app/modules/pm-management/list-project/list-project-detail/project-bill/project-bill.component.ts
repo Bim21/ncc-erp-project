@@ -25,12 +25,18 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   private projectId: number
   public userBillCurrentPage: number = 1
   public rateInfo = {} as ProjectRateDto;
+  public lastInvoiceNumber;
+  public discount;
   public chargeType = ['d', 'm', 'h']
 
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit;
   constructor(private projectUserBillService: ProjectUserBillService, private route: ActivatedRoute,
     injector: Injector, private userService: UserService) {
     super(injector)
@@ -42,7 +48,8 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.getUserBill();
     this.getAllFakeUser();
     this.getRate();
-
+    this.getLastInvoiceNumber();
+    this.getDiscount();
   }
   getRate() {
     this.projectUserBillService.getRate(this.projectId).subscribe(data => {
@@ -50,6 +57,48 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       console.log('rate', this.rateInfo)
     })
   }
+  getLastInvoiceNumber() {
+    this.projectUserBillService.getLastInvoiceNumber(this.projectId).subscribe(data => {
+      this.lastInvoiceNumber = data.result;
+    })
+  }
+  updateLastInvoiceNumber(){
+    let data = {
+      projectId : this.projectId,
+      lastInvoiceNumber : this.lastInvoiceNumber,
+    }
+    if(+this.lastInvoiceNumber <= 0) {
+      abp.message.error(this.l("Last Invoice Number must be bigger than 0!"));
+      this.getLastInvoiceNumber();
+      return;
+    }
+    this.projectUserBillService.updateLastInvoiceNumber(data).subscribe(data => {
+      this.lastInvoiceNumber = data.result;
+      abp.notify.success(`Updated Last Invoice Number`)
+    })
+  }
+
+  getDiscount() {
+    this.projectUserBillService.getDiscount(this.projectId).subscribe(data => {
+      this.discount = data.result;
+    })
+  }
+  updateDiscount(){
+    let data = {
+      projectId : this.projectId,
+      discount : this.discount,
+    }
+    if(+this.discount <= 0) {
+      abp.message.error(this.l("Discount must be bigger than 0!"));
+      this.getLastInvoiceNumber();
+      return;
+    }
+    this.projectUserBillService.updateDiscount(data).subscribe(data => {
+      this.discount = data.result;
+      abp.notify.success(`Updated Discount`)
+    })
+  }
+
   public getTitleRate() {
     return '(' + this.rateInfo.currencyName + '/' + this.chargeType[this.rateInfo.chargeType] + ')'
   }

@@ -43,3 +43,15 @@
 ::ng-deep mat-checkbox .mat-checkbox-layout{
   margin-bottom: 10px;
 }
+
+button.special{
+  min-height: auto;
+  height: auto;
+  line-height: 30px;
+  overflow: inherit;
+}
+button.special span{
+  display: block;
+  padding-left: 25px;
+  font-size: 14px;
+}

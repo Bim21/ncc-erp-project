@@ -1,0 +1,54 @@
+<form action="" autocomplete="off" (submit)="SaveAndClose()">
+    <abp-modal-header
+    [title]="'Edit for project: ' + projectName | localize"
+      (onCloseClick)="bsModalRef.hide()"
+    ></abp-modal-header>
+    <div class="modal-body">
+        <div class="form-group row required">
+            <label class="col-md-4 col-form-label" for="Invoice Number">Invoice Number: </label>
+            <div class="col-md-8">
+              <input
+                class="form-control mt-1"
+                type="number"
+                step="1"
+                placeholder="Invoice Number"
+                required
+                name="invoiceNumber"
+                [(ngModel)]="invoiceNumber"
+                #invoice="ngModel"
+                #invoiceEl
+                suffix="%"
+              />
+              <abp-validation-summary [control]="invoice" [controlEl]="invoiceEl">
+              </abp-validation-summary>
+            </div>
+        </div>
+        <div class="form-group row required">
+            <label class="col-md-4 col-form-label" for="Working Day">Working Day: </label>
+            <div class="col-md-8">
+              <input
+                class="form-control mt-1"
+                type="number"
+                step="0.01"
+                placeholder="Working Day"
+                required
+                name="workingDay"
+                [(ngModel)]="workingDay"
+                #working="ngModel"
+                #workingEl
+                suffix="%"
+              />
+              <abp-validation-summary [control]="working" [controlEl]="workingEl">
+              </abp-validation-summary>
+            </div>
+        </div>
+    </div>
+  
+    <abp-modal-footer
+      [cancelDisabled]="saving"
+      (onCancelClick)="bsModalRef.hide()"
+      [saveDisabled]="saving"
+    ></abp-modal-footer>
+  </form>
+
+  

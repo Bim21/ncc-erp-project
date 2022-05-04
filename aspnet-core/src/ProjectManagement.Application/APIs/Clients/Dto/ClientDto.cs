@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ClientEnum;
 
 namespace ProjectManagement.APIs.Clients.Dto
 {
@@ -19,5 +20,8 @@ namespace ProjectManagement.APIs.Clients.Dto
         [ApplySearchAttribute]
         public string Code { get; set; }
         public string Address { get; set; }
+        public InvoiceDateSetting InvoiceDateSetting { get; set; }
+        public byte PaymentDueBy { get; set; }
+        public float TransferFee { get; set; }
     }
 }

@@ -52,8 +52,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              UserType = x.User.UserType,
                              WorkingTime = x.WorkingTime,
                              UserLevel = x.User.UserLevel,
-                             Currency = x.Project.Currency.Name,
-                             ChargeType = x.Project.ChargeType,
+                             Currency = x.CurrencyId == null ? x.Project.Currency.Name : x.Currency.Name,
+                             ChargeType = x.ChargeType == null ? x.Project.ChargeType : x.ChargeType,
                              //ProjectBillInfomation = $"<b>{x.User.FullName}</b> - {x.BillRole} - {x.BillRate} - {x.Note} - {x.ShadowNote} <br>"
                          });
             return await query.ToListAsync();
@@ -75,13 +75,13 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             }
 
             var isDuplicate = (from i in input
-                         group i by i.UserId into g
-                         select new
-                         {
-                             UserId = g.Key,
-                             Count = g.Count()
-                         }).Any(s => s.Count > 1);
-                              
+                               group i by i.UserId into g
+                               select new
+                               {
+                                   UserId = g.Key,
+                                   Count = g.Count()
+                               }).Any(s => s.Count > 1);
+
 
             if (isDuplicate)
             {
@@ -120,7 +120,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 }
             }
             await CurrentUnitOfWork.SaveChangesAsync();
-           
+
             return input;
         }
 
