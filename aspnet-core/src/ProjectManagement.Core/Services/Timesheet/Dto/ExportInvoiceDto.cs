@@ -139,7 +139,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
     public class TimesheetDetail
     {
         public DateTime DateAt { get; set; }
-        public float WorkingTime { get; set; }
+        public float ManDay { get; set; }
         public string TaskName { get; set; }
         public string Note { get; set; }
         public string EmailAddress { get; set; }

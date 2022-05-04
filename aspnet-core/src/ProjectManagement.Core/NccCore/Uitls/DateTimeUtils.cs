@@ -57,6 +57,17 @@ namespace NccCore.Uitls
             return s.Substring(s.IndexOf(",") + 2);
         }
 
+        public static long DateDiff(DateTime date1, DateTime date2)
+        {
+            return date1.Ticks - date2.Ticks;
+        }
+
+        public static long DateDiffAbs(DateTime date1, DateTime date2)
+        {
+            return Math.Abs(DateDiff(date1, date2));
+        }
+
+
 
     }
 }
