@@ -63,7 +63,7 @@ jobs:
           echo "===ReBuild node-sass==="
           npm rebuild node-sass
           echo "===Build node==="
-          ng build
+          ng build --prod
           cd dist
           zip -r frontend_publish.zip *
         displayName: 'Build Frontend'
