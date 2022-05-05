@@ -425,7 +425,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         event.source._checked = false
         return;
       }
-      this.clientId = checkClientId;
       this.currency = checkCurrency;
       this.listExportInvoice.push(event.source.value.projectId);
       this.listExportInvoiceChargeType.push(event.source.value.chargeType);
