@@ -96,10 +96,4 @@ export class ClientComponent extends PagedListingComponentBase<ClientComponent> 
       }
     }
   }
-  public getPaymentDueBy(paymentDueBy: number) {
-    if (paymentDueBy == 0) {
-      return "Last day this month";
-    }
-    return paymentDueBy;
-  }
 }

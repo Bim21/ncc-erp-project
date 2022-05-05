@@ -4,6 +4,7 @@ using NccCore.Anotations;
 using NccCore.IoC;
 using NccCore.Paging;
 using ProjectManagement.Entities;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,5 +24,21 @@ namespace ProjectManagement.APIs.Clients.Dto
         public InvoiceDateSetting InvoiceDateSetting { get; set; }
         public byte PaymentDueBy { get; set; }
         public float TransferFee { get; set; }
-    }
+
+        public string PaymentDueByToString
+        {
+            get
+            {
+                return CommonUtil.PaymentDueByToString(PaymentDueBy);
+            }
+        }
+        public string InvoiceDateSettingToString
+        {
+            get
+            {
+                return CommonUtil.InvoiceDateSettingToString(InvoiceDateSetting);
+            }
+        }
+
+    } 
 }

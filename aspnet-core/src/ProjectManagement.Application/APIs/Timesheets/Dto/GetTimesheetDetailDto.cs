@@ -16,6 +16,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long TimesheetId { get; set; }
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
+        public string ProjectCode { get; set; }
         public long PmId { get; set; }
         [ApplySearchAttribute]
         public string PmEmailAddress { get; set; }

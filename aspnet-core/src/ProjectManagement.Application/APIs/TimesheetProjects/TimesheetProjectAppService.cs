@@ -140,6 +140,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              ProjectId = tsp.ProjectId,
                              TimesheetId = tsp.TimesheetId,
                              ProjectName = tsp.Project.Name,
+                             ProjectCode = tsp.Project.Code,
                              PmId = tsp.Project.PMId,
                              PmUserType = tsp.Project.PM.UserType,
                              PmAvatarPath = tsp.Project.PM.AvatarPath,
@@ -602,25 +603,34 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 invoiceSheet.Cells[rowIndex, 2].Value = tsUser.FullName;
                 invoiceSheet.Cells[rowIndex, 3].Value = tsUser.ProjectName;
                 invoiceSheet.Cells[rowIndex, 4].Value = tsUser.BillRateDisplay;
-                invoiceSheet.Cells[rowIndex, 5].Value = tsUser.CurrencyName + "/" + tsUser.ChargeType;
-                invoiceSheet.Cells[rowIndex, 6].Value = tsUser.WorkingDay;
+                invoiceSheet.Cells[rowIndex, 5].Value = tsUser.CurrencyName + "/" + tsUser.ChargeTypeDisplay;
+                invoiceSheet.Cells[rowIndex, 6].Value = tsUser.WorkingDayDisplay;
                 invoiceSheet.Cells[rowIndex, 7].Value = tsUser.LineTotal;
                 sumLineTotal += tsUser.LineTotal;
                 rowIndex++;
             }
 
-            invoiceSheet.Cells["F6:G6"].Value = data.Info.ClientName;
-            invoiceSheet.Cells["F7:G7"].Value = data.Info.ClientAddress;
+            var invoiceNetTotal = sumLineTotal + data.Info.TransferFee;
+            var invoiceTotal = invoiceNetTotal - (data.Info.Discount * invoiceNetTotal) / 100;
+            invoiceSheet.Cells["F6:I6"].Value = data.Info.ClientName;
+            invoiceSheet.Cells["F7:I7"].Value = data.Info.ClientAddress;
             invoiceSheet.Cells["C2"].Value = data.Info.InvoiceNumber;
             invoiceSheet.Cells["B3"].Value = data.Info.InvoiceDateStr();
             invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {data.Info.PaymentDueByStr()}";
             invoiceSheet.Names["TransferFee"].Value = data.Info.TransferFee;
-            invoiceSheet.Names["InvoiceNetTotal"].Formula = $"={sumLineTotal}+TransferFee";
+            invoiceSheet.Names["InvoiceNetTotal"].Value = invoiceNetTotal;
             invoiceSheet.Names["DiscountLabel"].Value = $"Discount ({data.Info.Discount}%)";
-            invoiceSheet.Names["Discount"].Formula = $"=({data.Info.Discount}*InvoiceNetTotal)/100";
-            invoiceSheet.Names["InvoiceTotal"].Formula = $"=InvoiceNetTotal-Discount";
-
-
+            invoiceSheet.Names["Discount"].Value = (data.Info.Discount * invoiceNetTotal) / 100;
+            invoiceSheet.Names["InvoiceTotal"].Value = invoiceTotal;
+            invoiceSheet.Names["CurrencyInvoiceTotal"].Value = invoiceTotal;
+            if (data.CurrencyName() == "USD")
+            {
+                invoiceSheet.Cells["F3:F4"].Value = "$";
+            }
+            else
+            {
+                invoiceSheet.Cells["I3:I4"].Value = data.CurrencyName();
+            }
             //Fill data payment
             string[] arrPaymentInfo = data.Info.PaymentInfoArr();
             var arrPaymentInfoCount = arrPaymentInfo.Length;
@@ -843,6 +853,22 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             return excelPackageIn;
 
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay)]
+        public async Task<float> UpdateTimesheetProject(UpdateTimesheetProjectDto input)
+        {
+            var timesheetProject = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);
+            if (timesheetProject != null)
+            {
+                timesheetProject.WorkingDay = input.WorkingDay;
+                timesheetProject.InvoiceNumber = input.InvoiceNumber;
+                var timesheetProjectUpdate = await WorkScope.UpdateAsync<TimesheetProject>(timesheetProject);
+                return timesheetProjectUpdate.WorkingDay;
+            }
+
+            return default;
         }
     }
 
