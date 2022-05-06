@@ -106,6 +106,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public meId: number;
   public updateAction = UpdateAction;
   public currency: string = "";
+  public clientIdInvoice: number = -1;
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -414,7 +415,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     else {
       let checkClientId = event.source.value.clientId;
       let checkCurrency = event.source.value.currency;
-      if (this.listExportInvoice.length > 0 && this.clientId != checkClientId) {
+      if (this.listExportInvoice.length > 0 && this.clientIdInvoice != checkClientId) {
         abp.notify.warn("Cannot export invoices for different clients!")
         event.checked = false;
         event.source._checked = false
@@ -427,7 +428,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         return;
       }
       this.currency = checkCurrency;
-      this.clientId = checkClientId;
+      this.clientIdInvoice = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
       this.listExportInvoiceChargeType.push(event.source.value.chargeType);
     }

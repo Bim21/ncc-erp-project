@@ -110,5 +110,19 @@ namespace ProjectManagement.APIs.Clients
         {
             return  await WorkScope.GetAll<Client>().Where(x => x.Code == "NCC").Select(x => x.Id).FirstOrDefaultAsync();
         }
+
+        [HttpGet]
+        public List<PaymentDueByDto> GetAllPaymentDueBy()
+        {
+            var dataPaymentDueBy = new DataPaymentDueBy();
+            return dataPaymentDueBy.ListDataPaymentDueBy.ToList();
+        }
+
+        [HttpGet]
+        public List<InvoiceDateDto> GetAllInvoiceDate()
+        {
+            var dataInvoiceDate = new DataInvoiceDate();
+            return dataInvoiceDate.ListDataInvoiceDate.ToList();
+        }
     }
 }

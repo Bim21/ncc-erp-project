@@ -56,9 +56,9 @@
           <mat-form-field class="w-100" appearance="outline">
               <mat-select [(ngModel)]="client.invoiceDateSetting" name="clientInvoiceDateSetting" placeholder="Select Invoice date setting"
                   required #clientInvoiceDateSetting="ngModel">
-                  <ng-container *ngFor="let clientInvoiceDateSetting of clientInvoiceDateSettingList">
-                      <mat-option [value]="APP_ENUM.ClientInvoiceDateSetting[clientInvoiceDateSetting]">
-                          {{getTextClientInvoiceDateSetting(APP_ENUM.ClientInvoiceDateSetting[clientInvoiceDateSetting])}}</mat-option>
+                  <ng-container *ngFor="let item of invoiceDateSettingList">
+                    <mat-option [value]="item.value">
+                        {{item.label}}</mat-option>
                   </ng-container>
               </mat-select>
           </mat-form-field>
