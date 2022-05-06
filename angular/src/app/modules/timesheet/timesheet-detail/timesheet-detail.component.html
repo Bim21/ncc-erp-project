@@ -26,10 +26,10 @@
           <mat-menu #actionsMenu="matMenu">
             
             <button mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.Normal)">
-              <i class="fa fa-file"></i> Export Invoice
+              <i class="fa fa-file"></i> Normally
             </button>
             <button class="special" *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
-              <i class="fa fa-file-excel"></i> Export Invoice <span style="padding-left: 15px;">(Monthly to daily)</span>
+              <i class="fa fa-file-excel"></i> Monthly to daily
             </button>
           </mat-menu>
         </div>
@@ -47,12 +47,12 @@
           </div>
           <mat-menu #actionsExportInvoiceForTax="matMenu">
             <button mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceForTax(APP_ENUM.ExportInvoiceMode.Normal)">
-              <i class="fa fa-file"></i> Export Invoice For Tax
+              <i class="fa fa-file"></i> 
+              Normally
             </button>
             <button class="special" *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0" (click)="exportInvoiceForTax(APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
               <i class="fa fa-file-export"></i> 
-              Export Invoice For Tax
-              <span>(Monthly to daily)</span>
+              Monthly to daily
             </button>
           </mat-menu>
         </div>
@@ -190,7 +190,12 @@
                   <span>{{ i + 1 }}</span>
                 </td>
                 <td style="white-space: normal; min-width: 165px">
-                  <b>{{ item.projectName }}</b>
+                  <a style="cursor: pointer; font-weight: bold;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(item)" >
+                    {{ item.projectName }}
+                  </a>
+                  <b *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)">
+                      {{ item.projectName }}
+                  </b>
                   <p>{{item.clientName}}</p>
                 </td>
                 <td class="text-left">

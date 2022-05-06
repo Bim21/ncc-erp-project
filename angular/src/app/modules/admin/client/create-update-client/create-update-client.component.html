@@ -58,7 +58,7 @@
                   required #clientInvoiceDateSetting="ngModel">
                   <ng-container *ngFor="let clientInvoiceDateSetting of clientInvoiceDateSettingList">
                       <mat-option [value]="APP_ENUM.ClientInvoiceDateSetting[clientInvoiceDateSetting]">
-                          {{clientInvoiceDateSetting}}</mat-option>
+                          {{getTextClientInvoiceDateSetting(APP_ENUM.ClientInvoiceDateSetting[clientInvoiceDateSetting])}}</mat-option>
                   </ng-container>
               </mat-select>
           </mat-form-field>

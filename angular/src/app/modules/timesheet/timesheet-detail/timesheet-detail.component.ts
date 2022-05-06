@@ -29,6 +29,7 @@ import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-di
   styleUrls: ['./timesheet-detail.component.css']
 })
 export class TimesheetDetailComponent extends PagedListingComponentBase<TimesheetDetailDto> implements OnInit {
+  Projects_OutsourcingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail;
   requestBody: PagedRequestDto
   pageNum: number
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
@@ -426,6 +427,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         return;
       }
       this.currency = checkCurrency;
+      this.clientId = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
       this.listExportInvoiceChargeType.push(event.source.value.chargeType);
     }
@@ -516,6 +518,16 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     editTimesheetProjectDialog.content.onSave.subscribe(() => {
       this.refresh();
     });
+  }
+
+  
+  viewProjectDetail(project){
+    let routingToUrl:string = "/app/list-project-detail/list-project-general"
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
+      id: project.projectId,
+      projectName: project.projectName, 
+      projectCode: project.projectCode} }));
+      window.open(url, '_blank');
   }
 
 }

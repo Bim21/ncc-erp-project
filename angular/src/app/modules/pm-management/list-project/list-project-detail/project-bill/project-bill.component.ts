@@ -27,8 +27,10 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public rateInfo = {} as ProjectRateDto;
   public lastInvoiceNumber;
   public discount;
-  public chargeType = ['d', 'm', 'h']
-
+  public chargeType = ['d', 'm', 'h'];
+  public isEditLastInvoiceNumber: boolean = false;
+  public isEditDiscount: boolean = false;
+  
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
@@ -74,7 +76,8 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     }
     this.projectUserBillService.updateLastInvoiceNumber(data).subscribe(data => {
       this.lastInvoiceNumber = data.result;
-      abp.notify.success(`Updated Last Invoice Number`)
+      abp.notify.success(`Updated Last Invoice Number`);
+      this.isEditLastInvoiceNumber = false;
     })
   }
 
@@ -95,6 +98,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     }
     this.projectUserBillService.updateDiscount(data).subscribe(data => {
       this.discount = data.result;
+      this.isEditDiscount = false;
       abp.notify.success(`Updated Discount`)
     })
   }
@@ -191,5 +195,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.searchUserBill = '';
   }
 
+  cancelLastInvoiceNumber() {
+    this.isEditLastInvoiceNumber = false;
+  }
+  cancelDiscount() {
+    this.isEditDiscount = false;
+  }
+  
 
 }

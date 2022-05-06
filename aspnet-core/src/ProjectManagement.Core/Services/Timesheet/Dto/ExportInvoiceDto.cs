@@ -104,6 +104,40 @@ namespace ProjectManagement.Services.Timesheet.Dto
         public ExportInvoiceMode Mode { get; set; }
         public float TimesheetWorkingDay { get; set; }
         public float BillRateDisplay => (Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) ? BillRate / TimesheetWorkingDay : BillRate;
+        public float WorkingDayDisplay
+        {
+            get
+            {
+                if ((Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) || ChargeType == ChargeType.Daily)
+                {
+                    return WorkingDay;
+                }
+
+                if (ChargeType == ChargeType.Hours)
+                {
+                    return WorkingDay * DefaultWorkingHours;
+                }
+
+                return WorkingDay / TimesheetWorkingDay;
+            }
+        }
+        public string ChargeTypeDisplay
+        {
+            get
+            {
+                if ((Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) || ChargeType == ChargeType.Daily)
+                {
+                    return "Day";
+                }
+
+                if (ChargeType == ChargeType.Hours)
+                {
+                    return "Hours";
+                }
+
+                return "Month";
+            }
+        }
         public double LineTotal
         {
             get
