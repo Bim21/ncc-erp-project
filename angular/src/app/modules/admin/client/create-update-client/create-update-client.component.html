@@ -58,7 +58,7 @@
                   required #clientInvoiceDateSetting="ngModel">
                   <ng-container *ngFor="let item of invoiceDateSettingList">
                     <mat-option [value]="item.value">
-                        {{item.label}}</mat-option>
+                        {{item.text}}</mat-option>
                   </ng-container>
               </mat-select>
           </mat-form-field>
@@ -76,7 +76,7 @@
                   required #paymentDueBy="ngModel">
                   <ng-container *ngFor="let item of paymentDueByList">
                       <mat-option [value]="item.value">
-                          {{item.label}}</mat-option>
+                          {{item.text}}</mat-option>
                   </ng-container>
               </mat-select>
           </mat-form-field>

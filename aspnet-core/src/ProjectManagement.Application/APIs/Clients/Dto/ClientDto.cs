@@ -29,16 +29,14 @@ namespace ProjectManagement.APIs.Clients.Dto
         {
             get
             {
-                var dataPaymentDueBy = new DataPaymentDueBy();
-                return dataPaymentDueBy.ListDataPaymentDueBy.Find(x => x.Value == PaymentDueBy).Label.ToString();
+                return CommonUtil.PaymentDueByList().GetValueOrDefault(PaymentDueBy);
             }
         }
         public string InvoiceDateSettingToString
         {
             get
             {
-                var dataInvoiceDate = new DataInvoiceDate();
-                return dataInvoiceDate.ListDataInvoiceDate.Find(x => x.Value == InvoiceDateSetting).Label.ToString();
+                return CommonUtil.InvoiceDateList().GetValueOrDefault(InvoiceDateSetting);
             }
         }
     }

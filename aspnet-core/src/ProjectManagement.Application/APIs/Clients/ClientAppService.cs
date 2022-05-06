@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectManagement.Services.Timesheet;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.Clients
 {
@@ -110,19 +111,25 @@ namespace ProjectManagement.APIs.Clients
         {
             return  await WorkScope.GetAll<Client>().Where(x => x.Code == "NCC").Select(x => x.Id).FirstOrDefaultAsync();
         }
-
+        
         [HttpGet]
-        public List<PaymentDueByDto> GetAllPaymentDueBy()
+        public List<ValueTextDto> GetAllPaymentDueBy()
         {
-            var dataPaymentDueBy = new DataPaymentDueBy();
-            return dataPaymentDueBy.ListDataPaymentDueBy.ToList();
+            return CommonUtil.PaymentDueByList().Select(x => new ValueTextDto
+            {
+                Value = x.Key,
+                Text = x.Value,
+            }).ToList();
         }
 
         [HttpGet]
-        public List<InvoiceDateDto> GetAllInvoiceDate()
+        public List<ValueTextDto> GetAllInvoiceDate()
         {
-            var dataInvoiceDate = new DataInvoiceDate();
-            return dataInvoiceDate.ListDataInvoiceDate.ToList();
+            return CommonUtil.InvoiceDateList().Select(x => new ValueTextDto
+            {
+                Value = Convert.ToInt16(x.Key),
+                Text = x.Value,
+            }).ToList();
         }
     }
 }
