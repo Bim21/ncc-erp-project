@@ -10,8 +10,8 @@ namespace ProjectManagement.Utils
     public class CommonUtil
     {
 
-        private static readonly Dictionary<int, string> PaymentDueByListReadOnly
-        = new Dictionary<int, string>
+        private static readonly Dictionary<byte, string> PaymentDueByListReadOnly
+        = new Dictionary<byte, string>
         {
             { 0, "Last date next month" },
             { 15, "15th next month" },
@@ -46,7 +46,7 @@ namespace ProjectManagement.Utils
             { 30, "30th next month" },
         };
 
-        public static Dictionary<int, string> PaymentDueByList()
+        public static Dictionary<byte, string> PaymentDueByList()
         {
             return PaymentDueByListReadOnly;
         }
