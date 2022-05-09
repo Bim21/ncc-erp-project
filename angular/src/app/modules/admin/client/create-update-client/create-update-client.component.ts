@@ -13,7 +13,7 @@ import { Component, OnInit, Injector, Inject } from '@angular/core';
 export class CreateUpdateClientComponent extends AppComponentBase implements OnInit {
   title:string =""
   public client = {} as ClientDto;
-  public clientInvoiceDateSettingList: string[] = Object.keys(this.APP_ENUM.ClientInvoiceDateSetting);
+  invoiceDateSettingList: [];
   paymentDueByList = [];
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,
@@ -26,47 +26,18 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
       this.title = this.data.item.name ? this.data.item.name : ''
     }
     this.getPaymentDueBy();
+    this.getAllInvoiceDate();
   }
-  public getTextClientInvoiceDateSetting(enumValue) {
-    if(enumValue==this.APP_ENUM.ClientInvoiceDateSetting.LastDateThisMonth){
-      return "Last date this month";
-    }
-    return "First date next month";
-  }
+  
   getPaymentDueBy() {
-    this.paymentDueByList = [
-      {value: 0, label: "Last date next month"},
-      {value: 15, label: "15th next month"},
-      {value: 1, label: "1st next month"},
-      {value: 2, label: "2nd next month"},
-      {value: 3, label: "3rd next month"},
-      {value: 4, label: "4th next month"},
-      {value: 5, label: "5th next month"},
-      {value: 6, label: "6th next month"},
-      {value: 7, label: "7th next month"},
-      {value: 8, label: "8th next month"},
-      {value: 9, label: "9th next month"},
-      {value: 10, label: "10th next month"},
-      {value: 11, label: "11th next month"},
-      {value: 12, label: "12th next month"},
-      {value: 13, label: "13th next month"},
-      {value: 14, label: "14th next month"},
-      {value: 16, label: "16th next month"},
-      {value: 17, label: "17th next month"},
-      {value: 18, label: "18th next month"},
-      {value: 19, label: "19th next month"},
-      {value: 20, label: "20th next month"},
-      {value: 21, label: "21st next month"},
-      {value: 22, label: "22nd next month"},
-      {value: 23, label: "23rd next month"},
-      {value: 24, label: "24th next month"},
-      {value: 25, label: "25th next month"},
-      {value: 26, label: "26th next month"},
-      {value: 27, label: "27th next month"},
-      {value: 28, label: "28th next month"},
-      {value: 29, label: "29th next month"},
-      {value: 30, label: "30th next month"}
-    ]
+    this.clientService.getAllPaymentDueBy().pipe(catchError(this.clientService.handleError)).subscribe((res) => {
+      this.paymentDueByList = res.result;
+    })
+  }
+  getAllInvoiceDate() {
+    this.clientService.getAllInvoiceDate().pipe(catchError(this.clientService.handleError)).subscribe((res) => {
+      this.invoiceDateSettingList = res.result;
+    })
   }
 
   SaveAndClose() {

@@ -29,16 +29,15 @@ namespace ProjectManagement.APIs.Clients.Dto
         {
             get
             {
-                return CommonUtil.PaymentDueByToString(PaymentDueBy);
+                return CommonUtil.PaymentDueByList().GetValueOrDefault(PaymentDueBy);
             }
         }
         public string InvoiceDateSettingToString
         {
             get
             {
-                return CommonUtil.InvoiceDateSettingToString(InvoiceDateSetting);
+                return CommonUtil.InvoiceDateList().GetValueOrDefault(InvoiceDateSetting);
             }
         }
-
-    } 
+    }
 }

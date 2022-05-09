@@ -9,6 +9,60 @@ namespace ProjectManagement.Utils
 {
     public class CommonUtil
     {
+
+        private static readonly Dictionary<byte, string> PaymentDueByListReadOnly
+        = new Dictionary<byte, string>
+        {
+            { 0, "Last date next month" },
+            { 15, "15th next month" },
+            { 1, "1st next month" },
+            { 2, "2nd next month" },
+            { 3, "3rd next month" },
+            { 4, "4th next month" },
+            { 5, "5th next month" },
+            { 6, "6th next month" },
+            { 7, "7th next month" },
+            { 8, "8th next month" },
+            { 9, "9th next month" },
+            { 10, "10th next month" },
+            { 11, "11th next month" },
+            { 12, "12th next month" },
+            { 13, "13th next month" },
+            { 14, "14th next month" },
+            { 16, "16th next month" },
+            { 17, "17th next month" },
+            { 18, "18th next month" },
+            { 19, "19th next month" },
+            { 20, "20th next month" },
+            { 21, "21st next month" },
+            { 22, "22nd next month" },
+            { 23, "23rd next month" },
+            { 24, "24th next month" },
+            { 25, "25th next month" },
+            { 26, "26th next month" },
+            { 27, "27th next month" },
+            { 28, "28th next month" },
+            { 29, "29th next month" },
+            { 30, "30th next month" },
+        };
+
+        public static Dictionary<byte, string> PaymentDueByList()
+        {
+            return PaymentDueByListReadOnly;
+        }
+
+        private static readonly Dictionary<InvoiceDateSetting, string> InvoiceDateListReadOnly
+        = new Dictionary<InvoiceDateSetting, string>
+        {
+            { InvoiceDateSetting.LastDateThisMonth, "Last date this month" },
+            { InvoiceDateSetting.FirstDateNextMonth, "First date next month" }
+        };
+
+        public static Dictionary<InvoiceDateSetting, string> InvoiceDateList()
+        {
+            return InvoiceDateListReadOnly;
+        }
+
         public static string ToString(ProjectUserRole projectUserRole)
         {
             return Enum.GetName(typeof(ProjectUserRole), projectUserRole);
@@ -144,83 +198,6 @@ namespace ProjectManagement.Utils
             }
             return Enum.GetName(typeof(ProjectStatus), status);
 
-        }
-
-        public static string PaymentDueByToString(byte paymentDueBy)
-        {
-            switch (paymentDueBy)
-            {
-                case 1:
-                    return "1st next month";
-                case 2:
-                    return "2nd next month";
-                case 3:
-                    return "3rd next month";
-                case 4:
-                    return "4th next month";
-                case 5:
-                    return "5th next month";
-                case 6:
-                    return "6th next month";
-                case 7:
-                    return "7th next month";
-                case 8:
-                    return "8th next month";
-                case 9:
-                    return "9th next month";
-                case 10:
-                    return "10th next month";
-                case 11:
-                    return "11th next month";
-                case 12:
-                    return "12th next month";
-                case 13:
-                    return "13th next month";
-                case 14:
-                    return "14th next month";
-                case 15:
-                    return "15th next month";
-                case 16:
-                    return "16th next month";
-                case 17:
-                    return "17th next month";
-                case 18:
-                    return "18th next month";
-                case 19:
-                    return "19th next month";
-                case 20:
-                    return "20th next month";
-                case 21:
-                    return "21st next month";
-                case 22:
-                    return "22nd next month";
-                case 23:
-                    return "23rd next month";
-                case 24:
-                    return "24th next month";
-                case 25:
-                    return "25th next month";
-                case 26:
-                    return "26th next month";
-                case 27:
-                    return "27th next month";
-                case 28:
-                    return "28th next month";
-                case 29:
-                    return "29th next month";
-                case 30:
-                    return "30th next month";
-
-                default: return "Last date next month";
-            }
-        }
-        public static string InvoiceDateSettingToString(InvoiceDateSetting invoiceDateSetting)
-        {
-            if (invoiceDateSetting == InvoiceDateSetting.LastDateThisMonth)
-            {
-                return "Last date this month";
-            }
-            return "First date next month";
         }
 
     }

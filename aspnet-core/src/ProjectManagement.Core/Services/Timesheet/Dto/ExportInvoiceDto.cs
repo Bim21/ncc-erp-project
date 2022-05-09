@@ -132,7 +132,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
 
                 if (ChargeType == ChargeType.Hours)
                 {
-                    return "Hours";
+                    return "Hour";
                 }
 
                 return "Month";
