@@ -854,7 +854,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     }
     let effortRequestBody = {
       projectCode: this.projectInfo.projectCode,
-      emails: this.officalResourceList,
+      emails: this.tempResourceList,
       startDate: fiveMonthAgo,
       endDate: currentDate 
     }
