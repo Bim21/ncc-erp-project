@@ -59,6 +59,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PMReportName = x.PMReport.Name,
                     ProjectId = x.ProjectId,
                     ProjectName = x.Project.Name,
+                    ProjectCode = x.Project.Code,
                     Status = x.Status.ToString(),
                     ProjectHealth = x.ProjectHealth.ToString(),
                     PMId = x.PMId,
