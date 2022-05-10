@@ -22,6 +22,8 @@ export class EditTimesheetProjectDialogComponent implements OnInit {
   id: number;
   invoiceNumber: number;
   workingDay: number;
+  transferFee: number;
+  discount: number;
   projectName: string;
   saving = false;
   @Output() onSave = new EventEmitter<null>();
@@ -42,10 +44,20 @@ export class EditTimesheetProjectDialogComponent implements OnInit {
       abp.message.error("Working Day must be bigger than 0!");
       return;
     }
+    if(+this.transferFee < 0) {
+      abp.message.error("Transfer Fee must be bigger than or equal to 0!");
+      return;
+    }
+    if(+this.discount < 0) {
+      abp.message.error("Discount must be bigger than or equal to 0!");
+      return;
+    }
     let requestBody = {
       id : this.id,
       invoiceNumber: this.invoiceNumber,
-      workingDay: this.workingDay
+      workingDay: this.workingDay,
+      transferFee: this.transferFee,
+      discount: this.discount,
     }
     this.saving = true;
     this.subscription.push(
@@ -59,7 +71,7 @@ export class EditTimesheetProjectDialogComponent implements OnInit {
         .subscribe(() => {
           this.bsModalRef.hide();
           this.onSave.emit();
-          abp.notify.success("Updated Invoice Number and Working Day")
+          abp.notify.success("Updated Invoice Info")
         })
     );
   }

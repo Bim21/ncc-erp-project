@@ -168,7 +168,7 @@
                 <th>PM</th>
                 <th>Note</th>
                 <th>Bill Info</th>
-                <th>InvoiceNumber /<br />Working Day</th>
+                <th>Invoice Info</th>
                 <th>Timesheet File</th>
                 <th>Done</th>
                 <th>Actions</th>
@@ -243,23 +243,25 @@
                 <td style="
                 white-space: pre-line;
                 word-break: break-all;
-                max-width: 200px;
-                min-width: 150px;
+                max-width: 230px;
+                min-width: 200px;
               ">
                                 <div class="d-flex" style="align-items: center">
                                     <div style="width: 90%">
-                                      <p>{{ item.invoiceNumber }}</p>
-                                      <p matTooltip="Working day of {{item.projectName}}: {{item.workingDay}} days">{{ item.workingDay }}</p>
+                                      <p class="m-0"><strong>Invoice Number: </strong>{{ item.invoiceNumber }}</p>
+                                      <p class="m-0" matTooltip="Working day of {{item.projectName}}: {{item.workingDay}} days"><strong>Working Day:</strong> {{ item.workingDay }}</p>
+                                      <p class="m-0"><strong>Transfer Fee: </strong>{{ item.transferFee }}</p>
+                                      <p class="m-0"><strong>Discount: </strong>{{ item.discount }} (%)</p>
                                     </div>
-                                    <div style="width: 10%; text-align: right;" class="ml-1" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay)">
-                                        <i class="fas fa-edit " (click)="updateTimesheetProject(item.id, item.invoiceNumber, item.workingDay,item.projectName )" ></i>
+                                    <div style="width: 10%; text-align: right;" class="ml-1" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_EditInvoiceInfo) && isActive">
+                                        <i class="fas fa-edit " (click)="updateTimesheetProject(item)" ></i>
                                     </div>
                                 </div>
                             </td>
                 <td class="" style="
                     white-space: normal;
-                    max-width: 230px;
-                    min-width: 200px;
+                    max-width: 200px;
+                    min-width: 170px;
                   ">
                   <span class="file-download">
                     <span (click)="downloadFile(item)">{{ item.file }}</span>

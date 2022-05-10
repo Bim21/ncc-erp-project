@@ -94,17 +94,17 @@ namespace ProjectManagement.Services.Timesheet.Dto
         public string EmailAddress { get; set; }
         public string ProjectCode { get; set; }
         public string ProjectName { get; set; }
-        public float WorkingDay { get; set; }
+        public double WorkingDay { get; set; }
         public ChargeType ChargeType { get; set; }
         public string CurrencyName { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public float BillRate { get; set; }
+        public double BillRate { get; set; }
         public int DefaultWorkingHours { get; set; }
         public ExportInvoiceMode Mode { get; set; }
-        public float TimesheetWorkingDay { get; set; }
-        public float BillRateDisplay => (Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) ? BillRate / TimesheetWorkingDay : BillRate;
-        public float WorkingDayDisplay
+        public double TimesheetWorkingDay { get; set; }
+        public double BillRateDisplay => (Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) ? BillRate / TimesheetWorkingDay : BillRate;
+        public double WorkingDayDisplay
         {
             get
             {
@@ -173,7 +173,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
     public class TimesheetDetail
     {
         public DateTime DateAt { get; set; }
-        public float ManDay { get; set; }
+        public double ManDay { get; set; }
         public string TaskName { get; set; }
         public string Note { get; set; }
         public string EmailAddress { get; set; }

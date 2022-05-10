@@ -67,6 +67,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         }
         public long InvoiceNumber { get; set; }
         public float WorkingDay { get; set; }
+        public float Discount { get; set; }
+        public float TransferFee { get; set; }
     }
 
 }
