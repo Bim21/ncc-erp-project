@@ -145,3 +145,6 @@ th {
 .ot-noCharge{
     color: #ff7136;
 }
+::ng-deep .project-menu-item .mat-list-item-content{
+    padding: 0 0 0 16px !important;
+}

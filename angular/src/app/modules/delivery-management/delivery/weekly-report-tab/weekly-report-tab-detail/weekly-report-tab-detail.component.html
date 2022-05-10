@@ -15,12 +15,12 @@
             <div style="margin-bottom: 20px;">
                 <mat-list *ngFor="let item of pmReportProjectList">
                     <div class="row sidebar-item" [ngClass]="item.setBackground==true?'projectActive':''">
-                        <div class="col-10"
+                        <div class="col-10 project-menu-item"
                             [ngClass]="item.projectHealth ==='Green'?'green':item.projectHealth ==='Red'?'red':'yellow'">
-                            <mat-list-item style="cursor:pointer," role="item.projectId" (click)="view(item);">
+                            <mat-list-item style="cursor:pointer," role="item.projectId" (click)="view(item);"  [matTooltip]="item.projectCode"  matTooltipPosition="right">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
-                                        <strong>{{item.projectName}}</strong>
+                                        <strong>{{item.projectName}} </strong>
                                     </div>
                                     <div class="project-list">
                                         {{item.pmEmailAddress}}
@@ -335,7 +335,7 @@
                                                                     class="d-flex justify-content-between">
                                                                     <app-user-info
                                                                         style="width: -webkit-fill-available;"
-                                                                        [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                        [userData]="{fullName:report.fullName,branch:report.branch, userLevel: report.userLevel,
                                                                         userType:report.userType,emailAddress:report.emailAddress, avatarPath:report.avatarPath}">
                                                                     </app-user-info>
 
@@ -506,7 +506,7 @@
                                                                     class="d-flex justify-content-between">
                                                                     <app-user-info
                                                                         style="width: -webkit-fill-available;"
-                                                                        [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                        [userData]="{fullName:report.fullName,branch:report.branch, userLevel: report.userLevel,
                                                                 userType:report.userType,emailAddress:report.emailAddress,avatarPath: report.avatarPath}">
                                                                     </app-user-info>
 
