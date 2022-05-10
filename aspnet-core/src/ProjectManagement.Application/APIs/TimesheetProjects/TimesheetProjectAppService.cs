@@ -171,6 +171,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              ProjectChargeType = tsp.Project.ChargeType,
                              InvoiceNumber = tsp.InvoiceNumber,
                              WorkingDay = tsp.WorkingDay,
+                             Discount = tsp.Discount,
+                             TransferFee = tsp.TransferFee,
                          }).OrderByDescending(x => x.ClientId);
             return await query.GetGridResult(query, input);
         }
@@ -605,8 +607,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 invoiceSheet.Cells[rowIndex, 4].Value = tsUser.BillRateDisplay;
                 invoiceSheet.Cells[rowIndex, 5].Value = tsUser.CurrencyName + "/" + tsUser.ChargeTypeDisplay;
                 invoiceSheet.Cells[rowIndex, 6].Value = tsUser.WorkingDayDisplay;
-                invoiceSheet.Cells[rowIndex, 7].Value = tsUser.LineTotal;
-                sumLineTotal += tsUser.LineTotal;
+                invoiceSheet.Cells[rowIndex, 7].Formula = $"={tsUser.BillRateDisplay}*{tsUser.WorkingDayDisplay}";
+                sumLineTotal += tsUser.BillRateDisplay * tsUser.WorkingDayDisplay;
                 rowIndex++;
             }
 
@@ -747,7 +749,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return resultList;
         }
 
-        private void AddMoreBillDate(List<DateTime> listBillDate, float totalWorkingDay)
+        private void AddMoreBillDate(List<DateTime> listBillDate, double totalWorkingDay)
         {
             var maxBillDay = listBillDate.Count;
             if (totalWorkingDay <= maxBillDay)
@@ -767,6 +769,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     listBillDate.Add(date);
                     maxBillDay += 1;
                 }
+                date = date.AddDays(1);
             }
 
             listBillDate = listBillDate.OrderBy(s => s.Ticks).ToList();
@@ -776,7 +779,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         private List<TimesheetDetail> TimesheetDetailOfUserInProject(
                 List<DateTime> listBillDate,
                 List<TimesheetDetail> listTimesheetDetail,
-                float totalWorkingDay
+                double totalWorkingDay
         )
         {
 
@@ -784,9 +787,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var resultList = new List<TimesheetDetail>();
 
-            float remainDay = totalWorkingDay;
+            double remainDay = totalWorkingDay;
 
-            float workingDay = 1;
+            double workingDay = 1;
             DateTime dateAtLast = DateTime.Today;
 
             foreach (var billDate in listBillDate)
@@ -856,14 +859,23 @@ namespace ProjectManagement.APIs.TimesheetProjects
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_EditInvoiceInfo)]
         public async Task<float> UpdateTimesheetProject(UpdateTimesheetProjectDto input)
         {
             var timesheetProject = await WorkScope.GetAll<TimesheetProject>().FirstOrDefaultAsync(x => x.Id == input.Id);
             if (timesheetProject != null)
             {
+                long timesheetId = timesheetProject.TimesheetId;
+                var timesheet = await WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId).Where(x => x.IsActive).FirstOrDefaultAsync();
+                if (timesheet == default)
+                {
+                    throw new UserFriendlyException($"Unable to update for closed timesheet Id {timesheet}");
+                }
+
                 timesheetProject.WorkingDay = input.WorkingDay;
                 timesheetProject.InvoiceNumber = input.InvoiceNumber;
+                timesheetProject.TransferFee = input.TransferFee;
+                timesheetProject.Discount = input.Discount;
                 var timesheetProjectUpdate = await WorkScope.UpdateAsync<TimesheetProject>(timesheetProject);
                 return timesheetProjectUpdate.WorkingDay;
             }

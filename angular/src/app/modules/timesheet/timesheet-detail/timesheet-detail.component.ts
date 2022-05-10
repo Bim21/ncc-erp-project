@@ -132,7 +132,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_UpdateTimsheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateTimsheet;
   Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill;
   Timesheets_TimesheetDetail_ExportInvoiceForTax = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoiceForTax;
-  Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_EditInvoiceNumberWorkingDay;
+  Timesheets_TimesheetDetail_EditInvoiceInfo = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_EditInvoiceInfo;
   constructor(
     private timesheetService: TimesheetService,
     public timesheetProjectService: TimesheetProjectService,
@@ -503,15 +503,17 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     );
   }
 
-  updateTimesheetProject(id, invoiceNumber,workingDay,projectName) {
+  updateTimesheetProject(item) {
     let editTimesheetProjectDialog: BsModalRef;
     editTimesheetProjectDialog = this._modalService.show(EditTimesheetProjectDialogComponent, {
       class: 'modal',
       initialState: {
-        id: id,
-        invoiceNumber: invoiceNumber,
-        workingDay: workingDay,
-        projectName: projectName
+        id: item.id,
+        invoiceNumber: item.invoiceNumber,
+        workingDay: item.workingDay,
+        projectName: item.projectName,
+        transferFee: item.transferFee,
+        discount: item.discount,
       },
      
     });

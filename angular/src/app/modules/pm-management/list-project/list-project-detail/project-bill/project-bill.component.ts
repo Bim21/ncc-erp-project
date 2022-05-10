@@ -91,8 +91,8 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       projectId : this.projectId,
       discount : this.discount,
     }
-    if(+this.discount <= 0) {
-      abp.message.error(this.l("Discount must be bigger than 0!"));
+    if(+this.discount < 0) {
+      abp.message.error(this.l("Discount must be bigger than or equal to 0!"));
       this.getLastInvoiceNumber();
       return;
     }

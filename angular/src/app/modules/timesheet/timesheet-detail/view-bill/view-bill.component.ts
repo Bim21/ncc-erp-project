@@ -64,22 +64,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     }
     userBill.timesheetId = this.data.billInfo.timesheetId;
     userBill.projectId = this.data.billInfo.projectId;
-    let bill =
-      [{
-        "projectId": userBill.projectId,
-        "timeSheetId": userBill.timesheetId,
-        "userId": userBill.userId,
-        "billRole": userBill.billRole,
-        "billRate": userBill.billRate,
-        "startTime": userBill.startTime,
-        "endTime": userBill.endTime,
-        "currency": userBill.currency,
-        "note": userBill?.note,
-        "shadowNote": userBill.shadowNote,
-        "isActive": userBill.isActive,
-        "workingTime": userBill.workingTime,
-        "id": userBill.id
-      }]
+    
     if (this.isCreate) {
       userBill.projectId = this.data.billInfo.projectId;
       delete userBill['userList'];
@@ -101,6 +86,16 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
 
     } else {
+      let bill =
+      [{
+        "userId": userBill.userId,
+        "billRole": userBill.billRole,
+        "billRate": userBill.billRate,
+        "note": userBill?.note,
+        "isActive": userBill.isActive,
+        "workingTime": userBill.workingTime,
+        "id": userBill.id
+      }]
       this.projectBillService.updateProjectBill(bill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Update successfull`)
         this.getProjectBill();
