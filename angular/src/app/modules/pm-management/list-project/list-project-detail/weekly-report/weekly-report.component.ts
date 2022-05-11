@@ -672,13 +672,14 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       option = {
         width:'90%',
         title: {
-          text: 'Timesheet'
+          text: 'Timesheet',
+          show:false,
         },
         tooltip: {
           trigger: 'axis'
         },
         legend: {
-          left:'25%',
+          right:'0',
           width:'80%',
           data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
@@ -1034,6 +1035,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             trigger: 'axis',
           },
           title: {
+            show:false,
             text: 'Bill info'
           },
           grid: {
@@ -1043,7 +1045,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             containLabel: true
           },
           legend: {
-            data: ['Bill.ManMonth', 'Bill.ManDay', `${EffortData?.manDays? 'Effort.ManDay' : ''}`]
+            data: ['Bill.ManMonth', 'Bill.ManDay', `${EffortData?.manDays? 'Effort.ManDay' : ''}`],
+            right:'0'
           },
           xAxis: [
             {
@@ -1124,7 +1127,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         startDate: resource.startDate,
         isPool: resource.isPool,
         allocatePercentage: resource.allocatePercentage,
-        startTime: resource.startTime
+        startTime: resource.startTime,
+        disabled:true
       }
       let ref = this.dialog.open(AddFutureResourceDialogComponent, {
         width: "700px",

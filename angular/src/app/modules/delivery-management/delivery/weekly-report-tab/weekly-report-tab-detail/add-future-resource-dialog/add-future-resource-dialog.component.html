@@ -16,10 +16,11 @@
                 User:
             </label>
             <div class="col-md-9">
-                <mat-form-field appearance="outline">
-                    <mat-select [(ngModel)]="planUser.userId" name="user" placeholder="select a user" required #projectRole="ngModel">
+                <mat-form-field appearance="outline" style="display:block">
+                    <mat-select [(ngModel)]="planUser.userId" name="user" placeholder="select a user" required #projectRole="ngModel"
+                    [disabled]="planUser.disabled" >
                         <mat-form-field class="w-100 px-3 "
-                        style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                        style="position: sticky; top: 0; z-index: 2; background-color: white;display:block">
                         <input matInput [(ngModel)]="searchUser" name="searchUserName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
                     </mat-form-field>
                         <mat-option *ngFor="let user of userList |listFilter:  'fullName' : searchUser : 'emailAddress'" [value]="user.id">
@@ -55,7 +56,7 @@
                 Role:
             </label>
             <div class="col-md-9">
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" style="display:block">
                     <mat-select [(ngModel)]="planUser.projectRole" name="projectRole" placeholder="select a role" required #projectRole="ngModel">
                         <mat-option *ngFor="let role of projectRoleList" [value]="APP_ENUM.ProjectUserRole[role]">
                             {{role}}</mat-option>
@@ -68,7 +69,7 @@
                 Start Date:
             </label>
             <div class="col-md-9">
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" style="display:block">
                     <input placeholder="Choose date" matInput [matDatepicker]="picker"  name="startDate" [(ngModel)]="planUser.startTime" #timeStart="ngModel" required />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
