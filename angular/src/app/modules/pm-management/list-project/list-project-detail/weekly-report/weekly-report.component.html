@@ -283,7 +283,7 @@
                                     *ngFor="let user of projectCurrentResource; let i =index">
                                     <td class="d-flex justify-content-between" style="border: none;width: 380px;">
                                         <div style="width: 80%;">
-                                            <app-user-info [userData]="{fullName:user.fullName,branch:0,
+                                            <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
                                                     userType:user.userType,avatarPath: user.avatarPath,
                                                      userLevel: user.userLevel}">
                                             </app-user-info>
@@ -391,7 +391,7 @@
                                                             class="d-flex justify-content-between">
                                                             <app-user-info
                                                                 style="width: -webkit-fill-available;"
-                                                                [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                [userData]="{fullName:report.fullName,branch:report.branch, userLevel: report.userLevel,
                                                                 userType:report.userType,emailAddress:report.emailAddress, avatarPath:report.avatarPath}">
                                                             </app-user-info>
 
@@ -562,7 +562,7 @@
                                                             class="d-flex justify-content-between">
                                                             <app-user-info
                                                                 style="width: -webkit-fill-available;"
-                                                                [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                [userData]="{fullName:report.fullName,branch:report.branch, userLevel: report.userLevel,
                                                         userType:report.userType,emailAddress:report.emailAddress,avatarPath: report.avatarPath}">
                                                             </app-user-info>
 
