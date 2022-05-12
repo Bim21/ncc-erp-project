@@ -33,6 +33,8 @@ namespace ProjectManagement.Authorization.Users
 
             return user;
         }
+
+        [MaxLength(256)]
         public string UserCode { set; get; }
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }

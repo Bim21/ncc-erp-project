@@ -1515,7 +1515,8 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<byte>("UserLevel")
                         .HasColumnType("tinyint");

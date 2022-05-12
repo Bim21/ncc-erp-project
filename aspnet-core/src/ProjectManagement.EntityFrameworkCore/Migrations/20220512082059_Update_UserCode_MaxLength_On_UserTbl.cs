@@ -2,13 +2,14 @@
 
 namespace ProjectManagement.Migrations
 {
-    public partial class Remove_MaxLength_From_UserCode_At_UserTbl : Migration
+    public partial class Update_UserCode_MaxLength_On_UserTbl : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "UserCode",
                 table: "AbpUsers",
+                maxLength: 256,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(12)",
@@ -25,6 +26,7 @@ namespace ProjectManagement.Migrations
                 maxLength: 12,
                 nullable: true,
                 oldClrType: typeof(string),
+                oldMaxLength: 256,
                 oldNullable: true);
         }
     }

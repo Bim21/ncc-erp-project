@@ -205,7 +205,7 @@ namespace ProjectManagement.Services.ResourceManager
 
 
         private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee,
-            KomuProjectInfoDto project, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject , ProjectUser futureU)
+            KomuProjectInfoDto projectToJoin, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject , ProjectUser futureU)
         {
             var sbKomuMessage = new StringBuilder();
             var currentPUs = await _workScope.GetAll<ProjectUser>()
@@ -289,7 +289,7 @@ namespace ProjectManagement.Services.ResourceManager
                 PMReportId = activeReportId,
                 ProjectRole = input.ProjectRole,
             };
-            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject, joinPU);
+            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, projectToJoin, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject, joinPU);
 
             await _workScope.InsertAsync(joinPU);
 
