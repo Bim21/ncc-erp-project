@@ -28,27 +28,25 @@ export class ResetPasswordDialogComponent extends AppComponentBase
   }
 
   ngOnInit() {
-    this.isLoading = true;
     this.resetPasswordDto = new ResetPasswordDto();
     this.resetPasswordDto.userId = this.data.id;
-    this.resetPasswordDto.newPassword = Math.random()
-      .toString(36)
-      .substr(2, 10);
-    this.isLoading = false;
   }
 
+  randomPassword() {
+    let passRandom = Math.random()
+      .toString(36)
+      .substr(2, 10);
+
+    this.resetPasswordDto.newPassword = passRandom;
+  }
   public resetPassword(): void {
     this.isLoading = true;
     this._userService
       .resetPassword(this.resetPasswordDto)
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
       .subscribe(() => {
         this.notify.success('Password reset successful');
-        this.dialogRef.close(this.resetPassword)
+        this.dialogRef.close(this.resetPassword);
+        this.isLoading = false;
       });
   }
 }

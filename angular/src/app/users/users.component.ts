@@ -190,11 +190,6 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
       width: "700px",
       disableClose: true,
     });
-    showCreate.afterClosed().subscribe(res => {
-      if (res) {
-        this.refresh()
-      }
-    })
   }
   getAllSkills() {
     this.skillService.getAll().subscribe((data) => {
