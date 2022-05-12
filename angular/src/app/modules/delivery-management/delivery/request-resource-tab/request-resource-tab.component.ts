@@ -313,7 +313,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.skillIds = []
     this.selectedLevel = -1
     this.selectedStatus = -1
-    this.changeSortableByName('priority', 'ASC')
+    this.changeSortableByName('priority', 'DESC')
     this.sortable = new SortableModel('',0,'')
     this.refresh()
   }
