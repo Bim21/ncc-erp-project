@@ -4,44 +4,50 @@ using Abp.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NccCore.Helper;
+using NccCore.IoC;
 using NccCore.Uitls;
 using ProjectManagement.APIs.HRM.Dto;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
+using ProjectManagement.Entities;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Utils;
+using ProjectManagement.Services.ResourceService.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManagement.APIs.HRM
 {
     public class HRMAppService : ProjectManagementAppServiceBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly RoleManager _roleManager;
-        private ISettingManager _settingManager;
         private KomuService _komuService;
+        private readonly ResourceManager _resourceManager;
+
         public HRMAppService(IHttpContextAccessor httpContextAccessor, RoleManager roleManager, KomuService komuService,
+            ResourceManager resourceManager,
             ISettingManager settingManager)
         {
             _httpContextAccessor = httpContextAccessor;
-            _roleManager = roleManager;
             _komuService = komuService;
-            _settingManager = settingManager;
+            _resourceManager = resourceManager;
         }
 
         [AbpAllowAnonymous]
         [HttpPost]
         public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto model)
         {
-            if (!CheckSecurityCode())
-            {
-                throw new UserFriendlyException("SecretCode does not match!");
-            }
+            CheckSecurityCode();
+
             var user = new User
             {
                 UserName = model.EmailAddress.ToLower(),
@@ -57,10 +63,10 @@ namespace ProjectManagement.APIs.HRM
                 Password = RandomPasswordHelper.CreateRandomPassword(8),
                 UserCode = model.UserCode
             };
-            model.Id = await WorkScope.InsertAndGetIdAsync(user);           
+            model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
-            var message = $"Welcome các nhân viên mới vào làm việc tại công ty, đó là **{userName ?? user.UserName}**.\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.";
-            await _komuService.NotifyToChannel(new KomuMessage
+            var message = $"Welcome new member **{userName ?? user.UserName}** [{CommonUtil.BranchName(user.Branch)}]({CommonUtil.UserTypeName(user.UserType)} - {CommonUtil.UserLevelName(user.UserLevel)}) to NCC.";
+            _komuService.NotifyToChannel(new KomuMessage
             {
                 UserName = userName ?? user.UserName,
                 Message = message,
@@ -68,19 +74,270 @@ namespace ProjectManagement.APIs.HRM
             }, ChannelTypeConstant.GENERAL_CHANNEL);
             return model;
         }
-        #region API HELPER
-        private bool CheckSecurityCode()
+
+        [AbpAllowAnonymous]
+        [HttpPost]
+        public async Task UpdateUserFromHRM(UpdateUserFromHRMDto input)
+        {
+            CheckSecurityCode();
+            var user = await WorkScope.GetAll<User>()
+                .Where(x => x.EmailAddress.ToLower().Trim() == input.EmailAddress.ToLower().Trim())
+                .FirstOrDefaultAsync();
+            if (user != null)
+            {
+                user.UserName = input.EmailAddress;
+                user.Name = input.Name;
+                user.Surname = input.Surname;
+                user.EmailAddress = input.EmailAddress;
+                user.UserType = input.UserType;
+                user.UserLevel = input.UserLevel;
+                user.Branch = input.Branch;
+            }
+            await WorkScope.UpdateAsync(user);
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task<string> PlanUserQuitJob(PlanAndConfirmUserDto input)
+        {
+            CheckSecurityCode();
+            await PlanUserFromHRMToProject(input, AppConsts.CHO_NGHI_PROJECT_CODE);
+            return "Successful plan user to project CHO_NGHI";
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task<string> ConfirmUserQuitJob(PlanAndConfirmUserDto input)
+        {
+            CheckSecurityCode();
+            var user = WorkScope.GetAll<User>()
+               .Where(x => x.EmailAddress.ToLower().Trim() == input.Email.ToLower().Trim())
+               .FirstOrDefault();
+
+            if (user == default)
+            {
+                return "PROJECT tool: Not found user with email " + input.Email;
+            }
+
+            var employee = new KomuUserInfoDto
+            {
+                FullName = user.FullName,
+                UserId = user.Id,
+                KomuUserId = user.KomuUserId,
+                UserName = user.UserName
+            };
+            var activeReportId = await _resourceManager.GetActiveReportId();
+            var sb = await _resourceManager.ReleaseUserFromAllWorkingProjectsByHRM(employee, activeReportId, "Nghỉ việc từ HRM Tool");
+
+            user.IsActive = false;
+            await WorkScope.UpdateAsync(user);
+
+            sb.AppendLine($"{employee.KomuAccountInfo} quited job on {DateTimeUtils.ToString(input.StartTime)}");
+            sb.AppendLine("");
+
+            await SendKomu(sb);
+            return sb.ToString();
+
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task PlanUserMaternityLeave(PlanAndConfirmUserDto input)
+        {
+            CheckSecurityCode();
+            await PlanUserFromHRMToProject(input, AppConsts.NGHI_SINH_PROJECT_CODE);
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task<string> ConfirmUserMaternityLeave(PlanAndConfirmUserDto input)
+        {
+            CheckSecurityCode();
+
+            var employee = await _resourceManager.GetKomuUserInfo(input.Email.ToLower().Trim());
+
+            if (employee == default)
+            {
+                return "PROJECT tool: Not found user with email " + input.Email.ToLower().Trim();
+            }
+
+            var activeReportId = await _resourceManager.GetActiveReportId();
+            string note = "Nghỉ sinh từ HRM Tool";
+            var sb = await _resourceManager.ReleaseUserFromAllWorkingProjectsByHRM(employee, activeReportId, note);
+
+            var projectId = await GetProjectIdByCode(AppConsts.NGHI_SINH_PROJECT_CODE);
+
+            var pu = await processMaternityLeavePU(employee.UserId, projectId, note, activeReportId);
+
+            sb.AppendLine($"{employee.KomuAccountInfo} was **maternity leave** from {DateTimeUtils.ToString(pu.StartTime)}");
+            sb.AppendLine("");
+
+            await SendKomu(sb);
+            return sb.ToString();
+        }
+
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task ComfirmUserBackToWorkAfterQuitJob(ConfirmUserBackToWorkDto input)
+        {
+            CheckSecurityCode();
+            var user = WorkScope.GetAll<User>()
+              .Where(x => x.EmailAddress.ToLower().Trim() == input.EmailAddress.ToLower().Trim())
+              .FirstOrDefault();
+            user.IsActive = true;
+            await WorkScope.UpdateAsync(user);
+        }
+
+        private async Task<ProjectUser> processMaternityLeavePU(long userId, long projectId, string note, long activeReportId)
+        {
+            var pu = await WorkScope.GetAll<ProjectUser>()
+                .Where(s => s.Status == ProjectUserStatus.Future)
+                .Where(s => s.AllocatePercentage > 0)
+                .Where(s => s.UserId == userId)
+                .Where(s => s.Project.Code == AppConsts.NGHI_SINH_PROJECT_CODE)
+                .FirstOrDefaultAsync();
+            if (pu != default)
+            {
+                pu.Status = ProjectUserStatus.Present;
+                pu.StartTime = DateTimeUtils.GetNow();
+                pu.IsPool = true;
+                pu.PMReportId = activeReportId;
+                await WorkScope.UpdateAsync(pu);
+            }
+            else
+            {
+                pu = new ProjectUser
+                {
+                    UserId = userId,
+                    ProjectId = projectId,
+                    StartTime = DateTimeUtils.GetNow(),
+                    Status = ProjectUserStatus.Present,
+                    AllocatePercentage = 100,
+                    IsPool = true,
+                    PMReportId = activeReportId,
+                    Note = note
+                };
+                await WorkScope.InsertAsync(pu);
+            }
+            return pu;
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task<string> ConfirmMaternityUserComeBack(PlanAndConfirmUserDto input)
+        {
+            CheckSecurityCode();
+            var NghiSinhPU = await WorkScope.GetAll<ProjectUser>()
+                .Where(x => x.Project.Code == AppConsts.NGHI_SINH_PROJECT_CODE)
+                .Where(x => x.User.EmailAddress.ToLower().Trim() == input.Email.ToLower().Trim())
+                .Where(x => x.Status == ProjectUserStatus.Present)
+                .Where(x => x.AllocatePercentage > 0)
+                .FirstOrDefaultAsync();
+
+            if (NghiSinhPU == default)
+            {
+                return $"Not found present working PU with email: {input.Email}, ProjectCode {AppConsts.NGHI_SINH_PROJECT_CODE}";
+            }
+
+            var activeReportId = await _resourceManager.GetActiveReportId();
+
+            NghiSinhPU.Status = ProjectUserStatus.Past;
+            await WorkScope.UpdateAsync(NghiSinhPU);
+
+            NghiSinhPU.Status = ProjectUserStatus.Present;
+            NghiSinhPU.StartTime = DateTimeUtils.GetNow();
+            NghiSinhPU.PMReportId = activeReportId;
+            NghiSinhPU.AllocatePercentage = 0;
+            NghiSinhPU.Id = 0;
+
+            await WorkScope.InsertAsync(NghiSinhPU);
+           
+            var sb = new StringBuilder();
+            var employee = await _resourceManager.GetKomuUserInfo(input.Email);
+            sb.AppendLine($"{employee.KomuAccountInfo} come back to work on {DateTimeUtils.ToString(NghiSinhPU.StartTime)} after finishing **maternity leave**");
+            sb.AppendLine();
+            await SendKomu(sb);
+
+            return sb.ToString();
+        }
+
+        public IQueryable<ProjectUser> CheckExistPlanJoinPU(string email, string projectCode)
+        {
+            return WorkScope.GetAll<ProjectUser>()
+                .Where(x => x.Project.Code == projectCode)
+                .Where(x => x.User.EmailAddress.ToLower().Trim() == email.ToLower().Trim())
+                .Where(x => x.Status == ProjectUserStatus.Future)
+                .Where(x => x.AllocatePercentage > 0);
+        }
+
+        public async Task PlanUserFromHRMToProject(PlanAndConfirmUserDto input, string projectCode)
+        {
+            var activeReportId = await _resourceManager.GetActiveReportId();
+
+            var existPlanPU = await CheckExistPlanJoinPU(input.Email, projectCode).FirstOrDefaultAsync();
+            if (existPlanPU != default)
+            {                
+                existPlanPU.StartTime = input.StartTime;
+                existPlanPU.PMReportId = activeReportId;
+                await WorkScope.UpdateAsync(existPlanPU);
+            }
+            else
+            {
+                var projectId = await GetProjectIdByCode(projectCode);
+                var userId = await WorkScope.GetAll<User>()
+                    .Where(x => x.EmailAddress.ToLower().Trim() == input.Email.ToLower().Trim())
+                    .Select(x => x.Id)
+                    .FirstOrDefaultAsync();
+
+                var newPU = new ProjectUser
+                {
+                    StartTime = input.StartTime,
+                    ProjectId = projectId,
+                    Status = ProjectUserStatus.Future,
+                    AllocatePercentage = 100,
+                    UserId = userId,
+                    PMReportId = activeReportId,
+                    IsPool = projectCode == AppConsts.NGHI_SINH_PROJECT_CODE,//nghi sinh - temp -> xuat hien o pool
+                };
+                await WorkScope.InsertAsync(newPU);
+            }
+        }
+
+        private async Task<long> GetProjectIdByCode(string code)
+        {
+            return await WorkScope.GetAll<Project>()
+                .Where(s => s.Code == code)
+                .Select(s => s.Id)
+                .FirstOrDefaultAsync();
+        }
+
+        private async Task SendKomu(string komuMessage)
+        {
+             _komuService.NotifyToChannel(new KomuMessage
+            {
+                CreateDate = DateTimeUtils.GetNow(),
+                Message = komuMessage,
+            },
+            ChannelTypeConstant.PM_CHANNEL);
+        }
+
+        private async Task SendKomu(StringBuilder sb)
+        {
+            await SendKomu(sb.ToString());
+        }
+
+
+        private void CheckSecurityCode()
         {
             var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
             var header = _httpContextAccessor.HttpContext.Request.Headers;
-            var securityCodeHeader = header["X-Secret-Key"].ToString();            
+            var securityCodeHeader = header["X-Secret-Key"].ToString();
             if (secretCode == securityCodeHeader)
-                return true;
+                return;
 
-            Logger.Error("secretCode: " + secretCode.Substring(0, secretCode.Length / 2));
-            Logger.Error("securityCodeHeader: " + securityCodeHeader.Substring(0, securityCodeHeader.Length / 2));
-            return false;
+            throw new UserFriendlyException($"SecretCode does not match! {secretCode.Substring(0, secretCode.Length / 2)} != {securityCodeHeader.Substring(0, securityCodeHeader.Length / 2)}");
         }
-        #endregion
+       
     }
 }

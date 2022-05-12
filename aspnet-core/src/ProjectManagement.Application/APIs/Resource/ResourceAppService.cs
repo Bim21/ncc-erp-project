@@ -200,7 +200,7 @@ namespace ProjectManagement.APIs.Resource
                 komuMessage.Append($"**{pu.EmployeeName}** {pu.InOutString } **{pu.ProjectName}** ");
                 komuMessage.Append($"từ ngày **{projectUser.StartTime:dd/MM/yyyy}**, ");
 
-                await _komuService.NotifyToChannel(new KomuMessage
+                 _komuService.NotifyToChannel(new KomuMessage
                 {
                     CreateDate = DateTimeUtils.GetNow(),
                     Message = komuMessage.ToString(),

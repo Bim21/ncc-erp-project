@@ -9,7 +9,7 @@ namespace ProjectManagement.Services.ResourceService.Dto
     {
         public long ProjectId { get; set; }
         public string ProjectCode { get; set; }
-        public string ProjectName { get; set; }
+        public string ProjectName { get; set; }     
         public KomuUserInfoDto PM { get; set; }
         public ProjectStatus Status { get; set; }
         public string KomuProjectInfo {

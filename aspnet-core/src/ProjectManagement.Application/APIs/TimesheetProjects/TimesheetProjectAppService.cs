@@ -412,7 +412,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             message.AppendLine(titlelink);
             foreach (var username in komuUserNames)
             {
-                await _komuService.NotifyToChannel(new KomuMessage
+                 _komuService.NotifyToChannel(new KomuMessage
                 {
                     UserName = username,
                     Message = message.ToString(),

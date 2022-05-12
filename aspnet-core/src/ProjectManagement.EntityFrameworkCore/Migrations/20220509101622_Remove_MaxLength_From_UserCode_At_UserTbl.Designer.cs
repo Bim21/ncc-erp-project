@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.EntityFrameworkCore;
 
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    partial class ProjectManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220509101622_Remove_MaxLength_From_UserCode_At_UserTbl")]
+    partial class Remove_MaxLength_From_UserCode_At_UserTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2134,9 +2136,6 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte>("InvoiceDateSetting")
-                        .HasColumnType("tinyint");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -2150,14 +2149,8 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<byte>("PaymentDueBy")
-                        .HasColumnType("tinyint");
-
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
-
-                    b.Property<float>("TransferFee")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -2274,9 +2267,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("InvoicePaymentInfo")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2592,9 +2582,6 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("DetailDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Discount")
-                        .HasColumnType("real");
-
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -2606,9 +2593,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<long>("LastInvoiceNumber")
-                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -2917,6 +2901,9 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<long?>("DeleterUserId")
                         .HasColumnType("bigint");
@@ -3240,18 +3227,12 @@ namespace ProjectManagement.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Discount")
-                        .HasColumnType("real");
-
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("HistoryFile")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("InvoiceNumber")
-                        .HasColumnType("bigint");
 
                     b.Property<bool?>("IsComplete")
                         .HasColumnType("bit");
@@ -3281,12 +3262,6 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("TimesheetId")
                         .HasColumnType("bigint");
 
-                    b.Property<float>("TransferFee")
-                        .HasColumnType("real");
-
-                    b.Property<float>("WorkingDay")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
@@ -3309,17 +3284,14 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("BillRole")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ChargeType")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CurrencyId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Currency")
+                        .HasColumnType("int");
 
                     b.Property<long?>("DeleterUserId")
                         .HasColumnType("bigint");
@@ -3367,8 +3339,6 @@ namespace ProjectManagement.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
 
                     b.HasIndex("ProjectId");
 
@@ -3986,10 +3956,6 @@ namespace ProjectManagement.Migrations
 
             modelBuilder.Entity("ProjectManagement.Entities.TimesheetProjectBill", b =>
                 {
-                    b.HasOne("ProjectManagement.Entities.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId");
-
                     b.HasOne("ProjectManagement.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
