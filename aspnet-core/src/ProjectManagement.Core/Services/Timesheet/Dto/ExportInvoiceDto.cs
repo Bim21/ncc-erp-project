@@ -142,17 +142,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
         {
             get
             {
-                if (ChargeType == ChargeType.Daily)
-                {
-                    return WorkingDay * BillRate;
-                }
-
-                if (ChargeType == ChargeType.Hours)
-                {
-                    return WorkingDay * BillRate * DefaultWorkingHours;
-                }
-
-                return WorkingDay * BillRate / TimesheetWorkingDay;
+                return WorkingDayDisplay * BillRateDisplay;
             }
         }
     }

@@ -26,6 +26,7 @@ namespace ProjectManagement.Services.ResourceRequestService
         public IQueryable<GetResourceRequestDto> IQGetResourceRequest()
         {
             var query = from request in _workScope.GetAll<ResourceRequest>()
+                        orderby request.Priority descending, request.TimeNeed ascending
                         select new GetResourceRequestDto
                         {
                             DMNote = request.DMNote,

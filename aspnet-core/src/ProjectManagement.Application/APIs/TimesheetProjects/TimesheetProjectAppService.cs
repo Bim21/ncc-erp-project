@@ -188,7 +188,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 InvoiceNumber = invoiceNumber,
                 TransferFee = transferFee,
                 Discount = discount,
-                WorkingDay = workingDay
+                WorkingDay = workingDay,
+                Note = input.Note
             };
 
             return await WorkScope.InsertAsync(timesheetProject);
@@ -607,8 +608,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 invoiceSheet.Cells[rowIndex, 4].Value = tsUser.BillRateDisplay;
                 invoiceSheet.Cells[rowIndex, 5].Value = tsUser.CurrencyName + "/" + tsUser.ChargeTypeDisplay;
                 invoiceSheet.Cells[rowIndex, 6].Value = tsUser.WorkingDayDisplay;
-                invoiceSheet.Cells[rowIndex, 7].Formula = $"={tsUser.BillRateDisplay}*{tsUser.WorkingDayDisplay}";
-                sumLineTotal += tsUser.BillRateDisplay * tsUser.WorkingDayDisplay;
+                invoiceSheet.Cells[rowIndex, 7].Value = tsUser.LineTotal;
+                sumLineTotal += tsUser.LineTotal;
                 rowIndex++;
             }
 

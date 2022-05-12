@@ -43,7 +43,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public skillIds:number[]
   public theadTable: THeadTable[] = [
     {name: '#'},
-    {name: 'Priority', sortName: 'priority', defaultSort: 'ASC'},
+    {name: 'Priority', sortName: 'priority', defaultSort: 'DESC'},
     {name: 'Project', sortName: 'projectName', defaultSort: ''},
     {name: 'Skill'},
     {name: 'Level', sortName: 'level', defaultSort: ''},
@@ -60,7 +60,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public strNote: string
   public typePM: string
   public resourceRequestId: number
-  public sortable = new SortableModel('priority',0,'ASC')
+  public sortable = new SortableModel('',0,'')
 
   ResourceRequest_CreateNewRequest = PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest;
   ResourceRequest_View = PERMISSIONS_CONSTANT.ResourceRequest_View;
@@ -135,6 +135,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         if(index >= 0){
           this.listRequest[index] = rs
         }
+        this.refresh();
       }
     });
   }
@@ -313,7 +314,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.selectedLevel = -1
     this.selectedStatus = -1
     this.changeSortableByName('priority', 'ASC')
-    this.sortable = new SortableModel('priority',0,'ASC')
+    this.sortable = new SortableModel('',0,'')
     this.refresh()
   }
 

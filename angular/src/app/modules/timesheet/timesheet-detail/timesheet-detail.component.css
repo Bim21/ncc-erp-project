@@ -55,3 +55,6 @@ button.special span{
   padding-left: 25px;
   font-size: 14px;
 }
+#timesheet-detail ::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin {
+  margin-top: auto;
+}

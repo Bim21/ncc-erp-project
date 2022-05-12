@@ -107,7 +107,8 @@ namespace ProjectManagement.APIs.ResourceRequests
             var query = _resourceRequestManager.IQGetResourceRequest()
                 .Where(x => x.ProjectId == projectId)
                 .Where(s => !status.HasValue || s.Status == status)
-                .OrderByDescending(x => x.CreationTime);
+                .OrderByDescending(x => x.Priority)
+                .ThenBy(x => x.TimeNeed);
             return await query.ToListAsync();
         }
 
