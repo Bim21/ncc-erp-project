@@ -30,7 +30,7 @@ export class ResetPasswordDialogComponent extends AppComponentBase
   ngOnInit() {
     this.isLoading = true;
     this.resetPasswordDto = new ResetPasswordDto();
-    this.resetPasswordDto.userId = this.id;
+    this.resetPasswordDto.userId = this.data.id;
     this.resetPasswordDto.newPassword = Math.random()
       .toString(36)
       .substr(2, 10);
@@ -47,7 +47,7 @@ export class ResetPasswordDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info('Password Reset');
+        this.notify.success('Password reset successful');
         this.dialogRef.close(this.resetPassword)
       });
   }

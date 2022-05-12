@@ -111,7 +111,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   }
 
   public resetPassword(user: UserDto): void {
-    this.showResetPasswordUserDialog(user.id);
+    this.showResetPasswordUserDialog(user);
   }
 
   clearFilters(): void {
@@ -184,9 +184,9 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
     this.getAllSkills()
   }
 
-  private showResetPasswordUserDialog(id?: number): void {
+  private showResetPasswordUserDialog(user?: UserDto): void {
     const showCreate = this.dialog.open(ResetPasswordDialogComponent, {
-      data:{id:id},
+      data:user,
       width: "700px",
       disableClose: true,
     });
