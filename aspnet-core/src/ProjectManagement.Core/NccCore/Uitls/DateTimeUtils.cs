@@ -67,6 +67,11 @@ namespace NccCore.Uitls
             return Math.Abs(DateDiff(date1, date2));
         }
 
+        public static DateTime MinDate(DateTime date1, DateTime date2)
+        {
+            return date1.Ticks < date2.Ticks ? date1 : date2; ;
+        }
+
 
 
     }

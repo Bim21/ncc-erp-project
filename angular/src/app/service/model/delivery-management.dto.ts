@@ -75,6 +75,7 @@ export class planUserDto {
   fullName: string;
   isPool: boolean;
   allocatePercentage: number;
+  disabled: boolean;
 }
 export class editFutureResourceDto {
   fullName: string;
