@@ -46,26 +46,27 @@ namespace ProjectManagement.Services.Komu
             }
             return null;
         }
-        public async Task<HttpResponseMessage> NotifyToChannel(KomuMessage input, string channelType)
+        public async Task NotifyToChannel(KomuMessage input, string channelType)
         {
             if (!_enableSendToKomu)
             {
                 logger.LogInformation("_enableSendToKomu=false => stop");
-                return null;
             }
+
             if (!string.IsNullOrEmpty(channelUrl) && !string.IsNullOrEmpty(channelId))
             {
                 var contentString = new StringContent(JsonConvert.SerializeObject(new { message = input.Message, channelid = channelId }), Encoding.UTF8, "application/json");
-                return await PostAsync(channelUrl, contentString);
+                 Post(channelUrl, contentString);
             }
             else
             {
                 var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
-                return await PostAsync(channelType, contentString);
-            } 
+                 Post(channelType, contentString);
+
+            }
         }
         private async Task<HttpResponseMessage> PostAsync(string url, StringContent contentString)
-        {            
+        {
             url = _baseUrl + url;
             logger.LogInformation($"PostAsync() url={url}");
             httpClient.DefaultRequestHeaders.Clear();
@@ -87,7 +88,24 @@ namespace ProjectManagement.Services.Komu
                 //throw new UserFriendlyException("Connection to KOMU failed!");
                 return null;
             }
-            
+
+        }
+
+        private void Post(string url, StringContent contentString)
+        {
+            url = _baseUrl + url;
+            logger.LogInformation($"Post() url={url}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", _secretCode);
+            try
+            {
+                httpClient.PostAsync(url, contentString);
+            }
+            catch (Exception e)
+            {
+                logger.LogInformation($"Post() url={url}, Error={e.Message}");
+            }
+
         }
     }
 }

@@ -377,7 +377,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                 message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(pm.KomuUserId.HasValue ? "<@" + pm.KomuUserId + ">" : "**" + (pmUserName ?? pm.UserName) + "**")} release **{userName ?? user.UserName}** ra khỏi dự án **{project.Name}**.");
             else
                 message.AppendLine($"Từ ngày **{model.StartTime:dd/MM/yyyy}**, PM {(pm.KomuUserId.HasValue ? "<@" + pm.KomuUserId + ">" : "**" + (pmUserName ?? pm.UserName) + "**")} request **{userName ?? user.UserName}** làm việc ở dự án **{project.Name}**.");
-            await _komuService.NotifyToChannel(new KomuMessage
+            _komuService.NotifyToChannel(new KomuMessage
             {
                 UserName = pmUserName ?? pm.UserName,
                 Message = message.ToString(),

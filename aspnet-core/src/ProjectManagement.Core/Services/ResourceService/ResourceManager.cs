@@ -102,7 +102,7 @@ namespace ProjectManagement.Services.ResourceManager
                     SkillName = s.Skill.Name
                 }).ToList()
             })
-            .OrderByDescending(s => s.PUStatus == ProjectUserStatus.Present && s.AllocatePercentage> 0)
+            .OrderByDescending(s => s.PUStatus == ProjectUserStatus.Present && s.AllocatePercentage > 0)
             .ThenByDescending(s => s.StartTime);
 
             return queryPu;
@@ -158,10 +158,54 @@ namespace ProjectManagement.Services.ResourceManager
                 .Select(s => s.Id).FirstOrDefaultAsync();
         }
 
+        public async Task<StringBuilder> ReleaseUserFromAllWorkingProjectsByHRM(KomuUserInfoDto employee, long activeReportId, string outProjectNote)
+        {            
+            var sbKomuMessage = new StringBuilder();
+            var currentPUs = await _workScope.GetAll<ProjectUser>()
+             .Include(s => s.Project)
+             .Where(s => s.UserId == employee.UserId)
+             .Where(s => s.Status == ProjectUserStatus.Present)
+             .Where(s => s.AllocatePercentage > 0)
+             .ToListAsync();
+
+            if (currentPUs.IsEmpty())
+            {
+                return sbKomuMessage;
+            }
+
+
+            foreach (var pu in currentPUs)
+            {
+                //release user from current project
+                pu.PMReportId = activeReportId;
+                pu.Status = ProjectUserStatus.Past;
+
+                await _workScope.UpdateAsync(pu);
+
+                var outPU = new ProjectUser
+                {
+                    IsPool = pu.IsPool,
+                    UserId = pu.UserId,
+                    ProjectId = pu.ProjectId,
+                    Status = ProjectUserStatus.Present,
+                    AllocatePercentage = 0,
+                    StartTime = DateTimeUtils.GetNow(),
+                    PMReportId = activeReportId,
+                    ProjectRole = pu.ProjectRole,
+                    Note = outProjectNote,
+                };
+                await _workScope.InsertAsync(outPU);
+                sbKomuMessage.AppendLine($"{DateTimeUtils.ToString(outPU.StartTime)}: **HRM Tool** " +
+                    $"released {employee.KomuAccountInfo} from **{pu.Project.Name}** {CommonUtil.ProjectUserWorkTypeKomu(pu.IsPool)}");
+            }
+
+            return sbKomuMessage;
+        }
+
 
 
         private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee,
-            KomuProjectInfoDto project, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject , ProjectUser futureU)
+            KomuProjectInfoDto projectToJoin, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject , ProjectUser futureU)
         {
             var sbKomuMessage = new StringBuilder();
             var currentPUs = await _workScope.GetAll<ProjectUser>()
@@ -184,7 +228,7 @@ namespace ProjectManagement.Services.ResourceManager
             if (!currentPUs.IsEmpty())
             {
                 var isUserWorkingOnProject = currentPUs
-                .Where(s => s.ProjectId == project.ProjectId)
+                .Where(s => s.ProjectId == projectToJoin.ProjectId)
                 .Where(s => s.AllocatePercentage > 0)
                 .FirstOrDefault();
 
@@ -211,17 +255,12 @@ namespace ProjectManagement.Services.ResourceManager
                         StartTime = DateTimeUtils.MinDate(futureU.StartTime, DateTimeUtils.GetNow()),
                         PMReportId = activeReportId,
                         ProjectRole = pu.ProjectRole,
-                        Note = $"added to project {project.ProjectName} {CommonUtil.ProjectUserWorkType(pu.IsPool)} by {sessionUser.FullName}",
+                        Note = $"added to project {projectToJoin.ProjectName} {CommonUtil.ProjectUserWorkType(pu.IsPool)} by {sessionUser.FullName}",
                     };
                     await _workScope.InsertAsync(outPU);
                     sbKomuMessage.AppendLine($"{DateTimeUtils.ToString(outPU.StartTime)}: {sessionUser.KomuAccountInfo} " +
                         $"released {employee.KomuAccountInfo} from {pu.Project.Name} {CommonUtil.ProjectUserWorkTypeKomu(pu.IsPool)}");
                 }
-            }
-
-            if (project.ProjectCode == AppConsts.CHO_NGHI_PROJECT_CODE)
-            {
-                await _userManager.DeactiveUser(employee.UserId);
             }
 
             return sbKomuMessage;
@@ -233,9 +272,9 @@ namespace ProjectManagement.Services.ResourceManager
 
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(input.UserId);
-            var project = await GetKomuProjectInfo(input.ProjectId);
+            var projectToJoin = await GetKomuProjectInfo(input.ProjectId);
 
-            if (project.Status == ProjectStatus.Closed)
+            if (projectToJoin.Status == ProjectStatus.Closed)
             {
                 throw new UserFriendlyException("You can not add user to closed project");
             }
@@ -250,11 +289,15 @@ namespace ProjectManagement.Services.ResourceManager
                 PMReportId = activeReportId,
                 ProjectRole = input.ProjectRole,
             };
-            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject, joinPU);
+            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, projectToJoin, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject, joinPU);
 
             await _workScope.InsertAsync(joinPU);
 
-            await nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, project);
+            if (projectToJoin.ProjectCode == AppConsts.CHO_NGHI_PROJECT_CODE)
+            {
+                await _userManager.DeactiveUser(employee.UserId);
+            }
+            await nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
 
             return joinPU;
         }
@@ -319,6 +362,12 @@ namespace ProjectManagement.Services.ResourceManager
             futurePU.PMReportId = activeReportId;
 
             await _workScope.UpdateAsync(confirmPUExt.PU);
+
+            if (project.ProjectCode == AppConsts.CHO_NGHI_PROJECT_CODE)
+            {
+                await _userManager.DeactiveUser(employee.UserId);
+            }
+
             await nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
 
 
@@ -411,7 +460,7 @@ namespace ProjectManagement.Services.ResourceManager
 
 
         /// <summary>
-        /// Release working user from project
+        /// Release one working user from project
         /// if release date > now: plan release
         /// else: confirm release
         /// </summary>
@@ -549,7 +598,7 @@ namespace ProjectManagement.Services.ResourceManager
                          UserId = s.UserId,
                          UserName = s.User.UserName
                      }
-                     
+
                  })
                  .FirstOrDefaultAsync();
         }
@@ -838,7 +887,7 @@ namespace ProjectManagement.Services.ResourceManager
         {
             if (!projectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
             {
-                await _komuService.NotifyToChannel(new KomuMessage
+                 _komuService.NotifyToChannel(new KomuMessage
                 {
                     CreateDate = DateTimeUtils.GetNow(),
                     Message = komuMessage.ToString(),
@@ -856,6 +905,20 @@ namespace ProjectManagement.Services.ResourceManager
         {
             return await _workScope.GetAll<User>()
                 .Where(s => s.Id == userId)
+                .Select(s => new KomuUserInfoDto
+                {
+                    FullName = s.FullName,
+                    UserId = s.Id,
+                    KomuUserId = s.KomuUserId,
+                    UserName = s.UserName
+                }).FirstOrDefaultAsync();
+
+        }
+
+        public async Task<KomuUserInfoDto> GetKomuUserInfo(string emailAddress)
+        {
+            return await _workScope.GetAll<User>()
+                .Where(s => s.NormalizedEmailAddress == emailAddress.ToUpper().Trim())
                 .Select(s => new KomuUserInfoDto
                 {
                     FullName = s.FullName,

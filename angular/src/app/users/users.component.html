@@ -98,10 +98,11 @@
 
                 <td>
                   <p *ngFor="let project of user.workingProjects" class="mb-1">
-                    <strong>{{project.projectName}} </strong> 
+                    <strong>{{project.projectName}} </strong> <strong [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong>&nbsp;
                     <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
                       {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>  
                       <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date: "dd/MM/yyyy"}}</span>
+                      
                   </p>
                   <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!user.isshowProjectHistory" matTooltip="View project history"
                     (click)="getHistoryProjectsByUserId(user)"></i>

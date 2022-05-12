@@ -385,7 +385,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         private async Task SendKomu(StringBuilder komuMessage)
         {
 
-            await _komuService.NotifyToChannel(new KomuMessage
+             _komuService.NotifyToChannel(new KomuMessage
             {
                 CreateDate = DateTimeUtils.GetNow(),
                 Message = komuMessage.ToString(),

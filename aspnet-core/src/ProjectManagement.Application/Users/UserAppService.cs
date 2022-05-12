@@ -132,7 +132,9 @@ namespace ProjectManagement.Users
                             {
                                 ProjectName = p.Project.Name,
                                 ProjectRole = p.ProjectRole,
-                                StartTime = p.StartTime
+                                StartTime = p.StartTime,
+                                IsPool = p.IsPool
+                                
                             }).ToList(),
                         };
 
@@ -849,7 +851,7 @@ namespace ProjectManagement.Users
             {
                 komuMessage = komuMessage.Length >= 2 ? komuMessage.Remove(komuMessage.Length - 2, 2) : komuMessage;
                 komuMessage.Append("\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-                await _komuService.NotifyToChannel(new KomuMessage
+                 _komuService.NotifyToChannel(new KomuMessage
                 {
                     Message = komuMessage.ToString(),
                     CreateDate = DateTimeUtils.GetNow(),
