@@ -69,7 +69,7 @@ namespace NccCore.Uitls
 
         public static DateTime MinDate(DateTime date1, DateTime date2)
         {
-            return new DateTime(Math.Min(date1.Ticks, date2.Ticks));
+            return date1.Ticks < date2.Ticks ? date1 : date2; ;
         }
 
 
