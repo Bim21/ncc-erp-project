@@ -733,14 +733,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       option = {
         width: '90%',
         title: {
-          text: 'Timesheet'
+          text: 'Timesheet',
+          show:false
         },
         tooltip: {
           trigger: 'axis'
         },
         legend: {
-          left:'25%',
-          width:'80%',
+          itemGap: 4,
+          left:'10%',
+          right:'0',
+          padding: [0, 0, 0, 0],
           data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
           `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
@@ -1095,8 +1098,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         tooltip: {
           trigger: 'axis',
         },
-        title: {
-          text: 'Bill info'
+        title: {        
+          text: 'Bill info',
+          show:false
         },
         grid: {
           left: '3%',

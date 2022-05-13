@@ -312,9 +312,9 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.searchText = ''
     this.skillIds = []
     this.selectedLevel = -1
-    this.selectedStatus = -1
+    this.selectedStatus = 0
     this.changeSortableByName('priority', 'DESC')
-    this.sortable = new SortableModel('',0,'')
+    this.sortable = new SortableModel('',1,'')
     this.refresh()
   }
 
@@ -325,7 +325,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       this.sortable = new SortableModel('timeDone', 1, 'DESC')
       this.changeSortableByName('','')
     }
-    this.refresh()
+    this.getDataPage(1);
   }
 
   sortTable(event: any){

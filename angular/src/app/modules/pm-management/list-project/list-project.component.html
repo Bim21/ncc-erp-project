@@ -47,7 +47,7 @@
                                     <mat-label>PM</mat-label>
 
                                     <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
-                                        (selectionChange)="refresh()"
+                                        (selectionChange)="getDataPage(1)"
                                         [disabled]="!isEnablePMFilter()">
                                         <mat-form-field class="w-100 px-3 "
                                             style="position: sticky; top: 0; z-index: 2; background-color: white;">
@@ -69,7 +69,7 @@
                                 <mat-form-field appearance="outline" class="listStatus">
                                     <mat-label>Status</mat-label>
                                     <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"
-                                        (selectionChange)="refresh()">
+                                        (selectionChange)="getDataPage(1)">
                                         <mat-option value="-1">All</mat-option>
                                         <mat-option *ngFor="let item of statusFilterList" [value]="item.value">
                                             {{item.displayName}}</mat-option>

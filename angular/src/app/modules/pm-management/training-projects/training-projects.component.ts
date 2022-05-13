@@ -147,7 +147,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
-    this.refresh();    
+    this.getDataPage(1);    
   }
   public isEnablePMFilter(){
     return this.permission.isGranted(this.Projects_TrainingProjects_ViewAllProject)

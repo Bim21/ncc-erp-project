@@ -133,7 +133,7 @@
             <label class="col-md-3 col-form-label mt-2" for="chargeType">Charge Type: </label>
             <div class="col-md-9 pt-2">
                 <mat-form-field class="w-100" appearance="outline">
-                    <mat-select [(ngModel)]="project.chargeType" name="chargeType" placeholder="Select currency"  #chargeType="ngModel" required>
+                    <mat-select [(ngModel)]="project.chargeType" name="chargeType" placeholder="Select charge type"  #chargeType="ngModel" required>
                         <mat-option *ngFor="let type of chargeTypeList" [value]="APP_ENUM.ChargeType[type]">
                             {{type}}
                         </mat-option>

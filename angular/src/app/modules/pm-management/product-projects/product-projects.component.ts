@@ -144,7 +144,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
-    this.refresh();    
+    this.getDataPage(1);    
   }
   public isEnablePMFilter(){
     return this.permission.isGranted(this.Projects_ProductProjects_ViewAllProject)
