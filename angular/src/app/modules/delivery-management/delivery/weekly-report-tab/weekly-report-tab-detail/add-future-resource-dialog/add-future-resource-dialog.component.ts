@@ -24,6 +24,7 @@ export class AddFutureResourceDialogComponent extends AppComponentBase implement
   public tomorrowDate = new Date();
   public userList: any[] = [];
   public searchUser:string = "";
+  public isEdittingPlan:boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private resourceService: ResourceManagerService,
@@ -32,7 +33,6 @@ export class AddFutureResourceDialogComponent extends AppComponentBase implement
     private projectUserService: ProjectUserService) { super(injector) }
 
   ngOnInit(): void {
-    console.log(this.data)
     this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
     if (this.data.command != "edit") {
       this.planUser.projectId = this.data.projectId
@@ -40,7 +40,8 @@ export class AddFutureResourceDialogComponent extends AppComponentBase implement
       this.planUser.isPool = false;
     }
     else {
-      this.planUser = this.data.item
+      this.planUser = this.data.item;
+      this.isEdittingPlan = true;
     }
     this.getAllUser()
   }

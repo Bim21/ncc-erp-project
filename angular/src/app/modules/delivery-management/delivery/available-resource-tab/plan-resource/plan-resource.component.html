@@ -22,9 +22,9 @@
                         <div class="col-3 row justify-content-end">
                             <label for="" style="margin-top: 13px;" class="col-3 text-right">Skills:</label>
                             <mat-form-field style="width: 300px;" class="col-9" appearance="outline">
-                                <mat-select placeholder="select skill" multiple (selectionChange)="refresh()" [(ngModel)]="selectedSkillId">
+                                <mat-select placeholder="select skill" multiple (selectionChange)="getDataPage(1)" [(ngModel)]="selectedSkillId">
                                     <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
-                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
+                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="getDataPage(1)" style=" width: 100%;">
                                             <div class="col-4">
                                                 <label style=" white-space: nowrap;" class="mt-2 mr-2">Search
                                                     type:</label>

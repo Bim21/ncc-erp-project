@@ -91,7 +91,7 @@
                                     </div>
                                     <div class="col-md-10 col-xl-8 rsp-group-form-field">
                                         <mat-form-field appearance="outline" class="rsp-form-field">
-                                            <mat-select [(ngModel)]="selectedLevel" (selectionChange)="refresh()">
+                                            <mat-select [(ngModel)]="selectedLevel" (selectionChange)="getDataPage(1)">
                                                 <mat-option [value]="-1">All</mat-option>
                                                 <mat-option *ngFor="let level of listLevels"
                                                     [value]="level.id">
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="col-md-10 col-xl-8 rsp-group-form-field">
                                         <mat-form-field appearance="outline" class="rsp-form-field">
-                                            <mat-select placeholder="search skill" multiple (selectionChange)="refresh()" [(ngModel)]="skillIds">
+                                            <mat-select placeholder="search skill" multiple (selectionChange)="getDataPage(1)" [(ngModel)]="skillIds">
                                                 <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
                                                     <mat-radio-group aria-label="Filter by" class="w-100 px-3  row" [(ngModel)]="isAndCondition" (ngModelChange)="refresh()" style=" width: 100%;">
                                                         <div class="col-4">

@@ -23,12 +23,12 @@
                         <div class="col-3 row justify-content-end">
                             <label for="" style="margin-top: 13px;" class="col-3 text-right">Skills:</label>
                             <mat-form-field style="width: 300px;" class="col-9" appearance="outline">
-                                <mat-select placeholder="search skill" multiple (selectionChange)="refresh()"
+                                <mat-select placeholder="search skill" multiple (selectionChange)="getDataPage(1)"
                                     [(ngModel)]="selectedSkillId">
                                     <div style="width: 334px;"
                                         style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
                                         <mat-radio-group aria-label="Filter by" class="w-100 px-3  row"
-                                            [(ngModel)]="isAndCondition" (ngModelChange)="refresh()"
+                                            [(ngModel)]="isAndCondition" (ngModelChange)="getDataPage(1)"
                                             style=" width: 100%;">
                                             <div class="col-4">
                                                 <label style=" white-space: nowrap;" class="mt-2 mr-2">Search
@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-1">
                             <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0"
-                                (click)="selectedSkillId = null; refresh()"></i>
+                                (click)="selectedSkillId = null; getDataPage(1)"></i>
                         </div>
                     </div>
 

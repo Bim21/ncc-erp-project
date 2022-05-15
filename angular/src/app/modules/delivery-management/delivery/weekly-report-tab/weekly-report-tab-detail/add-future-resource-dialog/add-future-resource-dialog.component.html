@@ -18,7 +18,7 @@
             <div class="col-md-9">
                 <mat-form-field appearance="outline" style="display:block">
                     <mat-select [(ngModel)]="planUser.userId" name="user" placeholder="select a user" required #projectRole="ngModel"
-                    [disabled]="planUser.disabled" >
+                    [disabled]="isEdittingPlan" >
                         <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;display:block">
                         <input matInput [(ngModel)]="searchUser" name="searchUserName" placeholder="Search" #search (keydown)="$event.stopPropagation()">{{search.focus()}}
