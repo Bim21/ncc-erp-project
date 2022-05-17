@@ -47,7 +47,13 @@ namespace ProjectManagement.APIs.HRM
         public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto model)
         {
             CheckSecurityCode();
+            var existUser =  WorkScope.GetAll<User>()
+                .Where(x => x.EmailAddress.ToLower().Trim() == model.EmailAddress.ToLower().Trim());
 
+            if (existUser.Any())
+            {
+                throw new UserFriendlyException("failed to create user from HRM, this user is already exist");
+            }
             var user = new User
             {
                 UserName = model.EmailAddress.ToLower(),
@@ -119,6 +125,37 @@ namespace ProjectManagement.APIs.HRM
                 return "PROJECT tool: Not found user with email " + input.Email;
             }
 
+            var currentPlanForUser = WorkScope.GetAll<ProjectUser>()
+              .Where(x => x.User.EmailAddress.ToLower().Trim() == input.Email.ToLower().Trim())
+              .Where(x => x.Status == ProjectUserStatus.Future)
+              .Where(x => x.Project.Code == AppConsts.CHO_NGHI_PROJECT_CODE)
+              .FirstOrDefault();
+
+            var ChoNghiproject = await WorkScope.GetAll<Project>()
+                .Where(x => x.Code == AppConsts.CHO_NGHI_PROJECT_CODE)
+                .FirstOrDefaultAsync();
+            var activeReportId = await _resourceManager.GetActiveReportId();
+
+            if (currentPlanForUser != default)
+            {
+                currentPlanForUser.Status = ProjectUserStatus.Present;
+                await WorkScope.UpdateAsync(currentPlanForUser);
+            }
+            else
+            {
+                var newPU = new ProjectUser
+                {
+                    IsPool = false,
+                    UserId = user.Id,
+                    ProjectId = ChoNghiproject.Id,
+                    Status = ProjectUserStatus.Present,
+                    AllocatePercentage = 100,
+                    StartTime = input.StartTime,
+                    PMReportId = activeReportId
+                };
+                await WorkScope.InsertAsync(newPU);
+            }
+
             var employee = new KomuUserInfoDto
             {
                 FullName = user.FullName,
@@ -126,7 +163,6 @@ namespace ProjectManagement.APIs.HRM
                 KomuUserId = user.KomuUserId,
                 UserName = user.UserName
             };
-            var activeReportId = await _resourceManager.GetActiveReportId();
             var sb = await _resourceManager.ReleaseUserFromAllWorkingProjectsByHRM(employee, activeReportId, "Nghỉ việc từ HRM Tool");
 
             user.IsActive = false;
@@ -182,9 +218,21 @@ namespace ProjectManagement.APIs.HRM
         public async Task ComfirmUserBackToWorkAfterQuitJob(ConfirmUserBackToWorkDto input)
         {
             CheckSecurityCode();
+            long activeReportId = await _resourceManager.GetActiveReportId();
+
             var user = WorkScope.GetAll<User>()
               .Where(x => x.EmailAddress.ToLower().Trim() == input.EmailAddress.ToLower().Trim())
               .FirstOrDefault();
+
+            var employee = new KomuUserInfoDto
+            {
+                FullName = user.FullName,
+                UserId = user.Id,
+                KomuUserId = user.KomuUserId,
+                UserName = user.UserName
+            };
+            await _resourceManager.ReleaseUserFromAllWorkingProjectsByHRM(employee, activeReportId, "account recovery from HRM");
+
             user.IsActive = true;
             await WorkScope.UpdateAsync(user);
         }
