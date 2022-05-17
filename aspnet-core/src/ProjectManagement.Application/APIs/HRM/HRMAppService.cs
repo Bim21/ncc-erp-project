@@ -52,7 +52,7 @@ namespace ProjectManagement.APIs.HRM
 
             if (existUser.Any())
             {
-                throw new UserFriendlyException("failed to create user from HRM, this user is already exist");
+                throw new UserFriendlyException($"failed to create user from HRM, user with email {model.EmailAddress} is already exist");
             }
             var user = new User
             {
