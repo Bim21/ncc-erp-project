@@ -215,7 +215,7 @@ namespace ProjectManagement.APIs.HRM
 
             var projectId = await GetProjectIdByCode(AppConsts.NGHI_SINH_PROJECT_CODE);
 
-            var pu = await processMaternityLeavePU(employee.UserId, projectId, note, activeReportId);
+            var pu = await processMaternityLeavePU(employee.UserId, projectId, note, activeReportId, input.StartTime);
 
             sb.AppendLine($"{employee.KomuAccountInfo} was **maternity leave** from {DateTimeUtils.ToString(pu.StartTime)}");
             sb.AppendLine("");
@@ -249,7 +249,7 @@ namespace ProjectManagement.APIs.HRM
             await WorkScope.UpdateAsync(user);
         }
 
-        private async Task<ProjectUser> processMaternityLeavePU(long userId, long projectId, string note, long activeReportId)
+        private async Task<ProjectUser> processMaternityLeavePU(long userId, long projectId, string note, long activeReportId, DateTime startTime)
         {
             var pu = await WorkScope.GetAll<ProjectUser>()
                 .Where(s => s.Status == ProjectUserStatus.Future)
@@ -260,7 +260,7 @@ namespace ProjectManagement.APIs.HRM
             if (pu != default)
             {
                 pu.Status = ProjectUserStatus.Present;
-                pu.StartTime = DateTimeUtils.GetNow();
+                pu.StartTime = startTime;
                 pu.IsPool = true;
                 pu.PMReportId = activeReportId;
                 await WorkScope.UpdateAsync(pu);
@@ -271,7 +271,7 @@ namespace ProjectManagement.APIs.HRM
                 {
                     UserId = userId,
                     ProjectId = projectId,
-                    StartTime = DateTimeUtils.GetNow(),
+                    StartTime = startTime,
                     Status = ProjectUserStatus.Present,
                     AllocatePercentage = 100,
                     IsPool = true,
