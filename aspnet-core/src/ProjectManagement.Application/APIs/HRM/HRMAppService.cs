@@ -71,13 +71,25 @@ namespace ProjectManagement.APIs.HRM
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
-            var message = $"Welcome new member **{userName ?? user.UserName}** [{CommonUtil.BranchName(user.Branch)}]({CommonUtil.UserTypeName(user.UserType)} - {CommonUtil.UserLevelName(user.UserLevel)}) to NCC.";
+            var messageToGeneral = $"Welcome **{userName}** [{CommonUtil.BranchName(user.Branch)}] to **NCC**"; 
+            
+           
             _komuService.NotifyToChannel(new KomuMessage
             {
-                UserName = userName ?? user.UserName,
-                Message = message,
+                UserName = userName,
+                Message = messageToGeneral,
                 CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.GENERAL_CHANNEL);
+
+            var messageToPM = $"@here HR has onboarded: **{userName}** [{CommonUtil.BranchName(user.Branch)}](**{CommonUtil.UserLevelName(user.UserLevel)}**)";
+
+            _komuService.NotifyToChannel(new KomuMessage
+            {
+                UserName = userName ,
+                Message = messageToPM,
+                CreateDate = DateTimeUtils.GetNow(),
+            }, ChannelTypeConstant.PM_CHANNEL);
+
             return model;
         }
 
