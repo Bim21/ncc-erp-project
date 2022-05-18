@@ -297,19 +297,19 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 await _userManager.DeactiveUser(employee.UserId);
             }
-            await nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
+            nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
 
             return joinPU;
         }
 
-        private async Task nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
+        private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
         {
             sbKomuMessage.AppendLine();
             sbKomuMessage.Append($"{sessionUser.KomuAccountInfo} confirmed {employee.KomuAccountInfo} ");
             sbKomuMessage.Append($"work in {project.KomuProjectInfo} {CommonUtil.ProjectUserWorkTypeKomu(joinPU.IsPool)} ");
             sbKomuMessage.Append($"on {DateTimeUtils.ToString(joinPU.StartTime)}");
 
-            await SendKomu(sbKomuMessage, project.ProjectCode);
+            SendKomu(sbKomuMessage, project.ProjectCode);
 
         }
 
@@ -351,7 +351,7 @@ namespace ProjectManagement.Services.ResourceManager
                  .Where(s => s.Id == resourceRequest.Id)
                  .FirstOrDefaultAsync();
 
-                await nofityKomuDoneResourceRequest(listRequestDto, sessionUser, project);
+                nofityKomuDoneResourceRequest(listRequestDto, sessionUser, project);
             }
 
           
@@ -368,21 +368,21 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
 
-            await nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
+            nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
 
 
             return confirmPUExt;
 
         }
 
-        public async Task nofityKomuDoneResourceRequest(GetResourceRequestDto listRequestDto, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
+        public void nofityKomuDoneResourceRequest(GetResourceRequestDto listRequestDto, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
         {
             StringBuilder setDoneKomuMessage = new StringBuilder();
             setDoneKomuMessage.AppendLine($"{sessionUser.KomuAccountInfo} set DONE for request:");
             setDoneKomuMessage.AppendLine($"{listRequestDto.KomuInfo()} ");
             setDoneKomuMessage.AppendLine("");
 
-            await SendKomu(setDoneKomuMessage, project.ProjectCode);
+            SendKomu(setDoneKomuMessage, project.ProjectCode);
         }
 
 
@@ -450,7 +450,7 @@ namespace ProjectManagement.Services.ResourceManager
             sbKomuMessage.Append($"{DateTimeUtils.ToString(outPU.StartTime)}: {sessionUser.KomuAccountInfo} ");
             sbKomuMessage.Append($"released {employee.KomuAccountInfo} from {project.KomuProjectInfo} {CommonUtil.ProjectUserWorkTypeKomu(outPU.IsPool)}");
 
-            await SendKomu(sbKomuMessage, project.ProjectCode);
+            SendKomu(sbKomuMessage, project.ProjectCode);
 
             return outPU;
         }
@@ -511,7 +511,7 @@ namespace ProjectManagement.Services.ResourceManager
             sbKomuMessage.Append($"from {presentPU.Project.KomuProjectInfo} {CommonUtil.ProjectUserWorkTypeKomu(releasePU.IsPool)} ");
             sbKomuMessage.Append($"on {DateTimeUtils.ToString(releasePU.StartTime)}");
 
-            await SendKomu(sbKomuMessage, presentPU.Project.ProjectCode);
+            SendKomu(sbKomuMessage, presentPU.Project.ProjectCode);
 
             return releasePU;
 
@@ -566,7 +566,7 @@ namespace ProjectManagement.Services.ResourceManager
             sbKomuMessage.Append($"{CommonUtil.JoinOrOutProject(pu.AllocatePercentage)} {project.KomuProjectInfo} {CommonUtil.ProjectUserWorkTypeKomu(pu.IsPool)} ");
             sbKomuMessage.Append($"on {DateTimeUtils.ToString(pu.StartTime)}");
 
-            await SendKomu(sbKomuMessage, project.ProjectCode);
+            SendKomu(sbKomuMessage, project.ProjectCode);
         }
 
         public async Task<ProjectUserExt> GetPUExt(long id)
@@ -625,7 +625,7 @@ namespace ProjectManagement.Services.ResourceManager
             sbKomuMessage.Append($"{CommonUtil.JoinOrOutProject(puExt.PU.AllocatePercentage)} {puExt.Project.KomuProjectInfo} ");
             sbKomuMessage.Append($"{CommonUtil.ProjectUserWorkTypeKomu(puExt.PU.IsPool)} on {DateTimeUtils.ToString(puExt.PU.StartTime)}");
 
-            await SendKomu(sbKomuMessage, puExt.Project.ProjectCode);
+            SendKomu(sbKomuMessage, puExt.Project.ProjectCode);
 
             return puExt;
         }
@@ -883,7 +883,7 @@ namespace ProjectManagement.Services.ResourceManager
             return await query.GetGridResult(query, input);
         }
 
-        public async Task SendKomu(StringBuilder komuMessage, string projectCode)
+        public void SendKomu(StringBuilder komuMessage, string projectCode)
         {
             if (!projectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
             {

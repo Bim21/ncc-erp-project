@@ -46,7 +46,7 @@ namespace ProjectManagement.Services.Komu
             }
             return null;
         }
-        public async Task NotifyToChannel(KomuMessage input, string channelType)
+        public void NotifyToChannel(KomuMessage input, string channelType)
         {
             if (!_enableSendToKomu)
             {
