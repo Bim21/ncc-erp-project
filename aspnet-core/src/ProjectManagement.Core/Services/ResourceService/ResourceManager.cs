@@ -227,12 +227,13 @@ namespace ProjectManagement.Services.ResourceManager
             }
             if (!currentPUs.IsEmpty())
             {
-                var isUserWorkingOnProject = currentPUs
+                var isPoolInProjectToJoin = currentPUs
                 .Where(s => s.ProjectId == projectToJoin.ProjectId)
                 .Where(s => s.AllocatePercentage > 0)
+                .Select(s => s.IsPool)
                 .FirstOrDefault();
 
-                if (isUserWorkingOnProject.IsPool == isPresentPool)
+                if (isPoolInProjectToJoin != default && isPoolInProjectToJoin == isPresentPool)
                 {
                    throw new UserFriendlyException("This user is already working on this project!");
                 }
