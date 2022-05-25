@@ -76,7 +76,23 @@ namespace ProjectManagement.APIs.PMReportProjects
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                     TotalOverTime = x.TotalOverTime
                 }).OrderBy(x => x.PmFullName);
-            return await query.ToListAsync();
+            var list = await query.ToListAsync();
+
+            return shuffleList(list);
+        }
+
+        private List<GetPMReportProjectDto> shuffleList(List<GetPMReportProjectDto> list)
+        {
+            if (list == null || list.IsEmpty())
+            {
+                return null;
+            }
+            var rnd = new Random();
+            var dicPMIdToRandomValue = list.Select(s => s.PMId)
+                .Distinct()
+                .ToDictionary(k => k, v => rnd.Next());
+
+            return list.OrderBy(s => dicPMIdToRandomValue[s.PMId]).ToList();
         }
 
         [HttpGet]
@@ -162,7 +178,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<GetResultpmReportProjectIssue> ProblemsOfTheWeekForReport(long ProjectId, long pmReportId)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
-            if(pmReportProject == null)
+            if (pmReportProject == null)
             {
                 throw new UserFriendlyException("This project don't have report for this week");
             }
@@ -221,10 +237,11 @@ namespace ProjectManagement.APIs.PMReportProjects
             if (pmReportProject.Status == PMReportProjectIssueStatus.InProgress)
             {
                 pmReportProject.Status = PMReportProjectIssueStatus.Done;
-            }else
+            }
+            else
             {
                 pmReportProject.Status = PMReportProjectIssueStatus.InProgress;
-            }          
+            }
             await WorkScope.UpdateAsync(pmReportProject);
 
         }
