@@ -642,6 +642,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 invoiceSheet.Cells["B" + indexPayment].Value = arrPaymentInfo[i];
                 indexPayment++;
             }
+
+            invoiceSheet.Cells["B" + indexPayment].Value = $"Payment Reference: {data.Info.InvoiceNumber}";
+
         }
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoice)]
         public async Task<FileBase64Dto> ExportInvoice(InputExportInvoiceDto input)
