@@ -413,7 +413,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             message.AppendLine(titlelink);
             foreach (var username in komuUserNames)
             {
-                 _komuService.NotifyToChannel(new KomuMessage
+                _komuService.NotifyToChannel(new KomuMessage
                 {
                     UserName = username,
                     Message = message.ToString(),
@@ -613,27 +613,21 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 rowIndex++;
             }
 
-            var invoiceNetTotal = sumLineTotal + data.Info.TransferFee;
-            var invoiceTotal = invoiceNetTotal - (data.Info.Discount * invoiceNetTotal) / 100;
-            invoiceSheet.Cells["F6:I6"].Value = data.Info.ClientName;
-            invoiceSheet.Cells["F7:I7"].Value = data.Info.ClientAddress;
-            invoiceSheet.Cells["C2"].Value = data.Info.InvoiceNumber;
-            invoiceSheet.Cells["B3"].Value = data.Info.InvoiceDateStr();
-            invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {data.Info.PaymentDueByStr()}";
+            var netTotal = sumLineTotal;
+            var invoiceTotal = netTotal + data.Info.TransferFee - (data.Info.Discount * netTotal) / 100;
+            invoiceSheet.Cells["ClientName"].Value = data.Info.ClientName;
+            invoiceSheet.Cells["ClientAddress"].Value = data.Info.ClientAddress;
+            invoiceSheet.Cells["InvoiceNumber"].Value = data.Info.InvoiceNumber;
+            invoiceSheet.Cells["InvoiceDate"].Value = data.Info.InvoiceDateStr();
+            invoiceSheet.Cells["PaymentDueBy"].Value = $"PAYMENT DUE BY: {data.Info.PaymentDueByStr()}";
             invoiceSheet.Names["TransferFee"].Value = data.Info.TransferFee;
-            invoiceSheet.Names["InvoiceNetTotal"].Value = invoiceNetTotal;
+            invoiceSheet.Names["InvoiceNetTotal"].Value = netTotal;
             invoiceSheet.Names["DiscountLabel"].Value = $"Discount ({data.Info.Discount}%)";
-            invoiceSheet.Names["Discount"].Value = (data.Info.Discount * invoiceNetTotal) / 100;
+            invoiceSheet.Names["Discount"].Value = (data.Info.Discount * netTotal) / 100;
             invoiceSheet.Names["InvoiceTotal"].Value = invoiceTotal;
-            invoiceSheet.Names["CurrencyInvoiceTotal"].Value = invoiceTotal;
-            if (data.CurrencyName() == "USD")
-            {
-                invoiceSheet.Cells["F3:F4"].Value = "$";
-            }
-            else
-            {
-                invoiceSheet.Cells["I3:I4"].Value = data.CurrencyName();
-            }
+            invoiceSheet.Names["InvoiceTotalTop"].Value = invoiceTotal;
+            invoiceSheet.Cells["Currency"].Value = data.CurrencyName();
+
             //Fill data payment
             string[] arrPaymentInfo = data.Info.PaymentInfoArr();
             var arrPaymentInfoCount = arrPaymentInfo.Length;
@@ -648,6 +642,9 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 invoiceSheet.Cells["B" + indexPayment].Value = arrPaymentInfo[i];
                 indexPayment++;
             }
+
+            invoiceSheet.Cells["B" + indexPayment].Value = $"Payment Reference: {data.Info.InvoiceNumber}";
+
         }
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoice)]
         public async Task<FileBase64Dto> ExportInvoice(InputExportInvoiceDto input)
@@ -678,7 +675,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var dataInvoice = await GetInvoiceData(input);
             var dataTimesheetDetail = await GetTimesheetDetailData(dataInvoice);
 
-            var templateFilePath = Path.Combine(templateFolder, "InvoiceForTax.xlsx");
+            var templateFilePath = Path.Combine(templateFolder, "Invoice.xlsx");
 
             using (var memoryStream = new MemoryStream(File.ReadAllBytes(templateFilePath)))
             {
