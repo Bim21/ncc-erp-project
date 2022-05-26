@@ -615,8 +615,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var invoiceNetTotal = sumLineTotal + data.Info.TransferFee;
             var invoiceTotal = invoiceNetTotal - (data.Info.Discount * invoiceNetTotal) / 100;
-            invoiceSheet.Cells["F6:I6"].Value = data.Info.ClientName;
-            invoiceSheet.Cells["F7:I7"].Value = data.Info.ClientAddress;
+            invoiceSheet.Cells["D6:G6"].Value = data.Info.ClientName;
+            invoiceSheet.Cells["D7:G7"].Value = data.Info.ClientAddress;
             invoiceSheet.Cells["C2"].Value = data.Info.InvoiceNumber;
             invoiceSheet.Cells["B3"].Value = data.Info.InvoiceDateStr();
             invoiceSheet.Cells["B4"].Value = $"PAYMENT DUE BY: {data.Info.PaymentDueByStr()}";
