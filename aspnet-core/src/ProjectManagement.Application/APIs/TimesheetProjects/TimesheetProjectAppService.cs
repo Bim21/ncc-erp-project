@@ -149,6 +149,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              PmFullName = tsp.Project.PM.Name + " " + tsp.Project.PM.Surname,
                              ClientId = tsp.Project.ClientId,
                              ClientName = tsp.Project.Client != null ? tsp.Project.Client.Name : "NULL",
+                             ClientCode = tsp.Project.Client != null ? tsp.Project.Client.Code : "NULL",
                              File = tsp.FilePath,
                              ProjectBillInfomation = WorkScope.GetAll<TimesheetProjectBill>()
                                                     .Where(x => x.TimesheetId == tsp.TimesheetId && x.ProjectId == tsp.ProjectId && x.IsActive)

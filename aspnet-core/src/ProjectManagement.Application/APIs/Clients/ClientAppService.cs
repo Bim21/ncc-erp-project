@@ -77,7 +77,7 @@ namespace ProjectManagement.APIs.Clients
         [AbpAuthorize(PermissionNames.Admin_Clients_Edit)]
         public async Task<ClientDto> Update(ClientDto input)
         {
-            var client = await WorkScope.GetAsync<Client>(input.Id);           
+            var client = await WorkScope.GetAsync<Client>(input.Id);
 
             var isExist = await WorkScope.GetAll<Client>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
 
@@ -102,16 +102,16 @@ namespace ProjectManagement.APIs.Clients
         [HttpGet]
         public async Task<IActionResult> GetAllClient()
         {
-            var clients = await WorkScope.GetAll<Client>().Select(x => new {Id = x.Id, Name = x.Name}).ToListAsync();
+            var clients = await WorkScope.GetAll<Client>().Select(x => new { Id = x.Id, Name = x.Name + " [" + x.Code + "]" }).ToListAsync();
             return new OkObjectResult(clients);
         }
 
         [HttpGet]
         public async Task<long> getIdClientByCodeNcc()
         {
-            return  await WorkScope.GetAll<Client>().Where(x => x.Code == "NCC").Select(x => x.Id).FirstOrDefaultAsync();
+            return await WorkScope.GetAll<Client>().Where(x => x.Code == "NCC").Select(x => x.Id).FirstOrDefaultAsync();
         }
-        
+
         [HttpGet]
         public List<ValueTextDto> GetAllPaymentDueBy()
         {

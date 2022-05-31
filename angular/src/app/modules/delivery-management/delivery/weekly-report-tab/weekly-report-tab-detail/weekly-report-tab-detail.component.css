@@ -148,3 +148,7 @@ th {
 ::ng-deep .project-menu-item .mat-list-item-content{
     padding: 0 0 0 16px !important;
 }
+.menu-4-icon{
+    margin-right: 10px;
+    margin-top: 8px ; color: #585858;
+}
