@@ -219,6 +219,13 @@
                                         <tr (contextmenu)="showActions($event)"
                                             *ngFor="let user of projectCurrentResource; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">
+                                                <i class="fas fa-ellipsis-v ml-1 menu-4-icon"
+                                                [matMenuTriggerFor]="menu4"></i>
+                                                <mat-menu #menu4="matMenu" >
+                                                    <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                        (click)="releaseUser(user)">
+                                                        <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
+                                                </mat-menu>
                                                 <div style="width: 80%;">
                                                     <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
                                                     userType: user.userType, avatarPath: user.avatarPath,
