@@ -904,6 +904,7 @@ namespace ProjectManagement.Users
                 if (user != null)
                 {
                     user.StarRate = item.StarRate;
+                    user.UserLevel = item.Level;
                     await _workScope.UpdateAsync(user);
                 }
             }
