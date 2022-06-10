@@ -59,7 +59,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             isActive = x.isActive,
                             AvatarPath = x.User.AvatarPath,
                             FullName = x.User.FullName,
-                            Branch = x.User.Branch,
+                            Branch = x.User.BranchOld,
+                            BranchColor = x.User.Branch.Color,
+                            BranchDisplayName = x.User.Branch.DisplayName,
                             EmailAddress = x.User.EmailAddress,
                             UserType = x.User.UserType
                         });

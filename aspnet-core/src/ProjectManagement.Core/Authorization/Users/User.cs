@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Authorization.Users;
 using Abp.Extensions;
 using ProjectManagement.Entities;
@@ -39,7 +40,7 @@ namespace ProjectManagement.Authorization.Users
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
-        public Branch Branch { get; set; }
+        public ProjectManagement.Constants.Enum.ProjectEnum.Branch BranchOld { get; set; }
         public DateTime? DOB { get; set; }
         public long? KomuUserId { get; set; }
         public int? StarRate { get; set; }
@@ -49,5 +50,10 @@ namespace ProjectManagement.Authorization.Users
         public string PoolNote { get; set; }
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
         public virtual ICollection<UserSkill> UserSkills { get; set; }
+
+        public long? BranchId { get; set; }
+        [ForeignKey(nameof(BranchId))]
+        public ProjectManagement.Entities.Branch Branch { get; set; }
+
     }
 }

@@ -16,7 +16,7 @@ import {
   RoleDto
 } from '@shared/service-proxies/service-proxies';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
-
+import { BranchService } from '@app/service/api/branch.service';
 @Component({
   templateUrl: './create-user-dialog.component.html'
 })
@@ -29,7 +29,7 @@ export class CreateUserDialogComponent extends AppComponentBase
   checkedRolesMap: { [key: string]: boolean } = {};
   defaultRoleCheckedStatus = false;
   userLevelList = Object.keys(this.APP_ENUM.UserLevel);
-  userBranchList = Object.keys(this.APP_ENUM.Branch);
+  userBranchList;
   userTypeList = Object.keys(this.APP_ENUM.UserType);
   passwordValidationErrors: Partial<AbpValidationError>[] = [
     {
@@ -51,6 +51,7 @@ export class CreateUserDialogComponent extends AppComponentBase
     injector: Injector,
     public _userService: UserServiceProxy,
     private skillService:SkillService,
+    private branchService: BranchService,
     public dialogRef: MatDialogRef<CreateUserDialogComponent>,
   ) {
     super(injector);
@@ -61,10 +62,18 @@ export class CreateUserDialogComponent extends AppComponentBase
     this.user.password=""
     this.user.isActive = true;
     this.getAllSkill();
+    this.getAllBranchs();
     this._userService.getRoles().subscribe((result) => {
       this.roles = result.items;
       this.setInitialRolesStatus();
     });
+  }
+
+
+  getAllBranchs() {
+    this.branchService.getAllNotPagging().subscribe((data) => {
+      this.userBranchList = data.result
+    })
   }
   getAllSkill(){
     this.skillService.getAll().subscribe(data =>{

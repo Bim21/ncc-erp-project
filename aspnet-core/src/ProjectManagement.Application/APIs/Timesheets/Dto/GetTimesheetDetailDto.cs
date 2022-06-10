@@ -70,6 +70,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public float Discount { get; set; }
         public float TransferFee { get; set; }
         public string ClientCode { get; set; }
+        public string PmBranchColor { get; set; }
+        public string PmBranchDisplayName { get; set; }
     }
 
 }

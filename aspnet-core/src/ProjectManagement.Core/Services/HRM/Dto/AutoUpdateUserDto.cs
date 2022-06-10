@@ -18,6 +18,7 @@ namespace ProjectManagement.Services.HRM.Dto
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch? Branch { get; set; }
+        public long? BranchId { get; set; }
         public string FullName { get; set; }
         public bool IsActive { get; set; }
         public string PhoneNumber { get; set; }

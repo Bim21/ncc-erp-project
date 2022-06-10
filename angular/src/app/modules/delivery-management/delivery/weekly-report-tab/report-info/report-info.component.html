@@ -147,7 +147,8 @@
                                                         <td>{{i+1}}</td>
                                                         <td>
                                                             <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
-                                                        userType:report.userType,emailAddress:report.email,avatarPath:report.avatarPath}">
+                                                                branchColor:report.branchColor,branchDisplayName:report.branchDisplayName,
+                                                        userType:report.userType,emailAddress:report.email, avatarPath:report.avatarPath}">
                                                             </app-user-info>
                                                         </td>
                                                         <td class="text-center">{{report.allocatePercentage}}%
@@ -233,6 +234,7 @@
                                                         <td>{{i+1}}</td>
                                                         <td>
                                                             <app-user-info [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                branchColor:report.branchColor,branchDisplayName:report.branchDisplayName,
                                                         userType:report.userType,emailAddress:report.email, avatarPath:report.avatarPath}">
                                                             </app-user-info>
                                                         </td>

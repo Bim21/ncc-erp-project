@@ -20,6 +20,14 @@ namespace ProjectManagement.Authorization
         public const string Admin_Clients_Create = "Admin.Clients.Create";
         public const string Admin_Clients_Edit = "Admin.Clients.Edit";
         public const string Admin_Clients_Delete = "Admin.Clients.Delete";
+
+        //Branchs 
+        public const string Admin_Branchs = "Admin.Branchs";
+        public const string Admin_Branchs_View = "Admin.Branchs.View";
+        public const string Admin_Branchs_Create = "Admin.Branchs.Create";
+        public const string Admin_Branchs_Edit = "Admin.Branchs.Edit";
+        public const string Admin_Branchs_Delete = "Admin.Branchs.Delete";
+
         //Configuration
         public const string Admin_Configuartions = "Admin.Configuartions";
         public const string Admin_Configuartions_Edit = "Admin.Configuartions.Edit";
@@ -500,6 +508,12 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Clients_Create,
                     PermissionNames.Admin_Clients_Edit,
                     PermissionNames.Admin_Clients_Delete,
+                    //Branchs 
+                    PermissionNames.Admin_Branchs,
+                    PermissionNames.Admin_Branchs_View,
+                    PermissionNames.Admin_Branchs_Create,
+                    PermissionNames.Admin_Branchs_Edit,
+                    PermissionNames.Admin_Branchs_Delete,
                     //Configuration
                     PermissionNames.Admin_Configuartions,
                     PermissionNames.Admin_Configuartions_Edit,
@@ -981,6 +995,12 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
+                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Branchs" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
+
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuartions" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewKomuSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Komu Setting" },
@@ -1445,6 +1465,15 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Clients_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
+                            }
+                        },
+                          new SystemPermission { Name =  PermissionNames.Admin_Branchs, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Branchs",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                             }
                         },
                           new SystemPermission { Name =  PermissionNames.Admin_Configuartions, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuration",

@@ -42,6 +42,17 @@ namespace ProjectManagement.APIs.HRM
             _resourceManager = resourceManager;
         }
 
+
+        private async Task<ProjectManagement.Entities.Branch> GetBranchByCode(string code)
+        {
+            var branch = await WorkScope.GetAll<ProjectManagement.Entities.Branch>().Where(s => s.Code == code).FirstOrDefaultAsync();
+            if (branch == default)
+            {
+                branch= await WorkScope.GetAll<ProjectManagement.Entities.Branch>().FirstOrDefaultAsync();
+            }
+            return branch;
+        }
+
         [AbpAllowAnonymous]
         [HttpPost]
         public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto model)
@@ -54,6 +65,7 @@ namespace ProjectManagement.APIs.HRM
             {
                 throw new UserFriendlyException($"failed to create user from HRM, user with email {model.EmailAddress} is already exist");
             }
+            var branch = await GetBranchByCode(model.BranchCode);
             var user = new User
             {
                 UserName = model.EmailAddress.ToLower(),
@@ -64,14 +76,15 @@ namespace ProjectManagement.APIs.HRM
                 NormalizedUserName = model.UserName.ToUpper(),
                 UserType = model.UserType,
                 UserLevel = model.UserLevel,
-                Branch = model.Branch,
+                BranchOld = model.Branch,
                 IsActive = true,
                 Password = RandomPasswordHelper.CreateRandomPassword(8),
-                UserCode = model.UserCode
+                UserCode = model.UserCode,
+                BranchId = branch.Id
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
-            var messageToGeneral = $"Welcome **{userName}** [{CommonUtil.BranchName(user.Branch)}] to **NCC**"; 
+            var messageToGeneral = $"Welcome **{userName}** [{branch.DisplayName}] to **NCC**"; 
             
            
             _komuService.NotifyToChannel(new KomuMessage
@@ -81,7 +94,7 @@ namespace ProjectManagement.APIs.HRM
                 CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.GENERAL_CHANNEL);
 
-            var messageToPM = $"@here HR has onboarded: **{userName}** [{CommonUtil.BranchName(user.Branch)}](**{CommonUtil.UserLevelName(user.UserLevel)}**)";
+            var messageToPM = $"@here HR has onboarded: **{userName}** [{branch.DisplayName}](**{CommonUtil.UserLevelName(user.UserLevel)}**)";
 
             _komuService.NotifyToChannel(new KomuMessage
             {
@@ -103,13 +116,15 @@ namespace ProjectManagement.APIs.HRM
                 .FirstOrDefaultAsync();
             if (user != null)
             {
+                var branch = await GetBranchByCode(input.BranchCode);
                 user.UserName = input.EmailAddress;
                 user.Name = input.Name;
                 user.Surname = input.Surname;
                 user.EmailAddress = input.EmailAddress;
                 user.UserType = input.UserType;
                 user.UserLevel = input.UserLevel;
-                user.Branch = input.Branch;
+                user.BranchOld = input.Branch;
+                user.BranchId = branch.Id;
             }
             await WorkScope.UpdateAsync(user);
         }

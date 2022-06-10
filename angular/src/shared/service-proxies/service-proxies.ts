@@ -4162,7 +4162,7 @@ export class CreateUserDto implements ICreateUserDto {
   roleNames: string[] | undefined;
   password: string | undefined;
   komuUserName: string | undefined;
-  branch: number | undefined;
+  branchId: number | undefined;
   avatarPath: string | undefined;
   userType: number | undefined;
   userLevel: number | undefined;
@@ -4185,7 +4185,7 @@ export class CreateUserDto implements ICreateUserDto {
       this.surname = data['surname'];
       this.emailAddress = data['emailAddress'];
       this.isActive = data['isActive'];
-      this.branch = data['branch'];
+      this.branchId = data['branchId'];
       this.userType = data['userType'];
       this.avatarPath = data['avatarPath'];
       this.userLevel = data['userLevel'];
@@ -4214,7 +4214,7 @@ export class CreateUserDto implements ICreateUserDto {
     data['surname'] = this.surname;
     data['emailAddress'] = this.emailAddress;
     data['isActive'] = this.isActive;
-    data['branch'] = this.branch;
+    data['branchId'] = this.branchId;
     data['userType'] = this.userType;
     data['avatarPath'] = this.avatarPath;
     data['userLevel'] = this.userLevel;
@@ -4246,12 +4246,12 @@ export interface ICreateUserDto {
   roleNames: string[] | undefined;
   password: string | undefined;
   komuUserName: string | undefined;
-  branch: number | undefined;
   avatarPath: string | undefined;
   userType: number | undefined;
   userLevel: number | undefined;
   userCode: string | undefined;
   userSkills: any[] | undefined;
+  branchId: number | undefined;
 }
 
 export class UserDto implements IUserDto {
@@ -4265,7 +4265,6 @@ export class UserDto implements IUserDto {
   creationTime: moment.Moment;
   roleNames: string[] | undefined;
   komuUserName: string | undefined;
-  branch: number;
   avatarPath: string;
   id: number;
   userType: number;
@@ -4276,7 +4275,9 @@ export class UserDto implements IUserDto {
   managerAvatarPath: string;
   managerName: string;
   rateStar?:number;
-
+  branchColor: string | undefined;
+  branchDisplayName: string | undefined;
+  branchId: number;
   constructor(data?: IUserDto) {
     if (data) {
       for (var property in data) {
@@ -4295,7 +4296,7 @@ export class UserDto implements IUserDto {
       this.emailAddress = data['emailAddress'];
       this.isActive = data['isActive'];
       this.fullName = data['fullName'];
-      this.branch = data['branch'];
+      this.branchId = data['branchId'];
       this.userType = data['userType'];
       this.avatarPath = data['avatarPath'];
       this.userLevel = data['userLevel'];
@@ -4338,7 +4339,7 @@ export class UserDto implements IUserDto {
     data['creationTime'] = this.creationTime
       ? this.creationTime.toISOString()
       : <any>undefined;
-    data['branch'] = this.branch;
+    data['branchId'] = this.branchId;
     data['userType'] = this.userType;
     data['avatarPath'] = this.avatarPath;
     data['userLevel'] = this.userLevel;
@@ -4373,12 +4374,12 @@ export interface IUserDto {
   roleNames: string[] | undefined;
   id: number;
   komuUserName: string | undefined;
-  branch: number;
   avatarPath: string;
   userType: number;
   userLevel: number;
   userCode: string;
   userSkills: any[];
+  branchId: number;
 }
 
 

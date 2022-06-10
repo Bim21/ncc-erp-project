@@ -43,6 +43,7 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<TimesheetProjectBill> TimesheetProjectBills { get; set; }
         public DbSet<ResourceRequestSkill> ResourceRequestSkills { get; set; }
+        public DbSet<Branch> Branchs { get; set; }
 
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)

@@ -101,7 +101,9 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
-                            PmBranch = p.PM.Branch,
+                            PmBranch = p.PM.BranchOld,
+                            PmBranchColor = p.PM.Branch.Color,
+                            PmBranchDisplayName = p.PM.Branch.DisplayName,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
@@ -135,7 +137,7 @@ namespace ProjectManagement.APIs.Projects
                     AvatarPath = u.PM.AvatarPath,
                     UserType = u.PM.UserType,
                     UserLevel = u.PM.UserLevel,
-                    Branch = u.PM.Branch,
+                    Branch = u.PM.BranchOld,
                 })
                 .Distinct()
                 .ToListAsync();
@@ -153,7 +155,7 @@ namespace ProjectManagement.APIs.Projects
                     AvatarPath = u.PM.AvatarPath,
                     UserType = u.PM.UserType,
                     UserLevel = u.PM.UserLevel,
-                    Branch = u.PM.Branch,
+                    Branch = u.PM.BranchOld,
                 })
                 .Distinct()
                 .ToListAsync();
@@ -171,7 +173,7 @@ namespace ProjectManagement.APIs.Projects
                     AvatarPath = u.PM.AvatarPath,
                     UserType = u.PM.UserType,
                     UserLevel = u.PM.UserLevel,
-                    Branch = u.PM.Branch,
+                    Branch = u.PM.BranchOld,
                 })
                 .Distinct()
                 .ToListAsync();
@@ -242,7 +244,7 @@ namespace ProjectManagement.APIs.Projects
                                     PmUserName = x.PM.UserName,
                                     PmEmailAddress = x.PM.EmailAddress,
                                     PmAvatarPath = x.PM.AvatarPath,
-                                    PmBranch = x.PM.Branch,
+                                    PmBranch = x.PM.BranchOld,
                                     PmUserType = x.PM.UserType,
                                     CurrencyId = x.CurrencyId,
                                     CurrencyName = x.Currency.Name,
@@ -540,7 +542,9 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
-                            PmBranch = p.PM.Branch,
+                            PmBranch = p.PM.BranchOld,
+                            PmBranchColor = p.PM.Branch.Color,
+                            PmBranchDisplayName = p.PM.Branch.DisplayName,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
@@ -668,7 +672,7 @@ namespace ProjectManagement.APIs.Projects
                                     PmUserName = x.PM.UserName,
                                     PmEmailAddress = x.PM.EmailAddress,
                                     PmAvatarPath = x.PM.AvatarPath,
-                                    PmBranch = x.PM.Branch,
+                                    PmBranch = x.PM.BranchOld,
                                     PmUserType = x.PM.UserType,
                                 });
             return await query.FirstOrDefaultAsync();
@@ -713,7 +717,9 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
-                            PmBranch = p.PM.Branch,
+                            PmBranch = p.PM.BranchOld,
+                            PmBranchColor = p.PM.Branch.Color,
+                            PmBranchDisplayName = p.PM.Branch.DisplayName,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date
@@ -739,7 +745,7 @@ namespace ProjectManagement.APIs.Projects
                                     PmUserName = x.PM.UserName,
                                     PmEmailAddress = x.PM.EmailAddress,
                                     PmAvatarPath = x.PM.AvatarPath,
-                                    PmBranch = x.PM.Branch,
+                                    PmBranch = x.PM.BranchOld,
                                     PmUserType = x.PM.UserType,
                                 });
             return await query.FirstOrDefaultAsync();

@@ -26,5 +26,8 @@ namespace ProjectManagement.Services.ResourceService.Dto
         public List<UserSkillDto> UserSkills { get; set; }
         public int? StarRate { get; set; }
         public List<ProjectOfUserDto> WorkingProjects { get; set; }
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
+        public long? BranchId { get; set; }
     }
 }

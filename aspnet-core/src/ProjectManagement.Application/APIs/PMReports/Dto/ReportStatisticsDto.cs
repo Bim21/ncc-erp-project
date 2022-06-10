@@ -24,5 +24,7 @@ namespace ProjectManagement.APIs.PMReports.Dto
         public Branch Branch { get; set; }
         public string Email { get; set; }
         public int AllocatePercentage { get; set; }
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
     }
 }

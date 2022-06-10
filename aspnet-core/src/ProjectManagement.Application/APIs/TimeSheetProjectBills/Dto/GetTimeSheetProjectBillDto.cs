@@ -34,5 +34,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public UserLevel? UserLevel { get; set; }
         public string Currency { get; set; }
         public ChargeType? ChargeType { get; set; }
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
     }
 }

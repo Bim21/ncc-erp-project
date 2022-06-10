@@ -98,7 +98,7 @@ namespace ProjectManagement.APIs.ProjectCheckLists
                                         UserName = x.User.FullName,
                                         CheckListItemId = x.CheckListItemId,
                                         AvatarPath = x.User.AvatarPath,
-                                        Branch = x.User.Branch,
+                                        Branch = x.User.BranchOld,
                                         EmailAddress = x.User.EmailAddress,
                                         FullName = x.User.FullName,
                                         UserType = x.User.UserType

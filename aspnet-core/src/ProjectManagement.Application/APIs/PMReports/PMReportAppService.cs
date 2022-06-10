@@ -93,23 +93,23 @@ namespace ProjectManagement.APIs.PMReports
                     projectCode = s.Project.Code,
                     projectName = s.Project.Name,
                     pmName = s.Project.PM.Name + " " + s.Project.PM.Surname
-                 })
+                })
                 .ToListAsync();
 
             var listProjectCode = pmReportProjects
-                .Select(pro=>pro.projectCode).ToList();
+                .Select(pro => pro.projectCode).ToList();
 
             var listTimsheetByProjectCode = await _timesheetService.GetTimesheetByListProjectCode(listProjectCode, startTime, endTime);
-            
+
             Dictionary<String, TotalWorkingTimeOfWeekDto> mapProjectCodeToTimesheet = listTimsheetByProjectCode
                 .GroupBy(s => s.ProjectCode)
                 .ToDictionary(x => x.Key, s => s.FirstOrDefault());
-           
+
             var result = new List<CollectTimesheetDto>();
             foreach (var pmReport in pmReportProjects)
             {
                 TotalWorkingTimeOfWeekDto timesheet = mapProjectCodeToTimesheet.ContainsKey(pmReport.projectCode) ? mapProjectCodeToTimesheet[pmReport.projectCode] : default;
-                if(timesheet != null)
+                if (timesheet != null)
                 {
                     pmReport.pmReportProject.TotalNormalWorkingTime = timesheet.NormalWorkingTime;
                     pmReport.pmReportProject.TotalOverTime = timesheet.OverTime;
@@ -127,14 +127,14 @@ namespace ProjectManagement.APIs.PMReports
                 else
                 {
                     result.Add(new CollectTimesheetDto
-                    {                        
+                    {
                         ProjectCode = pmReport.projectCode,
                         ProjectName = pmReport.projectName,
                         PMName = pmReport.pmName,
                         Note = "Not found in Timesheet tool"
                     });
 
-                }               
+                }
 
             }
 
@@ -179,7 +179,7 @@ namespace ProjectManagement.APIs.PMReports
                 .AnyAsync(x => x.Name == input.Name && x.Type == input.Type && x.Year == input.Year);
 
             if (isExist)
-                throw new UserFriendlyException("PM Report already exist!");           
+                throw new UserFriendlyException("PM Report already exist!");
 
             var activeReport = await WorkScope.GetAll<PMReport>().Where(x => x.IsActive).FirstOrDefaultAsync();
             long lastReportId = 0;
@@ -238,7 +238,7 @@ namespace ProjectManagement.APIs.PMReports
                     var issues = mapInprogressIssues[project.Id];
                     if (issues != null && !issues.IsEmpty())
                     {
-                        foreach(var issue in issues)
+                        foreach (var issue in issues)
                         {
                             issue.Id = 0;
                             issue.PMReportProjectId = pmReportProject.Id;
@@ -246,7 +246,7 @@ namespace ProjectManagement.APIs.PMReports
                         }
                     }
                 }
-            }          
+            }
             return input;
         }
 
@@ -374,6 +374,7 @@ namespace ProjectManagement.APIs.PMReports
 
             var query = from u in WorkScope.GetAll<User>().ToList()
                         join pu in projectUser on u.Id equals pu.UserId into pUser
+                        join b in WorkScope.GetAll<ProjectManagement.Entities.Branch>() on u.BranchId equals b.Id into bUser
                         join c in changeInFuture on u.Id equals c.UserId into change
                         join t in totalPercentageFuture on u.Id equals t.UserId into newFuture
                         select new
@@ -382,7 +383,8 @@ namespace ProjectManagement.APIs.PMReports
                             FullName = u.Name + " " + u.Surname,
                             Avatar = u.AvatarPath,
                             UserType = u.UserType,
-                            Branch = u.Branch,
+                            BranchColor = bUser.Select(x=>x.Color).FirstOrDefault().ToString(),
+                            BranchDislayName = bUser.Select(x => x.DisplayName).FirstOrDefault().ToString(),
                             UserEmail = u.EmailAddress,
                             TotalInTheWeek = pUser.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
                             TotalInTheFuture = presentUser.Where(x => x.UserId == u.Id).Sum(x => x.AllocatePercentage) + change.Sum(x => x.Total) + newFuture.Sum(x => x.AllocatePercentage)
@@ -398,7 +400,9 @@ namespace ProjectManagement.APIs.PMReports
                     FullName = x.FullName,
                     Avatar = x.Avatar,
                     UserType = x.UserType,
-                    Branch = x.Branch,
+                    //Branch = x.Branch,
+                    BranchColor = x.BranchColor,
+                    BranchDisplayName = x.BranchDislayName,
                     Email = x.UserEmail,
                     AllocatePercentage = x.TotalInTheWeek
                 }).ToList(),
@@ -408,7 +412,9 @@ namespace ProjectManagement.APIs.PMReports
                     FullName = x.FullName,
                     Avatar = x.Avatar,
                     UserType = x.UserType,
-                    Branch = x.Branch,
+                    //Branch = x.Branch,
+                    BranchColor = x.BranchColor,
+                    BranchDisplayName = x.BranchDislayName,
                     Email = x.UserEmail,
                     AllocatePercentage = x.TotalInTheFuture
                 }).ToList()
