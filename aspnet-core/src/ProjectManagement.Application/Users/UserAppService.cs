@@ -110,7 +110,9 @@ namespace ProjectManagement.Users
                             AvatarPath = u.AvatarPath,
                             UserType = u.UserType,
                             UserLevel = u.UserLevel,
-                            Branch = u.Branch,
+                            Branch = u.BranchOld,
+                            BranchColor = u.Branch.Color,
+                            BranchDisplayName = u.Branch.DisplayName,
                             IsActive = u.IsActive,
                             FullName = u.Name+ " " + u.Surname,
                             CreationTime = u.CreationTime,
@@ -388,7 +390,7 @@ namespace ProjectManagement.Users
                 EmployeeName = user.Surname.Trim() + " " + user.Name.Trim(),
                 PhoneNumber = user.PhoneNumber,
                 DOB = user.DOB,
-                Branch = Enum.GetName(typeof(Branch), user.Branch),
+                Branch = Enum.GetName(typeof(ProjectManagement.Constants.Enum.ProjectEnum.Branch), user.Branch),
                 RoleType = Enum.GetName(typeof(UserType), user.UserType),
                 Position = user.Job.HasValue ? Enum.GetName(typeof(Job), user.Job) : String.Empty,
                 ProjectDtos = new List<ProjectDTO>()
@@ -589,7 +591,7 @@ namespace ProjectManagement.Users
                     AvatarPath = u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
-                    Branch = u.Branch,
+                    Branch = u.BranchOld,
                     UserSkills = u.UserSkills.Select(x => new UserSkillDto
                     {
                         SkillId = x.SkillId,
@@ -614,7 +616,7 @@ namespace ProjectManagement.Users
                     AvatarPath = u.AvatarPath,
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
-                    Branch = u.Branch,
+                    Branch = u.BranchOld,
                     IsActive = u.IsActive,
                     UserCode = u.UserCode
                 });
@@ -877,7 +879,7 @@ namespace ProjectManagement.Users
                 .Select(s => new UserBaseDto
                 {
                     AvatarPath = s.AvatarPath,
-                    Branch = s.Branch,
+                    Branch = s.BranchOld,
                     EmailAddress = s.EmailAddress,
                     FullName = s.FullName,
                     Id = s.Id,
@@ -1016,7 +1018,7 @@ namespace ProjectManagement.Users
                 UserCode = user.UserCode,
                 UserType = user.UserType,
                 UserLevel = user.UserLevel,
-                Branch = user.Branch.Value,
+                BranchId = user.BranchId,
                 IsActive = user.IsActive,
                 Password = RandomPasswordHelper.CreateRandomPassword(),
                 RoleNames = new string[] { "EMPLOYEE" }

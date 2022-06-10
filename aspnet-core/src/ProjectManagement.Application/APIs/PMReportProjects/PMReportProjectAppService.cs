@@ -66,7 +66,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmName = x.PM.Name,
                     Note = x.Note,
                     AutomationNote = x.AutomationNote,
-                    PmBranch = x.PM.Branch,
+                    PmBranch = x.PM.BranchOld,
                     PmEmailAddress = x.PM.EmailAddress,
                     PmAvatarPath = x.PM.AvatarPath,
                     PmFullName = x.PM.Name + " " + x.PM.Surname,
@@ -267,7 +267,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                   PmEmailAddress = x.PM.EmailAddress,
                                   PmFullName = x.PM.FullName,
                                   PmUserName = x.PM.UserName,
-                                  PmBranch = x.PM.Branch,
+                                  PmBranch = x.PM.BranchOld,
                                   PmUserType = x.PM.UserType
                               });
 
@@ -305,7 +305,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 AvatarPath = x.User.AvatarPath,
                                 EmailAddress = x.User.EmailAddress,
                                 UserName = x.User.UserName,
-                                Branch = x.User.Branch,
+                                Branch = x.User.BranchOld,
                                 UserType = x.User.UserType,
                                 Note = x.Note
                             });
@@ -343,7 +343,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                 AvatarPath = x.User.AvatarPath,
                                 EmailAddress = x.User.EmailAddress,
                                 UserType = x.User.UserType,
-                                Branch = x.User.Branch,
+                                Branch = x.User.BranchOld,
                                 Note = x.Note
                             });
             query = query.Where(x => x.UserType != UserType.FakeUser);

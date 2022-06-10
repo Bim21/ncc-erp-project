@@ -19,7 +19,7 @@ import {
   UserDto,
   RoleDto
 } from '@shared/service-proxies/service-proxies';
-
+import { BranchService } from '@app/service/api/branch.service';
 @Component({
   templateUrl: './edit-user-dialog.component.html',
   styleUrls: ['./edit-user-dialog.component.css']
@@ -34,15 +34,16 @@ export class EditUserDialogComponent extends AppComponentBase
   action:string
   skillList:UserSkillDto[] = [];
   userLevelList = Object.keys(this.APP_ENUM.UserLevel);
-  userBranchList = Object.keys(this.APP_ENUM.Branch);
+  userBranchList;
   userTypeList = Object.keys(this.APP_ENUM.UserType);
-  isviewOnlyMe:boolean =false
+  isviewOnlyMe:boolean =false;
   @Output() onSave = new EventEmitter<any>();
 
 
   constructor(
     injector: Injector,
     private skillService:SkillService,
+    private branchService: BranchService,
     public _userService: UserServiceProxy,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<EditUserDialogComponent>,
@@ -52,6 +53,7 @@ export class EditUserDialogComponent extends AppComponentBase
 
   ngOnInit(): void {
     this.getAllSkill();
+    this.getAllBranchs();
     this._userService.get(this.data.id).subscribe((result) => {
       this.user = result;
       this.user.userSkills = this.user.userSkills
@@ -64,6 +66,12 @@ export class EditUserDialogComponent extends AppComponentBase
     });
 
     
+  }
+
+  getAllBranchs() {
+    this.branchService.getAllNotPagging().subscribe((data) => {
+      this.userBranchList = data.result
+    })
   }
   getAllSkill(){
     this.skillService.getAll().subscribe(data =>{

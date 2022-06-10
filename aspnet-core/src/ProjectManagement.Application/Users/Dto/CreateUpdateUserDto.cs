@@ -30,6 +30,6 @@ namespace ProjectManagement.Users.Dto
         public string EmailAddress { get; set; }
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
-        public Branch Branch { get; set; }
+        public long? BranchId { get; set; }
     }
 }

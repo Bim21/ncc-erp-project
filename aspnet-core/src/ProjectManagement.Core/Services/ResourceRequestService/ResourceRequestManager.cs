@@ -55,7 +55,9 @@ namespace ProjectManagement.Services.ResourceRequestService
                                 ProjectUserId = s.Id,
                                 Employee = new UserBaseDto
                                 {
-                                    Branch = s.User.Branch,
+                                    Branch = s.User.BranchOld,
+                                    BranchColor = s.User.Branch.Color,
+                                    BranchDisplayName = s.User.Branch.DisplayName,
                                     UserLevel = s.User.UserLevel,
                                     UserType = s.User.UserType,
                                     FullName = s.User.FullName,

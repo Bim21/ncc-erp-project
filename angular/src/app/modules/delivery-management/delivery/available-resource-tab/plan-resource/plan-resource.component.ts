@@ -31,7 +31,7 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ReleaseUserDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/release-user-dialog/release-user-dialog.component';
 import { ConfirmPlanDialogComponent } from './plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
-
+import { BranchService } from '@app/service/api/branch.service';
 @Component({
   selector: 'app-plan-resource',
   templateUrl: './plan-resource.component.html',
@@ -114,13 +114,6 @@ export class PlanResourceComponent
       displayName: 'User Name',
     },
     {
-      propertyName: 'branch',
-      comparisions: [0],
-      displayName: 'Branch',
-      filterType: 3,
-      dropdownData: this.branchParam,
-    },
-    {
       propertyName: 'userType',
       comparisions: [0],
       displayName: 'User Type',
@@ -137,7 +130,8 @@ export class PlanResourceComponent
     private availableRerourceService: ResourceManagerService,
     private dialog: MatDialog,
     private skillService: SkillService,
-    private projectUserService: ProjectUserService
+    private projectUserService: ProjectUserService,
+    private branchService: BranchService
   ) {
     super(injector);
   }
@@ -146,8 +140,20 @@ export class PlanResourceComponent
     this.pageSizeType = 100;
     this.changePageSize();
     this.getAllSkills();
+    this.getAllBranchs();
+  }
 
-
+  getAllBranchs() {
+    this.branchService.getAllNotPagging().subscribe((data) => {
+      this.branchParam = data.result.map(item => {
+        return {
+          displayName: item.displayName,
+          value: item.id
+        }
+      })
+      this.FILTER_CONFIG.push({ propertyName: 'branchId', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
+      )
+    })
   }
   public isAllowCancelPlan(creatorUserId: number) {
     if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {

@@ -23,7 +23,7 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 import { ProjectUserService } from '@app/service/api/project-user.service';
 import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
-
+import { BranchService } from '@app/service/api/branch.service';
 @Component({
   selector: 'app-vendor',
   templateUrl: './vendor.component.html',
@@ -88,7 +88,6 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
-    { propertyName: 'branch', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
     { propertyName: 'userType', comparisions: [0], displayName: "User Type", filterType: 3, dropdownData: this.userTypeParam },
 
 
@@ -102,7 +101,8 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     private skillService: SkillService,
     private _modalService: BsModalService,
     private userInfoService: UserService,
-    private projectUserService: ProjectUserService
+    private projectUserService: ProjectUserService,
+    private branchService: BranchService
 
 
   ) { super(injector) }
@@ -111,7 +111,20 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     this.pageSizeType = 100
     this.changePageSize();
     this.getAllSkills();
-    console.log("project status", this.APP_ENUM.ProjectStatus)
+    this.getAllBranchs();
+  }
+
+  getAllBranchs() {
+    this.branchService.getAllNotPagging().subscribe((data) => {
+      this.branchParam = data.result.map(item => {
+        return {
+          displayName: item.displayName,
+          value: item.id
+        }
+      })
+      this.FILTER_CONFIG.push({ propertyName: 'branchId', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
+      )
+    })
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {

@@ -34,5 +34,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public PMReportProjectStatus IsSent { get; set; }
         public DateTime? TimeSendReport { get; set; }
         public DateTime? DateSendReport { get; set; }
+        public string PmBranchColor { get; set; }
+        public string PmBranchDisplayName { get; set; }
     }
 }

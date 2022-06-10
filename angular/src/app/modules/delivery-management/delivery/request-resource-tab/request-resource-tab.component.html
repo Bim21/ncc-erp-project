@@ -214,9 +214,9 @@
                                         <div *ngIf="item.planUserInfo">
                                             <p class="m-0"><strong>{{item.planUserInfo.employee.fullName}}</strong></p>
                                             <p class="m-0">
-                                                <span class="mr-1"
-                                                    [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.employee.branch]">
-                                                    {{item.planUserInfo.employee.branchName}}
+                                                <span class="mr-1 badge badge-pill text-white"
+                                                [style.backgroundColor]="item.planUserInfo.employee.branchColor">
+                                                    {{item.planUserInfo.employee.branchDisplayName}}
                                                 </span>
                                                 <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.employee.userType]">
                                                     {{item.planUserInfo.employee.userTypeName}}

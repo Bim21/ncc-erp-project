@@ -48,5 +48,8 @@ namespace ProjectManagement.Services.ResourceService.Dto
                 return this.LastReleaseDate > this.UserCreationTime ? this.LastReleaseDate : this.UserCreationTime;
             }
         }
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
+        public long? BranchId { get; set; }
     }
 }

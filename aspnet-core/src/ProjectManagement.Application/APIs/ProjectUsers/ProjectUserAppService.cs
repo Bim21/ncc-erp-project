@@ -72,7 +72,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             PMReportId = x.PMReportId,
                             IsFutureActive = x.IsFutureActive,
                             AvatarPath = x.User.AvatarPath,
-                            Branch = x.User.Branch,
+                            Branch = x.User.BranchOld,
                             EmailAddress = x.User.EmailAddress,
                             UserName = x.User.UserName,
                             UserType = x.User.UserType,
@@ -264,7 +264,7 @@ namespace ProjectManagement.APIs.ProjectUsers
                             AvatarPath = x.AvatarPath,
                             UserType = x.UserType,
                             UserLevel = x.UserLevel,
-                            Branch = x.Branch,
+                            Branch = x.BranchOld,
                             EmailAddress = x.EmailAddress,
                             UserName = x.UserName,
                         });

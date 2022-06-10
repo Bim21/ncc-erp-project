@@ -33,6 +33,9 @@ namespace ProjectManagement.Services.ResourceManager.Dto
         public bool IsPool { get; set; }
         public string Note { get; set; }
 
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
+
         public ProjectUserStatus WorkingStatus
         {
             get

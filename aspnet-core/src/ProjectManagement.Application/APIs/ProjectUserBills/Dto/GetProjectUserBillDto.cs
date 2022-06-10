@@ -28,5 +28,7 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public byte? LastInvoiceNumber { get; set; }
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
     }
 }

@@ -16,7 +16,8 @@ namespace ProjectManagement.Services.ResourceRequestService.Dto
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public UserLevel UserLevel { get; set; }
-
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
         public string LevelName
         {
             get

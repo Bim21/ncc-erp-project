@@ -16,5 +16,6 @@ namespace ProjectManagement.APIs.HRM.Dto
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
+        public string BranchCode { get; set; }
     }
 }

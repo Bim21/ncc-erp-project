@@ -86,6 +86,7 @@ namespace ProjectManagement.Web.Host.Startup
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
             {
+                options.CustomSchemaIds(type => type.ToString());
                 options.SwaggerDoc(_apiVersion, new OpenApiInfo
                 {
                     Version = _apiVersion,

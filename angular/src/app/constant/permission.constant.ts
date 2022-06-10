@@ -57,6 +57,13 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Roles_Edit: "Admin.Roles.Edit",
        Admin_Roles_Delete: "Admin.Roles.Delete",
 
+        //Branchs 
+        Admin_Branchs: "Admin.Branchs",
+        Admin_Branchs_View: "Admin.Branchs.View",
+        Admin_Branchs_Create: "Admin.Branchs.Create",
+        Admin_Branchs_Edit: "Admin.Branchs.Edit",
+        Admin_Branchs_Delete: "Admin.Branchs.Delete",
+
        //Project
        //Projects > Outsourcing Project
        Projects: "Projects",

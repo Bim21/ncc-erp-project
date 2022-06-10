@@ -51,6 +51,8 @@
                                         <div *ngIf="!user.createMode" class="d-flex">
                                             <div class="col-10">
                                                 <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                                    branchColor:user.branchColor,
+                                                    branchDisplayName:user.branchDisplayName,
                                                     userType:user.userType,emailAddress:user.emailAddress, avatarPath:user.avatarPath,
                                                     userLevel: user.userLevel,
                                                     rateStar: user.starRate}">
@@ -256,6 +258,8 @@
                                             <div class="col-11">
                                                 <div *ngIf="!user.createMode">
                                                     <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                                    branchColor:user.branchColor,
+                                                    branchDisplayName:user.branchDisplayName,
                                                 userType:user.userType,emailAddress:user.emailAddress, avatarPath:user.avatarPath,
                                                 userLevel: user.userLevel,
                                                 rateStar: user.starRate}">
@@ -537,9 +541,9 @@
                                                     <p class="m-0">
                                                         <strong>{{item.planUserInfo.employee.fullName}}</strong></p>
                                                     <p class="m-0">
-                                                        <span class="mr-1"
-                                                            [ngClass]="APP_CONST.userBranchStyle[item.planUserInfo.employee.branch]">
-                                                            {{item.planUserInfo.employee.branchName}}
+                                                        <span class="mr-1 badge badge-pill text-white"
+                                                            [style.backgroundColor]="item.planUserInfo.employee.branchColor">
+                                                            {{item.planUserInfo.employee.branchDisplayName}}
                                                         </span>
                                                         <span
                                                             [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.employee.userType]">

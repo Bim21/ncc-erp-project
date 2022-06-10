@@ -21,7 +21,7 @@ namespace ProjectManagement.Users.Dto
         public string AvatarPath { get; set; }
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
-        public Branch Branch { get; set; }
+        public ProjectManagement.Constants.Enum.ProjectEnum.Branch Branch { get; set; }
         public List<UserSkillDto> UserSkills { get; set; }
         public bool IsActive { get; set; }
 
@@ -33,6 +33,8 @@ namespace ProjectManagement.Users.Dto
         public string[] RoleNames { get; set; }
 
         public List<WorkingProjectDto> WorkingProjects { get; set; }
-        
+        public string BranchColor { get; set; }
+        public string BranchDisplayName { get; set; }
+
     }
 }
