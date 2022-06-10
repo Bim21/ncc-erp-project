@@ -11,5 +11,6 @@ namespace ProjectManagement.Users.Dto
         public string EmailAddress { get; set; }
         public int StarRate { get; set; }
         public UserLevel Level { get; set; }
+        public UserType Type { get; set; }
     }
 }

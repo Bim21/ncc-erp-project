@@ -905,6 +905,7 @@ namespace ProjectManagement.Users
                 {
                     user.StarRate = item.StarRate;
                     user.UserLevel = item.Level;
+                    user.UserType = item.Type == UserType.Staff ? UserType.ProbationaryStaff : item.Type;
                     await _workScope.UpdateAsync(user);
                 }
             }
