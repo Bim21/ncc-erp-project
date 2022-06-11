@@ -47,6 +47,8 @@ using ProjectManagement.Constants.Enum;
 using NccCore.Helper;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.ResourceRequestService.Dto;
+using ProjectManagement.Utils;
+using ProjectManagement.FilesService;
 
 namespace ProjectManagement.Users
 {
@@ -65,7 +67,7 @@ namespace ProjectManagement.Users
         private readonly HrmService _hrmService;
         private ISettingManager _settingManager;
         private KomuService _komuService;
-
+        private UploadFileService _uploadFileService;
         public UserAppService(
             IRepository<User, long> repository,
             UserManager userManager,
@@ -79,7 +81,9 @@ namespace ProjectManagement.Users
             HrmService hrmService,
             KomuService komuService,
             ISettingManager settingManager,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            UploadFileService uploadFileService
+         )
             : base(repository)
         {
             _userManager = userManager;
@@ -94,6 +98,7 @@ namespace ProjectManagement.Users
             _komuService = komuService;
             _settingManager = settingManager;
             _httpContextAccessor = httpContextAccessor;
+            _uploadFileService = uploadFileService;
         }
 
 
@@ -627,48 +632,12 @@ namespace ProjectManagement.Users
         [AbpAuthorize(PermissionNames.Admin_Users_UploadAvatar)]
         public async Task<string> UpdateAvatar([FromForm] AvatarDto input)
         {
-            String path = Path.Combine(_webHostEnvironment.WebRootPath, "avatars");
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            if (input != null && input.File != null && input.File.Length > 0)
-            {
-                string FileExtension = Path.GetExtension(input.File.FileName).ToLower();
-
-                if (FileExtension == ".jpeg" || FileExtension == ".png" || FileExtension == ".jpg" || FileExtension == ".gif")
-                {
-                    if (input.File.Length > 1048576)
-                    {
-                        throw new UserFriendlyException(String.Format("File needs to be less than 1MB!"));
-                    }
-                    else
-                    {
-                        //get user to take name + code
-                        User user = await _userManager.GetUserByIdAsync(input.UserId);
-                        //set avatar name = milisecond + id + name + extension
-                        String avatarPath = DateTimeOffset.Now.ToUnixTimeMilliseconds()
-                            + "_" + input.UserId
-                            + "_" + user.UserName
-                            + Path.GetExtension(input.File.FileName);
-                        using (var stream = System.IO.File.Create(Path.Combine(_webHostEnvironment.WebRootPath, "avatars", avatarPath)))
-                        {
-                            await input.File.CopyToAsync(stream);
-                            user.AvatarPath = "/avatars/" + avatarPath;
-                            await _userManager.UpdateAsync(user);
-                        }
-                        return user.AvatarPath;
-                    }
-                }
-                else
-                {
-                    throw new UserFriendlyException(String.Format("File can not upload!"));
-                }
-            }
-            else
-            {
-                throw new UserFriendlyException(String.Format("No file upload!"));
-            }
+            User user = await _userManager.GetUserByIdAsync(input.UserId);
+            String avatarPath = await _uploadFileService.UploadImageFileAsync(input.File, input.UserId);
+            user.AvatarPath = FileUtils.FullFilePath(avatarPath);
+            await _userManager.UpdateAsync(user);
+            return avatarPath;
+            
         }
 
         [HttpPost]

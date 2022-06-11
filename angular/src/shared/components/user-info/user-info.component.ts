@@ -1,3 +1,4 @@
+import { UploadAvatarComponent } from './../../../app/users/upload-avatar/upload-avatar.component';
 import { AppComponentBase } from '@shared/app-component-base';
 import { UserService } from './../../../app/service/api/user.service';
 import { UserDto } from './../../service-proxies/service-proxies';
@@ -30,7 +31,7 @@ export class UserInfoComponent extends AppComponentBase implements OnInit {
   }
   getAvatar(member) {
     if (member.avatarPath) {
-      return AppConsts.remoteServiceBaseUrl + member.avatarPath;
+      return member.avatarPath;
     }
     // if (member.avatarPath === '' && member.sex === 1) {
     //   return 'assets/images/women.png';
