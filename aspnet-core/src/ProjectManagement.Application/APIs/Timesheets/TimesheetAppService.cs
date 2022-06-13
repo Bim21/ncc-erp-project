@@ -279,14 +279,23 @@ namespace ProjectManagement.APIs.TimeSheets
         [HttpPost]
         public async Task UpdateAvatarFromTimesheet(UpdateAvatarDto input)
         {
-            var user = await WorkScope.GetAll<User>()
-                .Where(x => x.EmailAddress.ToLower().Trim() == input.EmailAddress.ToLower().Trim())
-                .FirstOrDefaultAsync();
-            if (user != null)
+            if (string.IsNullOrEmpty(input.AvatarPath))
             {
-                user.AvatarPath = input.AvatarPath == null ? "" : FileUtils.FullFilePath(input.AvatarPath);
+                Logger.Error($"user with {input.AvatarPath} is null or empty");
+                return;
             }
+            var user = await GetUserByEmailAsync(input.EmailAddress);
+
+            if (user == null)
+            {
+                Logger.Error($"not found user with email {input.EmailAddress}");
+                return;
+            }
+
+            user.AvatarPath = FileUtils.FullFilePath(input.AvatarPath);
             await WorkScope.UpdateAsync(user);
         }
+
     }
 }
+   

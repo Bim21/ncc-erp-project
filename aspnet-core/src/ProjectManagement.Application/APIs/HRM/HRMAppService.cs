@@ -133,7 +133,10 @@ namespace ProjectManagement.APIs.HRM
                 user.UserLevel = input.UserLevel;
                 user.BranchOld = input.Branch;
                 user.BranchId = branch.Id;
-                user.AvatarPath = input.AvatarPath == null ? "" : FileUtils.FullFilePath(input.AvatarPath);
+                if (!string.IsNullOrEmpty(input.AvatarPath))
+                {
+                    user.AvatarPath = FileUtils.FullFilePath(input.AvatarPath);
+                }
             }
             await WorkScope.UpdateAsync(user);
         }
