@@ -12,6 +12,7 @@ export interface IUser {
   fullNameNormal: string;
   branch: number;
   avatarPath: string;
+  avatarFullPath: string
   userType: number;
   userLevel: number;
   userSkills: any[] | undefined;

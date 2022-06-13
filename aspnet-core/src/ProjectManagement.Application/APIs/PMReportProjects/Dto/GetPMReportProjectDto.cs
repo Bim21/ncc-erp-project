@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using ProjectManagement.Constants.Enum;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,6 +25,7 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public string PmUserName { get; set; }
         public string PmFullName { get; set; }
         public string PmAvatarPath { get; set; }
+        public string PmAvatarFullPath => FileUtils.FullFilePath(PmAvatarPath);
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
         public bool Seen { get; set; }

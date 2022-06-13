@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {
@@ -24,6 +25,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         [ApplySearchAttribute]
         public string PmFullName { get; set; }
         public string PmAvatarPath { get; set; }
+        public string PmAvatarFullPath => FileUtils.FullFilePath(PmAvatarPath);
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
         public long? ClientId { get; set; }

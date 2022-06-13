@@ -3555,6 +3555,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
   emailAddress: string | undefined;
   id: number;
   avatarPath: string;
+  avatarFullPath: string;
 
   constructor(data?: IUserLoginInfoDto) {
     if (data) {
@@ -3573,6 +3574,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
       this.emailAddress = data['emailAddress'];
       this.id = data['id'];
       this.avatarPath = data['avatarPath'];
+      this.avatarFullPath = data['avatarFullPath'];
     }
   }
 
@@ -3591,6 +3593,8 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
     data['emailAddress'] = this.emailAddress;
     data['id'] = this.id;
     data['avatarPath'] = this.avatarPath;
+    this.avatarFullPath = data['avatarFullPath'];
+    
     return data;
   }
 
@@ -3608,6 +3612,7 @@ export interface IUserLoginInfoDto {
   userName: string | undefined;
   emailAddress: string | undefined;
   avatarPath: string | undefined;
+  avatarFullPath: string;
   id: number;
 }
 

@@ -249,12 +249,12 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
             this.notify.success('Upload Avatar Successfully!');
             this.refresh();
             if (this.appSession.user.id == user.id) {
-              this.appSession.user.avatarPath = data.body.result;
+              this.appSession.user.avatarFullPath = data.body.result;
             }
-            user.avatarPath = AppConsts.remoteServiceBaseUrl + data.body.result;
+            user.avatarFullPath = AppConsts.remoteServiceBaseUrl + data.body.result;
             this.users.forEach(u => {
               if (u.managerId == user.id) {
-                u.managerAvatarPath = user.avatarPath;
+                u.managerAvatarPath = user.avatarFullPath;
               }
             });
 

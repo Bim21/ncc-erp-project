@@ -1,5 +1,6 @@
 ﻿using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,6 +21,7 @@ namespace ProjectManagement.APIs.PMReports.Dto
         public long UserId { get; set; }
         public string FullName { get; set; }
         public string Avatar { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(Avatar);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public string Email { get; set; }

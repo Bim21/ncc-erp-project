@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.Projects.Dto
 {
@@ -26,6 +27,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string PmEmailAddress { get; set; }
         public string PmUserName { get; set; }
         public string PmAvatarPath { get; set; }
+        public string PmAvatarFullPath => FileUtils.FullFilePath(PmAvatarPath);
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
         public PMReportProjectStatus IsSent { get; set; }

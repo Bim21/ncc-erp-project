@@ -112,7 +112,7 @@ namespace ProjectManagement.Users
 
                             Id = u.Id,
                             EmailAddress = u.EmailAddress,
-                            AvatarPath = u.AvatarPath,
+                            AvatarPath = u.AvatarPath == null? "": u.AvatarPath,
                             UserType = u.UserType,
                             UserLevel = u.UserLevel,
                             Branch = u.BranchOld,
@@ -634,7 +634,7 @@ namespace ProjectManagement.Users
         {
             User user = await _userManager.GetUserByIdAsync(input.UserId);
             String avatarPath = await _uploadFileService.UploadImageFileAsync(input.File, input.UserId);
-            user.AvatarPath = FileUtils.FullFilePath(avatarPath);
+            user.AvatarPath = avatarPath;
             await _userManager.UpdateAsync(user);
             return avatarPath;
             

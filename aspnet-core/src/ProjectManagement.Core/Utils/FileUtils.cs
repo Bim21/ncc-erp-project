@@ -8,6 +8,11 @@ namespace ProjectManagement.Utils
     {
         public static string FullFilePath(string filePath)
         {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return filePath;
+            }
+
             if (Constants.ConstantUploadFile.Provider == Constants.ConstantUploadFile.AmazoneS3)
             {
                 return Constants.ConstantAmazonS3.CloudFront.TrimEnd('/') + "/" + filePath;

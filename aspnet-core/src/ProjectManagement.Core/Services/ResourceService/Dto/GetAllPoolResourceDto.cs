@@ -1,6 +1,7 @@
 ﻿using NccCore.Anotations;
 using NccCore.Uitls;
 using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -15,6 +16,7 @@ namespace ProjectManagement.Services.ResourceService.Dto
         [ApplySearchAttribute]
         public string FullName { get; set; }        
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }

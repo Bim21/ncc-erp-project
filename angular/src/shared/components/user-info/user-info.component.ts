@@ -30,8 +30,8 @@ export class UserInfoComponent extends AppComponentBase implements OnInit {
     }
   }
   getAvatar(member) {
-    if (member.avatarPath) {
-      return member.avatarPath;
+    if (member.avatarFullPath) {
+      return member.avatarFullPath;
     }
     // if (member.avatarPath === '' && member.sex === 1) {
     //   return 'assets/images/women.png';

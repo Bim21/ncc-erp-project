@@ -292,7 +292,7 @@ namespace ProjectManagement.APIs.TimeSheets
                 return;
             }
 
-            user.AvatarPath = FileUtils.FullFilePath(input.AvatarPath);
+            user.AvatarPath = input.AvatarPath;
             await WorkScope.UpdateAsync(user);
         }
 

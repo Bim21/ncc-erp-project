@@ -2,6 +2,7 @@
 using NccCore.Anotations;
 using System;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
@@ -18,6 +19,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         [ApplySearchAttribute]
         public string FullName { get; set; }
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
     }

@@ -9,6 +9,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceService.Dto;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.Users.Dto
 {
@@ -19,6 +20,7 @@ namespace ProjectManagement.Users.Dto
         [ApplySearchAttribute]
         public string EmailAddress { get; set; }
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public ProjectManagement.Constants.Enum.ProjectEnum.Branch Branch { get; set; }

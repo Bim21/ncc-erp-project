@@ -965,7 +965,7 @@ namespace ProjectManagement.Services.ResourceManager
                 Id = pu.Id,
                 ProjectId = pu.ProjectId,
                 UserId = pu.UserId,
-                AvatarPath = pu.User.AvatarPath != null ? "/avatars/" + pu.User.AvatarPath : "",
+                AvatarPath = pu.User.AvatarPath != null ? pu.User.AvatarPath : "",
                 FullName = pu.User.FullName,
                 EmailAddress = pu.User.EmailAddress,
                 Branch = pu.User.BranchOld,

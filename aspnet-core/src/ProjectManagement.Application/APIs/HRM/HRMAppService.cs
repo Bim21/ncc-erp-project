@@ -88,7 +88,7 @@ namespace ProjectManagement.APIs.HRM
                 Password = RandomPasswordHelper.CreateRandomPassword(8),
                 UserCode = model.UserCode,
                 BranchId = branch.Id,
-                AvatarPath = model.AvatarPath == null ? "" : FileUtils.FullFilePath(model.AvatarPath)
+                AvatarPath = model.AvatarPath == null ? "" : model.AvatarPath
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
@@ -135,7 +135,7 @@ namespace ProjectManagement.APIs.HRM
                 user.BranchId = branch.Id;
                 if (!string.IsNullOrEmpty(input.AvatarPath))
                 {
-                    user.AvatarPath = FileUtils.FullFilePath(input.AvatarPath);
+                    user.AvatarPath = input.AvatarPath;
                 }
             }
             await WorkScope.UpdateAsync(user);
