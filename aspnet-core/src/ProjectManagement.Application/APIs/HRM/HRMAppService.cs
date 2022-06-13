@@ -94,7 +94,7 @@ namespace ProjectManagement.APIs.HRM
                 CreateDate = DateTimeUtils.GetNow(),
             }, ChannelTypeConstant.GENERAL_CHANNEL);
 
-            var messageToPM = $"@here HR has onboarded: **{userName}** [{branch.DisplayName}](**{CommonUtil.UserLevelName(user.UserLevel)}**)";
+            var messageToPM = $"HR has onboarded: **{userName}** [{branch.DisplayName}](**{CommonUtil.UserLevelName(user.UserLevel)}**)";
 
             _komuService.NotifyToChannel(new KomuMessage
             {
