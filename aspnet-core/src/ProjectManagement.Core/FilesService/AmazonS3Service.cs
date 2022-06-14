@@ -68,8 +68,8 @@ namespace ProjectManagement.FilesService
         public async Task<string> ImageUserInfo(long userId)
         {
             User user = await _userManager.GetUserByIdAsync(userId);
-            string path = DateTimeOffset.Now.ToUnixTimeMilliseconds()
-                            + "_" + user.UserName;
+            string path = user.UserName
+                            + "_" + DateTimeOffset.Now.ToUnixTimeMilliseconds();
             return path;
 
         }
