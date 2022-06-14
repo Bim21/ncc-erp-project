@@ -11,6 +11,7 @@ namespace ProjectManagement.APIs.HRM.Dto
         public string UserName { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string AvatarPath { get; set; }
         public string EmailAddress { get; set; }
         public string UserCode { get; set; }
         public UserType UserType { get; set; }

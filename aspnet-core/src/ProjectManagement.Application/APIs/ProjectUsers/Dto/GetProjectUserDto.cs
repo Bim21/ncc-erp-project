@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,6 +26,7 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public string EmailAddress { get; set; }
         public string UserName { get; set; }
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public string Note { get; set; }

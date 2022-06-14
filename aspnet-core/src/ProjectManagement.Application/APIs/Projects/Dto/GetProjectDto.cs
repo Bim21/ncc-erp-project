@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
 using ProjectManagement.Constants.Enum;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,6 +35,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string PmEmailAddress { get; set; }
         public string PmUserName { get; set; }
         public string PmAvatarPath { get; set; }
+        public string PmAvatarFullPath => FileUtils.FullFilePath(PmAvatarPath);
         public UserType PmUserType { get; set; }
         public Branch PmBranch { get; set; }
         public PMReportProjectStatus IsSent { get; set; }

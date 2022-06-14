@@ -22,6 +22,11 @@ using ProjectManagement.Services.Finance;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.HRM;
+using ProjectManagement.Constants;
+using Amazon.Runtime.CredentialManagement;
+using Amazon.S3;
+using Amazon;
+using ProjectManagement.FilesService;
 
 namespace ProjectManagement.Web.Host.Startup
 {
@@ -82,6 +87,15 @@ namespace ProjectManagement.Web.Host.Startup
             services.AddHttpClient<TimesheetService>();
             services.AddHttpClient<KomuService>();
             services.AddHttpClient<HrmService>();
+
+            services.AddHttpClient<UploadFileService>();
+            services.AddHttpClient<AmazonS3Service>();
+            services.AddHttpClient<InternalUploadFileService>();
+
+            LoadUploadFileConfig();
+
+            CreateAWSCredentialProfile();
+            object value = services.AddAWSService<IAmazonS3>();
 
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
@@ -160,6 +174,37 @@ namespace ProjectManagement.Web.Host.Startup
                     .GetManifestResourceStream("ProjectManagement.Web.Host.wwwroot.swagger.ui.index.html");
                 options.DisplayRequestDuration(); // Controls the display of the request duration (in milliseconds) for "Try it out" requests.  
             }); // URL: /swagger
+        }
+        void CreateAWSCredentialProfile()
+        {
+            var options = new CredentialProfileOptions
+            {
+                AccessKey = ConstantAmazonS3.AccessKeyId,
+                SecretKey = ConstantAmazonS3.SecretKeyId
+            };
+            var profile = new CredentialProfile(ConstantAmazonS3.Profile, options);
+            profile.Region = RegionEndpoint.GetBySystemName(ConstantAmazonS3.Region);
+
+            var sharedFile = new SharedCredentialsFile();
+            sharedFile.RegisterProfile(profile);
+        }
+
+        private void LoadUploadFileConfig()
+        {
+            ConstantAmazonS3.Profile = _appConfiguration.GetValue<string>("AWS:Profile");
+            ConstantAmazonS3.AccessKeyId = _appConfiguration.GetValue<string>("AWS:AccessKeyId");
+            ConstantAmazonS3.SecretKeyId = _appConfiguration.GetValue<string>("AWS:SecretKeyId");
+            ConstantAmazonS3.Region = _appConfiguration.GetValue<string>("AWS:Region");
+            ConstantAmazonS3.BucketName = _appConfiguration.GetValue<string>("AWS:BucketName");
+            ConstantAmazonS3.Prefix = _appConfiguration.GetValue<string>("AWS:Prefix");
+            ConstantAmazonS3.CloudFront = _appConfiguration.GetValue<string>("AWS:CloudFront");
+
+            ConstantInternalUploadFile.AvatarFolder = _appConfiguration.GetValue<string>("InternalUploadFile:AvatarFolder");
+
+            ConstantUploadFile.Provider = _appConfiguration.GetValue<string>("UploadFile:Provider");
+            var strAllowImageFileType = _appConfiguration.GetValue<string>("UploadFile:AllowImageFileTypes");
+            ConstantUploadFile.AllowImageFileTypes = strAllowImageFileType.Split(",");
+            ConstantInternalUploadFile.RootUrl = _appConfiguration.GetValue<string>("App:ServerRootAddress");
         }
     }
 }

@@ -9,6 +9,8 @@ using ProjectManagement.MultiTenancy;
 using Abp.Dependency;
 using Abp.ObjectMapping;
 using NccCore.IoC;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManagement
 {
@@ -51,5 +53,13 @@ namespace ProjectManagement
         {
             identityResult.CheckErrors(LocalizationManager);
         }
+
+        protected virtual async Task<User> GetUserByEmailAsync(string emailAddress)
+        {
+           return await WorkScope.GetAll<User>()
+                .Where(x => x.EmailAddress.ToLower().Trim() == emailAddress.ToLower().Trim())
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

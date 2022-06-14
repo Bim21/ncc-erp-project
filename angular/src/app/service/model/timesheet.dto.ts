@@ -60,6 +60,7 @@ export class TimesheetProjectBill {
     emailAddress: string
     fullName: string
     avatarPath: string
+    avatarFullPath: string
     userType: number
     branch: number
     workingTime: number

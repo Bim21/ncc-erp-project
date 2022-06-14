@@ -330,13 +330,6 @@ export class EditRoleDialogComponent extends AppComponentBase implements OnInit 
     });
   }
 
-  getAvatar(member) {
-    if (member.avatarPath) {
-      return AppConsts.remoteServiceBaseUrl+ '/' + member.avatarPath;
-    }
-    return "assets/img/undefine.png";
-  }
-
   findDevLevelName(id) {
     const level = this.listUserLevel?.find((item) => {
       return item.id == id;

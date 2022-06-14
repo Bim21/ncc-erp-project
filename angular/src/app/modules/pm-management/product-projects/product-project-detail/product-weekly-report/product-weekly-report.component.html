@@ -285,7 +285,7 @@
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
                                                 branchColor:user.branchColor,
                                                 branchDisplayName:user.branchDisplayName,
-                                                    userType:user.userType,avatarPath: user.avatarPath,
+                                                    userType:user.userType,avatarFullPath: user.avatarFullPath,
                                                      userLevel: user.userLevel}">
                                             </app-user-info>
                                         </div>
@@ -396,7 +396,7 @@
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
-                                                                userType:report.userType,emailAddress:report.emailAddress, avatarPath:report.avatarPath}">
+                                                                userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath}">
                                                             </app-user-info>
 
                                                             <i  *ngIf="selectedReport.isActive"  style="margin-top: 23px ; color: #585858;"
@@ -569,7 +569,7 @@
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
-                                                        userType:report.userType,emailAddress:report.emailAddress,avatarPath: report.avatarPath}">
+                                                        userType:report.userType,emailAddress:report.emailAddress,avatarFullPath: report.avatarFullPath}">
                                                             </app-user-info>
 
                                                         </div>

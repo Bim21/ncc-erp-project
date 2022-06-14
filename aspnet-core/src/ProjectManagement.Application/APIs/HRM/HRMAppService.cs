@@ -24,6 +24,7 @@ using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Utils;
 using ProjectManagement.Services.ResourceService.Dto;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ProjectManagement.APIs.HRM
 {
@@ -32,20 +33,26 @@ namespace ProjectManagement.APIs.HRM
         private readonly IHttpContextAccessor _httpContextAccessor;
         private KomuService _komuService;
         private readonly ResourceManager _resourceManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager _userManager;
 
         public HRMAppService(IHttpContextAccessor httpContextAccessor, RoleManager roleManager, KomuService komuService,
             ResourceManager resourceManager,
-            ISettingManager settingManager)
+            ISettingManager settingManager,
+            IWebHostEnvironment webHostEnvironment,
+            UserManager userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _komuService = komuService;
             _resourceManager = resourceManager;
+            _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
 
         private async Task<ProjectManagement.Entities.Branch> GetBranchByCode(string code)
         {
-            var branch = await WorkScope.GetAll<ProjectManagement.Entities.Branch>().Where(s => s.Code == code).FirstOrDefaultAsync();
+             var branch = await WorkScope.GetAll<ProjectManagement.Entities.Branch>().Where(s => s.Code == code).FirstOrDefaultAsync();
             if (branch == default)
             {
                 branch= await WorkScope.GetAll<ProjectManagement.Entities.Branch>().FirstOrDefaultAsync();
@@ -80,7 +87,8 @@ namespace ProjectManagement.APIs.HRM
                 IsActive = true,
                 Password = RandomPasswordHelper.CreateRandomPassword(8),
                 UserCode = model.UserCode,
-                BranchId = branch.Id
+                BranchId = branch.Id,
+                AvatarPath = model.AvatarPath == null ? "" : model.AvatarPath
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
@@ -125,6 +133,10 @@ namespace ProjectManagement.APIs.HRM
                 user.UserLevel = input.UserLevel;
                 user.BranchOld = input.Branch;
                 user.BranchId = branch.Id;
+                if (!string.IsNullOrEmpty(input.AvatarPath))
+                {
+                    user.AvatarPath = input.AvatarPath;
+                }
             }
             await WorkScope.UpdateAsync(user);
         }

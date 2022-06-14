@@ -2,6 +2,7 @@
 using Abp.Domain.Entities;
 using NccCore.Anotations;
 using ProjectManagement.Entities;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,12 +17,14 @@ namespace ProjectManagement.APIs.CheckPointUsers.Dto
         public string ReviewerName { get; set; }
         public string ReviewerEmail { get; set; }
         public string ReviewerAvatar { get; set; }
+        public string ReviewerAvatarFullPath => FileUtils.FullFilePath(ReviewerAvatar);
         public long? UserId { get; set; }
         [ApplySearchAttribute]
         public string UserName { get; set; }
         [ApplySearchAttribute]
         public string UserEmail { get; set; }
         public string UserAvatar { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(UserAvatar);
         public CheckPointUserType Type { get; set; }    
         public CheckPointUserStatus Status { get; set; }
         public int? Score { get; set; }

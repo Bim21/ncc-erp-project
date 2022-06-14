@@ -5,6 +5,7 @@ using ProjectManagement.Users.Dto;
 using System;
 using System.Collections.Generic;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.ResourceRequests.Dto
 {
@@ -19,6 +20,7 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
         [ApplySearchAttribute]
         public string NormalFullName { get; set; }
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }

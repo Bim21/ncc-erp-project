@@ -34,6 +34,7 @@ export interface IProjectHistoryUser {
   emailAddress: string;
   userName: string;
   avatarPath: string;
+  avatarFullPath: string
   userType: number;
   branch: number;
   note: string;

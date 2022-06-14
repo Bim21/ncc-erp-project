@@ -17,6 +17,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ProjectTimesheet;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -273,5 +274,28 @@ namespace ProjectManagement.APIs.TimeSheets
             timesheet.IsActive = !timesheet.IsActive;
             await WorkScope.UpdateAsync(timesheet);
         }
+
+        [AbpAllowAnonymous]
+        [HttpPost]
+        public async Task UpdateAvatarFromTimesheet(UpdateAvatarDto input)
+        {
+            if (string.IsNullOrEmpty(input.AvatarPath))
+            {
+                Logger.Error($"user with {input.AvatarPath} is null or empty");
+                return;
+            }
+            var user = await GetUserByEmailAsync(input.EmailAddress);
+
+            if (user == null)
+            {
+                Logger.Error($"not found user with email {input.EmailAddress}");
+                return;
+            }
+
+            user.AvatarPath = input.AvatarPath;
+            await WorkScope.UpdateAsync(user);
+        }
+
     }
 }
+   

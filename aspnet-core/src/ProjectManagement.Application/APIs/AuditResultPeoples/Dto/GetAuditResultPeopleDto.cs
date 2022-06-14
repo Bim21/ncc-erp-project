@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities;
+using ProjectManagement.Utils;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.AuditResultPeoples.Dto
@@ -15,6 +16,7 @@ namespace ProjectManagement.APIs.AuditResultPeoples.Dto
         public string EmailAddress { get; set; }
         public string FullName { get; set; }
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
     }

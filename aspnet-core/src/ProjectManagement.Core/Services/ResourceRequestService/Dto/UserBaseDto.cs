@@ -13,6 +13,7 @@ namespace ProjectManagement.Services.ResourceRequestService.Dto
         public string FullName { get; set; }
         public string EmailAddress { get; set; }
         public string AvatarPath { get; set; }
+        public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public UserLevel UserLevel { get; set; }

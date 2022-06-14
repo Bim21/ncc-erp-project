@@ -138,14 +138,14 @@
                             <td (click)="showDetail(item)">
                                 <div style="width: 300px;">
                                     <app-user-info [userData]="{fullName:item.userName,
-                                        emailAddress:item.userEmail,avatarPath:item.userAvatar}"></app-user-info>
+                                        emailAddress:item.userEmail,avatarFullPath:item.avatarFullPath}"></app-user-info>
                                 </div>
                                 
                             </td>
                             <td>
                                 <div style="width: 300px;">
                                     <app-user-info [userData]="{fullName:item.reviewerName,
-                                        emailAddress:item.reviewerEmail,avatarPath:item.reviewerAvatar}"></app-user-info>
+                                        emailAddress:item.reviewerEmail,avatarFullPath:item.reviewerAvatarFullPath}"></app-user-info>
                                 </div></td>
                             <td> <span [ngClass]="getByEnum(item.type,APP_ENUM.CheckPointUserType)" class="mr-1">
                                 {{getByEnum(item.type,APP_ENUM.CheckPointUserType)}}</span></td>
