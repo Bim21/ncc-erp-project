@@ -11,31 +11,10 @@ namespace ProjectManagement.Helper
 {
     public class UploadFile
     {
-        private static readonly string[] imageFileTypes = new[] { "jpg", "jpeg", "png" };
-        public static async Task<string> UploadAsync(string fileLocation, IFormFile file, bool renameFile = true)
+        public static async Task<string> UploadFileAsync(string fileLocation, IFormFile file, string fileName)
         {
-            var fileExt = Path.GetExtension(file.FileName).Substring(1).ToLower();
-            if (!imageFileTypes.Contains(fileExt))
-                throw new UserFriendlyException("Wrong file type");
-
-            var fileName = renameFile ? $"{DateTime.Now.ToFileTime()}.{fileExt}" : file.FileName;
-            var filePath = Path.Combine(fileLocation, fileName);
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-            }
-            return fileName;
-        }
-
-        public static async Task<string> UploadImageAsync(string fileLocation, IFormFile file, string userInfo ,bool renameFile = true)
-        {
-            var fileExt = Path.GetExtension(file.FileName).Substring(1).ToLower();
-            if (!imageFileTypes.Contains(fileExt))
-                throw new UserFriendlyException("Wrong file type");
-
-            var fileName = renameFile ? $"{userInfo + "_" + file.FileName}" : file.FileName;
-            var filePath = Path.Combine(fileLocation, fileName);
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            var fullFilePath = Path.Combine(fileLocation, fileName);
+            using (var fileStream = new FileStream(fullFilePath, FileMode.Create))
             {
                 await file.CopyToAsync(fileStream);
             }

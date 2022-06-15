@@ -88,14 +88,7 @@ namespace ProjectManagement.Web.Host.Startup
             services.AddHttpClient<KomuService>();
             services.AddHttpClient<HrmService>();
 
-            services.AddHttpClient<UploadFileService>();
-            services.AddHttpClient<AmazonS3Service>();
-            services.AddHttpClient<InternalUploadFileService>();
-
-            LoadUploadFileConfig();
-
-            CreateAWSCredentialProfile();
-            object value = services.AddAWSService<IAmazonS3>();
+            RegisterFileService(services);
 
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
@@ -199,12 +192,29 @@ namespace ProjectManagement.Web.Host.Startup
             ConstantAmazonS3.Prefix = _appConfiguration.GetValue<string>("AWS:Prefix");
             ConstantAmazonS3.CloudFront = _appConfiguration.GetValue<string>("AWS:CloudFront");
 
-            ConstantInternalUploadFile.AvatarFolder = _appConfiguration.GetValue<string>("InternalUploadFile:AvatarFolder");
+            ConstantUploadFile.AvatarFolder = _appConfiguration.GetValue<string>("UploadFile:AvatarFolder");
 
             ConstantUploadFile.Provider = _appConfiguration.GetValue<string>("UploadFile:Provider");
             var strAllowImageFileType = _appConfiguration.GetValue<string>("UploadFile:AllowImageFileTypes");
             ConstantUploadFile.AllowImageFileTypes = strAllowImageFileType.Split(",");
             ConstantInternalUploadFile.RootUrl = _appConfiguration.GetValue<string>("App:ServerRootAddress");
+        }
+
+        private void RegisterFileService(IServiceCollection services)
+        {
+            LoadUploadFileConfig();
+
+            if (ConstantUploadFile.Provider == ConstantUploadFile.AMAZONE_S3)
+            {
+                CreateAWSCredentialProfile();
+                services.AddAWSService<IAmazonS3>();
+                services.AddTransient<IFileService, AmazonS3Service>();
+            }
+            else
+            {
+                services.AddTransient<IFileService, InternalUploadFileService>();
+            }
+
         }
     }
 }
