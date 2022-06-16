@@ -633,7 +633,7 @@ namespace ProjectManagement.Users
         public async Task<string> UpdateAvatar([FromForm] AvatarDto input)
         {
             User user = await _userManager.GetUserByIdAsync(input.UserId);
-            String avatarPath = await _uploadFileService.UploadImageFileAsync(input.File, input.UserId);
+            String avatarPath = await _uploadFileService.UploadAvatarAsync(input.File);
             user.AvatarPath = avatarPath;
             await _userManager.UpdateAsync(user);
             return avatarPath;
@@ -876,7 +876,7 @@ namespace ProjectManagement.Users
                 {
                     user.StarRate = item.StarRate;
                     user.UserLevel = item.Level;
-                    user.UserType = item.Type == UserType.Staff ? UserType.ProbationaryStaff : item.Type;
+                    user.UserType = item.Level >= UserLevel.FresherMinus ? UserType.ProbationaryStaff : UserType.Internship;
                     await _workScope.UpdateAsync(user);
                 }
             }
