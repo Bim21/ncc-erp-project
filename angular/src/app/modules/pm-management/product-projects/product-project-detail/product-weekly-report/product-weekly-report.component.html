@@ -278,10 +278,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr (contextmenu)="showActions($event)"
+                                <tr
                                     *ngFor="let user of projectCurrentResource; let i =index">
                                     <td class="d-flex justify-content-between" style="border: none;width: 380px;">
-                                        <div style="width: 80%;">
+                                        <div style="width: 80%;" class="d-flex">
+                                            <div>
+                                                <i style="color: #585858;margin-top: 23px !important;"
+                                            class="fas fa-ellipsis-v mt-1 mr-2"
+                                            [matMenuTriggerFor]="menu"></i>
+                                            </div>
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
                                                 branchColor:user.branchColor,
                                                 branchDisplayName:user.branchDisplayName,
@@ -396,7 +401,7 @@
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
-                                                                userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath}">
+                                                                userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath, userLevel: report.userLevel}">
                                                             </app-user-info>
 
                                                             <i  *ngIf="selectedReport.isActive"  style="margin-top: 23px ; color: #585858;"
@@ -569,7 +574,7 @@
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
-                                                        userType:report.userType,emailAddress:report.emailAddress,avatarFullPath: report.avatarFullPath}">
+                                                        userType:report.userType,emailAddress:report.emailAddress,avatarFullPath: report.avatarFullPath, userLevel: report.userLevel}">
                                                             </app-user-info>
 
                                                         </div>
