@@ -4,8 +4,10 @@ using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,24 +22,20 @@ namespace ProjectManagement.FilesService
     {
         private readonly ILogger<AmazonS3Service> logger;
         private readonly IAmazonS3 s3Client;
-        private readonly UserManager _userManager;
 
-        public AmazonS3Service(HttpClient httpClient, ILogger<AmazonS3Service> logger, IAmazonS3 _s3Client, UserManager userManager)
+        public AmazonS3Service(ILogger<AmazonS3Service> logger, IAmazonS3 _s3Client)
         {
             this.logger = logger;
             this.s3Client = _s3Client;
-            _userManager = userManager;
         }
 
-        public async Task<string> UploadFileAsync(IFormFile file, string[] allowFileTypes, long userId)
+        public async Task<string> UploadFileAsync(IFormFile file, string[] allowFileTypes, string filePath)
         {
-            var userInfo = await ImageUserInfo(userId);
             var strAlowFileType = string.Join(", ", allowFileTypes);
-            logger.LogInformation($"UploadFile() fileName: {file.FileName}, contentType: {file.ContentType}, allowFileTypes: {strAlowFileType}");
-
+            logger.LogInformation($"UploadFile() fileName: {file.FileName}, contentType: {file.ContentType}, allowFileTypes: {strAlowFileType}, filePath: {filePath}");
             CheckValidFile(file, allowFileTypes);
 
-            var key = string.IsNullOrEmpty(ConstantAmazonS3.Prefix) ? file.FileName : $"{ConstantAmazonS3.Prefix?.TrimEnd('/')}/{userInfo}_{file.FileName}";
+            var key = $"{ConstantAmazonS3.Prefix?.TrimEnd('/')}/{filePath}";
 
             logger.LogInformation($"UploadImageFile() Key: {key}");
             var request = new PutObjectRequest()
@@ -47,31 +45,22 @@ namespace ProjectManagement.FilesService
                 InputStream = file.OpenReadStream()
             };
             request.Metadata.Add("Content-Type", file.ContentType);
-            await s3Client.PutObjectAsync(request);
-            /* PutObjectResponse response = await s3Client.PutObjectAsync(request);*/
-            /*  logger.LogInformation(response.ToString());*/
+            var response = await s3Client.PutObjectAsync(request);
+            logger.LogDebug(JsonConvert.SerializeObject(response));
             return key;
         }
 
         private void CheckValidFile(IFormFile file, string[] allowFileTypes)
         {
-            var fileExt = Path.GetExtension(file.FileName).Substring(1).ToLower(); ;
+            var fileExt = FileUtils.GetFileExtension(file);
             if (!allowFileTypes.Contains(fileExt))
                 throw new UserFriendlyException($"Wrong file type {file.ContentType}. Allow file types: {string.Join(", ", allowFileTypes)}");
         }
 
-        public async Task<string> UploadImageFileAsync(IFormFile file, long userId)
+        public async Task<string> UploadAvatarAsync(IFormFile file)
         {
-            return await UploadFileAsync(file, ConstantUploadFile.AllowImageFileTypes, userId);
-        }
-
-        public async Task<string> ImageUserInfo(long userId)
-        {
-            User user = await _userManager.GetUserByIdAsync(userId);
-            string path = DateTimeOffset.Now.ToUnixTimeMilliseconds()
-                            + "_" + user.UserName;
-            return path;
-
+            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
+            return await UploadFileAsync(file, ConstantUploadFile.AllowImageFileTypes, filePath);
         }
 
     }

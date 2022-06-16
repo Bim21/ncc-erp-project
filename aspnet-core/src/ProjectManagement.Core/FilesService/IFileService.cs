@@ -8,8 +8,8 @@ namespace ProjectManagement.FilesService
 {
     public interface IFileService
     {
-        Task<string> UploadImageFileAsync(IFormFile file, long userId);
+        Task<string> UploadAvatarAsync(IFormFile file);
 
-        Task<string> UploadFileAsync(IFormFile file, string[] allowFileTypes, long userId);
+        Task<string> UploadFileAsync(IFormFile file, string[] allowFileTypes, string filePath);
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using static ProjectManagement.Constants.Enum.ClientEnum;
 using Branch = ProjectManagement.Constants.Enum.ProjectEnum.Branch;
+using Abp.Timing;
 
 namespace ProjectManagement.Utils
 {
@@ -200,6 +201,21 @@ namespace ProjectManagement.Utils
             return Enum.GetName(typeof(ProjectStatus), status);
 
         }
+        public static DateTime GetNow()
+        {
+            return Clock.Provider.Now;
+        }
+
+        public static long NowToMilliseconds()
+        {
+            return DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        }
+
+        public static string NowToYYYYMMddHHmmss()
+        {
+            return GetNow().ToString("yyyyMMddHHmmss");
+        }
+        
 
     }
 }

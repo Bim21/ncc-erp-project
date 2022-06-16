@@ -140,6 +140,7 @@ export class TrainingProjectDto {
   pmEmailAddress?: string;
   pmUserName?: string;
   pmAvatarPath?: string;
+  pmAvatarFullPath?: string;
   pmUserType?: number;
   pmBranch?: number;
   isSent?: number;

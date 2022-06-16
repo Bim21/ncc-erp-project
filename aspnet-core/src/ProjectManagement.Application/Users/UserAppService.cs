@@ -633,7 +633,7 @@ namespace ProjectManagement.Users
         public async Task<string> UpdateAvatar([FromForm] AvatarDto input)
         {
             User user = await _userManager.GetUserByIdAsync(input.UserId);
-            String avatarPath = await _uploadFileService.UploadImageFileAsync(input.File, input.UserId);
+            String avatarPath = await _uploadFileService.UploadAvatarAsync(input.File);
             user.AvatarPath = avatarPath;
             await _userManager.UpdateAsync(user);
             return avatarPath;
