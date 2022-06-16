@@ -369,7 +369,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             var userName = UserHelper.GetUserName(user.EmailAddress);
             if (pm != null && !pm.KomuUserId.HasValue)
             {
-                pm.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = pmUserName ?? pm.UserName }, ChannelTypeConstant.KOMU_USER);
+                pm.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = pmUserName ?? pm.UserName });
                 await WorkScope.UpdateAsync<User>(pm);
             }
             var message = new StringBuilder();
