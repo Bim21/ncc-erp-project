@@ -40,14 +40,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
     public class TimesheetProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly FinanceService _financeService;
+        private readonly FinfastService _financeService;
         private ISettingManager _settingManager;
         private KomuService _komuService;
         private readonly string templateFolder = Path.Combine("wwwroot", "template");
         private readonly ProjectTimesheetManager _timesheetManager;
         private readonly TimesheetService _timesheetService;
 
-        public TimesheetProjectAppService(IWebHostEnvironment environment, FinanceService financeService,
+        public TimesheetProjectAppService(IWebHostEnvironment environment, FinfastService financeService,
             KomuService komuService, ISettingManager settingManager, ProjectTimesheetManager timesheetManager,
             TimesheetService timesheetService)
         {
@@ -361,7 +361,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var userName = UserHelper.GetUserName(user.EmailAddress);
             if (user != null && !user.KomuUserId.HasValue)
             {
-                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName }, ChannelTypeConstant.KOMU_USER);
+                user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto { Username = userName ?? user.UserName });
                 await WorkScope.UpdateAsync(user);
             }
             var historyFile = new StringBuilder();

@@ -1,10 +1,10 @@
 ﻿
 using Abp.Configuration;
-using Abp.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ProjectManagement.Configuration;
+using Newtonsoft.Json.Linq;
+using ProjectManagement.Constants;
 using ProjectManagement.Services.Komu.KomuDto;
 using System;
 using System.Net.Http;
@@ -17,34 +17,29 @@ namespace ProjectManagement.Services.Komu
     {
         private ILogger<KomuService> logger;
         private HttpClient httpClient;
-        private string _baseUrl;
-        private string _secretCode;
-        private string channelUrl = string.Empty;
-        private string channelId = string.Empty;
+        private readonly string _channelIdDevMode;
         private bool _enableSendToKomu = false;
 
-        public KomuService(HttpClient httpClient, ILogger<KomuService> logger, ISettingManager settingManager, IConfiguration configuration)
+        public KomuService(HttpClient httpClient, ILogger<KomuService> logger, IConfiguration configuration)
         {
             this.logger = logger;
             this.httpClient = httpClient;
-            channelUrl = configuration.GetValue<string>("Channel:ChannelUrl");
-            channelId = configuration.GetValue<string>("Channel:ChannelId");
-            _baseUrl = settingManager.GetSettingValueForApplication(AppSettingNames.KomuUrl);
-            _secretCode = settingManager.GetSettingValueForApplication(AppSettingNames.KomuSecretCode);
-            var noticeToKomu = settingManager.GetSettingValueForApplication(AppSettingNames.NoticeToKomu);
-            _enableSendToKomu = noticeToKomu == "true";
+             _channelIdDevMode = configuration.GetValue<string>("KomuService:DevModeChannelId");
+            var _isNotifyToKomu = configuration.GetValue<string>("KomuService:EnableKomuNotification");
+            _enableSendToKomu = _isNotifyToKomu == "true";
+            var baseAddress = configuration.GetValue<string>("KomuService:BaseAddress");
+            var secretCode = configuration.GetValue<string>("KomuService:SecurityCode");
+
+            httpClient.BaseAddress = new Uri(baseAddress);
+            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", secretCode);
         }
-        public async Task<long?> GetKomuUserId(KomuUserDto komuUserDto, string url)
+        public async Task<long?> GetKomuUserId(KomuUserDto input)
         {
-            var contentString = new StringContent(JsonConvert.SerializeObject(komuUserDto), Encoding.UTF8, "application/json");
-            var httpResponse = await PostAsync(url, contentString);
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<KomuUserDto>(responseContent);
-                return result != null ? result.KomuUserId : null;
-            }
-            return null;
+            var komuUser = await PostAsync<KomuUserDto>(ChannelTypeConstant.KOMU_USER, new { username = input.Username });
+            if (komuUser != null)
+                return komuUser.KomuUserId;
+
+            return default;
         }
         public void NotifyToChannel(KomuMessage input, string channelType)
         {
@@ -53,59 +48,70 @@ namespace ProjectManagement.Services.Komu
                 logger.LogInformation("_enableSendToKomu=false => stop");
             }
 
-            if (!string.IsNullOrEmpty(channelUrl) && !string.IsNullOrEmpty(channelId))
-            {
-                var contentString = new StringContent(JsonConvert.SerializeObject(new { message = input.Message, channelid = channelId }), Encoding.UTF8, "application/json");
-                 Post(channelUrl, contentString);
+            if (!string.IsNullOrEmpty(_channelIdDevMode))
+            {                
+                 Post(ChannelTypeConstant.KOMU_CHANNELID, new { message = input.Message, channelid = _channelIdDevMode });
             }
             else
             {
-                var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
-                 Post(channelType, contentString);
-
+                 Post(channelType, input);
             }
         }
-        private async Task<HttpResponseMessage> PostAsync(string url, StringContent contentString)
+
+
+        public void Post(string url, object input)
         {
-            url = _baseUrl + url;
-            logger.LogInformation($"PostAsync() url={url}");
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", _secretCode);
-            HttpResponseMessage httpResponse = new HttpResponseMessage();
+            var fullUrl = $"{this.httpClient.BaseAddress}/{url}";
+            string strInput = JsonConvert.SerializeObject(input);
             try
             {
-                httpResponse = await httpClient.PostAsync(url, contentString);
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    var responseContent = await httpResponse.Content.ReadAsStringAsync();
-                    logger.LogInformation($"PostAsync() url={url} Response:StatusCode= {httpResponse.StatusCode}, Content={responseContent}");
-                }
-                return httpResponse;
-            }
-            catch (Exception e)
-            {
-                logger.LogInformation($"PostAsync() url={url} Response:StatusCode= {httpResponse.StatusCode}, Error={e.Message}");
-                //throw new UserFriendlyException("Connection to KOMU failed!");
-                return null;
-            }
-
-        }
-
-        private void Post(string url, StringContent contentString)
-        {
-            url = _baseUrl + url;
-            logger.LogInformation($"Post() url={url}");
-            httpClient.DefaultRequestHeaders.Clear();
-            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", _secretCode);
-            try
-            {
+                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
+                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
                 httpClient.PostAsync(url, contentString);
             }
             catch (Exception e)
             {
-                logger.LogInformation($"Post() url={url}, Error={e.Message}");
+                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
             }
 
         }
+        public async Task<T> PostAsync<T>(string url, object input)
+        {
+            string strInput = JsonConvert.SerializeObject(input);
+            var fullUrl = $"{this.httpClient.BaseAddress}/{url}";
+            try
+            {
+                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
+
+                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await httpClient.PostAsync(url, contentString);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    logger.LogInformation($"Post: {fullUrl} input: {strInput} response: {responseContent}");
+
+                    JObject responseJObj = JObject.Parse(responseContent);
+
+                    var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
+                    if (result == null)
+                    {
+                        result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj));
+                    }
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
+            }
+
+            return default;
+
+
+        }
+
+
     }
 }

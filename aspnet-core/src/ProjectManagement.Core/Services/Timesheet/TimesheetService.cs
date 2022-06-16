@@ -1,10 +1,7 @@
-﻿using Abp.Configuration;
-using Abp.UI;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ProjectManagement.Configuration;
-using ProjectManagement.Services.Finance;
 using ProjectManagement.Services.Timesheet.Dto;
 using System;
 using System.Collections.Generic;
@@ -19,13 +16,18 @@ namespace ProjectManagement.Services.Timesheet
     {
         private readonly HttpClient httpClient;
         private readonly ILogger<TimesheetService> logger;
-        private readonly ISettingManager settingManager;
 
-        public TimesheetService(HttpClient httpClient, ILogger<TimesheetService> logger, ISettingManager settingManager)
+        public TimesheetService(HttpClient httpClient, ILogger<TimesheetService> logger, IConfiguration configuration)
         {
-            this.settingManager = settingManager;
             this.httpClient = httpClient;
             this.logger = logger;
+
+            var baseAddress = configuration.GetValue<string>("TimesheetService:BaseAddress");
+            var securityCode = configuration.GetValue<string>("TimesheetService:SecurityCode");
+
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.BaseAddress = new Uri(baseAddress);
+            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", securityCode);
         }
 
         public async Task<string> CreateCustomer(string name, string code, string address)
@@ -89,69 +91,91 @@ namespace ProjectManagement.Services.Timesheet
                 listProjectCode);
         }
 
-        private async Task<T> GetAsync<T>(string Url)
+
+        public async Task<T> GetAsync<T>(string url)
         {
-            using (var httpClient = new HttpClient())
+            var fullUrl = $"{httpClient.BaseAddress}/{url}";
+            try
             {
-                httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.BaseAddress = new Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri));
-                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretCode));
-                HttpResponseMessage response = new HttpResponseMessage();
-                try
+                var response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
                 {
-                    response = await httpClient.GetAsync(Url);
-                    if (response.IsSuccessStatusCode)
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    logger.LogInformation($"Get: {fullUrl} => Response: {responseContent}");
+
+                    JObject responseJObj = JObject.Parse(responseContent);
+                    var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
+                    if (result == null)
                     {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        logger.LogInformation($"Get: {Url} response: { responseContent}");
-                        JObject res = JObject.Parse(responseContent);
-                        var rs = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res["result"]));
-                        return rs;
+                        result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj));
                     }
-                    else
-                    {
-                        return default;
-                    }
+                    return result;
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError($"Exception in GetAsync() url = {Url}\nError = {ex.Message}");
-                    return default;
-                }
-                
             }
+            catch (Exception e)
+            {
+                logger.LogError($"Get: {fullUrl} => Exception: {e}");
+
+            }
+            return default;
+
         }
-        private async Task<T> PostAsync<T>(string Url, object input)
+
+        public void Post(string url, object input)
         {
-            using (var httpClient = new HttpClient())
+            var fullUrl = $"{httpClient.BaseAddress}/{url}";
+            string strInput = JsonConvert.SerializeObject(input);
+            try
             {
-                httpClient.DefaultRequestHeaders.Accept.Clear();
-                httpClient.BaseAddress = new System.Uri(await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri));
-                httpClient.DefaultRequestHeaders.Add("X-Secret-Key", await settingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretCode));
-                var contentString = new StringContent(JsonConvert.SerializeObject(input), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = new HttpResponseMessage();
-                try { 
-                    response = await httpClient.PostAsync(Url, contentString);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseContent = await response.Content.ReadAsStringAsync();
-                        logger.LogInformation($"Post: {Url} response: { responseContent}");
-                        JObject res = JObject.Parse(responseContent);
-                        var rs = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(res["result"]));
-                        return rs;
-                    }
-                    else
-                    {
-                        return default;
-                    }
-                }
-                catch (Exception ex)
-                {
-                   logger.LogError($"Exception in PostAsync() url = {Url}, input={JObject.FromObject(input).ToString()}\nError = {ex.Message}");
-                    return default;
-                }
-                
+                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
+                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
+                httpClient.PostAsync(url, contentString);
             }
+            catch (Exception e)
+            {
+                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
+            }
+
         }
+        public async Task<T> PostAsync<T>(string url, object input)
+        {
+            var fullUrl = $"{httpClient.BaseAddress}/{url}";
+            string strInput = JsonConvert.SerializeObject(input);
+
+            try
+            {
+                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
+
+                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await httpClient.PostAsync(url, contentString);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+
+                    logger.LogInformation($"Post: {fullUrl} input: {strInput} response: {responseContent}");
+
+                    JObject responseJObj = JObject.Parse(responseContent);
+
+                    var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
+                    if (result == null)
+                    {
+                        result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj));
+                    }
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
+            }
+
+            return default;
+
+
+        }
+
+
     }
 }

@@ -83,14 +83,12 @@ namespace ProjectManagement.Web.Host.Startup
                         .AllowCredentials()
                 )
             );
-            services.AddHttpClient<FinanceService>();
+            services.AddHttpClient<FinfastService>();
             services.AddHttpClient<TimesheetService>();
             services.AddHttpClient<KomuService>();
-            services.AddHttpClient<HrmService>();
+            services.AddHttpClient<HRMService>();
 
             services.AddHttpClient<UploadFileService>();
-            services.AddHttpClient<AmazonS3Service>();
-            services.AddHttpClient<InternalUploadFileService>();
 
             LoadUploadFileConfig();
 

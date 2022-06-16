@@ -64,7 +64,7 @@ namespace ProjectManagement.Users
         private readonly LogInManager _logInManager;
         private readonly IWorkScope _workScope;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly HrmService _hrmService;
+        private readonly HRMService _hrmService;
         private ISettingManager _settingManager;
         private KomuService _komuService;
         private UploadFileService _uploadFileService;
@@ -78,7 +78,7 @@ namespace ProjectManagement.Users
             LogInManager logInManager,
             IWorkScope workScope,
             IWebHostEnvironment webHostEnvironment,
-            HrmService hrmService,
+            HRMService hrmService,
             KomuService komuService,
             ISettingManager settingManager,
             IHttpContextAccessor httpContextAccessor,
@@ -896,8 +896,7 @@ namespace ProjectManagement.Users
             user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto
             {
                 Username = userName,
-            },
-            ChannelTypeConstant.KOMU_USER);
+            });
 
             if (user.KomuUserId.HasValue)
             {
@@ -925,8 +924,7 @@ namespace ProjectManagement.Users
                 user.KomuUserId = await _komuService.GetKomuUserId(new KomuUserDto
                 {
                     Username = userName ?? user.UserName,
-                },
-                ChannelTypeConstant.KOMU_USER);
+                });
                 if (user.KomuUserId.HasValue)
                 {
                     await _userManager.UpdateAsync(user);
