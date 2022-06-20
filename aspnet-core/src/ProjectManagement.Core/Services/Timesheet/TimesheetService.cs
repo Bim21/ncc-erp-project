@@ -92,6 +92,19 @@ namespace ProjectManagement.Services.Timesheet
         }
 
 
+      
+        public async Task<string> UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        {
+            var item = new
+            {
+                ProjectCode = projectCode,
+                EmailAddress = emailAddress,
+                IsPool = isPool,
+                Role = role,
+            };
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/UserJoinProject", item);
+        }
+
         public async Task<T> GetAsync<T>(string url)
         {
             var fullUrl = $"{httpClient.BaseAddress}/{url}";

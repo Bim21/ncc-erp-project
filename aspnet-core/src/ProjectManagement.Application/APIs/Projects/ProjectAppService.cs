@@ -30,6 +30,7 @@ using ProjectManagement.Configuration;
 using Abp.Application.Services.Dto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -41,17 +42,20 @@ namespace ProjectManagement.APIs.Projects
         private readonly TimesheetService _timesheetService;
         private readonly ISettingManager _settingManager;
         private readonly IRepository<UserRole, long> _userRoleRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public ProjectAppService(IProjectUserAppService projectUserAppService,
             TimesheetService timesheetService,
             IRepository<UserRole, long> userRoleRepository,
             ResourceManager resourceManager,
-            ISettingManager settingManager)
+            ISettingManager settingManager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _projectUserAppService = projectUserAppService;
             _timesheetService = timesheetService;
             _userRoleRepository = userRoleRepository;
             _resourceManager = resourceManager;
             _settingManager = settingManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -121,7 +125,7 @@ namespace ProjectManagement.APIs.Projects
                                         isActive = b.isActive,
                                         FullName = b.User.FullName,
                                     }).ToList() : null
-        };
+                        };
             return await query.GetGridResult(query, input);
         }
 
@@ -652,6 +656,180 @@ namespace ProjectManagement.APIs.Projects
             return "update-only-project-tool";
 
         }
+
+
+        private void CheckSecurityCode()
+        {
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
+            var header = _httpContextAccessor.HttpContext.Request.Headers;
+            var securityCodeHeader = header["X-Secret-Key"].ToString();
+            if (secretCode == securityCodeHeader)
+                return;
+
+            throw new UserFriendlyException($"SecretCode does not match! {secretCode.Substring(0, secretCode.Length / 2)} != {securityCodeHeader.Substring(0, securityCodeHeader.Length / 2)}");
+        }
+
+        [AbpAllowAnonymous]
+        [HttpGet]
+        public async Task<List<GetTempOfUserInProjectDto>> GetUserTempInProject(string code)
+        {
+            //CheckSecurityCode();
+            var project = await WorkScope.GetAll<Project>()
+                .Where(x => x.Code.ToUpper() == code.ToUpper())
+                .FirstOrDefaultAsync();
+
+            if (project == default)
+                throw new UserFriendlyException("Project not exist !");
+
+            var tempProjectUsers = await WorkScope.GetAll<ProjectUser>()
+                    .Where(s => s.ProjectId == project.Id)
+                    .Where(s => s.User.UserType != UserType.FakeUser)
+                    .Where(s => s.IsPool)
+                    .Where(s => s.Status != ProjectUserStatus.Future)
+                    .Select(s => new
+                        {
+                            s.User.EmailAddress,
+                            s.UserId,
+                            s.StartTime,
+                            s.AllocatePercentage
+                        })
+                    .ToListAsync();
+
+            var result = tempProjectUsers.GroupBy(s => new { s.EmailAddress, s.UserId }).Select(s =>
+             new GetTempOfUserInProjectDto
+             {
+                 EmailAddress = s.Key.EmailAddress,
+                 ListTimeJoinOut = s.Select(x => new TimeJoinOut
+                 {
+                     StartTime = x.StartTime,
+                     IsJoin = x.AllocatePercentage > 0
+                 }).OrderByDescending(x => x.StartTime).ToList()
+             });
+
+            return UserTempInProject(result.ToList());
+        }
+
+        private List<GetTempOfUserInProjectDto> UserTempInProject(List<GetTempOfUserInProjectDto> list)
+        {
+            var result = new List<GetTempOfUserInProjectDto>();
+
+            foreach (var item in list)
+            {
+                var tempOfUserInProject = new GetTempOfUserInProjectDto { };
+                var listProjectUserJoinOut = item.ListTimeJoinOut.OrderBy(s => s.StartTime).ToList();
+                tempOfUserInProject.EmailAddress = item.EmailAddress;
+                tempOfUserInProject.ListTimeJoinOut = new List<TimeJoinOut>();
+                bool isJoinFirst = false;
+                foreach (var projectUserJoinOut in listProjectUserJoinOut)
+                {
+                    if (isJoinFirst == false && projectUserJoinOut.IsJoin == false)
+                    {
+                        continue;
+                    }
+                    if (projectUserJoinOut.IsJoin == true)
+                    {
+                        isJoinFirst = true;
+                    }
+                    var time = new TimeJoinOut
+                    {
+                        StartTime = projectUserJoinOut.StartTime,
+                        IsJoin = projectUserJoinOut.IsJoin,
+                    };
+                    if (tempOfUserInProject.ListTimeJoinOut.Count == 0)
+                    {
+                        tempOfUserInProject.ListTimeJoinOut.Add(time);
+                    }
+                    else 
+                    {
+                        //Loại các ngày out gần nhau
+                        if (!(tempOfUserInProject.ListTimeJoinOut.LastOrDefault().IsJoin == false && time.IsJoin == false))
+                        {
+                            tempOfUserInProject.ListTimeJoinOut.Add(time);
+                        }
+                    }
+                }
+
+                result.Add(tempOfUserInProject);
+            }
+
+            return result;
+        }
+
+
+
+        [AbpAllowAnonymous]
+        [HttpGet]
+        public async Task<List<GetUserTempOrOfficalInProject>> GetUserTempOrOfficalInProjectFromProjectToolByCode(string code)
+        {
+            //CheckSecurityCode();
+            var projectId = await WorkScope.GetAll<Project>()
+                .Where(x => x.Code.ToUpper() == code.ToUpper())
+                .Select(x=>x.Id)
+                .FirstOrDefaultAsync();
+
+            if (projectId == default)
+                throw new UserFriendlyException("Project not exist!");
+
+            var projectUsers = await WorkScope.GetAll<ProjectUser>()
+                    .Where(s => s.ProjectId == projectId)
+                    .Where(s => s.User.UserType != UserType.FakeUser)
+                    .Where(s => s.Status == ProjectUserStatus.Present)
+                    .Where(s => s.AllocatePercentage > 0)
+                    .Where(s => s.IsPool)
+                    .OrderByDescending(s => s.StartTime)
+                    .Select(s => new GetUserTempOrOfficalInProject
+                    {
+                        EmailAddress = s.User.EmailAddress,
+                    })
+                    .ToListAsync();
+
+            return projectUsers;
+        }
+
+
+        [AbpAllowAnonymous]
+        [HttpPost]
+        public async Task<List<ResultGetUserTempOrOfficalInProject>> GetUserTempOrOfficalInProjectFromProjectToolByListCode(List<string> listProjectCode)
+        {
+            //CheckSecurityCode();
+            Logger.Info("listProjectCodelistProjectCode" + listProjectCode.Count().ToString());
+            var listProjectId = await WorkScope.GetAll<Project>()
+                .Where(s => listProjectCode.Contains(s.Code.ToUpper()))
+                .Select(s=>s.Id)
+                .ToListAsync();
+
+            if (listProjectId == default)
+                throw new UserFriendlyException("Project not exist!");
+
+            var projectUsers = await WorkScope.GetAll<ProjectUser>()
+                    .Include(s=>s.Project)
+                    .Where(s => listProjectId.Contains(s.ProjectId))
+                    .Where(s => s.User.UserType != UserType.FakeUser)
+                    .Where(s => s.Status == ProjectUserStatus.Present)
+                    .Where(s => s.AllocatePercentage > 0)
+                    .Where(s => s.IsPool)
+                    .OrderByDescending(s => s.StartTime)
+                    .Select(s => new 
+                        {
+                            EmailAddress = s.User.EmailAddress,
+                            Code = s.Project.Code
+                        })
+                    .ToListAsync();
+
+            var result = projectUsers.GroupBy(s => new { s.Code })
+                .Select(s =>
+                    new ResultGetUserTempOrOfficalInProject
+                    {
+                        Code = s.Key.Code,
+                        ListUserTempOrOfficalInProject = s.Select(x => new GetUserTempOrOfficalInProject
+                        {
+                            EmailAddress = x.EmailAddress,
+                        }).ToList()
+                    }).ToList();
+
+            return result;
+        }
+
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail)]

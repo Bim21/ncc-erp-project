@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Application.Services;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Runtime.Session;
 using Abp.UI;
@@ -13,6 +14,7 @@ using NccCore.Paging;
 using NccCore.Uitls;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Komu;
@@ -21,6 +23,7 @@ using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
+using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
@@ -37,15 +40,21 @@ namespace ProjectManagement.Services.ResourceManager
         private readonly KomuService _komuService;
         private readonly UserManager _userManager;
         private readonly ResourceRequestManager _resourceRequestManager;
+        private readonly ISettingManager _settingManager;
+        private readonly TimesheetService _timesheetService;
 
         public ResourceManager(IWorkScope workScope, IAbpSession abpSession,
             ResourceRequestManager resourceRequestManager,
-            KomuService komuService, UserManager userManager)
+            KomuService komuService, UserManager userManager,
+            ISettingManager settingManager,
+            TimesheetService timesheetService)
         {
             _workScope = workScope;
             _komuService = komuService;
             _userManager = userManager;
             _resourceRequestManager = resourceRequestManager;
+            _settingManager = settingManager;
+            _timesheetService = timesheetService;
         }
 
         public IQueryable<ProjectOfUserDto> QueryProjectsOfUser()
@@ -305,6 +314,25 @@ namespace ProjectManagement.Services.ResourceManager
             return joinPU;
         }
 
+
+        private async Task<bool> IsEnableAutoCreateUpdateToTimsheetTool()
+        {
+            var dbSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool);
+            return dbSetting == "true";
+        }
+
+        [HttpPost]
+        private async Task<string> UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        {
+            if (!(await IsEnableAutoCreateUpdateToTimsheetTool()))
+            {
+                Logger.Info("UserJoinProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
+                return "update-only-project-tool";
+            }
+
+            return await _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role);
+        }
+
         private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
         {
             sbKomuMessage.AppendLine();
@@ -372,7 +400,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
-
+            await UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole);
 
             return confirmPUExt;
 
