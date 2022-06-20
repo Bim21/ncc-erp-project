@@ -29,17 +29,6 @@ export class UserInfoComponent extends AppComponentBase implements OnInit {
       }
     }
   }
-  getAvatar(member) {
-    if (member.avatarFullPath) {
-      return member.avatarFullPath;
-    }
-    // if (member.avatarPath === '' && member.sex === 1) {
-    //   return 'assets/images/women.png';
-    // } if (member.avatarPath === '' && member.sex === 0) {
-    //   return 'assets/images/men.png';
-    // }
-    return '/assets/img/user.png';
-  }
 
   public getStarColor(star, isClass){
     switch(star){
