@@ -28,6 +28,13 @@ namespace ProjectManagement.Authorization
         public const string Admin_Branchs_Edit = "Admin.Branchs.Edit";
         public const string Admin_Branchs_Delete = "Admin.Branchs.Delete";
 
+        //Technologies 
+        public const string Admin_Technologies = "Admin.Technologies";
+        public const string Admin_Technologies_View = "Admin.Technologies.View";
+        public const string Admin_Technologies_Create = "Admin.Technologies.Create";
+        public const string Admin_Technologies_Edit = "Admin.Technologies.Edit";
+        public const string Admin_Technologies_Delete = "Admin.Technologies.Delete";
+
         //Configuration
         public const string Admin_Configuartions = "Admin.Configuartions";
         public const string Admin_Configuartions_Edit = "Admin.Configuartions.Edit";
@@ -160,6 +167,8 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_Edit";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Rate_View";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Note_Edit";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabTimesheet = "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet";
 
@@ -514,6 +523,13 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Branchs_Create,
                     PermissionNames.Admin_Branchs_Edit,
                     PermissionNames.Admin_Branchs_Delete,
+
+                    //Technologies 
+                    PermissionNames.Admin_Technologies,
+                    PermissionNames.Admin_Technologies_View,
+                    PermissionNames.Admin_Technologies_Create,
+                    PermissionNames.Admin_Technologies_Edit,
+                    PermissionNames.Admin_Technologies_Delete,
                     //Configuration
                     PermissionNames.Admin_Configuartions,
                     PermissionNames.Admin_Configuartions_Edit,
@@ -646,6 +662,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet ,
 
@@ -1001,6 +1019,12 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
 
+                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Technologies" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
+
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuartions" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewKomuSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Komu Setting" },
@@ -1128,6 +1152,8 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "LastInvoiceNumber: Edit" },   
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: Edit" }, 
+                        new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Rate" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note" }, 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab timesheet" },
 
 
@@ -1474,7 +1500,17 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                                  new SystemPermission{ Name =  PermissionNames.Admin_Branchs_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
-                            }
+                            },
+                        }
+                        ,
+                          new SystemPermission { Name =  PermissionNames.Admin_Technologies, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Technologies",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Technologies_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
+                            },
                         },
                           new SystemPermission { Name =  PermissionNames.Admin_Configuartions, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Configuration",
                             Childrens = new List<SystemPermission>()
@@ -1656,6 +1692,8 @@ namespace ProjectManagement.Authorization
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "LastInvoiceNumber: Edit"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: View"},
                                              new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Discount: Edit"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Rate"},
+                                             new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
                                      }
                                  },
                                   new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabTimesheet, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Timsheet"},

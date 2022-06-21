@@ -19,8 +19,7 @@
                     Mô tả ngắn dự án:
                 </label>
                 <div *ngIf="readMode" class="col-md-9 mt-2">
-                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                        font-family: sans-serif; align-self:flex-start; ">
+                    <pre class="mb-0 p-0  ml-2 pre-text">
                           {{projectDetail.briefDescription}}
                       </pre>
                 </div>
@@ -38,8 +37,7 @@
                     Mô tả chi tiết dự án:
                 </label>
                 <div *ngIf="readMode" class="col-md-9 mt-2">
-                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                        font-family: sans-serif; align-self:flex-start; ">
+                    <pre class="mb-0 p-0  ml-2 pre-text">
                           {{projectDetail.detailDescription}}
                       </pre>
                 </div>
@@ -57,18 +55,26 @@
                     Công nghệ sử dụng:
                 </label>
                 <div *ngIf="readMode" class="col-md-9 mt-2">
-                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                    font-family: sans-serif; align-self:flex-start; ">
-                      {{projectDetail.technologyUsed}}
-                  </pre>
+                    <pre *ngIf="projectDetail.technologyUsed" class="mb-0 p-0  ml-2 pre-text">
+                        {{projectDetail.technologyUsed}}
+                    </pre>
+                    <pre class="mb-0 p-0  ml-2 pre-text">
+                        <span *ngFor="let technology of projectDetail.projectTechnologies; let i=index" class="mr-1 badge text-white" [style.backgroundColor]="technology.color">
+                            {{technology.name}}
+                        </span>
+                    </pre>
                 </div>
                 <div *ngIf="!readMode" class="col-md-9">
-                    <textarea rows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize" type="text"
-                        class="form-control" name="technologyUsed" id="technologyUsed" required
-                        [(ngModel)]="projectDetail.technologyUsed" #technologyUsed="ngModel"
-                        #technologyUsedEl></textarea>
-                    <!-- <abp-validation-summary [control]="technologyUsed" [controlEl]="technologyUsedEl">
-                    </abp-validation-summary> -->
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-select multiple [(ngModel)]="projectTechnologyList" name="projectTechnologies" placeholder="Select technologies" #projectTechnologies="ngModel">
+                            <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                                <input matInput [(ngModel)]="searchTechnology" name="searchTechnology" placeholder="Search" #search (input)="$event.stopPropagation();
+                                filterTechnology()">{{search.focus()}}
+                            </mat-form-field>
+                            <mat-option *ngFor="let technology of technologyList" [value]="technology.id">
+                                {{technology.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
             </div>
 
@@ -78,8 +84,7 @@
                     Các vấn đề kĩ thuật:
                 </label>
                 <div *ngIf="readMode" class="col-md-9 mt-2">
-                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                    font-family: sans-serif; align-self:flex-start; ">
+                    <pre class="mb-0 p-0  ml-2 pre-text">
                       {{projectDetail.technicalProblems}}
                   </pre>
                 </div>
@@ -97,8 +102,7 @@
                     Các vấn đề khác:
                 </label>
                 <div *ngIf="readMode" class="col-md-9 mt-2">
-                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                    font-family: sans-serif; align-self:flex-start; ">
+                    <pre class="mb-0 p-0  ml-2 pre-text">
                       {{projectDetail.otherProblems}}
                   </pre>
                 </div>
@@ -115,8 +119,7 @@
                     Kiến thức mới có thể sử dụng sau này:
                 </label>
                 <div *ngIf="readMode" class="col-md-9 mt-2">
-                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                    font-family: sans-serif; align-self:flex-start; ">
+                    <pre class="mb-0 p-0  ml-2 pre-text">
                       {{projectDetail.newKnowledge}}
                   </pre>
                 </div>

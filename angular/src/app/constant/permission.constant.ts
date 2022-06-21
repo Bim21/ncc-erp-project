@@ -64,6 +64,13 @@ export const PERMISSIONS_CONSTANT = {
         Admin_Branchs_Edit: "Admin.Branchs.Edit",
         Admin_Branchs_Delete: "Admin.Branchs.Delete",
 
+       //Technologies 
+       Admin_Technologies: "Admin. Technologies",
+       Admin_Technologies_View: "Admin.Technologies.View",
+       Admin_Technologies_Create: "Admin.Technologies.Create",
+       Admin_Technologies_Edit: "Admin.Technologies.Edit",
+       Admin_Technologies_Delete: "Admin.Technologies.Delete",
+
        //Project
        //Projects > Outsourcing Project
        Projects: "Projects",
@@ -152,6 +159,8 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_Edit",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_View",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_Edit",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Rate_View",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Note_Edit",
 
        Projects_OutsourcingProjects_ProjectDetail_TabTimesheet : "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet",
 

@@ -8,6 +8,9 @@ import { projectUserBillDto, ProjectRateDto } from './../../../../../service/mod
 import { ProjectUserBillService } from './../../../../../service/api/project-user-bill.service';
 import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { EditNoteDialogComponent } from './add-note-dialog/edit-note-dialog.component';
+
 
 @Component({
   selector: 'app-project-bill',
@@ -39,8 +42,14 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit;
-  constructor(private projectUserBillService: ProjectUserBillService, private route: ActivatedRoute,
-    injector: Injector, private userService: UserService) {
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View;
+  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit;
+  constructor(
+    private projectUserBillService: ProjectUserBillService,
+    private route: ActivatedRoute,
+    injector: Injector, 
+    private userService: UserService,
+    private _modalService: BsModalService) {
     super(injector)
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
 
@@ -202,5 +211,22 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.isEditDiscount = false;
   }
   
+  updateNote(id, fullName,projectName,note) {
+    let editNoteDialog: BsModalRef;
+    editNoteDialog = this._modalService.show(EditNoteDialogComponent, {
+      class: 'modal',
+      initialState: {
+        id: id,
+        fullName: fullName,
+        projectName: projectName,
+        note: note,
+      },
+    });
+
+    editNoteDialog.content.onSave.subscribe(() => {
+      this.getUserBill();
+    });
+  }
+
 
 }

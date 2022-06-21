@@ -73,7 +73,7 @@ import { EditRoleDialogComponent } from './roles/edit-role/edit-role-dialog.comp
 import { TrainingProjectFileComponent } from './modules/pm-management/training-projects/training-project-detail/training-project-file/training-project-file.component';
 import { ProductProjectFileComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-file/product-project-file.component';
 import { BranchComponent } from './modules/admin/branch/branch.component';
-
+import { TechnologyComponent } from './modules/admin/technology/technology.component';
 
 @NgModule({
   imports: [
@@ -115,6 +115,11 @@ import { BranchComponent } from './modules/admin/branch/branch.component';
           {
             path: "branchs",
             component: BranchComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "technologies",
+            component: TechnologyComponent,
             canActivate: [AppRouteGuard],
           },
           {
