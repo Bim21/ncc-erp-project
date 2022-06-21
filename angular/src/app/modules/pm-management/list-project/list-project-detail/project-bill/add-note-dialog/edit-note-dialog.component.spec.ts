@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateUpdateBranchComponent } from './create-update-branch.component';
+import { EditNoteDialogComponent } from './edit-note-dialog.component';
 
-describe('CreateUpdateBranchComponent', () => {
-  let component: CreateUpdateBranchComponent;
-  let fixture: ComponentFixture<CreateUpdateBranchComponent>;
+describe('EditNoteDialogComponent', () => {
+  let component: EditNoteDialogComponent;
+  let fixture: ComponentFixture<EditNoteDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateUpdateBranchComponent ]
+      declarations: [ EditNoteDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateUpdateBranchComponent);
+    fixture = TestBed.createComponent(EditNoteDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

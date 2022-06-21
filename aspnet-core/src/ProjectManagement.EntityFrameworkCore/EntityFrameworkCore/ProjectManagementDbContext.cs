@@ -44,6 +44,8 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<TimesheetProjectBill> TimesheetProjectBills { get; set; }
         public DbSet<ResourceRequestSkill> ResourceRequestSkills { get; set; }
         public DbSet<Branch> Branchs { get; set; }
+        public DbSet<Technology> Technologies { get; set; }
+        public DbSet<ProjectTechnology> ProjectTechnologies { get; set; }
 
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)

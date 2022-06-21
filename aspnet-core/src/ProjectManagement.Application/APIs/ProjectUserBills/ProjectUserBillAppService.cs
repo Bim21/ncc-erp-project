@@ -39,6 +39,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             PermissionNames.Projects_TrainingProjects_ProjectDetail_TabBillInfo)]
         public async Task<List<GetProjectUserBillDto>> GetAllByProject(long projectId)
         {
+            var isViewRate = await IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View);
             var query = WorkScope.GetAll<ProjectUserBill>()
                 .Where(x => x.ProjectId == projectId)
                 .OrderByDescending(x => x.CreationTime)
@@ -50,7 +51,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             ProjectId = x.ProjectId,
                             ProjectName = x.Project.Name,
                             BillRole = x.BillRole,
-                            BillRate = x.BillRate,
+                            BillRate = isViewRate ? x.BillRate : 0,
                             StartTime = x.StartTime.Date,
                             EndTime = x.EndTime.Value.Date,
                             //CurrencyName = x.Project.Currency.Name,
@@ -125,7 +126,6 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
         }
 
-
         [HttpGet]
         [AbpAuthorize]
         public async Task<ProjectRateDto> GetRate(long projectId)
@@ -190,7 +190,13 @@ namespace ProjectManagement.APIs.ProjectUserBills
             if (input.EndTime.HasValue && input.StartTime.Date > input.EndTime.Value.Date)
                 throw new UserFriendlyException($"Start date cannot be greater than end date !");
 
+            var isEditNote = await IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit);
+            if (!isEditNote)
+            {
+                input.Note = projectUserBill.Note;
+            }
             var entity = ObjectMapper.Map(input, projectUserBill);
+            
             await WorkScope.UpdateAsync(entity);
 
             await this.timesheetManager.UpdateTimesheetProjectBill(entity);
@@ -206,6 +212,19 @@ namespace ProjectManagement.APIs.ProjectUserBills
             var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(projectUserBillId);
 
             await WorkScope.DeleteAsync(projectUserBill);
+        }
+
+        [HttpPut]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit)]
+        public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
+        {
+            var projectUserBill = await WorkScope.GetAsync<ProjectUserBill>(input.Id);
+
+            var entity = ObjectMapper.Map(input, projectUserBill);
+
+            await WorkScope.UpdateAsync(entity);
+
+            return input;
         }
     }
 }
