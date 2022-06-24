@@ -25,6 +25,9 @@ export class CreateUpdateBranchComponent extends AppComponentBase implements OnI
       this.branch = this.data.item;
       this.title = this.data.item.name ? this.data.item.name : ''
     }
+    else{
+      this.branch.color = "#28a745";
+    }
   }
   
   
