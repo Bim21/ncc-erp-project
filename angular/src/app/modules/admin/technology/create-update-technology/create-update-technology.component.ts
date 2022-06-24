@@ -25,6 +25,9 @@ export class CreateUpdateTechnologyComponent extends AppComponentBase implements
       this.technology = this.data.item;
       this.title = this.data.item.name ? this.data.item.name : ''
     }
+    else{
+      this.technology.color = "#28a745";
+    }
   }
   
   SaveAndClose() {
