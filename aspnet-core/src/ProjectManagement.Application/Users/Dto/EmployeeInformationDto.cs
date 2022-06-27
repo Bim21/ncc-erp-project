@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ProjectManagement.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Users.Dto
 {
@@ -11,8 +13,10 @@ namespace ProjectManagement.Users.Dto
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime? DOB { get; set; }
-        public string RoleType { get; set; }
-        public string Position { get; set; }
+        public UserType UserType { get; set; }
+        public Job? Job { get; set; }
+        public string RoleType => CommonUtil.UserTypeName(this.UserType);
+        public string Position => CommonUtil.JobPositionName(Job);
         public string Branch { get; set; }
         public List<ProjectDTO> ProjectDtos { get; set; }
     }
