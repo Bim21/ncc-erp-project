@@ -355,13 +355,17 @@ namespace ProjectManagement.Users
                 return null;
             }
 
-            var user = await _workScope
+            var userAndBranch = await _workScope
                 .GetAll<User>()
-                .FirstOrDefaultAsync(u => u.EmailAddress == email);
-            if (user == null)
+                .Where(s => s.EmailAddress == email)
+                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : ""})
+                .FirstOrDefaultAsync();
+
+            if (userAndBranch == null)
             {
                 return null;
             }
+            var user = userAndBranch.User;
 
             if (string.IsNullOrEmpty(user.PhoneNumber) || !user.DOB.HasValue || !user.Job.HasValue)
             {
@@ -378,16 +382,13 @@ namespace ProjectManagement.Users
                                 {
                                     ProjectId = pu.ProjectId,
                                     ProjectName = pu.Project.Name,
-                                    PmName = pu.Project.PM != null ?
-                                        pu.Project.PM.Surname.Trim() + " " + pu.Project.PM.Name.Trim() :
-                                        string.Empty,
+                                    PmName = pu.Project.PM.FullName,
                                     StartTime = pu.StartTime,
                                     ProjectRole = pu.ProjectRole,
-                                    PmUsername = pu.Project.PM != null ?
-                                        (UserHelper.GetUserName(pu.Project.PM.EmailAddress) ?? pu.Project.PM.UserName) :
-                                        string.Empty,
+                                    PmEmail = pu.Project.PM.EmailAddress
                                 };
             var projectUsers = await qProjectUsers.OrderByDescending(x => x.StartTime).ToListAsync();
+
             var employeeInfo = new EmployeeInformationDto()
             {
                 EmployeeId = user.Id,
@@ -395,28 +396,23 @@ namespace ProjectManagement.Users
                 EmployeeName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
                 DOB = user.DOB,
-                Branch = user.Branch.Name,
+                Branch = userAndBranch.BranchName,
                 UserType = user.UserType,
                 Job = user.Job,
-                ProjectDtos = new List<ProjectDTO>()
-            };
-
-
-            if (projectUsers.Any())
-            {
-                employeeInfo.ProjectDtos.
-                    AddRange(projectUsers.Select(x =>
+                ProjectDtos = projectUsers.Select(x =>
                         new ProjectDTO()
                         {
                             ProjectId = x.ProjectId,
                             ProjectName = x.ProjectName,
                             PmName = x.PmName,
                             StartTime = x.StartTime,
-                            ProjectRole = Enum.GetName(typeof(ProjectUserRole), x.ProjectRole),
-                            PmUsername = x.PmUsername
-                        })
-                    );
-            }
+                            PRole = x.ProjectRole,
+                            PmEmail = x.PmEmail
+                        }).ToList()
+            };
+
+
+           
             return employeeInfo;
         }
 

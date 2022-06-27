@@ -1,4 +1,5 @@
-﻿using ProjectManagement.Utils;
+﻿using ProjectManagement.NccCore.Helper;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,8 +27,10 @@ namespace ProjectManagement.Users.Dto
         public long ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string PmName { get; set; }
-        public string PmUsername{ get; set; }
+        public string PmUsername => UserHelper.GetUserName(this.PmEmail);
         public DateTime StartTime { get; set; }
-        public string ProjectRole { get; set; }
+        public ProjectUserRole PRole { get; set; }
+        public string ProjectRole => Enum.GetName(typeof(ProjectUserRole), this.PRole);
+        public string PmEmail { get; set; }
     }
 }
