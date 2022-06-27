@@ -181,6 +181,16 @@ namespace ProjectManagement.Utils
             return Enum.GetName(typeof(UserType), type);
         }
 
+        public static string JobPositionName(Job? job)
+        {
+            if (!job.HasValue)
+            {
+                return "";
+            }           
+            return Enum.GetName(typeof(Job), job.Value);
+        }
+
+
         public static string ProjectTypeName(ProjectType projectType)
         {
             switch (projectType)

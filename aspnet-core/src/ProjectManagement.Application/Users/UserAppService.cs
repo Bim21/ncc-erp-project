@@ -346,10 +346,10 @@ namespace ProjectManagement.Users
         [HttpGet]
         public async Task<EmployeeInformationDto> GetEmployeeInformation(string email)
         {
-            if (!CheckSecurityCode())
-            {
-                throw new UserFriendlyException("SecretCode does not match!");
-            }
+            //if (!CheckSecurityCode())
+            //{
+            //    throw new UserFriendlyException("SecretCode does not match!");
+            //}
             if (string.IsNullOrEmpty(email))
             {
                 return null;
@@ -392,12 +392,12 @@ namespace ProjectManagement.Users
             {
                 EmployeeId = user.Id,
                 EmailAddress = user.EmailAddress,
-                EmployeeName = user.Surname.Trim() + " " + user.Name.Trim(),
+                EmployeeName = user.FullName,
                 PhoneNumber = user.PhoneNumber,
                 DOB = user.DOB,
-                Branch = Enum.GetName(typeof(ProjectManagement.Constants.Enum.ProjectEnum.Branch), user.Branch),
-                RoleType = Enum.GetName(typeof(UserType), user.UserType),
-                Position = user.Job.HasValue ? Enum.GetName(typeof(Job), user.Job) : String.Empty,
+                Branch = user.Branch.Name,
+                UserType = user.UserType,
+                Job = user.Job,
                 ProjectDtos = new List<ProjectDTO>()
             };
 
