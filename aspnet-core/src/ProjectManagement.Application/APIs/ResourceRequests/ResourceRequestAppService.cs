@@ -27,6 +27,7 @@ using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
+using ProjectManagement.Services.Talent;
 using ProjectManagement.Users;
 using ProjectManagement.Users.Dto;
 using ProjectManagement.Utils;
@@ -53,6 +54,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         private readonly UserManager _userManager;
         private ISettingManager _settingManager;
         private KomuService _komuService;
+        private readonly TalentService _talentService;
 
         public ResourceRequestAppService(
             ProjectUserAppService projectUserAppService,
@@ -62,7 +64,8 @@ namespace ProjectManagement.APIs.ResourceRequests
             ResourceManager resourceManager,
             ResourceRequestManager resourceRequestManager,
             ISettingManager settingManager,
-            IUserAppService userAppService)
+            IUserAppService userAppService,
+            TalentService talentService)
         {
             _projectUserAppService = projectUserAppService;
             _pMReportProjectIssueAppService = pMReportProjectIssueAppService;
@@ -72,6 +75,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             _userAppService = userAppService;
             _userManager = userManager;
             _resourceRequestManager = resourceRequestManager;
+            _talentService = talentService;
         }
 
         [HttpPost]
@@ -272,6 +276,9 @@ namespace ProjectManagement.APIs.ResourceRequests
                 .Where(s => s.Id == requestId)
                 .FirstOrDefaultAsync();
 
+            if (resourceRequest.IsRecruitmentSend)
+                await _talentService.CancelRequest(requestId);
+
             await notifyToKomu(requestDto, Action.Cancel, null);
             return requestDto;
         }
@@ -338,9 +345,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             request.Request.Status = ResourceRequestStatus.DONE;
             request.Request.TimeDone = DateTimeUtils.GetNow();
             await WorkScope.UpdateAsync(request.Request);
-
-
-
             return input;
         }
 

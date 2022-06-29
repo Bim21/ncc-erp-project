@@ -6,6 +6,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 using static ProjectManagement.Constants.Enum.ClientEnum;
 using Branch = ProjectManagement.Constants.Enum.ProjectEnum.Branch;
 using Abp.Timing;
+using Microsoft.Extensions.Configuration;
 
 namespace ProjectManagement.Utils
 {
@@ -226,6 +227,13 @@ namespace ProjectManagement.Utils
             return GetNow().ToString("yyyyMMddHHmmss");
         }
         
-
+        public static string GetPathSendRecuitment(string path)
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build()
+                .GetValue<string>("TalentService:FEAddress");
+            return config + path;
+        }
     }
 }

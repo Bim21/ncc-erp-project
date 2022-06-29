@@ -27,6 +27,8 @@ using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon;
 using ProjectManagement.FilesService;
+using ProjectManagement.Services.Talent;
+using ProjectManagement.Services;
 
 namespace ProjectManagement.Web.Host.Startup
 {
@@ -83,10 +85,13 @@ namespace ProjectManagement.Web.Host.Startup
                         .AllowCredentials()
                 )
             );
+
             services.AddHttpClient<FinfastService>();
             services.AddHttpClient<TimesheetService>();
             services.AddHttpClient<KomuService>();
             services.AddHttpClient<HRMService>();
+            services.AddHttpClient<TalentService>();
+            services.AddHttpClient<BaseWebService>();
 
             RegisterFileService(services);
 
