@@ -230,7 +230,7 @@ namespace ProjectManagement.Utils
         
         public static string GetPathSendRecuitment(string path)
         {
-            return AppConsts.FE_TALENT_ADDRESS + path;
+            return string.IsNullOrEmpty(path) ? "" : AppConsts.FE_TALENT_ADDRESS + path;
         }
     }
 }
