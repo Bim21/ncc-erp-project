@@ -95,6 +95,8 @@ namespace ProjectManagement.Web.Host.Startup
 
             RegisterFileService(services);
 
+            ProjectManagement.Constants.AppConsts.FE_TALENT_ADDRESS = _appConfiguration.GetValue<string>("TalentService:FEAddress");
+
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             services.AddSwaggerGen(options =>
             {

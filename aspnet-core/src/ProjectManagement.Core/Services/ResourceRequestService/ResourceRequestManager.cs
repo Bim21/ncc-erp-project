@@ -43,7 +43,7 @@ namespace ProjectManagement.Services.ResourceRequestService
                             PMNote = request.PMNote,
                             Priority = request.Priority,
 
-                            RecruitmentUrl = CommonUtil.GetPathSendRecuitment(request.RecruitmentUrl),
+                            PathRecruitment = request.RecruitmentUrl,
                             TimeNeed = request.TimeNeed,
                             TimeDone = request.TimeDone,
                             Status = request.Status,

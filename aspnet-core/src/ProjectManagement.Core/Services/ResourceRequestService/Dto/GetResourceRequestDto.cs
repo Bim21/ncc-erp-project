@@ -26,7 +26,8 @@ namespace ProjectManagement.Services.ResourceRequestService.Dto
         public string DMNote { get; set; }
         public List<ResourceRequestSkillDto> Skills { get; set; }
         public bool IsRecruitmentSend { get; set; }
-        public string RecruitmentUrl { get; set; }        
+        public string RecruitmentUrl { get => CommonUtil.GetPathSendRecuitment(PathRecruitment); }
+        public string PathRecruitment { get; set; }
         public PlanUserInfoDto PlanUserInfo { get; set; }
         public long ProjectId { get; set; }
         [ApplySearchAttribute]
