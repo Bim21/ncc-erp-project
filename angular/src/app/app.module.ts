@@ -178,6 +178,7 @@ import { CreateUpdateBranchComponent } from './modules/admin/branch/create-updat
 import { TechnologyComponent } from './modules/admin/technology/technology.component';
 import { CreateUpdateTechnologyComponent } from './modules/admin/technology/create-update-technology/create-update-technology.component';
 import { EditNoteDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/add-note-dialog/edit-note-dialog.component';
+import { FormSendRecruitmentComponent } from './modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -338,7 +339,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     CreateUpdateBranchComponent,
     TechnologyComponent,
     CreateUpdateTechnologyComponent,
-    EditNoteDialogComponent
+    EditNoteDialogComponent,
+    FormSendRecruitmentComponent
   ],
   imports: [
     CommonModule,

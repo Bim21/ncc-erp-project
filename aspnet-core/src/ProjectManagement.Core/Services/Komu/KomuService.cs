@@ -13,25 +13,21 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.Services.Komu
 {
-    public class KomuService
+    public class KomuService : BaseWebService
     {
-        private ILogger<KomuService> logger;
-        private HttpClient httpClient;
         private readonly string _channelIdDevMode;
         private bool _enableSendToKomu = false;
+        private const string serviceName = "KomuService";
 
-        public KomuService(HttpClient httpClient, ILogger<KomuService> logger, IConfiguration configuration)
+        public KomuService(
+            HttpClient httpClient, 
+            ILogger<KomuService> logger, 
+            IConfiguration configuration
+        ) : base(httpClient,configuration,logger,serviceName)
         {
-            this.logger = logger;
-            this.httpClient = httpClient;
-             _channelIdDevMode = configuration.GetValue<string>("KomuService:DevModeChannelId");
-            var _isNotifyToKomu = configuration.GetValue<string>("KomuService:EnableKomuNotification");
+             _channelIdDevMode = configuration.GetValue<string>($"{serviceName}:DevModeChannelId");
+            var _isNotifyToKomu = configuration.GetValue<string>($"{serviceName}:EnableKomuNotification");
             _enableSendToKomu = _isNotifyToKomu == "true";
-            var baseAddress = configuration.GetValue<string>("KomuService:BaseAddress");
-            var secretCode = configuration.GetValue<string>("KomuService:SecurityCode");
-
-            httpClient.BaseAddress = new Uri(baseAddress);
-            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", secretCode);
         }
         public async Task<long?> GetKomuUserId(KomuUserDto input)
         {
@@ -57,61 +53,5 @@ namespace ProjectManagement.Services.Komu
                  Post(channelType, input);
             }
         }
-
-
-        public void Post(string url, object input)
-        {
-            var fullUrl = $"{this.httpClient.BaseAddress}/{url}";
-            string strInput = JsonConvert.SerializeObject(input);
-            try
-            {
-                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
-                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
-                httpClient.PostAsync(url, contentString);
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
-            }
-
-        }
-        public async Task<T> PostAsync<T>(string url, object input)
-        {
-            string strInput = JsonConvert.SerializeObject(input);
-            var fullUrl = $"{this.httpClient.BaseAddress}/{url}";
-            try
-            {
-                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
-
-                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await httpClient.PostAsync(url, contentString);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    logger.LogInformation($"Post: {fullUrl} input: {strInput} response: {responseContent}");
-
-                    JObject responseJObj = JObject.Parse(responseContent);
-
-                    var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
-                    if (result == null)
-                    {
-                        result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj));
-                    }
-                    return result;
-                }
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
-            }
-
-            return default;
-
-
-        }
-
-
     }
 }
