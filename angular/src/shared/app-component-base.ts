@@ -82,4 +82,10 @@ export abstract class AppComponentBase {
     public formatDateYMD(date:any){
         return moment(date).format("YYYY-MM-DD")
     }
+    getAvatar(member) {
+      if (member.avatarFullPath) {
+        return member.avatarFullPath;
+      }
+      return '/assets/img/user.png';
+    }
 }

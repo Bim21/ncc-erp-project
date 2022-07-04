@@ -6,6 +6,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.ResourceRequestService.Dto;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace ProjectManagement.Services.ResourceRequestService
                             PMNote = request.PMNote,
                             Priority = request.Priority,
 
-                            RecruitmentUrl = request.RecruitmentUrl,
+                            PathRecruitment = request.RecruitmentUrl,
                             TimeNeed = request.TimeNeed,
                             TimeDone = request.TimeDone,
                             Status = request.Status,

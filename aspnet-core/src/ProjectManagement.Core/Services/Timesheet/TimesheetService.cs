@@ -12,22 +12,15 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.Timesheet
 {
-    public class TimesheetService
+    public class TimesheetService : BaseWebService
     {
-        private readonly HttpClient httpClient;
-        private readonly ILogger<TimesheetService> logger;
-
-        public TimesheetService(HttpClient httpClient, ILogger<TimesheetService> logger, IConfiguration configuration)
+        private const string serviceName = "TimesheetService";
+        public TimesheetService(
+            HttpClient httpClient, 
+            IConfiguration configuration,
+            ILogger<TimesheetService> logger
+        ) : base(httpClient,configuration,logger,serviceName)
         {
-            this.httpClient = httpClient;
-            this.logger = logger;
-
-            var baseAddress = configuration.GetValue<string>("TimesheetService:BaseAddress");
-            var securityCode = configuration.GetValue<string>("TimesheetService:SecurityCode");
-
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.BaseAddress = new Uri(baseAddress);
-            httpClient.DefaultRequestHeaders.Add("X-Secret-Key", securityCode);
         }
 
         public async Task<string> CreateCustomer(string name, string code, string address)
@@ -105,90 +98,7 @@ namespace ProjectManagement.Services.Timesheet
             return await PostAsync<string>($"/api/services/app/ProjectManagement/UserJoinProject", item);
         }
 
-        public async Task<T> GetAsync<T>(string url)
-        {
-            var fullUrl = $"{httpClient.BaseAddress}/{url}";
-            try
-            {
-                var response = await httpClient.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    logger.LogInformation($"Get: {fullUrl} => Response: {responseContent}");
-
-                    JObject responseJObj = JObject.Parse(responseContent);
-                    var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
-                    if (result == null)
-                    {
-                        result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj));
-                    }
-                    return result;
-                }
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Get: {fullUrl} => Exception: {e}");
-
-            }
-            return default;
-
-        }
-
-        public void Post(string url, object input)
-        {
-            var fullUrl = $"{httpClient.BaseAddress}/{url}";
-            string strInput = JsonConvert.SerializeObject(input);
-            try
-            {
-                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
-                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
-                httpClient.PostAsync(url, contentString);
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
-            }
-
-        }
-        public async Task<T> PostAsync<T>(string url, object input)
-        {
-            var fullUrl = $"{httpClient.BaseAddress}/{url}";
-            string strInput = JsonConvert.SerializeObject(input);
-
-            try
-            {
-                logger.LogInformation($"Post: {fullUrl} input: {strInput}");
-
-                var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await httpClient.PostAsync(url, contentString);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    logger.LogInformation($"Post: {fullUrl} input: {strInput} response: {responseContent}");
-
-                    JObject responseJObj = JObject.Parse(responseContent);
-
-                    var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
-                    if (result == null)
-                    {
-                        result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj));
-                    }
-                    return result;
-                }
-            }
-            catch (Exception e)
-            {
-                logger.LogError($"Post: {fullUrl} input: {strInput} Error: {e.Message}");
-            }
-
-            return default;
-
-
-        }
-
+      
 
     }
 }

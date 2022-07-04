@@ -6,4 +6,6 @@ export class ProjectdetailDto{
     technicalProblems: string;
     otherProblems: string;
     newKnowledge: string;
+    projectTechnologies: any[];
+    projectTechnologiesInput: any[];
 }

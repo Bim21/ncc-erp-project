@@ -31,6 +31,7 @@ using Abp.Application.Services.Dto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using Microsoft.AspNetCore.Http;
+using ProjectManagement.APIs.Technologys.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -262,6 +263,13 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.Projects)]
         public async Task<ProjectDetailDto> GetProjectDetail(long projectId)
         {
+            var query = WorkScope.GetAll<ProjectTechnology>().Where(x => x.ProjectId == projectId)
+                              .Select(x => new TechnologyDto
+                              {
+                                  Id = x.Technology.Id,
+                                  Name = x.Technology.Name,
+                                  Color = x.Technology.Color,
+                              });
             return await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
                               .Select(x => new ProjectDetailDto
                               {
@@ -271,7 +279,13 @@ namespace ProjectManagement.APIs.Projects
                                   TechnologyUsed = x.TechnologyUsed,
                                   TechnicalProblems = x.TechnicalProblems,
                                   OtherProblems = x.OtherProblems,
-                                  NewKnowledge = x.NewKnowledge
+                                  NewKnowledge = x.NewKnowledge,
+                                  ProjectTechnologies = query.Select(s => new TechnologyDto
+                                  {
+                                      Id = s.Id,
+                                      Name = s.Name,
+                                      Color = s.Color,
+                                  }).ToList()
                               }).FirstOrDefaultAsync();
         }
 
@@ -279,6 +293,30 @@ namespace ProjectManagement.APIs.Projects
         public async Task<ProjectDetailDto> UpdateProjectDetail(ProjectDetailDto input)
         {
             var project = await WorkScope.GetAsync<Project>(input.ProjectId);
+
+
+            var projectTechnologies = await WorkScope.GetAll<ProjectTechnology>().Where(x => x.ProjectId == input.ProjectId).ToListAsync();
+            var currentProjectTechnologiesId = projectTechnologies.Select(x => x.TechnologyId);
+            var deleteTechnologyId = currentProjectTechnologiesId.Except(input.ProjectTechnologiesInput);
+            var listSkillDelete = projectTechnologies.Where(x => deleteTechnologyId.Contains(x.TechnologyId));
+            var listSkillInsert = input.ProjectTechnologiesInput.Where(x => !currentProjectTechnologiesId.Contains(x));
+
+            foreach (var item in listSkillDelete)
+            {
+                await WorkScope.DeleteAsync<ProjectTechnology>(item);
+            }
+
+            foreach (var item in listSkillInsert)
+            {
+                var projectTechnology = new ProjectTechnology
+                {
+                    ProjectId = input.ProjectId,
+                    TechnologyId = item
+                };
+                await WorkScope.InsertAndGetIdAsync(projectTechnology);
+            }
+            //Update Technologies
+
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDetailDto, Project>(input, project));
             return input;

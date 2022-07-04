@@ -1,3 +1,5 @@
+import { FormSendRecruitmentComponent } from './form-send-recruitment/form-send-recruitment.component';
+import { ResourceRequestDto } from './../../../../service/model/resource-request.dto';
 import { result } from 'lodash-es';
 import { FormSetDoneComponent } from './form-set-done/form-set-done.component';
 import { SortableComponent, SortableModel } from './../../../../../shared/components/sortable/sortable.component';
@@ -39,28 +41,28 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
   public selectedLevel: any = -1
-  public isAndCondition:boolean =false;
-  public skillIds:number[]
+  public isAndCondition: boolean = false;
+  public skillIds: number[]
   public theadTable: THeadTable[] = [
-    {name: '#'},
-    {name: 'Priority', sortName: 'priority', defaultSort: 'DESC'},
-    {name: 'Project', sortName: 'projectName', defaultSort: ''},
-    {name: 'Skill'},
-    {name: 'Level', sortName: 'level', defaultSort: ''},
-    {name: 'Time request', sortName: 'creationTime', defaultSort: ''},
-    {name: 'Time need', sortName: 'timeNeed', defaultSort: ''},
-    {name: 'Planned resource'},
-    {name: 'PM Note'},
-    {name: 'HR/DM Note'},
-    {name: 'Status'},
-    {name: 'Action'},
+    { name: '#' },
+    { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
+    { name: 'Project', sortName: 'projectName', defaultSort: '' },
+    { name: 'Skill' },
+    { name: 'Level', sortName: 'level', defaultSort: '' },
+    { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
+    { name: 'Time need', sortName: 'timeNeed', defaultSort: '' },
+    { name: 'Planned resource' },
+    { name: 'PM Note' },
+    { name: 'HR/DM Note' },
+    { name: 'Status' },
+    { name: 'Action' },
   ]
   public isShowModal: string = 'none'
   public modal_title: string
   public strNote: string
   public typePM: string
   public resourceRequestId: number
-  public sortable = new SortableModel('',0,'')
+  public sortable = new SortableModel('', 0, '')
 
   ResourceRequest_CreateNewRequest = PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest;
   ResourceRequest_View = PERMISSIONS_CONSTANT.ResourceRequest_View;
@@ -82,9 +84,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     private resourceRequestService: DeliveryResourceRequestService,
     private ref: ChangeDetectorRef,
     private dialog: MatDialog
-  )
-  { 
-    super(injector) 
+  ) {
+    super(injector)
   }
 
   ngOnInit(): void {
@@ -118,7 +119,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
       data: {
         command: command,
-        item: resourceRequest, 
+        item: resourceRequest,
         skills: this.listSkills,
         levels: this.listLevels,
         typeControl: 'request'
@@ -127,12 +128,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       maxHeight: '90vh',
     })
     show.afterClosed().subscribe(rs => {
-      if(!rs) return
-      if(command == 'create')
+      if (!rs) return
+      if (command == 'create')
         this.refresh()
-      else if(command == 'edit'){
+      else if (command == 'edit') {
         let index = this.listRequest.findIndex(x => x.id == rs.id)
-        if(index >= 0){
+        if (index >= 0) {
           this.listRequest[index] = rs
         }
         this.refresh();
@@ -145,10 +146,10 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public editRequest(item: any) {
     this.showDialog("edit", item);
   }
-  public setDoneRequest(item){
+  public setDoneRequest(item) {
     let data = {
-      ...item.planUserInfo, 
-      requestName: item.name, 
+      ...item.planUserInfo,
+      requestName: item.name,
       resourceRequestId: item.id
     }
     const showModal = this.dialog.open(FormSetDoneComponent, {
@@ -157,22 +158,22 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       maxHeight: "90vh"
     })
     showModal.afterClosed().subscribe((rs) => {
-      if(rs)
+      if (rs)
         this.refresh()
     })
   }
-  cancelRequest(id){
+  cancelRequest(id) {
     abp.message.confirm(
       'Are you sure cancel request?',
       '',
       (result) => {
-        if(result){
+        if (result) {
           this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
-            if(res.success){
+            if (res.success) {
               abp.notify.success('Cancel Request Success!')
               this.refresh()
             }
-            else{
+            else {
               abp.notify.error(res.result)
             }
           })
@@ -181,40 +182,48 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     )
   }
 
-  async showModalPlanUser(item: any){
+  async showModalPlanUser(item: any) {
     const data = await this.getPlanResource(item);
     const show = this.dialog.open(FormPlanUserComponent, {
-      data: {...data, projectUserRoles: this.listProjectUserRoles},
+      data: { ...data, projectUserRoles: this.listProjectUserRoles },
       width: "700px",
-      maxHeight:"90vh"
+      maxHeight: "90vh"
     })
     show.afterClosed().subscribe(rs => {
-      if(!rs) return
-      if(rs.type == 'delete'){
+      if (!rs) return
+      if (rs.type == 'delete') {
         this.refresh()
       }
-      else{
+      else {
         let index = this.listRequest.findIndex(x => x.id == rs.data.resourceRequestId)
-        if(index >= 0)
+        if (index >= 0)
           this.listRequest[index].planUserInfo = rs.data.result
       }
-      
+
     });
   }
-  async getPlanResource(item){
+  async getPlanResource(item) {
     let data = new ResourcePlanDto(item.id, 0);
-    if(!item.planUserInfo) 
+    if (!item.planUserInfo)
       return data;
     let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
     return res.result
   }
 
-  sendRecruitment(){
-    abp.message.info('Chức năng này sẽ được cập nhật trong bản release sắp tới', 'Thông báo')
+  sendRecruitment(item: ResourceRequestDto) {
+    const show = this.dialog.open(FormSendRecruitmentComponent, {
+      data: { id: item.id, name: item.name } as SendRecruitmentModel,
+      width: "700px",
+      maxHeight: "90vh"
+    })
+    show.afterClosed().subscribe(rs => {
+      if (!rs) return
+      //TODO: received response
+    });
   }
 
   // #region update note for pm, dmPm
-  public openModal(name, typePM, content, id){
+  public openModal(name, typePM, content, id) {
     this.typePM = typePM
     this.modal_title = name
     this.strNote = content
@@ -222,28 +231,28 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.isShowModal = 'block'
   }
 
-  public closeModal(){
+  public closeModal() {
     this.isShowModal = 'none'
   }
 
-  public updateNote(){
+  public updateNote() {
     let request = {
       resourceRequestId: this.resourceRequestId,
       note: this.strNote,
     }
-    this.resourceRequestService.updateNote(request,this.typePM).subscribe(rs => {
-      if(rs.success){
+    this.resourceRequestService.updateNote(request, this.typePM).subscribe(rs => {
+      if (rs.success) {
         abp.notify.success('Update Note Successfully!')
         let index = this.listRequest.findIndex(x => x.id == request.resourceRequestId);
-        if(index >= 0){
-          if(this.typePM == 'PM')
+        if (index >= 0) {
+          if (this.typePM == 'PM')
             this.listRequest[index].pmNote = request.note;
           else
             this.listRequest[index].dmNote = request.note;
         }
         this.closeModal()
       }
-      else{
+      else {
         abp.notify.error(rs.result)
       }
     })
@@ -252,25 +261,25 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   // #region paging, search, sortable, filter
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    let requestBody:any = request
+    let requestBody: any = request
     requestBody.skillIds = this.skillIds
     requestBody.isAndCondition = this.isAndCondition
     let objFilter = [
-      {name: 'status', isTrue: false, value: this.selectedStatus},
-      {name: 'level', isTrue: false, value: this.selectedLevel},
+      { name: 'status', isTrue: false, value: this.selectedStatus },
+      { name: 'level', isTrue: false, value: this.selectedLevel },
     ];
 
     objFilter.forEach((item) => {
-      if(!item.isTrue){
+      if (!item.isTrue) {
         requestBody.filterItems = this.AddFilterItem(requestBody, item.name, item.value)
       }
-      if(item.value == -1){
+      if (item.value == -1) {
         requestBody.filterItems = this.clearFilter(requestBody, item.name, "")
         item.isTrue = true
       }
     })
 
-    if(this.sortable.sort){
+    if (this.sortable.sort) {
       requestBody.sort = this.sortable.sort;
       requestBody.sortDirection = this.sortable.sortDirection
     }
@@ -281,17 +290,17 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       this.listRequest = this.tempListRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
     },
-    (error)=> {
-      abp.notify.error(error)
-    })
+      (error) => {
+        abp.notify.error(error)
+      })
     let rsFilter = this.resetDataSearch(requestBody, request, objFilter)
     request = rsFilter.request
     requestBody = rsFilter.requestBody
   }
 
-  resetDataSearch(requestBody: any, request: any, objFilter: any){
+  resetDataSearch(requestBody: any, request: any, objFilter: any) {
     objFilter.forEach((item) => {
-      if(!item.isTrue){
+      if (!item.isTrue) {
         request.filterItems = this.clearFilter(request, item.name, '')
       }
     })
@@ -307,39 +316,38 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     }
   }
 
-  clearAllFilter(){
+  clearAllFilter() {
     this.filterItems = []
     this.searchText = ''
     this.skillIds = []
     this.selectedLevel = -1
     this.selectedStatus = 0
     this.changeSortableByName('priority', 'DESC')
-    this.sortable = new SortableModel('',1,'')
+    this.sortable = new SortableModel('', 1, '')
     this.refresh()
   }
 
-  onChangeStatus(){
+  onChangeStatus() {
     let status = this.listStatuses.find(x => x.id == this.selectedStatus)
-    if(status && status.name == 'DONE')
-    {
+    if (status && status.name == 'DONE') {
       this.sortable = new SortableModel('timeDone', 1, 'DESC')
-      this.changeSortableByName('','')
+      this.changeSortableByName('', '')
     }
     this.getDataPage(1);
   }
 
-  sortTable(event: any){
+  sortTable(event: any) {
     this.sortable = event
     this.changeSortableByName(this.sortable.sort, this.sortable.typeSort)
     this.refresh()
   }
 
-  changeSortableByName(sort: string, sortType: string){
+  changeSortableByName(sort: string, sortType: string) {
     this.elementRefSortable.forEach((item) => {
-      if(item.childValue.sort != sort){
+      if (item.childValue.sort != sort) {
         item.childValue.typeSort = ''
       }
-      else{
+      else {
         item.childValue.typeSort = sortType
       }
     })
@@ -348,39 +356,34 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   // #endregion
 
   //#region get skills, statuses, levels, priorities
-  getAllSkills(){
+  getAllSkills() {
     this.resourceRequestService.getSkills().subscribe((data) => {
       this.listSkills = data.result;
     })
   }
-  getLevels(){
+  getLevels() {
     this.resourceRequestService.getLevels().subscribe(res => {
       this.listLevels = res.result
     })
   }
-  getPriorities(){
+  getPriorities() {
     this.resourceRequestService.getPriorities().subscribe(res => {
       this.listPriorities = res.result
     })
   }
-  getStatuses(){
+  getStatuses() {
     this.resourceRequestService.getStatuses().subscribe(res => {
       this.listStatuses = res.result
     })
   }
-  getProjectUserRoles(){
+  getProjectUserRoles() {
     this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
       this.listProjectUserRoles = rs.result
     })
   }
   // #endregion
 
-  showActionViewRecruitment(status, isRecruitment){
-    if(isRecruitment && (status == 'INPROGRESS' || status == 'CANCELLED' || status == 'DONE'))
-      return true
-    return false
-  }
-  styleThead(item: any){
+  styleThead(item: any) {
     return {
       width: item.width,
       height: item.height
@@ -393,7 +396,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     }
   }
-  viewRecruitment(url){
+  viewRecruitment(url) {
     window.open(url, '_blank')
   }
   protected delete(item: RequestResourceDto): void {
@@ -412,19 +415,24 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
     );
   }
-  isShowButtonMenuAction(item){
-    if((item.statusName != 'DONE' && !item.isRecruitmentSend) || item.statusName != 'CANCELLED')
+  isShowButtonMenuAction(item) {
+    if ((item.statusName != 'DONE' && !item.isRecruitmentSend) || item.statusName != 'CANCELLED')
       return true;
     return false;
   }
 }
 
-export class THeadTable{
+export class THeadTable {
   name: string;
   width?: string = 'auto';
   height?: string = 'auto';
   backgroud_color?: string;
   sortName?: string;;
   defaultSort?: string;
+}
+
+export class SendRecruitmentModel {
+  id: number;
+  name: string;
 }
 

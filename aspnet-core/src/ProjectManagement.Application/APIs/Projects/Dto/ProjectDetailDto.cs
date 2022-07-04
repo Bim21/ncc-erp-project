@@ -1,4 +1,5 @@
 ﻿using Abp.AutoMapper;
+using ProjectManagement.APIs.Technologys.Dto;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string TechnicalProblems { get; set; }
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
+        public List<TechnologyDto> ProjectTechnologies { get; set; }
+        public List<long> ProjectTechnologiesInput { get; set; }
     }
 }

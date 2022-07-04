@@ -175,6 +175,10 @@ import { AddUserInRoleComponent } from './roles/edit-role/add-user-in-role/add-u
 import { EditTimesheetProjectDialogComponent } from './modules/timesheet/timesheet-detail/edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
 import { BranchComponent } from './modules/admin/branch/branch.component';
 import { CreateUpdateBranchComponent } from './modules/admin/branch/create-update-branch/create-update-branch.component';
+import { TechnologyComponent } from './modules/admin/technology/technology.component';
+import { CreateUpdateTechnologyComponent } from './modules/admin/technology/create-update-technology/create-update-technology.component';
+import { EditNoteDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/add-note-dialog/edit-note-dialog.component';
+import { FormSendRecruitmentComponent } from './modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -331,6 +335,12 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditTimesheetProjectDialogComponent,
     BranchComponent,
     CreateUpdateBranchComponent,
+    BranchComponent,
+    CreateUpdateBranchComponent,
+    TechnologyComponent,
+    CreateUpdateTechnologyComponent,
+    EditNoteDialogComponent,
+    FormSendRecruitmentComponent
   ],
   imports: [
     CommonModule,

@@ -35,4 +35,7 @@ export class ProjectUserBillService extends BaseApiService {
   updateDiscount(item: any): Observable<any> {
     return this.http.put<any>(this.rootUrl + '/UpdateDiscount', item);
   }
+  updateNote(item: any): Observable<any> {
+    return this.http.put<any>(this.rootUrl + '/UpdateNote', item);
+  }
 }
