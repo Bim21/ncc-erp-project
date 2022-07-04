@@ -197,6 +197,14 @@ namespace ProjectManagement.Web.Host.Startup
             ConstantUploadFile.Provider = _appConfiguration.GetValue<string>("UploadFile:Provider");
             var strAllowImageFileType = _appConfiguration.GetValue<string>("UploadFile:AllowImageFileTypes");
             ConstantUploadFile.AllowImageFileTypes = strAllowImageFileType.Split(",");
+
+            var strAllowTimesheetFileType = _appConfiguration.GetValue<string>("UploadFile:AllowTimesheetFileTypes");
+            if (string.IsNullOrEmpty(strAllowTimesheetFileType))
+            {
+                strAllowTimesheetFileType = "xlsx,xltx,docx";
+            }
+            ConstantUploadFile.AllowTimesheetFileTypes = strAllowTimesheetFileType.Split(",");
+
             ConstantInternalUploadFile.RootUrl = _appConfiguration.GetValue<string>("App:ServerRootAddress");
         }
 

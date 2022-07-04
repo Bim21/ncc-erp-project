@@ -1,9 +1,11 @@
 ﻿using Abp.UI;
 using Microsoft.AspNetCore.Http;
+using NccCore.Uitls;
 using ProjectManagement.Constants;
 using ProjectManagement.Helper;
 using ProjectManagement.Utils;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +14,7 @@ namespace ProjectManagement.FilesService
     public class InternalUploadFileService : IFileService
     {
         private readonly string WWWRootFolder = "wwwroot";
+
 
         private void CheckValidFile(IFormFile file, string[] allowFileTypes)
         {
@@ -24,12 +27,13 @@ namespace ProjectManagement.FilesService
         {
             CheckValidFile(file, ConstantUploadFile.AllowImageFileTypes);
 
-            string fileLocation = UploadFile.CreateFolderIfNotExists(WWWRootFolder, ConstantUploadFile.AvatarFolder);
+            var avatarFolder = Path.Combine(WWWRootFolder, ConstantUploadFile.AvatarFolder);
+            UploadFile.CreateFolderIfNotExists(avatarFolder);
 
             var fileName = $"{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
             var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{fileName}";
 
-            await UploadFile.UploadFileAsync(fileLocation, file, fileName);
+            await UploadFile.UploadFileAsync(avatarFolder, file, fileName);
 
             return filePath;
         }
@@ -39,5 +43,26 @@ namespace ProjectManagement.FilesService
             throw new NotImplementedException();
         }
 
+        public async Task<string> UploadTimsheetAsync(IFormFile file, string tenantName, int year, int month, string fileName)
+        {
+            CheckValidFile(file, ConstantUploadFile.AllowTimesheetFileTypes);
+
+
+            var yyyyMM = DateTimeUtils.yyyyMM(year, month);
+            var folder = $"{ConstantUploadFile.UPLOAD_FOLDER}/{tenantName}/{ConstantUploadFile.TIMESHEET_FOLDER}/{yyyyMM}";
+
+            UploadFile.CreateFolderIfNotExists(folder);
+
+            var filePath = $"{folder.TrimEnd('/')}/{fileName}";
+
+            await UploadFile.UploadFileAsync(folder, file, fileName);
+
+            return filePath;
+        }
+
+        public async Task<byte[]> DownloadFileAsync(string filePath)
+        {
+            return await File.ReadAllBytesAsync(filePath);           
+        }
     }
 }
