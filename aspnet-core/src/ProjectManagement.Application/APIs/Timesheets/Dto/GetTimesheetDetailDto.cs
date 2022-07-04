@@ -1,13 +1,10 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
-using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
-using System;
+using ProjectManagement.Utils;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
-using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {
@@ -31,7 +28,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long? ClientId { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
-        public string File { get; set; }
+        public string FilePath { get; set; }
+        public string File => FileUtils.GetFileName(FilePath);
         public string HistoryFile { get; set; }
         public List<TimesheetProjectBillInfoDto> ProjectBillInfomation { get; set; }
         public string Note { get; set; }

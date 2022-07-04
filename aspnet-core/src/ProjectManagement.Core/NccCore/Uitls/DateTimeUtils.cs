@@ -73,6 +73,11 @@ namespace NccCore.Uitls
         }
 
 
+        public static string yyyyMM(int year, int month)
+        {
+            return new DateTime(year, month, 15).ToString("yyyy-MM");
+        }
+
 
     }
 }

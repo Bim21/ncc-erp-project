@@ -9,7 +9,10 @@ namespace ProjectManagement.FilesService
     public interface IFileService
     {
         Task<string> UploadAvatarAsync(IFormFile file);
+        Task<string> UploadTimsheetAsync(IFormFile file, string tenantName, int year, int month, string fileName);
 
         Task<string> UploadFileAsync(IFormFile file, string[] allowFileTypes, string filePath);
+
+        Task<byte[]> DownloadFileAsync(string filePath);
     }
 }
