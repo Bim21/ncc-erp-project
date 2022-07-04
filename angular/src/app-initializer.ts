@@ -147,7 +147,7 @@ export class AppInitializer {
         moment.locale(abp.localization.currentLanguage.name);
 
         if (abp.clock.provider.supportsMultipleTimezone) {
-          // moment.tz.setDefault(abp.timing.timeZoneInfo.iana.timeZoneId);
+          moment.tz.setDefault(abp.timing.timeZoneInfo.iana.timeZoneId);
         }
 
         callback();
