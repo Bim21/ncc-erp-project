@@ -12,7 +12,30 @@ pool:
   name: 'ERP_DEV'
 
 jobs:
+  - job: check_file
+    displayName: Check changed files BE
+    steps:
+      - task: ChangedFiles@1
+        name: CheckChangesBE
+        inputs:
+          rules: aspnet-core/**
+          variable: HasChangedBE
+  
+      - task: ChangedFiles@1
+        name: CheckChangesFE
+        inputs:
+          rules: angular/**
+          variable: HasChangedFE
+
+      - task: ChangedFiles@1
+        name: CheckChangesPJ
+        inputs:
+          rules: angular/package.json
+          variable: HasChangedPJ
+
   - job: DotnetBuild
+    dependsOn: check_file
+    condition: eq(dependencies.check_file.outputs['CheckChangesBE.HasChangedBE'], 'true')
     steps: 
     - script: |
         export PATH=$PATH:/opt/dotnet3/
@@ -47,32 +70,51 @@ jobs:
       displayName: 'Publish Artifacts Host'
 
   - job: AngularBuild
+    dependsOn: check_file
+    condition: eq(dependencies.check_file.outputs['CheckChangesFE.HasChangedFE'], 'true')
+    variables:
+      check_pj: $[eq(dependencies.check_file.outputs['CheckChangesPJ.HasChangedPJ'], 'true')]
     steps:
       - script: |
-          cd angular 
+          cd angular
+          unzip -qo ~/soft/check_node/project/node_modules.zip
+        displayName: 'Copy node modules'
+
+      - script: |
+          cd angular/
           export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
           nvm use 14.15
           node -v
-          echo "Copy node-modules"
-          unzip -qo ~/soft/check_node/project/node_modules.zip
-          cp ~/soft/check_node/project/check.sh ./check.sh
-          echo "===Check package.json==="
-          bash check.sh
-          echo "===ReBuild node-sass==="
-          npm rebuild node-sass
-          echo "===Build node==="
+          echo "=== INSTALL PACKAGE ==="
+          npm install
+          echo "=== COPY NEW PACKAGE ==="
+          rm -rf ~/soft/check_node/project/node_modules.zip
+          zip -r ~/soft/check_node/project/node_modules.zip node_modules/
+        condition: and(succeeded(), eq(variables['check_pj'], 'true'))
+        displayName: 'Install Package'
+      
+      - script: |
+          cd angular/
+          export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+          nvm use 14.15          
           ng build --prod
-          cd dist
-          zip -r frontend_publish.zip *
         displayName: 'Build Frontend'
-        
+      
+      - script: |
+          cd angular/dist
+          zip -r frontend_publish.zip *
+        displayName: 'Compress Build '
+
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: 'angular/dist/frontend_publish.zip'
           ArtifactName: 'dev-fe-project'
           publishLocation: 'Container'
+          FileCopyOptions: 
         displayName: 'Publish Artifacts Frontend'
             
           
