@@ -600,6 +600,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var qtimesheetProjectBill = WorkScope.All<TimesheetProjectBill>()
                 .Where(s => s.TimesheetId == input.TimesheetId)
+                .Where(s => s.IsActive)
+                .Where(s => s.WorkingTime > 0)
                 .Where(s => input.ProjectIds.Contains(s.ProjectId));
 
             result.Info = await qtimesheetProject
