@@ -85,6 +85,7 @@
                 Rate <br> {{getTitleRate()}}
               </th>
               <th style="width: 100px; white-space: break-spaces;">Working Day</th>
+              <th style="width: 50px;">Is Charge</th>
               <th>Note</th>
               <th>Action</th>
             </tr>
@@ -184,6 +185,19 @@
                 </div>
               </td>
              
+              <td class="text-center pt-3">
+                <mat-checkbox
+                  [disabled]="!bill.createMode && !isEdittingRows"
+                  [ngClass]="{'bg-succes': bill.isActive}"
+                  class="mt-1"
+                  name="isactive+{{ i }}"
+                  (change)="onActiveChange(active, bill)"
+                  #active
+                  [checked]="bill.isActive"
+                >
+                </mat-checkbox>
+              </td>
+
               <td>
                 <pre
                   class="mb-0 p-0 ml-2"

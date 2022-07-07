@@ -110,13 +110,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
             tpb.BillRate = pub.BillRate;
             tpb.BillRole = pub.BillRole;
-            //tpb.Currency = pub.Currency;
-            tpb.IsActive = pub.isActive;
-            if (!pub.isActive)
-            {
-                tpb.IsDeleted = true;
-                tpb.DeleterUserId = AbpSession.UserId;
-            }
+            tpb.IsActive = pub.isActive;           
 
             await _workScope.UpdateAsync(tpb);
         }
