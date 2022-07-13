@@ -48,7 +48,7 @@ using NccCore.Helper;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Utils;
-using ProjectManagement.FilesService;
+using ProjectManagement.UploadFilesService;
 
 namespace ProjectManagement.Users
 {
