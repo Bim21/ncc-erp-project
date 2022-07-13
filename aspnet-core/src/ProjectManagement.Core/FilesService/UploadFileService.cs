@@ -1,24 +1,28 @@
 ﻿
+using Abp.Application.Services;
 using Abp.Dependency;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using ProjectManagement.MultiTenancy;
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.FilesService
 {
-    public class UploadFileService: ITransientDependency
+    public class UploadFileService: ApplicationService, ITransientDependency
     {
        
         private readonly ILogger<UploadFileService> _logger;
         private readonly IFileService _fileService;
-        public UploadFileService(IFileService fileService, ILogger<UploadFileService> logger)
+        private readonly TenantManager _tenantManager;
+        public UploadFileService(
+            IFileService fileService, 
+            ILogger<UploadFileService> logger,
+            TenantManager tenantManager)
         {
             _fileService = fileService;
             _logger = logger;
+            _tenantManager = tenantManager;
         }
 
         public Task<string> UploadFileAsync(IFormFile file, string[] allowFileTypes, string filePath)
@@ -26,9 +30,33 @@ namespace ProjectManagement.FilesService
             throw new NotImplementedException();
         }
 
-        public Task<string> UploadAvatarAsync(IFormFile file)
+        public async Task<string> UploadAvatarAsync(IFormFile file)
         {
-            return _fileService.UploadAvatarAsync(file);
+            var filePath = await _fileService.UploadAvatarAsync(file);
+            return filePath;
+        }
+        public async Task<string> UploadTimesheetFileAsync(IFormFile file, int year, int month, string filename)
+        {
+            var tenantName = getSessionTenantName();           
+            var filePath = await _fileService.UploadTimsheetAsync(file, tenantName, year, month, filename);
+            return filePath;
+        }
+
+        public async Task<byte[]> DownloadTimesheetFileAsync(string filePath)
+        {
+            return await _fileService.DownloadFileAsync(filePath);
+        }
+
+        private string getSessionTenantName()
+        {
+            if (!AbpSession.TenantId.HasValue)
+            {
+                return "host";
+            }
+
+            var tenant = _tenantManager.GetById(AbpSession.TenantId.Value);
+            
+            return tenant.TenancyName.ToLower();
         }
     }
 }

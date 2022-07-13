@@ -494,6 +494,7 @@ namespace ProjectManagement.Authorization
         public const string Timesheets_TimesheetDetail_UpdateBill_SetDone = "Timesheets.TimesheetDetail.UpdateBill.SetDone";
 
         public const string Timesheets_TimesheetDetail_UpdateTimsheet = "Timesheets.TimesheetDetail.UpdateTimsheet";
+        public const string Timesheets_TimesheetDetail_RemoveAccount = "Timesheets.TimesheetDetail.RemoveAccount";
 
     }
 
@@ -986,6 +987,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone ,
 
                     PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet ,
+                    PermissionNames.Timesheets_TimesheetDetail_RemoveAccount ,
 
 
                 }
@@ -1465,6 +1467,8 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
 
                  new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet"},
+                 new SystemPermission{ Name =  PermissionNames.Timesheets_TimesheetDetail_RemoveAccount ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Account Timesheet"},
+
 
 
             };
@@ -2109,6 +2113,7 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Bill"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateTimsheet,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Timesheet" },
+                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_RemoveAccount,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Account Timesheet" },
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_UpdateBill_SetDone,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
                                         new SystemPermission { Name =  PermissionNames.Timesheets_TimesheetDetail_EditInvoiceInfo ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Invoice Info (Invoice Number,Working Day,Transfer Fee,Discount) of project"},
                                     }

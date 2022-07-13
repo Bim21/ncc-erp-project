@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,6 +39,11 @@ namespace ProjectManagement.Services
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     logger.LogInformation($"Get: {fullUrl} response: { responseContent}");
+                    JObject responseJObj = JObject.Parse(responseContent);
+                    if (responseJObj.ContainsKey("result"))
+                    {
+                        return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
+                    }
                     return JsonConvert.DeserializeObject<T>(responseContent);
                 }
             }
@@ -62,6 +68,10 @@ namespace ProjectManagement.Services
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     logger.LogInformation($"Post: {fullUrl} input: {strInput} response: { responseContent}");
+                    JObject responseJObj = JObject.Parse(responseContent);
+                    if (responseJObj.ContainsKey("result")){
+                       return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
+                    }
                     return JsonConvert.DeserializeObject<T>(responseContent);
                 }
             }

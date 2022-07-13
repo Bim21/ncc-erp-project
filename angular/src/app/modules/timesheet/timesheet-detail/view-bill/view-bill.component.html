@@ -184,6 +184,7 @@
                   />
                 </div>
               </td>
+             
               <td class="text-center pt-3">
                 <mat-checkbox
                   [disabled]="!bill.createMode && !isEdittingRows"
@@ -196,6 +197,7 @@
                 >
                 </mat-checkbox>
               </td>
+
               <td>
                 <pre
                   class="mb-0 p-0 ml-2"
@@ -238,6 +240,18 @@
                     (click)="editUserBill(bill)"
                   >
                     <i class="fas fa-pencil-alt mr-1"></i>Edit
+                  </button>
+                  <button style="border:2px soild #dc3545;" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_RemoveAccount)"
+                    [disabled]="
+                      userBillProcess ||
+                      isEdit ||
+                      data.billInfo.isComplete ||
+                      isEdittingRows
+                    "
+                    class="btn btn-sm bg-danger ml-1 mt-3"
+                    (click)="removeAccountTS(bill)"
+                  >
+                  <i class="fas fa-trash"></i> Remove
                   </button>
                 </div>
                 <div *ngIf="bill.createMode" class="pt-1 mt-1">

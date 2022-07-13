@@ -148,6 +148,13 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
             return new OkObjectResult("Save Success!");
         }
 
+        [HttpDelete]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_RemoveAccount)]
+        public async Task RemoveAccountTS(long id)
+        {
+            await WorkScope.DeleteAsync<TimesheetProjectBill>(id);
+        }
+
         public async Task<List<GetUserForTimesheetProjectBillDto>> GetUserForTimesheetProjectBill(long timesheetId, long projectId, bool isEdited)
         {
             var currentUserIds = await WorkScope.GetAll<TimesheetProjectBill>()
