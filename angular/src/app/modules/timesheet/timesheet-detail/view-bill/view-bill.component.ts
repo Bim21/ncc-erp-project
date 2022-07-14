@@ -32,6 +32,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   Timesheets_TimesheetDetail_ViewBillRate = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate
   Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill
   Timesheets_TimesheetDetail_UpdateTimsheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateTimsheet
+  Timesheets_TimesheetDetail_RemoveAccount = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_RemoveAccount
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
@@ -244,6 +245,30 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         abp.notify.error(response.message)
       }
     })
+  }
+
+
+  protected removeAccountTS(data:TimesheetProjectBill): void {
+    abp.message.confirm(
+      "Remove account " + data.fullName + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.projectBillService.removeAccountTS(data.id).pipe(catchError(this.projectBillService.handleError)).subscribe((response) => {
+            if(response.success){
+              abp.notify.success("Remove successfull")
+              this.isEdit = false;
+              this.isCreate = false
+              this.isEdittingRows = false
+              this.getProjectBill();
+            }
+            else{
+              abp.notify.error(response.message)
+            }
+          });
+        }
+      }
+    );
   }
   saveAllUpdateTS(){
     let arr = this.billDetail.map((userBill) => {

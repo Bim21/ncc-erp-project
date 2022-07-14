@@ -33,6 +33,9 @@ using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
+using ProjectManagement.FilesService;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Utils;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -46,10 +49,17 @@ namespace ProjectManagement.APIs.TimesheetProjects
         private readonly string templateFolder = Path.Combine("wwwroot", "template");
         private readonly ProjectTimesheetManager _timesheetManager;
         private readonly TimesheetService _timesheetService;
+        private readonly UploadFileService _uploadFileService;
 
-        public TimesheetProjectAppService(IWebHostEnvironment environment, FinfastService financeService,
-            KomuService komuService, ISettingManager settingManager, ProjectTimesheetManager timesheetManager,
-            TimesheetService timesheetService)
+        public TimesheetProjectAppService(
+            IWebHostEnvironment environment,
+            FinfastService financeService,
+            KomuService komuService,
+            ISettingManager settingManager,
+            ProjectTimesheetManager timesheetManager,
+            TimesheetService timesheetService,
+            UploadFileService uploadFileService
+            )
         {
             _hostingEnvironment = environment;
             _financeService = financeService;
@@ -57,6 +67,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             _settingManager = settingManager;
             _timesheetManager = timesheetManager;
             _timesheetService = timesheetService;
+            _uploadFileService = uploadFileService;
         }
 
         [HttpGet]
@@ -152,7 +163,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              ClientId = tsp.Project.ClientId,
                              ClientName = tsp.Project.Client != null ? tsp.Project.Client.Name : "NULL",
                              ClientCode = tsp.Project.Client != null ? tsp.Project.Client.Code : "NULL",
-                             File = tsp.FilePath,
+                             FilePath = tsp.FilePath,
                              ProjectBillInfomation = WorkScope.GetAll<TimesheetProjectBill>()
                                                     .Where(x => x.TimesheetId == tsp.TimesheetId && x.ProjectId == tsp.ProjectId && x.IsActive)
                                                     .Select(x => new TimesheetProjectBillInfoDto
@@ -336,9 +347,51 @@ namespace ProjectManagement.APIs.TimesheetProjects
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_UploadTimesheetFile)]
         public async Task UpdateFileTimeSheetProject([FromForm] FileInputDto input)
+        {
+            var timesheetProjectId = input.TimesheetProjectId;
+            var timesheet = WorkScope.GetAll<TimesheetProject>()
+              .Where(x => x.Id == timesheetProjectId)
+              .Where(s => s.Timesheet.IsActive)
+              .Select(s => new
+              {
+                  s.Timesheet.Year,
+                  s.Timesheet.Month,
+                  s.Project.Code,
+                  s.Project.Name,
+                  s.ProjectId,
+                  TimsheetProject = s
+              }).FirstOrDefault();
+
+            if (timesheet == default)
+            {
+                throw new UserFriendlyException($"TimesheetProjectId {timesheetProjectId} is NOT exist or Inactive");
+            }
+
+            if (input.File == null)
+            {
+                timesheet.TimsheetProject.FilePath = null;
+            }
+            else
+            {
+                var filename = DateTimeUtils.yyyyMM(timesheet.Year, timesheet.Month) + "_" + timesheet.Code + "_" + input.File.FileName;
+                var filePath = await _uploadFileService.UploadTimesheetFileAsync(input.File, timesheet.Year, timesheet.Month, filename);
+
+                timesheet.TimsheetProject.FilePath = filePath;              
+            }
+
+            CurrentUnitOfWork.SaveChanges();
+
+
+        }
+
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_UploadTimesheetFile)]
+        public async Task UpdateFileTimeSheetProject1([FromForm] FileInputDto input)
         {
             String path = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "timesheets");
             if (!Directory.Exists(path))
@@ -429,17 +482,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [HttpGet]
         public async Task<object> DownloadFileTimesheetProject(long timesheetProjectId)
         {
-            var timesheetProject = await WorkScope.GetAsync<TimesheetProject>(timesheetProjectId);
+            var filePath = WorkScope.GetAll<TimesheetProject>()
+                .Where(s => s.Id == timesheetProjectId)
+                .Select(s => s.FilePath)
+                .FirstOrDefault();
 
-            String path = Path.Combine(_hostingEnvironment.ContentRootPath, "Uploads", "timesheets");
-
-            var filePath = Path.Combine(path, timesheetProject.FilePath);
-
-            var data = await System.IO.File.ReadAllBytesAsync(filePath);
-
+            var data = await _uploadFileService.DownloadTimesheetFileAsync(filePath);
+            var fileName = FileUtils.GetFileName(filePath);
             return new
             {
-                FileName = timesheetProject.FilePath,
+                FileName = fileName,
                 Data = data
             };
         }
@@ -548,6 +600,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var qtimesheetProjectBill = WorkScope.All<TimesheetProjectBill>()
                 .Where(s => s.TimesheetId == input.TimesheetId)
+                .Where(s => s.IsActive)
+                .Where(s => s.WorkingTime > 0)
                 .Where(s => input.ProjectIds.Contains(s.ProjectId));
 
             result.Info = await qtimesheetProject
@@ -638,7 +692,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var indexPayment = invoiceSheet.Names["PaymentDetails"].Start.Row;
             invoiceSheet.InsertRow(indexPayment, arrPaymentInfoCount, indexPayment + arrPaymentInfoCount);
 
-            invoiceSheet.Names["CurrencyTotal"].Value = $"{ data.CurrencyName()} TOTAL";
+            invoiceSheet.Names["CurrencyTotal"].Value = $"{data.CurrencyName()} TOTAL";
 
             for (int i = 0; i < arrPaymentInfoCount; i++)
             {

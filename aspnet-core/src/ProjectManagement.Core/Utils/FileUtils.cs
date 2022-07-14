@@ -31,5 +31,20 @@ namespace ProjectManagement.Utils
             }
             return file.FileName.Contains(".") ? file.FileName.Split(".")[1] : file.FileName;
         }
+
+        public static string GetFileName(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return filePath;
+            }
+            if (filePath.Contains("/"))
+            {
+                return filePath.Substring(filePath.LastIndexOf("/") + 1);
+            }
+            return filePath;
+
+        }
+
     }
 }

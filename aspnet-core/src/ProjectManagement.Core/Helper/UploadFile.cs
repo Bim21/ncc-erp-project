@@ -21,13 +21,12 @@ namespace ProjectManagement.Helper
             return fileName;
         }
 
-        public static string CreateFolderIfNotExists(string path1, string path2)
+        public static string CreateFolderIfNotExists(string folderPath)
         {
-            var fileLocation = Path.Combine(path1, path2);
-            if (!Directory.Exists(fileLocation))
-                Directory.CreateDirectory(fileLocation);
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
-            return fileLocation;
+            return folderPath;
         }
     }
 }
