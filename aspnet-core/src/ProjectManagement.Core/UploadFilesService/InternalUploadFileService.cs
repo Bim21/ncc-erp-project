@@ -9,9 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectManagement.FilesService
+namespace ProjectManagement.UploadFilesService
 {
-    public class InternalUploadFileService : IFileService
+    public class InternalUploadFileService : IUploadFileService
     {
         private readonly string WWWRootFolder = "wwwroot";
 
@@ -23,15 +23,15 @@ namespace ProjectManagement.FilesService
                 throw new UserFriendlyException($"Wrong file type {file.ContentType}. Allow file types: {string.Join(", ", allowFileTypes)}");
         }
 
-        public async Task<string> UploadAvatarAsync(IFormFile file)
+        public async Task<string> UploadAvatarAsync(IFormFile file,string tenantName)
         {
             CheckValidFile(file, ConstantUploadFile.AllowImageFileTypes);
 
-            var avatarFolder = Path.Combine(WWWRootFolder, ConstantUploadFile.AvatarFolder);
+            var avatarFolder = Path.Combine(WWWRootFolder, ConstantUploadFile.AvatarFolder, tenantName);
             UploadFile.CreateFolderIfNotExists(avatarFolder);
 
             var fileName = $"{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
-            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{fileName}";
+            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{tenantName}/{fileName}";
 
             await UploadFile.UploadFileAsync(avatarFolder, file, fileName);
 

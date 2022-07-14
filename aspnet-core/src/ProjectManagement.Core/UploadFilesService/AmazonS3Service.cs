@@ -18,9 +18,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectManagement.FilesService
+namespace ProjectManagement.UploadFilesService
 {
-    public class AmazonS3Service : IFileService
+    public class AmazonS3Service : IUploadFileService
     {
         private readonly ILogger<AmazonS3Service> logger;
         private readonly IAmazonS3 s3Client;
@@ -59,9 +59,9 @@ namespace ProjectManagement.FilesService
                 throw new UserFriendlyException($"Wrong file type {file.ContentType}. Allow file types: {string.Join(", ", allowFileTypes)}");
         }
 
-        public async Task<string> UploadAvatarAsync(IFormFile file)
+        public async Task<string> UploadAvatarAsync(IFormFile file, string tanentName)
         {
-            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
+            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{tanentName}/{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
             return await UploadFileAsync(file, ConstantUploadFile.AllowImageFileTypes, filePath);
         }
 

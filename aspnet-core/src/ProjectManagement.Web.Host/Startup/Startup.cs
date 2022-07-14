@@ -26,7 +26,7 @@ using ProjectManagement.Constants;
 using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon;
-using ProjectManagement.FilesService;
+using ProjectManagement.UploadFilesService;
 using ProjectManagement.Services.Talent;
 using ProjectManagement.Services;
 
@@ -223,11 +223,11 @@ namespace ProjectManagement.Web.Host.Startup
             {
                 CreateAWSCredentialProfile();
                 services.AddAWSService<IAmazonS3>();
-                services.AddTransient<IFileService, AmazonS3Service>();
+                services.AddTransient<IUploadFileService, AmazonS3Service>();
             }
             else
             {
-                services.AddTransient<IFileService, InternalUploadFileService>();
+                services.AddTransient<IUploadFileService, InternalUploadFileService>();
             }
 
         }
