@@ -68,7 +68,7 @@ namespace ProjectManagement.UploadFilesService
         public async Task<string> UploadTimsheetAsync(IFormFile file, string tenantName, int year, int month, string fileName)
         {
             var yyyyMM = DateTimeUtils.yyyyMM(year, month);
-            var filePath = $"{AppConsts.APP_NAME}/{tenantName}/{ConstantUploadFile.TIMESHEET_FOLDER}/{yyyyMM}/{fileName}";
+            var filePath = $"{tenantName}/{ConstantUploadFile.TIMESHEET_FOLDER}/{yyyyMM}/{fileName}";
             return await UploadFileAsync(file, ConstantUploadFile.AllowTimesheetFileTypes, filePath);
         }
         public async Task<byte[]> DownloadFileAsync(string filePath)
