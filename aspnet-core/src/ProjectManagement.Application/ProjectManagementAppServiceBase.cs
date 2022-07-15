@@ -11,6 +11,10 @@ using Abp.ObjectMapping;
 using NccCore.IoC;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using ProjectManagement.Configuration;
+using Abp.UI;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectManagement
 {
@@ -23,7 +27,7 @@ namespace ProjectManagement
 
         public UserManager UserManager { get; set; }
         protected IWorkScope WorkScope { get; set; }
-
+        public IHttpContextAccessor HttpContextAccessor { get; }
         protected ProjectManagementAppServiceBase()
         {
             LocalizationSourceName = ProjectManagementConsts.LocalizationSourceName;
@@ -31,6 +35,8 @@ namespace ProjectManagement
             ObjectMapper = IocManager.Instance.Resolve<IObjectMapper>();
             UserManager = IocManager.Instance.Resolve<UserManager>();
             TenantManager = IocManager.Instance.Resolve<TenantManager>();
+            HttpContextAccessor = IocManager.Instance.Resolve<IHttpContextAccessor>();
+
         }
 
         protected virtual async Task<User> GetCurrentUserAsync()
@@ -61,5 +67,21 @@ namespace ProjectManagement
                 .FirstOrDefaultAsync();
         }
 
+        protected  List<User> GetUsers(List<string> emails)
+        {
+            return WorkScope.GetAll<User>()
+                 .Where(x => emails.Contains(x.EmailAddress))
+                 .ToList();
+        }
+        protected void CheckSecurityCode()
+        {
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
+            var header = HttpContextAccessor.HttpContext.Request.Headers;
+            var securityCodeHeader = header["X-Secret-Key"].ToString();
+            if (secretCode == securityCodeHeader)
+                return;
+
+            throw new UserFriendlyException($"SecretCode does not match! {secretCode.Substring(0, secretCode.Length / 2)} != {securityCodeHeader.Substring(0, securityCodeHeader.Length / 2)}");
+        }
     }
 }
