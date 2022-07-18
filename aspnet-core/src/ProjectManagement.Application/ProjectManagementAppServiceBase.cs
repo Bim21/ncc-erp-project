@@ -66,6 +66,13 @@ namespace ProjectManagement
                 .Where(x => x.EmailAddress.ToLower().Trim() == emailAddress.ToLower().Trim())
                 .FirstOrDefaultAsync();
         }
+        protected virtual long GetUserIdByEmail(string emailAddress)
+        {
+            return WorkScope.GetAll<User>()
+                 .Where(x => x.EmailAddress.ToLower().Trim() == emailAddress.ToLower().Trim())
+                 .Select(x => x.Id)
+                 .FirstOrDefault();
+        }
 
         protected  List<User> GetUsers(List<string> emails)
         {
