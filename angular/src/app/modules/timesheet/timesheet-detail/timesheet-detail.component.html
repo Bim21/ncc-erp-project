@@ -165,9 +165,8 @@
               <tr style="border: none">
                 <th class="stt">#</th>
                 <th>Project</th>
-                <th>PM</th>
-                <th>Note</th>
                 <th>Bill Info</th>
+                <th>Note</th>
                 <th>Invoice Info</th>
                 <th>Timesheet File</th>
                 <th>Done</th>
@@ -189,29 +188,33 @@
                 <td class="text-center">
                   <span>{{ i + 1 }}</span>
                 </td>
-                <td style="white-space: normal; min-width: 165px">
+                <td style="white-space: normal; min-width: 195px">
                   <a style="cursor: pointer; font-weight: bold;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(item)" >
                     {{ item.projectName }}
                   </a>
-                  <b *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)">
+                  <b *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" class="mb-0">
                       {{ item.projectName }}
                   </b>
-                  <p>{{item.clientCode}}</p>
+                  <p class="mb-0">{{item.clientCode}}</p>
+                  <span>PM: <b>{{item.pmFullName}}</b></span>
                 </td>
-                <td class="text-left">
-                  <div>
-                    <app-user-info [userData]="{
-                        fullName: item.pmFullName,
-                        branch: item.pmBranch,
-                        branchColor:item.pmBranchColor,
-                        branchDisplayName:item.pmBranchDisplayName,
-                        userType: item.pmUserType,
-                        emailAddress: item.pmEmailAddress,
-                        avatarFullPath: item.pmAvatarFullPath
-                      }">
-                    </app-user-info>
+                <td style="cursor: pointer" class="text-left bill">
+                  <div *ngIf="item.projectBillInfomation" style="min-width: 600px;">
+                      <div class="row" *ngFor="let bill of item.projectBillInfomation">
+                          <div class="col-3"><label>{{bill.fullName}}</label></div>
+                          <div class="col-3"><span class="ml-2">{{bill.billRole}}</span></div>
+                          <div class="col-2" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ViewBillRate)"><label
+                                  class="ml-3">{{covertMoneyType(bill.billRate)+' '+item.currency+getChargeType(item.chargeType)}}</label></div>
+                          <div class="col-2"><label class="ml-5">{{bill.workingTime}}d</label></div>
+                          <div [ngClass]="permission.isGranted(Timesheets_TimesheetDetail_ViewBillRate)?'col-2 noexpand-note': 'col-4 expand-note'"
+                              style="word-break: break-all; white-space: pre-line;">
+                              <div title="{{bill.description?bill.description:''}}" class="no-expand-text">
+                                  {{bill.description?bill.description:''}}
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                </td>
+              </td>
                 <td style="
                     white-space: pre-line;
                     word-wrap: break-word;
@@ -219,28 +222,6 @@
                     max-width: 350px;
                   ">
                   {{ item.note }}
-                </td>
-                <td style="cursor: pointer" class="text-left bill">
-                  <div *ngIf="item.projectBillInfomation" style="
-                      word-break: break-all;
-                      white-space: pre-line;
-                      min-width: 290px;
-                    ">
-                    <p *ngFor="let bill of item.projectBillInfomation" 
-                      (click)="bill.isShow = !bill.isShow" 
-                      [ngClass]="bill.isShow?'billinfo':'expand-billinfo'" 
-                      style="margin-bottom: 0;"
-                    >
-                      <label >{{bill.fullName}} -</label>
-                      {{bill.billRole}}
-                      <label >
-                        {{permission.isGranted(Timesheets_TimesheetDetail_ViewBillRate)?'- '+
-                        covertMoneyType(bill.billRate)+item.currency+getChargeType(item.chargeType):""}}
-                      </label>
-                      - <label>{{bill.workingTime}}d</label>
-                      {{bill.description?'- '+bill.description:''}}
-                    </p>
-                    </div>
                 </td>
                 <td style="
                 white-space: pre-line;
@@ -262,8 +243,8 @@
                             </td>
                 <td class="" style="
                     white-space: normal;
-                    max-width: 200px;
-                    min-width: 170px;
+                    max-width: 170px;
+                    min-width: 140px;
                   ">
                   <span class="file-download">
                     <span (click)="downloadFile(item)">{{ item.file }}</span>

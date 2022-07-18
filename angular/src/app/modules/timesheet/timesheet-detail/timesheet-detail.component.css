@@ -25,7 +25,7 @@
 #timesheet-detail .btn-upload{
   background-color: #F9F8A8;
 }
-.expand-billinfo{
+.no-expand-text{
   text-overflow: ellipsis;
   -webkit-line-clamp: 1;
   display: -webkit-box;
@@ -57,4 +57,10 @@ button.special span{
 }
 #timesheet-detail ::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin {
   margin-top: auto;
+}
+.expand-note{
+  min-width:150px;
+}
+.noexpand-note{
+  min-width:80px;
 }
