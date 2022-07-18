@@ -797,7 +797,7 @@ namespace ProjectManagement.APIs.Projects
 
         [AbpAllowAnonymous]
         [HttpGet]
-        public async Task<List<GetUserTempOrOfficalInProject>> GetUserTempOrOfficalInProjectFromProjectToolByCode(string code)
+        public async Task<List<GetUserTempInProject>> GetUserTempInProjectFromProjectToolByCode(string code)
         {
             //CheckSecurityCode();
             var projectId = await WorkScope.GetAll<Project>()
@@ -815,7 +815,7 @@ namespace ProjectManagement.APIs.Projects
                     .Where(s => s.AllocatePercentage > 0)
                     .Where(s => s.IsPool)
                     .OrderByDescending(s => s.StartTime)
-                    .Select(s => new GetUserTempOrOfficalInProject
+                    .Select(s => new GetUserTempInProject
                     {
                         EmailAddress = s.User.EmailAddress,
                     })
@@ -827,7 +827,7 @@ namespace ProjectManagement.APIs.Projects
 
         [AbpAllowAnonymous]
         [HttpPost]
-        public async Task<List<ResultGetUserTempOrOfficalInProject>> GetUserTempOrOfficalInProjectFromProjectToolByListCode(List<string> listProjectCode)
+        public async Task<List<ResultGetUserTempInProject>> GetUserTempInProjectFromProjectToolByListCode(List<string> listProjectCode)
         {
             //CheckSecurityCode();
             Logger.Info("listProjectCodelistProjectCode" + listProjectCode.Count().ToString());
@@ -856,10 +856,10 @@ namespace ProjectManagement.APIs.Projects
 
             var result = projectUsers.GroupBy(s => new { s.Code })
                 .Select(s =>
-                    new ResultGetUserTempOrOfficalInProject
+                    new ResultGetUserTempInProject
                     {
                         Code = s.Key.Code,
-                        ListUserTempOrOfficalInProject = s.Select(x => new GetUserTempOrOfficalInProject
+                        ListUserTempInProject = s.Select(x => new GetUserTempInProject
                         {
                             EmailAddress = x.EmailAddress,
                         }).ToList()

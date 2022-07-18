@@ -17,14 +17,14 @@ namespace ProjectManagement.APIs.Projects.Dto
     }
 
 
-    public class GetUserTempOrOfficalInProject
+    public class GetUserTempInProject
     {
         public string EmailAddress { get; set; }
     }
 
-    public class ResultGetUserTempOrOfficalInProject
+    public class ResultGetUserTempInProject
     {
         public string Code { get; set; }
-        public List<GetUserTempOrOfficalInProject> ListUserTempOrOfficalInProject { get; set; }
+        public List<GetUserTempInProject> ListUserTempInProject { get; set; }
     }
 }
