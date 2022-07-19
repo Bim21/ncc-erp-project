@@ -4,15 +4,15 @@ using System.Text;
 
 namespace ProjectManagement.APIs.Projects.Dto
 {
-    public class GetTempOfUserInProjectDto
+    public class UserInOutProject
     {
         public string EmailAddress { get; set; }
-        public List<TimeJoinOut> ListTimeJoinOut { get; set; }
+        public List<TimeJoinOut> ListTimeInOut { get; set; }
     }
 
     public class TimeJoinOut
     {
-        public DateTime StartTime { get; set; }
+        public DateTime DateAt { get; set; }
         public bool IsJoin { get; set; }
     }
 
