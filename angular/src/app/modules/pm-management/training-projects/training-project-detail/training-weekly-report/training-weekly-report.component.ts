@@ -844,22 +844,13 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
 
     }
 
-    let effortRequestBody = {
-      projectCode: this.projectInfo.projectCode,
-      emails: this.officalResourceList,
-      startDate: fiveMonthAgo,
-      endDate: currentDate 
-    }
-    await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
-      chartData.effort = rs.result
-    })
 
     let effortInput = {
       projectCode: this.projectInfo.projectCode,
       startDate: fiveMonthAgo,
       endDate: currentDate 
     }
-   await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProjectOffical(effortInput).toPromise().then(rs=>{
+   await this.pmReportProjectService.GetEffortMonthlyChartProject(effortInput).toPromise().then(rs=>{
       chartData.effort = rs.result
     })
 

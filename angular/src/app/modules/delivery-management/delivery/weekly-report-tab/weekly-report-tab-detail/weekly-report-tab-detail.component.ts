@@ -902,10 +902,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let fiveMonthAgo:Date =  new Date(todayDate.setMonth(todayDate.getMonth() - 5))
 
     fiveMonthAgo = this.getFirstDayOfMonth(fiveMonthAgo.getFullYear(), fiveMonthAgo.getMonth())
-    await this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
+    
+    this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
       chartData.normalAndOT = rs.result
     })
+
     if (this.officalResourceList.length > 0) {
+
       let officalRequestBody = {
         projectCode: this.projectInfo.projectCode,
         emails: this.officalResourceList,
@@ -913,21 +916,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         endDate: endTime
       }
    
-      await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(officalRequestBody).toPromise().then(rs => {
+      this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(officalRequestBody).toPromise().then(rs => {
         chartData.offical = rs.result
-      })
+      })      
 
-      
     }
+
     let effortRequestBody = {
       projectCode: this.projectInfo.projectCode,
-      emails: this.tempResourceList,
+      //emails: this.tempResourceList,
       startDate: this.formatDateYMD(fiveMonthAgo),
       endDate: currentDate 
     }
-   await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
+
+   this.pmReportProjectService.GetEffortMonthlyChartProject(effortRequestBody).toPromise().then(rs=>{
       chartData.effort = rs.result
     })
+
     if (this.tempResourceList.length > 0) {
       let tempRequestBody = {
         projectCode: this.projectInfo.projectCode,
@@ -940,24 +945,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       })
     }
 
-    
-    let effortInput = {
-      projectCode: this.projectInfo.projectCode,
-      startDate: this.formatDateYMD(fiveMonthAgo),
-      endDate: currentDate 
-    }
-   await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProjectOffical(effortInput).toPromise().then(rs=>{
-      chartData.temp = rs.result
-    })
-
-
     await this.tsProjectService.GetBillInfoChart(this.projectId, this.formatDateYMD(fiveMonthAgo), currentDate).toPromise().then(data => {
       chartData.billChart = data.result
     })
    
     this.buildProjectTSChart(chartData.normalAndOT, chartData.offical, chartData.temp)
     this.buildBillChart(chartData.billChart, chartData.effort)
-
 
   }
 
@@ -966,6 +959,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.genarateUserChart(user, rs.result)
     })
   }
+
   GetTimesheetOfUserInProject(projectCode, user, startTime, endTime) {
     this.pmReportProjectService.GetTimesheetOfUserInProject(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
       user.normalWorkingTime = rs.result ? rs.result.normalWorkingTime : 0
@@ -980,19 +974,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     return new Date(year, month, 1);
   }
   
-  GetTimesheetWeeklyChartOfUserGroupInProject(emailList) {
-    // monday at 5 weeks ago =  last week mondy - 5 week (35 days)
-
-    let requestBody = {
-      projectCode: this.projectInfo.projectCode,
-      emails: emailList,
-      startDate: this.mondayOf5weeksAgo,
-      endDate: this.lastWeekSunday
-    }
-    this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(requestBody).subscribe(r => {
-
-    })
-  }
+  
   showActions(e) {
     e.preventDefault();
     this.contextMenuPosition.x = e.clientX + 'px';
