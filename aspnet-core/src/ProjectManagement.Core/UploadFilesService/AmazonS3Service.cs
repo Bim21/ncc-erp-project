@@ -18,9 +18,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectManagement.FilesService
+namespace ProjectManagement.UploadFilesService
 {
-    public class AmazonS3Service : IFileService
+    public class AmazonS3Service : IUploadFileService
     {
         private readonly ILogger<AmazonS3Service> logger;
         private readonly IAmazonS3 s3Client;

@@ -138,7 +138,33 @@ namespace ProjectManagement.Services.ResourceManager
                     IsPool = x.IsPool
                 });
         }
-
+        public List<PMOfUserDto> QueryPMOfUser(long userId)
+        {
+            var query = QueryCurrentProjectUser(userId);
+            return query.Select(x => new PMOfUserDto
+                {
+                    ProjectName = x.Project.Name,
+                    ProjectCode = x.Project.Code,
+                    PM = new BaseUserInfo
+                    {
+                        FullName = x.Project.PM.FullName,
+                        AvatarPath = x.Project.PM.AvatarPath,
+                        BranchName = x.Project.PM.Branch.Name,
+                        EmailAddress = x.Project.PM.EmailAddress,
+                        UserType = x.Project.PM.UserType,
+                    }
+                }).ToList();
+        }
+        private IQueryable<ProjectUser> QueryCurrentProjectUser(long userId)
+        {
+            return _workScope.GetAll<ProjectUser>()
+                .Where(s => s.UserId == userId)
+                .Where(s => s.Status == ProjectUserStatus.Present)
+                .Where(s => s.AllocatePercentage > 0)
+                .Where(s => s.Project.Status == ProjectStatus.InProgress)
+                .OrderBy(s => s.ProjectRole)
+                .ThenByDescending(s => s.StartTime);
+        }
 
         public async Task<KomuProjectInfoDto> GetKomuProjectInfo(long projectId)
         {

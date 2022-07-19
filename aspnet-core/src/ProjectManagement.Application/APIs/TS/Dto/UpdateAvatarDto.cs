@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjectManagement.APIs.Timesheets.Dto
+namespace ProjectManagement.APIs.TS.Dto
 {
     public class UpdateAvatarDto
     {

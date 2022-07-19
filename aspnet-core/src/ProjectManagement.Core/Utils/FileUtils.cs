@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace ProjectManagement.Utils
@@ -29,8 +30,7 @@ namespace ProjectManagement.Utils
             {
                 return "";
             }
-            string[] arr = file.FileName.Split(".");            
-            return arr.Length > 1 ? arr[arr.Length - 1] : file.FileName;
+            return Path.GetExtension(file.FileName).Substring(1).ToLower();
         }
 
         public static string GetFileName(string filePath)

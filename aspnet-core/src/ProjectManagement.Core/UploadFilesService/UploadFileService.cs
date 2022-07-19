@@ -7,16 +7,16 @@ using ProjectManagement.MultiTenancy;
 using System;
 using System.Threading.Tasks;
 
-namespace ProjectManagement.FilesService
+namespace ProjectManagement.UploadFilesService
 {
     public class UploadFileService: ApplicationService, ITransientDependency
     {
        
         private readonly ILogger<UploadFileService> _logger;
-        private readonly IFileService _fileService;
+        private readonly IUploadFileService _fileService;
         private readonly TenantManager _tenantManager;
         public UploadFileService(
-            IFileService fileService, 
+            IUploadFileService fileService, 
             ILogger<UploadFileService> logger,
             TenantManager tenantManager)
         {
@@ -33,7 +33,7 @@ namespace ProjectManagement.FilesService
         public async Task<string> UploadAvatarAsync(IFormFile file)
         {
             var tenantName = getSessionTenantName();
-            var filePath = await _fileService.UploadAvatarAsync(file, tenantName);
+            var filePath = await _fileService.UploadAvatarAsync(file,tenantName);
             return filePath;
         }
         public async Task<string> UploadTimesheetFileAsync(IFormFile file, int year, int month, string filename)
