@@ -864,6 +864,15 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProject(effortRequestBody).toPromise().then(rs=>{
       chartData.effort = rs.result
     })
+
+    let effortInput = {
+      projectCode: this.projectInfo.projectCode,
+      startDate: fiveMonthAgo,
+      endDate: currentDate 
+    }
+   await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProjectOffical(effortInput).toPromise().then(rs=>{
+      chartData.effort = rs.result
+    })
     if (this.tempResourceList.length > 0) {
       let tempRequestBody = {
         projectCode: this.projectInfo.projectCode,

@@ -59,9 +59,9 @@ namespace ProjectManagement.UploadFilesService
                 throw new UserFriendlyException($"Wrong file type {file.ContentType}. Allow file types: {string.Join(", ", allowFileTypes)}");
         }
 
-        public async Task<string> UploadAvatarAsync(IFormFile file, string tanentName)
+        public async Task<string> UploadAvatarAsync(IFormFile file, string tenantName)
         {
-            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{tanentName}/{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
+            var filePath = $"{ConstantUploadFile.AvatarFolder?.TrimEnd('/')}/{tenantName}/{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";
             return await UploadFileAsync(file, ConstantUploadFile.AllowImageFileTypes, filePath);
         }
 
