@@ -3,9 +3,14 @@ using Abp.Authorization;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NccCore.IoC;
 using ProjectManagement.APIs.Public.Dto;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
+using ProjectManagement.Entities;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +22,7 @@ namespace ProjectManagement.APIs.Public
 {
     public class PublicAppService : ProjectManagementAppServiceBase
     {
-        ResourceManager resourceManager;
+        private readonly ResourceManager resourceManager;
         public PublicAppService(ResourceManager resourceManager)
         {
             this.resourceManager = resourceManager;
@@ -123,8 +128,8 @@ namespace ProjectManagement.APIs.Public
             return results;
         }
 
-    }
-        }
+
+
         [HttpGet]
         public List<BaseUserInfo> GetAllUser()
         {
