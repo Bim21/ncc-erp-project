@@ -8,6 +8,7 @@ using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.ResourceService.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,15 +34,14 @@ namespace ProjectManagement.APIs.Public
             };
         }
         [HttpGet]
-        public List<UserInfo> GetAllUser()
+        public List<BaseUserInfo> GetAllUser()
         {
-            return WorkScope.GetAll<User>().Select(x => new UserInfo()
+            return WorkScope.GetAll<User>().Select(x => new BaseUserInfo()
             {
                 UserType = x.UserType,
                 FullName = x.FullName,
                 BranchName = x.Branch.Name,
-                BranchDisplayName = x.Branch.DisplayName,
-                Email = x.EmailAddress,
+                EmailAddress = x.EmailAddress,
                 AvatarPath = x.AvatarPath
             }).ToList();
         }
