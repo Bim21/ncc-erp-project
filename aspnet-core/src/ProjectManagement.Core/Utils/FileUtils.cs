@@ -29,7 +29,8 @@ namespace ProjectManagement.Utils
             {
                 return "";
             }
-            return file.FileName.Contains(".") ? file.FileName.Split(".")[1] : file.FileName;
+            string[] arr = file.FileName.Split(".");            
+            return arr.Length > 1 ? arr[arr.Length - 1] : file.FileName;
         }
 
         public static string GetFileName(string filePath)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjectManagement.APIs.Projects.Dto
+namespace ProjectManagement.APIs.Public.Dto
 {
     public class UserInOutProject
     {

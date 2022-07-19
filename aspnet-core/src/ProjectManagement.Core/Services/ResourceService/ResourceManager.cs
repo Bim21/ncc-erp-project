@@ -310,27 +310,28 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
             nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
+            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole);
 
             return joinPU;
         }
 
 
-        private async Task<bool> IsEnableAutoCreateUpdateToTimsheetTool()
+        private bool IsEnableAutoCreateUpdateToTimsheetTool()
         {
-            var dbSetting = await _settingManager.GetSettingValueForApplicationAsync(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool);
+            var dbSetting = _settingManager.GetSettingValueForApplication(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool);
             return dbSetting == "true";
         }
 
         [HttpPost]
-        private async Task<string> UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        private void UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
         {
-            if (!(await IsEnableAutoCreateUpdateToTimsheetTool()))
+            if (!IsEnableAutoCreateUpdateToTimsheetTool())
             {
                 Logger.Info("UserJoinProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
-                return "update-only-project-tool";
+                return;
             }
 
-            return await _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role);
+            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role);
         }
 
         private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
@@ -400,7 +401,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
-            await UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole);
+            UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole);
 
             return confirmPUExt;
 
@@ -947,7 +948,8 @@ namespace ProjectManagement.Services.ResourceManager
                     FullName = s.FullName,
                     UserId = s.Id,
                     KomuUserId = s.KomuUserId,
-                    UserName = s.UserName
+                    UserName = s.UserName,
+                    EmailAddress = s.EmailAddress
                 }).FirstOrDefaultAsync();
 
         }

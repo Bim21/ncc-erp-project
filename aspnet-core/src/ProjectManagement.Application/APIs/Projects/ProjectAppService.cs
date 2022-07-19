@@ -1,30 +1,23 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
-using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
-using ProjectManagement.Sessions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Services.Timesheet;
 using Abp.Domain.Repositories;
 using Abp.Authorization.Users;
-using ProjectManagement.APIs.ResourceRequests.Dto;
 using Abp.Configuration;
 using ProjectManagement.Configuration;
 using Abp.Application.Services.Dto;
@@ -32,6 +25,7 @@ using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using Microsoft.AspNetCore.Http;
 using ProjectManagement.APIs.Technologys.Dto;
+using ProjectManagement.APIs.Public.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -322,7 +316,7 @@ namespace ProjectManagement.APIs.Projects
             return input;
         }
 
-        private async Task<bool> UserHasRole(long userId, string roleName)
+        private bool UserHasRole(long userId, string roleName)
         {
             var quser =
                     from ur in WorkScope.GetAll<UserRole, long>().Where(u => u.UserId == userId)
@@ -334,16 +328,16 @@ namespace ProjectManagement.APIs.Projects
 
         }
 
-        private async Task AddRolePMForUser(long userId)
+        private void AddRolePMForUser(long userId)
         {
             //Set role PM for user when user set PM of project
-            var userHasRolePM = await UserHasRole(userId, StaticRoleNames.Tenants.PM);
+            var userHasRolePM = UserHasRole(userId, StaticRoleNames.Tenants.PM);
             if (!userHasRolePM)
             {
-                var roleId = await WorkScope.GetAll<Role, int>()
+                var roleId = WorkScope.GetAll<Role, int>()
                     .Where(s => s.Name == StaticRoleNames.Tenants.PM)
                     .Select(s => s.Id)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
 
                 WorkScope.Insert<UserRole>(new UserRole
                 {
@@ -436,7 +430,7 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             return await CreateProjectInTimesheetTool(input);
         }
@@ -500,7 +494,7 @@ namespace ProjectManagement.APIs.Projects
             string codeCurrent = project.Code;
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
 
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
             {
@@ -654,7 +648,7 @@ namespace ProjectManagement.APIs.Projects
                 ClientId = input.ClientId
             };
 
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             return await CreateProjectInTimesheetTool(trainingProject);
         }
@@ -685,7 +679,7 @@ namespace ProjectManagement.APIs.Projects
             string codeCurrent = project.Code;
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Project>(input, project));
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
             {
@@ -733,55 +727,6 @@ namespace ProjectManagement.APIs.Projects
              }).ToList();
 
             return resultList;
-        }
-
-        private List<UserInOutProject> ProcessUserInOutProjectData(List<UserInOutProject> list)
-        {
-            var result = new List<UserInOutProject>();
-
-            foreach (var item in list)
-            {
-                var tempItem = new UserInOutProject { };
-
-                var timeInOutList = item.ListTimeInOut.OrderBy(s => s.DateAt).ToList();
-
-                tempItem.EmailAddress = item.EmailAddress;
-                tempItem.ListTimeInOut = new List<TimeJoinOut>();
-
-                bool isJoinFirst = false;
-                foreach (var timeInOut in timeInOutList)
-                {
-                    if (isJoinFirst == false && timeInOut.IsJoin == false)
-                    {
-                        continue;
-                    }
-                    if (timeInOut.IsJoin == true)
-                    {
-                        isJoinFirst = true;
-                    }
-                    var time = new TimeJoinOut
-                    {
-                        DateAt = timeInOut.DateAt,
-                        IsJoin = timeInOut.IsJoin,
-                    };
-                    if (tempItem.ListTimeInOut.Count == 0)
-                    {
-                        tempItem.ListTimeInOut.Add(time);
-                    }
-                    else
-                    {
-                        //Loại các ngày out gần nhau
-                        if (!(tempItem.ListTimeInOut.LastOrDefault().IsJoin == false && time.IsJoin == false))
-                        {
-                            tempItem.ListTimeInOut.Add(time);
-                        }
-                    }
-                }
-
-                result.Add(tempItem);
-            }
-
-            return result;
         }
 
 

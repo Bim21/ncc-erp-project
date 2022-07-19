@@ -23,11 +23,11 @@ namespace ProjectManagement.FilesService
                 throw new UserFriendlyException($"Wrong file type {file.ContentType}. Allow file types: {string.Join(", ", allowFileTypes)}");
         }
 
-        public async Task<string> UploadAvatarAsync(IFormFile file)
+        public async Task<string> UploadAvatarAsync(IFormFile file, string tenantName)
         {
             CheckValidFile(file, ConstantUploadFile.AllowImageFileTypes);
 
-            var avatarFolder = Path.Combine(WWWRootFolder, ConstantUploadFile.AvatarFolder);
+            var avatarFolder = Path.Combine(WWWRootFolder, ConstantUploadFile.AvatarFolder, tenantName);
             UploadFile.CreateFolderIfNotExists(avatarFolder);
 
             var fileName = $"{CommonUtil.NowToYYYYMMddHHmmss()}_{Guid.NewGuid()}.{FileUtils.GetFileExtension(file)}";

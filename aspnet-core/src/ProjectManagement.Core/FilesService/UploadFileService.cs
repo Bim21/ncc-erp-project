@@ -32,7 +32,8 @@ namespace ProjectManagement.FilesService
 
         public async Task<string> UploadAvatarAsync(IFormFile file)
         {
-            var filePath = await _fileService.UploadAvatarAsync(file);
+            var tenantName = getSessionTenantName();
+            var filePath = await _fileService.UploadAvatarAsync(file, tenantName);
             return filePath;
         }
         public async Task<string> UploadTimesheetFileAsync(IFormFile file, int year, int month, string filename)

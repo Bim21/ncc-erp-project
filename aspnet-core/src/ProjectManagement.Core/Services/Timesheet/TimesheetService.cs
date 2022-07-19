@@ -86,7 +86,7 @@ namespace ProjectManagement.Services.Timesheet
 
 
       
-        public async Task<string> UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        public void UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
         {
             var item = new
             {
@@ -95,7 +95,7 @@ namespace ProjectManagement.Services.Timesheet
                 IsPool = isPool,
                 Role = role,
             };
-            return await PostAsync<string>($"/api/services/app/ProjectManagement/UserJoinProject", item);
+            Post($"/api/services/app/ProjectManagement/UserJoinProject", item);
         }
 
       
