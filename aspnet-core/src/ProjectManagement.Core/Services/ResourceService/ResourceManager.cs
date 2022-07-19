@@ -1,5 +1,6 @@
 ﻿using Abp;
 using Abp.Application.Services;
+using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Runtime.Session;
 using Abp.UI;
@@ -13,6 +14,7 @@ using NccCore.Paging;
 using NccCore.Uitls;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Komu;
@@ -21,6 +23,7 @@ using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
+using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
@@ -37,15 +40,21 @@ namespace ProjectManagement.Services.ResourceManager
         private readonly KomuService _komuService;
         private readonly UserManager _userManager;
         private readonly ResourceRequestManager _resourceRequestManager;
+        private readonly ISettingManager _settingManager;
+        private readonly TimesheetService _timesheetService;
 
         public ResourceManager(IWorkScope workScope, IAbpSession abpSession,
             ResourceRequestManager resourceRequestManager,
-            KomuService komuService, UserManager userManager)
+            KomuService komuService, UserManager userManager,
+            ISettingManager settingManager,
+            TimesheetService timesheetService)
         {
             _workScope = workScope;
             _komuService = komuService;
             _userManager = userManager;
             _resourceRequestManager = resourceRequestManager;
+            _settingManager = settingManager;
+            _timesheetService = timesheetService;
         }
 
         public IQueryable<ProjectOfUserDto> QueryProjectsOfUser()
@@ -327,8 +336,28 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
             nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
+            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole);
 
             return joinPU;
+        }
+
+
+        private bool IsEnableAutoCreateUpdateToTimsheetTool()
+        {
+            var dbSetting = _settingManager.GetSettingValueForApplication(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool);
+            return dbSetting == "true";
+        }
+
+        [HttpPost]
+        private void UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        {
+            if (!IsEnableAutoCreateUpdateToTimsheetTool())
+            {
+                Logger.Info("UserJoinProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
+                return;
+            }
+
+            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role);
         }
 
         private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
@@ -398,7 +427,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
-
+            UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole);
 
             return confirmPUExt;
 
@@ -945,7 +974,8 @@ namespace ProjectManagement.Services.ResourceManager
                     FullName = s.FullName,
                     UserId = s.Id,
                     KomuUserId = s.KomuUserId,
-                    UserName = s.UserName
+                    UserName = s.UserName,
+                    EmailAddress = s.EmailAddress
                 }).FirstOrDefaultAsync();
 
         }

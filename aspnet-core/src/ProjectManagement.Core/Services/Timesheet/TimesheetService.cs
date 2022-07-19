@@ -84,5 +84,21 @@ namespace ProjectManagement.Services.Timesheet
                 listProjectCode);
         }
 
+
+      
+        public void UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        {
+            var item = new
+            {
+                ProjectCode = projectCode,
+                EmailAddress = emailAddress,
+                IsPool = isPool,
+                Role = role,
+            };
+            Post($"/api/services/app/ProjectManagement/UserJoinProject", item);
+        }
+
+      
+
     }
 }

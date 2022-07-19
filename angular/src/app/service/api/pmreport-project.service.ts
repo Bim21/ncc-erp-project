@@ -119,4 +119,8 @@ export class PMReportProjectService extends BaseApiService {
   public GetEffortMonthlyChartOfUserGroupInProject(input:any): Observable<any> {
     return this.http.post(this.configURI.timesheetURI +`api/services/app/Public/GetEffortMonthlyChartOfUserGroupInProject`, input)
   }
+
+  public GetEffortMonthlyChartOfUserGroupInProjectOffical(input:any): Observable<any> {
+    return this.http.post(this.configURI.timesheetURI +`api/services/app/Public/GetEffortMonthlyChartOfUserGroupInProjectOffical`, input)
+  }
 }

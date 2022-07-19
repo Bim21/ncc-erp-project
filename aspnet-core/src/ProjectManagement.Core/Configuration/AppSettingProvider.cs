@@ -10,7 +10,7 @@ namespace ProjectManagement.Configuration
             return new[]
             {
                 new SettingDefinition(AppSettingNames.UiTheme, "red", scopes: SettingScopes.Application | SettingScopes.Tenant | SettingScopes.User, isVisibleToClients: true),
-                new SettingDefinition(AppSettingNames.ClientAppId,"879411761479-734qv2e2efi9f68utvo8catolkcfbe47.apps.googleusercontent.com",scopes:SettingScopes.Application| SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.ClientAppId,"313933079512-lmpvf98bmvgidrv3m65624is4q700v17.apps.googleusercontent.com",scopes:SettingScopes.Application| SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.SecurityCode, "Uqhfwwg%fyef@HUSAA744fiegyeR", scopes:SettingScopes.Application| SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.FinanceUri,"http://finance-api.dev.nccsoft.vn/",scopes:SettingScopes.Application|SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.FinanceSecretCode,"Uqhfwwg%fyef@HUSAA744fiegyeR",scopes:SettingScopes.Application|SettingScopes.Tenant),

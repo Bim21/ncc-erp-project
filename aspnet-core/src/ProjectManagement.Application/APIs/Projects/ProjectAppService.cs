@@ -1,36 +1,31 @@
 ﻿using Abp.Authorization;
 using Abp.UI;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
-using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
-using ProjectManagement.Sessions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Services.Timesheet;
 using Abp.Domain.Repositories;
 using Abp.Authorization.Users;
-using ProjectManagement.APIs.ResourceRequests.Dto;
 using Abp.Configuration;
 using ProjectManagement.Configuration;
 using Abp.Application.Services.Dto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
+using Microsoft.AspNetCore.Http;
 using ProjectManagement.APIs.Technologys.Dto;
+using ProjectManagement.APIs.Public.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -42,17 +37,20 @@ namespace ProjectManagement.APIs.Projects
         private readonly TimesheetService _timesheetService;
         private readonly ISettingManager _settingManager;
         private readonly IRepository<UserRole, long> _userRoleRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public ProjectAppService(IProjectUserAppService projectUserAppService,
             TimesheetService timesheetService,
             IRepository<UserRole, long> userRoleRepository,
             ResourceManager resourceManager,
-            ISettingManager settingManager)
+            ISettingManager settingManager,
+            IHttpContextAccessor httpContextAccessor)
         {
             _projectUserAppService = projectUserAppService;
             _timesheetService = timesheetService;
             _userRoleRepository = userRoleRepository;
             _resourceManager = resourceManager;
             _settingManager = settingManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -122,7 +120,7 @@ namespace ProjectManagement.APIs.Projects
                                         isActive = b.isActive,
                                         FullName = b.User.FullName,
                                     }).ToList() : null
-        };
+                        };
             return await query.GetGridResult(query, input);
         }
 
@@ -318,7 +316,7 @@ namespace ProjectManagement.APIs.Projects
             return input;
         }
 
-        private async Task<bool> UserHasRole(long userId, string roleName)
+        private bool UserHasRole(long userId, string roleName)
         {
             var quser =
                     from ur in WorkScope.GetAll<UserRole, long>().Where(u => u.UserId == userId)
@@ -330,16 +328,16 @@ namespace ProjectManagement.APIs.Projects
 
         }
 
-        private async Task AddRolePMForUser(long userId)
+        private void AddRolePMForUser(long userId)
         {
             //Set role PM for user when user set PM of project
-            var userHasRolePM = await UserHasRole(userId, StaticRoleNames.Tenants.PM);
+            var userHasRolePM = UserHasRole(userId, StaticRoleNames.Tenants.PM);
             if (!userHasRolePM)
             {
-                var roleId = await WorkScope.GetAll<Role, int>()
+                var roleId = WorkScope.GetAll<Role, int>()
                     .Where(s => s.Name == StaticRoleNames.Tenants.PM)
                     .Select(s => s.Id)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
 
                 WorkScope.Insert<UserRole>(new UserRole
                 {
@@ -432,7 +430,7 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             return await CreateProjectInTimesheetTool(input);
         }
@@ -496,7 +494,7 @@ namespace ProjectManagement.APIs.Projects
             string codeCurrent = project.Code;
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDto, Project>(input, project));
 
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
             {
@@ -650,7 +648,7 @@ namespace ProjectManagement.APIs.Projects
                 ClientId = input.ClientId
             };
 
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             return await CreateProjectInTimesheetTool(trainingProject);
         }
@@ -681,7 +679,7 @@ namespace ProjectManagement.APIs.Projects
             string codeCurrent = project.Code;
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<TrainingProjectDto, Project>(input, project));
-            await AddRolePMForUser(input.PmId);
+            AddRolePMForUser(input.PmId);
 
             if (input.PmId != pmIdCurrent && input.Code == codeCurrent)
             {
@@ -690,6 +688,7 @@ namespace ProjectManagement.APIs.Projects
             return "update-only-project-tool";
 
         }
+
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail)]

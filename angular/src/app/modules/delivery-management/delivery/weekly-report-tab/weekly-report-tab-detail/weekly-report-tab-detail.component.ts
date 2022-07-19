@@ -941,6 +941,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
 
     
+    let effortInput = {
+      projectCode: this.projectInfo.projectCode,
+      startDate: this.formatDateYMD(fiveMonthAgo),
+      endDate: currentDate 
+    }
+   await this.pmReportProjectService.GetEffortMonthlyChartOfUserGroupInProjectOffical(effortInput).toPromise().then(rs=>{
+      chartData.temp = rs.result
+    })
+
+
     await this.tsProjectService.GetBillInfoChart(this.projectId, this.formatDateYMD(fiveMonthAgo), currentDate).toPromise().then(data => {
       chartData.billChart = data.result
     })
