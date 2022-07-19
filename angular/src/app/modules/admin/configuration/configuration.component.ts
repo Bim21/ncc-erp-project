@@ -14,7 +14,6 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   Admin_Configuartions_ViewHrmSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewHrmSetting;
   Admin_Configuartions_ViewTimesheetSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewTimesheetSetting;
   Admin_Configuartions_ViewFinanceSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewFinanceSetting;
-  Admin_Configuartions_ViewSendReportSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewSendReportSetting;
   Admin_Configuartions_ViewGoogleClientAppSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewGoogleClientAppSetting;
   Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting;
 
@@ -26,25 +25,12 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditUserBot: boolean = false;
   public isEditPassBot: boolean = false;
   public isEditKomuUrl: boolean = false;
-  public isEditKomuSecretCode: boolean = false;
-  public isEditFinanceUri: boolean = false;
-  public isEditFinanceSecretKey: boolean = false;
-  public isEditTimesheetUri: boolean = false;
-  public isEditTimesheetSecretKey: boolean = false;
-  public isEditCanSendDay: boolean = false;
-  public isEditCanSendHour: boolean = false;
-  public isEditExpiredDay: boolean = false;
-  public isEditExpiredHour: boolean = false;
-  public isEditGoogleKey: boolean = false;
-  public isEditHRM: boolean = false;
-  public isEditHRMSecretKey: boolean = false;
   public isEditDefaultWorkingHours: boolean = false;
   public isShowKomuSetting: boolean = false;
   public isShowProjectSetting: boolean = false;
   public isShowHRMSetting: boolean = false;
   public isShowTimesheetSetting: boolean = false;
   public isShowFinanceSetting: boolean = false;
-  public isShowSendReportSetting: boolean = false;
   public isShowGoogleClientApp: boolean = false;
   public isShowDefaultWorking: boolean = false;
   public listDays: any[] = [
@@ -57,6 +43,8 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     { value: '8', text: 'Sunday' },
   ];
   public listHours = [];
+  public isEditingKomu: boolean = false;
+  public isEditingTimesheet: boolean = false;
   constructor(
     private settingService: AppConfigurationService,
     injector: Injector
@@ -90,7 +78,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     this.configuration.autoUpdateProjectInfoToTimesheetTool = value.toString();
   }
   checkNoticeToKomu() {
-    if (this.configuration.noticeToKomu == 'true' && this.isEditKomuSecretCode) return true;
+    if (this.configuration.noticeToKomu == 'true') return true;
     return false;
   }
 }

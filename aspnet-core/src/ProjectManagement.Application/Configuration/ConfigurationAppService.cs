@@ -2,6 +2,7 @@
 using Abp.Authorization;
 using Abp.Runtime.Session;
 using Abp.UI;
+using Microsoft.Extensions.Configuration;
 using ProjectManagement.Authorization;
 using ProjectManagement.Configuration.Dto;
 
@@ -10,6 +11,12 @@ namespace ProjectManagement.Configuration
     [AbpAuthorize]
     public class ConfigurationAppService : ProjectManagementAppServiceBase, IConfigurationAppService
     {
+        private static IConfiguration _appConfiguration;
+
+        public ConfigurationAppService(IConfiguration appConfiguration)
+        {
+            _appConfiguration = appConfiguration;
+        }
         public async Task ChangeUiTheme(ChangeUiThemeInput input)
         {
             await SettingManager.ChangeSettingForUserAsync(AbpSession.ToUserIdentifier(), AppSettingNames.UiTheme, input.Theme);
@@ -26,25 +33,25 @@ namespace ProjectManagement.Configuration
             return new AppSettingDto
             {
                 ClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId),
-                SecurityCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecurityCode),
-                FinanceUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceUri),
-                FinanceSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.FinanceSecretCode),
-                TimesheetUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri),
-                TimesheetSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetSecretCode),
+                SecurityCode = _appConfiguration.GetValue<string>("ProjectService:SecurityCode"),
+                FinanceUri = _appConfiguration.GetValue<string>("FinfastService:BaseAddress"),
+                FinanceSecretCode = _appConfiguration.GetValue<string>("FinfastService:SecurityCode"),
+                TimesheetUri = _appConfiguration.GetValue<string>("TimesheetService:BaseAddress"),
+                TimesheetSecretCode = _appConfiguration.GetValue<string>("TimesheetService:SecurityCode"),
                 AutoUpdateProjectInfoToTimesheetTool = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool),
                 CanSendDay = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.CanSendDay),
                 CanSendHour = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.CanSendHour),
                 ExpiredDay = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ExpiredDay),
                 ExpiredHour = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ExpiredHour),
-                KomuUrl = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUrl),
+                KomuUrl = _appConfiguration.GetValue<string>("KomuService:BaseAddress"),
                 NoticeToKomu = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.NoticeToKomu),
-                KomuSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuSecretCode),
+                KomuSecretCode = _appConfiguration.GetValue<string>("KomuService:SecurityCode"),
                 KomuUserNames = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames),
                 UserBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot),
                 PasswordBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                ProjectUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ProjectUri),
-                HRMUri = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMUri),
-                HRMSecretCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.HRMSecretCode),
+                ProjectUri = _appConfiguration.GetValue<string>("ProjectService:BaseAddress"),
+                HRMUri = _appConfiguration.GetValue<string>("HRMService:BaseAddress"),
+                HRMSecretCode = _appConfiguration.GetValue<string>("HRMService:SecurityCode"),
                 KomuRoom = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
                 DefaultWorkingHours = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours),
             };

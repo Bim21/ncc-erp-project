@@ -2,6 +2,7 @@
 using Abp.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ProjectManagement.APIs.Public.Dto;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
@@ -20,16 +21,18 @@ namespace ProjectManagement.APIs.Public
     public class PublicAppService : ProjectManagementAppServiceBase
     {
         ResourceManager resourceManager;
-        public PublicAppService(ResourceManager resourceManager)
+        private readonly IConfiguration _appConfiguration;
+        public PublicAppService(ResourceManager resourceManager, IConfiguration appConfiguration)
         {
             this.resourceManager = resourceManager;
+            this._appConfiguration = appConfiguration;
         }
         [HttpGet]
         public async Task<GetURIDto> GetConfigUri()
         {
             return new GetURIDto
             {
-                TimesheetURI = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimesheetUri),
+                TimesheetURI = _appConfiguration.GetValue<string>("TimesheetService:BaseAddress"),
                 GoogleClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId)
             };
         }
