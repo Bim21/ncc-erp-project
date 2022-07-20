@@ -23,11 +23,10 @@ namespace ProjectManagement.APIs.Public
 {
     public class PublicAppService : ProjectManagementAppServiceBase
     {
-        ResourceManager resourceManager;
         private readonly IConfiguration _appConfiguration;
-        public PublicAppService(ResourceManager resourceManager, IConfiguration appConfiguration)
         private readonly ResourceManager resourceManager;
-        public PublicAppService(ResourceManager resourceManager)
+        
+        public PublicAppService(ResourceManager resourceManager, IConfiguration appConfiguration)
         {
             this.resourceManager = resourceManager;
             this._appConfiguration = appConfiguration;
