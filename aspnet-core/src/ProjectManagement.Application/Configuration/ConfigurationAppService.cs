@@ -49,7 +49,6 @@ namespace ProjectManagement.Configuration
                 KomuUserNames = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuUserNames),
                 UserBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.UserBot),
                 PasswordBot = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.PasswordBot),
-                ProjectUri = _appConfiguration.GetValue<string>("ProjectService:BaseAddress"),
                 HRMUri = _appConfiguration.GetValue<string>("HRMService:BaseAddress"),
                 HRMSecretCode = _appConfiguration.GetValue<string>("HRMService:SecurityCode"),
                 KomuRoom = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
