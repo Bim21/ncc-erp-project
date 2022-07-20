@@ -234,9 +234,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
         this.isLoading = false;
-
         this.getDataForBillChart(this.projectInfo.projectCode)
-
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
         this.router.navigate(
           [],
@@ -645,12 +643,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   getDataForWeeklyChart(projectCode, startTime, endTime) {
-    let normalAndOTData = this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime)
+    let totalNormalAndOT = this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime)
     let temp = null
     let offical = null
-    let forkJoinRequest = [normalAndOTData]
+    let forkJoinRequest = [totalNormalAndOT]
     let apiPayload = {
-      projectCode: this.projectInfo.projectCode,
+      projectCode: projectCode,
       emails: this.officalResourceList,
       startDate: startTime,
       endDate: endTime
@@ -668,10 +666,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
 
     forkJoin(forkJoinRequest).subscribe((data: any) => {
-      normalAndOTData = data[0].result
+      totalNormalAndOT = data[0].result
       offical = data[1]?.result
       temp = data[2]?.result
-      this.buildProjectTSChart(normalAndOTData, offical, temp)
+      this.buildProjectTSChart(totalNormalAndOT, offical, temp)
     });
   }
 
@@ -682,19 +680,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let fiveMonthAgo: any =  new Date(now.setMonth(now.getMonth() - 5))
     fiveMonthAgo =  this.formatDateYMD(this.getFirstDayOfMonth(fiveMonthAgo.getFullYear(), fiveMonthAgo.getMonth()))
 
-    let effortRequestBody = {
+    let apiPayload = {
       projectCode: projectCode,
       startDate: fiveMonthAgo,
       endDate: currentDate
     }
 
-    let effortData = this.pmReportProjectService.GetEffortMonthlyChartProject(effortRequestBody)
-    let billData = this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate)
+    let effort = this.pmReportProjectService.GetEffortMonthlyChartProject(apiPayload)
+    let bill = this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate)
 
-    forkJoin([effortData, billData]).subscribe(data => {
-      effortData = data[0].result
-      billData = data[1].result
-      this.buildBillChart(billData, effortData)
+    forkJoin([effort, bill]).subscribe(data => {
+      effort = data[0].result
+      bill = data[1].result
+      this.buildBillChart(bill, effort)
     });
 
   }

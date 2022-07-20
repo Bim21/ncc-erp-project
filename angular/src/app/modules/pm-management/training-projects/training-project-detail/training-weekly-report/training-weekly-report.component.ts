@@ -29,6 +29,7 @@ import { PagedRequestDto } from '@shared/paged-listing-component-base';
 import { WeeklyReportComponent } from '@app/modules/pm-management/list-project/list-project-detail/weekly-report/weekly-report.component';
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-training-weekly-report',
@@ -245,10 +246,10 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     if (this.selectedReport.pmReportProjectId) {
       this.pmReportProjectService.GetInfoProject(this.selectedReport.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
-
         this.isLoading = false;
-        this.GetTimesheetWeeklyChartOfProject(this.projectInfo.projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday);
+        this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
+
         this.router.navigate(
           [], 
           {
@@ -609,6 +610,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
             this.GetTimesheetWeeklyChartOfUserInProject(projectCode, user, this.mondayOf5weeksAgo, this.lastWeekSunday)
             this.GetTimesheetOfUserInProject(projectCode, user, lastWeekMonday, this.lastWeekSunday)
           })
+          this.getDataForWeeklyChart(projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday)
         })
     }
   }
@@ -821,56 +823,63 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   }
 
 
-
-  // TimesheetWeeklyChart
-  async GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime) {
-    let chartData = {} as any;
-    var todayDate: any = new Date();
-    var currentDate = this.formatDateYMD(todayDate);
-    let fiveMonthAgo = this.formatDateYMD(todayDate.setMonth(todayDate.getMonth() - 5));
-    await this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime).toPromise().then(rs => {
-      chartData.normalAndOT = rs.result
-    })
+  getDataForWeeklyChart(projectCode, startTime, endTime) {
+    let totalNormalAndOT = this.pmReportProjectService.GetTimesheetWeeklyChartOfProject(projectCode, startTime, endTime)
+    let temp = null
+    let offical = null
+    let forkJoinRequest = [totalNormalAndOT]
+    let apiPayload = {
+      projectCode: projectCode,
+      emails: this.officalResourceList,
+      startDate: startTime,
+      endDate: endTime
+    }
     if (this.officalResourceList.length > 0) {
-      let officalRequestBody = {
-        projectCode: this.projectInfo.projectCode,
-        emails: this.officalResourceList,
-        startDate: startTime,
-        endDate: endTime
-      }
-      await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(officalRequestBody).toPromise().then(rs => {
-        chartData.offical = rs.result
-      })
-
+      apiPayload.emails = this.officalResourceList
+      offical = this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(apiPayload)
+      forkJoinRequest.push(offical)
     }
-
-
-    let effortInput = {
-      projectCode: this.projectInfo.projectCode,
-      startDate: fiveMonthAgo,
-      endDate: currentDate 
-    }
-   await this.pmReportProjectService.GetEffortMonthlyChartProject(effortInput).toPromise().then(rs=>{
-      chartData.effort = rs.result
-    })
 
     if (this.tempResourceList.length > 0) {
-      let tempRequestBody = {
-        projectCode: this.projectInfo.projectCode,
-        emails: this.tempResourceList,
-        startDate: startTime,
-        endDate: endTime
-      }
-      await this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(tempRequestBody).toPromise().then(rs => {
-        chartData.temp = rs.result
-      })
+      apiPayload.emails = this.tempResourceList
+      temp = this.pmReportProjectService.GetTimesheetWeeklyChartOfUserGroupInProject(apiPayload)
+      forkJoinRequest.push(temp)
     }
-    await this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate).toPromise().then(data => {
-      chartData.billChart = data.result
-    })
 
-    this.buildProjectTSChart(chartData.normalAndOT, chartData.offical, chartData.temp)
-    this.buildBillChart(chartData.billChart, chartData.effort)
+    forkJoin(forkJoinRequest).subscribe((data: any) => {
+      totalNormalAndOT = data[0].result
+      offical = data[1]?.result
+      temp = data[2]?.result
+      this.buildProjectTSChart(totalNormalAndOT, offical, temp)
+    });
+  }
+
+
+  getDataForBillChart(projectCode: string) {
+    var now = new Date();
+    var currentDate = this.formatDateYMD(new Date())
+    let fiveMonthAgo: any =  new Date(now.setMonth(now.getMonth() - 5))
+    fiveMonthAgo =  this.formatDateYMD(this.getFirstDayOfMonth(fiveMonthAgo.getFullYear(), fiveMonthAgo.getMonth()))
+
+    let apiPayload = {
+      projectCode: projectCode,
+      startDate: fiveMonthAgo,
+      endDate: currentDate
+    }
+
+    let effort = this.pmReportProjectService.GetEffortMonthlyChartProject(apiPayload)
+    let bill = this.tsProjectService.GetBillInfoChart(this.projectId, fiveMonthAgo, currentDate)
+
+    forkJoin([effort, bill]).subscribe(data => {
+      effort = data[0].result
+      bill = data[1].result
+      this.buildBillChart(bill, effort)
+    });
+
+  }
+
+  getFirstDayOfMonth(year, month) {
+    return new Date(year, month, 1);
   }
 
   GetTimesheetWeeklyChartOfUserInProject(projectCode, user, startTime, endTime) {
