@@ -86,7 +86,7 @@ namespace ProjectManagement.Services.Timesheet
 
 
       
-        public void UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        public void UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate)
         {
             var item = new
             {
@@ -94,6 +94,7 @@ namespace ProjectManagement.Services.Timesheet
                 EmailAddress = emailAddress,
                 IsPool = isPool,
                 Role = role,
+                StartDate = startDate
             };
             Post($"/api/services/app/ProjectManagement/UserJoinProject", item);
         }
