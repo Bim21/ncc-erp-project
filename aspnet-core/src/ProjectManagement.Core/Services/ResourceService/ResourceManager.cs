@@ -336,7 +336,7 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
             nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
-            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole);
+            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
 
             return joinPU;
         }
@@ -349,7 +349,7 @@ namespace ProjectManagement.Services.ResourceManager
         }
 
         [HttpPost]
-        private void UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role)
+        private void UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate)
         {
             if (!IsEnableAutoCreateUpdateToTimsheetTool())
             {
@@ -357,7 +357,7 @@ namespace ProjectManagement.Services.ResourceManager
                 return;
             }
 
-            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role);
+            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role, startDate);
         }
 
         private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
@@ -427,7 +427,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
-            UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole);
+            UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime);
 
             return confirmPUExt;
 
