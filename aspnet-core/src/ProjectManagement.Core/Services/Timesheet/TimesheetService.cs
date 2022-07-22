@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Abp.Runtime.Session;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,8 +19,9 @@ namespace ProjectManagement.Services.Timesheet
         public TimesheetService(
             HttpClient httpClient, 
             IConfiguration configuration,
-            ILogger<TimesheetService> logger
-        ) : base(httpClient,configuration,logger,serviceName)
+            ILogger<TimesheetService> logger,
+            IAbpSession abpSession
+        ) : base(httpClient,configuration,logger,abpSession, serviceName)
         {
         }
 

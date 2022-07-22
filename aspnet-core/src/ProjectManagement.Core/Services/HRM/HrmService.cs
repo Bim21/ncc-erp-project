@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Abp.Runtime.Session;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,8 +18,9 @@ namespace ProjectManagement.Services.HRM
         public HRMService(
             HttpClient httpClient, 
             IConfiguration configuration, 
-            ILogger<HRMService> logger
-        ) : base(httpClient, configuration, logger, serviceName)
+            ILogger<HRMService> logger,
+            IAbpSession abpSession
+        ) : base(httpClient, configuration, logger, abpSession, serviceName)
         {
         }
 

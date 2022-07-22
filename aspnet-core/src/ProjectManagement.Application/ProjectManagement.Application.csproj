@@ -13,4 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Core\ProjectManagement.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="APIs\Talent\Dto\" />
+  </ItemGroup>
 </Project>

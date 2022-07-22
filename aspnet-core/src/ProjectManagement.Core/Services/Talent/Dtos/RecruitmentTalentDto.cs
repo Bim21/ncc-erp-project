@@ -10,7 +10,7 @@ namespace ProjectManagement.Services.Talent.Dtos
         [Required]
         public long ResourceRequestId { get; set; }
         [Required]
-        public long PositionId { get; set; }
+        public long SubPositionId { get; set; }
         [Required]
         public long BranchId { get; set; }
     }

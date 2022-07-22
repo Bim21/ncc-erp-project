@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ProjectManagement.Services.Talent.Dtos
 {
-    public class PositionDto
+    public class SubPositionDto
     {
         [JsonProperty("id")]
         public long Id { get; set; }
@@ -14,7 +14,5 @@ namespace ProjectManagement.Services.Talent.Dtos
         public string Name { get; set; }
         [JsonProperty("colorCode")]
         public string ColorCode { get; set; }
-        [JsonProperty("code")]
-        public string Code { get; set; }
     }
 }

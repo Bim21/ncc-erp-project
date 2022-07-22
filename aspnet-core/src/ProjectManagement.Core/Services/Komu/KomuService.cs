@@ -1,5 +1,6 @@
 ﻿
 using Abp.Configuration;
+using Abp.Runtime.Session;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -22,8 +23,9 @@ namespace ProjectManagement.Services.Komu
         public KomuService(
             HttpClient httpClient, 
             ILogger<KomuService> logger, 
-            IConfiguration configuration
-        ) : base(httpClient,configuration,logger,serviceName)
+            IConfiguration configuration,
+            IAbpSession abpSession
+        ) : base(httpClient,configuration,logger, abpSession, serviceName)
         {
              _channelIdDevMode = configuration.GetValue<string>($"{serviceName}:DevModeChannelId");
             var _isNotifyToKomu = configuration.GetValue<string>($"{serviceName}:EnableKomuNotification");
