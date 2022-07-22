@@ -12,26 +12,26 @@ namespace ProjectManagement.APIs.Talent
     [AbpAuthorize]
     public class TalentAppService : ProjectManagementAppServiceBase
     {
-        private readonly TalentService _talentService;
-        public TalentAppService(TalentService talentService)
+        private readonly TalentManager _talentManager;
+        public TalentAppService(TalentManager talentManager)
         {
-            _talentService = talentService;
+            _talentManager = talentManager;
         }
         [HttpPost]
         public async Task<IActionResult> SendRecruitmentToTalent(RecruitmentTalentDto input)
         {
-            await _talentService.SendRecruitmentToTalent(input);
-            return new OkObjectResult(input);
+            var result = await _talentManager.SendRecruitmentToTalent(input);
+            return new OkObjectResult(result);
         }
         [HttpGet]
         public async Task<List<SubPositionDto>> GetPositions()
         {
-            return await _talentService.GetPositions();
+            return await _talentManager.GetPositions();
         }
         [HttpGet]
         public async Task<List<BranchDto>> GetBranches()
         {
-            return await _talentService.GetBranches();
+            return await _talentManager.GetBranches();
         }
     }
 }

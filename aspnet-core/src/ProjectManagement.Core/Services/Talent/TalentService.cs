@@ -20,7 +20,7 @@ namespace ProjectManagement.Services.Talent
     {
         private readonly IWorkScope _workScope;
         private const string serviceName = "TalentService";
-        private const string baseUrl = "api/services/app/ProjectTool";
+        private const string pathUrl = "api/services/app/ProjectTool";
         public TalentService(
             IWorkScope workScope, 
             HttpClient httpClient, 
@@ -32,58 +32,21 @@ namespace ProjectManagement.Services.Talent
             _workScope = workScope;
         }
 
-        public async Task SendRecruitmentToTalent(RecruitmentTalentDto input)
+        public async Task<BaseResponseDto> SendRecruitmentToTalent(SendRecruitmentTalentDto recruitment)
         {
-            var resourceRequest = await _workScope.GetAll<ResourceRequest>()
-                .Where(q => q.Id == input.ResourceRequestId)
-                .Select(s => new
-                {
-                    Id = s.Id,
-                    Level = s.Level,
-                    SkillNames = s.ResourceRequestSkills.Select(s => s.Skill.Name).ToList(),
-                    TimeNeed = s.TimeNeed,
-                    Priority = s.Priority,
-                    Note = s.PMNote, 
-                    Url = s.RecruitmentUrl,
-                    IsRecruitmentSend = s.IsRecruitmentSend
-                }).FirstOrDefaultAsync();
-
-            if (resourceRequest == null) 
-                throw new UserFriendlyException("Not Found Resource Request!");
-
-            var recruitment = new SendRecruitmentTalentDto
-            {
-                BranchId = input.BranchId,
-                Level = resourceRequest.Level,
-                ResourceRequestId = input.ResourceRequestId,
-                PositionId = input.SubPositionId,
-                Quantity = 1,
-                Priority = resourceRequest.Priority,
-                SkillNames = resourceRequest.SkillNames,
-                TimeNeed = resourceRequest.TimeNeed,
-                Note = resourceRequest.Note
-            };
-
-            var response = await PostAsync<string>($"{baseUrl}/CreateRequestFromProject", recruitment);
-
-            var model = await _workScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
-            model.IsRecruitmentSend = true;
-            model.RecruitmentUrl = response;
-            await _workScope.UpdateAsync(model);
+            return await PostAsync<BaseResponseDto>($"{pathUrl}/CreateRequestFromProject", recruitment);
         }
         public async Task CancelRequest(long resourceRequestId)
         {
-            await GetAsync<string>($"{baseUrl}/CancelRequest?resourceRequestId={resourceRequestId}");
+            await GetAsync<string>($"{pathUrl}/CancelRequest?resourceRequestId={resourceRequestId}");
         }
         public async Task<List<SubPositionDto>> GetPositions()
         {
-            var response = await GetAsync<List<SubPositionDto>>($"{baseUrl}/GetSubPositions");
-            return response;
+            return await GetAsync<List<SubPositionDto>>($"{pathUrl}/GetSubPositions");
         }
         public async Task<List<BranchDto>> GetBranches()
         {
-            var response = await GetAsync<List<BranchDto>>($"{baseUrl}/GetBranches");
-            return response;
+            return await GetAsync<List<BranchDto>>($"{pathUrl}/GetBranches");
         }
     }
 }

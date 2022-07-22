@@ -217,8 +217,9 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       maxHeight: "90vh"
     })
     show.afterClosed().subscribe(rs => {
-      if (!rs) return
-      //TODO: received response
+      if (!rs) return;
+      item.isRecruitmentSend = rs.isRecruitmentSend;
+      item.recruitmentUrl = rs.recruitmentUrl;
     });
   }
 
