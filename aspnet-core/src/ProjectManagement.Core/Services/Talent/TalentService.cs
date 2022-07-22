@@ -1,4 +1,5 @@
-﻿using Abp.UI;
+﻿using Abp.Runtime.Session;
+using Abp.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -24,8 +25,9 @@ namespace ProjectManagement.Services.Talent
             IWorkScope workScope, 
             HttpClient httpClient, 
             IConfiguration configuration,
-            ILogger<TalentService> logger
-        ) : base(httpClient,configuration,logger,serviceName)
+            ILogger<TalentService> logger,
+            IAbpSession abpSession
+        ) : base(httpClient,configuration,logger,abpSession,serviceName)
         {
             _workScope = workScope;
         }
@@ -54,7 +56,7 @@ namespace ProjectManagement.Services.Talent
                 BranchId = input.BranchId,
                 Level = resourceRequest.Level,
                 ResourceRequestId = input.ResourceRequestId,
-                PositionId = input.PositionId,
+                PositionId = input.SubPositionId,
                 Quantity = 1,
                 Priority = resourceRequest.Priority,
                 SkillNames = resourceRequest.SkillNames,
@@ -62,26 +64,26 @@ namespace ProjectManagement.Services.Talent
                 Note = resourceRequest.Note
             };
 
-            var response = await PostAsync<ResponseResult<string>>($"{baseUrl}/CreateRequestFromProject", recruitment);
+            var response = await PostAsync<string>($"{baseUrl}/CreateRequestFromProject", recruitment);
 
             var model = await _workScope.GetAsync<ResourceRequest>(input.ResourceRequestId);
             model.IsRecruitmentSend = true;
-            model.RecruitmentUrl = response.Result;
+            model.RecruitmentUrl = response;
             await _workScope.UpdateAsync(model);
         }
         public async Task CancelRequest(long resourceRequestId)
         {
-            await GetAsync<ResponseResult<string>>($"{baseUrl}/CancelRequest?resourceRequestId={resourceRequestId}");
+            await GetAsync<string>($"{baseUrl}/CancelRequest?resourceRequestId={resourceRequestId}");
         }
-        public async Task<List<PositionDto>> GetPositions()
+        public async Task<List<SubPositionDto>> GetPositions()
         {
-            var response = await GetAsync<ResponseResult<List<PositionDto>>>($"{baseUrl}/GetPositions");
-            return response.Result;
+            var response = await GetAsync<List<SubPositionDto>>($"{baseUrl}/GetSubPositions");
+            return response;
         }
         public async Task<List<BranchDto>> GetBranches()
         {
-            var response = await GetAsync<ResponseResult<List<BranchDto>>>($"{baseUrl}/GetBranches");
-            return response.Result;
+            var response = await GetAsync<List<BranchDto>>($"{baseUrl}/GetBranches");
+            return response;
         }
     }
 }

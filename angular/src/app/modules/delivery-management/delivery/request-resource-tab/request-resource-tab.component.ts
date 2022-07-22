@@ -93,7 +93,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.getLevels()
     this.getPriorities()
     this.getStatuses()
-    this.getProjectUserRoles()
+    this.getProjectUserRoles();
     this.refresh();
   }
 

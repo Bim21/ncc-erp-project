@@ -1,7 +1,6 @@
 export class PosistionTalentDto {
     id: number;
     name: string;
-    code: string;
     colorCode: string;
 }
 
@@ -13,6 +12,6 @@ export class BranchTalentDto {
 
 export class SendRecuitmentDto {
     resourceRequestId: number;
-    positionId: number;
+    subPositionId: number;
     branchId: number;
 }

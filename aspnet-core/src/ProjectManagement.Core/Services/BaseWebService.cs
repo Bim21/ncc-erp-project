@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Abp.Dependency;
+using Abp.Runtime.Session;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ProjectManagement.MultiTenancy;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -15,21 +18,26 @@ namespace ProjectManagement.Services
         private readonly HttpClient httpClient;
         protected readonly ILogger logger;
         private string serviceName = string.Empty;
+        private readonly IAbpSession _abpSession;
+        private readonly TenantManager _tenantManager;
         public BaseWebService(
-            HttpClient httpClient, 
-            IConfiguration configuration, 
-            ILogger logger, 
+            HttpClient httpClient,
+            IConfiguration configuration,
+            ILogger logger,
+            IAbpSession abpSession,
             string serviceName
         )
         {
             this.httpClient = httpClient;
             this.logger = logger;
             this.serviceName = serviceName;
+            this._abpSession = abpSession;
+            this._tenantManager = IocManager.Instance.Resolve<TenantManager>();
             GetConfigService(configuration);
         }
-        protected virtual async Task<T> GetAsync<T>(string url) 
+        protected virtual async Task<T> GetAsync<T>(string url)
         {
-            var fullUrl = $"{ httpClient.BaseAddress }/{ url}";
+            var fullUrl = $"{httpClient.BaseAddress}/{url}";
             try
             {
                 logger.LogInformation($"Get: {fullUrl}");
@@ -38,7 +46,7 @@ namespace ProjectManagement.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    logger.LogInformation($"Get: {fullUrl} response: { responseContent}");
+                    logger.LogInformation($"Get: {fullUrl} response: {responseContent}");
                     JObject responseJObj = JObject.Parse(responseContent);
                     if (responseJObj.ContainsKey("result"))
                     {
@@ -49,15 +57,15 @@ namespace ProjectManagement.Services
             }
             catch (Exception ex)
             {
-                logger.LogError($"Get: {fullUrl} error: { ex.Message}");
+                logger.LogError($"Get: {fullUrl} error: {ex.Message}");
             }
 
             return default;
 
         }
-        protected virtual async Task<T> PostAsync<T>(string url, object input) 
+        protected virtual async Task<T> PostAsync<T>(string url, object input)
         {
-            var fullUrl = $"{ httpClient.BaseAddress }/{ url}";
+            var fullUrl = $"{httpClient.BaseAddress}/{url}";
             var strInput = JsonConvert.SerializeObject(input);
             var contentString = new StringContent(strInput, Encoding.UTF8, "application/json");
 
@@ -67,21 +75,22 @@ namespace ProjectManagement.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    logger.LogInformation($"Post: {fullUrl} input: {strInput} response: { responseContent}");
+                    logger.LogInformation($"Post: {fullUrl} input: {strInput} response: {responseContent}");
                     JObject responseJObj = JObject.Parse(responseContent);
-                    if (responseJObj.ContainsKey("result")){
-                       return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
+                    if (responseJObj.ContainsKey("result"))
+                    {
+                        return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(responseJObj["result"]));
                     }
                     return JsonConvert.DeserializeObject<T>(responseContent);
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError($"Post: {fullUrl} error: { ex.Message}");
+                logger.LogError($"Post: {fullUrl} error: {ex.Message}");
             }
             return default;
         }
-        public void Post(string url, object input)
+        protected virtual void Post(string url, object input)
         {
             var fullUrl = $"{httpClient.BaseAddress}/{url}";
             string strInput = JsonConvert.SerializeObject(input);
@@ -97,6 +106,12 @@ namespace ProjectManagement.Services
             }
 
         }
+        protected string GetTenantName()
+        {
+            if (!_abpSession.TenantId.HasValue) return string.Empty;
+            var tenant = _tenantManager.FindById(_abpSession.TenantId.Value);
+            return tenant.TenancyName;
+        }
         private void GetConfigService(IConfiguration configuration)
         {
             var baseAddress = configuration.GetValue<string>($"{serviceName}:BaseAddress");
@@ -104,6 +119,7 @@ namespace ProjectManagement.Services
             this.httpClient.DefaultRequestHeaders.Accept.Clear();
             this.httpClient.BaseAddress = new Uri(baseAddress);
             this.httpClient.DefaultRequestHeaders.Add("X-Secret-Key", securityCode);
+            this.httpClient.DefaultRequestHeaders.Add("Abp-TenantName", GetTenantName());
         }
     }
 }

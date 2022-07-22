@@ -1,4 +1,5 @@
 ﻿using Abp.Configuration;
+using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -19,8 +20,9 @@ namespace ProjectManagement.Services.Finance
         public FinfastService(
             HttpClient httpClient, 
             ILogger<FinfastService> logger, 
-            IConfiguration configuration
-        ) : base(httpClient, configuration, logger, serviceName)
+            IConfiguration configuration,
+            IAbpSession abpSession
+        ) : base(httpClient, configuration, logger, abpSession, serviceName)
         {
         }
         public async Task<CreateInvoiceDto> CreateInvoiceToFinance(List<CreateInvoiceDto> input)
