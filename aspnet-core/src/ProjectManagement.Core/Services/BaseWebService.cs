@@ -106,20 +106,20 @@ namespace ProjectManagement.Services
             }
 
         }
-        protected virtual async Task<string> GetTenantName()
+        protected string GetTenantName()
         {
             if (!_abpSession.TenantId.HasValue) return string.Empty;
-            var tenant = await _tenantManager.FindByIdAsync(_abpSession.TenantId.Value);
+            var tenant = _tenantManager.FindById(_abpSession.TenantId.Value);
             return tenant.TenancyName;
         }
-        private async void GetConfigService(IConfiguration configuration)
+        private void GetConfigService(IConfiguration configuration)
         {
             var baseAddress = configuration.GetValue<string>($"{serviceName}:BaseAddress");
             var securityCode = configuration.GetValue<string>($"{serviceName}:SecurityCode");
             this.httpClient.DefaultRequestHeaders.Accept.Clear();
             this.httpClient.BaseAddress = new Uri(baseAddress);
             this.httpClient.DefaultRequestHeaders.Add("X-Secret-Key", securityCode);
-            this.httpClient.DefaultRequestHeaders.Add("Abp-TenantName", await GetTenantName());
+            this.httpClient.DefaultRequestHeaders.Add("Abp-TenantName", GetTenantName());
         }
     }
 }
