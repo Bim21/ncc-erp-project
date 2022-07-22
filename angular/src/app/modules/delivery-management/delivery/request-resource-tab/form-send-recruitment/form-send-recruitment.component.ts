@@ -50,7 +50,7 @@ export class FormSendRecruitmentComponent extends AppComponentBase implements On
     this._talent.sendRecruitment(this.recruitment).subscribe(
       (rs) => {
         abp.notify.success("Sent Recruitment Successfully!");
-        this.dialogRef.close();
+        this.dialogRef.close(rs.result);
       },
       (err) => {
         abp.notify.error(err);

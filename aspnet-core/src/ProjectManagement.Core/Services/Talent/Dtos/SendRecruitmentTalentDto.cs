@@ -8,7 +8,7 @@ namespace ProjectManagement.Services.Talent.Dtos
     public class SendRecruitmentTalentDto
     {
         public long ResourceRequestId { get; set; }
-        public long PositionId { get; set; }
+        public long SubPositionId { get; set; }
         public long BranchId { get; set; }
         public int Quantity { get; set; }
         public List<string> SkillNames { get; set; }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ProjectManagement.Services
 {
-    public class ResponseResult<T> where T : class
+    public class AbpResponseResult<T> where T : class
     {
         [JsonProperty("result")]
         public T Result { get; set; }
