@@ -164,6 +164,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 Discount = s.Project.Discount,
                 TransferFee = s.Project.Client.TransferFee,
                 LastInvoiceNumber = s.Project.LastInvoiceNumber,
+                AccountName = s.AccountName,
             }).ToListAsync();
 
         }

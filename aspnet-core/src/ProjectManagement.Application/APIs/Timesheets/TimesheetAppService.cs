@@ -182,6 +182,7 @@ namespace ProjectManagement.APIs.TimeSheets
                         BillRate = pub.BillRate,
                         StartTime = pub.StartTime,
                         EndTime = pub.EndTime,
+                        AccountName = pub.AccountName,
                         IsActive = true,
                         CurrencyId = pub.CurrencyId,
                         ChargeType = pub.ChargeType,
