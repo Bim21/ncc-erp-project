@@ -19,5 +19,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public string Note { get; set; }
         public bool IsActive { get; set; }
         public float WorkingTime { get; set; }
+        public ChargeType? ChargeType { get; set; }
     }
 }

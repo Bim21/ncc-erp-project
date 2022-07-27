@@ -23,7 +23,7 @@ export class TimesheetDetailDto {
     timesheetId: number;
     projectBillInfomation: string;
     isComplete:boolean;
-
+    chargeType: string;
 }
 export class ProjectTimesheetDto {
     projectId: number;
@@ -73,4 +73,7 @@ export class TimesheetProjectBill {
     userList:any[]
     searchText:string
     chargeType?: number
+    chargeTypeName: string
+    isEditing: boolean
+    isDisable: boolean
 }

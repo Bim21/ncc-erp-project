@@ -163,6 +163,16 @@ namespace ProjectManagement.Utils
             return Enum.GetName(typeof(Branch), branch);
         }
 
+        public static string ChargeTypeName(ChargeType? chargeType)
+        {
+            if (!chargeType.HasValue)
+            {
+                return "null";
+            }
+            
+            return Enum.GetName(typeof(ChargeType), chargeType);
+        }
+
         public static string UserTypeName(UserType? type)
         {
             if (!type.HasValue)

@@ -65,7 +65,8 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             BranchColor = x.User.Branch.Color,
                             BranchDisplayName = x.User.Branch.DisplayName,
                             EmailAddress = x.User.EmailAddress,
-                            UserType = x.User.UserType
+                            UserType = x.User.UserType,
+                            ChargeType = x.ChargeType.HasValue ? x.ChargeType : x.Project.ChargeType,
                         });
             return await query.ToListAsync();
         }

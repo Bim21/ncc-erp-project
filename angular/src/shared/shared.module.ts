@@ -65,6 +65,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
 import { SortableComponent } from './components/sortable/sortable.component';
+import { ChargeTypePipe } from './pipes/charge-type.pipe';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -131,6 +132,7 @@ import { SortableComponent } from './components/sortable/sortable.component';
         FileUploadComponent,
         ListFilterPipe,
         SortableComponent,
+        ChargeTypePipe,
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -183,6 +185,7 @@ import { SortableComponent } from './components/sortable/sortable.component';
         ListFilterPipe,
         NgxStarsModule,
         DragDropModule,
+        ChargeTypePipe
     ]
 })
 export class SharedModule {

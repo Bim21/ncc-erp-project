@@ -33,6 +33,10 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public byte? LastInvoiceNumber { get; set; }
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
+        public ChargeType? ChargeType { get; set; }
         public string BillAccountName => string.IsNullOrEmpty(AccountName) ? FullName : AccountName;
+        public string ChargeTypeName => CommonUtil.ChargeTypeName(ChargeType);
+       
+
     }
 }

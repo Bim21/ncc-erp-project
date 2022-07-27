@@ -29,5 +29,6 @@ namespace ProjectManagement.Entities
         public string Note { get; set; }
         public string shadowNote { get; set; }
         public bool isActive { get; set; }
+        public ChargeType? ChargeType { get; set; }
     }
 }

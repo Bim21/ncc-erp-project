@@ -161,7 +161,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 BillRole = s.BillRole,
                 StartTime = s.StartTime,
                 EndTime = s.EndTime,
-                ChargeType = s.Project.ChargeType,
+                ChargeType = s.ChargeType,
                 CurrencyId = s.Project.CurrencyId,
                 Discount = s.Project.Discount,
                 TransferFee = s.Project.Client.TransferFee,

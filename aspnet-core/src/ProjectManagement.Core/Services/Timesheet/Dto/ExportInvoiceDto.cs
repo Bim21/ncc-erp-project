@@ -115,7 +115,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
                     return WorkingDay;
                 }
 
-                if (ChargeType == ChargeType.Hours)
+                if (ChargeType == ChargeType.Hourly)
                 {
                     return WorkingDay * DefaultWorkingHours;
                 }
@@ -132,7 +132,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
                     return "Day";
                 }
 
-                if (ChargeType == ChargeType.Hours)
+                if (ChargeType == ChargeType.Hourly)
                 {
                     return "Hour";
                 }
