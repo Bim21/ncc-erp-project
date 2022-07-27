@@ -3,6 +3,7 @@ using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -21,6 +22,8 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(TimesheetId))]
         public Timesheet TimeSheet { get; set; }
         public long? TimesheetId { get; set; }
+        [MaxLength(100)]
+        public string AccountName { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
@@ -34,5 +37,6 @@ namespace ProjectManagement.Entities
         public long? CurrencyId { get; set; }
         [ForeignKey(nameof(CurrencyId))]
         public Currency Currency { get; set; }
+
     }
 }

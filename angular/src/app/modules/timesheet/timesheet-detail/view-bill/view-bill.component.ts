@@ -65,7 +65,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     }
     userBill.timesheetId = this.data.billInfo.timesheetId;
     userBill.projectId = this.data.billInfo.projectId;
-    
+
     if (this.isCreate) {
       userBill.projectId = this.data.billInfo.projectId;
       delete userBill['userList'];
@@ -95,7 +95,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         "note": userBill?.note,
         "isActive": userBill.isActive,
         "workingTime": userBill.workingTime,
-        "id": userBill.id
+        "id": userBill.id,
+        "accountName": userBill.accountName
       }]
       this.projectBillService.updateProjectBill(bill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
         abp.notify.success(`Update successfull`)
@@ -115,7 +116,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   isComplete(e) {
     this.data.billInfo.isComplete = e.checked;
-    let data = {      
+    let data = {
       isComplete: this.data.billInfo.isComplete,
       id: this.data.billInfo.id
     }
@@ -130,6 +131,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       return {
         projectId: userBill.projectId,
         timeSheetId: this.data.billInfo.timesheetId,
+        billAccountName: userBill.billAccountName,
+        accountName: userBill.accountName,
         userId: userBill.userId,
         billRole: userBill.billRole,
         billRate: userBill.billRate,
@@ -231,7 +234,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       Id: data.id,
       workingTime: data.workingTime,
       isActive: data.isActive,
-      note: data.note
+      note: data.note,
+      accountName: data.accountName
     }]
     this.projectBillService.updateTS(request).subscribe((response) =>{
       if(response.success){
@@ -276,7 +280,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
         note: userBill?.note,
         isActive: userBill.isActive,
         workingTime: userBill.workingTime,
-        id: userBill.id
+        id: userBill.id,
+        accountName: userBill.accountName
       }
     })
 

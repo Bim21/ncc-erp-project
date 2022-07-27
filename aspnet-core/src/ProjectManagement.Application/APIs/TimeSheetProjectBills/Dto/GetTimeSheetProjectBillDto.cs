@@ -16,6 +16,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public long ProjectId { get; set; }
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
+        public string AccountName { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
@@ -38,5 +39,6 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public ChargeType? ChargeType { get; set; }
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
+        public string BillAccountName => string.IsNullOrEmpty(AccountName) ? FullName : AccountName;
     }
 }

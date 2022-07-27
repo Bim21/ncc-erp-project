@@ -90,7 +90,8 @@ namespace ProjectManagement.Services.Timesheet.Dto
     public class TimesheetUser
     {
         public long UserId { get; set; }
-        public string FullName { get; set; }
+        public string UserFullName { get; set; }
+        public string AccountName { get; set; }
         public string EmailAddress { get; set; }
         public string ProjectCode { get; set; }
         public string ProjectName { get; set; }
@@ -103,6 +104,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
         public int DefaultWorkingHours { get; set; }
         public ExportInvoiceMode Mode { get; set; }
         public double TimesheetWorkingDay { get; set; }
+        public string FullName => string.IsNullOrEmpty(AccountName) ? UserFullName : AccountName;
         public double BillRateDisplay => (Mode == ExportInvoiceMode.MontlyToDaily && ChargeType == ChargeType.Monthly) ? BillRate / TimesheetWorkingDay : BillRate;
         public double WorkingDayDisplay
         {

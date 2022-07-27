@@ -23,7 +23,7 @@ export class TimesheetDetailDto {
     timesheetId: number;
     projectBillInfomation: string;
     isComplete:boolean;
-    
+
 }
 export class ProjectTimesheetDto {
     projectId: number;
@@ -50,6 +50,8 @@ export class TimesheetProjectBill {
     userName: string
     projectId: number
     projectName: string
+    billAccountName: string
+    accountName: string
     billRole: string
     billRate: number
     startTime: string

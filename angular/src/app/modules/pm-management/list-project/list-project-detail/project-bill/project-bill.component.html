@@ -4,7 +4,7 @@
             <div class="row p-1" style="margin:16px 16.5px;">
                 <div class="col-6 m-0 p-0" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
                     <span classs="col-12" style="font-size: 20px;">Last Invoice Number: </span>
-                    <span *ngIf="!isEditLastInvoiceNumber" 
+                    <span *ngIf="!isEditLastInvoiceNumber"
                         style="word-wrap: break-word; white-space: pre-line;font-size: 18px; text-align: justify;"
                         class="m-0">
                         {{lastInvoiceNumber}}
@@ -14,24 +14,24 @@
                             <input type="number"
                                 style="padding-bottom: 5px;" matInput
                                 [(ngModel)]="lastInvoiceNumber" name="lastInvoiceNumber" placeholder="Last Invoice Number" />
-                    
+
                     </mat-form-field>
 
                     <div class="d-inline ml-2 pt-1 text-right row">
-                        <i  *ngIf="!isEditLastInvoiceNumber && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)" 
+                        <i  *ngIf="!isEditLastInvoiceNumber && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)"
                             class="fas fa-edit mb-2  fa-lg"
-                            style="font-size: 17px;" 
+                            style="font-size: 17px;"
                             (click)="isEditLastInvoiceNumber = true">
                         </i>
-                        <i *ngIf="isEditLastInvoiceNumber"  
-                            (click)="cancelLastInvoiceNumber()"  
-                            style="color: red;" 
+                        <i *ngIf="isEditLastInvoiceNumber"
+                            (click)="cancelLastInvoiceNumber()"
+                            style="color: red;"
                             class="fas fa-times fa-lg mr-2">
                             </i>
-                        <i 
-                            *ngIf="isEditLastInvoiceNumber"  
-                            style="color: green ;" 
-                            class="fas fa-check fa-lg" 
+                        <i
+                            *ngIf="isEditLastInvoiceNumber"
+                            style="color: green ;"
+                            class="fas fa-check fa-lg"
                             (click)="updateLastInvoiceNumber()" >
                         </i>
                     </div>
@@ -40,7 +40,7 @@
                 <div class="col-6" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
                     <span style="font-size: 20px;">Discount(%): </span>
                     <span *ngIf="!isEditDiscount"
-                        style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;" 
+                        style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;"
                         class="m-0">
                         {{discount}}
                     </span>
@@ -51,21 +51,21 @@
                             name="discount" placeholder="Discount"
                         />
                     </mat-form-field>
-                    
+
                     <div class="d-inline ml-2 pt-1 text-right row">
                         <i *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit) && !isEditDiscount"
                             style="font-size: 17px;"
-                            class="fas fa-edit mb-2 fa-lg" 
+                            class="fas fa-edit mb-2 fa-lg"
                             (click)="isEditDiscount = true">
                         </i>
-                        <i *ngIf="isEditDiscount" 
-                            (click)="cancelDiscount();"  
+                        <i *ngIf="isEditDiscount"
+                            (click)="cancelDiscount();"
                             style="color: red;"
                              class="fas fa-times fa-lg mr-2">
                         </i>
-                        <i style="color: green ;" 
-                            class="fas fa-check fa-lg" 
-                            *ngIf="isEditDiscount" 
+                        <i style="color: green ;"
+                            class="fas fa-check fa-lg"
+                            *ngIf="isEditDiscount"
                             (click)="updateDiscount()" >
                         </i>
                     </div>
@@ -73,8 +73,8 @@
             </div>
         </div>
 
-      
-        
+
+
         <div class="card mt-3">
 
             <mat-expansion-panel [expanded]="!isShowUserBill" >
@@ -98,6 +98,7 @@
                                 <tr>
                                     <th class="stt">#</th>
                                     <th>Employee</th>
+                                    <th>Bill Account Name</th>
                                     <th>Charge Role</th>
                                     <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View)">Rate <br> <span *ngIf="rateInfo.isCharge">{{getTitleRate()}}</span></th>
                                     <th>Start charge</th>
@@ -145,6 +146,20 @@
                                         </div>
                                     </td>
                                     <td>
+                                        <span *ngIf="!bill.createMode">{{ bill.billAccountName }}</span>
+
+                                        <div *ngIf="bill.createMode">
+
+                                            <input style="min-width: 150px;" class="form-control mt-1"
+                                                #accountName="ngModel" #accountNameEl type="text" placeholder="Bill Account Name"
+                                                name="accountName" [(ngModel)]="bill.accountName" />
+
+                                            <abp-validation-summary [control]="accountName" [controlEl]="accountNameEl">
+                                            </abp-validation-summary>
+
+                                        </div>
+                                    </td>
+                                    <td>
                                         <span *ngIf="!bill.createMode">{{bill.billRole}}</span>
 
                                         <div *ngIf="bill.createMode">
@@ -162,13 +177,12 @@
                                         <span class="text-center" *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
                                         </span>
                                         <div *ngIf="bill.createMode">
-                                            <input style="min-width: 150px;" required class="form-control mt-1"
+                                            <input style="min-width: 150px;" required class="form-control mt-1 aaa"
                                                 #billRate="ngModel" #billRateEl type="text" mask="separator"
                                                 thousandSeparator="." placeholder="number *"
                                                 [(ngModel)]="bill.billRate">
                                             <abp-validation-summary [control]="billRate" [controlEl]="billRateEl">
                                             </abp-validation-summary>
-
                                         </div>
                                     </td>
                                     <td class="text-center">
@@ -209,7 +223,7 @@
                                         </mat-checkbox>
                                     </td>
                                     <td style="white-space: pre-line;
-                                               word-break: break-all; 
+                                               word-break: break-all;
                                                min-width: 150px;
                                                text-align: left;">
                                         <div class="d-flex" style="align-items: center">
@@ -257,7 +271,7 @@
                 </div>
 
 
-              
+
             </mat-expansion-panel>
             <mat-expansion-panel>
 

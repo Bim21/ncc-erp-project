@@ -4,6 +4,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -19,6 +20,8 @@ namespace ProjectManagement.Entities
         [ForeignKey(nameof(ProjectId))]
         public Project Project { get; set; }
         public long ProjectId { get; set; }
+        [MaxLength(100)]
+        public string AccountName { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
