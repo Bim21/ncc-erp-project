@@ -38,6 +38,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                              UserName = x.User.Name,
                              ProjectId = x.ProjectId,
                              ProjectName = x.Project.Name,
+                             AccountName = x.AccountName,
                              BillRole = x.BillRole,
                              BillRate = isViewRate ? x.BillRate : -1,
                              StartTime = x.StartTime.Date,
@@ -114,6 +115,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                 var dto = input.Where(s => s.Id == item.Id).FirstOrDefault();
                 if (dto != default)
                 {
+                    item.AccountName = dto.AccountName;
                     item.BillRate = dto.BillRate;
                     item.BillRole = dto.BillRole;
                     item.Note = dto.Note;
@@ -142,6 +144,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                     entity.WorkingTime = dto.WorkingTime;
                     entity.Note = dto.Note;
                     entity.IsActive = dto.IsActive;
+                    entity.AccountName = dto.AccountName;
                 }
             }
             await CurrentUnitOfWork.SaveChangesAsync();

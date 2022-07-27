@@ -9,6 +9,7 @@ namespace ProjectManagement.Services.ProjectTimesheet.Dto
     {
         public long ProjectId { get; set; }
         public long UserId { get; set; }
+        public string BillAccountName { get; set; }
         public float BillRate { get; set; }
         public string BillRole { get; set; }
         public DateTime StartTime { get; set; }
@@ -18,6 +19,7 @@ namespace ProjectManagement.Services.ProjectTimesheet.Dto
         public float Discount { get; set; }
         public float TransferFee { get; set; }
         public long LastInvoiceNumber { get; set; }
+        public string AccountName => BillAccountName;
 
     }
 }

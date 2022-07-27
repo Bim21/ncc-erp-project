@@ -21,5 +21,6 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public string Note { get; set; }
         public string shadowNote { get; set; }
         public bool isActive { get; set; }
+        public string AccountName { get; set; }
     }
 }

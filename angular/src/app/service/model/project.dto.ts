@@ -81,6 +81,8 @@ export class projectUserBillDto {
   userName: string;
   projectId: number;
   projectName: string;
+  billAccountName: string;
+  accountName: string;
   billRole: string;
   billRate: number;
   startTime: string;

@@ -73,6 +73,7 @@
             <tr>
               <th class="stt">#</th>
               <th style="width: 350px;">Employee</th>
+              <th style="width: 250px;">Bill Account Name</th>
               <th style="width: 150px;" *ngIf="data.action == updateAction.UpdateBillInfo">Charge Role</th>
               <th
                 style="width: 150px;"
@@ -112,6 +113,29 @@
                     }"
                   >
                   </app-user-info>
+              </td>
+              <td class="text-center">
+                <span *ngIf="(!bill.createMode && !isEdittingRows) || data.action != updateAction.UpdateBillInfo">{{
+                  bill.billAccountName
+                }}</span>
+                <div *ngIf="((bill.createMode || isEdittingRows) && data.action == updateAction.UpdateBillInfo)">
+                  <input
+                    style="min-width: 110px"
+                    class="form-control mt-1"
+                    #accountName="ngModel"
+                    #accountNameEl
+                    type="text"
+                    placeholder="Bill Account Name"
+                    [name]="i + 'accountName'"
+                    [(ngModel)]="bill.accountName"
+                  />
+
+                  <abp-validation-summary
+                    [control]="accountName"
+                    [controlEl]="accountNameEl"
+                  >
+                  </abp-validation-summary>
+                </div>
               </td>
               <td class="text-center" *ngIf="data.action == updateAction.UpdateBillInfo">
                 <span *ngIf="!bill.createMode && !isEdittingRows">{{
@@ -184,7 +208,7 @@
                   />
                 </div>
               </td>
-             
+
               <td class="text-center pt-3">
                 <mat-checkbox
                   [disabled]="!bill.createMode && !isEdittingRows"

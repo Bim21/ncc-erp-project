@@ -50,6 +50,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             UserName = x.User.Name,
                             ProjectId = x.ProjectId,
                             ProjectName = x.Project.Name,
+                            AccountName = x.AccountName,
                             BillRole = x.BillRole,
                             BillRate = isViewRate ? x.BillRate : 0,
                             StartTime = x.StartTime.Date,

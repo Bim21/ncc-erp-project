@@ -168,7 +168,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                     .Where(x => x.TimesheetId == tsp.TimesheetId && x.ProjectId == tsp.ProjectId && x.IsActive)
                                                     .Select(x => new TimesheetProjectBillInfoDto
                                                     {
-                                                        FullName = x.User.FullName,
+                                                        UserFullName = x.User.FullName,
+                                                        AccountName = x.AccountName,
                                                         BillRate = allowViewBillRate ? x.BillRate : 0,
                                                         BillRole = x.BillRole,
                                                         WorkingTime = x.WorkingTime,
@@ -263,6 +264,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 var timesheetProjectBill = new TimesheetProjectBill
                 {
                     ProjectId = pub.ProjectId,
+                    AccountName = pub.AccountName,
                     TimesheetId = timesheet.Id,
                     UserId = pub.UserId,
                     BillRole = pub.BillRole,
@@ -628,7 +630,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                BillRate = tpb.BillRate,
                                                ChargeType = tpb.ChargeType.Value,
                                                CurrencyName = tpb.Currency.Name,
-                                               FullName = tpb.User.FullName,
+                                               UserFullName = tpb.User.FullName,
+                                               AccountName = tpb.AccountName,
                                                Mode = input.Mode,
                                                DefaultWorkingHours = defaultWorkingHours,
                                                ProjectName = tpb.Project.Name,

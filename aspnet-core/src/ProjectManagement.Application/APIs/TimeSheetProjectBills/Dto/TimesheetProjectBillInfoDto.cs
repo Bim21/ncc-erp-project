@@ -7,12 +7,14 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
 {
     public class TimesheetProjectBillInfoDto
     {
-        public string FullName { get; set; }
+        public string UserFullName { get; set; }
+        public string AccountName { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }
         public float WorkingTime { get; set; }
         public string Description { get; set; }
         public string Currency { get; set; }
         public ChargeType? ChargeType { get; set; }
+        public string FullName => string.IsNullOrEmpty(AccountName) ? UserFullName : AccountName;
     }
 }

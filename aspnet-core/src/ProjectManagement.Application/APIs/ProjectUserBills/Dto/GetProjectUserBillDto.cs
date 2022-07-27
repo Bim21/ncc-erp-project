@@ -6,7 +6,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectUserBills.Dto
 {
-    public class GetProjectUserBillDto  : EntityDto<long>
+    public class GetProjectUserBillDto : EntityDto<long>
     {
         public long UserId { get; set; }
         [ApplySearchAttribute]
@@ -14,6 +14,7 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public long ProjectId { get; set; }
         [ApplySearchAttribute]
         public string ProjectName { get; set; }
+        public string AccountName { get; set; }
         public string BillRole { get; set; }
         public float BillRate { get; set; }
         public DateTime StartTime { get; set; }
@@ -32,5 +33,6 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public byte? LastInvoiceNumber { get; set; }
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
+        public string BillAccountName => string.IsNullOrEmpty(AccountName) ? FullName : AccountName;
     }
 }
