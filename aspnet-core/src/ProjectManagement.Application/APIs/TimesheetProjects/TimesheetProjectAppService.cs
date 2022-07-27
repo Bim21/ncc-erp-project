@@ -175,7 +175,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                         WorkingTime = x.WorkingTime,
                                                         Description = x.Note,
                                                         Currency = x.Currency.Name,
-                                                        ChargeType = x.ChargeType
+                                                        ChargeType = x.ChargeType.HasValue ? x.ChargeType : x.Project.ChargeType,
                                                     }).ToList(),
                              Note = tsp.Note,
                              HistoryFile = tsp.HistoryFile,
@@ -272,7 +272,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     StartTime = pub.StartTime,
                     EndTime = pub.EndTime,
                     IsActive = true,
-                    ChargeType = project.Project.ChargeType,
+                    ChargeType = pub.ChargeType,
                     CurrencyId = project.Project.CurrencyId,
                 };
                 listTimesheetProjectBill.Add(timesheetProjectBill);

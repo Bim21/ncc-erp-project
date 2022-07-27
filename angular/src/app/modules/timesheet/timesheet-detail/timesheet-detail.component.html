@@ -203,7 +203,7 @@
                       <div class="row" *ngFor="let bill of item.projectBillInfomation">
                           <div class="col-3"><label>{{bill.fullName}}</label></div>
                           <div class="col-3"><span class="ml-2">{{bill.billRole}}</span></div>
-                          <div class="col-2" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ViewBillRate)"><label
+                          <div class="col-2" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)"><label
                                   class="ml-3">{{covertMoneyType(bill.billRate)+' '+item.currency+getChargeType(bill.chargeType)}}</label></div>
                           <div class="col-2"><label class="ml-5">{{bill.workingTime}}d</label></div>
                           <div [ngClass]="permission.isGranted(Timesheets_TimesheetDetail_ViewBillRate)?'col-2 noexpand-note': 'col-4 expand-note'"

@@ -186,10 +186,10 @@
                                             </abp-validation-summary>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center" >
                                         <span class="text-center" *ngIf="!bill.createMode">
                                             {{bill.chargeTypeName}}</span>
-                                        <div *ngIf="bill.createMode">
+                                        <div *ngIf="bill.createMode" style="width: 100px; ">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select (closed)="focusOut()" [(ngModel)]="bill.chargeType" name="chargeTypes"
                                                     placeholder="select Charge" #chargeTypes="ngModel">
