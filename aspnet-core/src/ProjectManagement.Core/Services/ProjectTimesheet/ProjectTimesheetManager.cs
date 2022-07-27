@@ -81,7 +81,8 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 UserId = pub.UserId,
                 WorkingTime = 0,
                 ChargeType = project.ChargeType,
-                CurrencyId = project.CurrencyId
+                CurrencyId = project.CurrencyId,
+                AccountName = pub.AccountName,
             };
 
             await _workScope.InsertAsync(tpb);
@@ -110,7 +111,8 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
             tpb.BillRate = pub.BillRate;
             tpb.BillRole = pub.BillRole;
-            tpb.IsActive = pub.isActive;           
+            tpb.IsActive = pub.isActive;         
+            tpb.AccountName = pub.AccountName;
 
             await _workScope.UpdateAsync(tpb);
         }
