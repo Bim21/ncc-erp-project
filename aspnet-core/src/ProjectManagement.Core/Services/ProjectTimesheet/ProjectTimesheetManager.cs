@@ -80,7 +80,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 ProjectId = pub.ProjectId,
                 UserId = pub.UserId,
                 WorkingTime = 0,
-                ChargeType = project.ChargeType,
+                ChargeType = pub.ChargeType.HasValue ? pub.ChargeType : project.ChargeType,
                 CurrencyId = project.CurrencyId,
                 AccountName = pub.AccountName,
             };
@@ -161,7 +161,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 BillRole = s.BillRole,
                 StartTime = s.StartTime,
                 EndTime = s.EndTime,
-                ChargeType = s.Project.ChargeType,
+                ChargeType = s.ChargeType.HasValue ? s.ChargeType : s.Project.ChargeType,
                 CurrencyId = s.Project.CurrencyId,
                 Discount = s.Project.Discount,
                 TransferFee = s.Project.Client.TransferFee,

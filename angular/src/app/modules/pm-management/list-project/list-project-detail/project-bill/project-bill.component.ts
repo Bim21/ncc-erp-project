@@ -10,6 +10,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditNoteDialogComponent } from './add-note-dialog/edit-note-dialog.component';
+import { APP_ENUMS } from '@shared/AppEnums';
 
 
 @Component({
@@ -25,15 +26,16 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public panelOpenState: boolean = false;
   public isShowUserBill: boolean = false;
   public searchUserBill: string = ""
+  public searchBillCharge: number
   private projectId: number
   public userBillCurrentPage: number = 1
   public rateInfo = {} as ProjectRateDto;
   public lastInvoiceNumber;
   public discount;
-  public chargeType = ['d', 'm', 'h'];
+  public chargeTypeList = [{name:'Daily', value: 0}, {name:'Monthly', value: 1}, {name:'Hourly', value: 2}];
   public isEditLastInvoiceNumber: boolean = false;
   public isEditDiscount: boolean = false;
-  
+
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
@@ -47,7 +49,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   constructor(
     private projectUserBillService: ProjectUserBillService,
     private route: ActivatedRoute,
-    injector: Injector, 
+    injector: Injector,
     private userService: UserService,
     private _modalService: BsModalService) {
     super(injector)
@@ -56,6 +58,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.getUserBill();
     this.getAllFakeUser();
     this.getRate();
@@ -112,9 +115,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
   }
 
-  public getTitleRate() {
-    return '(' + this.rateInfo.currencyName + '/' + this.chargeType[this.rateInfo.chargeType] + ')'
-  }
 
   private getAllFakeUser() {
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
@@ -178,7 +178,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     userBill.createMode = true;
     this.userBillProcess = true;
     this.isEditUserBill = true;
-    console.log(userBill)
     // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
   private getUserBill(): void {
@@ -210,7 +209,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   cancelDiscount() {
     this.isEditDiscount = false;
   }
-  
+
   updateNote(id, fullName,projectName,note) {
     let editNoteDialog: BsModalRef;
     editNoteDialog = this._modalService.show(EditNoteDialogComponent, {

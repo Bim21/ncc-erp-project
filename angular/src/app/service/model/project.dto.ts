@@ -96,6 +96,8 @@ export class projectUserBillDto {
   id: number;
   timesheetId: number;
   userList?: any[];
+  chargeType?: number;
+  chargeTypeName: string;
 }
 export class ProjectRateDto {
   currencyName: string;

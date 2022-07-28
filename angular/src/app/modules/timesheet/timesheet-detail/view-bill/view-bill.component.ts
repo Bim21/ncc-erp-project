@@ -25,7 +25,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   public isEdit: boolean = false;
   public isEdittingRows: boolean = false;
   tempUserList = []
-  public chargeType = ['d','m','h']
+  public chargeTypeList = [{name:'Daily', value: 0}, {name:'Monthly', value: 1}, {name:'Hourly', value: 2}];
   public updateAction = UpdateAction
   Timesheets_TimesheetDetail_UpdateBill_Edit = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_Edit
   Timesheets_TimesheetDetail_UpdateBill_SetDone = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill_SetDone
@@ -36,7 +36,7 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<ViewBillComponent>, private userService: UserService,
     private timesheetProjectService: TimesheetProjectService,
-    private projectBillService: TimeSheetProjectBillService, injector: Injector) {
+    private timesheetProjectBillService: TimeSheetProjectBillService, injector: Injector) {
     super(injector)
   }
 
@@ -46,7 +46,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   }
   public getProjectBill() {
     this.isLoading = true
-    this.projectBillService.getProjectBill(this.data.billInfo.projectId, this.data.billInfo.timesheetId).subscribe(data => {
+    this.timesheetProjectBillService.getProjectBill(this.data.billInfo.projectId, this.data.billInfo.timesheetId)
+    .subscribe(data => {
       this.billDetail = data.result
       this.isLoading = false
       //this.getAllFakeUser(false)
@@ -55,50 +56,48 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   }
 
 
-  public saveUserBill(userBill: projectUserBillDto): void {
-    delete userBill["createMode"];
+  public saveUserBill(tpb: TimesheetProjectBill): void {
+    delete tpb["isEditing"];
+    //tpb.isEditing = false;
 
-
-    userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
-    if (userBill.endTime) {
-      userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
+    tpb.startTime = moment(tpb.startTime).format("YYYY-MM-DD");
+    if (tpb.endTime) {
+      tpb.endTime = moment(tpb.endTime).format("YYYY-MM-DD");
     }
-    userBill.timesheetId = this.data.billInfo.timesheetId;
-    userBill.projectId = this.data.billInfo.projectId;
+    tpb.timesheetId = this.data.billInfo.timesheetId;
+    tpb.projectId = this.data.billInfo.projectId;
 
-    if (this.isCreate) {
-      userBill.projectId = this.data.billInfo.projectId;
-      delete userBill['userList'];
-      this.projectBillService.createProjectBill(userBill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
-        abp.notify.success(`Create successfull`);
+    if (!tpb.id) {
+      tpb.projectId = this.data.billInfo.projectId;
+      delete tpb['userList'];
+      this.timesheetProjectBillService.createProjectBill(tpb)
+      .pipe(catchError(this.timesheetProjectBillService.handleError))
+      .subscribe(res => {
+        abp.notify.success(`Created successfull`);
         this.getProjectBill();
         this.searchUserBill = "";
         // this.getAllFakeUser(false)
       },
         () => {
-          userBill.createMode = true;
+          tpb.isEditing = true;
         })
-      this.isCreate = false;
-      this.isEdit = false;
-      // this.userForUserBill.forEach((element,index) => {
-      //   if(element.id==userBill.userId)
-      //   this.userForUserBill.splice(index, 1);
-      // });
-
 
     } else {
       let bill =
       [{
-        "userId": userBill.userId,
-        "billRole": userBill.billRole,
-        "billRate": userBill.billRate,
-        "note": userBill?.note,
-        "isActive": userBill.isActive,
-        "workingTime": userBill.workingTime,
-        "id": userBill.id,
-        "accountName": userBill.accountName
+        "userId": tpb.userId,
+        "billRole": tpb.billRole,
+        "billRate": tpb.billRate,
+        "note": tpb?.note,
+        "isActive": tpb.isActive,
+        "workingTime": tpb.workingTime,
+        "id": tpb.id,
+        "accountName": tpb.accountName,
+        "chargeType": tpb.chargeType,
       }]
-      this.projectBillService.updateProjectBill(bill).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+      this.timesheetProjectBillService.updateProjectBill(bill)
+      .pipe(catchError(this.timesheetProjectBillService.handleError))
+      .subscribe(res => {
         abp.notify.success(`Update successfull`)
         this.getProjectBill();
         this.searchUserBill = "";
@@ -106,9 +105,8 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
       },
         () => {
-          userBill.createMode = true;
+          tpb.isEditing = true;
         })
-      this.isEdit = false;
     }
 
 
@@ -116,38 +114,41 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
 
   isComplete(e) {
     this.data.billInfo.isComplete = e.checked;
-    let data = {
+    const input = {
       isComplete: this.data.billInfo.isComplete,
       id: this.data.billInfo.id
     }
-    this.timesheetProjectService.setComplete(data).subscribe(res => {
+
+    this.timesheetProjectService.setComplete(input).subscribe(res => {
       abp.notify.success(`Update successfull`);
-      // this.getProjectBill();
-      // this.searchUserBill = "";
     })
   }
-  saveUserBills() {
-    let arr = this.billDetail.map((userBill) => {
+
+  saveAllUpdateBill() {
+    let tpbList = this.billDetail.map((tpb) => {
       return {
-        projectId: userBill.projectId,
+        projectId: tpb.projectId,
         timeSheetId: this.data.billInfo.timesheetId,
-        billAccountName: userBill.billAccountName,
-        accountName: userBill.accountName,
-        userId: userBill.userId,
-        billRole: userBill.billRole,
-        billRate: userBill.billRate,
-        startTime: userBill.startTime,
-        endTime: userBill.endTime,
-        currency: userBill.currency,
-        note: userBill?.note,
-        shadowNote: userBill.shadowNote,
-        isActive: userBill.isActive,
-        workingTime: userBill.workingTime,
-        id: userBill.id
+        billAccountName: tpb.billAccountName,
+        accountName: tpb.accountName,
+        userId: tpb.userId,
+        billRole: tpb.billRole,
+        billRate: tpb.billRate,
+        startTime: tpb.startTime,
+        endTime: tpb.endTime,
+        currency: tpb.currency,
+        note: tpb?.note,
+        shadowNote: tpb.shadowNote,
+        isActive: tpb.isActive,
+        workingTime: tpb.workingTime,
+        id: tpb.id,
+        chargeType: tpb.chargeType
       }
     })
 
-    this.projectBillService.updateProjectBill(arr).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+    this.timesheetProjectBillService.updateProjectBill(tpbList)
+    .pipe(catchError(this.timesheetProjectBillService.handleError))
+    .subscribe(res => {
       abp.notify.success(`Update successfull`)
       this.getProjectBill();
       this.searchUserBill = "";
@@ -155,31 +156,15 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     })
 
   }
-  public cancelUserBill(): void {
+  public cancelUpdateAll(): void {
     this.getProjectBill();
     this.searchUserBill = "";
-    this.isEdit = false;
-    this.isCreate = false
-    this.isEdittingRows = false
-
   }
-  public editUserBill(userBill: projectUserBillDto): void {
-    userBill.createMode = true;
-    this.isEdit = true;
-    // this.getAllFakeUser(true)
-  }
-  // private getAllFakeUser(isEdited) {
-  //   this.isLoading = true
-  //   this.projectBillService.getAllUserUnused(this.data.billInfo.projectId, this.data.billInfo.timesheetId, isEdited).pipe(catchError(this.userService.handleError)).subscribe(data => {
-  //     // this.userForUserBill = data.result;
-  //     this.billDetail.forEach(item => {
-  //       item.userList = data.result
-  //       item.searchText = ""
-  //     })
-  //     this.tempUserList = data.result
 
-  //   })
-  // }
+  public editUserBill(tpb: TimesheetProjectBill): void {
+    tpb.isEditing = true;
+  }
+
   searchUser(bill) {
     bill.userList = this.tempUserList.filter(item =>
       (this.removeAccents(item?.fullName.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, ""))) || this.removeAccents(item.email?.toLowerCase().replace(/\s/g, "")).includes(this.removeAccents(bill.searchText.toLowerCase().replace(/\s/g, "")))))
@@ -207,28 +192,34 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
     }
     return str;
   }
+
   public onActiveChange(active, userBill) {
     userBill.isActive = active.checked
   }
+
   public create() {
     let bill = {} as TimesheetProjectBill;
     this.billDetail.unshift(bill)
-    bill.createMode = true;
-    this.isEdit = true;
-    this.isCreate = true;
-    // this.getAllFakeUser(false)
+    bill.isEditing = true;
 
   }
-  editMultiRows() {
-    this.isEdittingRows = true;
-    // this.getAllFakeUser(true)
-    // this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
-    //   this.userForUserBill = data.result;})
 
+  editAllRow() {
+    this.setEditingAllRow();
   }
+
   onUserSelect(bill) {
     bill.searchText = ""
   }
+
+  private setViewAllRow(){
+    this.billDetail.forEach(s => s.isEditing = false);
+  }
+
+  private setEditingAllRow(){
+    this.billDetail.forEach(s => s.isEditing = true);
+  }
+
   saveUpdateTS(data){
     let request = [{
       Id: data.id,
@@ -237,12 +228,11 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       note: data.note,
       accountName: data.accountName
     }]
-    this.projectBillService.updateTS(request).subscribe((response) =>{
+
+    this.timesheetProjectBillService.updateTS(request).subscribe((response) =>{
       if(response.success){
         abp.notify.success(response.result)
-        this.isEdit = false;
-        this.isCreate = false
-        this.isEdittingRows = false
+        this.setViewAllRow();
         this.getProjectBill();
       }
       else{
@@ -252,18 +242,17 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
   }
 
 
-  protected removeAccountTS(data:TimesheetProjectBill): void {
+  protected removeAccountTS(tpb:TimesheetProjectBill): void {
     abp.message.confirm(
-      "Remove account " + data.fullName + "?",
+      "Remove account " + tpb.fullName + "?",
       "",
       (result: boolean) => {
         if (result) {
-          this.projectBillService.removeAccountTS(data.id).pipe(catchError(this.projectBillService.handleError)).subscribe((response) => {
+          this.timesheetProjectBillService.removeAccountTS(tpb.id)
+          .pipe(catchError(this.timesheetProjectBillService.handleError))
+          .subscribe((response) => {
             if(response.success){
               abp.notify.success("Remove successfull")
-              this.isEdit = false;
-              this.isCreate = false
-              this.isEdittingRows = false
               this.getProjectBill();
             }
             else{
@@ -274,29 +263,66 @@ export class ViewBillComponent extends AppComponentBase implements OnInit {
       }
     );
   }
+
+
   saveAllUpdateTS(){
-    let arr = this.billDetail.map((userBill) => {
+    let arr = this.billDetail.map((tpb) => {
       return {
-        note: userBill?.note,
-        isActive: userBill.isActive,
-        workingTime: userBill.workingTime,
-        id: userBill.id,
-        accountName: userBill.accountName
+        note: tpb?.note,
+        isActive: tpb.isActive,
+        workingTime: tpb.workingTime,
+        id: tpb.id,
+        accountName: tpb.accountName
       }
     })
 
-    this.projectBillService.updateTS(arr).pipe(catchError(this.projectBillService.handleError)).subscribe(res => {
+    this.timesheetProjectBillService.updateTS(arr)
+    .pipe(catchError(this.timesheetProjectBillService.handleError))
+    .subscribe(res => {
       abp.notify.success(`Update successfull`)
       this.getProjectBill();
       this.searchUserBill = "";
-      this.isEdittingRows = false;
+      this.setViewAllRow()
     })
   }
-  public getTitleRate(){
-    if(this.billDetail.length > 0){
-      return '(' + this.billDetail[0].currency + '/' + this.chargeType[this.billDetail[0].chargeType] + ')'
-    }
-    else
-      return ''
+
+
+  public isShowRate(){
+    return this.isGranted(PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewBillRate)
+     && this.data.action == this.updateAction.UpdateBillInfo
   }
+
+  public isBillPopUp(){
+    return this.data.action == this.updateAction.UpdateBillInfo;
+  }
+
+  public isTSPopUp(){
+    return this.data.action == this.updateAction.UpdateTimesheet;
+  }
+
+
+  public isEditingAllRow(){
+    return this.billDetail.find(s => !s.isEditing) == undefined;
+  }
+
+  public isEditingAnyRow(){
+    return this.billDetail.find(s => s.isEditing) != undefined;
+  }
+
+  public isShowEditBtnOnRow(){
+    return this.isGranted(this.Timesheets_TimesheetDetail_UpdateBill)
+    || this.isGranted(this.Timesheets_TimesheetDetail_UpdateTimsheet)
+  }
+
+  public isShowEditAllBtn(){
+    return !this.isEditingAllRow()
+    && this.billDetail
+    && this.billDetail.length
+    && this.isShowEditBtnOnRow()
+  }
+
+  public getCurrencyName(){
+    return this.billDetail && this.billDetail.length > 0 ? this.billDetail[0].currency : '';
+  }
+
 }

@@ -86,7 +86,7 @@ namespace ProjectManagement.Constants.Enum
         {
             Daily=0, 
             Monthly=1, 
-            Hours=2
+            Hourly=2
         }
         public enum ResourceRequestStatus
         {

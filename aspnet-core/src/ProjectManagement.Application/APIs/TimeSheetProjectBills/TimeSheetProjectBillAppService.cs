@@ -28,6 +28,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
         public async Task<List<GetTimeSheetProjectBillDto>> GetAll(long timesheetId, long projectId)
         {
             var isViewRate = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
+
             var query = WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
                 .OrderByDescending(x => x.CreationTime)
@@ -121,6 +122,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
                     item.Note = dto.Note;
                     item.WorkingTime = dto.WorkingTime;
                     item.IsActive = dto.IsActive;
+                    item.ChargeType = dto.ChargeType;
                 }
             }
             await CurrentUnitOfWork.SaveChangesAsync();
