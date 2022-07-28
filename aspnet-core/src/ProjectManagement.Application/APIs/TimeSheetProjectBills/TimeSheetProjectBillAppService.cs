@@ -31,7 +31,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills
 
             var query = WorkScope.GetAll<TimesheetProjectBill>()
                 .Where(x => x.TimesheetId == timesheetId && x.ProjectId == projectId)
-                .OrderByDescending(x => x.CreationTime)
+                .OrderBy(x => x.User.EmailAddress)
                          .Select(x => new GetTimeSheetProjectBillDto
                          {
                              Id = x.Id,

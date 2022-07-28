@@ -308,11 +308,7 @@
                       <i class="fas fa-file-invoice-dollar mr-1"></i>
                       Export Invoice
                     </button>
-                    <button *ngIf="
-                        permission.isGranted(
-                          Timesheets_TimesheetDetail_ExportInvoice
-                        ) && item.chargeType == APP_ENUM.ChargeType.Monthly
-                      " (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)" class="btn mat-menu-item w-100 special">
+                    <button *ngIf="isShowExportInvoiceMonthlyToDaily(item)" (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)" class="btn mat-menu-item w-100 special">
                       <i class="fas fa-file-invoice-dollar mr-1"></i>
                       Export Invoice<span>(Monthly to daily)</span>
                     </button>
@@ -321,7 +317,7 @@
                         <i class="fas fa-file-export mr-1"></i>
                         Export Invoice For Tax
                     </button>
-                    <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax) && item.chargeType == APP_ENUM.ChargeType.Monthly"
+                    <button *ngIf="isShowExportInvoiceForTaxMonthlyToDaily(item)"
                         (click)="exportQuickInvoiceForTax(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)" class="btn mat-menu-item w-100 special">
                         <i class="fas fa-file-export mr-1"></i>
                         Export Invoice For Tax

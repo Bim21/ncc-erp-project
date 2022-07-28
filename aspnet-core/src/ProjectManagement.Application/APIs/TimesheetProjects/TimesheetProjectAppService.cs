@@ -166,6 +166,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              FilePath = tsp.FilePath,
                              ProjectBillInfomation = WorkScope.GetAll<TimesheetProjectBill>()
                                                     .Where(x => x.TimesheetId == tsp.TimesheetId && x.ProjectId == tsp.ProjectId && x.IsActive)
+                                                    .OrderBy(x => x.User.EmailAddress)
                                                     .Select(x => new TimesheetProjectBillInfoDto
                                                     {
                                                         UserFullName = x.User.FullName,
