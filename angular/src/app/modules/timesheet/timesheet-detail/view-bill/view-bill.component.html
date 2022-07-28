@@ -10,7 +10,7 @@
   >
   </abp-modal-header>
   <div class="modal-body row" id="modal-bill-info">
-    <div class="col-11 row mb-1">
+    <div class="col-11 row mb-1" *ngIf="billDetail.length != 0">
 
       <button
         class="btn btn-editall-neutral ml-2"
@@ -70,7 +70,7 @@
               <th style="width: 350px;">Employee</th>
               <th style="width: 250px;">Charge Name</th>
               <th style="width: 150px;">Charge Role</th>
-              <th style="width: 100px;" *ngIf="isShowRate()">Rate ({{getCurrencyName()}})</th>
+              <th style="width: 100px;" *ngIf="isShowRate()">Rate<br>({{getCurrencyName()}})</th>
               <th style="width: 50px;">Charge Type</th>
               <th style="width: 100px; white-space: break-spaces;">Working Day</th>
               <th style="width: 50px;">Is Charge</th>
