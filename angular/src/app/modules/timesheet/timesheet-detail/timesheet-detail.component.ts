@@ -9,7 +9,7 @@ import { BaseApiService } from '@app/service/api/base-api.service';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto } from './../../../service/model/timesheet.dto';
+import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto, ProjectBillInfoDto } from './../../../service/model/timesheet.dto';
 import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
@@ -206,7 +206,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
   }
- 
+
 
   public isEnablePMFilter(){
     return this.permission.isGranted(this.Timesheets_TimesheetDetail_ViewAll)
@@ -215,7 +215,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
-    this.refresh();    
+    this.refresh();
   }
 
 
@@ -362,8 +362,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       data: {
         billInfo:bill,
         action: action
-      }, 
-     
+      },
+
     })
     show.afterClosed().subscribe((res) => {
       this.refresh();
@@ -515,7 +515,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         transferFee: item.transferFee,
         discount: item.discount,
       },
-     
+
     });
 
     editTimesheetProjectDialog.content.onSave.subscribe(() => {
@@ -523,14 +523,29 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     });
   }
 
-  
+
   viewProjectDetail(project){
     let routingToUrl:string = "/app/list-project-detail/list-project-general"
     const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
       id: project.projectId,
-      projectName: project.projectName, 
+      projectName: project.projectName,
       projectCode: project.projectCode} }));
       window.open(url, '_blank');
+  }
+
+  public isShowExportInvoiceMonthlyToDaily(item: TimesheetDetailDto){
+    return this.isGranted(this.Timesheets_TimesheetDetail_ExportInvoice)
+    && this.hasChargeTypeMonthly(item)
+  }
+  public isShowExportInvoiceForTaxMonthlyToDaily(item: TimesheetDetailDto){
+    return this.isGranted(this.Timesheets_TimesheetDetail_ExportInvoiceForTax)
+    && this.hasChargeTypeMonthly(item)
+  }
+
+  private hasChargeTypeMonthly(item: TimesheetDetailDto){
+      return item
+      && item.projectBillInfomation
+      && item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly)
   }
 
 }
