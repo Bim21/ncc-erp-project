@@ -215,10 +215,11 @@
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
-                                        <button *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone)"
+                                        <button *ngIf="permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone)"
                                             (click)="setDone(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-check mr-2 fa-lg "></i>
-                                            Change Status
+                                            <span *ngIf="isShowChangeDoneText(problem)">Set Done</span>
+                                            <span *ngIf="isShowChangeInProgressText(problem)">Set InProgress</span>
                                         </button>
                                         <button *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
@@ -251,7 +252,7 @@
                     <span style="font-size: 21px; margin-left: 21px;">Charged accounts:
                         <strong
                         [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' ">{{projectInfo.totalBill}}</strong></span>
-                <div class="fixTableHead" style="max-height: none;">
+                <div class="fixTableHead">
                         <table class="table table-hover ">
                             <thead>
                                 <tr>

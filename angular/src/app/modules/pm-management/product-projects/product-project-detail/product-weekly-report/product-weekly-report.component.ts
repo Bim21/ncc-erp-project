@@ -215,7 +215,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
 
   public getAllPmReport() {
 
-  
+
     this.pmReportProjectService.GetAllByProject(this.projectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
@@ -230,7 +230,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
     })
   }
 
-  
+
   public sendWeeklyreport() {
     abp.message.confirm(
       `send report ${this.selectedReport.pmReportName}? `,
@@ -257,7 +257,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
 
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
         this.router.navigate(
-          [], 
+          [],
           {
             relativeTo: this.route,
             queryParams: {
@@ -266,7 +266,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
               pmName: this.projectInfo.pmName,
               pmReportProjectId: this.selectedReport.pmReportProjectId,
               projectHealth: this.projectHealth
-            }, 
+            },
             queryParamsHandling: 'merge', // remove to replace all query params by provided
           });
       },
@@ -655,7 +655,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
       var chartDom = document.getElementById('timesheet-chart')!;
       var myChart = echarts.init(chartDom);
       var option: echarts.EChartsOption;
-      
+
       let hasOtValue = normalAndOTchartData?.overTimeHours.some(item => item > 0)
       let hasOfficalDataNormal = officalChartData?.normalWoringHours.some(item => item > 0)
       let hasOfficalDataOT = officalChartData?.overTimeHours.some(item => item > 0)
@@ -682,7 +682,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
           width:'80%',
           data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
+          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`],
         },
         color: ['#211f1f', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
         grid: {
@@ -767,8 +767,8 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         tooltip: {
           trigger: 'axis'
         },
-        
-        
+
+
         grid: {
           top: "6%",
           left: '3%',
@@ -787,7 +787,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
           show: false
         },
         series: [
-          
+
           {
             // showSymbol: false,
             symbolSize: 2,
@@ -1016,7 +1016,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
     this.pmReportProjectService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).subscribe((data) => {
       abp.notify.success("Update project health to " + this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth))
     })
- 
+
   }
 
   setDone(issue){
@@ -1029,14 +1029,14 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
   }
 
     public buildBillChart(billData,EffortData) {
-  
+
       // var chartDom = document.getElementById(user.userId.toString());
       // var myChart = echarts.init(chartDom);
-  
+
       setTimeout(() => {
-  
+
         let chartDom = document.getElementById('bill-chart');
-  
+
         let myChart = echarts.init(chartDom);
         let option: echarts.EChartsOption;
         option = {
@@ -1072,7 +1072,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
               },
               type: 'value',
               name: 'ManMonth',
-  
+
             },
             {
               axisLabel: {
@@ -1080,11 +1080,11 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
               },
               type: 'value',
               name: 'ManDay',
-  
+
             }
           ],
           series: [
-  
+
             {
               barWidth: 30,
               name: 'Bill.ManMonth',
@@ -1108,8 +1108,8 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         option && myChart.setOption(option);
       }, 1)
     }
-  
-  
+
+
     addPlanResource() {
       let ref = this.dialog.open(AddFutureResourceDialogComponent, {
         width: "700px",
@@ -1149,7 +1149,12 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         }
       })
     }
-  
+    isShowChangeDoneText(issue){
+      return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.InProgress
+    }
+    isShowChangeInProgressText(issue){
+      return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.Done
+    }
 
 }
 
