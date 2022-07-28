@@ -308,7 +308,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if (this.projectId) {
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
-          this.problemList = data.result.result;
+            this.problemList = data.result.result;
 
           this.projectHealth = data.result.projectHealth;
           this.pmReportProjectService.projectHealth = this.projectHealth
@@ -1103,13 +1103,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public editMeetingNote(projectIssue) {
     let item = {
-      id: projectIssue.pmReportProjectId,
+      id: projectIssue.id,
       note: projectIssue.meetingSolution
     }
     let ref = this.dialog.open(EditMeetingNoteDialogComponent, {
       width: "600px",
       data: item
-
     })
     ref.afterClosed().subscribe(rs => {
       if (rs) {

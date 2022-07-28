@@ -77,7 +77,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         public async Task<EditMeetingNoteDto> EditMeetingNote(EditMeetingNoteDto input)
         {
             var projectIssue = await WorkScope.GetAll<PMReportProjectIssue>()
-                .Where(x => x.PMReportProjectId == input.Id)
+                .Where(x => x.Id == input.Id)
                 .FirstOrDefaultAsync();
 
             projectIssue.MeetingSolution = input.Note;

@@ -112,6 +112,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public searchPmReport: string = "";
   public projectHealth: any;
   allowSendReport: boolean = true;
+  public defaultStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.issueStatusList[0]];
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth;
@@ -207,11 +208,11 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
 
   }
 
- 
+
 
   public getAllPmReport() {
 
-  
+
     this.pmReportProjectService.GetAllByProject(this.projectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
@@ -225,7 +226,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     })
   }
 
-  
+
   public sendWeeklyreport() {
     abp.message.confirm(
       `send report ${this.selectedReport.pmReportName}? `,
@@ -251,7 +252,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
 
         this.router.navigate(
-          [], 
+          [],
           {
             relativeTo: this.route,
             queryParams: {
@@ -260,7 +261,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
               pmName: this.projectInfo.pmName,
               pmReportProjectId: this.selectedReport.pmReportProjectId,
               projectHealth: this.projectHealth
-            }, 
+            },
             queryParamsHandling: 'merge', // remove to replace all query params by provided
           });
       },
@@ -490,6 +491,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public addIssueReport() {
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
+    newIssue.status = this.defaultStatus;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
   }
@@ -675,7 +677,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
           width:'80%',
           data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
+          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`],
         },
         color: ['#211f1f', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
         grid: {
@@ -760,8 +762,8 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         tooltip: {
           trigger: 'axis'
         },
-        
-        
+
+
         grid: {
           top: "6%",
           left: '3%',
@@ -780,7 +782,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
           show: false
         },
         series: [
-          
+
           {
             // showSymbol: false,
             symbolSize: 2,
@@ -1003,7 +1005,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     this.pmReportProjectService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).subscribe((data) => {
       abp.notify.success("Update project health to " + this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth))
     })
- 
+
   }
 
   setDone(issue){
@@ -1016,14 +1018,14 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   }
 
     public buildBillChart(billData,EffortData) {
-  
+
       // var chartDom = document.getElementById(user.userId.toString());
       // var myChart = echarts.init(chartDom);
-  
+
       setTimeout(() => {
-  
+
         let chartDom = document.getElementById('bill-chart');
-  
+
         let myChart = echarts.init(chartDom);
         let option: echarts.EChartsOption;
         option = {
@@ -1059,7 +1061,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
               },
               type: 'value',
               name: 'ManMonth',
-  
+
             },
             {
               axisLabel: {
@@ -1067,11 +1069,11 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
               },
               type: 'value',
               name: 'ManDay',
-  
+
             }
           ],
           series: [
-  
+
             {
               barWidth: 30,
               name: 'Bill.ManMonth',
@@ -1095,8 +1097,8 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
         option && myChart.setOption(option);
       }, 1)
     }
-  
-  
+
+
     addPlanResource() {
       let ref = this.dialog.open(AddFutureResourceDialogComponent, {
         width: "700px",
