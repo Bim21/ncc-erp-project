@@ -1,4 +1,4 @@
-<div class="row pt-2" style="position: relative;" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_View)"> 
+<div class="row pt-2" style="position: relative;" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_View)">
     <div style="min-width: 200px; width: 16%; position: fixed;  top:auto ; left:auto; ">
         <div class="card ml-2" style="height: 94vh; overflow-y: auto; overflow-x: hidden;">
             <div class="p-1" style="position: sticky; top: 0; z-index: 50; background-color: white;">
@@ -76,7 +76,7 @@
                                         class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
                                     <i *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();"  style="color: red;" class="fas fa-times fa-2x mr-3"></i>
                                     <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingAutomationNote" (click)="updateAutoNote()" ></i>
-                                    
+
                                 </div>
                                 <p *ngIf="!isEditingAutomationNote"
                                     style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify" class="mt-2">
@@ -187,7 +187,7 @@
                             <span style="font-size: 21px; margin-left: 21px;">Charged accounts:
                                 <strong
                                     [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' ">{{projectInfo.totalBill}}</strong></span>
-                            <div class="fixTableHead" style="max-height: 72vh;">
+                            <div class="fixTableHead" style="max-height: none;">
                                 <table class="table table-hover ">
                                     <thead>
                                         <tr>
@@ -204,7 +204,7 @@
                                                 <div [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
                                                     <strong [ngClass]="overTimeNoCharge>0?'ot-noCharge':''"
                                                         style="font-size: 17px;">{{overTimeNoCharge}}h
-                                                    </strong> / 
+                                                    </strong> /
                                                     <strong [ngClass]="totalOverTime>0?'text-danger':''"
                                                         style="font-size: 17px;">{{totalOverTime}}h
                                                     </strong>
@@ -216,7 +216,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr 
+                                        <tr
                                             *ngFor="let user of projectCurrentResource; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">
                                                 <i class="fas fa-ellipsis-v ml-1 menu-4-icon"
@@ -322,7 +322,7 @@
                                                     *ngIf=" permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan) && isActive"
                                                     [hidden]="processFuture || !isShowFutureList "
                                                     (click)="addPlanResource(); $event.stopPropagation()"></i>
-                                                    
+
                                             </mat-expansion-panel-header>
                                             <div class="table-responsive px-4 pb-4">
                                                 <table style="border-collapse: collapse;"
@@ -673,10 +673,10 @@
 
             <!-- <div class="row justify-content-between">
                 <div class="card" style="width: 59%;">
-                  
+
                 </div>
                 <div class=" card" style="width: 40%;">
-                  
+
                 </div>
             </div> -->
 
