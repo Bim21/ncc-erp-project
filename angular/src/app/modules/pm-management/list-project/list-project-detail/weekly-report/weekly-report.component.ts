@@ -121,6 +121,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public searchPmReport: string = "";
   public projectHealth: any;
   allowSendReport: boolean = true;
+  public defaultStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.issueStatusList[0]];
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth;
@@ -219,7 +220,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
   public getAllPmReport() {
 
-  
+
     this.pmReportProjectService.GetAllByProject(this.projectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
       this.pmReportList = data.result;
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
@@ -233,7 +234,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     })
   }
 
-  
+
   public sendWeeklyreport() {
     abp.message.confirm(
       `send report ${this.selectedReport.pmReportName}? `,
@@ -258,7 +259,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
         this.router.navigate(
-          [], 
+          [],
           {
             relativeTo: this.route,
             queryParams: {
@@ -267,7 +268,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
               pmName: this.projectInfo.pmName,
               pmReportProjectId: this.selectedReport.pmReportProjectId,
               projectHealth: this.projectHealth
-            }, 
+            },
             queryParamsHandling: 'merge', // remove to replace all query params by provided
           });
       },
@@ -497,6 +498,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public addIssueReport() {
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
+    newIssue.status = this.defaultStatus;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
   }
@@ -678,7 +680,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           padding: [0, 0, 0, 0],
           data: ['Total normal', `${hasOtValue ? 'Total OT' : ''}`, `${hasOfficalDataNormal ? 'Normal Offical' : ''}`
           , `${hasOfficalDataOT ? 'OT Offical' : ''}`, `${hasTempDataNormal ? 'Normal Temp' : ''}`,
-          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`], 
+          `${hasTempDataOT ? 'OT Temp' : ''}`,`${hasOtNoCharge ? 'OT NoCharge' : ''}`],
         },
         color: ['#211f1f', 'red', 'blue', 'orange', '#787a7a', 'purple', 'green'],
         grid: {
@@ -779,7 +781,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           show: false
         },
         series: [
-          
+
           {
             symbolSize: 2,
             data: chartData.normalWoringHours,
@@ -990,7 +992,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     this.pmReportProjectService.updateHealth(this.selectedReport.pmReportProjectId, projectHealth).subscribe((data) => {
       abp.notify.success("Update project health to " + this.getByEnum(projectHealth, this.APP_ENUM.ProjectHealth))
     })
- 
+
   }
 
   setDone(issue){
@@ -1004,18 +1006,18 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
     //
 
-  
-  
-  
+
+
+
     public buildBillChart(billData,EffortData) {
-  
+
       // var chartDom = document.getElementById(user.userId.toString());
       // var myChart = echarts.init(chartDom);
-  
+
       setTimeout(() => {
-  
+
         let chartDom = document.getElementById('bill-chart');
-  
+
         let myChart = echarts.init(chartDom);
         let option: echarts.EChartsOption;
         option = {
@@ -1052,7 +1054,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
               },
               type: 'value',
               name: 'ManMonth',
-  
+
             },
             {
               axisLabel: {
@@ -1060,11 +1062,11 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
               },
               type: 'value',
               name: 'ManDay',
-  
+
             }
           ],
           series: [
-  
+
             {
               barWidth: 30,
               name: 'Bill.ManMonth',
@@ -1088,8 +1090,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         option && myChart.setOption(option);
       }, 1)
     }
-  
-  
+
+
     addPlanResource() {
       let ref = this.dialog.open(AddFutureResourceDialogComponent, {
         width: "700px",
@@ -1130,6 +1132,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         }
       })
     }
-  
+
 
 }
