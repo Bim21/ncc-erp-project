@@ -628,7 +628,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                            select new TimesheetUser
                                            {
                                                BillRate = tpb.BillRate,
-                                               ChargeType = tpb.ChargeType.Value,
+                                               ChargeType = tpb.ChargeType.HasValue ? tpb.ChargeType.Value : tpb.Project.ChargeType.Value,
                                                CurrencyName = tpb.Currency.Name,
                                                UserFullName = tpb.User.FullName,
                                                AccountName = tpb.AccountName,
