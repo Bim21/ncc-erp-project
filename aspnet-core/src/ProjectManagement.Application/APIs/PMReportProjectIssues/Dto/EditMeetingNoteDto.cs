@@ -8,6 +8,5 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
     public class EditMeetingNoteDto : EntityDto
     {
         public string Note { get; set; }
-        public long PMReportProjectId { get; set; }
     }
 }

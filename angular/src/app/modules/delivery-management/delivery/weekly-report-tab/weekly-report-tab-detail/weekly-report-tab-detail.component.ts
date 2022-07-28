@@ -1103,7 +1103,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public editMeetingNote(projectIssue) {
     let item = {
-      pmReportProjectId: projectIssue.pmReportProjectId,
       id: projectIssue.id,
       note: projectIssue.meetingSolution
     }
