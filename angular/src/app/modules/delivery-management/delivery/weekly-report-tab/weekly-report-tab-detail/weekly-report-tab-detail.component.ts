@@ -1117,5 +1117,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     })
 
   }
+  isShowChangeDoneText(issue){
+    return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.InProgress
+  }
+  isShowChangeInProgressText(issue){
+    return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.Done
+  }
 
 }

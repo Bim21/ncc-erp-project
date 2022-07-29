@@ -1151,7 +1151,12 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         }
       })
     }
-
+    isShowChangeDoneText(issue){
+      return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.InProgress
+    }
+    isShowChangeInProgressText(issue){
+      return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.Done
+    }
 
 }
 

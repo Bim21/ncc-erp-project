@@ -108,14 +108,14 @@
                 <div class="text-right">
                     <button  *ngIf=" permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
                     [hidden]="processProblem"
-                    (click)="addIssueReport()" 
+                    (click)="addIssueReport()"
                     class="btn bg-blue ml-3 btn-sm mb-2">
                         <i class="fa fa-plus m-0"></i>
                     </button>
                 </div>
-                <div class="fixTableHead" style="max-height: 72vh;">
+                <div class="fixTableHead" style="max-height: none;">
                     <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                        <thead class="bg-light">
+                        <thead class="bg-light" style="z-index: 1;">
                             <tr>
                                 <th>#</th>
                                 <th>Issues</th>
@@ -124,7 +124,7 @@
                                 <th>Meeting Solution</th>
                                 <th class="col-time">Status</th>
                                 <th class="col-action-menu" *ngIf="selectedReport.isActive">Action</th>
-    
+
                             </tr>
                         </thead>
                         <tbody>
@@ -134,7 +134,7 @@
                                         currentPage: problemCurrentPage
                                         }; let i =index">
                                 <td>{{i+1}}</td>
-    
+
                                 <td style="white-space: normal;max-width: 200px;">
                                     <div class="break-word text-danger" *ngIf="!problem.createMode">{{problem.description}}</div>
                                     <div *ngIf="problem.createMode">
@@ -154,7 +154,7 @@
                                                 matInput></textarea>
                                         </mat-form-field>
                                     </div>
-    
+
                                 </td>
                                 <td style="white-space: normal;max-width: 200px;">
                                     <div class="break-word" *ngIf="!problem.createMode">{{problem.solution}}</div>
@@ -165,10 +165,10 @@
                                                 matInput></textarea>
                                         </mat-form-field>
                                     </div>
-    
+
                                 </td>
                                 <td style="white-space: normal;max-width: 200px;">
-    
+
                                     <div class="break-word" *ngIf="!problem.createMode">{{problem.meetingSolution}}</div>
                                     <div *ngIf="problem.createMode">
                                         <mat-form-field class="w-100" appearance="outline">
@@ -182,7 +182,7 @@
                                     <span [ngClass]="APP_CONST.PMReportProjectIssueStatusStyle[problem.status]"
                                         *ngIf="!problem.createMode">{{ problem.status }}</span>
                                     <div>
-    
+
                                         <div style="font-size: 15px;" *ngIf="problem.totalWeekAgo>1 && !problem.createMode">
                                             <strong class="text-danger">{{(problem.totalWeekAgo/7).toFixed()}}
                                             </strong> weeks ago
@@ -203,7 +203,7 @@
                                             This field is required
                                         </mat-error>
                                     </div>
-    
+
                                 </td>
                                 <td class="text-center" *ngIf="selectedReport.isActive">
                                     <button [matMenuTriggerFor]="menuAction" *ngIf="!problem.createMode && (permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit)
@@ -215,10 +215,11 @@
                                             <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                             Edit
                                         </button>
-                                        <button *ngIf="permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone)"
+                                        <button *ngIf="permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone)"
                                             (click)="setDone(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-check mr-2 fa-lg "></i>
-                                            Change Status
+                                            <span *ngIf="isShowChangeDoneText(problem)">Set Done</span>
+                                            <span *ngIf="isShowChangeInProgressText(problem)">Set InProgress</span>
                                         </button>
                                         <button *ngIf="permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete)" (click)="deleteProblem(problem)" class="mat-menu-item  w-100">
                                             <i class="fas fa-trash mr-2 fa-lg"></i>
@@ -236,7 +237,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>  
+                    </table>
                 </div>
             </div>
             </div>
@@ -251,7 +252,7 @@
                     <span style="font-size: 21px; margin-left: 21px;">Charged accounts:
                         <strong
                         [ngClass]="projectInfo.totalBill> 0 ?'text-danger': '' ">{{projectInfo.totalBill}}</strong></span>
-                <div class="fixTableHead" style="max-height: 72vh;">
+                    <div class="fixTableHead" style="max-height: 72vh;">
                         <table class="table table-hover ">
                             <thead>
                                 <tr>
@@ -357,7 +358,7 @@
 
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -373,8 +374,8 @@
                                             [hidden]="processFuture || !isShowFutureList "
                                             (click)="addPlanResource(); $event.stopPropagation()">
                                                 <i class="fa fa-plus  m-0"></i>
-                                            </button>  
-                                            
+                                            </button>
+
                                     </mat-expansion-panel-header>
                                     <div class="mt-0 table-responsive px-4 pb-4">
                                         <table style="border-collapse: collapse;"
@@ -423,7 +424,7 @@
                                                                     (click)="confirm(report)"> <i
                                                                         class="fas fa-check mr-1"></i>Confirm
                                                                         Out</button>
-                                                                    
+
                                                                 <button *ngIf=" permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CancelPlan)"  [disabled]="planResourceProcess"
                                                                     class="mat-menu-item  w-100"
                                                                     (click)="cancelResourcePlan(report)"> <i
