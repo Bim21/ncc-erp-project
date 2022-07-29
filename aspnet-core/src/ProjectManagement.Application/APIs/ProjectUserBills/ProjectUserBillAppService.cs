@@ -72,7 +72,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)]
+        [AbpAuthorize]
         public async Task<long> GetLastInvoiceNumber(long projectId)
         {
             return await WorkScope.GetAll<Project>()
@@ -103,7 +103,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)]
+        [AbpAuthorize]
         public async Task<float> GetDiscount(long projectId)
         {
             return await WorkScope.GetAll<Project>()

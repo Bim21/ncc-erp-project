@@ -108,10 +108,10 @@
 
               <!-- Charge Name -->
               <td class="text-center">
-                <span *ngIf="!bill.isEditing">{{
+                <span *ngIf="!bill.isEditing || isTSPopUp()" >{{
                   bill.billAccountName
                 }}</span>
-                <div *ngIf="bill.isEditing">
+                <div *ngIf="bill.isEditing && isBillPopUp()">
                   <input
                     style="min-width: 110px"
                     class="form-control mt-1"
@@ -133,10 +133,10 @@
 
               <!-- Charge Role -->
               <td class="text-center">
-                <span *ngIf="!bill.isEditing">{{
+                <span *ngIf="!bill.isEditing || isTSPopUp()" >{{
                   bill.billRole
                 }}</span>
-                <div *ngIf="bill.isEditing">
+                <div *ngIf="bill.isEditing && isBillPopUp()">
                   <input
                     style="min-width: 110px"
                     required

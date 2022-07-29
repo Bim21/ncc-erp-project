@@ -121,6 +121,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public searchPmReport: string = "";
   public projectHealth: any;
   allowSendReport: boolean = true;
+  public defaultStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.issueStatusList[0]];
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth;
@@ -497,6 +498,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public addIssueReport() {
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
+    newIssue.status = this.defaultStatus;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
   }

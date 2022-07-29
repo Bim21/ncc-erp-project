@@ -21,9 +21,21 @@ export class TimesheetDetailDto {
     note: string;
     id: number;
     timesheetId: number;
-    projectBillInfomation: string;
+    projectBillInfomation: ProjectBillInfoDto[];
     isComplete:boolean;
     chargeType: string;
+}
+
+export class ProjectBillInfoDto{
+    accountName: string;
+    billRate: number;
+    billRole: string;
+    chargeType: number;
+    currency: string;
+    description: string;
+    fullName: string;
+    userFullName: string;
+    workingTime: number;
 }
 export class ProjectTimesheetDto {
     projectId: number;

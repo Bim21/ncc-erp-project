@@ -112,6 +112,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
   public projectHealth: any;
   allowSendReport: boolean = true;
   overTimeNoCharge:number = 0;
+  public defaultStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.issueStatusList[0]];
   Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View
   Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote;
   Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth;
@@ -496,6 +497,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
   public addIssueReport() {
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
+    newIssue.status = this.defaultStatus;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
   }
