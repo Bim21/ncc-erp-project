@@ -242,5 +242,16 @@ namespace ProjectManagement.Utils
         {
             return string.IsNullOrEmpty(path) ? "" : AppConsts.FE_TALENT_ADDRESS + path;
         }
+        public static UserType GetProjectUserType(byte type)
+        {
+            UserType[] userTypes = { UserType.Staff, UserType.Internship, UserType.Collaborators };
+            return userTypes[type];
+        }
+        public enum TimeSheetUserType : byte
+        {
+            Staff = 0,
+            Internship = 1,
+            Collaborators = 2
+        }
     }
 }
