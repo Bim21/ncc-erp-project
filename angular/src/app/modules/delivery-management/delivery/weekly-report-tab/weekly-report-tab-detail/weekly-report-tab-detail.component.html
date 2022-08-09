@@ -13,11 +13,11 @@
                 </div>
             </div>
             <div style="margin-bottom: 20px;">
-                <mat-list *ngFor="let item of pmReportProjectList">
+                <mat-list  *ngFor="let item of pmReportProjectList">
                     <div class="row sidebar-item" [ngClass]="item.setBackground==true?'projectActive':''">
                         <div class="col-10 project-menu-item"
                             [ngClass]="item.projectHealth ==='Green'?'green':item.projectHealth ==='Red'?'red':'yellow'">
-                            <mat-list-item style="cursor:pointer," role="item.projectId" (click)="view(item);"  [matTooltip]="item.projectCode"  matTooltipPosition="right">
+                            <mat-list-item style="cursor:pointer," id="list" role="item.projectId" (click)="view(item);"  [matTooltip]="item.projectCode"  matTooltipPosition="right">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
                                         <strong>{{item.projectName}} </strong>
@@ -40,10 +40,6 @@
     </div>
     <div id="right-content" [ngClass]="sidebarExpanded?'expand-content':''" style="width: 80%; margin-left: 19%;">
         <section class="content ">
-
-
-
-
             <div class="row justify-content-between">
                 <div style="width: 59%;">
                     <div class="px-4 pb-2 pt-2 card"

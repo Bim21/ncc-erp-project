@@ -1,20 +1,14 @@
 ﻿using Abp.Authorization;
 using Abp.Linq.Extensions;
 using Abp.UI;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
-using NccCore.Paging;
 using NccCore.Uitls;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
-using ProjectManagement.APIs.PMReports.Dto;
-using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
-using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
@@ -24,7 +18,6 @@ using ProjectManagement.Services.Timesheet.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -36,7 +29,6 @@ namespace ProjectManagement.APIs.PMReportProjects
         private readonly TimesheetService _timesheetService;
         private readonly ResourceManager _resourceManager;
 
-
         public PMReportProjectAppService(TimesheetService timesheetService, ResourceManager resourceManager)
         {
             _timesheetService = timesheetService;
@@ -45,13 +37,113 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, string projectType = "OUTSOURCING")
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, string health, WeeklyReportSort sort, string projectType = "OUTSOURCING")
         {
             var query = WorkScope.GetAll<PMReportProject>()
                 .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill)
                 .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
                 .WhereIf(projectType == "TRAINING", x => x.Project.ProjectType == ProjectType.TRAINING)
-                .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT)
+                .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT);
+
+            
+            if (health == "GREEN" || health == "YELLOW" || health == "RED")
+            {
+                var listColor = query
+                    .WhereIf(health == "GREEN", x => x.ProjectHealth == ProjectHealth.Green)
+                    .WhereIf(health == "YELLOW", x => x.ProjectHealth == ProjectHealth.Yellow)
+                    .WhereIf(health == "RED", x => x.ProjectHealth == ProjectHealth.Red)
+                    .Select(x => new GetPMReportProjectDto
+                    {
+                        Id = x.Id,
+                        PMReportId = x.PMReportId,
+                        PMReportName = x.PMReport.Name,
+                        ProjectId = x.ProjectId,
+                        ProjectName = x.Project.Name,
+                        ProjectCode = x.Project.Code,
+                        Status = x.Status.ToString(),
+                        ProjectHealthEnum = x.ProjectHealth,
+                        PMId = x.PMId,
+                        PmName = x.PM.Name,
+                        Note = x.Note,
+                        AutomationNote = x.AutomationNote,
+                        PmBranch = x.PM.BranchOld,
+                        PmEmailAddress = x.PM.EmailAddress,
+                        PmAvatarPath = x.PM.AvatarPath,
+                        PmFullName = x.PM.Name + " " + x.PM.Surname,
+                        PmUserName = x.PM.UserName,
+                        PmUserType = x.PM.UserType,
+                        Seen = x.Seen,
+                        TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                        TotalOverTime = x.TotalOverTime,
+                    })
+                    .ToList();
+
+                return shuffleList(listColor);
+            }
+
+            if (sort == WeeklyReportSort.Green_Yellow_Red)
+            {
+                return await query
+                        .OrderBy(x => x.ProjectHealth)
+                        .Select(x => new GetPMReportProjectDto
+                        {
+                            Id = x.Id,
+                            PMReportId = x.PMReportId,
+                            PMReportName = x.PMReport.Name,
+                            ProjectId = x.ProjectId,
+                            ProjectName = x.Project.Name,
+                            ProjectCode = x.Project.Code,
+                            Status = x.Status.ToString(),
+                            ProjectHealthEnum = x.ProjectHealth,
+                            PMId = x.PMId,
+                            PmName = x.PM.Name,
+                            Note = x.Note,
+                            AutomationNote = x.AutomationNote,
+                            PmBranch = x.PM.BranchOld,
+                            PmEmailAddress = x.PM.EmailAddress,
+                            PmAvatarPath = x.PM.AvatarPath,
+                            PmFullName = x.PM.Name + " " + x.PM.Surname,
+                            PmUserName = x.PM.UserName,
+                            PmUserType = x.PM.UserType,
+                            Seen = x.Seen,
+                            TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                            TotalOverTime = x.TotalOverTime,
+                        })
+                        .ToListAsync();
+            }
+
+            if (sort == WeeklyReportSort.Red_Yellow_Green)
+            {
+                return await query
+                        .OrderByDescending(x => x.ProjectHealth)
+                        .Select(x => new GetPMReportProjectDto
+                        {
+                            Id = x.Id,
+                            PMReportId = x.PMReportId,
+                            PMReportName = x.PMReport.Name,
+                            ProjectId = x.ProjectId,
+                            ProjectName = x.Project.Name,
+                            ProjectCode = x.Project.Code,
+                            Status = x.Status.ToString(),
+                            ProjectHealthEnum = x.ProjectHealth,
+                            PMId = x.PMId,
+                            PmName = x.PM.Name,
+                            Note = x.Note,
+                            AutomationNote = x.AutomationNote,
+                            PmBranch = x.PM.BranchOld,
+                            PmEmailAddress = x.PM.EmailAddress,
+                            PmAvatarPath = x.PM.AvatarPath,
+                            PmFullName = x.PM.Name + " " + x.PM.Surname,
+                            PmUserName = x.PM.UserName,
+                            PmUserType = x.PM.UserType,
+                            Seen = x.Seen,
+                            TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                            TotalOverTime = x.TotalOverTime,
+                        })
+                        .ToListAsync();
+            }
+
+            var list = await query
                 .Select(x => new GetPMReportProjectDto
                 {
                     Id = x.Id,
@@ -61,7 +153,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     ProjectName = x.Project.Name,
                     ProjectCode = x.Project.Code,
                     Status = x.Status.ToString(),
-                    ProjectHealth = x.ProjectHealth.ToString(),
+                    ProjectHealthEnum = x.ProjectHealth,
                     PMId = x.PMId,
                     PmName = x.PM.Name,
                     Note = x.Note,
@@ -74,9 +166,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                     PmUserType = x.PM.UserType,
                     Seen = x.Seen,
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
-                    TotalOverTime = x.TotalOverTime
-                }).OrderBy(x => x.PmFullName);
-            var list = await query.ToListAsync();
+                    TotalOverTime = x.TotalOverTime,
+                }).ToListAsync();
 
             return shuffleList(list);
         }
@@ -139,7 +230,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             //                    .Where(x => x.Status == ProjectUserStatus.Present && x.AllocatePercentage > 0)
             //                    .Where(x => x.User.UserType != UserType.FakeUser)
             //                    .Select(x => new CurrentResourceDto
-            //                    { 
+            //                    {
             //                        UserId= x.UserId,
             //                        FullName = x.User.FullName,
             //                        ProjectRole = x.ProjectRole.ToString(),
@@ -243,7 +334,6 @@ namespace ProjectManagement.APIs.PMReportProjects
                 pmReportProject.Status = PMReportProjectIssueStatus.InProgress;
             }
             await WorkScope.UpdateAsync(pmReportProject);
-
         }
 
         [HttpGet]
@@ -259,7 +349,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                   ProjectId = x.ProjectId,
                                   ProjectName = x.Project.Name,
                                   Status = x.Status.ToString(),
-                                  ProjectHealth = x.ProjectHealth.ToString(),
+                                  ProjectHealthEnum = x.ProjectHealth,
                                   PMId = x.PMId,
                                   Note = x.Note,
                                   PmName = x.PM.Name,
@@ -367,8 +457,6 @@ namespace ProjectManagement.APIs.PMReportProjects
                              .ToListAsync();
         }
 
-
-
         [HttpDelete]
         [AbpAuthorize()]
         public async Task CancelResourcePlan(long projectUserId)
@@ -404,8 +492,6 @@ namespace ProjectManagement.APIs.PMReportProjects
         {
             await _resourceManager.AddFuturePU(input);
         }
-
-
 
         [HttpPost]
         [AbpAuthorize(
@@ -487,7 +573,6 @@ namespace ProjectManagement.APIs.PMReportProjects
             await WorkScope.UpdateAsync(pmReportProject);
         }
 
-
         [HttpGet]
         public async Task<List<GetAllByProjectDto>> GetAllByProject(long projectId)
         {
@@ -507,7 +592,6 @@ namespace ProjectManagement.APIs.PMReportProjects
                             Note = l.Note,
                             ProjectHealth = l.ProjectHealth.ToString()
                         };
-
 
             return await query.ToListAsync();
         }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseApiService } from './base-api.service';
 import { Injectable, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { APP_ENUMS } from '@shared/AppEnums';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,20 @@ export class PmReportService extends BaseApiService {
   changeUrl() {
     return 'PmReport';
   }
+
+  
   data = {} as pmReportProjectHealthDto;
   public projectHealth = new BehaviorSubject(this.data);
   currentProjectHealth = this.projectHealth.asObservable();
+
   public projectType = new BehaviorSubject('OUTSOURCING');
   currentProjectType = this.projectType.asObservable();
+
+  public projectStatus = new BehaviorSubject('ALL');
+  currentProjectStatus = this.projectStatus.asObservable();
+
+  public sortHealth = new BehaviorSubject('No_Order');
+  currentSortData = this.sortHealth.asObservable();
 
   constructor(http: HttpClient) { super(http) }
   public closeReport(id: any): Observable<any> {
@@ -48,9 +58,11 @@ export class PmReportService extends BaseApiService {
     this.projectType.next(message);
   }
 
+  changeProjectSelectionHealth(message: string){
+    this.projectStatus.next(message);
+  }
 
-
-
-
-
+  changeSelectSortHealth(message: string){
+    this.sortHealth.next(message)
+  }
 }

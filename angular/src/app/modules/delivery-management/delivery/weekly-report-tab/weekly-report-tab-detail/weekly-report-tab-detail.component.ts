@@ -82,14 +82,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public pmReportId: any;
   public isActive: boolean;
   public projectType = "";
+  public projectStatus = "ALL";
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
-  public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
+  public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus);
   public activeReportId: number;
-  public projectHealth;
+  public typeSort: string = "No_Order";
+  
   public pmReportProjectId: number;
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
@@ -172,6 +174,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.sidebarExpanded = value;
       });
 
+      this.pmReportService.currentProjectStatus.subscribe(projectStatus=>{
+        this.projectStatus = projectStatus
+
+        this.selectionHealth();
+      });
+
+      this.pmReportService.currentSortData.subscribe(typeSort => {
+        this.typeSort = typeSort;
+        this.sortStatusInputData();
+      });
     }
   }
 
@@ -207,7 +219,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   public getPmReportProject(): void {
     if (this.router.url.includes("weeklyReportTabDetail") && this.pmReportId) {
-      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType).subscribe((data => {
+      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort)
+      .subscribe((data => {
         this.pmReportProjectList = data.result;
         this.tempPmReportProjectList = data.result;
         this.projectId = this.pmReportProjectList[0]?.projectId
@@ -225,9 +238,32 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.getFuturereport();
         this.getProjectProblem();
         this.search()
+        this.selectionHealth();
+        this.sortStatusInputData();
       }))
     }
   }
+
+  public selectionHealth(){
+    if (this.router.url.includes("weeklyReportTabDetail") && this.projectStatus) {
+      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort).pipe(catchError(this.pmReportProjectService.handleError))
+      .subscribe((data => {
+        this.pmReportProjectList = data.result;
+      }))
+    }
+  }
+
+
+  public sortStatusInputData(){
+      if (this.router.url.includes("weeklyReportTabDetail") && this.typeSort) {
+        this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort).pipe(catchError(this.pmReportProjectService.handleError))
+        .subscribe((data => {
+          this.pmReportProjectList = data.result;
+        }))
+      }
+  }
+
+
   getProjectInfo() {
     this.isLoading = true;
     if (this.pmReportProjectId) {

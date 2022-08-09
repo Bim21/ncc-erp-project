@@ -13,9 +13,8 @@
     <li style="margin-left: 132px;" *ngIf="isShowReportBar">
         <div class="mt-1" style="font-size: 21px;">
             <strong>
-        {{projectInfo?.projectName}} - {{projectInfo?.clientName}} - {{projectInfo?.pmName}}
-      </strong>
-
+                {{projectInfo?.projectName}} - {{projectInfo?.clientName}} - {{projectInfo?.pmName}}
+            </strong>
         </div>
     </li>
 
@@ -44,12 +43,12 @@
             <mat-label>Project Type:</mat-label>
             <mat-select [(ngModel)]="projectType" (selectionChange)="changeProjectType($event.value)">
               <mat-option *ngFor="let type of projectTypeList" [value] = "type">
-                    {{type}}  
+                    {{type}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-       
+
       </li>
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
@@ -87,25 +86,31 @@
       </span> ]
         </div>
     </li>
-    <li *ngIf="isShowReportBar" style="margin-left: 40px; cursor: pointer; display: flex; white-space: nowrap;">
+    
 
-        <div class="count-timer " (click)="startTimmer()" [ngClass]="(!this.isTimmerCounting && ! this.isStopCounting) || this.isRefresh?'pointer':''">
-            <cd-timer autoStart="false" #timmer format="hms">00:00:00</cd-timer>
-            <button *ngIf="(!isTimmerCounting && !isStopCounting) || isRefresh" class="btn btn-sm  mb-2 pr-0">
-        <i class="fas fa-clock fa-lg"></i>
-      </button>
-            <button (click)="stopTimmer(); $event.stopPropagation()" *ngIf="!isStopCounting && isStart " class="btn btn-sm mb-2 pr-0">
-        <i class="fas fa-pause fa-lg"></i>
-      </button>
-            <button (click)="resumeTimmer(); $event.stopPropagation()" *ngIf="isStopCounting && !isTimmerCounting && !isRefresh" class="btn btn-sm mb-2 pr-0">
-        <i class="fas fa-play fa-lg"></i>
-      </button>
-        </div>
-        <div style="padding-top: 12px;
-        margin-left: 13px;">
-            <i class="fas fa-redo-alt mx-1 mb-2 fa-lg" (click)="refreshTimmer()" *ngIf="isStart"></i>
+    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+        <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
+            <mat-form-field appearance="outline" class="ml-2">
+              <mat-label>Status:</mat-label>
+              <mat-select [(ngModel)]="SelectedHealthList" (selectionChange)="changeProjectSelectionHealth($event.value)" (click)="changeProjectSelectionHealthList()">
+                <mat-option *ngFor="let type of projectTypeStatus" [value] = "type">
+                      {{type}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
         </div>
     </li>
-
-
+    <li *ngIf="isShowReportBar" style="margin-left: 30px; cursor: pointer; display: flex; white-space: nowrap;">
+        <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
+            <mat-form-field appearance="outline" class="ml-2">
+                <mat-label>Sort Status:</mat-label>
+                <mat-select [(ngModel)]="SelectedSortHealthList" (selectionChange)="changeSelectedSortHealth($event.value)" > 
+                    <mat-option *ngFor="let type of listOptionReport" [value] = "type">
+                        {{type}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>    
+        </div>
+        
+    </li>
 </ul>
