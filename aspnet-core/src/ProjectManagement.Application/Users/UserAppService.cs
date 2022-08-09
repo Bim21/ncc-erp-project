@@ -872,7 +872,14 @@ namespace ProjectManagement.Users
                 {
                     user.StarRate = item.StarRate;
                     user.UserLevel = item.Level;
-                    user.UserType = item.Level >= UserLevel.FresherMinus ? UserType.ProbationaryStaff : UserType.Internship;
+                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff )
+                    {
+                        user.UserType = UserType.ProbationaryStaff;
+                    }
+                    else
+                    {
+                        user.UserType = CommonUtil.GetProjectUserType((byte)item.Type);
+                    }
                     await _workScope.UpdateAsync(user);
                 }
             }
