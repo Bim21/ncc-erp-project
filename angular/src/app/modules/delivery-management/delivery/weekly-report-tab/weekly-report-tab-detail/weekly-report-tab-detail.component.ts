@@ -27,6 +27,7 @@ import { TimesheetProjectService } from '@app/service/api/timesheet-project.serv
 import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/add-future-resource-dialog.component';
 import { EditMeetingNoteDialogComponent } from './edit-meeting-note-dialog/edit-meeting-note-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
+import { APP_ENUMS } from '@shared/AppEnums';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -82,7 +83,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public pmReportId: any;
   public isActive: boolean;
   public projectType = "";
-  public projectStatus = "ALL";
+  public projectStatus:string="ALL";
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
@@ -148,6 +149,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.mondayOf5weeksAgo = moment(this.mondayOf5weeksAgo.setDate(this.mondayOf5weeksAgo.getDate() - 28)).format("YYYY-MM-DD")
     this.lastWeekSunday = moment(new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 6)).format("YYYY-MM-DD");
     if (this.router.url.includes("weeklyReportTabDetail")) {
+      //this.projectStatus = ""
       this.pmReportService.currentProjectHealth.subscribe((data) => {
         if (data) {
           const pmReportPro = this.pmReportProjectList.find(e => e.id == data.pmReportProjectId);
@@ -168,21 +170,20 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       if (projectTypeFromUrl) {
         this.projectType = projectTypeFromUrl
       }
-      this.getPmReportProject();
+      //this.getPmReportProject();
       this.getUser();
       this._layoutStore.sidebarExpanded.subscribe((value) => {
         this.sidebarExpanded = value;
       });
 
-      this.pmReportService.currentProjectStatus.subscribe(projectStatus=>{
-        this.projectStatus = projectStatus
-
-        this.selectionHealth();
+      this.pmReportService.filterProjectHealth.subscribe(projectStatus=>{
+        this.projectStatus = projectStatus;
+        this.getPmReportProject();
       });
 
-      this.pmReportService.currentSortData.subscribe(typeSort => {
+      this.pmReportService.filterSort.subscribe(typeSort => {
         this.typeSort = typeSort;
-        this.sortStatusInputData();
+        this.getPmReportProject();
       });
     }
   }
@@ -238,30 +239,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.getFuturereport();
         this.getProjectProblem();
         this.search()
-        this.selectionHealth();
-        this.sortStatusInputData();
       }))
     }
   }
 
-  public selectionHealth(){
-    if (this.router.url.includes("weeklyReportTabDetail") && this.projectStatus) {
-      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort).pipe(catchError(this.pmReportProjectService.handleError))
-      .subscribe((data => {
-        this.pmReportProjectList = data.result;
-      }))
-    }
-  }
-
-
-  public sortStatusInputData(){
-      if (this.router.url.includes("weeklyReportTabDetail") && this.typeSort) {
-        this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort).pipe(catchError(this.pmReportProjectService.handleError))
-        .subscribe((data => {
-          this.pmReportProjectList = data.result;
-        }))
-      }
-  }
+  
 
 
   getProjectInfo() {

@@ -22,11 +22,12 @@ export class PmReportService extends BaseApiService {
   public projectType = new BehaviorSubject('OUTSOURCING');
   currentProjectType = this.projectType.asObservable();
 
-  public projectStatus = new BehaviorSubject('ALL');
-  currentProjectStatus = this.projectStatus.asObservable();
+  
+  public filterProjectHealth = new BehaviorSubject("ALL");
+  currentFilterProjectHealth = this.filterProjectHealth.asObservable();
 
-  public sortHealth = new BehaviorSubject('No_Order');
-  currentSortData = this.sortHealth.asObservable();
+  public filterSort = new BehaviorSubject('No_Order');
+  currentFilterSort = this.filterSort.asObservable();
 
   constructor(http: HttpClient) { super(http) }
   public closeReport(id: any): Observable<any> {
@@ -38,6 +39,8 @@ export class PmReportService extends BaseApiService {
   public getStatisticsReport(pmReportId: number, reportDate: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/StatisticsReport?pmReportId=${pmReportId}&startDate=${reportDate}`);
   }
+
+
   public updateReportNote(pmReportId: number, note: string): Observable<any> {
     // if (note) {
     //   note = JSON.stringify(note)
@@ -58,11 +61,11 @@ export class PmReportService extends BaseApiService {
     this.projectType.next(message);
   }
 
-  changeProjectSelectionHealth(message: string){
-    this.projectStatus.next(message);
+  changeFilterProjectHealth(data: any){
+    this.filterProjectHealth.next(data);
   }
 
-  changeSelectSortHealth(message: string){
-    this.sortHealth.next(message)
+  changeFilterSort(message: string){
+    this.filterSort.next(message)
   }
 }

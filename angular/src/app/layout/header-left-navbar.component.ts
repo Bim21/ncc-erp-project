@@ -11,7 +11,6 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { catchError, filter } from 'rxjs/operators';
 import { PMReportProjectService } from '@app/service/api/pmreport-project.service';
-import { WeeklyReportTabDetailComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/weekly-report-tab-detail.component';
 
 @Component({
   selector: 'header-left-navbar',
@@ -29,6 +28,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   pmReportList: pmReportDto[] = [];
   pmReport = {} as pmReportDto;
   reportId: any;
+  select:any;
   projectInfo = {} as ProjectInfoDto
   projectName: string
   projectCode: string
@@ -42,8 +42,9 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   pmReportProjectId:string
   public problemIssueList: string[] = []
   public searchPmReport: string ="";
+  public selectedNumberStatus: number;
   projectType = this.reportService.projectType.getValue();
-  SelectedSortHealthList = this.reportService.sortHealth.getValue();
+  
   projectTypeList = [
     "ALL",
     "OUTSOURCING",
@@ -51,21 +52,21 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     "PRODUCT"
   ];
 
-  SelectedHealthList = this.reportService.projectStatus.getValue();
-  public projectTypeStatus = [
-    "ALL",
-    "GREEN",
-    "YELLOW",
-    "RED"
+  filterProjectHealth = this.reportService.filterProjectHealth.getValue();
+  public projectHeathList = [
+    {displayName: "ALL", value: "ALL"},
+    {displayName: "Green", value: 0},
+    {displayName: "Yellow", value: 1},
+    {displayName: "Red", value: 2},
   ];
 
-  listOptionReport = [
+  filterSort = this.reportService.filterSort.getValue();
+  filterSortList = [
     "No_Order",
     "Green_Yellow_Red",
     "Red_Yellow_Green",
   ]
 
-  weeklyReport: WeeklyReportTabDetailComponent;
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
@@ -131,8 +132,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
 
         }
       )
-
-      //this.changeTypeSort(this.typeSort.None);
   }
   getPmReportList() {
     this.reportService.getAll().pipe(catchError(this.reportService.handleError)).subscribe(data => {
@@ -173,9 +172,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     }
   }
 
-  
-
-
   public stopTimmer() {
     this.timmerCount.stop()
     this.isTimmerCounting = false
@@ -201,8 +197,8 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.reportService.changeProjectType(type)
   }
 
-  changeProjectSelectionHealth(type){
-    this.reportService.changeProjectSelectionHealth(type);
+  onChangeFilterProjectHealth(){
+    this.reportService.changeFilterProjectHealth(this.filterProjectHealth);
   }
 
   changeProjectHealth(pmReportProjectId,projectHealth) {
@@ -210,8 +206,8 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.reportService.changeProjectHealth(data)
   }
 
-  changeSelectedSortHealth(type){
-    this.reportService.changeSelectSortHealth(type);
+  onChangeFilterSort(){
+    this.reportService.changeFilterSort(this.filterSort);
   }
   
   updateHealth(projectHealth) {

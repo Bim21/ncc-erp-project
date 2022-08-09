@@ -91,10 +91,10 @@
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
             <mat-form-field appearance="outline" class="ml-2">
-              <mat-label>Status:</mat-label>
-              <mat-select [(ngModel)]="SelectedHealthList" (selectionChange)="changeProjectSelectionHealth($event.value)" (click)="changeProjectSelectionHealthList()">
-                <mat-option *ngFor="let type of projectTypeStatus" [value] = "type">
-                      {{type}}
+              <mat-label>Status</mat-label>
+              <mat-select [(ngModel)]="filterProjectHealth" (selectionChange)="onChangeFilterProjectHealth()">
+                <mat-option *ngFor="let item of projectHeathList"  [value] = "item.value">
+                      {{item.displayName}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -104,9 +104,9 @@
         <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Sort Status:</mat-label>
-                <mat-select [(ngModel)]="SelectedSortHealthList" (selectionChange)="changeSelectedSortHealth($event.value)" > 
-                    <mat-option *ngFor="let type of listOptionReport" [value] = "type">
-                        {{type}}
+                <mat-select [(ngModel)]="filterSort" (selectionChange)="onChangeFilterSort()" > 
+                    <mat-option *ngFor="let item of filterSortList" [value] = "item">
+                        {{item}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>    
