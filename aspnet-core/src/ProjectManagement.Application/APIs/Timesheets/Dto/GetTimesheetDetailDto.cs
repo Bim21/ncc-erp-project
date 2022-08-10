@@ -69,9 +69,11 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public float WorkingDay { get; set; }
         public float Discount { get; set; }
         public float TransferFee { get; set; }
+        [ApplySearchAttribute]
         public string ClientCode { get; set; }
         public string PmBranchColor { get; set; }
         public string PmBranchDisplayName { get; set; }
+        public double? TotalAmountProjectBillInfomation => ProjectBillInfomation.DefaultIfEmpty() != default ? ProjectBillInfomation.Sum(x => x.Amount) : default;
     }
 
 }
