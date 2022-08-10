@@ -10,8 +10,8 @@
       <i class="fas fa-sticky-note mr-1"></i> Note
     </button>
     </li>
-    <li style="margin-left: 132px;" *ngIf="isShowReportBar">
-        <div class="mt-1" style="font-size: 21px;">
+    <li style="margin-left: 30px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+        <div class="mt-1" style="font-size: 20px;">
             <strong>
                 {{projectInfo?.projectName}} - {{projectInfo?.clientName}} - {{projectInfo?.pmName}}
             </strong>
@@ -100,7 +100,7 @@
             </mat-form-field>
         </div>
     </li>
-    <li *ngIf="isShowReportBar" style="margin-left: 30px; cursor: pointer; display: flex; white-space: nowrap;">
+    <li *ngIf="isShowReportBar" style="cursor: pointer; display: flex; white-space: nowrap;">
         <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Sort Status:</mat-label>
