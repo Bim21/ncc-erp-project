@@ -165,7 +165,7 @@
               <tr style="border: none">
                 <th class="stt">#</th>
                 <th>Project</th>
-                <th>
+                <th style="justify-content: spa;">
                   Bill Info 
                   <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: green;" class="ml-5">{{getTotalAmountVND() | number : "1.0"}} VND </span>
                   <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: red;" class="ml-5">{{getTotalAmountUSD() | number : "1.0"}} USD</span>
@@ -224,9 +224,9 @@
                           <div class="col-2" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">
                             <label class="ml-3" style="font-weight: 500;">{{covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType)}}</label></div>
                           <div class="col-2" ><label class="ml-5" style="font-weight: 500;">{{bill.workingTime}}d</label></div>
-                          <div *ngIf="isShowBillAmountVND(item.currency)" class="col-2"><label class="ml-3">{{bill.amount | number : "1.0"}} VND</label></div>
-                          <div *ngIf="isShowBillAmountUSD(item.currency)" class="col-2"><label class="ml-3">{{bill.amount | number : "1.0"}} USD</label></div>
-                          <div *ngIf="isShowBillAmount(item.currency)" class="col-2"><label class="ml-3">{{bill.amount | number : "1.0"}} {{item.currency}}</label></div>
+                          <div *ngIf="isShowBillAmountVND(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.amount | number : "1.0"}} VND</label></div>
+                          <div *ngIf="isShowBillAmountUSD(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.amount | number : "1.0"}} USD</label></div>
+                          <div *ngIf="isShowBillAmount(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.amount | number : "1.0"}} {{item.currency}}</label></div>
                           <div *ngIf="!isGranted(Timesheets_TimesheetDetail_ViewBillRate)"
                               style="word-break: break-all; white-space: pre-line;">
                               <div title="{{bill.description?bill.description:''}}" class="no-expand-text">
