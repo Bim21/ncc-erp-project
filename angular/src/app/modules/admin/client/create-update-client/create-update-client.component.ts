@@ -15,6 +15,8 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
   public client = {} as ClientDto;
   invoiceDateSettingList: [];
   paymentDueByList = [];
+  temppaymentDueByList = [];
+  searchPaymentDueBy : string;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,
     public clientService: ClientService,
@@ -32,6 +34,7 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
   getPaymentDueBy() {
     this.clientService.getAllPaymentDueBy().pipe(catchError(this.clientService.handleError)).subscribe((res) => {
       this.paymentDueByList = res.result;
+      this.temppaymentDueByList = res.result;
     })
   }
   getAllInvoiceDate() {
@@ -39,7 +42,10 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
       this.invoiceDateSettingList = res.result;
     })
   }
-
+  searchPayment()
+  {
+    this.paymentDueByList = this.temppaymentDueByList.filter(item => item.text.trim().toLowerCase().includes(this.searchPaymentDueBy.trim().toLowerCase()));
+  }
   SaveAndClose() {
     if (this.data.command == "create") {
       this.clientService.create(this.client).pipe(catchError(this.clientService.handleError)).subscribe((res) => {

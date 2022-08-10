@@ -79,7 +79,7 @@
                 <i class="fas fa-search"></i>
               </button>
             </div>
-            <input type="text" class="form-control" name="keyword" placeholder="Search by Project name, PM Name, PM Email, Client Name" [(ngModel)]="searchText"
+            <input type="text" class="form-control" name="keyword" placeholder="Search by Project name, PM Name, PM Email, Client Name, Client Code" [(ngModel)]="searchText"
               (keyup.enter)="searchProjectTS()" />
             <div class="input-group-append">
               <button type="button" class="btn btn-default btn-search" (click)="checkAddFilter()">
@@ -165,7 +165,11 @@
               <tr style="border: none">
                 <th class="stt">#</th>
                 <th>Project</th>
-                <th>Bill Info</th>
+                <th>
+                  Bill Info 
+                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: green;" class="ml-5">{{getTotalAmountVND() | number : "1.0"}} VND </span>
+                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: red;" class="ml-5">{{getTotalAmountUSD() | number : "1.0"}} USD</span>
+                </th>
                 <th>Note</th>
                 <th>Invoice Info</th>
                 <th>Timesheet File</th>
@@ -200,13 +204,30 @@
                 </td>
                 <td style="cursor: pointer" class="text-left bill">
                   <div *ngIf="item.projectBillInfomation" style="min-width: 600px;">
+
+                      <div class="row" *ngIf="isShowBillAmountVND(item.currency)" style="color: green;">
+                        <div class="col-9"><label>Total</label></div>
+                        <div class="col-2"><label class="ml-3">{{item.totalAmountProjectBillInfomation | number : "1.0"}} VND</label></div>
+                      </div>
+                      <div class="row" *ngIf="isShowBillAmountUSD(item.currency)" style="color: red;">
+                        <div class="col-9"><label>Total</label></div>
+                        <div class="col-2"><label class="ml-3">{{item.totalAmountProjectBillInfomation | number : "1.0"}} USD</label></div>
+                      </div>
+                      <div class="row" *ngIf="isShowBillAmount(item.currency)">
+                        <div class="col-9"><label>Total</label></div>
+                        <div class="col-2"><label class="ml-3">{{item.totalAmountProjectBillInfomation | number : "1.0"}} {{item.currency}}</label></div>
+                      </div>
+
                       <div class="row" *ngFor="let bill of item.projectBillInfomation">
                           <div class="col-3"><label>{{bill.fullName}}</label></div>
-                          <div class="col-3"><span class="ml-2">{{bill.billRole}}</span></div>
-                          <div class="col-2" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)"><label
-                                  class="ml-3">{{covertMoneyType(bill.billRate)+' '+item.currency+getChargeType(bill.chargeType)}}</label></div>
-                          <div class="col-2"><label class="ml-5">{{bill.workingTime}}d</label></div>
-                          <div [ngClass]="permission.isGranted(Timesheets_TimesheetDetail_ViewBillRate)?'col-2 noexpand-note': 'col-4 expand-note'"
+                          <div class="col-2"><span class="ml-2">{{bill.billRole}}</span></div>
+                          <div class="col-2" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">
+                            <label class="ml-3" style="font-weight: 500;">{{covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType)}}</label></div>
+                          <div class="col-2" ><label class="ml-5" style="font-weight: 500;">{{bill.workingTime}}d</label></div>
+                          <div *ngIf="isShowBillAmountVND(item.currency)" class="col-2" style="color: green;"><label class="ml-3">{{bill.amount | number : "1.0"}} VND</label></div>
+                          <div *ngIf="isShowBillAmountUSD(item.currency)" class="col-2" style="color: red;"><label class="ml-3">{{bill.amount | number : "1.0"}} USD</label></div>
+                          <div *ngIf="isShowBillAmount(item.currency)" class="col-2"><label class="ml-3">{{bill.amount | number : "1.0"}} {{item.currency}}</label></div>
+                          <div *ngIf="!isGranted(Timesheets_TimesheetDetail_ViewBillRate)"
                               style="word-break: break-all; white-space: pre-line;">
                               <div title="{{bill.description?bill.description:''}}" class="no-expand-text">
                                   {{bill.description?bill.description:''}}

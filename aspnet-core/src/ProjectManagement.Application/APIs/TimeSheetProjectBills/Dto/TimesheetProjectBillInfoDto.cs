@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Abp.Configuration;
+using ProjectManagement.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -16,5 +18,22 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public string Currency { get; set; }
         public ChargeType? ChargeType { get; set; }
         public string FullName => string.IsNullOrEmpty(AccountName) ? UserFullName : AccountName;
+        public double TimeSheetWorkingDay { get; set; }
+        public int DefaultWorkingHours { get; set; }
+        public double? Amount => GetWorkingTime() * BillRate;
+        private double GetWorkingTime()
+        {
+            if (ChargeType == Constants.Enum.ProjectEnum.ChargeType.Daily)
+            {
+                return WorkingTime;
+            }
+
+            if (ChargeType == Constants.Enum.ProjectEnum.ChargeType.Hourly)
+            {
+                return WorkingTime * DefaultWorkingHours;
+            }
+
+            return WorkingTime / TimeSheetWorkingDay;
+        }
     }
 }

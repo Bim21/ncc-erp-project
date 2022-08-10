@@ -141,6 +141,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var allowViewBillRate = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
             var allowViewAllTSProject = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewAll);
 
+            var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
+
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
                                               .Where(x => filterItem == null || x.IsComplete != true)
@@ -177,6 +179,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                         Description = x.Note,
                                                         Currency = x.Currency.Name,
                                                         ChargeType = x.ChargeType.HasValue ? x.ChargeType : x.Project.ChargeType,
+                                                        DefaultWorkingHours = defaultWorkingHours,
+                                                        TimeSheetWorkingDay = tsp.WorkingDay,
                                                     }).ToList(),
                              Note = tsp.Note,
                              HistoryFile = tsp.HistoryFile,

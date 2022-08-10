@@ -24,6 +24,7 @@ export class TimesheetDetailDto {
     projectBillInfomation: ProjectBillInfoDto[];
     isComplete:boolean;
     chargeType: string;
+    totalAmountProjectBillInfomation: number;
 }
 
 export class ProjectBillInfoDto{
@@ -36,6 +37,7 @@ export class ProjectBillInfoDto{
     fullName: string;
     userFullName: string;
     workingTime: number;
+    amout: number;
 }
 export class ProjectTimesheetDto {
     projectId: number;

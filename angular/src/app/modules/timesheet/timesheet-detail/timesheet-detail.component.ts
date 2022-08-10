@@ -107,6 +107,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public updateAction = UpdateAction;
   public currency: string = "";
   public clientIdInvoice: number = -1;
+  public totalAmount: number;
 
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
@@ -117,7 +118,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType: 2 },
     { propertyName: 'isComplete', displayName: "Status", comparisions: [0], filterType: 5 },
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
-
+    { propertyName: 'clientCode', displayName: "Client Code", comparisions: [0, 6, 7, 8] },
   ];
 
   Timesheets_TimesheetDetail_View = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_View;
@@ -547,7 +548,33 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       && item.projectBillInfomation
       && item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly)
   }
-
+  isShowBillAmountVND(currency: string){
+    if(currency === "VND" && this.isGranted(this.Timesheets_TimesheetDetail_ViewBillRate))
+      return true;
+    return false;
+  }
+  isShowBillAmountUSD(currency: string){
+    if(currency === "USD" && this.isGranted(this.Timesheets_TimesheetDetail_ViewBillRate))
+      return true;
+    return false;
+  }
+  isShowBillAmount(currency: string){
+    if(currency != "USD" && currency != "VND" && this.isGranted(this.Timesheets_TimesheetDetail_ViewBillRate))
+      return true;
+    return false;
+  }
+  getTotalAmountVND()
+  {
+    this.totalAmount = 0;
+    this.TimesheetDetaiList.forEach(x => this.totalAmount += x.projectBillInfomation[0].currency === "VND" ? x.totalAmountProjectBillInfomation : 0);
+    return this.totalAmount;
+  }
+  getTotalAmountUSD()
+  {
+    this.totalAmount = 0;
+    this.TimesheetDetaiList.forEach(x => this.totalAmount += x.projectBillInfomation[0].currency === "USD" ? x.totalAmountProjectBillInfomation : 0);
+    return this.totalAmount;
+  }
 }
 export const UpdateAction = {
   UpdateBillInfo: 1,
