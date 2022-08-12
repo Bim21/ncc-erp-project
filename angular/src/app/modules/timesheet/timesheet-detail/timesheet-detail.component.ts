@@ -412,7 +412,6 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
 
   addProjectToExport(event, item) {
     let chargeTypeProject = item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly);
-    console.log("OK")
     if (!event.checked) {
       let index = this.listExportInvoice.indexOf(event.source.value.projectId);
       let indexChargeType = this.listExportInvoiceChargeType.indexOf(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);
