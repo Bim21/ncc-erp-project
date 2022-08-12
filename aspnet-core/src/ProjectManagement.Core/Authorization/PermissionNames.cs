@@ -417,7 +417,8 @@ namespace ProjectManagement.Authorization
         //public const string ResourceRequest_UpdateResourceRequestPlan = "ResourceRequest.UpdateResourceRequestPlan";
         //public const string ResourceRequest_RemoveResouceRequestPlan = "ResourceRequest.RemoveResouceRequestPlan";
         public const string ResourceRequest_SetDone = "ResourceRequest.SetDone";
-        public const string ResourceRequest_Cancel = "ResourceRequest.Cancel";
+        public const string ResourceRequest_CancelAllRequest = "ResourceRequest.CancelAllRequest";
+        public const string ResourceRequest_CancelMyRequest = "ResourceRequest.CancelMyRequest";
         public const string ResourceRequest_EditPmNote = "ResourceRequest.EditPmNote";
         public const string ResourceRequest_EditDmNote = "ResourceRequest.EditDmNote";
         public const string ResourceRequest_Edit = "ResourceRequest.Edit";
@@ -911,7 +912,8 @@ namespace ProjectManagement.Authorization
                     //PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,
                     //PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,
                     PermissionNames.ResourceRequest_SetDone ,
-                    PermissionNames.ResourceRequest_Cancel ,
+                    PermissionNames.ResourceRequest_CancelAllRequest ,
+                    PermissionNames.ResourceRequest_CancelMyRequest ,
                     PermissionNames.ResourceRequest_EditPmNote ,
                     PermissionNames.ResourceRequest_EditDmNote ,
                     PermissionNames.ResourceRequest_Edit ,
@@ -1394,7 +1396,8 @@ namespace ProjectManagement.Authorization
                  //new SystemPermission{ Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
                  //new SystemPermission{ Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
-                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_Cancel ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_CancelAllRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel All Request"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_CancelMyRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Cancel Request for My Project"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_EditPmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit PM Note"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
@@ -2027,7 +2030,8 @@ namespace ProjectManagement.Authorization
                         //new SystemPermission { Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
                         //new SystemPermission { Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
-                        new SystemPermission { Name =  PermissionNames.ResourceRequest_Cancel ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel"},
+                        new SystemPermission{ Name =  PermissionNames.ResourceRequest_CancelAllRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel All Request"},
+                        new SystemPermission{ Name =  PermissionNames.ResourceRequest_CancelMyRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Cancel Request for My Project"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_EditPmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit PM Note"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},

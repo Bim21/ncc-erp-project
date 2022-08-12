@@ -70,7 +70,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   ResourceRequest_UpdateResourceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_UpdateResourceRequestPlan;
   ResourceRequest_RemoveResouceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_RemoveResouceRequestPlan;
   ResourceRequest_SetDone = PERMISSIONS_CONSTANT.ResourceRequest_SetDone;
-  ResourceRequest_Cancel = PERMISSIONS_CONSTANT.ResourceRequest_Cancel;
+  ResourceRequest_CancelAllRequest = PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest;
+  ResourceRequest_CancelMyRequest = PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest;
   ResourceRequest_EditPmNote = PERMISSIONS_CONSTANT.ResourceRequest_EditPmNote;
   ResourceRequest_EditDmNote = PERMISSIONS_CONSTANT.ResourceRequest_EditDmNote;
   ResourceRequest_Edit = PERMISSIONS_CONSTANT.ResourceRequest_Edit;
@@ -162,24 +163,55 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
         this.refresh()
     })
   }
-  cancelRequest(id) {
-    abp.message.confirm(
-      'Are you sure cancel request?',
-      '',
-      (result) => {
-        if (result) {
-          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
-            if (res.success) {
-              abp.notify.success('Cancel Request Success!')
-              this.refresh()
-            }
-            else {
-              abp.notify.error(res.result)
-            }
-          })
+
+  clickMenuCancelRequest(id){
+    if(this.allowPMCancelRequestOfPMAndBlockWithOthers() && !this.allowPeopleCancelEveryCancelRequest()){
+      abp.message.confirm(
+        'Are you sure cancel request?',
+        '',
+        (result) => {
+          if (result) {
+            this.resourceRequestService.cancelMyResourceRequest(id).subscribe(res => {
+              if (res.success){
+                abp.notify.success('Cancel Request Success!');
+                this.refresh();
+              }
+              else {
+                abp.notify.error(res.result)
+              }
+            })
+          }
         }
-      }
-    )
+      )
+    }
+
+    if(this.allowPeopleCancelEveryCancelRequest()){
+      abp.message.confirm(
+        'Are you sure cancel request?',
+        '',
+        (result) => {
+          if (result) {
+            this.resourceRequestService.cancelAllResourceRequest(id).subscribe(res => {
+              if (res.success) {
+                abp.notify.success('Cancel Request Success!');
+                this.refresh();
+              }
+              else {
+                abp.notify.error(res.result)
+              }
+            })
+          }
+        }
+      )
+    }
+  }
+
+  allowPMCancelRequestOfPMAndBlockWithOthers(){
+    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest);
+  }
+  
+  allowPeopleCancelEveryCancelRequest(){
+    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest);
   }
 
   async showModalPlanUser(item: any) {

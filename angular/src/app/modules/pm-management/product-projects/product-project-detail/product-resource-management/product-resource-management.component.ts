@@ -595,13 +595,13 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     })
   }
 
-  cancelRequest(id){
+  cancelAllRequest(id){
     abp.message.confirm(
       'Are you sure cancel request?',
       '',
       (result) => {
         if(result){
-          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
+          this.resourceRequestService.cancelAllResourceRequest(id).subscribe(res => {
             if(res.success){
               abp.notify.success('Cancel Request Success!')
               this.getResourceRequestList()
