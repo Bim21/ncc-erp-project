@@ -2,6 +2,7 @@
 using NccCore.Anotations;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -73,7 +74,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public string ClientCode { get; set; }
         public string PmBranchColor { get; set; }
         public string PmBranchDisplayName { get; set; }
-        public double? TotalAmountProjectBillInfomation => ProjectBillInfomation.DefaultIfEmpty() != default ? ProjectBillInfomation.Sum(x => x.Amount) : default;
+        public double? TotalAmountProjectBillInfomation => ProjectBillInfomation.DefaultIfEmpty() != default ? ProjectBillInfomation.Sum(x => x.Amount).Value : default;
+        public double RoundTotalAmountProjectBillInfomation => Math.Round(TotalAmountProjectBillInfomation.Value);
     }
 
 }
