@@ -11,6 +11,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit, Inject, Injector, ChangeDetectorRef } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash'
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 @Component({
   selector: 'app-create-update-resource-request',
@@ -108,10 +109,18 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
 
   }
   getAllProject() {
-    this.listProjectService.getAll().subscribe(data => {
-      this.listProject = data.result;
-    })
+
+    if (this.isShowProjectOfOnlyPM() || !this.isShowProjectOfOnlyPM()){
+      this.listProjectService.getAll().subscribe(data => {
+        this.listProject = data.result;
+      })
+    }
   }
+
+  isShowProjectOfOnlyPM(){
+    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM);
+  }
+
   getallskill() {
     this.skillService.getAll().pipe(catchError(this.skillService.handleError)).subscribe(data => {
       this.listSkill = data.result

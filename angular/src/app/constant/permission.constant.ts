@@ -403,6 +403,7 @@ export const PERMISSIONS_CONSTANT = {
        ResourceRequest: "ResourceRequest",
        ResourceRequest_View: "ResourceRequest.View",
        ResourceRequest_CreateNewRequest: "ResourceRequest.CreateNewRequest",
+       ResourceRequest_CreateNewRequestByPM: "ResourceRequest.CreateNewRequestByPM",
        ResourceRequest_PlanNewResourceForRequest: "ResourceRequest.PlanNewResourceForRequest",
        ResourceRequest_UpdateResourceRequestPlan: "ResourceRequest.UpdateResourceRequestPlan",
        ResourceRequest_RemoveResouceRequestPlan: "ResourceRequest.RemoveResouceRequestPlan",
