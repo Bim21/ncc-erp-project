@@ -18,6 +18,8 @@ namespace ProjectManagement.Utils
         = new Dictionary<byte, string>
         {
             { 0, "Last date next month" },
+            { 103, "Last date next 2 month" },
+            { 104, "Last date next 3 month" },
             { 15, "15th next month" },
             { 1, "1st next month" },
             { 2, "2nd next month" },
@@ -48,6 +50,66 @@ namespace ProjectManagement.Utils
             { 28, "28th next month" },
             { 29, "29th next month" },
             { 30, "30th next month" },
+            { 31, "1st next 2 month" },
+            { 32, "2nd next 2 month" },
+            { 33, "3rd next 2 month" },
+            { 34, "4th next 2 month" },
+            { 35, "5th next 2 month" },
+            { 36, "6th next 2 month" },
+            { 37, "7th next 2 month" },
+            { 38, "8th next 2 month" },
+            { 39, "9th next 2 month" },
+            { 40, "10th next 2 month" },
+            { 41, "11th next 2 month" },
+            { 42, "12th next 2 month" },
+            { 43, "13th next 2 month" },
+            { 44, "14th next 2 month" },
+            { 45, "15th next 2 month" },
+            { 46, "16th next 2 month" },
+            { 47, "17th next 2 month" },
+            { 48, "18th next 2 month" },
+            { 49, "19th next 2 month" },
+            { 50, "20th next 2 month" },
+            { 51, "21st next 2 month" },
+            { 52, "22nd next 2 month" },
+            { 53, "23rd next 2 month" },
+            { 54, "24th next 2 month" },
+            { 55, "25th next 2 month" },
+            { 56, "26th next 2 month" },
+            { 57, "27th next 2 month" },
+            { 58, "28th next 2 month" },
+            { 59, "29th next 2 month" },
+            { 60, "30th next 2 month" },
+            { 61, "1st next 3 month" },
+            { 62, "2nd next 3 month" },
+            { 63, "3rd next 3 month" },
+            { 64, "4th next 3 month" },
+            { 65, "5th next 3 month" },
+            { 66, "6th next 3 month" },
+            { 67, "7th next 3 month" },
+            { 68, "8th next 3 month" },
+            { 69, "9th next 3 month" },
+            { 70, "10th next 3 month" },
+            { 71, "11th next 3 month" },
+            { 72, "12th next 3 month" },
+            { 73, "13th next 3 month" },
+            { 74, "14th next 3 month" },
+            { 75, "15th next 3 month" },
+            { 76, "16th next 3 month" },
+            { 77, "17th next 3 month" },
+            { 78, "18th next 3 month" },
+            { 79, "19th next 3 month" },
+            { 80, "20th next 3 month" },
+            { 81, "21st next 3 month" },
+            { 82, "22nd next 3 month" },
+            { 83, "23rd next 3 month" },
+            { 84, "24th next 3 month" },
+            { 85, "25th next 3 month" },
+            { 86, "26th next 3 month" },
+            { 87, "27th next 3 month" },
+            { 88, "28th next 3 month" },
+            { 89, "29th next 3 month" },
+            { 90, "30th next 3 month" },
         };
 
         public static Dictionary<byte, string> PaymentDueByList()
@@ -241,6 +303,17 @@ namespace ProjectManagement.Utils
         public static string GetPathSendRecuitment(string path)
         {
             return string.IsNullOrEmpty(path) ? "" : AppConsts.FE_TALENT_ADDRESS + path;
+        }
+        public static UserType GetProjectUserType(byte type)
+        {
+            UserType[] userTypes = { UserType.Staff, UserType.Internship, UserType.Collaborators };
+            return userTypes[type];
+        }
+        public enum TimeSheetUserType : byte
+        {
+            Staff = 0,
+            Internship = 1,
+            Collaborators = 2
         }
     }
 }

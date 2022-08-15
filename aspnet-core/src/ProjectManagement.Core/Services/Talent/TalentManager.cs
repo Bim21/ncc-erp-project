@@ -68,9 +68,9 @@ namespace ProjectManagement.Services.Talent
                 PathRecruitment = model.RecruitmentUrl
             };
         }
-        public async Task CancelRequest(long resourceRequestId)
+        public async Task CancelRequest(CloseResourceRequestDto input)
         {
-            await _talentService.CancelRequest(resourceRequestId);
+            await _talentService.CancelRequest(input);
         }
         public async Task<List<SubPositionDto>> GetPositions()
         {
