@@ -247,16 +247,19 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException($"Request Id {requestId} is for your project. You can't change to other project");
             }
 
-            if (project.PMId != AbpSession.UserId.Value)
+            var isGrantedCancelAll = IsGranted(PermissionNames.ResourceRequest_CancelAllRequest);
+
+            if (!isGrantedCancelAll && project.PMId != AbpSession.UserId.Value)
             {
                 throw new UserFriendlyException($"Request Id {requestId} is for project that you are NOT PM.");
             }
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_CancelAllRequest)]
+        [AbpAuthorize(PermissionNames.ResourceRequest_CancelAllRequest, PermissionNames.ResourceRequest_CancelMyRequest)]
         public async Task<GetResourceRequestDto> CancelRequest(long requestId)
         {
+            await CheckRequestIsForMyProject(requestId, null);
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(requestId);
 
             resourceRequest.Status = ResourceRequestStatus.CANCELLED;
@@ -272,14 +275,6 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             await notifyToKomu(requestDto, Action.Cancel, null);
             return requestDto;
-        }
-
-        [HttpPost]
-        [AbpAuthorize(PermissionNames.ResourceRequest_CancelMyRequest)]
-        public async Task<GetResourceRequestDto> CancelMyRequest(long requestId)
-        {
-            await CheckRequestIsForMyProject(requestId, null);
-            return await CancelRequest(requestId);
         }
 
         [HttpPost]

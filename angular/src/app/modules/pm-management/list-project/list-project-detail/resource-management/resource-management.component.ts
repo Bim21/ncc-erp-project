@@ -607,7 +607,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       '',
       (result) => {
         if(result){
-          this.resourceRequestService.cancelAllResourceRequest(id).subscribe(res => {
+          this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
             if(res.success){
               abp.notify.success('Cancel Request Success!')
               this.getResourceRequestList()

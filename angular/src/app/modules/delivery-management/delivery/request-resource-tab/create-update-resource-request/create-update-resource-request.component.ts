@@ -19,6 +19,7 @@ import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
   styleUrls: ['./create-update-resource-request.component.css']
 })
 export class CreateUpdateResourceRequestComponent extends AppComponentBase implements OnInit {
+  ResourceRequest_CreateNewRequestByPM = PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM;
   public isLoading: boolean = false;
   public listProject: ProjectDto[] = [];
   public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
@@ -109,16 +110,9 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
 
   }
   getAllProject() {
-
-    if (this.isShowProjectOfOnlyPM() || !this.isShowProjectOfOnlyPM()){
-      this.listProjectService.getAll().subscribe(data => {
-        this.listProject = data.result;
-      })
-    }
-  }
-
-  isShowProjectOfOnlyPM(){
-    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM);
+    this.listProjectService.getMyProject().subscribe(data => {
+      this.listProject = data.result;
+    })
   }
 
   getallskill() {

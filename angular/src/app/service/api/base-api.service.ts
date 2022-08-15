@@ -41,6 +41,11 @@ export abstract class BaseApiService {
     public getAll(): Observable<any> {
         return this.http.get<any>(this.rootUrl + '/GetAll');
     }
+
+    public getMyProject(): Observable<any>{
+        return this.http.get<any>(this.rootUrl + '/GetMyProjects');
+    }
+
     public getById(id: any): Observable<any> {
         return this.http.get<any>(this.rootUrl + '/Get?id=' + id);
     }

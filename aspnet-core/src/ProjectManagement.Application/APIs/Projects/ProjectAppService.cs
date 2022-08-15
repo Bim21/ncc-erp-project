@@ -198,32 +198,6 @@ namespace ProjectManagement.APIs.Projects
         [HttpGet]
         public async Task<List<GetProjectDto>> GetAll()
         {
-            if (this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestByPM))
-            {
-                var queryPM = WorkScope.GetAll<Project>()
-                .Where(x => x.PMId == AbpSession.UserId.Value)
-                .Include(x => x.Currency)
-                //.Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
-                .Select(x => new GetProjectDto
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Code = x.Code,
-                    ProjectType = x.ProjectType,
-                    StartTime = x.StartTime.Date,
-                    EndTime = x.EndTime.Value.Date,
-                    Status = x.Status,
-                    ClientId = x.ClientId,
-                    ClientName = x.Client.Name,
-                    CurrencyId = x.CurrencyId,
-                    CurrencyName = x.Currency.Name,
-                    IsCharge = x.IsCharge,
-                    ChargeType = x.ChargeType,
-                    PmId = x.PMId,
-                    PmName = x.PM.Name,
-                });
-                return await queryPM.ToListAsync();
-            }
             var query = WorkScope.GetAll<Project>()
                 .Include(x => x.Currency)
                 //.Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
@@ -246,6 +220,25 @@ namespace ProjectManagement.APIs.Projects
                     PmName = x.PM.Name,
                 });
             return await query.ToListAsync();
+        }
+
+        [HttpGet]
+        [AbpAuthorize]
+        public List<GetProjectDto> GetMyProjects()
+        {
+            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestByPM);
+
+            var queryPM = WorkScope.GetAll<Project>()
+                            .Where(x => isGetAll && x.PMId == AbpSession.UserId.Value)
+                            .Where(x => x.Status != ProjectStatus.Closed)
+                            .Select(x => new GetProjectDto
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Code = x.Code
+                            });
+            return queryPM.ToList();
+
         }
 
         [HttpGet]
