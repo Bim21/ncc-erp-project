@@ -601,7 +601,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     })
   }
 
-  cancelAllRequest(id){
+  cancelRequest(id){
     abp.message.confirm(
       'Are you sure cancel request?',
       '',

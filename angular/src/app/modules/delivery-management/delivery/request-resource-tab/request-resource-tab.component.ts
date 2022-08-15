@@ -6,6 +6,7 @@ import { SortableComponent, SortableModel } from './../../../../../shared/compon
 import { AppComponentBase } from 'shared/app-component-base';
 import { ResourcePlanDto } from './../../../../service/model/resource-plan.dto';
 import { PERMISSIONS_CONSTANT } from './../../../../constant/permission.constant';
+import { RESOURCE_REQUEST_STATUS } from './../../../../constant/resource-request-status.constant';
 import { CreateUpdateResourceRequestComponent } from './create-update-resource-request/create-update-resource-request.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
@@ -163,54 +164,24 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     })
   }
 
-  clickMenuCancelRequest(id){
-    if(this.allowPMCancelRequestOfPMAndBlockWithOthers() && !this.allowPeopleCancelEveryCancelRequest()){
-      abp.message.confirm(
-        'Are you sure cancel request?',
-        '',
-        (result) => {
-          if (result) {
-            this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
-              if (res.success){
-                abp.notify.success('Cancel Request Success!');
-                this.refresh();
-              }
-              else {
-                abp.notify.error(res.result)
-              }
-            })
-          }
+  cancelRequest(request: RequestResourceDto) {
+    abp.message.confirm(
+      'Are you sure cancel request for project: ' + request.projectName,
+      '',
+      (result) => {
+        if (result) {
+          this.resourceRequestService.cancelResourceRequest(request.id).subscribe(res => {
+            if (res.success) {
+              abp.notify.success('Cancel Request Success!');
+              this.refresh();
+            }
+            else {
+              abp.notify.error(res.result)
+            }
+          })
         }
-      )
-    }
-
-    if(this.allowPeopleCancelEveryCancelRequest()){
-      abp.message.confirm(
-        'Are you sure cancel request?',
-        '',
-        (result) => {
-          if (result) {
-            this.resourceRequestService.cancelResourceRequest(id).subscribe(res => {
-              if (res.success) {
-                abp.notify.success('Cancel Request Success!');
-                this.refresh();
-              }
-              else {
-                abp.notify.error(res.result)
-              }
-            })
-          }
-        }
-      )
-    }
-  }
-
-  allowPMCancelRequestOfPMAndBlockWithOthers(){
-    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest);
-  }
-  
-  allowPeopleCancelEveryCancelRequest(){
-    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest);
+      }
+    )
   }
 
   async showModalPlanUser(item: any) {
@@ -448,15 +419,46 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     );
   }
   isShowButtonMenuAction(item) {
-    if ((item.statusName != 'DONE' && !item.isRecruitmentSend) || item.statusName != 'CANCELLED')
-      return true;
-    return false;
+    return (item.statusName != 'DONE'
+     //&& !item.isRecruitmentSend
+     ) 
+    || item.statusName != 'CANCELLED'      
   }
 
-  isShowBtnCreate(){
+  isShowBtnCreate() {
     return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest)
-    || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM) 
+      || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM)
   }
+
+  isShowBtnCancel(item) {
+    return item.status == RESOURCE_REQUEST_STATUS.PENDING
+    && ( this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest)
+      || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest))
+  }  
+
+  isShowBtnEdit(item) {
+    return item.status == RESOURCE_REQUEST_STATUS.PENDING
+    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Edit)
+  }
+
+  isShowBtnSetDone(item) {
+    return item.status == RESOURCE_REQUEST_STATUS.PENDING
+    && item.planUserInfo
+    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SetDone)
+  }
+
+  isShowBtnSendRecruitment(item) {
+    return item.status == RESOURCE_REQUEST_STATUS.PENDING
+    && (!item.isRecruitmentSend || !item.recruitmentUrl)
+    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment)
+  }
+
+  isShowBtnDelete(item) {
+    return item.status == RESOURCE_REQUEST_STATUS.CANCELLED
+    && !item.isRecruitmentSend
+    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
+  }
+
 }
 
 export class THeadTable {

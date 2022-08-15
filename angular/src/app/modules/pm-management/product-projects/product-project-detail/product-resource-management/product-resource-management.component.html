@@ -614,7 +614,7 @@
                                                 </button>
                                                 <br *ngIf="item.planUserInfo">
                                                 <button *ngIf="permission.isGranted(Projects_ProductProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CancelRequest)" class="btn btn-block text-left" mat-button
-                                                    (click)="cancelAllRequest(item.id);">
+                                                    (click)="cancelRequest(item.id);">
                                                     <i class="fa fa-times text-warning vertical-align-baseline"></i>
                                                     Cancel
                                                 </button>

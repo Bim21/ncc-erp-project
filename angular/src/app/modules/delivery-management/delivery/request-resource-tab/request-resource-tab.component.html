@@ -506,7 +506,6 @@
                 </td>
                 <td class="text-center action-request-resource-tab">
                   <button
-                    *ngIf="isShowButtonMenuAction(item)"
                     mat-button
                     [matMenuTriggerFor]="menu"
                   >
@@ -514,14 +513,9 @@
                   </button>
                   <mat-menu #menu="matMenu" class="p-2">
                     <!-- case 1: Status is inprogress -->
-                    <div
-                      *ngIf="
-                        item.statusName == 'PENDING' &&
-                        permission.isGranted(ResourceRequest_SetDone)
-                      "
-                    >
+                    <div>
                       <button
-                        *ngIf="item.planUserInfo"
+                        *ngIf="isShowBtnSetDone(item)"
                         class="btn btn-block text-left"
                         mat-button
                         (click)="setDoneRequest(item)"
@@ -531,12 +525,12 @@
                         ></i>
                         Set Done
                       </button>
-                      <br *ngIf="item.planUserInfo" />
+                      
                       <button
-                        *ngIf="allowPeopleCancelEveryCancelRequest() || allowPMCancelRequestOfPMAndBlockWithOthers()"
+                        *ngIf="isShowBtnCancel(item)"
                         class="btn btn-block text-left"
                         mat-button
-                        (click)="clickMenuCancelRequest(item.id)"
+                        (click)="cancelRequest(item)"
                       >
                         <i
                           class="fa fa-times text-warning vertical-align-baseline"
@@ -548,30 +542,16 @@
                       <button
                         class="btn btn-block text-left"
                         mat-button
-                        *ngIf="permission.isGranted(ResourceRequest_Edit)"
+                        *ngIf="isShowBtnEdit(item)"
                         (click)="editRequest(item)"
                       >
                         <i class="fa fa-edit vertical-align-baseline"></i>
                         Edit
                       </button>
-                      <br />
+                     
+                   
                       <button
-                        class="btn btn-block text-left"
-                        mat-button
-                        *ngIf="permission.isGranted(ResourceRequest_Delete)"
-                        (click)="delete(item)"
-                      >
-                        <i
-                          class="fa fa-trash text-danger vertical-align-baseline"
-                        ></i>
-                        Delete
-                      </button>
-                    </div>
-                    <!-- case 2: Status is inprogress and IsRecruitmentSend is TRUE-->
-                    <!-- case 6: Status is cancel and IsRecruitmentSend is TRUE-->
-                    <!-- case 4: Status is done and IsRecruitmentSend is TRUE-->
-                    <div *ngIf="item.isRecruitmentSend" class="text-left">
-                      <button
+                        *ngIf="item.isRecruitmentSend && item.recruitmentUrl"
                         class="btn btn-block text-left"
                         (click)="viewRecruitment(item.recruitmentUrl)"
                         mat-button
@@ -579,34 +559,21 @@
                         <i class="fa fa-eye"></i>
                         View recruitment
                       </button>
-                    </div>
-                    <!-- case 3: Status is inprogress and IsRecruitmentSend is FALSE-->
-                    <div
-                      *ngIf="
-                        item.statusName == 'PENDING' && !item.isRecruitmentSend
-                      "
-                      class="text-left"
-                    >
-                      <button
-                        *ngIf="
-                          permission.isGranted(ResourceRequest_SendRecruitment)
-                        "
+                   
+                      <button      
+                      *ngIf="isShowBtnSendRecruitment(item)"                  
                         class="btn btn-block text-left"
                         mat-button
                         (click)="sendRecruitment(item)"
                       >
                         Send recruitment
                       </button>
-                    </div>
-                    <!-- case 5: Status is cancel-->
-                    <div
-                      *ngIf="item.statusName == 'CANCELLED'"
-                      class="text-left"
-                    >
+                  
+                  
                       <button
+                      *ngIf="isShowBtnDelete(item)"
                         class="btn btn-block text-left"
-                        mat-button
-                        *ngIf="permission.isGranted(ResourceRequest_Delete)"
+                        mat-button                        
                         (click)="delete(item)"
                       >
                         <i

@@ -33,7 +33,3 @@ table td {
 .badge {
     height: fit-content;
 }
-
-[hidden]{
-    display: none !important;
-}

@@ -598,7 +598,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
     })
   }
 
-  cancelAllRequest(id){
+  cancelRequest(id){
     abp.message.confirm(
       'Are you sure cancel request?',
       '',

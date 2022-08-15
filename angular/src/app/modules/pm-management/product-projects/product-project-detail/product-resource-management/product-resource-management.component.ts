@@ -595,7 +595,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
     })
   }
 
-  cancelAllRequest(id){
+  cancelRequest(id){
     abp.message.confirm(
       'Are you sure cancel request?',
       '',

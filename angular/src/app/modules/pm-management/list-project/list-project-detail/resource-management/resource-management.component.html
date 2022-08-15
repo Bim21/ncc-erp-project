@@ -608,20 +608,20 @@
                                         <mat-menu #menu="matMenu" class="p-2">
                                             <!-- case 1: Status is inprogress -->
                                             <div *ngIf="item.statusName == 'PENDING'">
-                                                <button *ngIf="item.planUserInfo && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone)" class="btn btn-block text-left"
+                                                <button *ngIf="item.planUserInfo && isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SetDone)" class="btn btn-block text-left"
                                                     mat-button (click)="setDoneRequest(item);">
                                                     <i class="fa fa-check text-success vertical-align-baseline"></i>
                                                     Set Done
                                                 </button>
                                                 <br *ngIf="item.planUserInfo">
-                                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CancelRequest)" class="btn btn-block text-left" mat-button
-                                                    (click)="cancelAllRequest(item.id);">
+                                                <button *ngIf="isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_CancelRequest)" class="btn btn-block text-left" mat-button
+                                                    (click)="cancelRequest(item.id);">
                                                     <i class="fa fa-times text-warning vertical-align-baseline"></i>
                                                     Cancel
                                                 </button>
                                                 <br>
                                                 <button class="btn btn-block text-left" mat-button
-                                                    *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit)"
+                                                    *ngIf="isGranted(Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Edit)"
                                                     (click)="editRequest(item);">
                                                     <i class="fa fa-edit vertical-align-baseline"></i>
                                                     Edit
