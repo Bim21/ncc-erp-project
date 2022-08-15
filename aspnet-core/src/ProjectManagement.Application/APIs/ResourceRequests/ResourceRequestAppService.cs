@@ -279,7 +279,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             if (resourceRequest.IsRecruitmentSend)
                 await _talentService.CancelRequest(new Services.Talent.Dtos.CloseResourceRequestDto
                 {
-                    Note = resourceRequest.DMNote,
                     ResourceRequestId = requestId
                 });
 

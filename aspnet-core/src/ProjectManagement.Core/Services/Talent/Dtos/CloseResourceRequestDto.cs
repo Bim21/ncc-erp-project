@@ -7,6 +7,5 @@ namespace ProjectManagement.Services.Talent.Dtos
     public class CloseResourceRequestDto
     {
         public long ResourceRequestId { get; set; }
-        public string Note { get; set; }
     }
 }
