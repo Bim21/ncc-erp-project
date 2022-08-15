@@ -223,13 +223,13 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize]
+        [AbpAuthorize(PermissionNames.ResourceRequest_CreateNewRequestByPM, PermissionNames.ResourceRequest_CreateNewRequestForAllProject)]
         public List<GetProjectDto> GetMyProjects()
         {
-            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestByPM);
+            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
 
             var queryPM = WorkScope.GetAll<Project>()
-                            .Where(x => isGetAll && x.PMId == AbpSession.UserId.Value)
+                            .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
                             .Where(x => x.Status != ProjectStatus.Closed)
                             .Select(x => new GetProjectDto
                             {
