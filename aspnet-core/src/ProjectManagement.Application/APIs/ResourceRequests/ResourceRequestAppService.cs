@@ -351,7 +351,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 sbKomuMessage.Append($"```{requestDto.PlanUserInfo.KomuInfo()}```");
             }
 
-            await SendKomu(sbKomuMessage);
+            SendKomu(sbKomuMessage);
         }
 
         private string ActionName(Action action)
@@ -373,7 +373,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             return "";
         }
 
-        private async Task SendKomu(StringBuilder komuMessage)
+        private void SendKomu(StringBuilder komuMessage)
         {
             _komuService.NotifyToChannel(new KomuMessage
             {

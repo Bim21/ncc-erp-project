@@ -7,7 +7,7 @@
         </div>
         <div class="col-6 text-right">
           <button
-            *ngIf="permission.isGranted(ResourceRequest_CreateNewRequest)"
+            *ngIf="isShowBtnCreate()"
             (click)="createRequest()"
             class="btn bg-blue"
           >

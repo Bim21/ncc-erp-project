@@ -64,7 +64,6 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public resourceRequestId: number
   public sortable = new SortableModel('', 0, '')
 
-  ResourceRequest_CreateNewRequest = PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest;
   ResourceRequest_View = PERMISSIONS_CONSTANT.ResourceRequest_View;
   ResourceRequest_PlanNewResourceForRequest = PERMISSIONS_CONSTANT.ResourceRequest_PlanNewResourceForRequest;
   ResourceRequest_UpdateResourceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_UpdateResourceRequestPlan;
@@ -452,6 +451,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     if ((item.statusName != 'DONE' && !item.isRecruitmentSend) || item.statusName != 'CANCELLED')
       return true;
     return false;
+  }
+
+  isShowBtnCreate(){
+    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest)
+    || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM) 
   }
 }
 
