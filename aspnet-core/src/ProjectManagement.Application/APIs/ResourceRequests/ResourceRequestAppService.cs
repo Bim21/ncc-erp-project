@@ -277,7 +277,10 @@ namespace ProjectManagement.APIs.ResourceRequests
                 .FirstOrDefaultAsync();
 
             if (resourceRequest.IsRecruitmentSend)
-                await _talentService.CancelRequest(requestId);
+                await _talentService.CancelRequest(new Services.Talent.Dtos.CloseResourceRequestDto
+                {
+                    ResourceRequestId = requestId
+                });
 
             await notifyToKomu(requestDto, Action.Cancel, null);
             return requestDto;
