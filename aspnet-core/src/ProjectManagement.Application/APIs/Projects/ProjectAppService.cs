@@ -1,31 +1,30 @@
-﻿using Abp.Authorization;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Authorization.Users;
+using Abp.Configuration;
+using Abp.Domain.Repositories;
 using Abp.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
+using ProjectManagement.APIs.Technologys.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Roles;
 using ProjectManagement.Authorization.Users;
+using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.ResourceManager;
+using ProjectManagement.Services.ResourceManager.Dto;
+using ProjectManagement.Services.Timesheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
-using ProjectManagement.Services.Timesheet;
-using Abp.Domain.Repositories;
-using Abp.Authorization.Users;
-using Abp.Configuration;
-using ProjectManagement.Configuration;
-using Abp.Application.Services.Dto;
-using ProjectManagement.Services.ResourceManager;
-using ProjectManagement.Services.ResourceManager.Dto;
-using Microsoft.AspNetCore.Http;
-using ProjectManagement.APIs.Technologys.Dto;
-using ProjectManagement.APIs.Public.Dto;
 
 namespace ProjectManagement.APIs.Projects
 {
@@ -38,6 +37,7 @@ namespace ProjectManagement.APIs.Projects
         private readonly ISettingManager _settingManager;
         private readonly IRepository<UserRole, long> _userRoleRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public ProjectAppService(IProjectUserAppService projectUserAppService,
             TimesheetService timesheetService,
             IRepository<UserRole, long> userRoleRepository,
@@ -142,6 +142,7 @@ namespace ProjectManagement.APIs.Projects
                 .ToListAsync();
             return new OkObjectResult(pms);
         }
+
         public async Task<IActionResult> GetProductPMs()
         {
             var pms = await WorkScope.GetAll<Project>()
@@ -160,6 +161,7 @@ namespace ProjectManagement.APIs.Projects
                 .ToListAsync();
             return new OkObjectResult(pms);
         }
+
         public async Task<IActionResult> GetTrainingPMs()
         {
             var pms = await WorkScope.GetAll<Project>()
@@ -221,6 +223,24 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.ResourceRequest_CreateNewRequestByPM, PermissionNames.ResourceRequest_CreateNewRequestForAllProject)]
+        public List<GetProjectDto> GetMyProjects()
+        {
+            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
+
+            var queryPM = WorkScope.GetAll<Project>()
+                            .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
+                            .Where(x => x.Status != ProjectStatus.Closed)
+                            .Select(x => new GetProjectDto
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Code = x.Code
+                            });
+            return queryPM.ToList();
+        }
+
+        [HttpGet]
         public async Task<GetProjectDto> Get(long projectId)
         {
             var query = WorkScope.GetAll<Project>().Include(x => x.Currency).Where(x => x.Id == projectId)
@@ -248,7 +268,6 @@ namespace ProjectManagement.APIs.Projects
                                     CurrencyId = x.CurrencyId,
                                     CurrencyName = x.Currency.Name,
                                     RequireTimesheetFile = x.RequireTimesheetFile,
-
                                 });
             return await query.FirstOrDefaultAsync();
         }
@@ -288,7 +307,6 @@ namespace ProjectManagement.APIs.Projects
         {
             var project = await WorkScope.GetAsync<Project>(input.ProjectId);
 
-
             var projectTechnologies = await WorkScope.GetAll<ProjectTechnology>().Where(x => x.ProjectId == input.ProjectId).ToListAsync();
             var currentProjectTechnologiesId = projectTechnologies.Select(x => x.TechnologyId);
             var deleteTechnologyId = currentProjectTechnologiesId.Except(input.ProjectTechnologiesInput);
@@ -311,7 +329,6 @@ namespace ProjectManagement.APIs.Projects
             }
             //Update Technologies
 
-
             await WorkScope.UpdateAsync(ObjectMapper.Map<ProjectDetailDto, Project>(input, project));
             return input;
         }
@@ -325,7 +342,6 @@ namespace ProjectManagement.APIs.Projects
                     from r in roles
                     select r.Id;
             return quser.Any();
-
         }
 
         private void AddRolePMForUser(long userId)
@@ -384,7 +400,6 @@ namespace ProjectManagement.APIs.Projects
 
             return await _timesheetService.ChangePmOfProject(code, emailPM);
         }
-
 
         [HttpPost]
         public async Task<string> Create(ProjectDto input)
@@ -461,13 +476,11 @@ namespace ProjectManagement.APIs.Projects
             }
         }
 
-
         [HttpGet]
         public async Task<List<UserOfProjectDto>> GetAllWorkingUserFromProject(long projectId)
         {
             return await _resourceManager.GetWorkingUsersOfProject(projectId);
         }
-
 
         [HttpPut]
         public async Task<string> Update(ProjectDto input)
@@ -514,7 +527,6 @@ namespace ProjectManagement.APIs.Projects
             public long Id { get; set; }
 
             public ProjectStatus Status { get; set; }
-
         }
 
         [HttpDelete]
@@ -540,7 +552,9 @@ namespace ProjectManagement.APIs.Projects
 
             await WorkScope.DeleteAsync(project);
         }
+
         #region PAGE TRAINING PROJECT
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ViewAllProject, PermissionNames.Projects_TrainingProjects_ViewMyProjectOnly)]
         public async Task<GridResult<GetTrainingProjectDto>> GetAllTrainingProjectPaging(GridParam input)
@@ -588,6 +602,7 @@ namespace ProjectManagement.APIs.Projects
                         };
             return await query.GetGridResult(query, input);
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_Create)]
         public async Task<string> CreateTrainingProject(TrainingProjectDto input)
@@ -636,7 +651,6 @@ namespace ProjectManagement.APIs.Projects
             };
             await WorkScope.InsertAsync(pmReportProject);
 
-
             var trainingProject = new ProjectDto
             {
                 Name = input.Name,
@@ -652,6 +666,7 @@ namespace ProjectManagement.APIs.Projects
 
             return await CreateProjectInTimesheetTool(trainingProject);
         }
+
         [HttpPut]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_Edit)]
         public async Task<string> UpdateTrainingProject(TrainingProjectDto input)
@@ -686,9 +701,7 @@ namespace ProjectManagement.APIs.Projects
                 return await ChangePmOfProjectTimesheetTool(project.Code, input.PmId);
             }
             return "update-only-project-tool";
-
         }
-
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail)]
@@ -714,9 +727,11 @@ namespace ProjectManagement.APIs.Projects
                                 });
             return await query.FirstOrDefaultAsync();
         }
-        #endregion
+
+        #endregion PAGE TRAINING PROJECT
 
         #region PAGE PRODUCT PROJECT
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Projects_ProductProjects_ViewAllProject, PermissionNames.Projects_ProductProjects_ViewMyProjectOnly)]
         public async Task<GridResult<ProductProjectDto>> GetAllProductProjectPaging(GridParam input)
@@ -763,6 +778,7 @@ namespace ProjectManagement.APIs.Projects
                         };
             return await query.GetGridResult(query, input);
         }
+
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail)]
         public async Task<ProductProjectDto> GetDetailProductProject(long projectId)
@@ -787,6 +803,7 @@ namespace ProjectManagement.APIs.Projects
                                 });
             return await query.FirstOrDefaultAsync();
         }
-        #endregion
+
+        #endregion PAGE PRODUCT PROJECT
     }
 }

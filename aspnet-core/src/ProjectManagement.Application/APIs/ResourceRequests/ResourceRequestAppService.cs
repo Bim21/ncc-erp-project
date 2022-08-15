@@ -6,36 +6,24 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using NccCore.Uitls;
-using Newtonsoft.Json;
 using ProjectManagement.APIs.PMReportProjectIssues;
-using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers;
-using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.APIs.ResourceRequests.Dto;
-using ProjectManagement.APIs.Skills.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
-using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Services.ResourceManager;
-using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceRequestService.Dto;
-using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Talent;
 using ProjectManagement.Users;
-using ProjectManagement.Users.Dto;
-using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -49,7 +37,6 @@ namespace ProjectManagement.APIs.ResourceRequests
         private readonly IUserAppService _userAppService;
         private readonly ResourceManager _resourceManager;
         private readonly ResourceRequestManager _resourceRequestManager;
-
 
         private readonly UserManager _userManager;
         private ISettingManager _settingManager;
@@ -214,7 +201,7 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpPut]
         public async Task<GetResourceRequestDto> UpdateMyRequest(UpdateResourceRequestDto input)
         {
-            await checkRequestIsForMyProject(input.Id, input.ProjectId);
+            await CheckRequestIsForMyProject(input.Id, input.ProjectId);
             return await Update(input);
         }
 
@@ -236,41 +223,48 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpDelete]
         public async Task DeleteMyRequest(long resourceRequestId)
         {
-            await checkRequestIsForMyProject(resourceRequestId, null);
+            await CheckRequestIsForMyProject(resourceRequestId, null);
             await Delete(resourceRequestId);
         }
 
-
-        private async Task checkRequestIsForMyProject(long requestId, long? newProjectId)
+        private async Task CheckRequestIsForMyProject(long requestId, long? newProjectId)
         {
-            var projectId = await WorkScope.GetAll<ResourceRequest>()
+            var project = await WorkScope.GetAll<ResourceRequest>()
                 .Where(s => s.Id == requestId)
-                .Where(s => s.Project.PMId == AbpSession.UserId.Value)
-                .Select(s => s.ProjectId)
+                .Select(s => new
+                {
+                    s.Project.PMId,
+                    s.ProjectId
+                })
                 .FirstOrDefaultAsync();
-            if (projectId == default)
+            if (project == default)
             {
-                throw new UserFriendlyException($"Request Id {requestId} is not exist or not for my project");
+                throw new UserFriendlyException($"Request Id {requestId} is not exist");
             }
 
-            if (newProjectId.HasValue && projectId != newProjectId)
+            if (newProjectId.HasValue && project.ProjectId != newProjectId)
             {
                 throw new UserFriendlyException($"Request Id {requestId} is for your project. You can't change to other project");
             }
 
+            var isGrantedCancelAll = IsGranted(PermissionNames.ResourceRequest_CancelAllRequest);
+
+            if (!isGrantedCancelAll && project.PMId != AbpSession.UserId.Value)
+            {
+                throw new UserFriendlyException($"Request Id {requestId} is for project that you are NOT PM.");
+            }
         }
 
-
         [HttpPost]
-        [AbpAuthorize]
-        public async Task<GetResourceRequestDto> Cancel(long requestId)
+        [AbpAuthorize(PermissionNames.ResourceRequest_CancelAllRequest, PermissionNames.ResourceRequest_CancelMyRequest)]
+        public async Task<GetResourceRequestDto> CancelRequest(long requestId)
         {
+            await CheckRequestIsForMyProject(requestId, null);
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(requestId);
 
             resourceRequest.Status = ResourceRequestStatus.CANCELLED;
 
             await WorkScope.UpdateAsync(resourceRequest);
-
 
             var requestDto = await _resourceRequestManager.IQGetResourceRequest()
                 .Where(s => s.Id == requestId)
@@ -285,13 +279,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             await notifyToKomu(requestDto, Action.Cancel, null);
             return requestDto;
         }
-
-        public async Task<GetResourceRequestDto> CancelMyRequest(long requestId)
-        {
-            await checkRequestIsForMyProject(requestId, null);
-            return await Cancel(requestId);
-        }
-
 
         [HttpPost]
         [AbpAuthorize]
@@ -318,8 +305,6 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             return input;
         }
-
-
 
         [HttpPost]
         [AbpAuthorize]
@@ -369,7 +354,7 @@ namespace ProjectManagement.APIs.ResourceRequests
                 sbKomuMessage.Append($"```{requestDto.PlanUserInfo.KomuInfo()}```");
             }
 
-            await SendKomu(sbKomuMessage);
+            SendKomu(sbKomuMessage);
         }
 
         private string ActionName(Action action)
@@ -381,26 +366,25 @@ namespace ProjectManagement.APIs.ResourceRequests
 
                 case Action.Cancel:
                     return "has **cancelled** the resource request:";
+
                 case Action.Plan:
                     return "has **planned** for the resource request:";
+
                 case Action.Done:
                     return "has **done** the resource request:";
             }
             return "";
         }
 
-        private async Task SendKomu(StringBuilder komuMessage)
+        private void SendKomu(StringBuilder komuMessage)
         {
-
-             _komuService.NotifyToChannel(new KomuMessage
+            _komuService.NotifyToChannel(new KomuMessage
             {
                 CreateDate = DateTimeUtils.GetNow(),
                 Message = komuMessage.ToString(),
             },
-            ChannelTypeConstant.PM_CHANNEL);
-
+           ChannelTypeConstant.PM_CHANNEL);
         }
-
 
         [HttpGet]
         public async Task<ResourceRequestPlanDto> GetResourceRequestPlan(long projectUserId)
@@ -439,7 +423,6 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var activeReportId = await _resourceManager.GetActiveReportId();
 
-
             var projectUser = new ProjectUser()
             {
                 UserId = input.UserId,
@@ -464,7 +447,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             await notifyToKomu(requestDto, Action.Plan, null);
 
             return requestDto.PlanUserInfo;
-
         }
 
         [HttpPost]
@@ -516,7 +498,6 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
 
             CurrentUnitOfWork.SaveChanges();
-
         }
 
         private IQueryable<long> QueryResourceRequestIdsHaveAnySkill(List<long> skillIds)
@@ -529,7 +510,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                    .Where(s => skillIds.Contains(s.SkillId))
                    .Select(s => s.ResourceRequestId);
         }
-
 
         private async Task<List<long>> QetResourceRequestIdsHaveAllSkill(List<long> skillIds)
         {
@@ -566,10 +546,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             }
 
             return result;
-
-
         }
-
 
         [HttpGet]
         public List<IDNameDto> GetRequestLevels()
@@ -600,7 +577,6 @@ namespace ProjectManagement.APIs.ResourceRequests
         [HttpGet]
         public List<IDNameDto> GetStatuses()
         {
-
             return Enum.GetValues(typeof(ResourceRequestStatus))
                              .Cast<ResourceRequestStatus>()
                              .Select(p => new IDNameDto()
@@ -619,19 +595,16 @@ namespace ProjectManagement.APIs.ResourceRequests
                 .Select(q => new IDNameDto
                 {
                     Id = q.GetHashCode(),
-                    Name= q.ToString()
+                    Name = q.ToString()
                 }).ToList();
         }
 
-        enum Action : byte
+        private enum Action : byte
         {
             Create = 1,
             Cancel = 2,
             Plan = 3,
             Done = 4
         }
-
     }
-
-
 }
