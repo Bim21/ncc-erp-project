@@ -1394,7 +1394,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestForAllProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request For All Project"},
-                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create request for my project only"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create request for my project and others"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
                  //new SystemPermission{ Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
                  //new SystemPermission{ Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
@@ -2029,7 +2029,7 @@ namespace ProjectManagement.Authorization
                     Childrens = new List<SystemPermission>() {
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_CreateNewRequestForAllProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request For All Project"},
-                        new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create new request for my project only"},
+                        new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create new request for my project and others"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan Resource For Request"},
                         //new SystemPermission { Name =  PermissionNames.ResourceRequest_UpdateResourceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
                         //new SystemPermission { Name =  PermissionNames.ResourceRequest_RemoveResouceRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},

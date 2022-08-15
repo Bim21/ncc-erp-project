@@ -226,7 +226,7 @@ namespace ProjectManagement.APIs.Projects
         [AbpAuthorize(PermissionNames.ResourceRequest_CreateNewRequestByPM, PermissionNames.ResourceRequest_CreateNewRequestForAllProject)]
         public List<GetProjectDto> GetMyProjects()
         {
-            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
+            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestByPM);
 
             var queryPM = WorkScope.GetAll<Project>()
                             .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
