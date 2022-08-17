@@ -86,7 +86,6 @@ namespace ProjectManagement.Configuration
 
             }
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ClientAppId, input.ClientAppId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceUri, input.FinanceUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceSecretCode, input.FinanceSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimesheetUri, input.TimesheetUri);
@@ -109,5 +108,12 @@ namespace ProjectManagement.Configuration
             return input;
         }
 
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_Edit)]
+        public async Task<ProjectSetting> ChangeProjectSetting(ProjectSetting input)
+        {
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
+            return input;
+
+        }
     }
 }

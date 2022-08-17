@@ -14,47 +14,14 @@
         <mat-expansion-panel-header (click)="isShowKomuSetting = !isShowKomuSetting"  class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Komu setting"}}</p>
-            <div class="edit-save" *ngIf="isShowKomuSetting">
-              <button *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                class="btn bg-blue mr-3"
-                (click)="isEditingKomu = !isEditingKomu;$event.stopPropagation()"
-                [hidden]="isEditingKomu"
-              >
-                <i class="fas fa-edit"></i>
-                Edit
-              </button>
-              <button
-                class="btn bg-secondary"
-                (click)="
-                isEditingKomu = !isEditingKomu;
-                  getSetting();
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditingKomu"
-              >
-                Cancel
-              </button>
-              <button
-              class="btn btn-primary btn-action ml-3"
-              (click)="
-                saveConfiguration();
-                isEditingKomu = !isEditingKomu;
-                $event.stopPropagation()
-              "
-              [hidden]="!isEditingKomu
-               "
-            >
-              Save
-            </button>
-            </div>
           </mat-panel-title>
   
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col-md-12">
-            <mat-checkbox class="example-margin" (change)="enableNoticeToKomu($event.checked)"
+            <mat-checkbox class="example-margin"
               [checked]="configuration.noticeToKomu == 'true'"
-              [disabled]="!isEditingKomu">
+              onclick="return false;">
               Enable notice to Komu
             </mat-checkbox>
           </div>
@@ -90,14 +57,13 @@
     </div>
 
     <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewProjectSetting)">
-      <mat-expansion-panel [expanded]="isShowProjectSetting">
-        <mat-expansion-panel-header (click)="isShowProjectSetting = !isShowProjectSetting" class="panel-header">
+      <mat-expansion-panel [expanded]="isExpandingProjectSetting">
+        <mat-expansion-panel-header (click)="isExpandingProjectSetting = !isExpandingProjectSetting" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Project Setting"}}</p>
-            <div class="edit-save" *ngIf="isShowProjectSetting">
-              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                href="javascript:;"
-                class="btn bg-blue mr-3"
+            <div class="edit-save" *ngIf="isExpandingProjectSetting">
+              <button *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
+                class="btn btn-primary mr-3"
                 (click)="
                   isEditSecretCode = !isEditSecretCode;
                   $event.stopPropagation()
@@ -106,32 +72,26 @@
               >
                 <i class="fas fa-edit"></i>
                 Edit
-              </a>
+              </button>
               
-              <a
-                href="javascript:;"
-                class="btn bg-secondary"
+              <button class="btn btn-secondary"
                 (click)="
                   isEditSecretCode = !isEditSecretCode;
                   getSetting();
                   $event.stopPropagation()
                 "
-                [hidden]="!isEditSecretCode"
-              >
+                [hidden]="!isEditSecretCode">
                 Cancel
-              </a>
-              <a
-                href="javascript:;"
-                class="btn btn-primary btn-action ml-3"
+              </button>
+              <button class="btn btn-primary btn-action ml-3"
                 (click)="
-                  saveConfiguration();
+                  updateProjectSettingConfig();
                   isEditSecretCode = !isEditSecretCode;
                   $event.stopPropagation()
                 "
-                [hidden]="!isEditSecretCode"
-              >
+                [hidden]="!isEditSecretCode">
                 Save
-              </a>
+              </button>
             </div>
           </mat-panel-title>
   
