@@ -25,6 +25,7 @@ export class TimesheetDetailDto {
     isComplete:boolean;
     chargeType: string;
     totalAmountProjectBillInfomation: number;
+    roundTotalAmountProjectBillInfomation: number;
 }
 
 export class ProjectBillInfoDto{
@@ -38,6 +39,14 @@ export class ProjectBillInfoDto{
     userFullName: string;
     workingTime: number;
     amout: number;
+    roundAmount: number;
+}
+
+export class TotalAmountDto{
+    amountVND : number;
+    amountUSD : number;
+    roundAmountVND : number;
+    roundAmountUSD : number;
 }
 export class ProjectTimesheetDto {
     projectId: number;

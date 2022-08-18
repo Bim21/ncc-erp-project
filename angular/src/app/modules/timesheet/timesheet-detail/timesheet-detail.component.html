@@ -95,7 +95,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>PM</mat-label>
                         <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM" [disabled]="!isEnablePMFilter()"
-                            (selectionChange)="refresh()">
+                            (selectionChange)="searchProjectTS()">
                             <mat-form-field class="w-100 px-3"
                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                 <input matInput [(ngModel)]="searchPM" name="searchPMName" placeholder="Search"
@@ -120,7 +120,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Client</mat-label>
                         <mat-select [(ngModel)]="clientId" placeholder="select a Client"
-                            (selectionChange)="refresh()">
+                            (selectionChange)="searchProjectTS()">
                             <mat-form-field class="w-100 px-3"
                                 style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                 <input matInput [(ngModel)]="searchClient" name="searchClient" placeholder="Search" (keydown)="$event.stopPropagation()">{{search.focus()}}
@@ -167,8 +167,8 @@
                 <th>Project</th>
                 <th style="justify-content: spa;">
                   Bill Info 
-                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: green;" class="ml-5">{{getTotalAmountVND() | number : "1.0"}} VND </span>
-                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: red;" class="ml-5">{{getTotalAmountUSD() | number : "1.0"}} USD</span>
+                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: green;" class="ml-5">{{totalAmountVNDAndUSD.roundAmountVND | number : "1.0"}} VND </span>
+                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: red;" class="ml-5">{{totalAmountVNDAndUSD.roundAmountUSD | number : "1.0"}} USD</span>
                 </th>
                 <th>Note</th>
                 <th>Invoice Info</th>
@@ -207,15 +207,15 @@
 
                       <div class="row" *ngIf="isShowBillAmountVND(item.currency)" style="color: green;">
                         <div class="col-9"><label>Total</label></div>
-                        <div class="col-2"><label class="ml-3">{{item.totalAmountProjectBillInfomation | number : "1.0"}} VND</label></div>
+                        <div class="col-2"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} VND</label></div>
                       </div>
                       <div class="row" *ngIf="isShowBillAmountUSD(item.currency)" style="color: red;">
                         <div class="col-9"><label>Total</label></div>
-                        <div class="col-2"><label class="ml-3">{{item.totalAmountProjectBillInfomation | number : "1.0"}} USD</label></div>
+                        <div class="col-2"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} USD</label></div>
                       </div>
                       <div class="row" *ngIf="isShowBillAmount(item.currency)">
                         <div class="col-9"><label>Total</label></div>
-                        <div class="col-2"><label class="ml-3">{{item.totalAmountProjectBillInfomation | number : "1.0"}} {{item.currency}}</label></div>
+                        <div class="col-2"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} {{item.currency}}</label></div>
                       </div>
 
                       <div class="row" *ngFor="let bill of item.projectBillInfomation">
@@ -224,9 +224,9 @@
                           <div class="col-2" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">
                             <label class="ml-3" style="font-weight: 500;">{{covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType)}}</label></div>
                           <div class="col-2" ><label class="ml-5" style="font-weight: 500;">{{bill.workingTime}}d</label></div>
-                          <div *ngIf="isShowBillAmountVND(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.amount | number : "1.0"}} VND</label></div>
-                          <div *ngIf="isShowBillAmountUSD(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.amount | number : "1.0"}} USD</label></div>
-                          <div *ngIf="isShowBillAmount(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.amount | number : "1.0"}} {{item.currency}}</label></div>
+                          <div *ngIf="isShowBillAmountVND(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.roundAmount | number : "1.0"}} VND</label></div>
+                          <div *ngIf="isShowBillAmountUSD(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.roundAmount | number : "1.0"}} USD</label></div>
+                          <div *ngIf="isShowBillAmount(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.roundAmount | number : "1.0"}} {{item.currency}}</label></div>
                           <div *ngIf="!isGranted(Timesheets_TimesheetDetail_ViewBillRate)"
                               style="word-break: break-all; white-space: pre-line;">
                               <div title="{{bill.description?bill.description:''}}" class="no-expand-text">
@@ -296,7 +296,7 @@
                     #checkboxExportInvoice
                     class="checkbox-exportInvoice"
                     [value]="item"
-                    (change)="addProjectToExport($event)"
+                    (change)="addProjectToExport($event, item)"
                   ></mat-checkbox>
 
                   <button  mat-button [matMenuTriggerFor]="menu" >

@@ -9,11 +9,11 @@ import { BaseApiService } from '@app/service/api/base-api.service';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto, ProjectBillInfoDto } from './../../../service/model/timesheet.dto';
+import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto, ProjectBillInfoDto, TotalAmountDto} from './../../../service/model/timesheet.dto';
 import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
-import { catchError, filter } from 'rxjs/operators';
+import { catchError, filter, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
@@ -65,6 +65,12 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
           }
         })
       })
+    this.timesheetProjectService.GetTotalAmount(this.timesheetId, {filterItems:request.filterItems, searchText:request.searchText} as PagedRequestDto).pipe(
+        map(data => data.result),
+        catchError(this.timesheetProjectService.handleError))
+      .subscribe((data: TotalAmountDto) => {
+          this.totalAmountVNDAndUSD = data
+      })
   }
   protected delete(item: TimesheetDetailDto): void {
     this.menu.closeMenu();
@@ -108,7 +114,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public currency: string = "";
   public clientIdInvoice: number = -1;
   public totalAmount: number;
-
+  public totalAmountVNDAndUSD: TotalAmountDto;
+  
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
   contextMenuPosition = { x: '0', y: '0' }
@@ -165,7 +172,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngAfterContentChecked() {
     this.ref.detectChanges();
-}
+  }
   ngAfterViewInit(){
     this.elementRefCheckbox.changes.subscribe(c => {
       c.toArray().forEach(element => {
@@ -216,6 +223,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
+    this.pageNumber = 1;
     this.refresh();
   }
 
@@ -402,10 +410,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
   }
 
-  addProjectToExport(event) {
+  addProjectToExport(event, item) {
+    let chargeTypeProject = item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly);
     if (!event.checked) {
       let index = this.listExportInvoice.indexOf(event.source.value.projectId);
-      let indexChargeType = this.listExportInvoiceChargeType.indexOf(event.source.value.chargeType);
+      let indexChargeType = this.listExportInvoiceChargeType.indexOf(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);
       if (index > -1){
         this.listExportInvoice.splice(index, 1);
       }
@@ -431,8 +440,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.currency = checkCurrency;
       this.clientIdInvoice = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
-      this.listExportInvoiceChargeType.push(event.source.value.chargeType);
-    }
+      this.listExportInvoiceChargeType.push(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);        
+    }    
     if(this.listExportInvoiceChargeType.indexOf(this.APP_ENUM.ChargeType.Monthly) !== -1){
       this.isMonthlyToDaily = true;
     }

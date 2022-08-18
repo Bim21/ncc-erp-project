@@ -36,6 +36,7 @@ using ProjectManagement.Services.Timesheet.Dto;
 using ProjectManagement.UploadFilesService;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Utils;
+using NccCore.DynamicFilter;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -133,15 +134,37 @@ namespace ProjectManagement.APIs.TimesheetProjects
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
         public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
+            var query = getTimesheetDetail(input, timesheetId);
+            return await query.GetGridResult(query, input);
+        }
+        [HttpPost]
+        public TotalAmountDto GetTotalAmountProjectTimesheetByTimesheet(GridParam input, long timesheetId)
+        {
+            input.MaxResultCount = int.MaxValue - 1;
+
+            var query = getTimesheetDetail(input, timesheetId);
+
+            var data = query.GetGridResultSync(query, input).Items;
+
+            var result = new TotalAmountDto
+            {
+                AmountUSD = data.Where(s => s.Currency.HasValue() && s.Currency.Contains("USD")).Sum(s => s.TotalAmountProjectBillInfomation.Value),
+                AmountVND = data.Where(s => s.Currency.HasValue() && s.Currency.Contains("VND")).Sum(s => s.TotalAmountProjectBillInfomation.Value),
+            };
+            return result;
+        }
+        private IOrderedQueryable<GetTimesheetDetailDto> getTimesheetDetail(GridParam input, long timesheetId)
+        {
             var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
             if (filterItem != null)
             {
                 input.FilterItems.Remove(filterItem);
             }
+
             var allowViewBillRate = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
             var allowViewAllTSProject = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewAll);
 
-            var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
+            var defaultWorkingHours = Convert.ToInt32(SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours).Result);
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
@@ -194,9 +217,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              Discount = tsp.Discount,
                              TransferFee = tsp.TransferFee,
                          }).OrderByDescending(x => x.ClientId);
-            return await query.GetGridResult(query, input);
+            return query;
         }
-
 
         public async Task<TimesheetProject> CreateTimesheetProject(TimesheetProjectDto input, long invoiceNumber, float transferFee, float discount, float workingDay)
         {
