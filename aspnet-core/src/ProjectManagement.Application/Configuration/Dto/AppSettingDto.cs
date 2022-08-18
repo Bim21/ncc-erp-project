@@ -29,4 +29,9 @@ namespace ProjectManagement.Configuration.Dto
         public string KomuRoom { get; set; }
         public string DefaultWorkingHours { get; set; }
     }
+
+    public class ProjectSetting
+    {
+        public string SecurityCode { get; set; }
+    }
 }

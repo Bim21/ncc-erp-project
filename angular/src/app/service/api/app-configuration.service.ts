@@ -24,4 +24,8 @@ export class AppConfigurationService extends BaseApiService {
   editConfiguration(item:any):Observable<any>{
     return this.http.post(this.rootUrl + '/Change', item)
   }
+
+  updateProjectSettingConfig(item: any):Observable<any>{
+    return this.http.post(this.rootUrl + '/ChangeProjectSetting', item)
+  }
 }
