@@ -19,44 +19,44 @@ import { BusyDirective } from './directives/busy.directive';
 import { EqualValidator } from './directives/equal-validator.directive';
 
 //import angular material
-import {MatAutocompleteModule} from '@angular/material/autocomplete'
-import {MatBadgeModule} from '@angular/material/badge'
-import {MatBottomSheetModule} from '@angular/material/bottom-sheet'
-import {MatButtonModule} from '@angular/material/button'
-import {MatButtonToggleModule} from '@angular/material/button-toggle'
-import {MatCardModule} from '@angular/material/card'
-import {MatCheckboxModule} from '@angular/material/checkbox'
-import {MatChipsModule} from '@angular/material/chips'
-import {MatDatepickerModule} from '@angular/material/datepicker'
-import {MatDialogModule} from '@angular/material/dialog'
-import {MatDividerModule} from '@angular/material/divider'
-import {MatExpansionModule} from '@angular/material/expansion'
-import {MatGridListModule} from '@angular/material/grid-list'
-import {MatIconModule} from '@angular/material/icon'
-import {MatInputModule} from '@angular/material/input'
-import {MatListModule} from '@angular/material/list'
-import {MatMenuModule} from '@angular/material/menu'
-import {MatNativeDateModule} from '@angular/material/core'
-import {MatPaginatorModule} from '@angular/material/paginator'
-import {MatProgressBarModule} from '@angular/material/progress-bar'
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'
-import {MatRadioModule} from '@angular/material/radio'
+import { MatAutocompleteModule } from '@angular/material/autocomplete'
+import { MatBadgeModule } from '@angular/material/badge'
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet'
+import { MatButtonModule } from '@angular/material/button'
+import { MatButtonToggleModule } from '@angular/material/button-toggle'
+import { MatCardModule } from '@angular/material/card'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatChipsModule } from '@angular/material/chips'
+import { MatDatepickerModule } from '@angular/material/datepicker'
+import { MatDialogModule } from '@angular/material/dialog'
+import { MatDividerModule } from '@angular/material/divider'
+import { MatExpansionModule } from '@angular/material/expansion'
+import { MatGridListModule } from '@angular/material/grid-list'
+import { MatIconModule } from '@angular/material/icon'
+import { MatInputModule } from '@angular/material/input'
+import { MatListModule } from '@angular/material/list'
+import { MatMenuModule } from '@angular/material/menu'
+import { MatNativeDateModule } from '@angular/material/core'
+import { MatPaginatorModule } from '@angular/material/paginator'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatRadioModule } from '@angular/material/radio'
 // import {MatSelectModule} from '@angular/material/select'
-import {MatSidenavModule} from '@angular/material/sidenav'
-import {MatSliderModule} from '@angular/material/slider'
-import {MatSlideToggleModule} from '@angular/material/slide-toggle'
-import {MatSnackBarModule} from '@angular/material/snack-bar'
-import {MatSortModule} from '@angular/material/sort'
-import {MatStepperModule} from '@angular/material/stepper'
-import {MatTableModule} from '@angular/material/table'
-import {MatTabsModule} from '@angular/material/tabs'
-import {MatToolbarModule} from '@angular/material/toolbar'
-import {MatTooltipModule} from '@angular/material/tooltip'
-import {MatTreeModule} from '@angular/material/tree'
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatSliderModule } from '@angular/material/slider'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { MatSnackBarModule } from '@angular/material/snack-bar'
+import { MatSortModule } from '@angular/material/sort'
+import { MatStepperModule } from '@angular/material/stepper'
+import { MatTableModule } from '@angular/material/table'
+import { MatTabsModule } from '@angular/material/tabs'
+import { MatToolbarModule } from '@angular/material/toolbar'
+import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatTreeModule } from '@angular/material/tree'
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { PercentageMaskDirective } from './directives/percentage-mask.directive';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
@@ -65,6 +65,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
 import { SortableComponent } from './components/sortable/sortable.component';
+import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -130,7 +131,8 @@ import { SortableComponent } from './components/sortable/sortable.component';
         RadioDropdownComponent,
         FileUploadComponent,
         ListFilterPipe,
-        SortableComponent
+        SortableComponent,
+        SubpositionFilterPipe
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -182,7 +184,8 @@ import { SortableComponent } from './components/sortable/sortable.component';
         FileUploadComponent,
         ListFilterPipe,
         NgxStarsModule,
-        DragDropModule
+        DragDropModule,
+        SubpositionFilterPipe
     ]
 })
 export class SharedModule {
