@@ -27,7 +27,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditKomuUrl: boolean = false;
   public isEditDefaultWorkingHours: boolean = false;
   public isShowKomuSetting: boolean = false;
-  public isShowProjectSetting: boolean = false;
+  public isExpandingProjectSetting: boolean = false;
   public isShowHRMSetting: boolean = false;
   public isShowTimesheetSetting: boolean = false;
   public isShowFinanceSetting: boolean = false;
@@ -81,6 +81,19 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     if (this.configuration.noticeToKomu == 'true') return true;
     return false;
   }
+
+  public updateProjectSettingConfig(){
+    let projectConfig = {} as ProjectSetting;
+    projectConfig.securityCode = this.configuration.securityCode;
+    this.settingService
+    .updateProjectSettingConfig(projectConfig)
+    .subscribe((rs)=>{
+      abp.notify.success('Update project setting successful!');
+      
+    })
+
+  }
+
 }
 export class ConfigurationDto {
   clientAppId: string;
@@ -104,4 +117,8 @@ export class ConfigurationDto {
   defaultWorkingHours: string;
   noticeToKomu: string;
   autoUpdateProjectInfoToTimesheetTool: string
+}
+
+export class ProjectSetting{
+  securityCode: string;
 }
