@@ -40,9 +40,9 @@ namespace ProjectManagement.Services.Talent
         {
             await PostAsync<string>($"{pathUrl}/CancelRequest",input);
         }
-        public async Task<List<SubPositionDto>> GetPositions()
+        public async Task<List<DropdownPositionDto>> GetPositions()
         {
-            return await GetAsync<List<SubPositionDto>>($"{pathUrl}/GetSubPositions");
+            return await GetAsync<List<DropdownPositionDto>>($"{pathUrl}/GetSubPositions");
         }
         public async Task<List<BranchDto>> GetBranches()
         {

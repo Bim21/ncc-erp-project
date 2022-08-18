@@ -13,5 +13,6 @@ namespace ProjectManagement.Services.Talent.Dtos
         public long SubPositionId { get; set; }
         [Required]
         public long BranchId { get; set; }
+        public string Note { get; set; }
     }
 }

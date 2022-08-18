@@ -214,7 +214,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   sendRecruitment(item: ResourceRequestDto) {
     const show = this.dialog.open(FormSendRecruitmentComponent, {
-      data: { id: item.id, name: item.name } as SendRecruitmentModel,
+      data: { id: item.id, name: item.name, dmNote: item.dmNote, pmNote: item.pmNote } as SendRecruitmentModel,
       width: "700px",
       maxHeight: "90vh"
     })
@@ -420,9 +420,9 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
   isShowButtonMenuAction(item) {
     return (item.statusName != 'DONE'
-     //&& !item.isRecruitmentSend
-     ) 
-    || item.statusName != 'CANCELLED'      
+      //&& !item.isRecruitmentSend
+    )
+      || item.statusName != 'CANCELLED'
   }
 
   isShowBtnCreate() {
@@ -432,31 +432,31 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
   isShowBtnCancel(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
-    && ( this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest)
-      || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest))
-  }  
+      && (this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest)
+        || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest))
+  }
 
   isShowBtnEdit(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
-    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Edit)
+      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Edit)
   }
 
   isShowBtnSetDone(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
-    && item.planUserInfo
-    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SetDone)
+      && item.planUserInfo
+      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SetDone)
   }
 
   isShowBtnSendRecruitment(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
-    && (!item.isRecruitmentSend || !item.recruitmentUrl)
-    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment)
+      && (!item.isRecruitmentSend || !item.recruitmentUrl)
+      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment)
   }
 
   isShowBtnDelete(item) {
     return item.status == RESOURCE_REQUEST_STATUS.CANCELLED
-    && !item.isRecruitmentSend
-    && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
+      && !item.isRecruitmentSend
+      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
   }
 
 }
@@ -473,5 +473,7 @@ export class THeadTable {
 export class SendRecruitmentModel {
   id: number;
   name: string;
+  dmNote: string;
+  pmNote: string;
 }
 
