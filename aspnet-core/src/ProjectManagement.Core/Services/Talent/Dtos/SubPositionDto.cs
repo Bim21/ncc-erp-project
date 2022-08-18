@@ -6,13 +6,20 @@ using System.Text;
 
 namespace ProjectManagement.Services.Talent.Dtos
 {
-    public class SubPositionDto
+    public class DropdownPositionDto
     {
         [JsonProperty("id")]
         public long Id { get; set; }
-        [JsonProperty("name")]
-        public string Name { get; set; }
-        [JsonProperty("colorCode")]
-        public string ColorCode { get; set; }
+        [JsonProperty("position")]
+        public string Position { get; set; }
+        [JsonProperty("items")]
+        public List<DropdownSubPositionDto> Items { get; set; }
+    }
+    public class DropdownSubPositionDto
+    {
+        [JsonProperty("id")]
+        public long Id { get; set; }
+        [JsonProperty("subPosition")]
+        public string SubPosition { get; set; }
     }
 }
