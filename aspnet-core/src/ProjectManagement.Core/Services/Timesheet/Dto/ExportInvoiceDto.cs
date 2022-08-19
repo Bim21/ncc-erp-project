@@ -1,6 +1,7 @@
 ﻿using NccCore.Uitls;
 using ProjectManagement.Entities;
 using ProjectManagement.Helper;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +83,7 @@ namespace ProjectManagement.Services.Timesheet.Dto
                     date = new DateTime(Year, Month, 1).AddMonths(months + 1).AddDays(-1);
                 }
             }
-            if(PaymentDueBy > 100)
+            if(PaymentDueBy > CommonUtil.LastDateNextThan2Month)
             {
                 date = new DateTime(Year, Month, 1).AddMonths(PaymentDueBy%100).AddDays(-1);
             }    
