@@ -132,28 +132,31 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
-        public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
+        public async Task<ResultTimesheetDetail> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
         {
-            var query = getTimesheetDetail(input, timesheetId);
-            return await query.GetGridResult(query, input);
-        }
-        [HttpPost]
-        public TotalAmountDto GetTotalAmountProjectTimesheetByTimesheet(GridParam input, long timesheetId)
-        {
-            input.MaxResultCount = int.MaxValue - 1;
+            var query = GetTimesheetDetail(input, timesheetId).ApplySearchAndFilter(input);
+            var list = await query.TakePage(input).ToListAsync();
+            var total = await query.CountAsync();
 
-            var query = getTimesheetDetail(input, timesheetId);
+            var listTimesheetDetail = new GridResult<GetTimesheetDetailDto>(list, total);
 
-            var data = query.GetGridResultSync(query, input).Items;
+            var listTotalAmountByCurrency = query.ToList().GroupBy(x => x.Currency)
+                                    .Select(x => new TotalAmountByCurrencyDto
+                                    {
+                                        CurrencyName = x.Key,
+                                        Amount = x.Sum(x => x.TotalAmountProjectBillInfomation.Value)
+                                    }).ToList();
 
-            var result = new TotalAmountDto
+            var result = new ResultTimesheetDetail
             {
-                AmountUSD = data.Where(s => s.Currency.HasValue() && s.Currency.Contains("USD")).Sum(s => s.TotalAmountProjectBillInfomation.Value),
-                AmountVND = data.Where(s => s.Currency.HasValue() && s.Currency.Contains("VND")).Sum(s => s.TotalAmountProjectBillInfomation.Value),
+                ListTimesheetDetail = listTimesheetDetail,
+                ListTotalAmountByCurrency = listTotalAmountByCurrency,
             };
+
             return result;
         }
-        private IOrderedQueryable<GetTimesheetDetailDto> getTimesheetDetail(GridParam input, long timesheetId)
+
+        private IOrderedQueryable<GetTimesheetDetailDto> GetTimesheetDetail(GridParam input, long timesheetId)
         {
             var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
             if (filterItem != null)
@@ -553,8 +556,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     FullName = u.PM.FullName,
                     AvatarPath = u.PM.AvatarPath,
                     UserType = u.PM.UserType,
-                    UserLevel = u.PM.UserLevel,
-                    Branch = u.PM.Branch,
+                    UserLevel = u.PM.UserLevel
                 })
                 .Distinct()
                 .ToListAsync();

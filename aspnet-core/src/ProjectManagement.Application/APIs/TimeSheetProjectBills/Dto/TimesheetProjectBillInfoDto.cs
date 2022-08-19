@@ -34,7 +34,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
                 return WorkingTime * DefaultWorkingHours;
             }
 
-            return WorkingTime / TimeSheetWorkingDay;
+            return TimeSheetWorkingDay == 0 ? 0 : WorkingTime / TimeSheetWorkingDay;
         }
     }
 }

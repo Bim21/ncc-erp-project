@@ -42,12 +42,7 @@ export class ProjectBillInfoDto{
     roundAmount: number;
 }
 
-export class TotalAmountDto{
-    amountVND : number;
-    amountUSD : number;
-    roundAmountVND : number;
-    roundAmountUSD : number;
-}
+
 export class ProjectTimesheetDto {
     projectId: number;
     timesheetId: number;
@@ -99,4 +94,9 @@ export class TimesheetProjectBill {
     chargeTypeName: string
     isEditing: boolean
     isDisable: boolean
+}
+export class TotalAmountByCurrencyDto{
+    CurrencyName : string;
+    Amount : string;
+    RoundAmount : string;
 }

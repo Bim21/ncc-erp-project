@@ -165,16 +165,22 @@
               <tr style="border: none">
                 <th class="stt">#</th>
                 <th>Project</th>
-                <th style="justify-content: spa;">
+                <th class="text-left">
                   Bill Info 
-                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: green;" class="ml-5">{{totalAmountVNDAndUSD.roundAmountVND | number : "1.0"}} VND </span>
-                  <span *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" style="color: red;" class="ml-5">{{totalAmountVNDAndUSD.roundAmountUSD | number : "1.0"}} USD</span>
+                  <div class="total-amount" *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" >
+                    <span *ngFor="let totalAmountByCurrency of listTotalAmountByCurrency" 
+                          [style.color]="getColorByCurrency(totalAmountByCurrency.currencyName)"
+                          class="ml-4">
+                          {{totalAmountByCurrency.roundAmount | number : "1.0"}} 
+                          {{totalAmountByCurrency.currencyName}} 
+                    </span>
+                  </div>
                 </th>
                 <th>Note</th>
                 <th>Invoice Info</th>
-                <th>Timesheet File</th>
-                <th>Done</th>
-                <th>Actions</th>
+                <th class="p-custom">Timesheet File</th>
+                <th class="p-custom">Done</th>
+                <th class="p-custom">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -190,9 +196,9 @@
                   let i = index
                 " >
                 <td class="text-center">
-                  <span>{{ i + 1 }}</span>
+                  <span>{{(pageNumber-1)*pageSize+i+1}}</span>
                 </td>
-                <td style="white-space: normal; min-width: 195px">
+                <td class="td-project">
                   <a style="cursor: pointer; font-weight: bold;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(item)" >
                     {{ item.projectName }}
                   </a>
@@ -205,28 +211,22 @@
                 <td style="cursor: pointer" class="text-left bill">
                   <div *ngIf="item.projectBillInfomation" style="min-width: 600px;">
 
-                      <div class="row" *ngIf="isShowBillAmountVND(item.currency)" style="color: green;">
+                      <div class="row" [style.color]="getColorByCurrency(item.currency)">
                         <div class="col-9"><label>Total</label></div>
-                        <div class="col-2"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} VND</label></div>
+                        <div class="col-3 text-right"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} {{item.currency}}</label></div>
                       </div>
-                      <div class="row" *ngIf="isShowBillAmountUSD(item.currency)" style="color: red;">
-                        <div class="col-9"><label>Total</label></div>
-                        <div class="col-2"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} USD</label></div>
-                      </div>
-                      <div class="row" *ngIf="isShowBillAmount(item.currency)">
-                        <div class="col-9"><label>Total</label></div>
-                        <div class="col-2"><label class="ml-3">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} {{item.currency}}</label></div>
-                      </div>
-
+                     
                       <div class="row" *ngFor="let bill of item.projectBillInfomation">
-                          <div class="col-3"><label>{{bill.fullName}}</label></div>
-                          <div class="col-2"><span class="ml-2">{{bill.billRole}}</span></div>
+                          <div class="col-3 text-special"><label>{{bill.fullName}}</label></div>
+                          <div class="col-3 text-special"><span class="ml-2">{{bill.billRole}}</span></div>
                           <div class="col-2" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">
-                            <label class="ml-3" style="font-weight: 500;">{{covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType)}}</label></div>
-                          <div class="col-2" ><label class="ml-5" style="font-weight: 500;">{{bill.workingTime}}d</label></div>
-                          <div *ngIf="isShowBillAmountVND(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.roundAmount | number : "1.0"}} VND</label></div>
-                          <div *ngIf="isShowBillAmountUSD(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.roundAmount | number : "1.0"}} USD</label></div>
-                          <div *ngIf="isShowBillAmount(item.currency)" class="col-2"><label class="ml-3" style="font-weight: 500;">{{bill.roundAmount | number : "1.0"}} {{item.currency}}</label></div>
+                            <label class="ml-3"  style="font-weight: 500;">
+                              {{covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType)}}
+                            </label>
+                          </div>
+                          <div class="col-1" ><label class="ml-5"  style="font-weight: 500;">{{bill.workingTime}}d</label></div>
+                          <div class="col-3 text-right"><label class="ml-3">{{bill.roundAmount | number : "1.0"}} {{item.currency}}</label></div>
+
                           <div *ngIf="!isGranted(Timesheets_TimesheetDetail_ViewBillRate)"
                               style="word-break: break-all; white-space: pre-line;">
                               <div title="{{bill.description?bill.description:''}}" class="no-expand-text">
@@ -236,37 +236,23 @@
                       </div>
                   </div>
               </td>
-                <td style="
-                    white-space: pre-line;
-                    word-wrap: break-word;
-                    min-width: 190px;
-                    max-width: 350px;
-                  ">
+                <td class="td-note">
                   {{ item.note }}
                 </td>
-                <td style="
-                white-space: pre-line;
-                word-break: break-all;
-                max-width: 230px;
-                min-width: 200px;
-              ">
-                                <div class="d-flex" style="align-items: center">
-                                    <div style="width: 90%">
-                                      <p class="m-0"><strong>Invoice Number: </strong>{{ item.invoiceNumber }}</p>
-                                      <p class="m-0" matTooltip="Working day of {{item.projectName}}: {{item.workingDay}} days"><strong>Working Day:</strong> {{ item.workingDay }}</p>
-                                      <p class="m-0"><strong>Transfer Fee: </strong>{{ item.transferFee }}</p>
-                                      <p class="m-0"><strong>Discount: </strong>{{ item.discount }} (%)</p>
-                                    </div>
-                                    <div style="width: 10%; text-align: right;" class="ml-1" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_EditInvoiceInfo) && isActive">
-                                        <i class="fas fa-edit " (click)="updateTimesheetProject(item)" ></i>
-                                    </div>
-                                </div>
-                            </td>
-                <td class="" style="
-                    white-space: normal;
-                    max-width: 170px;
-                    min-width: 140px;
-                  ">
+                <td class="td-invoice-info">
+                      <div class="d-flex" style="align-items: center">
+                          <div style="width: 90%">
+                            <p class="m-0"><strong>Invoice Number: </strong>{{ item.invoiceNumber }}</p>
+                            <p class="m-0" matTooltip="Working day of {{item.projectName}}: {{item.workingDay}} days"><strong>Working Day:</strong> {{ item.workingDay }}</p>
+                            <p class="m-0"><strong>Transfer Fee: </strong>{{ item.transferFee }}</p>
+                            <p class="m-0"><strong>Discount: </strong>{{ item.discount }} (%)</p>
+                          </div>
+                          <div style="width: 10%; text-align: right;" class="ml-1" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_EditInvoiceInfo) && isActive">
+                              <i class="fas fa-edit " (click)="updateTimesheetProject(item)" ></i>
+                          </div>
+                      </div>
+                  </td>
+                <td class="td-timesheet-file">
                   <span class="file-download">
                     <span (click)="downloadFile(item)">{{ item.file }}</span>
                   </span>
@@ -290,7 +276,7 @@
                     <i *ngIf="item.isComplete" style="color: green" class="fas fa-check fa-2x"></i>
                   </button>
                 </td>
-                <td  class="text-center" style="vertical-align: middle">
+                <td  class="text-center td-action" style="vertical-align: middle">
                   <mat-checkbox
                     *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice) || permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)"
                     #checkboxExportInvoice
