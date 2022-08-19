@@ -20,7 +20,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public string FullName => string.IsNullOrEmpty(AccountName) ? UserFullName : AccountName;
         public double TimeSheetWorkingDay { get; set; }
         public int DefaultWorkingHours { get; set; }
-        public double? Amount => Currency.Contains("VND") ? Math.Round(GetWorkingTime() * BillRate) : GetWorkingTime() * BillRate;
+        public double? Amount => GetWorkingTime() * BillRate;
+        public double RoundAmount => Math.Round(Amount.Value);
         private double GetWorkingTime()
         {
             if (ChargeType == Constants.Enum.ProjectEnum.ChargeType.Daily)
@@ -33,7 +34,7 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
                 return WorkingTime * DefaultWorkingHours;
             }
 
-            return WorkingTime / TimeSheetWorkingDay;
+            return TimeSheetWorkingDay == 0 ? 0 : WorkingTime / TimeSheetWorkingDay;
         }
     }
 }
