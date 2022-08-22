@@ -23,6 +23,7 @@ import { ProjectUserService } from '@app/service/api/project-user.service';
 import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 import { BranchService } from '@app/service/api/branch.service';
+import { BranchDto } from '@app/service/model/branch.dto';
 
 @Component({
   selector: 'app-all-resource',
@@ -33,13 +34,12 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   subscription: Subscription[] = [];
   public listSkills: SkillDto[] = [];
+  public listBranchs: BranchDto[] = [];
   public skill = '';
   public skillsParam = [];
   public selectedSkillId: number[];
-  public listBranchSelected: number[] = [];
-  public listUserTypeSelected: number[] = [];
-  public isAndCondition: boolean = false;
-  public requestBody: any;
+  public selectedBranchIds: number[] = [];
+  public selectedUserTypes: number[] = [];
 
   Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
@@ -52,15 +52,23 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   Resource_TabAllResource_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CancelAnyPlan
   Resource_TabAllResource_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabAllResource_UpdateSkill
 
-  protected delete(entity: PlanResourceComponent): void {
+  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
+    this.isLoading = true;
+    request.skillIds = this.selectedSkillId
+    request.branchIds = this.selectedBranchIds
+    request.userTypes = this.selectedUserTypes
+    request.isAndCondition = this.isAndCondition
+    this.subscription.push(
+      this.availableRerourceService.GetAllResource(request).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
+        this.availableResourceList = data.result.items;
+        this.showPaging(data.result, pageNumber);
+        this.isLoading = false;
+      })
+    )
   }
 
-  branchParam = Object.entries(this.APP_ENUM.UserBranch).map((item) => {
-    return {
-      displayName: item[0],
-      value: item[1],
-    };
-  });
+  protected delete(entity: PlanResourceComponent): void {
+  }
 
   userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
     return {
@@ -94,7 +102,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.getAllSkills();
     this.getAllBranchs();
     this.userTypeParam.forEach(item => {
-        this.listUserTypeSelected.push(item.value);
+        this.selectedUserTypes.push(item.value);
     })
   }
   showDialogPlanUser(command: string, user: any) {
@@ -158,62 +166,20 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     )
   }
 
-  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
-    this.isLoading = true;
-    this.requestBody = request
-    this.requestBody.skillIds = this.selectedSkillId
-    this.requestBody.branchIds = this.listBranchSelected
-    this.requestBody.userTypes = this.listUserTypeSelected
-    this.requestBody.UserLevels = this.listPositionSelected
-    this.requestBody.isAndCondition = this.isAndCondition
-    this.subscription.push(
-      this.availableRerourceService.GetAllResource(this.requestBody).pipe(finalize(() => {
-        finishedCallback();
-      }), catchError(this.availableRerourceService.handleError)).subscribe(data => {
-        this.availableResourceList = data.result.items.filter((item) => {
-          if (item.userType !== 4) {
-            return item;
-          }
-        });
-        this.showPaging(data.result, pageNumber);
-        this.isLoading = false;
-      })
-    )
-  }
-
   onChangeBranchEvent(event?): void {
-    this.listBranchSelected = event.value;
-    this.subscription.push(
-      this.availableRerourceService.GetAllResource(this.requestBody).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
-        this.availableResourceList = data.result.items.filter((item) => {
-          if (this.listBranchSelected.includes(item.branchId)) {
-            return item;
-          }
-        });
-        this.showPaging(data.result, this.pageNumber);
-        this.isLoading = false;
-      })
-    )
+    this.selectedBranchIds = event.value;
+    this.refresh();
   }
 
   onChangeUserTypeEvent(event?): void {
-    this.listUserTypeSelected = event.value;
-    this.requestBody.userTypes = this.listUserTypeSelected
-    this.availableRerourceService.GetAllResource(this.requestBody).subscribe(data => {
-      this.availableResourceList = data.result.items.filter((item) => {
-        if (this.listUserTypeSelected.includes(item.userType)) {
-          return item;
-        }
-      });
-      this.showPaging(data.result, this.pageNumber);
-      this.isLoading = false;
-    })
+    this.selectedUserTypes = event.value;
+    this.refresh();
   }
 
   getAllBranchs() {
     this.branchService.getAllNotPagging().subscribe((data) => {
-      this.branchParam = data.result
-      this.listBranchSelected = data.result.map(item => item.id)
+      this.listBranchs = data.result
+      this.selectedBranchIds = data.result.map(item => item.id)
       this.refresh();
     })
   }

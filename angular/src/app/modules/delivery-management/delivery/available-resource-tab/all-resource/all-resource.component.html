@@ -21,7 +21,7 @@
                             <div class="col-6" style="margin-left: 30px;">
                                 <label for="" style="margin-top: 13px;" class="col-4 text-right">User Type:</label>
                                 <mat-form-field class="col-8" appearance="outline">
-                                    <mat-select placeholder="select user type" [(ngModel)]="listUserTypeSelected" multiple (selectionChange)="onChangeUserTypeEvent($event)">
+                                    <mat-select placeholder="select user type" [(ngModel)]="selectedUserTypes" multiple (selectionChange)="onChangeUserTypeEvent($event)">
                                         <mat-option *ngFor="let userType of userTypeParam" [value]="userType.value">
                                             {{userType.displayName}}
                                         </mat-option>
@@ -32,8 +32,8 @@
                         <div class="col-3">
                             <label for="" style="margin-top: 13px;" class="col-4 text-right">Branch:</label>
                             <mat-form-field class="col-8" appearance="outline">
-                                <mat-select [(ngModel)]="listBranchSelected" (selectionChange)="onChangeBranchEvent($event)" placeholder="select branch" multiple>
-                                    <mat-option *ngFor="let branch of branchParam" [value]='branch.id'>
+                                <mat-select [(ngModel)]="selectedBranchIds" (selectionChange)="onChangeBranchEvent($event)" placeholder="select branch" multiple>
+                                    <mat-option *ngFor="let branch of listBranchs" [value]='branch.id'>
                                         {{branch.name}}
                                     </mat-option>
                                 </mat-select>
