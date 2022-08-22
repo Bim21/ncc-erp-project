@@ -1,20 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PagedRequestDto } from '../../../shared/paged-listing-component-base';
 import { BaseApiService } from './base-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ResourceManagerService extends BaseApiService{
+export class ResourceManagerService extends BaseApiService {
 
 
-  public filterUserType = new BehaviorSubject("");
-  currentFilterUserType = this.filterUserType.asObservable();
-
-  public filterPosition = new BehaviorSubject("");
-  currentFilterPosition = this.filterPosition.asObservable();
 
   changeUrl() {
     return 'Resource';
@@ -24,7 +19,7 @@ export class ResourceManagerService extends BaseApiService{
   }
 
 
-  
+
   public GetVendorResource(
     request: PagedRequestDto
   ): Observable<any> {
@@ -66,7 +61,7 @@ export class ResourceManagerService extends BaseApiService{
       this.rootUrl + '/CancelAllResourcePlan?projectUserId=' + id,
 
     );
-  }  public CancelVendorResourcPlan(
+  } public CancelVendorResourcPlan(
     id: number
   ): Observable<any> {
     return this.http.delete<any>(
@@ -101,26 +96,18 @@ export class ResourceManagerService extends BaseApiService{
     return this.http.get(this.rootUrl + `/ConfirmJoinProjectFromTabVendor?projectUserId=${projectUserId}&startTime=${startTime}`)
   }
 
-  public EditProjectUserPlan( input:any) {
-    return this.http.post(this.rootUrl + `/EditProjectUserPlan`,input)
+  public EditProjectUserPlan(input: any) {
+    return this.http.post(this.rootUrl + `/EditProjectUserPlan`, input)
   }
 
-  public PlanNewResourceToProject( input:any) {
-    return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
+  public PlanNewResourceToProject(input: any) {
+    return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`, input)
   }
 
-  public AddUserToTempProject( input:any) {
-    return this.http.post(this.rootUrl + `/AddUserFromPoolToTempProject`,input)
+  public AddUserToTempProject(input: any) {
+    return this.http.post(this.rootUrl + `/AddUserFromPoolToTempProject`, input)
   }
   public planUser(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
-  }
-
-  changeFilterUserType(data: any){
-    return this.filterUserType.next(data);
-  }
-
-  changeFilterPosition(data: any){
-    return this.filterPosition.next(data);
   }
 }

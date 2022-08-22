@@ -1,7 +1,6 @@
 import { AppComponentBase } from 'shared/app-component-base';
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BranchDto } from '@app/service/model/list-project.dto';
 
 export class PagedResultDto {
     items: any[];

@@ -753,30 +753,6 @@ namespace ProjectManagement.Services.ResourceManager
                    .Select(s => s.UserId);
         }
 
-        public IQueryable<long> queryUserIdsHaveAnyBranch(List<long> branchIds)
-        {
-            if (branchIds == null || branchIds.IsEmpty())
-            {
-                throw new Exception("branchIds null or empty");
-            }
-
-            return _workScope.GetAll<Entities.Branch>()
-                .Where(s => branchIds.Contains(s.Id))
-                .Select(s => s.Id);
-        }
-
-        public IQueryable<UserType> queryUserIdsHaveAnyType(List<UserType> userTypes)
-        {
-            if (userTypes == null || userTypes.IsEmpty())
-            {
-                throw new Exception("userTypes null or empty");
-            }
-
-            return _workScope.GetAll<User>()
-                .Where(s => userTypes.Contains(s.UserType))
-                .Select(s => s.UserType);
-        }
-
         public async Task<List<long>> getUserIdsHaveAllSkill(List<long> skillIds)
         {
             if (skillIds == null || skillIds.IsEmpty())
