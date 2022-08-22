@@ -8,8 +8,7 @@ import { InputFilterDto } from './../../../../../../shared/filter/filter.compone
 import { PlanResourceComponent } from './../plan-resource/plan-resource.component';
 import { catchError, finalize } from 'rxjs/operators';
 import { PagedRequestDto } from './../../../../../../shared/paged-listing-component-base';
-import { 
-  SkillDto } from './../../../../../service/model/list-project.dto';
+import {SkillDto } from './../../../../../service/model/list-project.dto';
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { PlanUserComponent } from './../plan-resource/plan-user/plan-user.component';
 import { ProjectDetailComponent } from './../plan-resource/plan-user/project-detail/project-detail.component';
