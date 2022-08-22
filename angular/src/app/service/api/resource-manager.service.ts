@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { PagedRequestDto } from '../../../shared/paged-listing-component-base';
 import { BaseApiService } from './base-api.service';
 
@@ -8,6 +8,13 @@ import { BaseApiService } from './base-api.service';
   providedIn: 'root'
 })
 export class ResourceManagerService extends BaseApiService{
+
+
+  public filterUserType = new BehaviorSubject("");
+  currentFilterUserType = this.filterUserType.asObservable();
+
+  public filterPosition = new BehaviorSubject("");
+  currentFilterPosition = this.filterPosition.asObservable();
 
   changeUrl() {
     return 'Resource';
@@ -109,4 +116,11 @@ export class ResourceManagerService extends BaseApiService{
     return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
   }
 
+  changeFilterUserType(data: any){
+    return this.filterUserType.next(data);
+  }
+
+  changeFilterPosition(data: any){
+    return this.filterPosition.next(data);
+  }
 }

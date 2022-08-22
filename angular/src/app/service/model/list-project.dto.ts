@@ -30,6 +30,23 @@ export interface SkillDto {
     name: string;
     id: number;
 }
+
+export interface UserTypeDto {
+    name: string;
+    id: number;
+}
+
+export interface BranchDto{
+    displayName: string;
+    name: string;
+    id: number;
+}
+
+export interface PositionDto{
+    name: string;
+    id: number;
+}
+
 export class projectForDM {
     projectName: string;
     pmName: string;

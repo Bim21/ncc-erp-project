@@ -42,7 +42,8 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public listPriorities: any[] = []
   public selectedLevel: any = -1
   public isAndCondition: boolean = false;
-  public skillIds: number[]
+  public skillIds: number[];
+  public branchId: number[];
   public theadTable: THeadTable[] = [
     { name: '#' },
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
@@ -264,6 +265,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     let requestBody: any = request
     requestBody.skillIds = this.skillIds
+    //requestBody.branchId = this.branchId
     requestBody.isAndCondition = this.isAndCondition
     let objFilter = [
       { name: 'status', isTrue: false, value: this.selectedStatus },

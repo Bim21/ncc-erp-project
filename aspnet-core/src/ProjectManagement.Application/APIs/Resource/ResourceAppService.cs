@@ -241,5 +241,6 @@ namespace ProjectManagement.APIs.Resource
             user.PoolNote = input.Note;
             await WorkScope.UpdateAsync<User>(user);
         }
+
     }
 }

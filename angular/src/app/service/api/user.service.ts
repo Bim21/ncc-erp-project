@@ -109,4 +109,8 @@ export class UserService extends BaseApiService {
   getHistoryProjectsByUserId(userId:number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/GetHistoryProjectsByUserId?userId=${userId}`);
   }
+
+  // getUserTypeAllNotPagging():Observable<any>{
+  //   return this.http.get(this.rootUrl+"/GetUserTypeAllNotPaging");
+  // }
 }

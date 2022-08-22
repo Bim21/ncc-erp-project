@@ -8,7 +8,7 @@ import { InputFilterDto } from './../../../../../../shared/filter/filter.compone
 import { PlanResourceComponent } from './../plan-resource/plan-resource.component';
 import { catchError, finalize } from 'rxjs/operators';
 import { PagedRequestDto } from './../../../../../../shared/paged-listing-component-base';
-import { SkillDto } from './../../../../../service/model/list-project.dto';
+import { BranchDto, SkillDto } from './../../../../../service/model/list-project.dto';
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { PlanUserComponent } from './../plan-resource/plan-user/plan-user.component';
 import { ProjectDetailComponent } from './../plan-resource/plan-user/project-detail/project-detail.component';
@@ -33,10 +33,15 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   subscription: Subscription[] = [];
   public listSkills: SkillDto[] = [];
+  public listBranch: BranchDto[] = [];
   public skill = '';
   public skillsParam = [];
-  public selectedSkillId:number[]
-  public isAndCondition:boolean =false;
+  public selectedSkillId: number[];
+  public listBranchSelected: number[] = [];
+  public listUserTypeSelected: number[] = [];
+  public listPositionSelected: number[] = [];
+  public isAndCondition: boolean = false;
+  public requestBody: any;
 
   Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
@@ -49,37 +54,24 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   Resource_TabAllResource_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CancelAnyPlan
   Resource_TabAllResource_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabAllResource_UpdateSkill
 
-  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
-    this.isLoading = true;
-    let requestBody:any = request
-    requestBody.skillIds = this.selectedSkillId
-    requestBody.isAndCondition = this.isAndCondition
-    this.subscription.push(
-      this.availableRerourceService.GetAllResource(requestBody).pipe(finalize(() => {
-        finishedCallback();
-      }), catchError(this.availableRerourceService.handleError)).subscribe(data => {
-        this.availableResourceList = data.result.items.filter((item) => {
-          if (item.userType !== 4) {
-            return item;
-          }
-        });
-        this.showPaging(data.result, pageNumber);
-        this.isLoading = false;
-      })
-    )
-
-  }
   protected delete(entity: PlanResourceComponent): void {
-
   }
+
+  branchParam = Object.entries(this.APP_ENUM.UserBranch).map((item) => {
+    return {
+      displayName: item[0],
+      value: item[1],
+    };
+  });
+
   userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
     return {
       displayName: item[0],
-      value: item[1]
-    }
+      value: item[1],
+    };
+  });
 
-  })
-  
+
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'fullName', comparisions: [0, 6, 7, 8], displayName: "User Name" },
     { propertyName: 'used', comparisions: [0, 1, 2, 3, 4], displayName: "Used" },
@@ -96,8 +88,6 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     private userInfoService: UserService,
     private projectUserService: ProjectUserService,
     private branchService: BranchService
-
-
   ) { super(injector) }
 
   ngOnInit(): void {
@@ -105,6 +95,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.changePageSize();
     this.getAllSkills();
     this.getAllBranchs();
+    this.userTypeParam.forEach(item => {
+        this.listUserTypeSelected.push(item.value);
+    })
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
@@ -135,13 +128,13 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   public isAllowCancelPlan(creatorUserId: number) {
     if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelMyPlanOnly)) {
-      if(this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)){
+      if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_CancelAnyPlanResource)) {
         return true
       }
       else if (creatorUserId === this.appSession.userId) {
         return true
       }
-      else{
+      else {
         return false
       }
     }
@@ -163,24 +156,65 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
             value: item.id
           }
         })
-       
       })
     )
-
-
   }
 
+  protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
+    this.isLoading = true;
+    this.requestBody = request
+    this.requestBody.skillIds = this.selectedSkillId
+    this.requestBody.branchIds = this.listBranchSelected
+    this.requestBody.userTypes = this.listUserTypeSelected
+    this.requestBody.UserLevels = this.listPositionSelected
+    this.requestBody.isAndCondition = this.isAndCondition
+    this.subscription.push(
+      this.availableRerourceService.GetAllResource(this.requestBody).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
+        this.availableResourceList = data.result.items.filter((item) => {
+          if (item.userType !== 4) {
+            return item;
+          }
+        });
+        this.showPaging(data.result, pageNumber);
+        this.isLoading = false;
+      })
+    )
+  }
+
+  onChangeBranchEvent(event?): void {
+    this.listBranchSelected = event.value;
+    this.subscription.push(
+      this.availableRerourceService.GetAllResource(this.requestBody).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
+        this.availableResourceList = data.result.items.filter((item) => {
+          if (this.listBranchSelected.includes(item.branchId)) {
+            return item;
+          }
+        });
+        this.showPaging(data.result, this.pageNumber);
+        this.isLoading = false;
+      })
+    )
+  }
+
+  onChangeUserTypeEvent(event?): void {
+    this.listUserTypeSelected = event.value;
+    this.requestBody.userTypes = this.listUserTypeSelected
+    this.availableRerourceService.GetAllResource(this.requestBody).subscribe(data => {
+      this.availableResourceList = data.result.items.filter((item) => {
+        if (this.listUserTypeSelected.includes(item.userType)) {
+          return item;
+        }
+      });
+      this.showPaging(data.result, this.pageNumber);
+      this.isLoading = false;
+    })
+  }
 
   getAllBranchs() {
     this.branchService.getAllNotPagging().subscribe((data) => {
-      this.branchParam = data.result.map(item => {
-        return {
-          displayName: item.displayName,
-          value: item.id
-        }
-      })
-      this.FILTER_CONFIG.push({ propertyName: 'branchId', comparisions: [0], displayName: "Branch", filterType: 3, dropdownData: this.branchParam },
-      )
+      this.branchParam = data.result
+      this.listBranchSelected = data.result.map(item => item.id)
+      this.refresh();
     })
   }
 
@@ -287,7 +321,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   ngOnDestroy(): void {
     this.subscription.forEach(sub => sub.unsubscribe())
   }
-  
+
   confirm(plan, userId, userName) {
     // if (user.allocatePercentage <= 0) {
     //   let ref = this.dialog.open(ReleaseUserDialogComponent, {
@@ -325,9 +359,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     })
     // }
   }
-  editUserPlan(user: any, projectUser:any) {
+  editUserPlan(user: any, projectUser: any) {
     user.userId = projectUser.userId
-    user.projectUserId = user.id 
+    user.projectUserId = user.id
     user.fullName = projectUser.fullName
     this.showDialogPlanUser('edit', user);
   }
