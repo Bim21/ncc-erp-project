@@ -1,7 +1,6 @@
 import { AppComponentBase } from 'shared/app-component-base';
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SkillDto } from '@app/service/model/list-project.dto';
 
 export class PagedResultDto {
     items: any[];
@@ -26,14 +25,7 @@ export class PagedRequestDto {
     filterItems: FilterDto[] = [];
     sort: string;
     sortDirection: number;
-    isAndCondition: boolean = false;
-    skillIds: number[] = [];
-    branchIds: number[] = [];
-    userTypes: number[] = [];
-
 }
-
-
 export class PagedResultResultDto {
     result: PagedResultDto;
 }

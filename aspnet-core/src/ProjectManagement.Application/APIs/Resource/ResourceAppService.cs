@@ -184,7 +184,7 @@ namespace ProjectManagement.APIs.Resource
             }
             if (projectUser.CreatorUserId != AbpSession.UserId.Value)
             {
-              
+
                 if (!allowCancelAnyPlan)
                 {
                     throw new UserFriendlyException(String.Format("You don't have permission to cancel resource plan of other people!"));
@@ -200,12 +200,12 @@ namespace ProjectManagement.APIs.Resource
                 komuMessage.Append($"**{pu.EmployeeName}** {pu.InOutString } **{pu.ProjectName}** ");
                 komuMessage.Append($"từ ngày **{projectUser.StartTime:dd/MM/yyyy}**, ");
 
-                 _komuService.NotifyToChannel(new KomuMessage
+                _komuService.NotifyToChannel(new KomuMessage
                 {
                     CreateDate = DateTimeUtils.GetNow(),
                     Message = komuMessage.ToString(),
                 },
-                ChannelTypeConstant.PM_CHANNEL);
+               ChannelTypeConstant.PM_CHANNEL);
             }
 
         }
@@ -241,6 +241,5 @@ namespace ProjectManagement.APIs.Resource
             user.PoolNote = input.Note;
             await WorkScope.UpdateAsync<User>(user);
         }
-
     }
 }

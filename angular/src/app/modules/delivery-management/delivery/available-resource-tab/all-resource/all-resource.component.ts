@@ -54,12 +54,13 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
-    request.skillIds = this.selectedSkillId
-    request.isAndCondition = this.isAndCondition
-    request.branchIds = this.selectedBranchIds
-    request.userTypes = this.selectedUserTypes
+    let requestBody:any = request;
+    requestBody.skillIds = this.selectedSkillId
+    requestBody.isAndCondition = this.isAndCondition
+    requestBody.branchIds = this.selectedBranchIds
+    requestBody.userTypes = this.selectedUserTypes
     this.subscription.push(
-      this.availableRerourceService.GetAllResource(request).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
+      this.availableRerourceService.GetAllResource(requestBody).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
         this.availableResourceList = data.result.items;
         this.showPaging(data.result, pageNumber);
         this.isLoading = false;
