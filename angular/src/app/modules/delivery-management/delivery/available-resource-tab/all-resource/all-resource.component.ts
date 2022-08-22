@@ -38,7 +38,6 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public selectedSkillId: number[];
   public listBranchSelected: number[] = [];
   public listUserTypeSelected: number[] = [];
-  public listPositionSelected: number[] = [];
   public isAndCondition: boolean = false;
   public requestBody: any;
 
@@ -168,7 +167,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.requestBody.UserLevels = this.listPositionSelected
     this.requestBody.isAndCondition = this.isAndCondition
     this.subscription.push(
-      this.availableRerourceService.GetAllResource(this.requestBody).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
+      this.availableRerourceService.GetAllResource(this.requestBody).pipe(finalize(() => {
+        finishedCallback();
+      }), catchError(this.availableRerourceService.handleError)).subscribe(data => {
         this.availableResourceList = data.result.items.filter((item) => {
           if (item.userType !== 4) {
             return item;
