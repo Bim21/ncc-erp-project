@@ -64,3 +64,46 @@ button.special span{
 .noexpand-note{
   min-width:80px;
 }
+#timesheet-detail .total-amount{
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+#timesheet-detail .td-timesheet-file{
+  white-space: normal;
+  max-width: 170px;
+  min-width: 115px;
+}
+#timesheet-detail .p-custom{
+  padding: 0.75rem 0.25rem;
+}
+#timesheet-detail ::ng-deep .td-action .mat-button{
+  min-width: 40px;
+  padding: 0px 8px;
+}
+#timesheet-detail .td-project{
+  white-space: normal; 
+  min-width: 195px;
+  max-width: 195px;
+}
+
+#timesheet-detail .td-note{
+  white-space: normal; 
+  min-width: 195px;
+  max-width: 195px;
+}
+#timesheet-detail .td-note{
+  white-space: pre-line;
+  word-wrap: break-word;
+  min-width: 150px;
+  max-width: 350px;
+}
+#timesheet-detail .td-invoice-info{
+  white-space: pre-line;
+  word-break: break-all;
+  min-width: 165px;
+  max-width: 165px;
+}
+#timesheet-detail .text-special{
+ font-size: 15.5px;
+}

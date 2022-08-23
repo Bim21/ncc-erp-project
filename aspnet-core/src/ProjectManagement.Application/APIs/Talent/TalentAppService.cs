@@ -24,7 +24,7 @@ namespace ProjectManagement.APIs.Talent
             return new OkObjectResult(result);
         }
         [HttpGet]
-        public async Task<List<SubPositionDto>> GetPositions()
+        public async Task<List<DropdownPositionDto>> GetPositions()
         {
             return await _talentManager.GetPositions();
         }

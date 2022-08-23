@@ -97,7 +97,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
   }
 
   public cancelResourceRequest(id: number): Observable<any>{
-    return this.http.post<any>(this.rootUrl + '/Cancel?requestId=' + id, {});
+    return this.http.post<any>(this.rootUrl + '/CancelRequest?requestId=' + id, {});
   }
 
   public getSkills(): Observable<any>{

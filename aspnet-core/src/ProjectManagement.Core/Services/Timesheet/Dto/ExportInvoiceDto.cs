@@ -1,6 +1,7 @@
 ﻿using NccCore.Uitls;
 using ProjectManagement.Entities;
 using ProjectManagement.Helper;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,19 +70,23 @@ namespace ProjectManagement.Services.Timesheet.Dto
 
         public string PaymentDueByStr()
         {
-            var date = new DateTime(Year, Month, 1).AddMonths(2).AddDays(-1);//last date of next month
-            if (PaymentDueBy >= 1)
+            var date = new DateTime(Year, Month, 1).AddMonths(2).AddDays(-1);
+            if (PaymentDueBy >= 1 && PaymentDueBy <= 100)
             {
+                int months = PaymentDueBy / 30 + 1;
                 try
                 {
-                    date = new DateTime(Year, Month, PaymentDueBy).AddMonths(1);//on the date of next month
+                    date = new DateTime(Year, Month, PaymentDueBy % 30).AddMonths(months);
                 }
                 catch
                 {
-                    date = new DateTime(Year, Month, 15).AddMonths(1);//on the date of next month
+                    date = new DateTime(Year, Month, 1).AddMonths(months + 1).AddDays(-1);
                 }
-
             }
+            if(PaymentDueBy > CommonUtil.LastDateNextThan2Month)
+            {
+                date = new DateTime(Year, Month, 1).AddMonths(PaymentDueBy%100).AddDays(-1);
+            }    
 
             return DateTimeUtils.FormatDateToInvoice(date);
         }

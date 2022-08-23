@@ -19,7 +19,7 @@
                                 (keydown)="$event.stopPropagation()" placeholder="Search" #search>{{search.focus()}}
                         </mat-form-field>
                         <ng-container *ngFor="let project of listProject | listFilter: 'name' : searchProject">
-                            <mat-option [value]="project.id">
+                            <mat-option  [value]="project.id">
                                 {{project.name}}
                             </mat-option>
                         </ng-container>

@@ -154,6 +154,4 @@ export class AppConsts {
         'bg-success',
         'bg-danger'
     ]
-
-
 }

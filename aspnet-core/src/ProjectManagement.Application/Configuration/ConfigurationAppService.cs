@@ -33,7 +33,7 @@ namespace ProjectManagement.Configuration
             return new AppSettingDto
             {
                 ClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId),
-                SecurityCode = _appConfiguration.GetValue<string>("ProjectService:SecurityCode"),
+                SecurityCode = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.SecurityCode),
                 FinanceUri = _appConfiguration.GetValue<string>("FinfastService:BaseAddress"),
                 FinanceSecretCode = _appConfiguration.GetValue<string>("FinfastService:SecurityCode"),
                 TimesheetUri = _appConfiguration.GetValue<string>("TimesheetService:BaseAddress"),
@@ -76,7 +76,6 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.KomuSecretCode) ||
                 string.IsNullOrEmpty(input.UserBot) ||
                 string.IsNullOrEmpty(input.PasswordBot) ||
-                string.IsNullOrEmpty(input.ProjectUri) ||
                 string.IsNullOrEmpty(input.HRMUri) ||
                 string.IsNullOrEmpty(input.HRMSecretCode) ||
                 string.IsNullOrEmpty(input.KomuRoom) ||
@@ -87,7 +86,6 @@ namespace ProjectManagement.Configuration
 
             }
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ClientAppId, input.ClientAppId);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceUri, input.FinanceUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceSecretCode, input.FinanceSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimesheetUri, input.TimesheetUri);
@@ -103,7 +101,6 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuUserNames, input.KomuUserNames);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.UserBot, input.UserBot);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.PasswordBot, input.PasswordBot);
-            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ProjectUri, input.ProjectUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMUri, input.HRMUri);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.HRMSecretCode, input.HRMSecretCode);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuRoom, input.KomuRoom);
@@ -111,5 +108,12 @@ namespace ProjectManagement.Configuration
             return input;
         }
 
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_Edit)]
+        public async Task<ProjectSetting> ChangeProjectSetting(ProjectSetting input)
+        {
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
+            return input;
+
+        }
     }
 }

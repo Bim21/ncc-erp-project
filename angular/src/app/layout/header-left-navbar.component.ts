@@ -1,5 +1,5 @@
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
-import { pmReportProjectHealthDto } from './../service/model/pmReport.dto';
+import { pmReportProjectHealthDto} from './../service/model/pmReport.dto';
 import { ProjectInfoDto } from './../service/model/project.dto';
 import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,12 +28,13 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   pmReportList: pmReportDto[] = [];
   pmReport = {} as pmReportDto;
   reportId: any;
+  select:any;
   projectInfo = {} as ProjectInfoDto
   projectName: string
   projectCode: string
   public projectHealthList: string[] =  Object.keys(this.APP_ENUM.ProjectHealth);
   projectHealth;
-  projectId
+  projectId;
   isTimmerCounting: boolean = false
   isStopCounting: boolean = false
   isRefresh: boolean = false
@@ -41,19 +42,39 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   pmReportProjectId:string
   public problemIssueList: string[] = []
   public searchPmReport: string ="";
+  public selectedNumberStatus: number;
   projectType = this.reportService.projectType.getValue();
+  
   projectTypeList = [
     "ALL",
     "OUTSOURCING",
     "TRAINING",
     "PRODUCT"
+  ];
+
+  filterProjectHealth = this.reportService.filterProjectHealth.getValue();
+  public projectHeathList = [
+    {displayName: "ALL", value: "ALL"},
+    {displayName: "Green", value: 0},
+    {displayName: "Yellow", value: 1},
+    {displayName: "Red", value: 2},
+  ];
+
+  filterSort = this.reportService.filterSort.getValue();
+  filterSortList = [
+    "No_Order",
+    "Green_Yellow_Red",
+    "Red_Yellow_Green",
   ]
+
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
     private pmReportProjectService: PMReportProjectService) {
     super(injector)
   }
+
+
   ngOnInit(): void {
      
 
@@ -150,6 +171,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
       this.isStart = true
     }
   }
+
   public stopTimmer() {
     this.timmerCount.stop()
     this.isTimmerCounting = false
@@ -175,11 +197,19 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.reportService.changeProjectType(type)
   }
 
+  onChangeFilterProjectHealth(){
+    this.reportService.changeFilterProjectHealth(this.filterProjectHealth);
+  }
 
   changeProjectHealth(pmReportProjectId,projectHealth) {
     let data = {pmReportProjectId,projectHealth} as pmReportProjectHealthDto;
     this.reportService.changeProjectHealth(data)
   }
+
+  onChangeFilterSort(){
+    this.reportService.changeFilterSort(this.filterSort);
+  }
+  
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
       .subscribe((data) => {
@@ -189,3 +219,5 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
       })
   }
 }
+
+

@@ -32,7 +32,6 @@ namespace ProjectManagement.Services.Talent
                     SkillNames = s.ResourceRequestSkills.Select(s => s.Skill.Name).ToList(),
                     TimeNeed = s.TimeNeed,
                     Priority = s.Priority,
-                    Note = s.PMNote,
                     Url = s.RecruitmentUrl,
                     IsRecruitmentSend = s.IsRecruitmentSend
                 }).FirstOrDefaultAsync();
@@ -50,7 +49,7 @@ namespace ProjectManagement.Services.Talent
                 Priority = resourceRequest.Priority,
                 SkillNames = resourceRequest.SkillNames,
                 TimeNeed = resourceRequest.TimeNeed,
-                Note = resourceRequest.Note
+                Note = input.Note,
             };
 
             var response = await _talentService.SendRecruitmentToTalent(recruitment);
@@ -68,11 +67,11 @@ namespace ProjectManagement.Services.Talent
                 PathRecruitment = model.RecruitmentUrl
             };
         }
-        public async Task CancelRequest(long resourceRequestId)
+        public async Task CancelRequest(CloseResourceRequestDto input)
         {
-            await _talentService.CancelRequest(resourceRequestId);
+            await _talentService.CancelRequest(input);
         }
-        public async Task<List<SubPositionDto>> GetPositions()
+        public async Task<List<DropdownPositionDto>> GetPositions()
         {
             return await _talentService.GetPositions();
         }

@@ -36,6 +36,7 @@ using ProjectManagement.Services.Timesheet.Dto;
 using ProjectManagement.UploadFilesService;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Utils;
+using NccCore.DynamicFilter;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -131,15 +132,42 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail)]
-        public async Task<GridResult<GetTimesheetDetailDto>> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
+        public async Task<ResultTimesheetDetail> GetAllProjectTimesheetByTimesheet(GridParam input, long timesheetId)
+        {
+            var query = GetTimesheetDetail(input, timesheetId).ApplySearchAndFilter(input);
+            var list = await query.TakePage(input).ToListAsync();
+            var total = await query.CountAsync();
+
+            var listTimesheetDetail = new GridResult<GetTimesheetDetailDto>(list, total);
+
+            var listTotalAmountByCurrency = query.ToList().GroupBy(x => x.Currency)
+                                    .Select(x => new TotalAmountByCurrencyDto
+                                    {
+                                        CurrencyName = x.Key,
+                                        Amount = x.Sum(x => x.TotalAmountProjectBillInfomation.Value)
+                                    }).ToList();
+
+            var result = new ResultTimesheetDetail
+            {
+                ListTimesheetDetail = listTimesheetDetail,
+                ListTotalAmountByCurrency = listTotalAmountByCurrency,
+            };
+
+            return result;
+        }
+
+        private IOrderedQueryable<GetTimesheetDetailDto> GetTimesheetDetail(GridParam input, long timesheetId)
         {
             var filterItem = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName.Contains("isComplete") && (bool)x.Value == false) : null;
             if (filterItem != null)
             {
                 input.FilterItems.Remove(filterItem);
             }
+
             var allowViewBillRate = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewBillRate);
             var allowViewAllTSProject = PermissionChecker.IsGranted(PermissionNames.Timesheets_TimesheetDetail_ViewAll);
+
+            var defaultWorkingHours = Convert.ToInt32(SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours).Result);
 
             var query = (from tsp in WorkScope.GetAll<TimesheetProject>()
                                               .Where(x => x.TimesheetId == timesheetId)
@@ -177,6 +205,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                                         Description = x.Note,
                                                         Currency = x.Currency.Name,
                                                         ChargeType = x.ChargeType.HasValue ? x.ChargeType : x.Project.ChargeType,
+                                                        DefaultWorkingHours = defaultWorkingHours,
+                                                        TimeSheetWorkingDay = tsp.WorkingDay,
                                                     }).ToList(),
                              Note = tsp.Note,
                              HistoryFile = tsp.HistoryFile,
@@ -190,9 +220,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                              Discount = tsp.Discount,
                              TransferFee = tsp.TransferFee,
                          }).OrderByDescending(x => x.ClientId);
-            return await query.GetGridResult(query, input);
+            return query;
         }
-
 
         public async Task<TimesheetProject> CreateTimesheetProject(TimesheetProjectDto input, long invoiceNumber, float transferFee, float discount, float workingDay)
         {
@@ -527,8 +556,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     FullName = u.PM.FullName,
                     AvatarPath = u.PM.AvatarPath,
                     UserType = u.PM.UserType,
-                    UserLevel = u.PM.UserLevel,
-                    Branch = u.PM.Branch,
+                    UserLevel = u.PM.UserLevel
                 })
                 .Distinct()
                 .ToListAsync();

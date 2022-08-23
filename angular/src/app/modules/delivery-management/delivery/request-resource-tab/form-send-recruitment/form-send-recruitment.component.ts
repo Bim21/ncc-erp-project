@@ -2,22 +2,22 @@ import { TalentService } from './../../../../../service/api/talent.service';
 import { PosistionTalentDto, SendRecuitmentDto, BranchTalentDto } from './../../../../../service/model/talent.dto';
 import { SendRecruitmentModel } from './../request-resource-tab.component';
 import { AppComponentBase } from 'shared/app-component-base';
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Injector, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DeliveryResourceRequestService } from '@app/service/api/delivery-request-resource.service';
-import { ApiResponse } from '@app/service/model/api-response.dto';
 
 @Component({
   selector: 'app-form-send-recruitment',
   templateUrl: './form-send-recruitment.component.html',
-  styleUrls: ['./form-send-recruitment.component.css']
+  styleUrls: ['./form-send-recruitment.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormSendRecruitmentComponent extends AppComponentBase implements OnInit {
   branches: BranchTalentDto[] = [];
   positions: PosistionTalentDto[] = [];
   recruitment = new SendRecuitmentDto();
   isSending: boolean = false;
-
+  searchSubPosition: string;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SendRecruitmentModel,
     private _resourceRequestService: DeliveryResourceRequestService,
@@ -29,9 +29,13 @@ export class FormSendRecruitmentComponent extends AppComponentBase implements On
   }
 
   ngOnInit(): void {
-    this.recruitment.resourceRequestId = this.data.id;
+    this.setRecruitment();
     this.getUserTypes();
     this.getPositions();
+  }
+  private setRecruitment() {
+    this.recruitment.resourceRequestId = this.data.id;
+    this.recruitment.note = (this.data?.pmNote ?? '') + '\n' + (this.data.dmNote ?? '');
   }
   getUserTypes() {
     this._talent.getBranches().subscribe((rs) => {

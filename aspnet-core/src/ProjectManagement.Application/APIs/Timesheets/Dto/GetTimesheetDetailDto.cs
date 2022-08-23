@@ -1,7 +1,9 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
+using NccCore.Paging;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -69,9 +71,39 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public float WorkingDay { get; set; }
         public float Discount { get; set; }
         public float TransferFee { get; set; }
+        [ApplySearchAttribute]
         public string ClientCode { get; set; }
         public string PmBranchColor { get; set; }
         public string PmBranchDisplayName { get; set; }
+        public double? TotalAmountProjectBillInfomation => GetIntoMoneyProject();
+        public double RoundTotalAmountProjectBillInfomation => Math.Round(TotalAmountProjectBillInfomation.Value);
+        private double GetIntoMoneyProject()
+        {
+            double amount = ProjectBillInfomation.Sum(x => x.Amount).Value;
+            if (this.ProjectBillInfomation.DefaultIfEmpty() == default)
+            {
+                return default;
+            }
+            if (amount > 0)
+            {
+                return (100 - Discount) / 100 * amount + TransferFee;
+            }
+
+            return amount;
+        }
+    }
+
+    public class TotalAmountByCurrencyDto
+    {
+        public string CurrencyName { get; set; }
+        public double Amount { get; set; }
+        public double RoundAmount => Math.Round(Amount);
+    }
+
+    public class ResultTimesheetDetail
+    {
+        public GridResult<GetTimesheetDetailDto> ListTimesheetDetail { get; set; }
+        public List<TotalAmountByCurrencyDto> ListTotalAmountByCurrency { get; set; }
     }
 
 }

@@ -1,19 +1,14 @@
-import { async } from '@angular/core/testing';
-import { result } from 'lodash-es';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ViewBillComponent } from './view-bill/view-bill.component';
-import { PagedResultResultDto } from './../../../../shared/paged-listing-component-base';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
-import { AppComponentBase } from '@shared/app-component-base';
-import { BaseApiService } from '@app/service/api/base-api.service';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TimesheetDetailDto, ProjectTimesheetDto, UploadFileDto, ProjectBillInfoDto } from './../../../service/model/timesheet.dto';
-import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TimesheetDetailDto,TotalAmountByCurrencyDto} from './../../../service/model/timesheet.dto';
+import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
-import { catchError, filter } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
@@ -50,15 +45,20 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       }
     })
     this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
-      .subscribe((data: PagedResultResultDto) => {
-        this.TimesheetDetaiList = data.result.items.map(el => {
+      .subscribe((res) => {
+        let timesheetDetaiList = res.result.listTimesheetDetail;
+        this.TimesheetDetaiList = timesheetDetaiList.items.map(el => {
           el.projectBillInfomation.map(item => {
             return {...item, isShow: false}
           })
           return el;
         });
-        this.showPaging(data.result, pageNumber);
-        this.projectTimesheetDetailId = data.result.items.map(el => { return el.projectId })
+
+        this.listTotalAmountByCurrency = res.result.listTotalAmountByCurrency;
+        this.pageNumber = timesheetDetaiList.totalCount;
+
+        this.showPaging(timesheetDetaiList, pageNumber);
+        this.projectTimesheetDetailId = timesheetDetaiList.items.map(el => { return el.projectId })
         objFilter.forEach((item) => {
           if(!item.isTrue){
             request.filterItems = this.clearFilter(request, item.name, '')
@@ -107,7 +107,9 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public updateAction = UpdateAction;
   public currency: string = "";
   public clientIdInvoice: number = -1;
-
+  public totalAmount: number;
+  public listTotalAmountByCurrency: TotalAmountByCurrencyDto[] = [];
+  
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
   contextMenuPosition = { x: '0', y: '0' }
@@ -117,7 +119,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     { propertyName: 'hasFile', displayName: "Has file", comparisions: [0], filterType: 2 },
     { propertyName: 'isComplete', displayName: "Status", comparisions: [0], filterType: 5 },
     { propertyName: 'clientName', displayName: "Client Name", comparisions: [0, 6, 7, 8] },
-
+    { propertyName: 'clientCode', displayName: "Client Code", comparisions: [0, 6, 7, 8] },
   ];
 
   Timesheets_TimesheetDetail_View = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_View;
@@ -164,7 +166,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   }
   ngAfterContentChecked() {
     this.ref.detectChanges();
-}
+  }
   ngAfterViewInit(){
     this.elementRefCheckbox.changes.subscribe(c => {
       c.toArray().forEach(element => {
@@ -215,6 +217,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
+    this.pageNumber = 1;
     this.refresh();
   }
 
@@ -401,10 +404,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     })
   }
 
-  addProjectToExport(event) {
+  addProjectToExport(event, item) {
+    let chargeTypeProject = item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly);
     if (!event.checked) {
       let index = this.listExportInvoice.indexOf(event.source.value.projectId);
-      let indexChargeType = this.listExportInvoiceChargeType.indexOf(event.source.value.chargeType);
+      let indexChargeType = this.listExportInvoiceChargeType.indexOf(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);
       if (index > -1){
         this.listExportInvoice.splice(index, 1);
       }
@@ -430,8 +434,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.currency = checkCurrency;
       this.clientIdInvoice = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
-      this.listExportInvoiceChargeType.push(event.source.value.chargeType);
-    }
+      this.listExportInvoiceChargeType.push(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);        
+    }    
     if(this.listExportInvoiceChargeType.indexOf(this.APP_ENUM.ChargeType.Monthly) !== -1){
       this.isMonthlyToDaily = true;
     }
@@ -547,7 +551,23 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       && item.projectBillInfomation
       && item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly)
   }
-
+  
+  getColorByCurrency(currencyName: string){
+    switch(currencyName) {
+      case 'VND':
+        return 'blue';
+      case 'USD':
+        return 'red';
+      case 'EURO':
+          return 'orange';
+      case 'YEN':
+            return '#42032C';
+      case 'BATH':
+        return '#17a2b8';
+      default:
+        return '#F675A8';
+    }
+  }
 }
 export const UpdateAction = {
   UpdateBillInfo: 1,

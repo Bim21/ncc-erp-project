@@ -67,4 +67,8 @@ public GetProductPMs(): Observable<any> {
   return this.http.get<any>(this.rootUrl + '/GetProductPMs');
 }
 
+public getMyProjects(): Observable<any>{
+  return this.http.get<any>(this.rootUrl + '/GetMyProjects');
+}
+
 }
