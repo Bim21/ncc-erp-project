@@ -64,7 +64,9 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
   public userListCurrentPage = 1;
+  public plannedResourceCurrentPage = 1;
   public itemPerPage = 50;
+  public maxUserCurrentPage = 50;
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
@@ -704,5 +706,9 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
       return true
     }
     return false
+  }
+  changePageSizeCurrent()
+  {
+    this.userListCurrentPage = 1
   }
 }
