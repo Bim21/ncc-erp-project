@@ -67,7 +67,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public userBillCurrentPage = 1;
   public resourceRequestCurrentPage = 1;
   public userListCurrentPage = 1;
+  public plannedResourceCurrentPage = 1;
   public itemPerPage = 50;
+  public maxUserCurrentPage= 50;
   public isEditUserProject: boolean = false;
   public searchUser: string = "";
   public searchUserBill: string = "";
@@ -710,6 +712,10 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       return true
     }
     return false
+  }
+  changePageSizeCurrent()
+  {
+    this.userListCurrentPage = 1
   }
 }
 
