@@ -102,4 +102,11 @@ button{
   max-height: 12.0em; 
   line-height: 1.2em;                      
 }
- 
+.time-over{
+  color: darkviolet;
+  text-decoration: underline;
+  text-decoration-style: double;
+}
+::ng-deep .test{
+  width: 100%;
+}

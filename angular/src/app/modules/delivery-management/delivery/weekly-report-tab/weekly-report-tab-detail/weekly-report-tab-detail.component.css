@@ -152,3 +152,9 @@ th {
     margin-right: 10px;
     margin-top: 8px ; color: #585858;
 }
+
+.time-over{
+    color: darkviolet;
+    text-decoration: underline;
+    text-decoration-style: double;
+}

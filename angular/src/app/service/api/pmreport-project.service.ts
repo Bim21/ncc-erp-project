@@ -113,6 +113,15 @@ export class PMReportProjectService extends BaseApiService {
   public GetTimesheetOfUserInProject(projectCode:string,emailAddress:any, startDate: string, endDate:string): Observable<any> {
     return this.http.get(this.configURI.timesheetURI +`api/services/app/Public/GetTimesheetOfUserInProject?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
   }
+  public GetTimesheetOfUserInProjectNew(projectCode:string,emailAddress:any, startDate: string, endDate:string): Observable<any> {
+    return this.http.get(this.configURI.timesheetURI +`api/services/app/Public/GetTimesheetOfUserInProjectNew?projectCode=${projectCode}&emailAddress=${emailAddress}&startDate=${startDate}&endDate=${endDate}`)
+  }
+  public GetNormalWokingOfWeek(startDate: string, endDate:string): Observable<any> {
+    return this.http.get(this.configURI.timesheetURI +`api/services/app/Public/GetNormalWokingOfWeek?startDate=${startDate}&endDate=${endDate}`)
+  }
+  public GetUserInProjectFromTimesheet(projectCode:string,usersEmail: string[], startDate: string, endDate:string): Observable<any> {
+    return this.http.post(this.configURI.timesheetURI +`api/services/app/Public/GetUserInProjectFromTimesheet?projectCode=${projectCode}&startDate=${startDate}&endDate=${endDate}`, usersEmail)
+  }
   public GetTimesheetWeeklyChartOfUserGroupInProject(input:any): Observable<any> {
     return this.http.post(this.configURI.timesheetURI +`api/services/app/Public/GetTimesheetWeeklyChartOfUserGroupInProject`, input)
   }

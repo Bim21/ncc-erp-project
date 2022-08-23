@@ -116,4 +116,8 @@ button{
   word-wrap: break-word;
   text-align: left;
 }
- 
+.time-over{
+  color: darkviolet;
+  text-decoration: underline;
+  text-decoration-style: double;
+}

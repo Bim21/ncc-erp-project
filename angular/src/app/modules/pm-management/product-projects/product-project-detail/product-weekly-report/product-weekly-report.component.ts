@@ -107,6 +107,16 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
   isStopCounting: boolean = false
   isRefresh: boolean = false
   isStart: boolean = false
+
+  totalNormalWorkingTimeOfWeekly: number = 0;
+  totalNormalWorkingTime1: number = 0;
+  totalOverTime1: number = 0;
+  totalNormalWorkingTimeOfWeekly1: number = 0;
+    overTimeNoCharge1: number = 0;
+    totalNormalWorkingTimeStandard: number = 0;
+    totalNormalWorkingTimeStandard1: number = 0;
+  public projectCurrentSupportUser: any = []
+
   public isSentReport: boolean;
   public searchPmReport: string = "";
   public projectHealth: any;
@@ -603,6 +613,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
       d.setDate(d.getDate() - (d.getDay() + 6) % 7);
       d.setDate(d.getDate() - 7);
       let lastWeekMonday = moment(new Date(d.getFullYear(), d.getMonth(), d.getDate())).format("YYYY-MM-DD")
+      let usersEmail = []
       this.pmReportProjectService.GetCurrentResourceOfProject(this.projectId)
         .pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
           this.totalNormalWorkingTime = 0
@@ -615,14 +626,25 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
             else {
               this.officalResourceList.push(user.emailAddress)
             }
+            usersEmail.push(user.emailAddress)
             this.GetTimesheetWeeklyChartOfUserInProject(projectCode, user, this.mondayOf5weeksAgo, this.lastWeekSunday)
-            this.GetTimesheetOfUserInProject(projectCode, user, lastWeekMonday, this.lastWeekSunday)
+            this.GetTimesheetOfUserInProjectNew(projectCode, user, lastWeekMonday, this.lastWeekSunday)
           })
+          this.getUserFromTimesheet(projectCode, usersEmail, lastWeekMonday)
           this.getDataForWeeklyChart(projectCode, this.mondayOf5weeksAgo, this.lastWeekSunday)
         })
     }
   }
-
+  getUserFromTimesheet(projectCode, usersEmail, lastWeekMonday)
+  {
+    this.pmReportProjectService.GetUserInProjectFromTimesheet(projectCode, usersEmail, this.mondayOf5weeksAgo, this.lastWeekSunday).subscribe(rs => {
+      this.projectCurrentSupportUser = rs.result
+      this.projectCurrentSupportUser.forEach(user => {
+        this.GetTimesheetOfSupportUserInProject(projectCode, user, lastWeekMonday, this.lastWeekSunday)
+        this.GetTimesheetWeeklyChartOfUserInProject(projectCode, user, this.mondayOf5weeksAgo, this.lastWeekSunday)
+      })
+    })
+  }
   getTimesheetWorking() {
     const dialogRef = this.dialog.open(GetTimesheetWorkingComponent, {
       data: {
@@ -911,7 +933,36 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
       this.totalOverTime += user.overTime
       this.overTimeNoCharge += user.overTimeNoCharge
     })
-  }
+    }
+
+    GetTimesheetOfUserInProjectNew(projectCode, user, startTime, endTime) {
+        this.pmReportProjectService.GetTimesheetOfUserInProjectNew(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
+            user.normalWorkingTime = rs.result ? rs.result.normalWorkingTime : 0
+            user.overTime = rs.result ? rs.result.overTime : 0
+            user.overTimeNoCharge = rs.result ? rs.result.overTimeNoCharge : 0
+            user.normalWorkingTimeAll = rs.result ? rs.result.normalWorkingTimeAll : 0
+            user.normalWorkingTimeStandard = rs.result ? rs.result.normalWorkingTimeStandard : 0
+            this.totalNormalWorkingTime += user.normalWorkingTime
+            this.totalOverTime += user.overTime
+            this.overTimeNoCharge += user.overTimeNoCharge
+            this.totalNormalWorkingTimeOfWeekly += user.normalWorkingTimeAll
+            this.totalNormalWorkingTimeStandard += user.normalWorkingTimeStandard
+        })
+    }
+    GetTimesheetOfSupportUserInProject(projectCode, user, startTime, endTime) {
+        this.pmReportProjectService.GetTimesheetOfUserInProjectNew(projectCode, user.emailAddress, startTime, endTime).subscribe(rs => {
+            user.normalWorkingTime = rs.result ? rs.result.normalWorkingTime : 0
+            user.overTime = rs.result ? rs.result.overTime : 0
+            user.overTimeNoCharge = rs.result ? rs.result.overTimeNoCharge : 0
+            user.normalWorkingTimeAll = rs.result ? rs.result.normalWorkingTimeAll : 0
+            user.normalWorkingTimeStandard = rs.result ? rs.result.normalWorkingTimeStandard : 0
+            this.totalNormalWorkingTime1 += user.normalWorkingTime
+            this.totalOverTime1 += user.overTime
+            this.overTimeNoCharge1 += user.overTimeNoCharge
+            this.totalNormalWorkingTimeOfWeekly1 += user.normalWorkingTimeAll
+            this.totalNormalWorkingTimeStandard1 += user.normalWorkingTimeStandard
+        })
+    }
 
   GetTimesheetWeeklyChartOfUserGroupInProject(emailList) {
     // monday at 5 weeks ago =  last week mondy - 5 week (35 days)
