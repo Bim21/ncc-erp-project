@@ -292,3 +292,8 @@ th {
 .current-resource th, td{
     padding: 0;    
 }
+.time-over{
+    color: darkviolet;
+    text-decoration: underline;
+    text-decoration-style: double;
+}

@@ -193,17 +193,21 @@
                                             </th>
                                             <th style="width: 80px; vertical-align: middle;">Role</th>
                                             <th style="width: 80px;">Normal
-                                                <div>
-                                                    <strong>({{totalNormalWorkingTime}}h) </strong>
+                                                <div [matTooltip]="totalNormalWorkingTime + 'h of project' 
+                                                        + ' / ' + totalNormalWorkingTimeOfWeekly + 'h all' 
+                                                        + ' / ' + totalNormalWorkingTimeStandard + 'h standard' ">
+                                                    <strong>({{totalNormalWorkingTime}}h</strong> /
+                                                    <strong>{{totalNormalWorkingTimeOfWeekly}}h</strong>/
+                                                    <strong>{{totalNormalWorkingTimeStandard}}h)</strong>
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
                                                 <div [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
                                                     <strong [ngClass]="overTimeNoCharge>0?'ot-noCharge':''"
-                                                        style="font-size: 17px;">{{overTimeNoCharge}}h
+                                                            style="font-size: 17px;">{{overTimeNoCharge}}h
                                                     </strong> /
                                                     <strong [ngClass]="totalOverTime>0?'text-danger':''"
-                                                        style="font-size: 17px;">{{totalOverTime}}h
+                                                            style="font-size: 17px;">{{totalOverTime}}h
                                                     </strong>
                                                     )
                                                 </div>
@@ -254,7 +258,100 @@
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <div> <strong>{{user?.normalWorkingTime}}</strong> </div>
+                                                <div [matTooltip]="user.normalWorkingTime + 'h of project' 
+                                                + ' / ' + user.normalWorkingTimeAll + 'h all'
+                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'"> 
+                                                    <strong>{{user?.normalWorkingTime}}</strong> /
+                                                    <strong [ngClass] = "(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong> /
+                                                    <strong>{{user?.normalWorkingTimeStandard}}</strong>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
+                                                    <strong [ngClass]="user.overTimeNoCharge>0?'ot-noCharge': ''">{{user.overTimeNoCharge}}</strong> /
+                                                    <strong [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
+                                                </div>
+                                            </td>
+                                            <td style="text-align: -webkit-center;">
+                                                <div style="width: 200px; height: 60px;" [id]="'user' + user.userId">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="card" id="support-resource" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
+                        <div class="card-body">
+                            <h4 class="d-inline-block mb-2">Support User</h4>&nbsp;
+                            <strong style="font-size: 20px;">({{projectCurrentSupportUser?.length}})</strong>
+                            <div class="fixTableHead" style="max-height: 72vh;">
+                                <table class="table table-hover ">
+                                    <thead>
+                                        <tr>
+                                            <th style="vertical-align: middle;">Employee</th>
+                                            <th style="width: 80px;">Normal
+                                                <div [matTooltip]="totalNormalWorkingTime1 + 'h of project' 
+                                                + ' / ' + totalNormalWorkingTimeOfWeekly1 + 'h all'
+                                                + ' / ' + totalNormalWorkingTimeStandard1 + 'h standard'">
+                                                    <strong>({{totalNormalWorkingTime1}}h</strong> /
+                                                    <strong>{{totalNormalWorkingTimeOfWeekly1}}h</strong>/
+                                                    <strong>{{totalNormalWorkingTimeStandard1}}h)</strong>
+                                                </div>
+                                            </th>
+                                            <th style="width: 80px;">OT
+                                                <div [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
+                                                    <strong [ngClass]="overTimeNoCharge1>0?'ot-noCharge':''"
+                                                            style="font-size: 17px;">{{overTimeNoCharge1}}h
+                                                    </strong> /
+                                                    <strong [ngClass]="totalOverTime1>0?'text-danger':''"
+                                                            style="font-size: 17px;">{{totalOverTime1}}h
+                                                    </strong>
+                                                    )
+                                                </div>
+                                            </th>
+                                                <!-- <th style="width: 50px;">Action</th> -->
+                                            <th style="vertical-align: middle;">Timesheet</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let user of projectCurrentSupportUser; let i =index">
+                                            <td class="d-flex justify-content-between" style="border: none;">                                               
+                                                <div style="width: 80%;">
+                                                    <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                                    branchColor: user.branchColor,
+                                                    branchDisplayName:user.branchDisplayName,
+                                                    userType: user.type, avatarFullPath: user.fullAvatarPath,
+                                                     userLevel: user.level}">
+                                                    </app-user-info>
+                                                </div>
+                                                <div style="visibility: hidden; position: fixed"
+                                                    [style.left]="contextMenuPosition.x"
+                                                    [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="menu">
+                                                </div>
+                                                <button mat-icon-button [matMenuTriggerFor]="menu"
+                                                    style="display: none;"
+                                                    >
+                                                </button>
+                                                <mat-menu #menu="matMenu">
+                                                    <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                        (click)="releaseUser(user)">
+                                                        <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
+                                                </mat-menu>
+                                            </td>
+                                            <td class="text-center">
+                                                <div [matTooltip]="user.normalWorkingTime + 'h of project' 
+                                                + ' / ' + user.normalWorkingTimeAll + 'h all'
+                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'"> 
+                                                    <strong>{{user?.normalWorkingTime}}</strong> /
+                                                    <strong [ngClass] = "(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong> /
+                                                    <strong>{{user?.normalWorkingTimeStandard}}</strong>
+                                                </div>
                                             </td>
                                             <td class="text-center">
                                                 <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
