@@ -315,5 +315,7 @@ namespace ProjectManagement.Utils
             Internship = 1,
             Collaborators = 2
         }
+
+        public static int LastDateNextThan2Month = 102;  
     }
 }
