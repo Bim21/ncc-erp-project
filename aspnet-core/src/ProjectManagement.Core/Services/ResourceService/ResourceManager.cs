@@ -1,18 +1,14 @@
-﻿using Abp;
-using Abp.Application.Services;
+﻿using Abp.Application.Services;
 using Abp.Configuration;
-using Abp.Dependency;
+using Abp.Linq.Extensions;
 using Abp.Runtime.Session;
 using Abp.UI;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.IoC;
 using NccCore.Paging;
 using NccCore.Uitls;
-using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
@@ -68,7 +64,6 @@ namespace ProjectManagement.Services.ResourceManager
                 });
         }
 
-
         public async Task<List<UserOfProjectDto>> GetWorkingUsersOfProject(long projectId)
         {
             return await QueryUsersOfProject(projectId)
@@ -79,7 +74,6 @@ namespace ProjectManagement.Services.ResourceManager
                 .ThenByDescending(s => s.StartTime)
                 .ToListAsync();
         }
-
 
         public IQueryable<UserOfProjectDto> QueryUsersOfProject(long projectId)
         {
@@ -119,10 +113,8 @@ namespace ProjectManagement.Services.ResourceManager
             return queryPu;
         }
 
-
         public IQueryable<ProjectOfUserDto> QueryWorkingProjectsOfUser(long userId)
         {
-
             return _workScope.GetAll<ProjectUser>()
                 .Where(s => s.UserId == userId)
                 .Where(s => s.Status == ProjectUserStatus.Present)
@@ -138,23 +130,25 @@ namespace ProjectManagement.Services.ResourceManager
                     IsPool = x.IsPool
                 });
         }
+
         public List<PMOfUserDto> QueryPMOfUser(long userId)
         {
             var query = QueryCurrentProjectUser(userId);
             return query.Select(x => new PMOfUserDto
+            {
+                ProjectName = x.Project.Name,
+                ProjectCode = x.Project.Code,
+                PM = new BaseUserInfo
                 {
-                    ProjectName = x.Project.Name,
-                    ProjectCode = x.Project.Code,
-                    PM = new BaseUserInfo
-                    {
-                        FullName = x.Project.PM.FullName,
-                        AvatarPath = x.Project.PM.AvatarPath,
-                        BranchName = x.Project.PM.Branch.Name,
-                        EmailAddress = x.Project.PM.EmailAddress,
-                        UserType = x.Project.PM.UserType,
-                    }
-                }).ToList();
+                    FullName = x.Project.PM.FullName,
+                    AvatarPath = x.Project.PM.AvatarPath,
+                    BranchName = x.Project.PM.Branch.Name,
+                    EmailAddress = x.Project.PM.EmailAddress,
+                    UserType = x.Project.PM.UserType,
+                }
+            }).ToList();
         }
+
         private IQueryable<ProjectUser> QueryCurrentProjectUser(long userId)
         {
             return _workScope.GetAll<ProjectUser>()
@@ -183,7 +177,6 @@ namespace ProjectManagement.Services.ResourceManager
                         UserId = s.PMId,
                         UserName = s.PM.UserName
                     }
-
                 }).FirstOrDefaultAsync();
         }
 
@@ -196,7 +189,7 @@ namespace ProjectManagement.Services.ResourceManager
         }
 
         public async Task<StringBuilder> ReleaseUserFromAllWorkingProjectsByHRM(KomuUserInfoDto employee, long activeReportId, string outProjectNote)
-        {            
+        {
             var sbKomuMessage = new StringBuilder();
             var currentPUs = await _workScope.GetAll<ProjectUser>()
              .Include(s => s.Project)
@@ -209,7 +202,6 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 return sbKomuMessage;
             }
-
 
             foreach (var pu in currentPUs)
             {
@@ -239,10 +231,8 @@ namespace ProjectManagement.Services.ResourceManager
             return sbKomuMessage;
         }
 
-
-
         private async Task<StringBuilder> releaseUserFromAllWorkingProjects(KomuUserInfoDto sessionUser, KomuUserInfoDto employee,
-            KomuProjectInfoDto projectToJoin, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject , ProjectUser futureU)
+            KomuProjectInfoDto projectToJoin, long activeReportId, bool isPresentPool, bool allowConfirmMoveEmployeeToOtherProject, ProjectUser futureU)
         {
             var sbKomuMessage = new StringBuilder();
             var currentPUs = await _workScope.GetAll<ProjectUser>()
@@ -272,7 +262,7 @@ namespace ProjectManagement.Services.ResourceManager
 
                 if (isPoolInProjectToJoin != default && isPoolInProjectToJoin == isPresentPool)
                 {
-                   throw new UserFriendlyException("This user is already working on this project!");
+                    throw new UserFriendlyException("This user is already working on this project!");
                 }
 
                 foreach (var pu in currentPUs)
@@ -341,7 +331,6 @@ namespace ProjectManagement.Services.ResourceManager
             return joinPU;
         }
 
-
         private bool IsEnableAutoCreateUpdateToTimsheetTool()
         {
             var dbSetting = _settingManager.GetSettingValueForApplication(AppSettingNames.AutoUpdateProjectInfoToTimesheetTool);
@@ -368,13 +357,11 @@ namespace ProjectManagement.Services.ResourceManager
             sbKomuMessage.Append($"on {DateTimeUtils.ToString(joinPU.StartTime)}");
 
             SendKomu(sbKomuMessage, project.ProjectCode);
-
         }
 
         public async Task<ProjectUserExt> ConfirmJoinProject(long projectUserId, DateTime startTime, bool allowConfirmMoveEmployeeToOtherProject)
         {
             var confirmPUExt = await GetPUExt(projectUserId);
-
 
             if (confirmPUExt == null || confirmPUExt.PU == null)
             {
@@ -412,8 +399,7 @@ namespace ProjectManagement.Services.ResourceManager
                 nofityKomuDoneResourceRequest(listRequestDto, sessionUser, project);
             }
 
-          
-            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool, allowConfirmMoveEmployeeToOtherProject , futurePU);
+            var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, project, activeReportId, futurePU.IsPool, allowConfirmMoveEmployeeToOtherProject, futurePU);
 
             futurePU.Status = ProjectUserStatus.Present;
             futurePU.StartTime = startTime;
@@ -430,7 +416,6 @@ namespace ProjectManagement.Services.ResourceManager
             UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime);
 
             return confirmPUExt;
-
         }
 
         public void nofityKomuDoneResourceRequest(GetResourceRequestDto listRequestDto, KomuUserInfoDto sessionUser, KomuProjectInfoDto project)
@@ -442,7 +427,6 @@ namespace ProjectManagement.Services.ResourceManager
 
             SendKomu(setDoneKomuMessage, project.ProjectCode);
         }
-
 
         public async Task<ProjectUser> ValidateUserWorkingInThisProject(long userId, long projectId)
         {
@@ -513,10 +497,6 @@ namespace ProjectManagement.Services.ResourceManager
             return outPU;
         }
 
-
-
-
-
         /// <summary>
         /// Release one working user from project
         /// if release date > now: plan release
@@ -538,7 +518,6 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             var activeReportId = await GetActiveReportId();
-
 
             if (input.ReleaseDate.Date <= DateTimeUtils.GetNow())
             {
@@ -572,7 +551,6 @@ namespace ProjectManagement.Services.ResourceManager
             SendKomu(sbKomuMessage, presentPU.Project.ProjectCode);
 
             return releasePU;
-
         }
 
         public IQueryable<UserOfProjectDto> QueryPlansOfProject(long projectId)
@@ -582,9 +560,7 @@ namespace ProjectManagement.Services.ResourceManager
                 .OrderByDescending(x => x.StartTime);
 
             return q;
-
         }
-
 
         public async Task<ProjectUser> AddFuturePUAndNofity(InputPlanResourceDto input)
         {
@@ -656,7 +632,6 @@ namespace ProjectManagement.Services.ResourceManager
                          UserId = s.UserId,
                          UserName = s.User.UserName
                      }
-
                  })
                  .FirstOrDefaultAsync();
         }
@@ -688,8 +663,6 @@ namespace ProjectManagement.Services.ResourceManager
             return puExt;
         }
 
-
-
         public async Task EditProjectUserPlan(EditProjectUserDto input)
         {
             var projectUser = _workScope.GetAll<ProjectUser>()
@@ -703,14 +676,15 @@ namespace ProjectManagement.Services.ResourceManager
             await _workScope.UpdateAsync(projectUser);
         }
 
-
         public async Task<IQueryable<GetAllResourceDto>> QueryAllResource(InputGetResourceDto input, bool isVendor)
         {
             var activeReportId = await GetActiveReportId();
-            var quser = _workScope.All<User>()
+            var quser = _workScope.GetAll<User>()
                        .Where(x => x.IsActive)
                        .Where(x => x.UserType != UserType.FakeUser)
                        .Where(u => isVendor ? u.UserType == UserType.Vendor : u.UserType != UserType.Vendor)
+                       .WhereIf(input.BranchIds != null, x => input.BranchIds.Contains(x.BranchId.Value))
+                       .WhereIf(input.UserTypes != null, x => input.UserTypes.Contains(x.UserType))
                        .Select(x => new GetAllResourceDto
                        {
                            UserId = x.Id,
@@ -763,7 +737,6 @@ namespace ProjectManagement.Services.ResourceManager
                                 IsPool = pu.IsPool
                             })
                            .ToList(),
-
                        });
 
             return quser;
@@ -779,7 +752,6 @@ namespace ProjectManagement.Services.ResourceManager
                    .Where(s => skillIds.Contains(s.SkillId))
                    .Select(s => s.UserId);
         }
-
 
         public async Task<List<long>> getUserIdsHaveAllSkill(List<long> skillIds)
         {
@@ -816,8 +788,6 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             return result;
-
-
         }
 
         public async Task<GridResult<GetAllPoolResourceDto>> GetAllPoolResource(InputGetResourceDto input)
@@ -901,10 +871,8 @@ namespace ProjectManagement.Services.ResourceManager
                            UserCreationTime = u.CreationTime,
                        });
 
-
             if (input.SkillIds == null || input.SkillIds.IsEmpty())
             {
-
                 return await quser.GetGridResult(quser, input);
             }
             if (input.SkillIds.Count() == 1 || !input.IsAndCondition)
@@ -914,15 +882,12 @@ namespace ProjectManagement.Services.ResourceManager
                         join userId in querySkillUserIds on u.UserId equals userId
                         select u;
 
-
                 return await quser.GetGridResult(quser, input);
             }
             var userIdsHaveAllSkill = await getUserIdsHaveAllSkill(input.SkillIds);
             quser = quser.Where(s => userIdsHaveAllSkill.Contains(s.UserId));
             return await quser.GetGridResult(quser, input);
-
         }
-
 
         public async Task<GridResult<GetAllResourceDto>> GetResources(InputGetResourceDto input, bool isVendor)
         {
@@ -951,20 +916,20 @@ namespace ProjectManagement.Services.ResourceManager
         {
             if (!projectCode.Equals(AppConsts.CHO_NGHI_PROJECT_CODE, StringComparison.OrdinalIgnoreCase))
             {
-                 _komuService.NotifyToChannel(new KomuMessage
+                _komuService.NotifyToChannel(new KomuMessage
                 {
                     CreateDate = DateTimeUtils.GetNow(),
                     Message = komuMessage.ToString(),
                 },
-                ChannelTypeConstant.PM_CHANNEL);
+               ChannelTypeConstant.PM_CHANNEL);
             }
         }
 
         public async Task<KomuUserInfoDto> getSessionKomuUserInfo()
         {
             return await getKomuUserInfo(AbpSession.UserId.Value);
-
         }
+
         private async Task<KomuUserInfoDto> getKomuUserInfo(long userId)
         {
             return await _workScope.GetAll<User>()
@@ -977,7 +942,6 @@ namespace ProjectManagement.Services.ResourceManager
                     UserName = s.UserName,
                     EmailAddress = s.EmailAddress
                 }).FirstOrDefaultAsync();
-
         }
 
         public async Task<KomuUserInfoDto> GetKomuUserInfo(string emailAddress)
@@ -991,7 +955,6 @@ namespace ProjectManagement.Services.ResourceManager
                     KomuUserId = s.KomuUserId,
                     UserName = s.UserName
                 }).FirstOrDefaultAsync();
-
         }
 
         public ProjectOfUserDto MapToProjectOfUserDto(ProjectUser pu)
@@ -1075,7 +1038,6 @@ namespace ProjectManagement.Services.ResourceManager
         /// <returns></returns>
         public async Task<List<ProjectUser>> ReleaseAllWorkingUserFromProject(long projectId)
         {
-
             var presentPUs = await _workScope.GetAll<ProjectUser>()
                 .Where(s => s.ProjectId == projectId)
                 .Where(s => s.Status == ProjectUserStatus.Present)
@@ -1108,6 +1070,5 @@ namespace ProjectManagement.Services.ResourceManager
 
             return presentPUs;
         }
-
     }
 }
