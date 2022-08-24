@@ -71,7 +71,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   protected delete(entity: PlanResourceComponent): void {
   }
 
-  userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
+  userTypeParam = Object.entries(this.APP_ENUM.UserTypeTabAllResource).map((item) => {
     return {
       displayName: item[0],
       value: item[1],
@@ -103,9 +103,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.getAllSkills();
     this.getAllBranchs();
     this.userTypeParam.forEach(item => {
-      if (item.value != 4 && item.value != 5) {
-        this.selectedUserTypes.push(item.value);
-      }
+      this.selectedUserTypes.push(item.value);
     })
   }
   showDialogPlanUser(command: string, user: any) {
