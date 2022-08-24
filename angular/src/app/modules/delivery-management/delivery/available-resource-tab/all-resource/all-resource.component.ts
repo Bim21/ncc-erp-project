@@ -40,6 +40,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public selectedSkillId: number[];
   public selectedBranchIds: number[] = [];
   public selectedUserTypes: number[] = [];
+  public isAndCondition:boolean = false;
 
   Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
