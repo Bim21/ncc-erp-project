@@ -34,4 +34,8 @@ namespace ProjectManagement.Configuration.Dto
     {
         public string SecurityCode { get; set; }
     }
+    public class WeeklyReportSettingDto
+    {
+        public int TimeCountDown { get; set; } //s
+    }
 }

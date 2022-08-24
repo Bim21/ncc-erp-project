@@ -32,6 +32,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.KomuUserNames,"hang.buithidiem.ncc;trung.do.trong;lam.buihoang.ncc;",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.KomuRoom,"erp-team-ncc",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.DefaultWorkingHours,"8",scopes:SettingScopes.Application |SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.TimeCountDown,"180",scopes:SettingScopes.Application |SettingScopes.Tenant),
             };
         }
     }
