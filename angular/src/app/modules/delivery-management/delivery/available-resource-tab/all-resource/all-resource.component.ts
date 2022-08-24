@@ -8,7 +8,7 @@ import { InputFilterDto } from './../../../../../../shared/filter/filter.compone
 import { PlanResourceComponent } from './../plan-resource/plan-resource.component';
 import { catchError, finalize } from 'rxjs/operators';
 import { PagedRequestDto } from './../../../../../../shared/paged-listing-component-base';
-import {SkillDto } from './../../../../../service/model/list-project.dto';
+import { SkillDto } from './../../../../../service/model/list-project.dto';
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { PlanUserComponent } from './../plan-resource/plan-user/plan-user.component';
 import { ProjectDetailComponent } from './../plan-resource/plan-user/project-detail/project-detail.component';
@@ -54,7 +54,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
-    let requestBody:any = request;
+    let requestBody: any = request;
     requestBody.skillIds = this.selectedSkillId
     requestBody.isAndCondition = this.isAndCondition
     requestBody.branchIds = this.selectedBranchIds
@@ -103,7 +103,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.getAllSkills();
     this.getAllBranchs();
     this.userTypeParam.forEach(item => {
+      if (item.value != 4 && item.value != 5) {
         this.selectedUserTypes.push(item.value);
+      }
     })
   }
   showDialogPlanUser(command: string, user: any) {
