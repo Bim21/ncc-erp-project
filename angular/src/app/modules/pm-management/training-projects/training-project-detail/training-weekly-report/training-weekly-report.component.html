@@ -322,7 +322,7 @@
                                             {{user.projectRoleName}}
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div [matTooltip]="user.normalWorkingTime + 'h of project'
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
                                                 + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
@@ -331,7 +331,7 @@
                                             <strong>{{user?.normalWorkingTimeStandard}}</strong>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div  [matTooltip]="user.overTimeNoCharge + 'h total OT NoCharge' + ' / ' + user.overTime + 'h total OT'">
                                             <strong
                                                 [ngClass]="user.overTimeNoCharge>0?'text-warning': ''">{{user.overTimeNoCharge}}</strong>/<strong
