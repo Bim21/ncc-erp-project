@@ -576,6 +576,7 @@ namespace ProjectManagement.APIs.Projects
                         .Where(x => filterStatus != null && valueStatus > -1 ? (valueStatus == 3 ? x.Status != ProjectStatus.Closed : x.Status == (ProjectStatus)valueStatus) : true)
                         join rp in WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive) on p.Id equals rp.ProjectId into lst
                         from l in lst.DefaultIfEmpty()
+                        orderby l.PM.Branch
                         select new GetTrainingProjectDto
                         {
                             Id = p.Id,
