@@ -218,6 +218,7 @@ namespace ProjectManagement.APIs.PMReports
 
             var mapPMNote = (await WorkScope.GetAll<PMReportProject>()
                 .Where(s => s.PMReportId == lastReportId)
+                .Where(s => s.Project.ProjectType == ProjectType.TRAINING)
                 .Select(s => new
                 {
                     s.ProjectId,
