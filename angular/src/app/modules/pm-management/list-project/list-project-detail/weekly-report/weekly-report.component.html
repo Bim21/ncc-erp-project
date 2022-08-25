@@ -380,7 +380,7 @@
                             <tbody>
                                 <tr
                                     *ngFor="let user of projectCurrentSupportUser; let i =index">
-                                    <td class="d-flex justify-content-between" style="border: none;width: 380px;">
+                                    <td class="d-flex justify-content-between" style="border: none;width: 100%;">
                                         <div style="width: 80%;">
                                             <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
                                                 branchColor:user.branchColor,
@@ -389,7 +389,9 @@
                                                      userLevel: user.level}">
                                             </app-user-info>
                                         </div>
-                                        <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
+                                        </div>
                                         <div style="visibility: hidden; position: fixed"
                                             [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y"
                                             [matMenuTriggerFor]="menu">

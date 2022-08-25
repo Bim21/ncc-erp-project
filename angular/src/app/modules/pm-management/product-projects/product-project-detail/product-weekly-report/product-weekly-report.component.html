@@ -317,12 +317,12 @@
                                                 [ngClass]="user.isPool ? 'text-secondary' : 'text-primary'">
                                                 {{user.workType }}</strong></div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div [ngClass]="APP_CONST.projectUserRole[user.projectRole]">
                                             {{user.projectRoleName}}
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div [matTooltip]="user.normalWorkingTime + 'h of project'
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
                                                 + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
@@ -331,7 +331,7 @@
                                             <strong>{{user?.normalWorkingTimeStandard}}</strong>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
                                             <strong
                                                 [ngClass]="user.overTimeNoCharge>0?'text-warning': ''">{{user.overTimeNoCharge}}</strong>/<strong
@@ -386,7 +386,7 @@
                             <tbody>
                                 <tr
                                     *ngFor="let user of projectCurrentSupportUser; let i =index">
-                                    <td class="d-flex justify-content-between" style="border: none;width: 380px;">
+                                    <td class="d-flex justify-content-between" style="border: none;width: 100%;">
                                         <div style="width: 80%;" class="d-flex">
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
                                                 branchColor:user.branchColor,
@@ -395,7 +395,9 @@
                                                      userLevel: user.level}">
                                             </app-user-info>
                                         </div>
-                                        <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
+                                        <div style="display: flex; align-items: center;">
+                                            <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
+                                        </div>
                                         <div style="visibility: hidden; position: fixed"
                                             [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y"
                                             [matMenuTriggerFor]="menu">
@@ -413,7 +415,7 @@
                                                 [ngClass]="user.isPool ? 'text-secondary' : 'text-primary'">
                                                 {{user.workType }}</strong></div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div [matTooltip]="user.normalWorkingTime + 'h of project'
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
                                                 + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
@@ -422,7 +424,7 @@
                                             <strong>{{user?.normalWorkingTimeStandard}}</strong>
                                         </div>
                                     </td>
-                                    <td class="text-center">
+                                    <td style="vertical-align: middle;" class="text-center">
                                         <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
                                             <strong
                                                 [ngClass]="user.overTimeNoCharge>0?'text-warning': ''">{{user.overTimeNoCharge}}</strong>/<strong
