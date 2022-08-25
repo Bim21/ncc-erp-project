@@ -671,6 +671,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   getUserFromTimesheet(projectCode, usersEmail, lastWeekMonday)
   {
+    this.projectCurrentSupportUser = []
     this.pmReportProjectService.GetUserInProjectFromTimesheet(projectCode, usersEmail, this.mondayOf5weeksAgo, this.lastWeekSunday).subscribe(rs => {
       this.projectCurrentSupportUser = rs.result
       this.projectCurrentSupportUser.forEach(user => {

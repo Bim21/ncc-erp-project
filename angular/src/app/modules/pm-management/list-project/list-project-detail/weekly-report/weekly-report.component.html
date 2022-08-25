@@ -385,10 +385,11 @@
                                             <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
                                                 branchColor:user.branchColor,
                                                 branchDisplayName:user.branchDisplayName,
-                                                    userType:user.userType,avatarFullPath: user.fullAvatarPath,
-                                                     userLevel: user.userLevel}">
+                                                    userType:user.type,avatarFullPath: user.fullAvatarPath,
+                                                     userLevel: user.level}">
                                             </app-user-info>
                                         </div>
+                                        <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
                                         <div style="visibility: hidden; position: fixed"
                                             [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y"
                                             [matMenuTriggerFor]="menu">
