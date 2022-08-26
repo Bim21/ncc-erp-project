@@ -114,9 +114,10 @@ cd-timer {
 
 .count-timer {
     background-color: #ffc107;
-    height: 50px;
+    height: auto;
     padding: 0px 12px;
     border-radius: 5px;
+    cursor: move;
 }
 
 .pointer {
@@ -157,4 +158,87 @@ th {
     color: darkviolet;
     text-decoration: underline;
     text-decoration-style: double;
+}
+
+
+.float-timmer {
+    /* position: absolute; */
+    display: flex;
+    position: fixed;
+    top: 9%;
+    left: 60%;
+    z-index: 200;
+}
+
+.pm-note-section {
+    position: relative;
+}
+
+.warning-count-down {
+    animation: shake 1s ease-out 5ms infinite;
+    transition: all .5s;
+}
+
+.warning-count-down::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem 4rem;
+    background-color: rgba(255, 153, 0, 0.3);
+    border-radius: 10px;
+    opacity: 0.8;
+    transition: all 0.2s;
+    -webkit-animation: ring1 1s infinite ease-in-out;
+    animation: ring1 1s infinite ease-in-out;
+}
+
+.warning-count-down::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 1rem 3rem;
+    background-color: rgba(255, 0, 0, 0.5);
+    border-radius: 10px;
+    opacity: 0.5;
+    transition: all 0.2s;
+    -webkit-animation: ring 1s infinite ease-in-out;
+    animation: ring 1s infinite ease-in-out;
+}
+
+.warning-count-down:hover {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+    animation: 0;
+}
+.warning-count-down::before:hover {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+    animation: 0;
+}
+.warning-count-down::after:hover {
+    -webkit-animation-play-state: paused;
+     animation-play-state: paused;
+     animation: 0;
+}
+
+@keyframes shake {
+	100%{
+        transform: scale(1.2)
+	}
+}
+
+@keyframes ring {
+    100% {
+        transform: scaleX(1.2) scaleY(1.4);
+        opacity: 0;
+    }
+}
+
+@keyframes ring1 {
+    100% {
+        transform: scaleX(1.6) scaleY(1.8);
+        opacity: 0;
+    }
 }

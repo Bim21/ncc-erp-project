@@ -42,7 +42,7 @@
         <section class="content ">
             <div class="row justify-content-between">
                 <div style="width: 59%;">
-                    <div class="px-4 pb-2 pt-2 card"
+                    <div class="px-4 pb-2 pt-2 card pm-note-section"
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
                             <div class="col-8">
@@ -87,9 +87,6 @@
                                 </mat-form-field>
                             </div>
                         </div>
-
-
-
 
                         <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)" style="border-collapse: collapse;" class="table table-hover text-nowrap">
                             <thead class="bg-light">
@@ -172,6 +169,76 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <div class="float-timmer"  *ngIf="countdownInterval.value !== null"
+                            #floatCountDown
+                            cdkDrag
+                            [class.warning-count-down]="isShowWarning"
+                            [cdkDragDisabled]="isShowWarning"
+                            (cdkDragEnded)="countDownDropped($event)"
+                            >
+                            <div class="count-timer" >
+                                <span class="action-timmer mr-2" *ngIf="!isShowWarning">
+                                    <button (click)="stopTimmer(); $event.stopPropagation()"
+                                    *ngIf="!isStopCounting && isStart " class="btn btn-sm mb-2 pr-0">
+                                    <i class="fas fa-pause fa-lg"></i>
+                                    </button>
+                                    <button (click)="startTimmer(); $event.stopPropagation()"
+                                        *ngIf="!isStart"
+                                        class="btn btn-sm mb-2 pr-0">
+                                        <i class="fas fa-play fa-lg"></i>
+                                    </button>
+                                    <button (click)="resumeTimmer(); $event.stopPropagation()"
+                                        *ngIf="isStopCounting && !isTimmerCounting && !isRefresh"
+                                        class="btn btn-sm mb-2 pr-0">
+                                        <i class="fas fa-play fa-lg"></i>
+                                    </button>
+                                </span>
+
+                                <cd-timer 
+                                    #timmer 
+                                    format="ms"
+                                    countdown="true"  
+                                    [startTime]="countdownInterval.value"
+                                    [autoStart]="false" 
+                                    (onTick)="onTick($event)"
+                                    (onComplete)="refreshTimmer()"
+                                >
+                                    {{ countdownInterval.value * 1000 | date:'mm:ss' }}
+                                </cd-timer>
+
+                                <button
+                                    *ngIf="permission.isGranted(Admin_Configuartions_WeeklyReportTime_Edit)"
+                                    class="btn btn-sm  mb-2 pr-0">
+                                    <i class="fas fa-clock fa-lg" (click)="openSettingCountDown()"></i>
+                                </button>
+
+                                <div class="row" *ngIf="isShowSettingCountDown">
+                                    <div class="col-8">
+                                        <mat-form-field class="w-100">
+                                            <mat-label>
+                                                Input time
+                                                <span *ngIf="countdownInterval.invalid">{{'(Min 30s)' | localize}}</span>
+                                            </mat-label>
+                                            <input matInput [formControl]="countdownInterval" name="searchPmReportName" min="30"
+                                            (keydown)="$event.stopPropagation()" placeholder="(s)">
+                                        </mat-form-field>
+                                      </div>
+                                      
+                                      <div class="col-4">
+                                        <button
+                                            class="btn btn-sm  mb-2 pr-0">
+                                            <i class="fas fa-check fa-lg" (click)="setTimeCountDown()"></i>
+                                        </button>
+
+                                        <button
+                                        class="btn btn-sm  mb-2 pr-0">
+                                        <i class="fas fa-times fa-lg" (click)="closeSettingCountDown()"></i>
+                                    </button>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -381,9 +448,7 @@
                             <div class="card-body">
                                 <div class="table-responsive px-2">
                                     <h5 class="d-inline-block mb-2 font-weight-bold">Timesheet</h5>
-                                    <div style="width: 100%; height: 190px;" id="timesheet-chart">
-
-                                    </div>
+                                    <div style="width: 100%; height: 190px;" id="timesheet-chart"></div>
                                 </div>
                             </div>
                         </div>
@@ -733,42 +798,12 @@
                         </div>
 
                     </div>
-
-
-
-
-
-
-
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <!-- <div class="row justify-content-between">
-                <div class="card" style="width: 59%;">
-
-                </div>
-                <div class=" card" style="width: 40%;">
-
-                </div>
-            </div> -->
-
         </section>
     </div>
 </div>
+
+
+
+

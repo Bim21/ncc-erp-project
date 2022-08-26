@@ -13,7 +13,7 @@ import { finalize, catchError } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
-import { Component, OnInit, Injector, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, Input, ElementRef } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import * as moment from 'moment';
 import * as echarts from 'echarts';
@@ -28,10 +28,14 @@ import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/a
 import { EditMeetingNoteDialogComponent } from './edit-meeting-note-dialog/edit-meeting-note-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
 import { APP_ENUMS } from '@shared/AppEnums';
+import { TimeInterface } from 'angular-cd-timer';
+import { AppConfigurationService } from '@app/service/api/app-configuration.service';
+import { FormControl, Validators } from '@angular/forms';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
-  styleUrls: ['./weekly-report-tab-detail.component.css']
+  styleUrls: ['./weekly-report-tab-detail.component.css'],
 })
 export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<WeeklyReportTabDetailComponent> implements OnInit {
   WeeklyReport_ReportDetail_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_View;
@@ -53,6 +57,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_PlannedResource_ConfirmOut = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_ConfirmOut;
   WeeklyReport_ReportDetail_PlannedResource_CancelPlan = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_CancelPlan;
   WeeklyReport_ReportDetail_ChangedResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ChangedResource;
+  Admin_Configuartions_WeeklyReportTime_Edit = PERMISSIONS_CONSTANT.Admin_Configuartions_WeeklyReportTime_Edit;
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // this.pmReportProjectService.GetAllByPmReport(this.pmReportId, request).pipe(finalize(()=>{
@@ -67,10 +72,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
   @ViewChild("timmer") timmerCount;
+  @ViewChild("floatCountDown") countDownElement:ElementRef<HTMLElement>;
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
 
+  readonly SEC_WARNING = 30;
   public itemPerPage: number = 20;
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
@@ -137,6 +144,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isStopCounting: boolean = false
   isRefresh: boolean = false
   isStart: boolean = false
+  arrayNewPosition: string[];
+  originPosition: string;
+  isShowWarning = false;
+  countdownInterval: FormControl = new FormControl(null, [Validators.min(30)]);
+  isShowSettingCountDown = false;
 
   constructor(public pmReportProjectService: PMReportProjectService,
     private tsProjectService: TimesheetProjectService,
@@ -148,6 +160,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private dialog: MatDialog,
     private requestservice: ProjectResourceRequestService,
     private _layoutStore: LayoutStoreService,
+    private _configuration: AppConfigurationService
   ) {
     super(injector)
   }
@@ -195,10 +208,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.typeSort = typeSort;
         this.getPmReportProject();
       });
+      this.getTimeCountDown();
     }
   }
 
   public startTimmer() {
+    this.refreshTimmer();
     if ((!this.isTimmerCounting && !this.isStopCounting) || this.isRefresh) {
       this.timmerCount.start()
       this.isTimmerCounting = true
@@ -220,6 +235,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     // this.isStopCounting =true
     this.isRefresh = true
     this.isStart = false
+    this.isShowWarning = false;
+    if(this.snackBarRef) this.snackBarRef.dismiss();
+    if(this.originPosition) {
+      this.countDownElement.nativeElement.style.transform = this.originPosition;
+      this.countDownElement.nativeElement.style.left = '';
+      this.countDownElement.nativeElement.style.top = '';
+    } 
 
   }
   public resumeTimmer() {
@@ -312,6 +334,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processProblem = false
     this.processWeekly = false;
     this.searchUser = ""
+    this.startTimmer();
   }
 
 
@@ -1200,4 +1223,49 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.Done
   }
 
+  onTick(data: TimeInterface) {
+    if (data.minutes === 0 && this.arrayNewPosition?.length && data.seconds <= this.SEC_WARNING + 1) {
+      this.countDownElement.nativeElement.style.left = `calc(60% + ${this.arrayNewPosition[0]})`;
+      this.countDownElement.nativeElement.style.top = `calc(9% + ${this.arrayNewPosition[1]})`; 
+      this.countDownElement.nativeElement.style.transform = '';
+    }
+
+    if (!this.isShowWarning && data.minutes === 0 && data.seconds <= 30) {
+      this.isShowWarning = true;
+    }
+   
+    if(data.minutes === 0 && data.seconds <= 10) {
+      new Audio('/assets/audio/beep_sound.mp3').play();
+    }
+
+  }
+
+  setTimeCountDown() {
+    if(this.countdownInterval.invalid) return
+    this._configuration.setTimeCountDown(this.countdownInterval.value).subscribe((data) => {
+      abp.notify.success('Update time was successfully!');
+      this.closeSettingCountDown();
+      this.refreshTimmer();
+    });
+  }
+
+  getTimeCountDown() {
+    this._configuration.getTimeCountDown().subscribe((rs) => {
+      this.countdownInterval.setValue(rs.result.timeCountDown);
+    });
+  }
+
+  openSettingCountDown() {
+    this.isShowSettingCountDown = true;
+  }
+
+  closeSettingCountDown() {
+    this.isShowSettingCountDown = !this.isShowSettingCountDown;
+    this.getTimeCountDown();
+  }
+
+  countDownDropped(event: CdkDragEnd) {
+    this.originPosition = this.countDownElement.nativeElement.style.transform;
+    this.arrayNewPosition =  this.originPosition.substring(this.originPosition.indexOf('(')+1, this.originPosition.indexOf(')')).split(', ');
+  }
 }
