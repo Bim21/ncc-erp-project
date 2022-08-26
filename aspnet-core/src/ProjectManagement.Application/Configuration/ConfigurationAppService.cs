@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Runtime.Session;
 using Abp.UI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ProjectManagement.Authorization;
 using ProjectManagement.Configuration.Dto;
@@ -115,5 +117,23 @@ namespace ProjectManagement.Configuration
             return input;
 
         }
+
+        [AbpAllowAnonymous]
+        [HttpGet]
+        public async Task<WeeklyReportSettingDto> GetTimeCountDown()
+        {
+            return new WeeklyReportSettingDto
+            {
+                TimeCountDown =  Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimeCountDown))
+            };
+        }
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit)]
+        [HttpPost]
+        public async Task<WeeklyReportSettingDto> SetTimeCountDown(WeeklyReportSettingDto input)
+        {
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimeCountDown, input.TimeCountDown.ToString());
+            return input;
+        }
+
     }
 }

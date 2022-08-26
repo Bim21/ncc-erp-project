@@ -5,22 +5,22 @@
             <div class="">
                 <div class="input-group">
                     <div class="row w-100">
-                        <div class="col-6 d-flex mt-1">
-                            <div class="input-group-prepend">
+                        <div class="col-5 d-flex mt-1">
+                            <div class="input-group-prepend" style="margin-top: 3px;">
                                 <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control col-4" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
-                            <div class="input-group-append">
+                            <input style="margin-top: 3px;" type="text" class="form-control col-4" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
+                            <div class="input-group-append" style="margin-top: 3px;">
                                 <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                                     <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
                                         [class.fa-angle-down]="!advancedFiltersVisible"></i>
                                 </button>
                             </div>
-                            <div class="col-6" style="margin-left: 30px;">
-                                <label for="" style="margin-top: 13px;" class="col-4 text-right">User Type:</label>
-                                <mat-form-field class="col-8" appearance="outline">
+                            <div class="col-7">
+                                <label for=""  style="margin-left: 20px;" class="col-4 text-right">User Type:</label>
+                                <mat-form-field class="col-7" appearance="outline">
                                     <mat-select placeholder="select user type" [(ngModel)]="selectedUserTypes" multiple (selectionChange)="onChangeUserTypeEvent($event)">
                                         <mat-option *ngFor="let userType of userTypeParam" [value]="userType.value">
                                             {{userType.displayName}}
@@ -29,7 +29,7 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-3"  style="margin-top: 3px;">
                             <label for="" style="margin-top: 13px;" class="col-4 text-right">Branch:</label>
                             <mat-form-field class="col-8" appearance="outline">
                                 <mat-select [(ngModel)]="selectedBranchIds" (selectionChange)="onChangeBranchEvent($event)" placeholder="select branch" multiple>
@@ -39,17 +39,21 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="col-3">
-                            <label for="" style="margin-top: 13px;" class="col-4 text-right">Skills:</label>
-                            <mat-form-field class="col-8" appearance="outline">
-                                <mat-select placeholder="select skill" multiple (selectionChange)="getDataPage(1)" [(ngModel)]="selectedSkillId">
-                                    <div style="width: 334px;" style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
-                                        <mat-radio-group aria-label="Filter by" class="w-80 px-2  row" [(ngModel)]="isAndCondition" (ngModelChange)="getDataPage(1)" style=" width: 100%;">
+                        <div class="col-3"  style="margin-top: 3px;">
+                            <label for="" style="margin-top: 13px;" class="col-3 text-right">Skills:</label>
+                            <mat-form-field style="width: 300px;" class="col-9" appearance="outline">
+                                <mat-select placeholder="search skill" multiple (selectionChange)="getDataPage(1)"
+                                    [(ngModel)]="selectedSkillId">
+                                    <div style="width: 334px;"
+                                        style="position: sticky; top: 0; z-index: 2; background-color: white; padding: 10px 7px; padding: 13px 7px 0px 5px;">
+                                        <mat-radio-group aria-label="Filter by" class="w-100 px-3 row"
+                                            [(ngModel)]="isAndCondition" (ngModelChange)="getDataPage(1)"
+                                            style=" width: 100%;">
                                             <div class="col-4">
                                                 <label style=" white-space: nowrap;" class="mt-2 mr-2">Search
                                                     type:</label>
                                             </div>
-                                            <div class="col-6 pt-2">
+                                            <div class="col-8 pt-2">
                                                 <mat-radio-button class="mr-3" [value]="true">And</mat-radio-button>
                                                 <mat-radio-button [value]="false">Or</mat-radio-button>
                                             </div>
@@ -62,7 +66,8 @@
                             </mat-form-field>
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0" (click)="selectedSkillId = null; refresh()"></i>
+                            <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0"
+                                (click)="selectedSkillId = null; refresh()"></i>
                         </div>
                     </div>
                 </div>

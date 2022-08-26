@@ -8,7 +8,7 @@ import { InputFilterDto } from './../../../../../../shared/filter/filter.compone
 import { PlanResourceComponent } from './../plan-resource/plan-resource.component';
 import { catchError, finalize } from 'rxjs/operators';
 import { PagedRequestDto } from './../../../../../../shared/paged-listing-component-base';
-import {SkillDto } from './../../../../../service/model/list-project.dto';
+import { SkillDto } from './../../../../../service/model/list-project.dto';
 import { PagedListingComponentBase } from '@shared/paged-listing-component-base';
 import { PlanUserComponent } from './../plan-resource/plan-user/plan-user.component';
 import { ProjectDetailComponent } from './../plan-resource/plan-user/project-detail/project-detail.component';
@@ -40,6 +40,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public selectedSkillId: number[];
   public selectedBranchIds: number[] = [];
   public selectedUserTypes: number[] = [];
+  public isAndCondition:boolean = false;
 
   Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
@@ -54,7 +55,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
-    let requestBody:any = request;
+    let requestBody: any = request;
     requestBody.skillIds = this.selectedSkillId
     requestBody.isAndCondition = this.isAndCondition
     requestBody.branchIds = this.selectedBranchIds
@@ -71,7 +72,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   protected delete(entity: PlanResourceComponent): void {
   }
 
-  userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
+  userTypeParam = Object.entries(this.APP_ENUM.UserTypeTabAllResource).map((item) => {
     return {
       displayName: item[0],
       value: item[1],
@@ -103,7 +104,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.getAllSkills();
     this.getAllBranchs();
     this.userTypeParam.forEach(item => {
-        this.selectedUserTypes.push(item.value);
+      this.selectedUserTypes.push(item.value);
     })
   }
   showDialogPlanUser(command: string, user: any) {

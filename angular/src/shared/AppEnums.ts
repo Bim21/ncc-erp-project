@@ -187,7 +187,14 @@ export const APP_ENUMS = {
         "T.Việc": 3,
         FakeUser: 4,
         Vendor: 5
-
+        
+    },
+    UserTypeTabAllResource: {
+        TTS: 0,
+        CTV: 1,
+        Staff: 2,
+        "T.Việc": 3,
+        
     },
     WeeklySent: {
         Unsent: 0,

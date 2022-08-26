@@ -46,6 +46,7 @@ namespace ProjectManagement.Authorization
         public const string Admin_Configuartions_ViewSendReportSetting = "Admin.Configuartions.ViewSendReportSetting";
         public const string Admin_Configuartions_ViewGoogleClientAppSetting = "Admin.Configuartions.ViewGoogleClientAppSetting";
         public const string Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting";
+        public const string Admin_Configuartions_WeeklyReportTime_Edit = "Admin.Configuartions.WeeklyReportTimeEdit";
         //Skill 
         public const string Admin_Skills = "Admin.Skills";
         public const string Admin_Skills_View = "Admin.Skills.View";
@@ -544,6 +545,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Configuartions_ViewSendReportSetting ,
                     PermissionNames.Admin_Configuartions_ViewGoogleClientAppSetting ,
                     PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting ,
+                    PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit,
                     //Skill 
                     PermissionNames.Admin_Skills,
                     PermissionNames.Admin_Skills_View,
@@ -1041,6 +1043,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewSendReportSetting , MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Send Report Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewGoogleClientAppSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Google Client App Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Default Working Hour Per Day Setting" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Time Count Down Weekly Report" },
 
                  new SystemPermission{ Name =  PermissionNames.Admin_Skills, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "skills" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Skills_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
@@ -1534,6 +1537,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewSendReportSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Send Report Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewGoogleClientAppSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Google Client App Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Default Working Hour Per Day Setting"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Time Count Down Weekly Report"},
 
                             }
                         },

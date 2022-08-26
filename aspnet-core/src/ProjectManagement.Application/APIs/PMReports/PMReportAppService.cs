@@ -216,6 +216,17 @@ namespace ProjectManagement.APIs.PMReports
                 .GroupBy(s => s.ProjectId)
                 .ToDictionary(s => s.Key, s => s.Select(s => s.Issues).ToList());
 
+            var mapPMNote = (await WorkScope.GetAll<PMReportProject>()
+                .Where(s => s.PMReportId == lastReportId)
+                .Where(s => s.Project.ProjectType == ProjectType.TRAINING)
+                .Select(s => new
+                {
+                    s.ProjectId,
+                    Note = s.Note
+                }).ToListAsync())
+                .GroupBy(s => s.ProjectId)
+                .ToDictionary(s => s.Key, s => s.Select(s => s.Note).FirstOrDefault());
+
             var activeProjects = await WorkScope.GetAll<Project>()
                 .Where(x => x.Status == ProjectStatus.InProgress)
                 .ToListAsync();
@@ -229,7 +240,7 @@ namespace ProjectManagement.APIs.PMReports
                     Status = PMReportProjectStatus.Draft,
                     ProjectHealth = mapInprogressIssues.ContainsKey(project.Id) ? ProjectHealth.Yellow : ProjectHealth.Green,
                     PMId = project.PMId,
-                    Note = null
+                    Note = project.ProjectType == ProjectType.TRAINING && mapPMNote.ContainsKey(project.Id) ? mapPMNote[project.Id] : null,
                 };
                 pmReportProject.Id = await WorkScope.InsertAndGetIdAsync(pmReportProject);
 

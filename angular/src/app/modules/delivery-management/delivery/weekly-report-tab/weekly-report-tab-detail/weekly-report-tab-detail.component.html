@@ -397,6 +397,9 @@
                                                      userLevel: user.level}">
                                                     </app-user-info>
                                                 </div>
+                                                <div style="display: flex; align-items: center;">
+                                                    <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
+                                                </div>
                                                 <div style="visibility: hidden; position: fixed"
                                                     [style.left]="contextMenuPosition.x"
                                                     [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="menu">
