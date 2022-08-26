@@ -171,11 +171,9 @@
                         </table>
 
                         <div class="float-timmer"  *ngIf="countdownInterval.value !== null"
-                            #floatCountDown
                             cdkDrag
                             [class.warning-count-down]="isShowWarning"
                             [cdkDragDisabled]="isShowWarning"
-                            (cdkDragEnded)="countDownDropped($event)"
                             >
                             <div class="count-timer" >
                                 <span class="action-timmer mr-2" *ngIf="!isShowWarning">

@@ -31,7 +31,6 @@ import { APP_ENUMS } from '@shared/AppEnums';
 import { TimeInterface } from 'angular-cd-timer';
 import { AppConfigurationService } from '@app/service/api/app-configuration.service';
 import { FormControl, Validators } from '@angular/forms';
-import { CdkDragEnd } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -72,7 +71,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   @ViewChild(RadioDropdownComponent) child: RadioDropdownComponent;
   @ViewChild("timmer") timmerCount;
-  @ViewChild("floatCountDown") countDownElement:ElementRef<HTMLElement>;
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
@@ -144,8 +142,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isStopCounting: boolean = false
   isRefresh: boolean = false
   isStart: boolean = false
-  arrayNewPosition: string[];
-  originPosition: string;
   isShowWarning = false;
   countdownInterval: FormControl = new FormControl(null, [Validators.min(30)]);
   isShowSettingCountDown = false;
@@ -236,13 +232,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isRefresh = true
     this.isStart = false
     this.isShowWarning = false;
-    if(this.snackBarRef) this.snackBarRef.dismiss();
-    if(this.originPosition) {
-      this.countDownElement.nativeElement.style.transform = this.originPosition;
-      this.countDownElement.nativeElement.style.left = '';
-      this.countDownElement.nativeElement.style.top = '';
-    } 
-
   }
   public resumeTimmer() {
     this.timmerCount.resume()
@@ -1225,12 +1214,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   onTick(data: TimeInterface) {
-    if (data.minutes === 0 && this.arrayNewPosition?.length && data.seconds <= this.SEC_WARNING + 1) {
-      this.countDownElement.nativeElement.style.left = `calc(60% + ${this.arrayNewPosition[0]})`;
-      this.countDownElement.nativeElement.style.top = `calc(9% + ${this.arrayNewPosition[1]})`; 
-      this.countDownElement.nativeElement.style.transform = '';
-    }
-
     if (!this.isShowWarning && data.minutes === 0 && data.seconds <= 30) {
       this.isShowWarning = true;
     }
@@ -1263,10 +1246,5 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   closeSettingCountDown() {
     this.isShowSettingCountDown = !this.isShowSettingCountDown;
     this.getTimeCountDown();
-  }
-
-  countDownDropped(event: CdkDragEnd) {
-    this.originPosition = this.countDownElement.nativeElement.style.transform;
-    this.arrayNewPosition =  this.originPosition.substring(this.originPosition.indexOf('(')+1, this.originPosition.indexOf(')')).split(', ');
   }
 }

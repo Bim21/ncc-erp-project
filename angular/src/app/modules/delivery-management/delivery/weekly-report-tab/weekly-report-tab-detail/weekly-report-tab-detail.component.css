@@ -177,6 +177,7 @@ th {
 .warning-count-down {
     animation: shake 1s ease-out 5ms infinite;
     transition: all .5s;
+    border-radius: 10px;
 }
 
 .warning-count-down::after {
@@ -184,11 +185,12 @@ th {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 1.5rem 4rem;
-    background-color: rgba(255, 153, 0, 0.3);
+    /* padding: 1.5rem 4rem; */
+    /* background-color: rgba(255, 153, 0, 0.3); */
+    border: 5px solid orange;
     border-radius: 10px;
-    opacity: 0.8;
-    transition: all 0.2s;
+    opacity: 0.5;
+    transition: all 0.5s;
     -webkit-animation: ring1 1s infinite ease-in-out;
     animation: ring1 1s infinite ease-in-out;
 }
@@ -198,10 +200,11 @@ th {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 1rem 3rem;
-    background-color: rgba(255, 0, 0, 0.5);
+    /* padding: 1rem 3rem; */
+    /* background-color: rgba(255, 0, 0, 0.5); */
     border-radius: 10px;
-    opacity: 0.5;
+    border: 10px solid red;
+    opacity: 0.8;
     transition: all 0.2s;
     -webkit-animation: ring 1s infinite ease-in-out;
     animation: ring 1s infinite ease-in-out;
@@ -224,21 +227,36 @@ th {
 }
 
 @keyframes shake {
-	100%{
-        transform: scale(1.2)
+	50%{
+        outline: 8px solid gold;
+        opacity: 0.6;
 	}
+    100% {
+        outline: 5px solid gold;
+        opacity: 0.2;
+    }
 }
 
 @keyframes ring {
+    30% {
+        border: 3px solid red;
+        opacity: 0.5;
+    }
+
     100% {
-        transform: scaleX(1.2) scaleY(1.4);
+        border: 1px solid orangered;
         opacity: 0;
     }
 }
 
 @keyframes ring1 {
+    30% {
+        border: 1px solid red;
+        opacity: 0.5;
+    }
+
     100% {
-        transform: scaleX(1.6) scaleY(1.8);
+        border: 1px solid orangered;
         opacity: 0;
     }
 }
