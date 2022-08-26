@@ -24,6 +24,7 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Configuartions_ViewSendReportSetting: "Admin.Configuartions.ViewSendReportSetting",
        Admin_Configuartions_ViewGoogleClientAppSetting: "Admin.Configuartions.ViewGoogleClientAppSetting",
        Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting: "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting",
+       Admin_Configuartions_WeeklyReportTime_Edit: "Admin.Configuartions.WeeklyReportTimeEdit",
        //Skill 
        Admin_Skills: "Admin.Skills",
        Admin_Skills_View: "Admin.Skills.View",

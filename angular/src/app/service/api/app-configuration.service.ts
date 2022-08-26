@@ -1,3 +1,4 @@
+import { ApiResponse } from './../model/api-response.dto';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -27,5 +28,16 @@ export class AppConfigurationService extends BaseApiService {
 
   updateProjectSettingConfig(item: any):Observable<any>{
     return this.http.post(this.rootUrl + '/ChangeProjectSetting', item)
+  }
+
+  /**
+   * @param timeCountDown: seconds
+   */
+  setTimeCountDown(timeCountDown: number): Observable<ApiResponse<{timeCountDown: number}>> {
+    return this.http.post<any>(this.rootUrl + '/SetTimeCountDown', {timeCountDown});
+  }
+
+  getTimeCountDown():Observable<ApiResponse<{timeCountDown: number}>>{
+    return this.http.get<any>(this.rootUrl + '/GetTimeCountDown') 
   }
 }
