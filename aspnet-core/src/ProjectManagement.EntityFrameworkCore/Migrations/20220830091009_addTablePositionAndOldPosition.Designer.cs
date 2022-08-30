@@ -10,7 +10,7 @@ using ProjectManagement.EntityFrameworkCore;
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    [Migration("20220830044816_addTablePositionAndOldPosition")]
+    [Migration("20220830091009_addTablePositionAndOldPosition")]
     partial class addTablePositionAndOldPosition
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1506,9 +1506,6 @@ namespace ProjectManagement.Migrations
 
                     b.Property<long?>("PositionId")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("PositionOld")
-                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(128)")

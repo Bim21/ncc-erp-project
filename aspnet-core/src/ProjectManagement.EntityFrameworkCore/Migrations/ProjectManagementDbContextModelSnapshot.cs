@@ -1505,9 +1505,6 @@ namespace ProjectManagement.Migrations
                     b.Property<long?>("PositionId")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("PositionOld")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);

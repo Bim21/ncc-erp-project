@@ -69,7 +69,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           ),
           new MenuItem(
             this.l('Positions'),
-            '/app/position',
+            '/app/positions',
             'fas fa-anchor',
             'Admin.Positions'
           ),

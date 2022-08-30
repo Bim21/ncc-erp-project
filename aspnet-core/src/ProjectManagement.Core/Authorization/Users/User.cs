@@ -55,8 +55,6 @@ namespace ProjectManagement.Authorization.Users
         [ForeignKey(nameof(BranchId))]
         public ProjectManagement.Entities.Branch Branch { get; set; }
 
-        public ProjectManagement.Constants.Enum.ProjectEnum.Position? PositionOld { get; set; }
-
         public long? PositionId { get; set; }
 
         [ForeignKey(nameof(PositionId))]

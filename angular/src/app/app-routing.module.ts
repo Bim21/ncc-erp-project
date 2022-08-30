@@ -119,7 +119,7 @@ import { PositionComponent } from './modules/admin/position/position.component';
             canActivate: [AppRouteGuard],
           },
           {
-            path: "position",
+            path: "positions",
             component: PositionComponent,
             canActivate: [AppRouteGuard],
           },

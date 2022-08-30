@@ -12,11 +12,6 @@ namespace ProjectManagement.Migrations
                 table: "AbpUsers",
                 nullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "PositionOld",
-                table: "AbpUsers",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Positions",
                 columns: table => new
@@ -69,10 +64,6 @@ namespace ProjectManagement.Migrations
 
             migrationBuilder.DropColumn(
                 name: "PositionId",
-                table: "AbpUsers");
-
-            migrationBuilder.DropColumn(
-                name: "PositionOld",
                 table: "AbpUsers");
         }
     }
