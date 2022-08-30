@@ -222,17 +222,6 @@
             Other = 4
         }
 
-        public enum Position
-        {
-            Dev,
-            Test,
-            Design,
-            PM,
-            IT,
-            HR,
-            Sales
-        }
-
         public enum Job
         {
             DEV = 0,
