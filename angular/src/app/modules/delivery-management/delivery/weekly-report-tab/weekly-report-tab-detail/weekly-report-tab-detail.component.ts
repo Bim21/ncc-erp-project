@@ -226,9 +226,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   }
   public refreshTimmer() {
-    this.timmerCount.reset()
+    this.timmerCount?.reset()
     this.isTimmerCounting = false
-    // this.isStopCounting =true
     this.isRefresh = true
     this.isStart = false
     this.isShowWarning = false;
@@ -323,7 +322,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processProblem = false
     this.processWeekly = false;
     this.searchUser = ""
-    this.startTimmer();
+    this.getTimeCountDown(true);
   }
 
 
@@ -1215,6 +1214,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   onTick(data: TimeInterface) {
     if (!this.isShowWarning && data.minutes === 0 && data.seconds <= 30) {
+      this.isShowSettingCountDown = false;
       this.isShowWarning = true;
     }
    
@@ -1233,9 +1233,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     });
   }
 
-  getTimeCountDown() {
+  getTimeCountDown(autoStart: boolean = false) {
     this._configuration.getTimeCountDown().subscribe((rs) => {
       this.countdownInterval.setValue(rs.result.timeCountDown);
+      if(autoStart) setTimeout(() => this.startTimmer());
     });
   }
 

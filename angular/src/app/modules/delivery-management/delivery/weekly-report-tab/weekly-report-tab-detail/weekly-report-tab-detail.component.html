@@ -182,7 +182,7 @@
                                     <i class="fas fa-pause fa-lg"></i>
                                     </button>
                                     <button (click)="startTimmer(); $event.stopPropagation()"
-                                        *ngIf="!isStart"
+                                        *ngIf="!isStart && !isShowSettingCountDown"
                                         class="btn btn-sm mb-2 pr-0">
                                         <i class="fas fa-play fa-lg"></i>
                                     </button>
