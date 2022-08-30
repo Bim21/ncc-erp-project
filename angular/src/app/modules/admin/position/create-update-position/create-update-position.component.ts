@@ -14,8 +14,6 @@ export class CreateUpdatePositionComponent  extends AppComponentBase implements 
 
   title:string =""
   public position = {} as PositionDto;
-  invoiceDateSettingList: [];
-  paymentDueByList = [];
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,
     public positionService: PositionService,
