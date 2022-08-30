@@ -59,7 +59,6 @@ export class EditUserDialogComponent extends AppComponentBase
     this.getAllBranchs();
     this._userService.get(this.data.id).subscribe((result) => {
       this.user = result;
-      console.log(this.user,'user')
       this.user.userSkills = this.user.userSkills
       this.user.positionId = this.user.positionId
       this._userService.getRoles().subscribe((result2) => {
@@ -87,7 +86,6 @@ export class EditUserDialogComponent extends AppComponentBase
   getAllPosition() {
     this.positionService.getAllNotPagging().subscribe((data) => {
       this.userPositionList = data.result
-      console.log(data.result, 'posi')
     })
     
   }
