@@ -7,8 +7,8 @@
   <abp-modal-header
     title="{{
       data.command == 'create'
-        ? 'Add new branch'
-        : 'Edit branch: ' + title
+        ? 'Create new position'
+        : 'Edit position: ' + title
     }}"
     (onCloseClick)="dialogRef.close()"
   >
@@ -18,11 +18,12 @@
       <label class="col-md-3 col-form-label" for="pm"> Name: </label>
       <div class="col-md-9">
         <input
+          (ngModelChange)="nameChange($event)"
           class="form-control mt-1"
           type="text"
           placeholder="Name"
           required
-          name="branchName"
+          name="positionName"
           [(ngModel)]="position.name"
           #name="ngModel"
           #nameEl
@@ -39,9 +40,9 @@
         <input
           class="form-control mt-1"
           type="text"
-          placeholder="Display Name"
+          placeholder="Short Name"
           required
-          name="displayName"
+          name="shortName"
           [(ngModel)]="position.shortName"
           #shortName="ngModel"
           #shortNameEl

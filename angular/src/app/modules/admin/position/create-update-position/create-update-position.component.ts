@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-create-update-position',
   templateUrl: './create-update-position.component.html',
-  styleUrls: ['./create-update-position.component.css']
+  //styleUrls: ['./create-update-position.component.css']
 })
 export class CreateUpdatePositionComponent  extends AppComponentBase implements OnInit  {
 
@@ -31,7 +31,12 @@ export class CreateUpdatePositionComponent  extends AppComponentBase implements 
     }
   }
   
-  
+  nameChange(event){
+    if(!this.data.item?.id){
+      this.position.shortName = event;
+      this.position.code = event;
+    }
+  }
 
   SaveAndClose() {
     if (this.data.command == "create") {

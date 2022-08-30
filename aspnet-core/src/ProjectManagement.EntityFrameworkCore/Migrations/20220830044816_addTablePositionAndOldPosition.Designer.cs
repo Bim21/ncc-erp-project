@@ -10,8 +10,8 @@ using ProjectManagement.EntityFrameworkCore;
 namespace ProjectManagement.Migrations
 {
     [DbContext(typeof(ProjectManagementDbContext))]
-    [Migration("20220827121838_addColumnColorForTablePosition")]
-    partial class addColumnColorForTablePosition
+    [Migration("20220830044816_addTablePositionAndOldPosition")]
+    partial class addTablePositionAndOldPosition
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1507,6 +1507,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long?>("PositionId")
                         .HasColumnType("bigint");
 
+                    b.Property<int?>("PositionOld")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
@@ -2625,10 +2628,28 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Note")
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortName")
