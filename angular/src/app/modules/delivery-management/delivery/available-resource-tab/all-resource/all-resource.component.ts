@@ -23,7 +23,9 @@ import { ProjectUserService } from '@app/service/api/project-user.service';
 import { ConfirmPlanDialogComponent } from '../plan-resource/plan-user/confirm-plan-dialog/confirm-plan-dialog.component';
 import { ConfirmFromPage } from '@app/modules/pm-management/list-project/list-project-detail/resource-management/confirm-popup/confirm-popup.component';
 import { BranchService } from '@app/service/api/branch.service';
+import { PositionService } from '@app/service/api/position.service';
 import { BranchDto } from '@app/service/model/branch.dto';
+import { PositionDto } from '@app/service/model/position.dto';
 
 @Component({
   selector: 'app-all-resource',
@@ -35,11 +37,14 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   subscription: Subscription[] = [];
   public listSkills: SkillDto[] = [];
   public listBranchs: BranchDto[] = [];
+  public listPositions: PositionDto[] = [];
   public skill = '';
   public skillsParam = [];
   public selectedSkillId: number[];
   public selectedBranchIds: number[] = [];
   public selectedUserTypes: number[] = [];
+  public selectedPositions: number[] = [];
+  public isAndCondition: boolean = false;
 
   Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
@@ -59,6 +64,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     requestBody.isAndCondition = this.isAndCondition
     requestBody.branchIds = this.selectedBranchIds
     requestBody.userTypes = this.selectedUserTypes
+    requestBody.positionIds = this.selectedPositions
     this.subscription.push(
       this.availableRerourceService.GetAllResource(requestBody).pipe(catchError(this.availableRerourceService.handleError)).subscribe(data => {
         this.availableResourceList = data.result.items;
@@ -94,13 +100,15 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     private _modalService: BsModalService,
     private userInfoService: UserService,
     private projectUserService: ProjectUserService,
-    private branchService: BranchService
+    private branchService: BranchService,
+    private positionService: PositionService,
   ) { super(injector) }
 
   ngOnInit(): void {
     this.pageSizeType = 100
     this.changePageSize();
     this.getAllSkills();
+    this.getAllPositions();
     this.getAllBranchs();
     this.userTypeParam.forEach(item => {
         this.selectedUserTypes.push(item.value);
@@ -181,6 +189,19 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.branchService.getAllNotPagging().subscribe((data) => {
       this.listBranchs = data.result
       this.selectedBranchIds = data.result.map(item => item.id)
+      this.refresh();
+    })
+  }
+
+  onChangePositionsEvent(event?): void{
+    this.selectedPositions = event.value;
+    this.refresh();
+  }
+
+  getAllPositions() {
+    this.positionService.getAllNotPagging().subscribe((data) => {
+      this.listPositions = data.result
+      this.selectedPositions = data.result.map(item => item.id)
       this.refresh();
     })
   }

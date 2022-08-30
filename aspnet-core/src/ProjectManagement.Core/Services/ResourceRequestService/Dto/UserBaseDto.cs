@@ -16,6 +16,7 @@ namespace ProjectManagement.Services.ResourceRequestService.Dto
         public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
+        public Position? Position { get; set; }
         public UserLevel UserLevel { get; set; }
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }

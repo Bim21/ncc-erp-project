@@ -189,6 +189,15 @@ export const APP_ENUMS = {
         Vendor: 5
 
     },
+    Position: {
+        Dev: 0,
+        Test: 1,
+        Design: 2,
+        PM: 3,
+        IT: 4,
+        HR: 5,
+        Sale: 6
+    },
     WeeklySent: {
         Unsent: 0,
         Sent: 1

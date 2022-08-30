@@ -17,6 +17,8 @@
                         {{user.branchDisplayName}}</span>
                     <span [ngClass]="APP_CONST.userTypeStyle[user.userType]">{{APP_ENUM.UserType[user.userType]}}
                         {{getProjectTypefromEnum(user.userType,APP_ENUM.UserType)}}</span>
+                    <span class="ml-1 badge badge-pill text-white" [style.backgroundColor]="user.positionColor">
+                        {{user.positionName}}</span>
                     <span *ngIf="user.userLevel || user.userLevel == 0" class="ml-1 badge text-white" [ngStyle]="getUserLevel().style">{{getUserLevel().userLevel}}
                     </span>
                 </p>

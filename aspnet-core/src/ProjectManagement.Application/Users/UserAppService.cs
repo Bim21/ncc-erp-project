@@ -114,6 +114,9 @@ namespace ProjectManagement.Users
                             EmailAddress = u.EmailAddress,
                             AvatarPath = u.AvatarPath == null? "": u.AvatarPath,
                             UserType = u.UserType,
+                            PositionId = u.PositionId,
+                            PositionColor = u.Position.Color,
+                            PositionName = u.Position.Name,
                             UserLevel = u.UserLevel,
                             Branch = u.BranchOld,
                             BranchColor = u.Branch.Color,
@@ -475,6 +478,7 @@ namespace ProjectManagement.Users
             var userDto = base.MapToEntityDto(user);
             userDto.RoleNames = roles.ToArray();
             userDto.UserSkills = userSkill.ToList();
+            userDto.PositionId = user.PositionId;
 
             return userDto;
         }
@@ -593,6 +597,7 @@ namespace ProjectManagement.Users
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
                     Branch = u.BranchOld,
+                    PositionId = u.PositionId,
                     UserSkills = u.UserSkills.Select(x => new UserSkillDto
                     {
                         SkillId = x.SkillId,
@@ -618,6 +623,7 @@ namespace ProjectManagement.Users
                     UserType = u.UserType,
                     UserLevel = u.UserLevel,
                     Branch = u.BranchOld,
+                    PositionId = u.PositionId,
                     IsActive = u.IsActive,
                     UserCode = u.UserCode
                 });
@@ -845,6 +851,7 @@ namespace ProjectManagement.Users
                 {
                     AvatarPath = s.AvatarPath,
                     Branch = s.BranchOld,
+                    Position = s.PositionOld,
                     EmailAddress = s.EmailAddress,
                     FullName = s.FullName,
                     Id = s.Id,

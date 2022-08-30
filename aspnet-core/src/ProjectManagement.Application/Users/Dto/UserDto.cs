@@ -57,5 +57,7 @@ namespace ProjectManagement.Users.Dto
         public List<WorkingProjectDto> WorkingProjects { get; set; }
         public List<WorkingProjectDto> ProjectHistory { get; set; }
         public long? BranchId { get; set; }
+
+        public long? PositionId { get; set; }
     }
 }

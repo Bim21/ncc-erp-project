@@ -31,5 +31,8 @@ namespace ProjectManagement.Services.ResourceService.Dto
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
         public long? BranchId { get; set; }
+        public long? PositionId { get; set; }
+        public string PositionColor { get; set; }
+        public string PositionName { get; set; }
     }
 }

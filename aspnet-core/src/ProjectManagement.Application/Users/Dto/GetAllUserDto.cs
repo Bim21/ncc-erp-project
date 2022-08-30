@@ -6,10 +6,10 @@ using Abp.Authorization.Users;
 using Abp.AutoMapper;
 using NccCore.Anotations;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceService.Dto;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Utils;
+using ProjectManagement.Constants.Enum;
 
 namespace ProjectManagement.Users.Dto
 {
@@ -37,6 +37,12 @@ namespace ProjectManagement.Users.Dto
         public List<WorkingProjectDto> WorkingProjects { get; set; }
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
+
+        public long? PositionId { get; set; }
+
+        public string PositionColor { get; set; }
+
+        public string PositionName { get; set; }
 
     }
 }

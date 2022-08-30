@@ -74,6 +74,7 @@ import { TrainingProjectFileComponent } from './modules/pm-management/training-p
 import { ProductProjectFileComponent } from './modules/pm-management/product-projects/product-project-detail/product-project-file/product-project-file.component';
 import { BranchComponent } from './modules/admin/branch/branch.component';
 import { TechnologyComponent } from './modules/admin/technology/technology.component';
+import { PositionComponent } from './modules/admin/position/position.component';
 
 @NgModule({
   imports: [
@@ -115,6 +116,11 @@ import { TechnologyComponent } from './modules/admin/technology/technology.compo
           {
             path: "branchs",
             component: BranchComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "position",
+            component: PositionComponent,
             canActivate: [AppRouteGuard],
           },
           {
