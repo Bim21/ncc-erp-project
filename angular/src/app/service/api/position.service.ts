@@ -24,7 +24,4 @@ export class PositionService extends BaseApiService{
         params: new HttpParams().set('positionId', id)
     })
   }
-  public getAllPosition(): Observable<any>{
-    return this.http.get<any>(this.rootUrl + '/getAllPosition');
-  }
 }

@@ -72,7 +72,6 @@ export class PositionComponent extends PagedListingComponentBase<PositionCompone
       code: position.code,
       shortName: position.shortName,
       color: position.color,
-      note: position.note,
       id: position.id,
     }
     const show = this.dialog.open(CreateUpdatePositionComponent, {
