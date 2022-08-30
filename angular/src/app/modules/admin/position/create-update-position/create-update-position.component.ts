@@ -25,7 +25,8 @@ export class CreateUpdatePositionComponent  extends AppComponentBase implements 
       this.title = this.data.item.name ? this.data.item.name : ''
     }
     else{
-      this.position.color = "#28a745";
+      var randomColor = Math.floor(Math.random() * 16777215).toString(16)
+      this.position.color = "#" + randomColor;
     }
   }
   
