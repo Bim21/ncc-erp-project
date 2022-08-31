@@ -111,7 +111,9 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     this.getAllPositions();
     this.getAllBranchs();
     this.userTypeParam.forEach(item => {
+      if(item.value != 4 && item.value != 5){
         this.selectedUserTypes.push(item.value);
+      }
     })
   }
   showDialogPlanUser(command: string, user: any) {
