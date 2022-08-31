@@ -65,6 +65,13 @@ export const PERMISSIONS_CONSTANT = {
         Admin_Branchs_Edit: "Admin.Branchs.Edit",
         Admin_Branchs_Delete: "Admin.Branchs.Delete",
 
+        //Positions 
+        Admin_Positions: "Admin.Positions",
+        Admin_Positions_View: "Admin.Positions.View",
+        Admin_Positions_Create: "Admin.Positions.Create",
+        Admin_Positions_Edit: "Admin.Positions.Edit",
+        Admin_Positions_Delete: "Admin.Positions.Delete",
+
        //Technologies 
        Admin_Technologies: "Admin. Technologies",
        Admin_Technologies_View: "Admin.Technologies.View",

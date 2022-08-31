@@ -55,5 +55,7 @@ namespace ProjectManagement.Users.Dto
                 RoleNames = new string[0];
             }
         }
+
+        public long? PositionId { get; set; }
     }
 }

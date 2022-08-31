@@ -10,6 +10,7 @@ namespace ProjectManagement.Services.ResourceService.Dto
     {
         public List<UserType> UserTypes { get; set; }
         public List<long> BranchIds { get; set; }
+        public List<long> PositionIds { get; set; }
         public List<long> SkillIds { get; set; }
         public bool IsAndCondition { get; set; }
     }

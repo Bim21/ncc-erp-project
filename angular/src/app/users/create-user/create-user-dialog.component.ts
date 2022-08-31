@@ -17,6 +17,7 @@ import {
 } from '@shared/service-proxies/service-proxies';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 import { BranchService } from '@app/service/api/branch.service';
+import { PositionService } from '@app/service/api/position.service';
 @Component({
   templateUrl: './create-user-dialog.component.html'
 })
@@ -30,6 +31,7 @@ export class CreateUserDialogComponent extends AppComponentBase
   defaultRoleCheckedStatus = false;
   userLevelList = Object.keys(this.APP_ENUM.UserLevel);
   userBranchList;
+  userPositionList;
   userTypeList = Object.keys(this.APP_ENUM.UserType);
   passwordValidationErrors: Partial<AbpValidationError>[] = [
     {
@@ -52,6 +54,7 @@ export class CreateUserDialogComponent extends AppComponentBase
     public _userService: UserServiceProxy,
     private skillService:SkillService,
     private branchService: BranchService,
+    private positionService: PositionService,
     public dialogRef: MatDialogRef<CreateUserDialogComponent>,
   ) {
     super(injector);
@@ -62,6 +65,7 @@ export class CreateUserDialogComponent extends AppComponentBase
     this.user.password=""
     this.user.isActive = true;
     this.getAllSkill();
+    this.getAllPosition();
     this.getAllBranchs();
     this._userService.getRoles().subscribe((result) => {
       this.roles = result.items;
@@ -73,6 +77,11 @@ export class CreateUserDialogComponent extends AppComponentBase
   getAllBranchs() {
     this.branchService.getAllNotPagging().subscribe((data) => {
       this.userBranchList = data.result
+    })
+  }
+  getAllPosition() {
+    this.positionService.getAllNotPagging().subscribe((data) => {
+      this.userPositionList = data.result
     })
   }
   getAllSkill(){

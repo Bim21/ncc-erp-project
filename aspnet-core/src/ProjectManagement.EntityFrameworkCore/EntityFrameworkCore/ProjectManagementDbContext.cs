@@ -47,6 +47,8 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<Technology> Technologies { get; set; }
         public DbSet<ProjectTechnology> ProjectTechnologies { get; set; }
 
+        public DbSet<Position> Positions { get; set; }
+
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)
         {

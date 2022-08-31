@@ -4169,6 +4169,7 @@ export class CreateUserDto implements ICreateUserDto {
   komuUserName: string | undefined;
   branchId: number | undefined;
   avatarPath: string | undefined;
+  positionId: number | undefined;
   userType: number | undefined;
   userLevel: number | undefined;
   userCode: string | undefined;
@@ -4192,6 +4193,7 @@ export class CreateUserDto implements ICreateUserDto {
       this.isActive = data['isActive'];
       this.branchId = data['branchId'];
       this.userType = data['userType'];
+      data['positionId'] = this.positionId;
       this.avatarPath = data['avatarPath'];
       this.userLevel = data['userLevel'];
       this.userCode = data['userCode'];
@@ -4221,6 +4223,7 @@ export class CreateUserDto implements ICreateUserDto {
     data['isActive'] = this.isActive;
     data['branchId'] = this.branchId;
     data['userType'] = this.userType;
+    data['positionId'] = this.positionId;
     data['avatarPath'] = this.avatarPath;
     data['userLevel'] = this.userLevel;
     data['userCode'] = this.userCode;
@@ -4257,6 +4260,7 @@ export interface ICreateUserDto {
   userCode: string | undefined;
   userSkills: any[] | undefined;
   branchId: number | undefined;
+  positionId: number | undefined;
 }
 
 export class UserDto implements IUserDto {
@@ -4273,6 +4277,9 @@ export class UserDto implements IUserDto {
   avatarPath: string;
   id: number;
   userType: number;
+  positionColor: string | undefined;
+  positionName: string | undefined;
+  positionId: number;
   userLevel: number;
   userCode: string;
   userSkills: any[];
@@ -4303,6 +4310,7 @@ export class UserDto implements IUserDto {
       this.fullName = data['fullName'];
       this.branchId = data['branchId'];
       this.userType = data['userType'];
+      this.positionId = data['positionId'];
       this.avatarPath = data['avatarPath'];
       this.userLevel = data['userLevel'];
       this.userCode = data['userCode'];
@@ -4346,6 +4354,7 @@ export class UserDto implements IUserDto {
       : <any>undefined;
     data['branchId'] = this.branchId;
     data['userType'] = this.userType;
+    data['positionId'] = this.positionId;
     data['avatarPath'] = this.avatarPath;
     data['userLevel'] = this.userLevel;
     data['userCode'] = this.userCode;
@@ -4385,6 +4394,7 @@ export interface IUserDto {
   userCode: string;
   userSkills: any[];
   branchId: number;
+  positionId: number;
 }
 
 

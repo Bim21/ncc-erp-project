@@ -684,6 +684,7 @@ namespace ProjectManagement.Services.ResourceManager
                        .Where(x => x.UserType != UserType.FakeUser)
                        .Where(u => isVendor ? u.UserType == UserType.Vendor : u.UserType != UserType.Vendor)
                        .WhereIf(input.BranchIds != null, x => input.BranchIds.Contains(x.BranchId.Value))
+                       .WhereIf(input.PositionIds != null, x => input.PositionIds.Contains(x.PositionId.Value))
                        .WhereIf(input.UserTypes != null, x => input.UserTypes.Contains(x.UserType))
                        .Select(x => new GetAllResourceDto
                        {
@@ -696,6 +697,9 @@ namespace ProjectManagement.Services.ResourceManager
                            BranchColor = x.Branch.Color,
                            BranchDisplayName = x.Branch.DisplayName,
                            BranchId = x.BranchId,
+                           PositionId = x.PositionId,
+                           PositionColor = x.Position.Color,
+                           PositionName = x.Position.Name,
                            UserLevel = x.UserLevel,
                            AvatarPath = x.AvatarPath,
                            StarRate = x.StarRate,
@@ -820,6 +824,9 @@ namespace ProjectManagement.Services.ResourceManager
                            BranchColor = u.Branch.Color,
                            BranchDisplayName = u.Branch.DisplayName,
                            UserLevel = u.UserLevel,
+                           PositionId = u.PositionId,
+                           PositionColor = u.Position.Color,
+                           PositionName = u.Position.Name,
                            AvatarPath = u.AvatarPath,
                            StarRate = u.StarRate,
                            PoolNote = u.PoolNote,

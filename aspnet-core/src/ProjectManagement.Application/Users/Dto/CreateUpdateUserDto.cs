@@ -31,5 +31,7 @@ namespace ProjectManagement.Users.Dto
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public long? BranchId { get; set; }
+
+        public long? PositionId { get; set; }
     }
 }

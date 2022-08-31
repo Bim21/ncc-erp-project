@@ -68,6 +68,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             'Admin.Branchs'
           ),
           new MenuItem(
+            this.l('Positions'),
+            '/app/positions',
+            'fas fa-anchor',
+            'Admin.Positions'
+          ),
+          new MenuItem(
             this.l('Project Technologies'),
             '/app/technologies',
             'fas fa-info',
