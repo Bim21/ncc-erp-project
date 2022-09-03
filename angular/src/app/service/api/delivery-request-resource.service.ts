@@ -44,7 +44,7 @@ export class DeliveryResourceRequestService extends BaseApiService {
       request
     );
   }
- 
+
   public availableResourceFuture(request: PagedRequestDto): Observable<any> {
     return this.http.post<any>(
       this.rootUrl + '/AvailableResourceFuture',
@@ -159,4 +159,13 @@ export class DeliveryResourceRequestService extends BaseApiService {
     return this.http.delete<any>(this.rootUrl + '/DeleteMyRequest?resourceRequestId='+id)
   }
 
+  public getResourceTrainingPaging(
+    request: PagedRequestDto,
+    option: string
+  ): Observable<any> {
+    return this.http.post<any>(
+      this.rootUrl + `/GetAllTrainingPaging`,
+      request
+    );
+  }
 }

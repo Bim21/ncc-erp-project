@@ -153,7 +153,7 @@ import { AddNoteDialogComponent } from '@app/modules/delivery-management/deliver
 import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import {DateAdapter,MAT_DATE_FORMATS} from '@angular/material/core'
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core'
 import { DATE_FORMATS } from '@shared/AppEnums';
 import { CollectTimesheetDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/collect-timesheet-dialog/collect-timesheet-dialog.component';
 import { ListTimesheetByProjectCodeDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/list-timesheet-by-project-code-dialog/list-timesheet-by-project-code-dialog.component';
@@ -181,6 +181,8 @@ import { EditNoteDialogComponent } from './modules/pm-management/list-project/li
 import { FormSendRecruitmentComponent } from './modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
 import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
+import { RequestResourceTrainingTabComponent } from './modules/delivery-management/delivery/request-resource-training-tab/request-resource-training-tab.component';
+import { CreateUpdateResourceRequestTrainingComponent } from './modules/delivery-management/delivery/request-resource-training-tab/create-update-resource-request-training/create-update-resource-request-training.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -344,7 +346,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditNoteDialogComponent,
     FormSendRecruitmentComponent,
     PositionComponent,
-    CreateUpdatePositionComponent
+    CreateUpdatePositionComponent,
+    RequestResourceTrainingTabComponent,
+    CreateUpdateResourceRequestTrainingComponent
   ],
   imports: [
     CommonModule,
@@ -415,4 +419,4 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ResetPasswordDialogComponent,
   ],
 })
-export class AppModule {}
+export class AppModule { }

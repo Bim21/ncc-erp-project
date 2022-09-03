@@ -75,6 +75,7 @@ import { ProductProjectFileComponent } from './modules/pm-management/product-pro
 import { BranchComponent } from './modules/admin/branch/branch.component';
 import { TechnologyComponent } from './modules/admin/technology/technology.component';
 import { PositionComponent } from './modules/admin/position/position.component';
+import { RequestResourceTrainingTabComponent } from './modules/delivery-management/delivery/request-resource-training-tab/request-resource-training-tab.component';
 
 @NgModule({
   imports: [
@@ -354,6 +355,11 @@ import { PositionComponent } from './modules/admin/position/position.component';
           {
             path: "resource-request",
             component: RequestResourceTabComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "resource-request-training",
+            component: RequestResourceTrainingTabComponent,
             canActivate: [AppRouteGuard],
           },
           {

@@ -69,7 +69,8 @@ namespace ProjectManagement.APIs.ResourceRequests
         [AbpAuthorize(PermissionNames.ResourceRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
-            var query = _resourceRequestManager.IQGetResourceRequest();
+            var query = _resourceRequestManager.IQGetResourceRequest()
+                .Where(s => s.ProjectType != ProjectType.TRAINING);
 
             if (input.SkillIds == null || input.SkillIds.IsEmpty())
             {
@@ -597,6 +598,33 @@ namespace ProjectManagement.APIs.ResourceRequests
                     Id = q.GetHashCode(),
                     Name = q.ToString()
                 }).ToList();
+        }
+
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.ResourceRequest)]
+        public async Task<GridResult<GetResourceRequestDto>> GetAllTrainingPaging(InputGetAllRequestResourceDto input)
+        {
+            var query = _resourceRequestManager.IQGetResourceRequest()
+                .Where(s => s.ProjectType == ProjectType.TRAINING);
+
+            if (input.SkillIds == null || input.SkillIds.IsEmpty())
+            {
+                return await query.GetGridResult(query, input);
+            }
+            if (input.SkillIds.Count() == 1 || !input.IsAndCondition)
+            {
+                var qRequestIdsHaveAnySkill = QueryResourceRequestIdsHaveAnySkill(input.SkillIds).Distinct();
+                query = from request in query
+                        join requestId in qRequestIdsHaveAnySkill on request.Id equals requestId
+                        select request;
+
+                return await query.GetGridResult(query, input);
+            }
+
+            var requestIds = await QetResourceRequestIdsHaveAllSkill(input.SkillIds);
+            query = query.Where(s => requestIds.Contains(s.Id));
+
+            return await query.GetGridResult(query, input);
         }
 
         private enum Action : byte
