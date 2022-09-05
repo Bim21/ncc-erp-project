@@ -465,7 +465,7 @@
                           line-height: initial;
                         "
                       >
-                                            {{ item.dmNote }} 
+                                            {{ item.dmNote }}
                       </pre>
                     </div>
                     <div
@@ -525,7 +525,7 @@
                         ></i>
                         Set Done
                       </button>
-                      
+
                       <button
                         *ngIf="isShowBtnCancel(item)"
                         class="btn btn-block text-left"
@@ -537,7 +537,7 @@
                         ></i>
                         Cancel
                       </button>
-                      
+
                       <br />
                       <button
                         class="btn btn-block text-left"
@@ -548,38 +548,39 @@
                         <i class="fa fa-edit vertical-align-baseline"></i>
                         Edit
                       </button>
-                     
-                   
+
                       <button
                         *ngIf="item.isRecruitmentSend && item.recruitmentUrl"
                         class="btn btn-block text-left"
                         (click)="viewRecruitment(item.recruitmentUrl)"
                         mat-button
                       >
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye vertical-align-baseline"></i>
                         View recruitment
                       </button>
-                   
-                      <button      
-                      *ngIf="isShowBtnSendRecruitment(item)"                  
+
+                      <button
+                        *ngIf="isShowBtnDelete(item)"
                         class="btn btn-block text-left"
                         mat-button
-                        (click)="sendRecruitment(item)"
-                      >
-                        Send recruitment
-                      </button>
-                  
-                  
-                      <button
-                      *ngIf="isShowBtnDelete(item)"
-                        class="btn btn-block text-left"
-                        mat-button                        
                         (click)="delete(item)"
                       >
                         <i
                           class="fa fa-trash text-danger vertical-align-baseline"
                         ></i>
                         Delete
+                      </button>
+
+                      <button
+                        *ngIf="isShowBtnSendRecruitment(item)"
+                        class="btn btn-block text-left"
+                        mat-button
+                        (click)="sendRecruitment(item)"
+                      >
+                        <i
+                          class="fa fa-paper-plane vertical-align-baseline text-primary"
+                        ></i>
+                        Send recruitment
                       </button>
                     </div>
                   </mat-menu>

@@ -116,9 +116,18 @@ export class DeliveryResourceRequestService extends BaseApiService {
     return this.http.get<any>(this.rootUrl + '/GetProjectUserRoles');
   }
 
+  public getPositions(): Observable<any>{
+    return this.http.get<any>(this.baseUrl + '/api/services/app/Position/GetAll');
+  }
+
   public getResourceRequestById(id: number): Observable<any>{
     return this.http.get<any>(this.rootUrl + '/GetById?requestId=' +id)
   }
+
+  public getTrainingLevels(): Observable<any>{
+    return this.http.get<any>(this.rootUrl + '/GetTrainingRequestLevels');
+  }
+
   public updateNote(data: any, type: string): Observable<any>{
     if(type == 'PM'){
       return this.http.post<any>(this.rootUrl + '/UpdatePMNote', data)

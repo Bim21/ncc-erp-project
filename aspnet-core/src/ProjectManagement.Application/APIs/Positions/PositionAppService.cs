@@ -34,6 +34,22 @@ namespace ProjectManagement.APIs.Positions
             return await query.GetGridResult(query, input);
         }
 
+        [HttpGet]
+        public async Task<List<PositionDto>> GetAll()
+        {
+            var query = WorkScope.GetAll<Position>()
+               .Select(s => new PositionDto
+               {
+                   Id = s.Id,
+                   Name = s.Name,
+                   ShortName = s.ShortName,
+                   Code = s.Code,
+                   Color = s.Color
+               })
+               .OrderBy(s => s.ShortName);
+            return await query.ToListAsync();
+        }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Admin_Positions_Create)]
         public async Task<PositionDto> Create(PositionDto input)

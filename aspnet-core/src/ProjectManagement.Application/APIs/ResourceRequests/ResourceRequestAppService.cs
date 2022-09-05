@@ -627,6 +627,14 @@ namespace ProjectManagement.APIs.ResourceRequests
             return await query.GetGridResult(query, input);
         }
 
+        [HttpGet]
+        public List<IDNameDto> GetTrainingRequestLevels()
+        {
+            var result = new List<IDNameDto>();
+            result.Add(new IDNameDto { Id = UserLevel.Intern_3.GetHashCode(), Name = "Intern" });
+            return result;
+        }
+
         private enum Action : byte
         {
             Create = 1,

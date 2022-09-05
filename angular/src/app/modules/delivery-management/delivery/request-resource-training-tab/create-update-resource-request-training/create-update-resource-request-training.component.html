@@ -29,7 +29,7 @@
             #projectIdValid="ngModel"
             placeholder="Select project"
             required
-            [(ngModel)]="resourceRequestDto.projectId"
+            [(ngModel)]="resourceRequestTrainingDto.projectId"
           >
             <mat-form-field
               class="w-100 px-3"
@@ -70,13 +70,34 @@
       </div>
     </div>
     <div class="form-group row required">
+      <label class="col-md-3 col-form-label" for="tenancyName">
+        Position:
+      </label>
+      <div class="col-md-9">
+        <mat-form-field class="mt-2 w-100" appearance="outline">
+          <mat-select
+            name="userLevel"
+            #userLevelValid="ngModel"
+            placeholder="Select Position"
+            [(ngModel)]="resourceRequestTrainingDto.position"
+          >
+            <ng-container *ngFor="let position of listPosition">
+              <mat-option [value]="position.id">
+                {{ position.name }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="tenancyName"> Skill: </label>
       <div class="col-md-9">
         <mat-form-field appearance="outline" class="w-100">
           <mat-select
             placeholder="Select skill"
             multiple
-            [(ngModel)]="resourceRequestDto.skillIds"
+            [(ngModel)]="resourceRequestTrainingDto.skillIds"
             name="SkillList"
             #skill="ngModel"
           >
@@ -104,7 +125,7 @@
             #userLevelValid="ngModel"
             placeholder="Select Level"
             required
-            [(ngModel)]="resourceRequestDto.level"
+            [(ngModel)]="resourceRequestTrainingDto.level"
           >
             <ng-container *ngFor="let userLevel of userLevelList">
               <mat-option [value]="userLevel.id">
@@ -134,7 +155,7 @@
             placeholder="Quantity"
             name="quantity"
             #quantity="ngModel"
-            [(ngModel)]="resourceRequestDto.quantity"
+            [(ngModel)]="resourceRequestTrainingDto.quantity"
             required
           />
         </mat-form-field>
@@ -159,7 +180,7 @@
             #priorityValid="ngModel"
             placeholder="Select priority"
             required
-            [(ngModel)]="resourceRequestDto.priority"
+            [(ngModel)]="resourceRequestTrainingDto.priority"
           >
             <ng-container *ngFor="let priority of priorityList">
               <mat-option [value]="APP_ENUM.Priority[priority]">
@@ -184,7 +205,7 @@
             name="startTime"
             name="timeNedd"
             #timeNeed="ngModel"
-            [(ngModel)]="resourceRequestDto.timeNeed"
+            [(ngModel)]="resourceRequestTrainingDto.timeNeed"
             required
           />
           <mat-datepicker-toggle

@@ -22,6 +22,32 @@ export class RequestResourceDto {
   quantity: number;
   planUserInfo: any
 }
+
+export class RequestResourceTrainingDto {
+  constructor(){
+    this.level = 100;
+    this.quantity = 1;
+    this.priority =1;
+    this.timeNeed = new Date()
+  }
+  name: string;
+  projectId: number;
+  projectName?: string;
+  timeNeed?: any;
+  status?: number;
+  statusName?: string;
+  timeDone: string;
+  pmNote?: string;
+  dmNote?: string;
+  plannedNumberOfPersonnel?: number;
+  id?: number;
+  skillIds?: any;
+  level?: any;
+  priority?: any;
+  quantity: number;
+  planUserInfo: any;
+  position?: any;
+}
 export class ResourceRequestDetailDto {
   userId: number;
   FullName: string;

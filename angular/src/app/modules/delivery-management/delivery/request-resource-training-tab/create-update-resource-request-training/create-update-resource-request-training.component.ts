@@ -4,7 +4,7 @@ import { DeliveryResourceRequestService } from './../../../../../service/api/del
 import { result } from 'lodash-es';
 import { ProjectDto } from './../../../../../service/model/list-project.dto';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
-import { RequestResourceDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
+import { RequestResourceTrainingDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -24,10 +24,11 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
   public listProject: ProjectDto[] = [];
   public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
   public userLevelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
-  public resourceRequestDto = {} as RequestResourceDto;
+  public resourceRequestTrainingDto = {} as RequestResourceTrainingDto;
   public title
   public searchProject: string = ""
   public isAddingSkill: boolean = false
+  listPosition: any[] = []
   listSkill: any[] = []
   listSkillDetail: any[] = []
   public selectedSkill: any[] = []
@@ -48,16 +49,17 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
     this.getAllProject();
     this.typeControl = this.data.typeControl
     if (this.data.command == 'create') {
-      this.resourceRequestDto = new RequestResourceDto()
+      this.resourceRequestTrainingDto = new RequestResourceTrainingDto()
       //if create from resource request project then command = 'create' & projectId != 0
       //assign projectId in dto = projectId
       if (this.data.item.projectId > 0) {
-        this.resourceRequestDto.projectId = this.data.item.projectId
+        this.resourceRequestTrainingDto.projectId = this.data.item.projectId
       }
     }
     else {
       this.getResourceRequestById(this.data.item.id)
     }
+    this.listPosition = this.data.positions
     this.listSkill = this.data.skills
     this.userLevelList = this.data.levels
   }
@@ -70,7 +72,7 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
 
   getResourceRequestById(id: number) {
     this.resourceRequestService.getResourceRequestById(id).subscribe(res => {
-      this.resourceRequestDto = res.result
+      this.resourceRequestTrainingDto = res.result
       this.title = res.result.name
     })
   }
@@ -82,23 +84,24 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
 
   SaveAndClose() {
     this.isLoading = true;
-    // this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
+    // this.resourceRequestTrainingDto.timeNeed = moment(this.resourceRequestTrainingDto.timeNeed).format("YYYY/MM/DD");
     let request = {
       name: '',
-      projectId: this.resourceRequestDto.projectId,
-      timeNeed: this.formatDateYMD(this.resourceRequestDto.timeNeed),
-      level: this.resourceRequestDto.level,
-      priority: this.resourceRequestDto.priority,
-      id: this.resourceRequestDto.id,
-      skillIds: this.resourceRequestDto.skillIds
+      projectId: this.resourceRequestTrainingDto.projectId,
+      timeNeed: this.formatDateYMD(this.resourceRequestTrainingDto.timeNeed),
+      position: this.resourceRequestTrainingDto.position,
+      level: this.resourceRequestTrainingDto.level,
+      priority: this.resourceRequestTrainingDto.priority,
+      id: this.resourceRequestTrainingDto.id,
+      skillIds: this.resourceRequestTrainingDto.skillIds
     }
 
     if (this.data.command == "create") {
       request.id = 0
-      let createRequest = { ...request, quantity: this.resourceRequestDto.quantity };
+      let createRequest = { ...request, quantity: 1 };
       this.resourceRequestService.create(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
-        this.dialogRef.close(this.resourceRequestDto);
+        this.dialogRef.close(this.resourceRequestTrainingDto);
       }, () => this.isLoading = false)
     } else {
       this.resourceRequestService.update(request).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
@@ -122,8 +125,8 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
         this.listSkillDetail = data.result
 
         let b = this.listSkillDetail.map(item => item.skillId)
-        this.resourceRequestDto.skillIds = b
-        console.log(this.resourceRequestDto.skillIds)
+        this.resourceRequestTrainingDto.skillIds = b
+        console.log(this.resourceRequestTrainingDto.skillIds)
       })
     }
   }

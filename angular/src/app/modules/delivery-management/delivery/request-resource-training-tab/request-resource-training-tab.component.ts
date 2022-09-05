@@ -1,5 +1,5 @@
 import { FormSendRecruitmentComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
-import { ResourceRequestDto } from './../../../../service/model/resource-request.dto';
+import { ResourceRequestTrainingDto } from '@app/service/model/resource-request.dto';
 import { result } from 'lodash-es';
 import { FormSetDoneComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-set-done/form-set-done.component';
 import { SortableComponent, SortableModel } from './../../../../../shared/components/sortable/sortable.component';
@@ -42,6 +42,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
   public listSkills: SkillDto[] = [];
   public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
+  public listPositions: any[] = []
   public selectedLevel: any = -1
   public isAndCondition: boolean = false;
   public skillIds: number[]
@@ -49,6 +50,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     { name: '#' },
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
     { name: 'Project', sortName: 'projectName', defaultSort: '' },
+    { name: 'Quantity' },
     { name: 'Skill' },
     { name: 'Level', sortName: 'level', defaultSort: '' },
     { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
@@ -95,6 +97,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     this.getPriorities()
     this.getStatuses()
     this.getProjectUserRoles();
+    this.getPositions();
     this.refresh();
   }
 
@@ -112,6 +115,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
       })
     }
   }
+
   showDialog(command: string, request: any) {
     let resourceRequest = {
       id: request.id ? request.id : null,
@@ -123,6 +127,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
         item: resourceRequest,
         skills: this.listSkills,
         levels: this.listLevels,
+        positions: this.listPositions,
         typeControl: 'request'
       },
       width: "700px",
@@ -141,12 +146,15 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
       }
     });
   }
+
   public createRequest() {
     this.showDialog("create", {});
   }
+
   public editRequest(item: any) {
     this.showDialog("edit", item);
   }
+
   public setDoneRequest(item) {
     let data = {
       ...item.planUserInfo,
@@ -212,7 +220,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     return res.result
   }
 
-  sendRecruitment(item: ResourceRequestDto) {
+  sendRecruitment(item: ResourceRequestTrainingDto) {
     const show = this.dialog.open(FormSendRecruitmentComponent, {
       data: { id: item.id, name: item.name, dmNote: item.dmNote, pmNote: item.pmNote } as SendRecruitmentModel,
       width: "700px",
@@ -358,30 +366,40 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
   }
   // #endregion
 
-  //#region get skills, statuses, levels, priorities
+  //#region get skills, statuses, levels, priorities, quantities
   getAllSkills() {
     this.resourceRequestService.getSkills().subscribe((data) => {
       this.listSkills = data.result;
     })
   }
+
   getLevels() {
-    this.resourceRequestService.getLevels().subscribe(res => {
+    this.resourceRequestService.getTrainingLevels().subscribe(res => {
       this.listLevels = res.result
     })
   }
+
   getPriorities() {
     this.resourceRequestService.getPriorities().subscribe(res => {
       this.listPriorities = res.result
     })
   }
+
   getStatuses() {
     this.resourceRequestService.getStatuses().subscribe(res => {
       this.listStatuses = res.result
     })
   }
+
   getProjectUserRoles() {
     this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
       this.listProjectUserRoles = rs.result
+    })
+  }
+
+  getPositions() {
+    this.resourceRequestService.getPositions().subscribe((rs: any) => {
+      this.listPositions = rs.result
     })
   }
   // #endregion

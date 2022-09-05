@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-6">
-          <h3>Resource requests for training</h3>
+          <h3>Training Requests</h3>
         </div>
         <div class="col-6 text-right">
           <button
@@ -327,6 +327,10 @@
                     {{ item.projectStatusName }}
                   </span>
                 </td>
+                <td class="text-center">
+                  1
+                  {{ item.quantity }}
+                </td>
                 <td>
                   <ul class="pl-3 m-0">
                     <li *ngFor="let skill of item.skills">
@@ -553,17 +557,8 @@
                         (click)="viewRecruitment(item.recruitmentUrl)"
                         mat-button
                       >
-                        <i class="fa fa-eye"></i>
+                        <i class="fa fa-eye vertical-align-baseline"></i>
                         View recruitment
-                      </button>
-
-                      <button
-                        *ngIf="isShowBtnSendRecruitment(item)"
-                        class="btn btn-block text-left"
-                        mat-button
-                        (click)="sendRecruitment(item)"
-                      >
-                        Send recruitment
                       </button>
 
                       <button
@@ -572,10 +567,18 @@
                         mat-button
                         (click)="delete(item)"
                       >
-                        <i
-                          class="fa fa-trash text-danger vertical-align-baseline"
-                        ></i>
+                        <i class="fa fa-trash text-danger vertical-align-baseline"></i>
                         Delete
+                      </button>
+
+                      <button
+                        *ngIf="isShowBtnSendRecruitment(item)"
+                        class="btn btn-block text-left"
+                        mat-button
+                        (click)="sendRecruitment(item)"
+                      >
+                        <i class="fa fa-paper-plane vertical-align-baseline text-primary"></i>
+                        Send recruitment
                       </button>
                     </div>
                   </mat-menu>
