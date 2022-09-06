@@ -185,8 +185,6 @@ export const APP_ENUMS = {
         CTV: 1,
         Staff: 2,
         "T.Việc": 3,
-        FakeUser: 4,
-        Vendor: 5
 
     },
     WeeklySent: {
