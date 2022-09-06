@@ -34,7 +34,7 @@
                             <mat-form-field class="col-6" appearance="outline">
                                 <mat-select placeholder="select position" [(ngModel)]="selectedPositions" multiple (selectionChange)="onChangePositionsEvent($event)">
                                     <mat-option *ngFor="let position of listPositions" [value]='position.id'>
-                                        {{position.name}}
+                                        {{position.shortName}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
