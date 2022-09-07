@@ -194,11 +194,8 @@ export const APP_ENUMS = {
         CTV: 1,
         Staff: 2,
         "T.Việc": 3,
-<<<<<<< HEAD
 
-=======
         
->>>>>>> 90143b48739c91011489fea954b274973a92e85b
     },
     WeeklySent: {
         Unsent: 0,
