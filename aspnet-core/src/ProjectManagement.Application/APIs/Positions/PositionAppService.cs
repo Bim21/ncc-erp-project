@@ -38,7 +38,7 @@ namespace ProjectManagement.APIs.Positions
         [AbpAuthorize(PermissionNames.Admin_Positions_Create)]
         public async Task<PositionDto> Create(PositionDto input)
         {
-            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Name == input.Name || x.Name == input.Code || x.Code == input.Code || x.ShortName != input.ShortName);
+            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.ShortName == input.ShortName);
 
             if (isExist)
                 throw new UserFriendlyException(String.Format("Name or ShortName or Code already exist or Name input not coincide Old Name !"));
@@ -54,7 +54,7 @@ namespace ProjectManagement.APIs.Positions
         {
             var Position = await WorkScope.GetAsync<Position>(input.Id);
 
-            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Name == input.Code || x.Code == input.Code || x.ShortName != input.ShortName));
+            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code || x.ShortName == input.ShortName));
 
             if (isExist)
                 throw new UserFriendlyException(String.Format("Name or ShortName or Code already exist or Name input not coincide Old Name !"));
