@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { RequestResourceDto } from './../../../../service/model/delivery-management.dto';
+import { RequestResourceTrainingDto } from './../../../../service/model/delivery-management.dto';
 import { Component, OnInit, Injector, ChangeDetectorRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from '@app/service/model/list-project.dto';
@@ -25,7 +25,7 @@ import { IDNameDto } from '@app/service/model/id-name.dto';
   templateUrl: './request-resource-training-tab.component.html',
   styleUrls: ['./request-resource-training-tab.component.css']
 })
-export class RequestResourceTrainingTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
+export class RequestResourceTrainingTabComponent extends PagedListingComponentBase<RequestResourceTrainingDto> implements OnInit {
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
@@ -35,8 +35,8 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
   ];
   public selectedOption: string = "PROJECT"
   public selectedStatus: any = 0
-  public listRequest: RequestResourceDto[] = [];
-  public tempListRequest: RequestResourceDto[] = [];
+  public listRequest: RequestResourceTrainingDto[] = [];
+  public tempListRequest: RequestResourceTrainingDto[] = [];
   public listStatuses: any[] = []
   public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
@@ -50,7 +50,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     { name: '#' },
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
     { name: 'Project', sortName: 'projectName', defaultSort: '' },
-    { name: 'Quantity' },
+    { name: 'Quantity'},
     { name: 'Skill' },
     { name: 'Level', sortName: 'level', defaultSort: '' },
     { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
@@ -172,7 +172,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     })
   }
 
-  cancelRequest(request: RequestResourceDto) {
+  cancelRequest(request: RequestResourceTrainingDto) {
     abp.message.confirm(
       'Are you sure cancel request for project: ' + request.projectName,
       '',
@@ -402,6 +402,11 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
       this.listPositions = rs.result
     })
   }
+
+  getQuantity(character) {
+    return this.listRequest.filter(x => x.projectName === character).length;
+  }
+
   // #endregion
 
   styleThead(item: any) {
@@ -410,6 +415,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
       height: item.height
     }
   }
+
   public getValueByEnum(enumValue: number, enumObject) {
     for (const key in enumObject) {
       if (enumObject[key] == enumValue) {
@@ -417,10 +423,11 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
       }
     }
   }
+
   viewRecruitment(url) {
     window.open(url, '_blank')
   }
-  protected delete(item: RequestResourceDto): void {
+  protected delete(item: RequestResourceTrainingDto): void {
     abp.message.confirm(
       "Delete this request?",
       "",
@@ -430,12 +437,11 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
             abp.notify.success(" Delete request successfully");
             this.refresh();
           });
-
         }
       }
-
     );
   }
+
   isShowButtonMenuAction(item) {
     return (item.statusName != 'DONE'
       //&& !item.isRecruitmentSend

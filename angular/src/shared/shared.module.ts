@@ -66,6 +66,7 @@ import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
 import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -116,7 +117,8 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         MatSelectModule,
         FormsModule,
         NgxStarsModule,
-        DragDropModule
+        DragDropModule,
+        NgxMatSelectSearchModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -185,7 +187,8 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         ListFilterPipe,
         NgxStarsModule,
         DragDropModule,
-        SubpositionFilterPipe
+        SubpositionFilterPipe,
+        NgxMatSelectSearchModule
     ]
 })
 export class SharedModule {
