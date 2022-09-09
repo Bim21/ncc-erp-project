@@ -60,7 +60,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { PercentageMaskDirective } from './directives/percentage-mask.directive';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
@@ -118,7 +118,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         FormsModule,
         NgxStarsModule,
         DragDropModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -180,6 +181,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         MatTooltipModule,
         MatTreeModule,
         MatFormFieldModule,
+        FormsModule,
         PercentageMaskDirective,
         UserInfoComponent,
         RadioDropdownComponent,

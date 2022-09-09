@@ -70,27 +70,6 @@
       </div>
     </div>
     <div class="form-group row required">
-      <label class="col-md-3 col-form-label" for="tenancyName">
-        Position:
-      </label>
-      <div class="col-md-9">
-        <mat-form-field class="mt-2 w-100" appearance="outline">
-          <mat-select
-            name="userLevel"
-            #userLevelValid="ngModel"
-            placeholder="Select Position"
-            [(ngModel)]="resourceRequestTrainingDto.position"
-          >
-            <ng-container *ngFor="let position of listPosition">
-              <mat-option [value]="position.id">
-                {{ position.name }}
-              </mat-option>
-            </ng-container>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="tenancyName"> Skill: </label>
       <div class="col-md-9">
         <mat-form-field appearance="outline" class="w-100">
@@ -101,6 +80,14 @@
             name="SkillList"
             #skill="ngModel"
           >
+            <ngx-mat-select-search
+              onkeydown="event.stopPropagation()"
+              placeholderLabel="Search..."
+              noEntriesFoundLabel="No match skill found"
+              ngModel
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="filterSkills($event)"
+            ></ngx-mat-select-search>
             <mat-option *ngFor="let skill of listSkill" [value]="skill.id">
               {{ skill.name }}
             </mat-option>

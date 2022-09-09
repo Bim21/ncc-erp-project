@@ -2,16 +2,25 @@ import { SkillService } from './../../../../../service/api/skill.service';
 import { catchError } from 'rxjs/operators';
 import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
 import { result } from 'lodash-es';
-import { ProjectDto } from './../../../../../service/model/list-project.dto';
+import { ProjectDto, SkillDto } from './../../../../../service/model/list-project.dto';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
 import { RequestResourceTrainingDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit, Inject, Injector, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, Injector, ChangeDetectorRef, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash'
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { MatSelect } from '@angular/material/select';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 
 @Component({
   selector: 'app-create-update-resource-request-training',
@@ -28,10 +37,9 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
   public title
   public searchProject: string = ""
   public isAddingSkill: boolean = false
-  listPosition: any[] = []
   listSkill: any[] = []
   listSkillDetail: any[] = []
-  public selectedSkill: any[] = []
+  public filteredSkillList: any[] = []
   public typeControl: string //include: request, requestProject
   constructor(
     injector: Injector,
@@ -59,8 +67,8 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
     else {
       this.getResourceRequestById(this.data.item.id)
     }
-    this.listPosition = this.data.positions
     this.listSkill = this.data.skills
+    this.filterSkills = this.data.skills
     this.userLevelList = this.data.levels
   }
 
@@ -89,7 +97,6 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
       name: '',
       projectId: this.resourceRequestTrainingDto.projectId,
       timeNeed: this.formatDateYMD(this.resourceRequestTrainingDto.timeNeed),
-      position: this.resourceRequestTrainingDto.position,
       level: this.resourceRequestTrainingDto.level,
       priority: this.resourceRequestTrainingDto.priority,
       id: this.resourceRequestTrainingDto.id,
@@ -160,11 +167,17 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
       abp.notify.error("Skill or Quantity not valid")
     }
     this.isAddingSkill = false
-
   }
 
   focusOut() {
     this.searchProject = '';
   }
 
+  filterSkills(event) {
+    this.filteredSkillList = this.listSkill.filter(
+      (skill) => this.l(skill.name.toLowerCase()).includes(
+        this.l(event.toLowerCase())
+      ) || skill.email.includes(event)
+    );
+  }
 }

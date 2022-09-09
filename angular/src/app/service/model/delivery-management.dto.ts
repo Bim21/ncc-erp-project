@@ -46,7 +46,6 @@ export class RequestResourceTrainingDto {
   priority?: any;
   quantity: number;
   planUserInfo: any;
-  position?: any;
 }
 export class ResourceRequestDetailDto {
   userId: number;

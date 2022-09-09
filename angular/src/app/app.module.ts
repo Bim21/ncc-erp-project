@@ -183,6 +183,8 @@ import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
 import { RequestResourceTrainingTabComponent } from './modules/delivery-management/delivery/request-resource-training-tab/request-resource-training-tab.component';
 import { CreateUpdateResourceRequestTrainingComponent } from './modules/delivery-management/delivery/request-resource-training-tab/create-update-resource-request-training/create-update-resource-request-training.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -369,6 +371,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     Ng2SearchPipeModule,
     ImageCropperModule,
     CdTimerModule,
+    NgxMatSelectSearchModule,
 
     TranslateModule.forRoot({
       loader: {

@@ -52,7 +52,6 @@ export class ResourceRequestTrainingDto {
     statusName: string;
     priorityName: string;
     levelName: string;
-    position: ResourceRequestPositionDto[];
 }
 export class UserPlanDto {
     projectUserId: number;
@@ -62,11 +61,6 @@ export class UserPlanDto {
 }
 
 export class ResourceRequestSkillDto {
-    id: number;
-    name: string;
-}
-
-export class ResourceRequestPositionDto {
     id: number;
     name: string;
 }
