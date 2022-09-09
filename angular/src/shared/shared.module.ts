@@ -68,7 +68,6 @@ import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
-
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
 

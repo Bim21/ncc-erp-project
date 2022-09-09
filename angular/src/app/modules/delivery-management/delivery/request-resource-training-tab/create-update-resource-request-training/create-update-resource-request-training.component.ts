@@ -37,9 +37,9 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
   public title
   public searchProject: string = ""
   public isAddingSkill: boolean = false
-  listSkill: any[] = []
+  listSkill: SkillDto[] = []
   listSkillDetail: any[] = []
-  public filteredSkillList: any[] = []
+  public filteredSkillList: SkillDto[] = []
   public typeControl: string //include: request, requestProject
   constructor(
     injector: Injector,
@@ -68,7 +68,7 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
       this.getResourceRequestById(this.data.item.id)
     }
     this.listSkill = this.data.skills
-    this.filterSkills = this.data.skills
+    this.filteredSkillList = this.data.skills
     this.userLevelList = this.data.levels
   }
 
@@ -177,7 +177,7 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
     this.filteredSkillList = this.listSkill.filter(
       (skill) => this.l(skill.name.toLowerCase()).includes(
         this.l(event.toLowerCase())
-      ) || skill.email.includes(event)
+      )
     );
   }
 }
