@@ -7,25 +7,25 @@ import { AppComponentBase } from 'shared/app-component-base';
 import { ResourcePlanDto } from './../../../../service/model/resource-plan.dto';
 import { PERMISSIONS_CONSTANT } from './../../../../constant/permission.constant';
 import { RESOURCE_REQUEST_STATUS } from './../../../../constant/resource-request-status.constant';
-import { CreateUpdateResourceRequestTrainingComponent } from './create-update-resource-request-training/create-update-resource-request-training.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { RequestResourceTrainingDto } from './../../../../service/model/delivery-management.dto';
+import { TrainingRequestDto } from './../../../../service/model/delivery-management.dto';
 import { Component, OnInit, Injector, ChangeDetectorRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from '@app/service/model/list-project.dto';
 import { FormPlanUserComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
 import * as moment from 'moment';
 import { IDNameDto } from '@app/service/model/id-name.dto';
+import { CreateUpdateTrainingRequestComponent } from './create-update-training-request/create-update-training-request.component';
 
 @Component({
-  selector: 'app-request-resource-training-tab',
-  templateUrl: './request-resource-training-tab.component.html',
-  styleUrls: ['./request-resource-training-tab.component.css']
+  selector: 'app-training-request-tab',
+  templateUrl: './training-request-tab.component.html',
+  styleUrls: ['./training-request-tab.component.css']
 })
-export class RequestResourceTrainingTabComponent extends PagedListingComponentBase<RequestResourceTrainingDto> implements OnInit {
+export class TrainingRequestTabComponent extends PagedListingComponentBase<TrainingRequestDto> implements OnInit {
 
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
@@ -35,8 +35,8 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
   ];
   public selectedOption: string = "PROJECT"
   public selectedStatus: any = 0
-  public listRequest: RequestResourceTrainingDto[] = [];
-  public tempListRequest: RequestResourceTrainingDto[] = [];
+  public listRequest: TrainingRequestDto[] = [];
+  public tempListRequest: TrainingRequestDto[] = [];
   public listStatuses: any[] = []
   public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
@@ -50,7 +50,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     { name: '#' },
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
     { name: 'Project', sortName: 'projectName', defaultSort: '' },
-    { name: 'Quantity'},
+    { name: 'Quantity' },
     { name: 'Skill' },
     { name: 'Level', sortName: 'level', defaultSort: '' },
     { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
@@ -82,13 +82,14 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
   ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment;
 
   @ViewChildren('sortThead') private elementRefSortable: QueryList<any>;
+
   constructor(
     private injector: Injector,
     private resourceRequestService: DeliveryResourceRequestService,
     private ref: ChangeDetectorRef,
     private dialog: MatDialog
   ) {
-    super(injector)
+    super(injector);
   }
 
   ngOnInit(): void {
@@ -121,7 +122,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
       id: request.id ? request.id : null,
       projectId: 0
     }
-    const show = this.dialog.open(CreateUpdateResourceRequestTrainingComponent, {
+    const show = this.dialog.open(CreateUpdateTrainingRequestComponent, {
       data: {
         command: command,
         item: resourceRequest,
@@ -172,7 +173,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
     })
   }
 
-  cancelRequest(request: RequestResourceTrainingDto) {
+  cancelRequest(request: TrainingRequestDto) {
     abp.message.confirm(
       'Are you sure cancel request for project: ' + request.projectName,
       '',
@@ -427,7 +428,7 @@ export class RequestResourceTrainingTabComponent extends PagedListingComponentBa
   viewRecruitment(url) {
     window.open(url, '_blank')
   }
-  protected delete(item: RequestResourceTrainingDto): void {
+  protected delete(item: TrainingRequestDto): void {
     abp.message.confirm(
       "Delete this request?",
       "",
@@ -497,3 +498,4 @@ export class SendRecruitmentModel {
   dmNote: string;
   pmNote: string;
 }
+

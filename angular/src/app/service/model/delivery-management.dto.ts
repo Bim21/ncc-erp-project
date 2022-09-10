@@ -1,8 +1,8 @@
 export class RequestResourceDto {
-  constructor(){
+  constructor() {
     this.level = 100;
     this.quantity = 1;
-    this.priority =1;
+    this.priority = 1;
     this.timeNeed = new Date()
   }
   name: string;
@@ -23,11 +23,11 @@ export class RequestResourceDto {
   planUserInfo: any
 }
 
-export class RequestResourceTrainingDto {
-  constructor(){
+export class TrainingRequestDto {
+  constructor() {
     this.level = 100;
     this.quantity = 1;
-    this.priority =1;
+    this.priority = 1;
     this.timeNeed = new Date()
   }
   name: string;

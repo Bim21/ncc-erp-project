@@ -256,11 +256,11 @@
                   [ngStyle]="styleThead(thead)"
                 >
                   <div class="row sortHeader">
-                    <div class="col-xl-8 col-lg-12 rsp-th-name text-left">
+                    <div class="col-xl-12 col-lg-12 rsp-th-name text-center">
                       {{ thead.name }}
                     </div>
                     <div
-                      class="col-xl-4 col-lg-12 rsp-th-sort text-right"
+                      class="col-xl-12 col-lg-12 rsp-th-sort text-center"
                       *ngIf="i != 0 && thead.sortName"
                       style="vertical-align: middle"
                     >
@@ -297,12 +297,12 @@
                   <span>{{ i + 1 }}</span>
                 </td>
                 <td class="text-center">
-                  <p
+                  <span
                     class="tag"
                     [ngClass]="APP_CONST.priorityRequest[item.priority]"
                   >
                     {{ item.priorityName }}
-                  </p>
+                  </span>
                 </td>
                 <td class="text-center">
                   {{ item.projectName }}
@@ -433,8 +433,8 @@
                           line-height: initial;
                         "
                       >
-                                              {{ item.pmNote }}
-                                          </pre
+                                                {{ item.pmNote }}
+                                            </pre
                       >
                     </div>
                     <div
@@ -468,8 +468,8 @@
                           line-height: initial;
                         "
                       >
-                                              {{ item.dmNote }}
-                        </pre
+                                                {{ item.dmNote }}
+                          </pre
                       >
                     </div>
                     <div
@@ -566,7 +566,9 @@
                         mat-button
                         (click)="delete(item)"
                       >
-                        <i class="fa fa-trash text-danger vertical-align-baseline"></i>
+                        <i
+                          class="fa fa-trash text-danger vertical-align-baseline"
+                        ></i>
                         Delete
                       </button>
 
@@ -576,7 +578,9 @@
                         mat-button
                         (click)="sendRecruitment(item)"
                       >
-                        <i class="fa fa-paper-plane vertical-align-baseline text-primary"></i>
+                        <i
+                          class="fa fa-paper-plane vertical-align-baseline text-primary"
+                        ></i>
                         Send recruitment
                       </button>
                     </div>

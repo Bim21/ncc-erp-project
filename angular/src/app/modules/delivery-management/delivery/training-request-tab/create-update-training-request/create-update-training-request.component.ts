@@ -4,7 +4,7 @@ import { DeliveryResourceRequestService } from './../../../../../service/api/del
 import { result } from 'lodash-es';
 import { ProjectDto, SkillDto } from './../../../../../service/model/list-project.dto';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
-import { RequestResourceTrainingDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
+import { TrainingRequestDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -12,42 +12,34 @@ import { Component, OnInit, Inject, Injector, ChangeDetectorRef, ViewChild } fro
 import * as moment from 'moment';
 import * as _ from 'lodash'
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
-import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { MatSelect } from '@angular/material/select';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
 
 @Component({
-  selector: 'app-create-update-resource-request-training',
-  templateUrl: './create-update-resource-request-training.component.html',
-  styleUrls: ['./create-update-resource-request-training.component.css']
+  selector: 'app-create-update-training-request',
+  templateUrl: './create-update-training-request.component.html',
+  styleUrls: ['./create-update-training-request.component.css']
 })
-export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBase implements OnInit {
+export class CreateUpdateTrainingRequestComponent extends AppComponentBase implements OnInit {
 
   public isLoading: boolean = false;
   public listProject: ProjectDto[] = [];
   public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
   public userLevelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
-  public resourceRequestTrainingDto = {} as RequestResourceTrainingDto;
-  public title
+  public resourceRequestTrainingDto = {} as TrainingRequestDto;
+  public title: string = ""
   public searchProject: string = ""
   public isAddingSkill: boolean = false
-  listSkill: SkillDto[] = []
-  listSkillDetail: any[] = []
+  public listSkill: SkillDto[] = []
+  public listSkillDetail: any[] = []
   public filteredSkillList: SkillDto[] = []
-  public typeControl: string //include: request, requestProject
+  public typeControl: string    //include: request, requestProject
+
   constructor(
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
     private resourceRequestService: DeliveryResourceRequestService,
     private skillService: SkillService,
-    public dialogRef: MatDialogRef<CreateUpdateResourceRequestTrainingComponent>,
+    public dialogRef: MatDialogRef<CreateUpdateTrainingRequestComponent>,
     public ref: ChangeDetectorRef
   ) {
     super(injector);
@@ -57,7 +49,7 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
     this.getAllProject();
     this.typeControl = this.data.typeControl
     if (this.data.command == 'create') {
-      this.resourceRequestTrainingDto = new RequestResourceTrainingDto()
+      this.resourceRequestTrainingDto = new TrainingRequestDto()
       //if create from resource request project then command = 'create' & projectId != 0
       //assign projectId in dto = projectId
       if (this.data.item.projectId > 0) {
@@ -180,4 +172,5 @@ export class CreateUpdateResourceRequestTrainingComponent extends AppComponentBa
       )
     );
   }
+
 }

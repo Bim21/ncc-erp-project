@@ -181,9 +181,9 @@ import { EditNoteDialogComponent } from './modules/pm-management/list-project/li
 import { FormSendRecruitmentComponent } from './modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
 import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
-import { RequestResourceTrainingTabComponent } from './modules/delivery-management/delivery/request-resource-training-tab/request-resource-training-tab.component';
-import { CreateUpdateResourceRequestTrainingComponent } from './modules/delivery-management/delivery/request-resource-training-tab/create-update-resource-request-training/create-update-resource-request-training.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { TrainingRequestTabComponent } from './modules/delivery-management/delivery/training-request-tab/training-request-tab.component';
+import { CreateUpdateTrainingRequestComponent } from './modules/delivery-management/delivery/training-request-tab/create-update-training-request/create-update-training-request.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -349,8 +349,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     FormSendRecruitmentComponent,
     PositionComponent,
     CreateUpdatePositionComponent,
-    RequestResourceTrainingTabComponent,
-    CreateUpdateResourceRequestTrainingComponent
+    TrainingRequestTabComponent,
+    CreateUpdateTrainingRequestComponent
   ],
   imports: [
     CommonModule,
