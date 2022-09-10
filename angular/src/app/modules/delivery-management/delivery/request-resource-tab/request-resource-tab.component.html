@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-6">
-          <h3>Resource request</h3>
+          <h3>Resource Requests</h3>
         </div>
         <div class="col-6 text-right">
           <button
@@ -297,12 +297,12 @@
                   <span>{{ i + 1 }}</span>
                 </td>
                 <td class="text-center">
-                  <p
+                  <span
                     class="tag"
                     [ngClass]="APP_CONST.priorityRequest[item.priority]"
                   >
                     {{ item.priorityName }}
-                  </p>
+                  </span>
                 </td>
                 <td class="text-center">
                   {{ item.projectName }}

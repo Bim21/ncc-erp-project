@@ -2,7 +2,7 @@ import { SkillService } from './../../../../../service/api/skill.service';
 import { catchError } from 'rxjs/operators';
 import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
 import { result } from 'lodash-es';
-import { ProjectDto } from './../../../../../service/model/list-project.dto';
+import { ProjectDto, SkillDto } from './../../../../../service/model/list-project.dto';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
 import { RequestResourceDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -24,22 +24,23 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
   public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
   public userLevelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
   public resourceRequestDto = {} as RequestResourceDto;
-  public title
+  public title: string = ""
   public searchProject: string = ""
   public isAddingSkill: boolean = false
-  listSkill: any[] = []
-  listSkillDetail: any[] = []
-  public selectedSkill: any[] = []
-  public typeControl: string //include: request, requestProject
+  public listSkill: SkillDto[] = []
+  public listSkillDetail: any[] = []
+  public filteredSkillList: any[] = []
+  public typeControl: string  //include: request, requestProject
+
   constructor(
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
-    private resourceRequestService: DeliveryResourceRequestService, 
+    private resourceRequestService: DeliveryResourceRequestService,
     private skillService: SkillService,
     public dialogRef: MatDialogRef<CreateUpdateResourceRequestComponent>,
     public ref: ChangeDetectorRef
-  ) 
+  )
   {
     super(injector);
   }
@@ -59,6 +60,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       this.getResourceRequestById(this.data.item.id)
     }
     this.listSkill = this.data.skills
+    this.filteredSkillList = this.data.skills
     this.userLevelList = this.data.levels
   }
 
@@ -79,6 +81,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     this.listSkillDetail.push({ pending: true })
     this.isAddingSkill = true
   }
+
   SaveAndClose() {
     this.isLoading = true;
     // this.resourceRequestDto.timeNeed = moment(this.resourceRequestDto.timeNeed).format("YYYY/MM/DD");
@@ -91,7 +94,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       id: this.resourceRequestDto.id,
       skillIds: this.resourceRequestDto.skillIds
     }
-    
+
     if (this.data.command == "create") {
       request.id = 0
       let createRequest = { ...request, quantity: this.resourceRequestDto.quantity};
@@ -108,6 +111,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     }
 
   }
+
   getAllProject() {
     this.listProjectService.getMyProjects().subscribe(data => {
       this.listProject = data.result;
@@ -121,21 +125,24 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       this.getSkillDetail();
     })
   }
+
   temp
   getSkillDetail() {
     if (this.data.command == "edit") {
       this.resourceRequestService.GetSkillDetail(this.data.item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(data => {
         this.listSkillDetail = data.result
-        
+
         let b = this.listSkillDetail.map(item => item.skillId)
         this.resourceRequestDto.skillIds = b
         console.log(this.resourceRequestDto.skillIds)
       })
     }
   }
+
   pushSkill(skill) {
     this.listSkillDetail.push(skill)
   }
+
   removeSkill(skill) {
     if (skill.id) {
       this.resourceRequestService.deleteSkill(skill.id).pipe(catchError(this.skillService.handleError)).subscribe(rs => {
@@ -148,6 +155,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     }
     this.isAddingSkill = false
   }
+
   saveSkill(skill) {
     if (skill.skillId && skill.quantity > 0) {
       skill.resourceRequestId = this.data.item.id
@@ -162,7 +170,17 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
     this.isAddingSkill = false
 
   }
+
   focusOut(){
     this.searchProject = '';
   }
+
+  filterSkills(event) {
+    this.filteredSkillList = this.listSkill.filter(
+      (skill) => this.l(skill.name.toLowerCase()).includes(
+        this.l(event.toLowerCase())
+      )
+    );
+  }
+
 }
