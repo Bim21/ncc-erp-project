@@ -143,7 +143,6 @@
                           [(ngModel)]="selectedLevel"
                           (selectionChange)="getDataPage(1)"
                         >
-                          <mat-option [value]="-1">All</mat-option>
                           <mat-option
                             *ngFor="let level of listLevels"
                             [value]="level.id"
@@ -328,7 +327,7 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  {{ this.getQuantity(item.projectName) }}
+                  {{ item.quantity }}
                 </td>
                 <td>
                   <ul class="pl-3 m-0">
@@ -433,9 +432,8 @@
                           line-height: initial;
                         "
                       >
-                                                {{ item.pmNote }}
-                                            </pre
-                      >
+                        {{ item.pmNote }}
+                      </pre>
                     </div>
                     <div
                       class="col-md-2"
@@ -468,9 +466,8 @@
                           line-height: initial;
                         "
                       >
-                                                {{ item.dmNote }}
-                          </pre
-                      >
+                        {{ item.dmNote }}
+                      </pre>
                     </div>
                     <div
                       class="col-md-2"

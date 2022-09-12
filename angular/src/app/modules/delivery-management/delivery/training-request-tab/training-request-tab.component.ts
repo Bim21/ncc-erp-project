@@ -42,7 +42,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   public listSkills: SkillDto[] = [];
   public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
-  public listPositions: any[] = []
   public selectedLevel: any = this.APP_ENUM.UserLevel.Intern_3
   public isAndCondition: boolean = false;
   public skillIds: number[]
@@ -50,7 +49,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     { name: '#' },
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
     { name: 'Project', sortName: 'projectName', defaultSort: '' },
-    { name: 'Quantity' },
+    { name: 'Quantity', sortName: 'quantity', defaultSort: '' },
     { name: 'Skill' },
     { name: 'Level', sortName: 'level', defaultSort: '' },
     { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
@@ -98,7 +97,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     this.getPriorities()
     this.getStatuses()
     this.getProjectUserRoles();
-    this.getPositions();
     this.refresh();
   }
 
@@ -128,7 +126,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
         item: resourceRequest,
         skills: this.listSkills,
         levels: this.listLevels,
-        positions: this.listPositions,
         typeControl: 'request'
       },
       width: "700px",
@@ -213,6 +210,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
 
     });
   }
+  
   async getPlanResource(item) {
     let data = new ResourcePlanDto(item.id, 0);
     if (!item.planUserInfo)
@@ -398,16 +396,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     })
   }
 
-  getPositions() {
-    this.resourceRequestService.getPositions().subscribe((rs: any) => {
-      this.listPositions = rs.result
-    })
-  }
-
-  getQuantity(character) {
-    return this.listRequest.filter(x => x.projectName === character).length;
-  }
-
   // #endregion
 
   styleThead(item: any) {
@@ -428,6 +416,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   viewRecruitment(url) {
     window.open(url, '_blank')
   }
+
   protected delete(item: TrainingRequestDto): void {
     abp.message.confirm(
       "Delete this request?",

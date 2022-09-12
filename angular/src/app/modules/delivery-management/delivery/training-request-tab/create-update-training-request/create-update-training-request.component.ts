@@ -93,12 +93,13 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
       level: this.trainingRequestDto.level,
       priority: this.trainingRequestDto.priority,
       id: this.trainingRequestDto.id,
-      skillIds: this.trainingRequestDto.skillIds
+      skillIds: this.trainingRequestDto.skillIds,
+      quantity: this.trainingRequestDto.quantity
     }
 
     if (this.data.command == "create") {
       request.id = 0
-      let createRequest = { ...request, quantity: this.trainingRequestDto.quantity };
+      let createRequest = { ...request, quantity: 1 };
       this.resourceRequestService.create(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.trainingRequestDto);
@@ -110,7 +111,6 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
         this.dialogRef.close(res.result);
       }, () => this.isLoading = false)
     }
-
   }
 
   getAllProject() {
