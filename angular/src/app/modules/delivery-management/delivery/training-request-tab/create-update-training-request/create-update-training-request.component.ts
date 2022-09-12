@@ -24,7 +24,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
   public listProject: ProjectDto[] = [];
   public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
   public userLevelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
-  public resourceRequestTrainingDto = {} as TrainingRequestDto;
+  public trainingRequestDto = {} as TrainingRequestDto;
   public title: string = ""
   public searchProject: string = ""
   public isAddingSkill: boolean = false
@@ -49,11 +49,11 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
     this.getAllProject();
     this.typeControl = this.data.typeControl
     if (this.data.command == 'create') {
-      this.resourceRequestTrainingDto = new TrainingRequestDto()
+      this.trainingRequestDto = new TrainingRequestDto()
       //if create from resource request project then command = 'create' & projectId != 0
       //assign projectId in dto = projectId
       if (this.data.item.projectId > 0) {
-        this.resourceRequestTrainingDto.projectId = this.data.item.projectId
+        this.trainingRequestDto.projectId = this.data.item.projectId
       }
     }
     else {
@@ -62,6 +62,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
     this.listSkill = this.data.skills
     this.filteredSkillList = this.data.skills
     this.userLevelList = this.data.levels
+    this.trainingRequestDto.level = this.APP_ENUM.UserLevel.Intern_3
   }
 
   ngAfterViewChecked(): void {
@@ -72,7 +73,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
 
   getResourceRequestById(id: number) {
     this.resourceRequestService.getResourceRequestById(id).subscribe(res => {
-      this.resourceRequestTrainingDto = res.result
+      this.trainingRequestDto = res.result
       this.title = res.result.name
     })
   }
@@ -87,20 +88,20 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
     // this.resourceRequestTrainingDto.timeNeed = moment(this.resourceRequestTrainingDto.timeNeed).format("YYYY/MM/DD");
     let request = {
       name: '',
-      projectId: this.resourceRequestTrainingDto.projectId,
-      timeNeed: this.formatDateYMD(this.resourceRequestTrainingDto.timeNeed),
-      level: this.resourceRequestTrainingDto.level,
-      priority: this.resourceRequestTrainingDto.priority,
-      id: this.resourceRequestTrainingDto.id,
-      skillIds: this.resourceRequestTrainingDto.skillIds
+      projectId: this.trainingRequestDto.projectId,
+      timeNeed: this.formatDateYMD(this.trainingRequestDto.timeNeed),
+      level: this.trainingRequestDto.level,
+      priority: this.trainingRequestDto.priority,
+      id: this.trainingRequestDto.id,
+      skillIds: this.trainingRequestDto.skillIds
     }
 
     if (this.data.command == "create") {
       request.id = 0
-      let createRequest = { ...request, quantity: 1 };
+      let createRequest = { ...request, quantity: this.trainingRequestDto.quantity };
       this.resourceRequestService.create(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
-        this.dialogRef.close(this.resourceRequestTrainingDto);
+        this.dialogRef.close(this.trainingRequestDto);
       }, () => this.isLoading = false)
     } else {
       this.resourceRequestService.update(request).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
@@ -124,8 +125,8 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
         this.listSkillDetail = data.result
 
         let b = this.listSkillDetail.map(item => item.skillId)
-        this.resourceRequestTrainingDto.skillIds = b
-        console.log(this.resourceRequestTrainingDto.skillIds)
+        this.trainingRequestDto.skillIds = b
+        console.log(this.trainingRequestDto.skillIds)
       })
     }
   }

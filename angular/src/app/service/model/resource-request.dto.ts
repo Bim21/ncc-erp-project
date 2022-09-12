@@ -52,6 +52,7 @@ export class ResourceRequestTrainingDto {
     statusName: string;
     priorityName: string;
     levelName: string;
+    quantity: number;
 }
 export class UserPlanDto {
     projectUserId: number;

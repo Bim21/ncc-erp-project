@@ -43,7 +43,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
   public listPositions: any[] = []
-  public selectedLevel: any = -1
+  public selectedLevel: any = this.APP_ENUM.UserLevel.Intern_3
   public isAndCondition: boolean = false;
   public skillIds: number[]
   public theadTable: THeadTable[] = [
@@ -332,7 +332,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     this.filterItems = []
     this.searchText = ''
     this.skillIds = []
-    this.selectedLevel = -1
+    this.selectedLevel = this.APP_ENUM.UserLevel.Intern_3
     this.selectedStatus = 0
     this.changeSortableByName('priority', 'DESC')
     this.sortable = new SortableModel('', 1, '')

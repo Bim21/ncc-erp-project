@@ -29,7 +29,7 @@
             #projectIdValid="ngModel"
             placeholder="Select project"
             required
-            [(ngModel)]="resourceRequestTrainingDto.projectId"
+            [(ngModel)]="trainingRequestDto.projectId"
           >
             <mat-form-field
               class="w-100 px-3"
@@ -76,7 +76,7 @@
           <mat-select
             placeholder="Select skill"
             multiple
-            [(ngModel)]="resourceRequestTrainingDto.skillIds"
+            [(ngModel)]="trainingRequestDto.skillIds"
             name="SkillList"
             #skill="ngModel"
           >
@@ -121,7 +121,7 @@
             #userLevelValid="ngModel"
             placeholder="Select Level"
             required
-            [(ngModel)]="resourceRequestTrainingDto.level"
+            [(ngModel)]="trainingRequestDto.level"
           >
             <ng-container *ngFor="let userLevel of userLevelList">
               <mat-option [value]="userLevel.id">
@@ -151,7 +151,7 @@
             placeholder="Quantity"
             name="quantity"
             #quantity="ngModel"
-            [(ngModel)]="resourceRequestTrainingDto.quantity"
+            [(ngModel)]="trainingRequestDto.quantity"
             required
           />
         </mat-form-field>
@@ -176,7 +176,7 @@
             #priorityValid="ngModel"
             placeholder="Select priority"
             required
-            [(ngModel)]="resourceRequestTrainingDto.priority"
+            [(ngModel)]="trainingRequestDto.priority"
           >
             <ng-container *ngFor="let priority of priorityList">
               <mat-option [value]="APP_ENUM.Priority[priority]">
@@ -201,7 +201,7 @@
             name="startTime"
             name="timeNedd"
             #timeNeed="ngModel"
-            [(ngModel)]="resourceRequestTrainingDto.timeNeed"
+            [(ngModel)]="trainingRequestDto.timeNeed"
             required
           />
           <mat-datepicker-toggle
