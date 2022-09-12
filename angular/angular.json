@@ -89,16 +89,6 @@
                   "with": "src/environments/environment.hmr.ts"
                 }
               ]
-            },
-            "development": {
-              "optimization": false,
-              "outputHashing": "all",
-              "sourceMap": true,
-              "namedChunks": true,
-              "extractLicenses": false,
-              "vendorChunk": true,
-              "buildOptimizer": false,
-              "budgets": []
             }
           }
         },
@@ -113,12 +103,8 @@
             },
             "hmr": {
               "browserTarget": "ProjectManagement:build:hmr"
-            },
-            "development": {
-              "browserTarget": "ProjectManagement:build:development"
             }
-          },
-          "defaultConfiguration": "development"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
