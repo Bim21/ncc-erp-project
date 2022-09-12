@@ -297,12 +297,12 @@
                   <span>{{ i + 1 }}</span>
                 </td>
                 <td class="text-center">
-                  <span
+                  <p
                     class="tag"
                     [ngClass]="APP_CONST.priorityRequest[item.priority]"
                   >
                     {{ item.priorityName }}
-                  </span>
+                  </p>
                 </td>
                 <td class="text-center">
                   {{ item.projectName }}
@@ -522,7 +522,7 @@
                         (click)="setDoneRequest(item)"
                       >
                         <i
-                          class="fa fa-check text-success vertical-align-baseline"
+                          class="fa fa-fw fa-check text-success vertical-align-baseline"
                         ></i>
                         Set Done
                       </button>
@@ -534,7 +534,7 @@
                         (click)="cancelRequest(item)"
                       >
                         <i
-                          class="fa fa-times text-warning vertical-align-baseline"
+                          class="fa fa-fw fa-times text-warning vertical-align-baseline"
                         ></i>
                         Cancel
                       </button>
@@ -546,7 +546,7 @@
                         *ngIf="isShowBtnEdit(item)"
                         (click)="editRequest(item)"
                       >
-                        <i class="fa fa-edit vertical-align-baseline"></i>
+                        <i class="fa fa-fw fa-edit vertical-align-baseline"></i>
                         Edit
                       </button>
 
@@ -556,7 +556,7 @@
                         (click)="viewRecruitment(item.recruitmentUrl)"
                         mat-button
                       >
-                        <i class="fa fa-eye vertical-align-baseline"></i>
+                        <i class="fa fa-fw fa-eye vertical-align-baseline"></i>
                         View recruitment
                       </button>
 
@@ -567,7 +567,7 @@
                         (click)="delete(item)"
                       >
                         <i
-                          class="fa fa-trash text-danger vertical-align-baseline"
+                          class="fa fa-fw fa-trash text-danger vertical-align-baseline"
                         ></i>
                         Delete
                       </button>
@@ -579,7 +579,7 @@
                         (click)="sendRecruitment(item)"
                       >
                         <i
-                          class="fa fa-paper-plane vertical-align-baseline text-primary"
+                          class="fa fa-fw fa-paper-plane text-primary vertical-align-baseline"
                         ></i>
                         Send recruitment
                       </button>
