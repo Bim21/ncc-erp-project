@@ -11,14 +11,14 @@
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control col-4" style="margin-top: 4px;" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
+                            <input type="text" class="form-control col-3" style="margin-top: 4px;" name="keyword" placeholder="Search" [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
                             <div class="input-group-append" style="margin-top: 4px;">
                                 <button type="button" class="btn btn-default" (click)="checkAddFilter()">
                                     <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
                                         [class.fa-angle-down]="!advancedFiltersVisible"></i>
                                 </button>
                             </div>
-                            <div class="col-5" style="margin-left: 1px;">
+                            <div class="col-6" style="margin-left: 5px;">
                                 <label for="" style="margin-top: 13px;" class="col-5 text-right">User Type:</label>
                                 <mat-form-field class="col-7" appearance="outline">
                                     <mat-select placeholder="select user type" [(ngModel)]="selectedUserTypes" multiple (selectionChange)="onChangeUserTypeEvent($event)">
@@ -29,19 +29,19 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="" style="margin-top: 4px;margin-left: -130px;">
+                        <div class="col-3" style="margin-top: 4px;margin-left: -120px;">
                             <label for="" style="margin-top: 13px;" class="col-5 text-right">Position:</label>
                             <mat-form-field class="col-6" appearance="outline">
                                 <mat-select placeholder="select position" [(ngModel)]="selectedPositions" multiple (selectionChange)="onChangePositionsEvent($event)">
                                     <mat-option *ngFor="let position of listPositions" [value]='position.id'>
-                                        {{position.shortName}}
+                                        {{position.name}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="col-3"  style="margin-top: 4px; margin-left: -72px;">
+                        <div class="col-3"  style="margin-top: 4px;margin-left: -60px;">
                             <label for="" style="margin-top: 13px;" class="col-4 text-right">Branch:</label>
-                            <mat-form-field class="col-5" appearance="outline">
+                            <mat-form-field class="col-6" appearance="outline">
                                 <mat-select [(ngModel)]="selectedBranchIds" (selectionChange)="onChangeBranchEvent($event)" placeholder="select branch" multiple>
                                     <mat-option *ngFor="let branch of listBranchs" [value]='branch.id'>
                                         {{branch.name}}
@@ -49,7 +49,7 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="col-3" style="margin-top: 4px;margin-left: -168px;">
+                        <div class="col-3" style="margin-top: 4px;margin-left: -100px;">
                             <label for="" style="margin-top: 13px;" class="col-4 text-right">Skills:</label>
                             <mat-form-field class="col-5" appearance="outline">
                                 <mat-select placeholder="select skill" multiple (selectionChange)="getDataPage(1)" [(ngModel)]="selectedSkillId">
@@ -70,6 +70,8 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
+                        </div>
+                        <div class="col-1" style="margin-left: -75px;">
                             <i class="fas fa-times fa-lg mt-3" *ngIf="selectedSkillId?.length > 0" (click)="selectedSkillId = null; refresh()"></i>
                         </div>
                     </div>

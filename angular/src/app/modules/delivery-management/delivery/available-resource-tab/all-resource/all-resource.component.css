@@ -39,8 +39,3 @@ button {
 span {
     height: fit-content;
 }
-
-.row .w-100 > div {
-    justify-content: space-around;
-    display: flex;
-}

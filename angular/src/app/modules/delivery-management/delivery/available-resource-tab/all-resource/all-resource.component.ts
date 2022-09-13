@@ -77,7 +77,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   protected delete(entity: PlanResourceComponent): void {
   }
 
-  userTypeParam = Object.entries(this.APP_ENUM.UserTypeTabAllResource).map((item) => {
+  userTypeParam = Object.entries(this.APP_ENUM.UserType).map((item) => {
     return {
       displayName: item[0],
       value: item[1],

@@ -112,17 +112,17 @@ namespace ProjectManagement.Users
 
                             Id = u.Id,
                             EmailAddress = u.EmailAddress,
-                            AvatarPath = u.AvatarPath == null? "": u.AvatarPath,
+                            AvatarPath = u.AvatarPath == null ? "" : u.AvatarPath,
                             UserType = u.UserType,
                             PositionId = u.PositionId,
                             PositionColor = u.Position.Color,
-                            PositionName = u.Position.ShortName,
+                            PositionName = u.Position.Name,
                             UserLevel = u.UserLevel,
                             Branch = u.BranchOld,
                             BranchColor = u.Branch.Color,
                             BranchDisplayName = u.Branch.DisplayName,
                             IsActive = u.IsActive,
-                            FullName = u.Name+ " " + u.Surname,
+                            FullName = u.Name + " " + u.Surname,
                             CreationTime = u.CreationTime,
                             RoleNames = _roleManager.Roles
                             .Where(r => u.Roles
@@ -144,7 +144,7 @@ namespace ProjectManagement.Users
                                 ProjectRole = p.ProjectRole,
                                 StartTime = p.StartTime,
                                 IsPool = p.IsPool
-                                
+
                             }).ToList(),
                         };
 
@@ -361,7 +361,7 @@ namespace ProjectManagement.Users
             var userAndBranch = await _workScope
                 .GetAll<User>()
                 .Where(s => s.EmailAddress == email)
-                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : ""})
+                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : "" })
                 .FirstOrDefaultAsync();
 
             if (userAndBranch == null)
@@ -415,7 +415,7 @@ namespace ProjectManagement.Users
             };
 
 
-           
+
             return employeeInfo;
         }
 
@@ -549,7 +549,7 @@ namespace ProjectManagement.Users
         [AbpAuthorize(PermissionNames.Admin_Users_ResetPassword)]
         public async Task<bool> ResetPassword(ResetPasswordDto input)
         {
-            
+
             //long currentUserId = _abpSession.UserId.Value;
             //var currentUser = await _userManager.GetUserByIdAsync(currentUserId);
             //var loginAsync = await _logInManager.LoginAsync(currentUser.UserName, input.AdminPassword, shouldLockout: false);
@@ -639,7 +639,7 @@ namespace ProjectManagement.Users
             user.AvatarPath = avatarPath;
             await _userManager.UpdateAsync(user);
             return avatarPath;
-            
+
         }
 
         [HttpPost]
@@ -824,12 +824,12 @@ namespace ProjectManagement.Users
             {
                 komuMessage = komuMessage.Length >= 2 ? komuMessage.Remove(komuMessage.Length - 2, 2) : komuMessage;
                 komuMessage.Append("\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-                 _komuService.NotifyToChannel(new KomuMessage
+                _komuService.NotifyToChannel(new KomuMessage
                 {
                     Message = komuMessage.ToString(),
                     CreateDate = DateTimeUtils.GetNow(),
                 },
-                ChannelTypeConstant.GENERAL_CHANNEL);
+               ChannelTypeConstant.GENERAL_CHANNEL);
             }
             return new
             {
@@ -879,7 +879,7 @@ namespace ProjectManagement.Users
                 {
                     user.StarRate = item.StarRate;
                     user.UserLevel = item.Level;
-                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff )
+                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff)
                     {
                         user.UserType = UserType.ProbationaryStaff;
                     }

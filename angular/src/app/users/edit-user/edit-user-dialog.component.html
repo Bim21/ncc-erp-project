@@ -52,7 +52,7 @@
                             <mat-select [(ngModel)]="user.positionId" name="positionId" placeholder="select position" required
                                 #position="ngModel">
                                 <mat-option *ngFor="let position of userPositionList" [value]="position.id">
-                                    {{position.shortName}}</mat-option>
+                                    {{position.name}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-error class="mt-1" *ngIf="position.hasError('required') && position.touched"

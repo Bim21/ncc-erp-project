@@ -38,10 +38,10 @@ namespace ProjectManagement.APIs.Positions
         [AbpAuthorize(PermissionNames.Admin_Positions_Create)]
         public async Task<PositionDto> Create(PositionDto input)
         {
-            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code || x.ShortName == input.ShortName);
+            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
 
             if (isExist)
-                throw new UserFriendlyException(String.Format("Name or ShortName or Code already exist or Name input not coincide Old Name !"));
+                throw new UserFriendlyException(String.Format("Name or Code already exist !"));
 
             await WorkScope.InsertAsync(ObjectMapper.Map<Position>(input));
 
@@ -54,10 +54,10 @@ namespace ProjectManagement.APIs.Positions
         {
             var Position = await WorkScope.GetAsync<Position>(input.Id);
 
-            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code || x.ShortName == input.ShortName));
+            var isExist = await WorkScope.GetAll<Position>().AnyAsync(x => x.Id != input.Id && (x.Name == input.Name || x.Code == input.Code));
 
             if (isExist)
-                throw new UserFriendlyException(String.Format("Name or ShortName or Code already exist or Name input not coincide Old Name !"));
+                throw new UserFriendlyException(String.Format("Name or Code already exist !"));
 
             await WorkScope.UpdateAsync(ObjectMapper.Map<PositionDto, Position>(input, Position));
             return input;
