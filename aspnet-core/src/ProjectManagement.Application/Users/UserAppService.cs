@@ -116,7 +116,7 @@ namespace ProjectManagement.Users
                             UserType = u.UserType,
                             PositionId = u.PositionId,
                             PositionColor = u.Position.Color,
-                            PositionName = u.Position.Name,
+                            PositionName = u.Position.ShortName,
                             UserLevel = u.UserLevel,
                             Branch = u.BranchOld,
                             BranchColor = u.Branch.Color,
