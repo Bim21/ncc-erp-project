@@ -33,6 +33,8 @@ namespace ProjectManagement.Services.Talent
                     TimeNeed = s.TimeNeed,
                     Priority = s.Priority,
                     Url = s.RecruitmentUrl,
+                    ProjectType = s.Project.ProjectType,
+                    Quantity = s.Quantity,
                     IsRecruitmentSend = s.IsRecruitmentSend
                 }).FirstOrDefaultAsync();
 
@@ -45,7 +47,7 @@ namespace ProjectManagement.Services.Talent
                 Level = resourceRequest.Level,
                 ResourceRequestId = input.ResourceRequestId,
                 SubPositionId = input.SubPositionId,
-                Quantity = 1,
+                Quantity = resourceRequest.Quantity,
                 Priority = resourceRequest.Priority,
                 SkillNames = resourceRequest.SkillNames,
                 TimeNeed = resourceRequest.TimeNeed,

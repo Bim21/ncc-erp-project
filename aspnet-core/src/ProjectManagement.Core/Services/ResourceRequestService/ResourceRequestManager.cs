@@ -50,6 +50,8 @@ namespace ProjectManagement.Services.ResourceRequestService
                             Level = request.Level,
                             CreationTime = request.CreationTime,
 
+                            Quantity = request.Quantity,
+
                             Skills = request.ResourceRequestSkills.Select(p => new ResourceRequestSkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
                             PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
                             {

@@ -118,6 +118,7 @@ namespace ProjectManagement.APIs.ResourceRequests
             for (int i = 0; i < input.Quantity; i++)
             {
                 var request = ObjectMapper.Map<ResourceRequest>(input);
+                request.Quantity = 1;
                 request.Id = await WorkScope.InsertAndGetIdAsync(request);
                 createdRequestIds.Add(request.Id);
                 CurrentUnitOfWork.SaveChanges();
@@ -633,6 +634,48 @@ namespace ProjectManagement.APIs.ResourceRequests
             var result = new List<IDNameDto>();
             result.Add(new IDNameDto { Id = UserLevel.Intern_3.GetHashCode(), Name = "Intern" });
             return result;
+        }
+
+        [HttpPost]
+        [AbpAuthorize]
+        public async Task<List<GetResourceRequestDto>> CreateTraining(CreateResourceRequestDto input)
+        {
+            if (input.Quantity <= 0)
+            {
+                throw new UserFriendlyException("Quantity must be >= 1");
+            }
+
+            if (!input.SkillIds.Any())
+            {
+                throw new UserFriendlyException("Select at least 1 skill");
+            }
+
+            List<long> createdRequestIds = new List<long>();
+
+            var request = ObjectMapper.Map<ResourceRequest>(input);
+            request.Id = await WorkScope.InsertAndGetIdAsync(request);
+            createdRequestIds.Add(request.Id);
+            CurrentUnitOfWork.SaveChanges();
+            foreach (var skillId in input.SkillIds)
+            {
+                var requestSkill = new ResourceRequestSkill()
+                {
+                    ResourceRequestId = request.Id,
+                    SkillId = skillId,
+                    Quantity = 1
+                };
+
+                await WorkScope.InsertAsync(requestSkill);
+            }
+            CurrentUnitOfWork.SaveChanges();
+
+            var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
+                .Where(s => createdRequestIds.Contains(s.Id))
+                .ToListAsync();
+
+            await notifyToKomu(listRequestDto.FirstOrDefault(), Action.Create, listRequestDto.Count);
+
+            return listRequestDto;
         }
 
         private enum Action : byte

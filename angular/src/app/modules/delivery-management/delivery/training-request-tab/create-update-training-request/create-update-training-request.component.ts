@@ -99,8 +99,8 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
 
     if (this.data.command == "create") {
       request.id = 0
-      let createRequest = { ...request, quantity: 1 };
-      this.resourceRequestService.create(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
+      let createRequest = { ...request, quantity: this.trainingRequestDto.quantity };
+      this.resourceRequestService.createTraining(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.trainingRequestDto);
       }, () => this.isLoading = false)

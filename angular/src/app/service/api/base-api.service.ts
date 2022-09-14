@@ -78,4 +78,7 @@ export abstract class BaseApiService {
         return throwError(errorMessage);
     }
 
+    public createTraining(item: any): Observable<any> {
+        return this.http.post<any>(this.rootUrl + '/CreateTraining', item);
+    }
 }
