@@ -112,7 +112,7 @@ namespace ProjectManagement.Users
 
                             Id = u.Id,
                             EmailAddress = u.EmailAddress,
-                            AvatarPath = u.AvatarPath == null ? "" : u.AvatarPath,
+                            AvatarPath = u.AvatarPath == null? "": u.AvatarPath,
                             UserType = u.UserType,
                             PositionId = u.PositionId,
                             PositionColor = u.Position.Color,
@@ -122,7 +122,7 @@ namespace ProjectManagement.Users
                             BranchColor = u.Branch.Color,
                             BranchDisplayName = u.Branch.DisplayName,
                             IsActive = u.IsActive,
-                            FullName = u.Name + " " + u.Surname,
+                            FullName = u.Name+ " " + u.Surname,
                             CreationTime = u.CreationTime,
                             RoleNames = _roleManager.Roles
                             .Where(r => u.Roles
@@ -361,7 +361,7 @@ namespace ProjectManagement.Users
             var userAndBranch = await _workScope
                 .GetAll<User>()
                 .Where(s => s.EmailAddress == email)
-                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : "" })
+                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : ""})
                 .FirstOrDefaultAsync();
 
             if (userAndBranch == null)
@@ -879,7 +879,7 @@ namespace ProjectManagement.Users
                 {
                     user.StarRate = item.StarRate;
                     user.UserLevel = item.Level;
-                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff)
+                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff )
                     {
                         user.UserType = UserType.ProbationaryStaff;
                     }
