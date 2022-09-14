@@ -72,7 +72,6 @@ namespace ProjectManagement.APIs.HRM
                 return positionDev;
             }    
             return position;
-
         }
         
         [AbpAllowAnonymous]
