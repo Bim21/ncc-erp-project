@@ -77,8 +77,4 @@ export abstract class BaseApiService {
         abp.notify.error(errorMessage);
         return throwError(errorMessage);
     }
-
-    public createTraining(item: any): Observable<any> {
-        return this.http.post<any>(this.rootUrl + '/CreateTraining', item);
-    }
 }
