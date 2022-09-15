@@ -87,7 +87,7 @@ namespace ProjectManagement.APIs.HRM
                 throw new UserFriendlyException($"failed to create user from HRM, user with email {model.EmailAddress} is already exist");
             }
             var branch = await GetBranchByCode(model.BranchCode);
-            var position = GetPositionIdByCode(model.PositionCode);
+            var positionId = GetPositionIdByCode(model.PositionCode);
             var user = new User
             {
                 UserName = model.EmailAddress.ToLower(),
@@ -104,7 +104,7 @@ namespace ProjectManagement.APIs.HRM
                 UserCode = model.UserCode,
                 BranchId = branch.Id,
                 AvatarPath = model.AvatarPath,
-                PositionId = position,
+                PositionId = positionId,
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
