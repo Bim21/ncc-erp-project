@@ -33,7 +33,6 @@ namespace ProjectManagement.Services.Talent
                     TimeNeed = s.TimeNeed,
                     Priority = s.Priority,
                     Url = s.RecruitmentUrl,
-                    ProjectType = s.Project.ProjectType,
                     Quantity = s.Quantity,
                     IsRecruitmentSend = s.IsRecruitmentSend
                 }).FirstOrDefaultAsync();
