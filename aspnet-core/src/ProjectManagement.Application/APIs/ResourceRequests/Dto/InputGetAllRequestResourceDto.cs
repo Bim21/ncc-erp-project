@@ -9,5 +9,6 @@ namespace ProjectManagement.APIs.ResourceRequests.Dto
     {
         public List<long> SkillIds { get; set; }
         public bool IsAndCondition { get; set; }
+        public bool IsTraining { get; set; }
     }
 }

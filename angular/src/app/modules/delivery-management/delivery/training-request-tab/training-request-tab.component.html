@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-6">
-          <h3>Resource Requests</h3>
+          <h3>Training Requests</h3>
         </div>
         <div class="col-6 text-right">
           <button
@@ -143,7 +143,6 @@
                           [(ngModel)]="selectedLevel"
                           (selectionChange)="getDataPage(1)"
                         >
-                          <mat-option [value]="-1">All</mat-option>
                           <mat-option
                             *ngFor="let level of listLevels"
                             [value]="level.id"
@@ -256,11 +255,11 @@
                   [ngStyle]="styleThead(thead)"
                 >
                   <div class="row sortHeader">
-                    <div class="col-xl-8 col-lg-12 rsp-th-name text-left">
+                    <div class="col-xl-12 col-lg-12 rsp-th-name text-center">
                       {{ thead.name }}
                     </div>
                     <div
-                      class="col-xl-4 col-lg-12 rsp-th-sort text-right"
+                      class="col-xl-12 col-lg-12 rsp-th-sort text-center"
                       *ngIf="i != 0 && thead.sortName"
                       style="vertical-align: middle"
                     >
@@ -326,6 +325,9 @@
                   >
                     {{ item.projectStatusName }}
                   </span>
+                </td>
+                <td class="text-center">
+                  {{ item.quantity }}
                 </td>
                 <td>
                   <ul class="pl-3 m-0">
@@ -430,9 +432,8 @@
                           line-height: initial;
                         "
                       >
-                                            {{ item.pmNote }}
-                                        </pre
-                      >
+                        {{ item.pmNote }}
+                      </pre>
                     </div>
                     <div
                       class="col-md-2"
@@ -465,7 +466,7 @@
                           line-height: initial;
                         "
                       >
-                                            {{ item.dmNote }}
+                        {{ item.dmNote }}
                       </pre>
                     </div>
                     <div
@@ -505,10 +506,7 @@
                   }}</span>
                 </td>
                 <td class="text-center action-request-resource-tab">
-                  <button
-                    mat-button
-                    [matMenuTriggerFor]="menu"
-                  >
+                  <button mat-button [matMenuTriggerFor]="menu">
                     <i class="fas fa-bars fa-lg"></i>
                   </button>
                   <mat-menu #menu="matMenu" class="p-2">

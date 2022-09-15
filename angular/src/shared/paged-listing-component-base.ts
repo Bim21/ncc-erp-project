@@ -11,8 +11,8 @@ export class FilterDto {
     value: any;
     comparision: number;
     // isDate?: boolean;
-    filterType?:number
-    dropdownData?:any[]
+    filterType?: number
+    dropdownData?: any[]
 }
 export class EntityDto {
     id: number;
@@ -25,6 +25,7 @@ export class PagedRequestDto {
     filterItems: FilterDto[] = [];
     sort: string;
     sortDirection: number;
+    isTraining: boolean;
 }
 export class PagedResultResultDto {
     result: PagedResultDto;
@@ -129,14 +130,14 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
     }
     AddFilterItem(request: PagedRequestDto, propertyName: string, value: any) {
         let filterList = request.filterItems
-        if (value !== "" || value==0) {
+        if (value !== "" || value == 0) {
             filterList.unshift({ propertyName: propertyName, comparision: 0, value: value })
         }
         return filterList
     }
     clearFilter(request: PagedRequestDto, propertyName: string, value: any) {
         let filterList = request.filterItems
-        if (value !=="" || value==0) {
+        if (value !== "" || value == 0) {
             let item = filterList.filter(item => item.propertyName === propertyName)[0]
             filterList.splice(request.filterItems.indexOf(item), 1)
         }

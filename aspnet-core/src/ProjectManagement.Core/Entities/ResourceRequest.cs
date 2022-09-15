@@ -26,6 +26,8 @@ namespace ProjectManagement.Entities
         public string DMNote { get; set; }
         public bool IsRecruitmentSend { get; set; }
         public string RecruitmentUrl { get; set; }
+
+        public int Quantity { get; set; }
         public UserLevel Level { get; set; }
         public Priority Priority { get; set; }
 

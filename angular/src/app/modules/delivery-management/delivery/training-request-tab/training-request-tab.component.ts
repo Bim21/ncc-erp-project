@@ -1,31 +1,32 @@
-import { FormSendRecruitmentComponent } from './form-send-recruitment/form-send-recruitment.component';
-import { ResourceRequestDto } from './../../../../service/model/resource-request.dto';
+import { FormSendRecruitmentComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
+import { ResourceRequestTrainingDto } from '@app/service/model/resource-request.dto';
 import { result } from 'lodash-es';
-import { FormSetDoneComponent } from './form-set-done/form-set-done.component';
+import { FormSetDoneComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-set-done/form-set-done.component';
 import { SortableComponent, SortableModel } from './../../../../../shared/components/sortable/sortable.component';
 import { AppComponentBase } from 'shared/app-component-base';
 import { ResourcePlanDto } from './../../../../service/model/resource-plan.dto';
 import { PERMISSIONS_CONSTANT } from './../../../../constant/permission.constant';
 import { RESOURCE_REQUEST_STATUS } from './../../../../constant/resource-request-status.constant';
-import { CreateUpdateResourceRequestComponent } from './create-update-resource-request/create-update-resource-request.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { RequestResourceDto } from './../../../../service/model/delivery-management.dto';
+import { TrainingRequestDto } from './../../../../service/model/delivery-management.dto';
 import { Component, OnInit, Injector, ChangeDetectorRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { SkillDto } from '@app/service/model/list-project.dto';
-import { FormPlanUserComponent } from './form-plan-user/form-plan-user.component';
+import { FormPlanUserComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
 import * as moment from 'moment';
 import { IDNameDto } from '@app/service/model/id-name.dto';
+import { CreateUpdateTrainingRequestComponent } from './create-update-training-request/create-update-training-request.component';
 
 @Component({
-  selector: 'app-request-resource-tab',
-  templateUrl: './request-resource-tab.component.html',
-  styleUrls: ['./request-resource-tab.component.css']
+  selector: 'app-training-request-tab',
+  templateUrl: './training-request-tab.component.html',
+  styleUrls: ['./training-request-tab.component.css']
 })
-export class RequestResourceTabComponent extends PagedListingComponentBase<RequestResourceDto> implements OnInit {
+export class TrainingRequestTabComponent extends PagedListingComponentBase<TrainingRequestDto> implements OnInit {
+
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'projectName', comparisions: [0, 6, 7, 8], displayName: "Project Name" },
@@ -34,20 +35,21 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   ];
   public selectedOption: string = "PROJECT"
   public selectedStatus: any = 0
-  public listRequest: RequestResourceDto[] = [];
-  public tempListRequest: RequestResourceDto[] = [];
+  public listRequest: TrainingRequestDto[] = [];
+  public tempListRequest: TrainingRequestDto[] = [];
   public listStatuses: any[] = []
   public listLevels: any[] = []
   public listSkills: SkillDto[] = [];
   public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
-  public selectedLevel: any = -1
+  public selectedLevel: any = this.APP_ENUM.UserLevel.Intern_3
   public isAndCondition: boolean = false;
   public skillIds: number[]
   public theadTable: THeadTable[] = [
     { name: '#' },
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
     { name: 'Project', sortName: 'projectName', defaultSort: '' },
+    { name: 'Quantity', sortName: 'quantity', defaultSort: '' },
     { name: 'Skill' },
     { name: 'Level', sortName: 'level', defaultSort: '' },
     { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
@@ -78,15 +80,15 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   ResourceRequest_Delete = PERMISSIONS_CONSTANT.ResourceRequest_Delete;
   ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment;
 
-
   @ViewChildren('sortThead') private elementRefSortable: QueryList<any>;
+
   constructor(
     private injector: Injector,
     private resourceRequestService: DeliveryResourceRequestService,
     private ref: ChangeDetectorRef,
     private dialog: MatDialog
   ) {
-    super(injector)
+    super(injector);
   }
 
   ngOnInit(): void {
@@ -112,12 +114,13 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       })
     }
   }
+
   showDialog(command: string, request: any) {
     let resourceRequest = {
       id: request.id ? request.id : null,
       projectId: 0
     }
-    const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
+    const show = this.dialog.open(CreateUpdateTrainingRequestComponent, {
       data: {
         command: command,
         item: resourceRequest,
@@ -141,12 +144,15 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     });
   }
+
   public createRequest() {
     this.showDialog("create", {});
   }
+
   public editRequest(item: any) {
     this.showDialog("edit", item);
   }
+
   public setDoneRequest(item) {
     let data = {
       ...item.planUserInfo,
@@ -164,7 +170,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     })
   }
 
-  cancelRequest(request: RequestResourceDto) {
+  cancelRequest(request: TrainingRequestDto) {
     abp.message.confirm(
       'Are you sure cancel request for project: ' + request.projectName,
       '',
@@ -204,6 +210,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
 
     });
   }
+
   async getPlanResource(item) {
     let data = new ResourcePlanDto(item.id, 0);
     if (!item.planUserInfo)
@@ -212,7 +219,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     return res.result
   }
 
-  sendRecruitment(item: ResourceRequestDto) {
+  sendRecruitment(item: ResourceRequestTrainingDto) {
     const show = this.dialog.open(FormSendRecruitmentComponent, {
       data: { id: item.id, name: item.name, dmNote: item.dmNote, pmNote: item.pmNote } as SendRecruitmentModel,
       width: "700px",
@@ -282,7 +289,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     })
 
-    requestBody.isTraining = false;
+    requestBody.isTraining = true;
     if (this.sortable.sort) {
       requestBody.sort = this.sortable.sort;
       requestBody.sortDirection = this.sortable.sortDirection
@@ -324,7 +331,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     this.filterItems = []
     this.searchText = ''
     this.skillIds = []
-    this.selectedLevel = -1
+    this.selectedLevel = this.APP_ENUM.UserLevel.Intern_3
     this.selectedStatus = 0
     this.changeSortableByName('priority', 'DESC')
     this.sortable = new SortableModel('', 1, '')
@@ -359,32 +366,37 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
   // #endregion
 
-  //#region get skills, statuses, levels, priorities
+  //#region get skills, statuses, levels, priorities, quantities
   getAllSkills() {
     this.resourceRequestService.getSkills().subscribe((data) => {
       this.listSkills = data.result;
     })
   }
+
   getLevels() {
-    this.resourceRequestService.getLevels().subscribe(res => {
+    this.resourceRequestService.getTrainingLevels().subscribe(res => {
       this.listLevels = res.result
     })
   }
+
   getPriorities() {
     this.resourceRequestService.getPriorities().subscribe(res => {
       this.listPriorities = res.result
     })
   }
+
   getStatuses() {
     this.resourceRequestService.getStatuses().subscribe(res => {
       this.listStatuses = res.result
     })
   }
+
   getProjectUserRoles() {
     this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
       this.listProjectUserRoles = rs.result
     })
   }
+
   // #endregion
 
   styleThead(item: any) {
@@ -393,6 +405,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       height: item.height
     }
   }
+
   public getValueByEnum(enumValue: number, enumObject) {
     for (const key in enumObject) {
       if (enumObject[key] == enumValue) {
@@ -400,10 +413,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     }
   }
+
   viewRecruitment(url) {
     window.open(url, '_blank')
   }
-  protected delete(item: RequestResourceDto): void {
+
+  protected delete(item: TrainingRequestDto): void {
     abp.message.confirm(
       "Delete this request?",
       "",
@@ -413,12 +428,11 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
             abp.notify.success(" Delete request successfully");
             this.refresh();
           });
-
         }
       }
-
     );
   }
+
   isShowButtonMenuAction(item) {
     return (item.statusName != 'DONE'
       //&& !item.isRecruitmentSend
@@ -457,7 +471,6 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   isShowBtnDelete(item) {
     return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
   }
-
 }
 
 export class THeadTable {

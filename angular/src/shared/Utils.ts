@@ -120,7 +120,7 @@ export class Utils {
       }
       else if (time <= 30) {
         let week = Math.round(time / 7)
-        return week > 1 ? 'in ' + week + ' weeks' : 'in' + week + ' week'
+        return week > 1 ? 'in ' + week + ' weeks' : 'in ' + week + ' week'
       }
       else if (time <= 365) {
         let month = Math.round(time / 30)

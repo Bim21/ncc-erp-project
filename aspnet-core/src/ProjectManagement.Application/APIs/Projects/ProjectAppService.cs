@@ -229,6 +229,26 @@ namespace ProjectManagement.APIs.Projects
             var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
 
             var queryPM = WorkScope.GetAll<Project>()
+                            .Where(x => x.ProjectType != ProjectType.TRAINING)
+                            .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
+                            .Where(x => x.Status != ProjectStatus.Closed)
+                            .Select(x => new GetProjectDto
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Code = x.Code
+                            });
+            return queryPM.ToList();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.ResourceRequest_CreateNewRequestByPM, PermissionNames.ResourceRequest_CreateNewRequestForAllProject)]
+        public List<GetProjectDto> GetMyTrainingProjects()
+        {
+            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
+
+            var queryPM = WorkScope.GetAll<Project>()
+                            .Where(x => x.ProjectType == ProjectType.TRAINING)
                             .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
                             .Where(x => x.Status != ProjectStatus.Closed)
                             .Select(x => new GetProjectDto

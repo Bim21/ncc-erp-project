@@ -60,13 +60,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { PercentageMaskDirective } from './directives/percentage-mask.directive';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
 import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
-
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
@@ -116,7 +116,9 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         MatSelectModule,
         FormsModule,
         NgxStarsModule,
-        DragDropModule
+        DragDropModule,
+        NgxMatSelectSearchModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -178,6 +180,7 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         MatTooltipModule,
         MatTreeModule,
         MatFormFieldModule,
+        FormsModule,
         PercentageMaskDirective,
         UserInfoComponent,
         RadioDropdownComponent,
@@ -185,7 +188,8 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         ListFilterPipe,
         NgxStarsModule,
         DragDropModule,
-        SubpositionFilterPipe
+        SubpositionFilterPipe,
+        NgxMatSelectSearchModule
     ]
 })
 export class SharedModule {
