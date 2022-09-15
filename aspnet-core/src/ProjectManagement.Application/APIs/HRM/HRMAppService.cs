@@ -59,20 +59,19 @@ namespace ProjectManagement.APIs.HRM
             }
             return branch;
         }
-        private Position GetPositionByCode(string code)
+        private long GetPositionIdByCode(string code)
         {
             var positionDev = WorkScope.GetAll<Position>().Where(s => s.Code.ToLower().Trim() == "dev").FirstOrDefault();
             if (code == null)
             {
-                return positionDev;
+                return positionDev.Id;
             }
             var position = WorkScope.GetAll<Position>().Where(s => s.Code.ToLower().Trim() == code.ToLower().Trim()).FirstOrDefault();
             if (position == default)
             {
-                return positionDev;
+                return positionDev.Id;
             }    
-            return position;
-
+            return position.Id;
         }
         
         [AbpAllowAnonymous]
@@ -88,7 +87,7 @@ namespace ProjectManagement.APIs.HRM
                 throw new UserFriendlyException($"failed to create user from HRM, user with email {model.EmailAddress} is already exist");
             }
             var branch = await GetBranchByCode(model.BranchCode);
-            var position = GetPositionByCode(model.PositionCode);
+            var position = GetPositionIdByCode(model.PositionCode);
             var user = new User
             {
                 UserName = model.EmailAddress.ToLower(),
@@ -104,8 +103,8 @@ namespace ProjectManagement.APIs.HRM
                 Password = RandomPasswordHelper.CreateRandomPassword(8),
                 UserCode = model.UserCode,
                 BranchId = branch.Id,
-                AvatarPath = model.AvatarPath == null ? "" : model.AvatarPath,
-                PositionId = position.Id,
+                AvatarPath = model.AvatarPath,
+                PositionId = position,
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
