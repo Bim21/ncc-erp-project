@@ -4289,6 +4289,7 @@ export class UserDto implements IUserDto {
   rateStar?:number;
   branchColor: string | undefined;
   branchDisplayName: string | undefined;
+  userTypeName: string;
   branchId: number;
   constructor(data?: IUserDto) {
     if (data) {

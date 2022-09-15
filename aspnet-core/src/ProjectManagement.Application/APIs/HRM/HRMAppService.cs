@@ -52,14 +52,32 @@ namespace ProjectManagement.APIs.HRM
 
         private async Task<ProjectManagement.Entities.Branch> GetBranchByCode(string code)
         {
-             var branch = await WorkScope.GetAll<ProjectManagement.Entities.Branch>().Where(s => s.Code == code).FirstOrDefaultAsync();
+            var branch = await WorkScope.GetAll<ProjectManagement.Entities.Branch>().Where(s => s.Code == code).FirstOrDefaultAsync();
             if (branch == default)
             {
                 branch= await WorkScope.GetAll<ProjectManagement.Entities.Branch>().FirstOrDefaultAsync();
             }
             return branch;
         }
+        private long GetPositionIdByCode(string code)
+        {
+            var positionDevId = WorkScope.GetAll<Position>()
+                                         .Where(s => s.Code.ToLower().Trim() == "dev")
+                                         .Select(s => s.Id)
+                                        .FirstOrDefault();
+            if (code == null)
+                return positionDevId;
 
+            var positionId = WorkScope.GetAll<Position>()
+                                      .Where(s => s.Code.ToLower().Trim() == code.ToLower().Trim())
+                                      .Select(s => s.Id)
+                                      .FirstOrDefault();
+
+            if (positionId == default && positionDevId != default)
+                return positionDevId;
+            return positionId;
+        }
+        
         [AbpAllowAnonymous]
         [HttpPost]
         public async Task<CreateUserHRMDto> CreateUserByHRM(CreateUserHRMDto model)
@@ -73,6 +91,7 @@ namespace ProjectManagement.APIs.HRM
                 throw new UserFriendlyException($"failed to create user from HRM, user with email {model.EmailAddress} is already exist");
             }
             var branch = await GetBranchByCode(model.BranchCode);
+            var positionId = GetPositionIdByCode(model.PositionCode);
             var user = new User
             {
                 UserName = model.EmailAddress.ToLower(),
@@ -88,7 +107,8 @@ namespace ProjectManagement.APIs.HRM
                 Password = RandomPasswordHelper.CreateRandomPassword(8),
                 UserCode = model.UserCode,
                 BranchId = branch.Id,
-                AvatarPath = model.AvatarPath == null ? "" : model.AvatarPath
+                AvatarPath = model.AvatarPath,
+                PositionId = positionId,
             };
             model.Id = await WorkScope.InsertAndGetIdAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);

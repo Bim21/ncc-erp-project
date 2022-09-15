@@ -144,7 +144,7 @@ namespace ProjectManagement.Users
                                 ProjectRole = p.ProjectRole,
                                 StartTime = p.StartTime,
                                 IsPool = p.IsPool
-                                
+
                             }).ToList(),
                         };
 
@@ -415,7 +415,7 @@ namespace ProjectManagement.Users
             };
 
 
-           
+
             return employeeInfo;
         }
 
@@ -549,7 +549,7 @@ namespace ProjectManagement.Users
         [AbpAuthorize(PermissionNames.Admin_Users_ResetPassword)]
         public async Task<bool> ResetPassword(ResetPasswordDto input)
         {
-            
+
             //long currentUserId = _abpSession.UserId.Value;
             //var currentUser = await _userManager.GetUserByIdAsync(currentUserId);
             //var loginAsync = await _logInManager.LoginAsync(currentUser.UserName, input.AdminPassword, shouldLockout: false);
@@ -639,7 +639,7 @@ namespace ProjectManagement.Users
             user.AvatarPath = avatarPath;
             await _userManager.UpdateAsync(user);
             return avatarPath;
-            
+
         }
 
         [HttpPost]
@@ -824,12 +824,12 @@ namespace ProjectManagement.Users
             {
                 komuMessage = komuMessage.Length >= 2 ? komuMessage.Remove(komuMessage.Length - 2, 2) : komuMessage;
                 komuMessage.Append("\rCác PM hãy nhanh tay pick nhân viên vào dự án ngay nào.");
-                 _komuService.NotifyToChannel(new KomuMessage
+                _komuService.NotifyToChannel(new KomuMessage
                 {
                     Message = komuMessage.ToString(),
                     CreateDate = DateTimeUtils.GetNow(),
                 },
-                ChannelTypeConstant.GENERAL_CHANNEL);
+               ChannelTypeConstant.GENERAL_CHANNEL);
             }
             return new
             {
