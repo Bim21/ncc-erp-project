@@ -61,15 +61,15 @@ namespace ProjectManagement.APIs.HRM
         }
         private long GetPositionIdByCode(string code)
         {
-            var positionIdDev = WorkScope.GetAll<Position>().Where(s => s.Code.ToLower().Trim() == "dev").Select(s => s.Id).FirstOrDefault();
+            var positionDevId = WorkScope.GetAll<Position>().Where(s => s.Code.ToLower().Trim() == "dev").Select(s => s.Id).FirstOrDefault();
             if (code == null)
             {
-                return positionIdDev;
+                return positionDevId;
             }
             var positionId = WorkScope.GetAll<Position>().Where(s => s.Code.ToLower().Trim() == code.ToLower().Trim()).Select(s => s.Id).FirstOrDefault();
-            if (positionId == default && positionIdDev != default)
+            if (positionId == default && positionDevId != default)
             {
-                return positionIdDev;
+                return positionDevId;
             }    
             return positionId;
         }
