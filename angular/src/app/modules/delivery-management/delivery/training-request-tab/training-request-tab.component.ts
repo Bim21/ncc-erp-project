@@ -210,7 +210,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
 
     });
   }
-  
+
   async getPlanResource(item) {
     let data = new ResourcePlanDto(item.id, 0);
     if (!item.planUserInfo)
@@ -289,12 +289,13 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
       }
     })
 
+    requestBody.isTraining = true;
     if (this.sortable.sort) {
       requestBody.sort = this.sortable.sort;
       requestBody.sortDirection = this.sortable.sortDirection
     }
 
-    this.resourceRequestService.getResourceTrainingPaging(requestBody, this.selectedOption).pipe(finalize(() => {
+    this.resourceRequestService.getResourcePaging(requestBody, this.selectedOption).pipe(finalize(() => {
       finishedCallback();
     }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
       this.listRequest = this.tempListRequest = data.result.items;

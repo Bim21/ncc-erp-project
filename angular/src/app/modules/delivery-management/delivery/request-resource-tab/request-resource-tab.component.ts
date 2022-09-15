@@ -282,6 +282,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     })
 
+    requestBody.isTraining = false;
     if (this.sortable.sort) {
       requestBody.sort = this.sortable.sort;
       requestBody.sortDirection = this.sortable.sortDirection

@@ -168,16 +168,6 @@ export class DeliveryResourceRequestService extends BaseApiService {
     return this.http.delete<any>(this.rootUrl + '/DeleteMyRequest?resourceRequestId=' + id)
   }
 
-  public getResourceTrainingPaging(
-    request: PagedRequestDto,
-    option: string
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.rootUrl + `/GetAllTrainingPaging`,
-      request
-    );
-  }
-
   public createTraining(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/CreateTraining', item);
   }
