@@ -179,12 +179,14 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   onChangeBranchEvent(event?): void {
     this.selectedBranchIds = event.value;
-    this.refresh();
+    this.getDataPage(1);
+    //this.refresh();
   }
 
   onChangeUserTypeEvent(event?): void {
     this.selectedUserTypes = event.value;
-    this.refresh();
+    this.getDataPage(1);
+    //this.refresh();
   }
 
   getAllBranchs() {
@@ -197,7 +199,8 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   onChangePositionsEvent(event?): void{
     this.selectedPositions = event.value;
-    this.refresh();
+    this.getDataPage(1);
+    //this.refresh();
   }
 
   getAllPositions() {
