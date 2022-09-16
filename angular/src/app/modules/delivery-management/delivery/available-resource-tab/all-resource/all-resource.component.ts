@@ -179,14 +179,12 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   onChangeBranchEvent(event?): void {
     this.selectedBranchIds = event.value;
-    this.getDataPage(1);
-    //this.refresh();
+    this.refresh();
   }
 
   onChangeUserTypeEvent(event?): void {
     this.selectedUserTypes = event.value;
-    this.getDataPage(1);
-    //this.refresh();
+    this.refresh();
   }
 
   getAllBranchs() {
