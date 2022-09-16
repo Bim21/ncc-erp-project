@@ -197,8 +197,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
   onChangePositionsEvent(event?): void{
     this.selectedPositions = event.value;
-    this.getDataPage(1);
-    //this.refresh();
+    this.refresh();
   }
 
   getAllPositions() {
