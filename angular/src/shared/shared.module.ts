@@ -66,7 +66,6 @@ import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
 import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
@@ -117,7 +116,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         FormsModule,
         NgxStarsModule,
         DragDropModule,
-        NgxMatSelectSearchModule,
         ReactiveFormsModule
     ],
     declarations: [
@@ -189,7 +187,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         NgxStarsModule,
         DragDropModule,
         SubpositionFilterPipe,
-        NgxMatSelectSearchModule
+        
     ]
 })
 export class SharedModule {
