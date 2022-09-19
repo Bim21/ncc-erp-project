@@ -74,11 +74,6 @@ jobs:
     condition: eq(dependencies.check_file.outputs['CheckChangesFE.HasChangedFE'], 'true')
     steps:
       - script: |
-          cd angular
-          unzip -qo ~/soft/check_node/project/node_modules.zip
-        displayName: 'Copy node modules'
-
-      - script: |
           cd angular/
           export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
