@@ -86,7 +86,7 @@ jobs:
           nvm use 14.17
           node -v
           echo "=== INSTALL PACKAGE ==="
-          npm install
+          npm install --force
         displayName: 'Install Package'
       
       - script: |
