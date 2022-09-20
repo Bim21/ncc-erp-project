@@ -292,6 +292,9 @@
                                             <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
                                                 branchColor:user.branchColor,
                                                 branchDisplayName:user.branchDisplayName,
+                                                position: user.position,
+                                                                    positionColor: user.positionColor,
+                                                                    positionName: user.positionName,
                                                     userType:user.userType,avatarFullPath: user.avatarFullPath,
                                                      userLevel: user.userLevel}">
                                             </app-user-info>
@@ -386,6 +389,9 @@
                                                 branchColor:user.branchColor,
                                                 branchDisplayName:user.branchDisplayName,
                                                     userType:user.type,avatarFullPath: user.fullAvatarPath,
+                                                    position: user.position,
+                                                                    positionColor: user.positionColor,
+                                                                    positionName: user.positionName,
                                                     userTypeName: user.userTypeName,
                                                      userLevel: user.level}">
                                             </app-user-info>
@@ -499,10 +505,13 @@
                                                             <app-user-info
                                                                 style="width: -webkit-fill-available;"
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                    position: report.position,
+                                                                    positionColor: report.positionColor,
+                                                                    positionName: report.positionName,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
                                                                     userLevel: report.userLevel,
-                                                                userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath}">
+                                                                    userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath}">
                                                             </app-user-info>
 
                                                             <i  *ngIf="selectedReport.isActive"  style="margin-top: 23px ; color: #585858;"
@@ -673,6 +682,9 @@
                                                             <app-user-info
                                                                 style="width: -webkit-fill-available;"
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                    position: report.position,
+                                                                    positionColor: report.positionColor,
+                                                                    positionName: report.positionName,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
                                                                     userLevel: report.userLevel,

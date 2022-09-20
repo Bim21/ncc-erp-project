@@ -296,6 +296,9 @@
                                             <app-user-info [userData]="{fullName:user.fullName,branch:0,
                                                     branchColor:user.branchColor,
                                                     branchDisplayName:user.branchDisplayName,
+                                                    position: user.position,
+                                                                    positionColor: user.positionColor,
+                                                                    positionName: user.positionName,
                                                     userType:user.userType,avatarFullPath: user.avatarFullPath,
                                                      userLevel: user.userLevel}">
                                             </app-user-info>
@@ -391,6 +394,9 @@
                                             <app-user-info class="test" style="width : 100%;" [userData]="{fullName:user.fullName,branch:0,
                                                     branchColor:user.branchColor,
                                                     branchDisplayName:user.branchDisplayName,
+                                                    position: user.position,
+                                                                    positionColor: user.positionColor,
+                                                                    positionName: user.positionName,
                                                     userType:user.type,avatarFullPath: user.fullAvatarPath,
                                                     userTypeName: user.userTypeName,
                                                      userLevel: user.level}">
@@ -507,6 +513,9 @@
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
+                                                                    position: report.position,
+                                                                    positionColor: report.positionColor,
+                                                                    positionName: report.positionName,
                                                                 userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath
                                                             , userLevel: report.userLevel}">
                                                             </app-user-info>
@@ -680,9 +689,13 @@
                                                             <app-user-info
                                                                 style="width: -webkit-fill-available;"
                                                                 [userData]="{fullName:report.fullName,branch:report.branch,
+                                                                    position: report.position,
+                                                                    positionColor: report.positionColor,
+                                                                    positionName: report.positionName,
                                                                     branchColor:report.branchColor,
                                                                     branchDisplayName:report.branchDisplayName,
-                                                        userType:report.userType,emailAddress:report.emailAddress,avatarFullPath: report.avatarFullPath, userLevel: report.userLevel}">
+                                                                    userLevel: report.userLevel,
+                                                                userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath}">
                                                             </app-user-info>
 
                                                         </div>
