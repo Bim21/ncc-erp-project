@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="row p-1" style="margin:16px 16.5px;">
-                <div class="col-6 m-0 p-0" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
+                <div class="col-4 m-0 p-0" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
                     <span classs="col-12" style="font-size: 20px;">Last Invoice Number: </span>
                     <span *ngIf="!isEditLastInvoiceNumber"
                         style="word-wrap: break-word; white-space: pre-line;font-size: 18px; text-align: justify;"
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="col-6" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
+                <div class="col-4" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
                     <span style="font-size: 20px;">Discount(%): </span>
                     <span *ngIf="!isEditDiscount"
                         style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;"
@@ -69,6 +69,17 @@
                             (click)="updateDiscount()" >
                         </i>
                     </div>
+                </div>
+
+                <!--Parent Invoice-->
+                <div class="col-4">
+                    <ng-template #invoiceMain [ngIf]="parentInvoice.isMainInvoice" [ngIfElse]="invoiceSub">
+                        <mat-checkbox class="checkbox-invoice" [(ngModel)]="parentInvoice.isMainInvoice">Main Invoice</mat-checkbox>
+                        <button class="btn btn-xs btn-primary ml-1" matTooltip="Add Sub Invoice" (click)="showAddSubInvoiceDialog()"><i class="fas fa-plus"></i></button>
+                    </ng-template>
+                    <ng-template #invoiceSub>
+                        <button class="btn btn-xs btn-danger" matTooltip="Out Parent Invoice"><i class="fas fa-times"></i></button>
+                    </ng-template>
                 </div>
             </div>
         </div>

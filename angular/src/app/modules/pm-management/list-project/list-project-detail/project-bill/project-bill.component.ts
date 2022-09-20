@@ -1,3 +1,5 @@
+import { AddSubInvoiceDialogComponent } from './add-sub-invoice-dialog/add-sub-invoice-dialog.component';
+import { ParentInvoice } from './../../../../../service/model/bill-info.model';
 import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { UserService } from '@app/service/api/user.service';
@@ -21,6 +23,7 @@ import { APP_ENUMS } from '@shared/AppEnums';
 export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public userBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
+  public parentInvoice: ParentInvoice = new ParentInvoice();
   public isEditUserBill: boolean = false;
   public userBillProcess: boolean = false;
   public panelOpenState: boolean = false;
@@ -32,7 +35,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public rateInfo = {} as ProjectRateDto;
   public lastInvoiceNumber;
   public discount;
-  public chargeTypeList = [{name:'Daily', value: 0}, {name:'Monthly', value: 1}, {name:'Hourly', value: 2}];
+  public chargeTypeList = [{ name: 'Daily', value: 0 }, { name: 'Monthly', value: 1 }, { name: 'Hourly', value: 2 }];
   public isEditLastInvoiceNumber: boolean = false;
   public isEditDiscount: boolean = false;
 
@@ -54,16 +57,15 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     private _modalService: BsModalService) {
     super(injector)
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
-
   }
 
   ngOnInit(): void {
-
     this.getUserBill();
     this.getAllFakeUser();
     this.getRate();
     this.getLastInvoiceNumber();
     this.getDiscount();
+    this.getParentInvoice();
   }
   getRate() {
     this.projectUserBillService.getRate(this.projectId).subscribe(data => {
@@ -76,12 +78,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.lastInvoiceNumber = data.result;
     })
   }
-  updateLastInvoiceNumber(){
+  updateLastInvoiceNumber() {
     let data = {
-      projectId : this.projectId,
-      lastInvoiceNumber : this.lastInvoiceNumber,
+      projectId: this.projectId,
+      lastInvoiceNumber: this.lastInvoiceNumber,
     }
-    if(+this.lastInvoiceNumber <= 0) {
+    if (+this.lastInvoiceNumber <= 0) {
       abp.message.error(this.l("Last Invoice Number must be bigger than 0!"));
       this.getLastInvoiceNumber();
       return;
@@ -98,12 +100,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.discount = data.result;
     })
   }
-  updateDiscount(){
+  updateDiscount() {
     let data = {
-      projectId : this.projectId,
-      discount : this.discount,
+      projectId: this.projectId,
+      discount: this.discount,
     }
-    if(+this.discount < 0) {
+    if (+this.discount < 0) {
       abp.message.error(this.l("Discount must be bigger than or equal to 0!"));
       this.getLastInvoiceNumber();
       return;
@@ -115,6 +117,25 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
   }
 
+  //#region Integrate Finfast
+  showAddSubInvoiceDialog(): void{
+    const subInvoiceDialog = this._modalService.show(AddSubInvoiceDialogComponent, {
+      class: 'modal',
+      initialState: {
+        projectId: this.projectId,
+        subInvoices: this.parentInvoice.subInvoices
+      }
+    })
+  }
+  private getParentInvoice(): void {
+    this.projectUserBillService.getParentInvoice(this.projectId)
+      .subscribe(response => {
+        if (!response.success) return;
+        this.parentInvoice = response.result;
+        console.log(this.parentInvoice)
+      });
+  }
+  //#endregion
 
   private getAllFakeUser() {
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
@@ -210,7 +231,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.isEditDiscount = false;
   }
 
-  updateNote(id, fullName,projectName,note) {
+  updateNote(id, fullName, projectName, note) {
     let editNoteDialog: BsModalRef;
     editNoteDialog = this._modalService.show(EditNoteDialogComponent, {
       class: 'modal',

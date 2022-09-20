@@ -29,5 +29,6 @@ namespace ProjectManagement.Entities
         public float TransferFee { get; set; }
         public float Discount { get; set; }
         public float WorkingDay { get; set; }
+        public long? ParentInvoiceId { get; set; }
     }
 }

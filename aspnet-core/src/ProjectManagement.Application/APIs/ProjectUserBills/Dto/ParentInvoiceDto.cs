@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ProjectManagement.APIs.ProjectUserBills.Dto
+{
+    public class ParentInvoiceDto
+    {
+        public long ProjectId { get; set; }
+        public long? ParentId { get; set; }
+        public bool IsMainInvoice => !ParentId.HasValue ? true : false;
+        public IEnumerable<SubInvoiceDto> SubInvoices { get; set; }
+    }
+    public class SubInvoiceDto
+    {
+        public long ProjectId { get; set; }
+        public string ProjectName { get; set; }
+    }
+}

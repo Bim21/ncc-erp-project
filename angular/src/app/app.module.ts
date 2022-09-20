@@ -181,6 +181,7 @@ import { EditNoteDialogComponent } from './modules/pm-management/list-project/li
 import { FormSendRecruitmentComponent } from './modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
 import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
+import { AddSubInvoiceDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/add-sub-invoice-dialog/add-sub-invoice-dialog.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -344,7 +345,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     EditNoteDialogComponent,
     FormSendRecruitmentComponent,
     PositionComponent,
-    CreateUpdatePositionComponent
+    CreateUpdatePositionComponent,
+    AddSubInvoiceDialogComponent
   ],
   imports: [
     CommonModule,

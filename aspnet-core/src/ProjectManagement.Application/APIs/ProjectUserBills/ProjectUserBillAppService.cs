@@ -228,5 +228,62 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
             return input;
         }
+        #region Integrate Finfast
+        [HttpGet]
+        public async Task<List<SubInvoiceDto>> GetAllProjectCanUsing(long projectId)
+        {
+            return await WorkScope.GetAll<Project>()
+                .Where(s => !s.ParentInvoiceId.HasValue && s.Id != projectId && !WorkScope.GetAll<Project>().Where(x => x.ParentInvoiceId == s.Id).Any())
+                .Select(x => new SubInvoiceDto
+                {
+                    ProjectId = x.Id,
+                    ProjectName = x.Name
+                }).ToListAsync();
+        }
+        [HttpGet]
+        public async Task<ParentInvoiceDto> GetParentInvoiceByProject(long projectId)
+        {
+            var project = await WorkScope.GetAll<Project>()
+                .Where(s => s.Id == projectId)
+                .Select(s => new ParentInvoiceDto
+                {
+                    ProjectId = s.Id,
+                    ParentId = s.ParentInvoiceId,
+                    SubInvoices = WorkScope.GetAll<Project>().Where(s => s.ParentInvoiceId == projectId).Select(x => new SubInvoiceDto
+                    {
+                        ProjectId = x.Id,
+                        ProjectName = x.Name
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+            return project;
+        }
+        [HttpPost]
+        public async Task<string> AddSubInvoice(AddSubInvoiceDto input)
+        {
+            var subInvoice = await WorkScope.GetAsync<Project>(input.SubInvoiceId);
+            subInvoice.ParentInvoiceId = input.ParentInvoiceId;
+            await CurrentUnitOfWork.SaveChangesAsync();
+            return "Added Successfullly";
+        }
+        [HttpGet]
+        public async Task<List<SubInvoiceDto>> GetSubInoviceByProjectId(long projectId)
+        {
+            return await WorkScope.GetAll<Project>()
+                .Where(s => s.ParentInvoiceId == projectId)
+                .Select(s =>new SubInvoiceDto
+                {
+                    ProjectId= s.Id,
+                    ProjectName = s.Name
+                })
+                .ToListAsync();
+        }
+        [HttpGet]
+        public async Task OutParentInvoice(long subInvoiceId)
+        {
+            var subInvoice = await WorkScope.GetAsync<Project>(subInvoiceId);
+            subInvoice.ParentInvoiceId = null;
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+        #endregion
     }
 }

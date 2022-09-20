@@ -19,6 +19,7 @@ namespace ProjectManagement.Services.ProjectTimesheet.Dto
         public float Discount { get; set; }
         public float TransferFee { get; set; }
         public long LastInvoiceNumber { get; set; }
+        public long? ParentInvoiceId { get; set; }
 
     }
 }
