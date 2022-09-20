@@ -55,5 +55,11 @@ export class ProjectUserBillService extends BaseApiService {
   getSubInvoiceByProjectId(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
     return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + '/GetSubInoviceByProjectId?projectId='+projectId);
   }
+  getAllPosibleSubProject(projecId: number): Observable<ApiResponse<SubInvoice[]>>{
+    return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAllPosibleSubProject?projectId=${projecId}`)
+  }
+  getAllPosibleMainProject(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
+    return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAllPosibleMainProject?projectId=${projectId}`)
+  }
   //#endregion
 }

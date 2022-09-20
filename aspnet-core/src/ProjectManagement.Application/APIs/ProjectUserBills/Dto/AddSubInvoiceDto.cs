@@ -9,4 +9,10 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public long ParentInvoiceId { get; set; }
         public long SubInvoiceId { get; set; }
     }
+
+    public class AddSubInvoicesDto
+    {
+        public long ParentInvoiceId { get; set; }
+        public List<long> SubInvoiceIds { get; set; }
+    }
 }

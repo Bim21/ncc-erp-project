@@ -1,5 +1,5 @@
 import { AddSubInvoiceDialogComponent } from './add-sub-invoice-dialog/add-sub-invoice-dialog.component';
-import { ParentInvoice } from './../../../../../service/model/bill-info.model';
+import { ParentInvoice, SubInvoice } from './../../../../../service/model/bill-info.model';
 import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { UserService } from '@app/service/api/user.service';
@@ -12,7 +12,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditNoteDialogComponent } from './add-note-dialog/edit-note-dialog.component';
-import { APP_ENUMS } from '@shared/AppEnums';
+import { DropDownDataDto } from '@shared/filter/filter.component';
 
 
 @Component({
@@ -28,6 +28,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public userBillProcess: boolean = false;
   public panelOpenState: boolean = false;
   public isShowUserBill: boolean = false;
+  public isEditInvoiceSetting: boolean = false;
   public searchUserBill: string = ""
   public searchBillCharge: number
   private projectId: number
@@ -38,7 +39,13 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public chargeTypeList = [{ name: 'Daily', value: 0 }, { name: 'Monthly', value: 1 }, { name: 'Hourly', value: 2 }];
   public isEditLastInvoiceNumber: boolean = false;
   public isEditDiscount: boolean = false;
-
+  public invoiceSettingOptions = Object.entries(this.APP_ENUM.InvoiceSetting).map((item) => ({
+    key: item[0],
+    value: item[1]
+  }))
+  public listProjectOfClient: SubInvoice[] = []
+  public listPosibleSubProject: DropDownDataDto[] = []
+  public listPosibleMainProject: DropDownDataDto[] = []
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
@@ -66,6 +73,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.getLastInvoiceNumber();
     this.getDiscount();
     this.getParentInvoice();
+    this.getAllProject();
   }
   getRate() {
     this.projectUserBillService.getRate(this.projectId).subscribe(data => {
@@ -132,7 +140,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       .subscribe(response => {
         if (!response.success) return;
         this.parentInvoice = response.result;
-        console.log(this.parentInvoice)
       });
   }
   //#endregion
@@ -248,5 +255,33 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     });
   }
 
+  getAllProject(){
+    this.projectUserBillService.getAllPosibleSubProject(this.projectId).subscribe(rs =>{
+      this.listProjectOfClient = rs.result
+      this.listPosibleSubProject = this.listProjectOfClient.map(item => ({
+        displayName: item.projectName,
+        value: item.projectId
+      }))
+    })
 
+    this.projectUserBillService.getAllPosibleMainProject(this.projectId).subscribe(rs => {
+      this.listPosibleMainProject = rs.result.map(item => ({
+        displayName: item.projectName,
+        value: item.projectId
+      }))
+    })
+  }
+
+  toggleEdit(){
+    this.isEditInvoiceSetting = !this.isEditInvoiceSetting
+  }
+
+  cancelInvoiceSetting(){
+    this.isEditInvoiceSetting = false;
+    this.getParentInvoice()
+  }
+
+  saveInvoiceSetting(invoiceDto: ParentInvoice){
+    this.projectUserBillService.update()
+  }
 }
