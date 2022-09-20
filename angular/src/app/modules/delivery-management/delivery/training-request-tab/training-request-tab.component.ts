@@ -8,7 +8,6 @@ import { ResourcePlanDto } from './../../../../service/model/resource-plan.dto';
 import { PERMISSIONS_CONSTANT } from './../../../../constant/permission.constant';
 import { RESOURCE_REQUEST_STATUS } from './../../../../constant/resource-request-status.constant';
 import { MatDialog } from '@angular/material/dialog';
-import { DeliveryResourceRequestService } from './../../../../service/api/delivery-request-resource.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { TrainingRequestDto } from './../../../../service/model/delivery-management.dto';
@@ -19,6 +18,7 @@ import { FormPlanUserComponent } from '@app/modules/delivery-management/delivery
 import * as moment from 'moment';
 import { IDNameDto } from '@app/service/model/id-name.dto';
 import { CreateUpdateTrainingRequestComponent } from './create-update-training-request/create-update-training-request.component';
+import { TrainingRequestService } from '@app/service/api/training-request.service';
 
 @Component({
   selector: 'app-training-request-tab',
@@ -84,7 +84,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
 
   constructor(
     private injector: Injector,
-    private resourceRequestService: DeliveryResourceRequestService,
+    private trainingRequestService: TrainingRequestService,
     private ref: ChangeDetectorRef,
     private dialog: MatDialog
   ) {
@@ -176,7 +176,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
       '',
       (result) => {
         if (result) {
-          this.resourceRequestService.cancelResourceRequest(request.id).subscribe(res => {
+          this.trainingRequestService.cancelResourceRequest(request.id).subscribe(res => {
             if (res.success) {
               abp.notify.success('Cancel Request Success!');
               this.refresh();
@@ -215,7 +215,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     let data = new ResourcePlanDto(item.id, 0);
     if (!item.planUserInfo)
       return data;
-    let res = await this.resourceRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
+    let res = await this.trainingRequestService.getPlanResource(item.planUserInfo.projectUserId, item.id)
     return res.result
   }
 
@@ -250,7 +250,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
       resourceRequestId: this.resourceRequestId,
       note: this.strNote,
     }
-    this.resourceRequestService.updateNote(request, this.typePM).subscribe(rs => {
+    this.trainingRequestService.updateNote(request, this.typePM).subscribe(rs => {
       if (rs.success) {
         abp.notify.success('Update Note Successfully!')
         let index = this.listRequest.findIndex(x => x.id == request.resourceRequestId);
@@ -295,9 +295,9 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
       requestBody.sortDirection = this.sortable.sortDirection
     }
 
-    this.resourceRequestService.getResourcePaging(requestBody, this.selectedOption).pipe(finalize(() => {
+    this.trainingRequestService.getResourcePaging(requestBody, this.selectedOption).pipe(finalize(() => {
       finishedCallback();
-    }), catchError(this.resourceRequestService.handleError)).subscribe(data => {
+    }), catchError(this.trainingRequestService.handleError)).subscribe(data => {
       this.listRequest = this.tempListRequest = data.result.items;
       this.showPaging(data.result, pageNumber);
     },
@@ -368,31 +368,31 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
 
   //#region get skills, statuses, levels, priorities, quantities
   getAllSkills() {
-    this.resourceRequestService.getSkills().subscribe((data) => {
+    this.trainingRequestService.getSkills().subscribe((data) => {
       this.listSkills = data.result;
     })
   }
 
   getLevels() {
-    this.resourceRequestService.getTrainingLevels().subscribe(res => {
+    this.trainingRequestService.getTrainingLevels().subscribe(res => {
       this.listLevels = res.result
     })
   }
 
   getPriorities() {
-    this.resourceRequestService.getPriorities().subscribe(res => {
+    this.trainingRequestService.getPriorities().subscribe(res => {
       this.listPriorities = res.result
     })
   }
 
   getStatuses() {
-    this.resourceRequestService.getStatuses().subscribe(res => {
+    this.trainingRequestService.getStatuses().subscribe(res => {
       this.listStatuses = res.result
     })
   }
 
   getProjectUserRoles() {
-    this.resourceRequestService.getProjectUserRoles().subscribe((rs: any) => {
+    this.trainingRequestService.getProjectUserRoles().subscribe((rs: any) => {
       this.listProjectUserRoles = rs.result
     })
   }
@@ -424,7 +424,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
       "",
       (result: boolean) => {
         if (result) {
-          this.resourceRequestService.delete(item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(() => {
+          this.trainingRequestService.delete(item.id).pipe(catchError(this.trainingRequestService.handleError)).subscribe(() => {
             abp.notify.success(" Delete request successfully");
             this.refresh();
           });

@@ -28,6 +28,7 @@ namespace ProjectManagement.Configuration.Dto
         public string PasswordBot { get; set; }
         public string KomuRoom { get; set; }
         public string DefaultWorkingHours { get; set; }
+        public string TrainingRequestChannel { get; set; }
     }
 
     public class ProjectSetting
