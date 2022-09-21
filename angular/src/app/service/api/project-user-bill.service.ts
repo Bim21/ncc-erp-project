@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ParentInvoice } from '../model/bill-info.model';
 import { ApiResponse } from '../model/api-response.dto';
+import { AddSubInvoicesDto } from '@app/modules/pm-management/list-project/list-project-detail/project-bill/project-bill.component';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +61,9 @@ export class ProjectUserBillService extends BaseApiService {
   }
   getAllPosibleMainProject(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
     return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAllPosibleMainProject?projectId=${projectId}`)
+  }
+  addSubInvoices(payload: AddSubInvoicesDto):Observable<ApiResponse<string>>{
+    return this.http.post<ApiResponse<string>>(this.rootUrl + `/AddSubInvoices`, payload)
   }
   //#endregion
 }

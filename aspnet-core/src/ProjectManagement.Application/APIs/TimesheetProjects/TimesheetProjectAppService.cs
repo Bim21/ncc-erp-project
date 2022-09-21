@@ -156,7 +156,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 if (dto.IsMainProjectInvoice)
                 {
-                    dto.SubProjects = listProject.Where(s => s.ParentInvoiceId.Value == dto.ProjectId).Select(s => new IdNameDto { Id = s.Id, Name = s.Name}).ToList();
+                    dto.SubProjects = listProject.Where(s => s.ParentInvoiceId.HasValue).Where(s => s.ParentInvoiceId.Value == dto.ProjectId).Select(s => new IdNameDto { Id = s.Id, Name = s.Name}).ToList();
                 }
                 else
                 {

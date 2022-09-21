@@ -9,13 +9,15 @@ import { DropDownDataDto } from '@shared/filter/filter.component';
 export class MultiSelectOptionComponent implements OnInit, OnChanges {
   @Input() searchPlaceHolder = ''
   @Input() dropdownData: DropDownDataDto[] = []
-  @Input() selectedIds: number[] = []
+  @Input() selectedValues: any[] = []
+  @Input() selectedValue: any 
   @Input() multiple: boolean = true
   @Input() selectLabel: string = 'Select'
-  @Output() onSelectionChange: EventEmitter<number[]> = new EventEmitter<number[]>()
+  @Input() required:  boolean = false;
+  @Output() onMultiSelectionChange: EventEmitter<any[]> = new EventEmitter<any[]>()
+  @Output() onSingleSelectionChange: EventEmitter<any[]> = new EventEmitter<any[]>()
   public searchString: string = ''
   public tempData: DropDownDataDto[]
-  public selected = []
   constructor() { }
   ngOnChanges(changes: SimpleChanges): void {
     if('dropdownData' in changes){
@@ -27,7 +29,6 @@ export class MultiSelectOptionComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.tempData = [...this.dropdownData]
-    this.selected = this.selectedIds
   }
 
   onSearch(value: string){
@@ -38,8 +39,13 @@ export class MultiSelectOptionComponent implements OnInit, OnChanges {
     this.tempData = [...this.dropdownData]
   }
 
-  onSelectChange(event: number[]){
-    this.onSelectionChange.emit(event)
+  onSingleSelectChange(event: any){
+    console.log(this.selectedValue)
+    this.onSingleSelectionChange.emit(event);
+  }
+
+  onMultiSelectChange(event: any[]){
+    this.onMultiSelectionChange.emit(event)
   }
 
   onOpenedChange(isOpened: boolean){

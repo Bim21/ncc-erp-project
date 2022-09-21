@@ -43,9 +43,10 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     key: item[0],
     value: item[1]
   }))
+  public selectedSubProjects: number[] = []
+  public selectedMainProject: number
   public listProjectOfClient: SubInvoice[] = []
-  public listPosibleSubProject: DropDownDataDto[] = []
-  public listPosibleMainProject: DropDownDataDto[] = []
+  public listSelectProject: DropDownDataDto[] = []
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
@@ -126,7 +127,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   }
 
   //#region Integrate Finfast
-  showAddSubInvoiceDialog(): void{
+  showAddSubInvoiceDialog(): void {
     const subInvoiceDialog = this._modalService.show(AddSubInvoiceDialogComponent, {
       class: 'modal',
       initialState: {
@@ -140,6 +141,8 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       .subscribe(response => {
         if (!response.success) return;
         this.parentInvoice = response.result;
+        this.selectedSubProjects = response.result.subInvoices.map(item => item.projectId)
+        this.selectedMainProject = response.result.parentId
       });
   }
   //#endregion
@@ -255,33 +258,78 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     });
   }
 
-  getAllProject(){
-    this.projectUserBillService.getAllPosibleSubProject(this.projectId).subscribe(rs =>{
+  getAllProject() {
+    this.projectUserBillService.getAllProjectCanUsing(this.projectId).subscribe(rs => {
       this.listProjectOfClient = rs.result
-      this.listPosibleSubProject = this.listProjectOfClient.map(item => ({
-        displayName: item.projectName,
-        value: item.projectId
-      }))
-    })
-
-    this.projectUserBillService.getAllPosibleMainProject(this.projectId).subscribe(rs => {
-      this.listPosibleMainProject = rs.result.map(item => ({
+      this.listSelectProject = this.listProjectOfClient.map(item => ({
         displayName: item.projectName,
         value: item.projectId
       }))
     })
   }
 
-  toggleEdit(){
+  toggleEdit() {
     this.isEditInvoiceSetting = !this.isEditInvoiceSetting
   }
 
-  cancelInvoiceSetting(){
+  cancelInvoiceSetting() {
     this.isEditInvoiceSetting = false;
     this.getParentInvoice()
   }
 
-  saveInvoiceSetting(invoiceDto: ParentInvoice){
-    this.projectUserBillService.update()
+  onSelectSubProjects(event) {
+    this.selectedSubProjects = event;
   }
+
+  saveInvoiceSetting() {
+    const addSubInvoices: AddSubInvoicesDto = {
+      parentInvoiceId: this.parentInvoice.isMainInvoice ? this.projectId : this.selectedMainProject,
+      subInvoiceIds: this.parentInvoice.isMainInvoice ? this.selectedSubProjects : [this.projectId]
+    }
+    const warningMessage = this.getWarningProjectMessage();
+    if (warningMessage.length) {
+      abp.message.confirm(`${warningMessage}`, "", (result) => {
+        if (result) {
+          this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
+            abp.notify.success(rs.result)
+            this.isEditInvoiceSetting = false;
+            this.getParentInvoice()
+          })
+        }
+      })
+    } else {
+      this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
+        abp.notify.success(rs.result)
+        this.isEditInvoiceSetting = false;
+        this.getParentInvoice()
+      })
+    }
+  }
+
+  getWarningProjectMessage(){
+    const warningProjects = []
+    this.listProjectOfClient.forEach(p => {
+      if (this.selectedSubProjects.find(value => value == p.projectId && p.parentId != this.projectId && p.parentId)) {
+        warningProjects.push({ projectName: p.projectName, parentName: p.parentName })
+      }
+    })
+    const warningMessage = warningProjects.map(value => `Project ${value.projectName} already has a main project ${value.parentName}`).join('\n')
+    return warningMessage
+  }
+
+  validateSaveInvoiceSetting(){
+    if(!this.parentInvoice.isMainInvoice){
+      return this.selectedMainProject == null
+    }
+    return false;
+  }
+
+  onSingleSelectionChange(selectedValue){
+    this.selectedMainProject = selectedValue
+  }
+}
+
+export interface AddSubInvoicesDto {
+  parentInvoiceId: number,
+  subInvoiceIds: number[]
 }

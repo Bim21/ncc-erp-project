@@ -290,12 +290,16 @@ namespace ProjectManagement.APIs.ProjectUserBills
         [HttpGet]
         public async Task<List<SubInvoiceDto>> GetAllProjectCanUsing(long projectId)
         {
+            var clientId = WorkScope.Get<Project>(projectId).ClientId;
             return await WorkScope.GetAll<Project>()
-                .Where(s => !s.ParentInvoiceId.HasValue && s.Id != projectId && !WorkScope.GetAll<Project>().Where(x => x.ParentInvoiceId == s.Id).Any())
+                .Where(p => p.ClientId == clientId)
+                .Where(s => s.Id != projectId)
                 .Select(x => new SubInvoiceDto
                 {
                     ProjectId = x.Id,
-                    ProjectName = x.Name
+                    ProjectName = x.Name,
+                    ParentId = x.ParentInvoiceId,
+                    ParentName = x.ParentInvoiceId.HasValue ? WorkScope.Get<Project>((long)x.ParentInvoiceId).Name: null,
                 }).ToListAsync();
         }
         [HttpGet]
@@ -307,6 +311,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                 {
                     ProjectId = s.Id,
                     ParentId = s.ParentInvoiceId,
+                    ParentName = s.ParentInvoiceId.HasValue ? WorkScope.Get<Project>((long)s.ParentInvoiceId).Name : null,
                     SubInvoices = WorkScope.GetAll<Project>().Where(s => s.ParentInvoiceId == projectId).Select(x => new SubInvoiceDto
                     {
                         ProjectId = x.Id,
@@ -328,6 +333,9 @@ namespace ProjectManagement.APIs.ProjectUserBills
         {
             var listProject = new List<Project>();
             var subProjects = await WorkScope.GetAll<Project>().Where(x => x.ParentInvoiceId == input.ParentInvoiceId).Where(x => !input.SubInvoiceIds.Any(s => s == x.Id)).ToListAsync();
+            var parentProject = await WorkScope.GetAsync<Project>(input.ParentInvoiceId);
+            parentProject.ParentInvoiceId = null;
+            listProject.Add(parentProject);
             foreach (var subProject in subProjects)
             {
                 subProject.ParentInvoiceId = null;
