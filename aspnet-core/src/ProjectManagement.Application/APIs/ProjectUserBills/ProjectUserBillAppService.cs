@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NccCore.Extension;
 using NccCore.Paging;
+using NccCore.Uitls;
 using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
+using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Constants.Enum;
@@ -19,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectUserBills
 {
@@ -87,33 +90,30 @@ namespace ProjectManagement.APIs.ProjectUserBills
             return await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == projectId);
         }
 
+        /// <summary>
+        /// return list projects that have the same client with input projectId
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<List<SubInvoiceDto>> GetAllPosibleSubProject(long projectId)
+        public List<SubInvoiceDto> GetAvailableProjectsForSettingInvoice(long projectId)
         {
-            var mainProject = WorkScope.GetAll<Project>().GroupBy(p => p.ParentInvoiceId).Select(x => new
+
+            var clientId = WorkScope.GetAll<Project>().Where(s => s.Id == projectId).Select(s => s.ClientId).FirstOrDefault();
+            if (clientId == default)
             {
-                ProjectId = x.Key,
-            });
-            var clientId = WorkScope.GetAll<Project>().Where(p => p.Id == projectId ).Select(p => p.ClientId).FirstOrDefault();
-            return await WorkScope.GetAll<Project>()
-                .Where(p => p.ClientId == clientId && !p.ParentInvoiceId.HasValue && p.Id != projectId)
-                .Where(x => !mainProject.Any(p => p.ProjectId == x.Id))
-                .Select(p => new SubInvoiceDto
-                {
-                    ProjectId = p.Id,
-                    ProjectName = p.Name
-                }).ToListAsync();
+                return null;
+            }
+
+            return WorkScope.GetAll<Project>()
+                .Where(s => s.ClientId == clientId)
+                .Where(s => s.Id != projectId)
+                .Select(s => new SubInvoiceDto { ProjectId = s.Id, ProjectName = s.Name })
+                .ToList();
+
         }
-        [HttpGet]
-        public async Task<List<SubInvoiceDto>> GetAllPosibleMainProject(long projectId)
-        {
-            var clientId = WorkScope.GetAll<Project>().Where(p => p.Id == projectId).Select(p => p.ClientId).FirstOrDefault();
-            return await WorkScope.GetAll<Project>().Where(p => p.ClientId == clientId && p.Id != projectId).Select(p => new SubInvoiceDto
-            {
-                ProjectId = p.Id,
-                ProjectName = p.Name
-            }).ToListAsync();
-        }
+
+
         [HttpPut]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)]
         public async Task<long> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
@@ -169,6 +169,37 @@ namespace ProjectManagement.APIs.ProjectUserBills
                                 });
             return await query.FirstOrDefaultAsync();
         }
+
+        [HttpGet]
+        [AbpAuthorize]
+        public async Task<ProjectInvoiceSettingDto> GetBillInfo(long projectId)
+        {
+            var subProjects = WorkScope.GetAll<Project>()
+              .Where(s => s.ParentInvoiceId == projectId)
+              .Select(s => new IdNameDto { Id = s.Id, Name = s.Name })
+              .ToList();
+
+            var dto = await WorkScope.GetAll<Project>().Where(x => x.Id == projectId)
+                                .Select(x => new ProjectInvoiceSettingDto
+                                {
+                                    CurrencyName = x.Currency.Name,
+                                    Discount = x.Discount,
+                                    InvoiceNumber = x.LastInvoiceNumber,
+                                    MainProjectId = x.ParentInvoiceId,          
+                                    SubProjects = subProjects,
+                                }).FirstOrDefaultAsync();
+
+            if (dto != default && !dto.IsMainProjectInvoice)
+            {
+                dto.MainProjectName = WorkScope.GetAll<Project>()
+                    .Where(s => s.Id == dto.MainProjectId.Value)
+                    .Select(s => s.Name)
+                    .FirstOrDefault();
+            }
+
+            return dto;
+        }
+
 
         [HttpPost]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create,
@@ -311,18 +342,95 @@ namespace ProjectManagement.APIs.ProjectUserBills
             await WorkScope.UpdateRangeAsync(listProject);
             return $"Added {input.SubInvoiceIds.Count} sub to main project";
         }
-        [HttpGet]
-        public async Task<List<SubInvoiceDto>> GetSubInoviceByProjectId(long projectId)
+
+
+        [HttpPost]
+        public void UpdateInvoiceSetting(UpdateInvoiceDto input)
         {
-            return await WorkScope.GetAll<Project>()
-                .Where(s => s.ParentInvoiceId == projectId)
-                .Select(s =>new SubInvoiceDto
+
+            var project = WorkScope.Get<Project>(input.ProjectId);
+
+            project.LastInvoiceNumber = input.InvoiceNumber;
+            project.Discount = input.Discount;
+
+
+            var projectsChangeToMain = WorkScope.GetAll<Project>()
+                        .Where(s => s.ParentInvoiceId == project.Id)
+                        .ToList();
+
+            projectsChangeToMain.ForEach(p =>
+            {
+                p.ParentInvoiceId = null;
+                p.LastModificationTime = DateTimeUtils.GetNow();
+                p.LastModifierUserId = AbpSession.UserId;
+            });
+
+            if (input.IsMainProjectInvoice)
+            {
+                project.ParentInvoiceId = null;
+
+                if (input.SubProjectIds != null && !input.SubProjectIds.IsEmpty())
                 {
-                    ProjectId= s.Id,
-                    ProjectName = s.Name
-                })
-                .ToListAsync();
+                    
+                    var subProjects = WorkScope.GetAll<Project>().Where(s => input.SubProjectIds.Contains(s.Id)).ToList();
+                    subProjects.ForEach(p =>
+                    {
+                        p.ParentInvoiceId = input.ProjectId;
+                        p.LastModificationTime = DateTimeUtils.GetNow();
+                        p.LastModifierUserId = AbpSession.UserId;
+                    });
+                }
+
+            }
+            else
+            {
+                if (!input.MainProjectId.HasValue)
+                {
+                    throw new UserFriendlyException("You have to select Main Project!");
+                }
+                project.ParentInvoiceId = input.MainProjectId.Value;
+
+            }
+
+            CurrentUnitOfWork.SaveChanges();
+                     
         }
+
+        [HttpGet]
+        public string CheckInvoiceSetting()
+        {
+            var listProject = WorkScope.GetAll<Project>()
+             .Where(s => s.ProjectType == ProjectType.ODC || s.ProjectType == ProjectType.TimeAndMaterials || s.ProjectType == ProjectType.FIXPRICE)
+             .Select(s => new { s.Id, s.Name, s.ParentInvoiceId })
+             .AsEnumerable();
+
+            var sb = new StringBuilder();
+            foreach(var project in listProject)
+            {
+                if (project.ParentInvoiceId.HasValue)
+                {
+                    var parrentProject = listProject.Where(s => s.Id == project.ParentInvoiceId.Value).FirstOrDefault();
+                    if (parrentProject == default)
+                    {
+                        sb.AppendLine($"{project.Name} is Sub but not found main project");
+                    }
+                    else
+                    {
+                        if (parrentProject.ParentInvoiceId.HasValue)
+                        {
+                            sb.AppendLine($"{project.Name} is Sub of {parrentProject.Name} but {parrentProject.Name} is SUB too");
+                        }
+                    }
+
+                }
+
+            }
+            return sb.ToString();
+
+        }
+
+
+
         [HttpGet]
         public async Task OutParentInvoice(long subInvoiceId)
         {

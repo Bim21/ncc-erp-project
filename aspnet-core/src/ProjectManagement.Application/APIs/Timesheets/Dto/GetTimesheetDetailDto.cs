@@ -91,7 +91,21 @@ namespace ProjectManagement.APIs.Timesheets.Dto
 
             return amount;
         }
+
+        public bool IsMainProjectInvoice => MainProjectId.HasValue;
+        public long? MainProjectId { get; set; }
+        public string MainProjectName { get; set; }
+        public List<IdNameDto> SubProjects { get; set; }
+        public List<string> SubProjectNames => SubProjects.Select(s => s.Name).ToList();        
+        public List<long> SubProjectIds => SubProjects.Select(s => s.Id).ToList();
     }
+
+    public class IdNameDto
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+
 
     public class TotalAmountByCurrencyDto
     {
