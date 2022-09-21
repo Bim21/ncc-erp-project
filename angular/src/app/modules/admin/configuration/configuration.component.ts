@@ -33,6 +33,9 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isShowFinanceSetting: boolean = false;
   public isShowGoogleClientApp: boolean = false;
   public isShowDefaultWorking: boolean = false;
+  public isShowDiscordChannel: boolean = false;
+  public isEditDiscordChannel: boolean = false;
+ 
   public listDays: any[] = [
     { value: '2', text: 'Monday' },
     { value: '3', text: 'Tuesday' },
@@ -116,7 +119,8 @@ export class ConfigurationDto {
   hrmSecretCode: string;
   defaultWorkingHours: string;
   noticeToKomu: string;
-  autoUpdateProjectInfoToTimesheetTool: string
+  autoUpdateProjectInfoToTimesheetTool: string;
+  trainingRequestChannel: string;
 }
 
 export class ProjectSetting{

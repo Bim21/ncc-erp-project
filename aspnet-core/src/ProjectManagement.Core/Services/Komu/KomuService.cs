@@ -55,5 +55,17 @@ namespace ProjectManagement.Services.Komu
                  Post(channelType, input);
             }
         }
+
+        public void NotifyToChannelId(KomuMessage input, string channelId)
+        {
+            if (!_enableSendToKomu)
+            {
+                logger.LogInformation("_enableSendToKomu=false => stop");
+            }
+            var channelIdToSend = string.IsNullOrEmpty(_channelIdDevMode) ? channelId : _channelIdDevMode;
+
+            Post(ChannelTypeConstant.KOMU_CHANNELID, new { message = input.Message, channelid = channelIdToSend });
+
+        }
     }
 }

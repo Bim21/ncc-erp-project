@@ -1,17 +1,13 @@
 import { SkillService } from './../../../../../service/api/skill.service';
 import { catchError } from 'rxjs/operators';
-import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
-import { result } from 'lodash-es';
 import { ProjectDto, SkillDto } from './../../../../../service/model/list-project.dto';
 import { ListProjectService } from './../../../../../service/api/list-project.service';
-import { TrainingRequestDto, ResourceRequestDetailDto } from './../../../../../service/model/delivery-management.dto';
+import { TrainingRequestDto} from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
-import { APP_ENUMS } from './../../../../../../shared/AppEnums';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit, Inject, Injector, ChangeDetectorRef, ViewChild } from '@angular/core';
-import * as moment from 'moment';
-import * as _ from 'lodash'
-import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import * as _ from 'lodash';
+import {TrainingRequestService} from '@app/service/api/training-request.service'
 
 @Component({
   selector: 'app-create-update-training-request',
@@ -37,7 +33,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private listProjectService: ListProjectService,
-    private resourceRequestService: DeliveryResourceRequestService,
+    private trainingRequestService: TrainingRequestService,
     private skillService: SkillService,
     public dialogRef: MatDialogRef<CreateUpdateTrainingRequestComponent>,
     public ref: ChangeDetectorRef
@@ -72,7 +68,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
   }
 
   getResourceRequestById(id: number) {
-    this.resourceRequestService.getResourceRequestById(id).subscribe(res => {
+    this.trainingRequestService.getResourceRequestById(id).subscribe(res => {
       this.trainingRequestDto = res.result
       this.title = res.result.name
     })
@@ -100,12 +96,12 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
     if (this.data.command == "create") {
       request.id = 0
       let createRequest = { ...request, quantity: this.trainingRequestDto.quantity };
-      this.resourceRequestService.createTraining(createRequest).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
+      this.trainingRequestService.create(createRequest).pipe(catchError(this.trainingRequestService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
         this.dialogRef.close(this.trainingRequestDto);
       }, () => this.isLoading = false)
     } else {
-      this.resourceRequestService.update(request).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
+      this.trainingRequestService.update(request).pipe(catchError(this.trainingRequestService.handleError)).subscribe((res) => {
         let updateRequest = { ...request, }
         abp.notify.success("Update Successfully!");
         this.dialogRef.close(res.result);
@@ -121,7 +117,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
 
   getSkillDetail() {
     if (this.data.command == "edit") {
-      this.resourceRequestService.GetSkillDetail(this.data.item.id).pipe(catchError(this.resourceRequestService.handleError)).subscribe(data => {
+      this.trainingRequestService.GetSkillDetail(this.data.item.id).pipe(catchError(this.trainingRequestService.handleError)).subscribe(data => {
         this.listSkillDetail = data.result
 
         let b = this.listSkillDetail.map(item => item.skillId)
@@ -137,7 +133,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
 
   removeSkill(skill) {
     if (skill.id) {
-      this.resourceRequestService.deleteSkill(skill.id).pipe(catchError(this.skillService.handleError)).subscribe(rs => {
+      this.trainingRequestService.deleteSkill(skill.id).pipe(catchError(this.skillService.handleError)).subscribe(rs => {
         abp.notify.success("delete Successful")
         this.getSkillDetail()
       })
@@ -151,7 +147,7 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
   saveSkill(skill) {
     if (skill.skillId && skill.quantity > 0) {
       skill.resourceRequestId = this.data.item.id
-      this.resourceRequestService.createSkill(skill).pipe(catchError(this.resourceRequestService.handleError)).subscribe(rs => {
+      this.trainingRequestService.createSkill(skill).pipe(catchError(this.trainingRequestService.handleError)).subscribe(rs => {
         abp.notify.success("added new Skill")
         this.getSkillDetail()
       })
