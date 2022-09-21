@@ -6,8 +6,8 @@
                 <img [src]="getAvatar(user)" class="rounded-circle  mt-1" width="50px" style="max-width: 100%;"
                     alt="avatar">
                 <ngx-stars style="z-index: 1 !important; margin-top: 10px;" [readonly]="true" [wholeStars]="true"
-                    [size]="1" [color]="getStarColor(user.rateStar, false)" [initialStars]="user.rateStar"
-                    [maxStars]="user.rateStar ? user.rateStar : 0 ">
+                    [size]="1" [color]="getStarColor(user.starRate, false)" [initialStars]="user.starRate"
+                    [maxStars]="user.starRate ? user.starRate : 0 ">
                 </ngx-stars>
             </div>
             <div class="col-8  text-left">

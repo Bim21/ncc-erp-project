@@ -293,7 +293,14 @@
                                                         <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                                 </mat-menu>
                                                 <div style="width: 80%;">
-                                                    <app-user-info [userData]="user">
+                                                    <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                                    branchColor:user.branchColor,
+                                                    branchDisplayName:user.branchDisplayName,
+                                                    userType: user.userType, avatarFullPath: user.avatarFullPath,
+                                                    position: user.position,
+                                                    positionColor: user.positionColor,
+                                                    positionName: user.positionName,
+                                                    userLevel: user.userLevel}">
                                                     </app-user-info>
                                                 </div>
                                                 <div style="visibility: hidden; position: fixed"
@@ -384,7 +391,16 @@
                                             *ngFor="let user of projectCurrentSupportUser; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">                                               
                                                 <div style="width: 80%;">
-                                                    <app-user-info [userData]="user">
+                                                    <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                                                    branchColor: user.branchColor,
+                                                    branchDisplayName:user.branchDisplayName,
+                                                    userType: user.type, 
+                                                    avatarFullPath: user.fullAvatarPath,
+                                                    userTypeName: user.userTypeName,
+                                                    position: user.position,
+                                                    positionColor: user.positionColor,
+                                                    positionName: user.positionName,
+                                                    userLevel: user.level}">
                                                     </app-user-info>
                                                 </div>
                                                 <div style="display: flex; align-items: center;">
