@@ -98,20 +98,7 @@
                                 </td>
                                 <td style="width: 350px;">
                                     <div style="width: 100%; display: flex; flex-direction: row; align-items: center;">
-                                        <app-user-info class="w-100" [userData]="{
-                        fullName: item.fullName,
-                        branch: item.branch,
-                        branchColor:item.branchColor,
-                        branchDisplayName:item.branchDisplayName,
-                        userType: item.userType,
-                        position: item.position,
-                        positionColor: item.positionColor,
-                        positionName: item.positionName,
-                        emailAddress: item.emailAddress,
-                        avatarFullPath: item.avatarFullPath,
-                        rateStar:item.starRate,
-                        userLevel: item.userLevel
-                      }">
+                                        <app-user-info class="w-100" [userData]="item">
                                         </app-user-info>
                                     </div>
                                 </td>
