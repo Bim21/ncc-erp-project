@@ -7,8 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ParentInvoice } from '../model/bill-info.model';
 import { ApiResponse } from '../model/api-response.dto';
-import { AddSubInvoicesDto } from '@app/modules/pm-management/list-project/list-project-detail/project-bill/project-bill.component';
-
+import {UpdateInvoiceDto} from '../model/updateInvoice.dto'
+import { ProjectInvoiceSettingDto } from '@app/service/model/projectInvoiceSetting.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -56,14 +56,14 @@ export class ProjectUserBillService extends BaseApiService {
   getSubInvoiceByProjectId(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
     return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + '/GetSubInoviceByProjectId?projectId='+projectId);
   }
-  getAllPosibleSubProject(projecId: number): Observable<ApiResponse<SubInvoice[]>>{
-    return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAllPosibleSubProject?projectId=${projecId}`)
+  getAvailableProjectsForSettingInvoice(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
+    return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAvailableProjectsForSettingInvoice?projectId=${projectId}`)
   }
-  getAllPosibleMainProject(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
-    return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAllPosibleMainProject?projectId=${projectId}`)
+  updateInvoiceSetting(payload: UpdateInvoiceDto){
+    return this.http.post(this.rootUrl + '/UpdateInvoiceSetting', payload)
   }
-  addSubInvoices(payload: AddSubInvoicesDto):Observable<ApiResponse<string>>{
-    return this.http.post<ApiResponse<string>>(this.rootUrl + `/AddSubInvoices`, payload)
+  getBillInfo(projectId: number): Observable<ApiResponse<ProjectInvoiceSettingDto>>{
+    return this.http.get<ApiResponse<ProjectInvoiceSettingDto>>(this.rootUrl + `/GetBillInfo?projectId=${projectId}`)
   }
   //#endregion
 }

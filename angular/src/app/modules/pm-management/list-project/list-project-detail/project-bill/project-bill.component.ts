@@ -13,6 +13,12 @@ import * as moment from 'moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditNoteDialogComponent } from './add-note-dialog/edit-note-dialog.component';
 import { DropDownDataDto } from '@shared/filter/filter.component';
+import { ProjectDto } from '@app/service/model/list-project.dto';
+import { ListProjectService } from '@app/service/api/list-project.service';
+import { InvoiceSettingDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/project-bill/invoice-setting-dialog/invoice-setting-dialog.component';
+import { ProjectInvoiceSettingDto } from '@app/service/model/projectInvoiceSetting.dto';
+import { UpdateInvoiceDto } from '@app/service/model/updateInvoice.dto';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -47,6 +53,9 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public selectedMainProject: number
   public listProjectOfClient: SubInvoice[] = []
   public listSelectProject: DropDownDataDto[] = []
+  public currentProjectInfo: ProjectDto
+  public projectInvoiceSetting: ProjectInvoiceSettingDto;
+  public updateInvoiceDto: UpdateInvoiceDto;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
@@ -62,7 +71,9 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     private route: ActivatedRoute,
     injector: Injector,
     private userService: UserService,
-    private _modalService: BsModalService) {
+    private _modalService: BsModalService,
+    private dialog: MatDialog,
+    private projectService: ListProjectService) {
     super(injector)
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
   }
@@ -70,11 +81,13 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getUserBill();
     this.getAllFakeUser();
-    this.getRate();
-    this.getLastInvoiceNumber();
-    this.getDiscount();
+    // this.getRate();
+    // this.getLastInvoiceNumber();
+    // this.getDiscount();
     this.getParentInvoice();
     this.getAllProject();
+    this.getCurrentProjectInfo();
+    this.getProjectBillInfo();
   }
   getRate() {
     this.projectUserBillService.getRate(this.projectId).subscribe(data => {
@@ -268,6 +281,30 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
   }
 
+  getCurrentProjectInfo(){
+    this.projectService.getProjectById(this.projectId).subscribe(rs => {
+      this.currentProjectInfo = rs.result
+    })
+  }
+
+  getProjectBillInfo(){
+    this.projectUserBillService.getBillInfo(this.projectId).subscribe((rs) => {
+      this.projectInvoiceSetting = rs.result;
+      this.updateInvoiceDto = {
+        discount: rs.result.discount,
+        invoiceNumber: rs.result.invoiceNumber,
+        isMainProjectInvoice: rs.result.isMainProjectInvoice,
+        mainProjectId: rs.result.mainProjectId,
+        projectId: this.projectId,
+        subProjectIds: rs.result.subProjectIds,
+      }
+      this.rateInfo = {
+        currencyName: rs.result.currencyName
+      } as ProjectRateDto
+      this.discount = rs.result.discount,
+      this.lastInvoiceNumber = rs.result.invoiceNumber
+    })
+  }
   toggleEdit() {
     this.isEditInvoiceSetting = !this.isEditInvoiceSetting
   }
@@ -287,23 +324,23 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       subInvoiceIds: this.parentInvoice.isMainInvoice ? this.selectedSubProjects : [this.projectId]
     }
     const warningMessage = this.getWarningProjectMessage();
-    if (warningMessage.length) {
-      abp.message.confirm(`${warningMessage}`, "", (result) => {
-        if (result) {
-          this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
-            abp.notify.success(rs.result)
-            this.isEditInvoiceSetting = false;
-            this.getParentInvoice()
-          })
-        }
-      })
-    } else {
-      this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
-        abp.notify.success(rs.result)
-        this.isEditInvoiceSetting = false;
-        this.getParentInvoice()
-      })
-    }
+    // if (warningMessage.length) {
+    //   abp.message.confirm(`${warningMessage}`, "", (result) => {
+    //     if (result) {
+    //       this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
+    //         abp.notify.success(rs.result)
+    //         this.isEditInvoiceSetting = false;
+    //         this.getParentInvoice()
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
+    //     abp.notify.success(rs.result)
+    //     this.isEditInvoiceSetting = false;
+    //     this.getParentInvoice()
+    //   })
+    // }
   }
 
   getWarningProjectMessage(){
@@ -326,6 +363,22 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
 
   onSingleSelectionChange(selectedValue){
     this.selectedMainProject = selectedValue
+  }
+
+  openInvoiceSettingDialog(){
+    const editDialogRef = this.dialog.open(InvoiceSettingDialogComponent, {
+      width: '700px',
+      data: {
+        dialogData: {
+          projectId: this.projectId,
+          projectName: this.currentProjectInfo.name,
+          updateInvoiceDto: this.updateInvoiceDto
+        }
+      }
+    })
+    editDialogRef.afterClosed().subscribe(() => {
+      this.getProjectBillInfo();
+    })
   }
 }
 
