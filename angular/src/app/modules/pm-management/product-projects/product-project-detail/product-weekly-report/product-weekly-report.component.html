@@ -384,15 +384,7 @@
                                     *ngFor="let user of projectCurrentSupportUser; let i =index">
                                     <td class="d-flex justify-content-between" style="border: none;width: 100%;">
                                         <div style="width: 80%;" class="d-flex">
-                                            <app-user-info [userData]="{fullName:user.fullName,branch:0,
-                                                branchColor:user.branchColor,
-                                                position: user.position,
-                                                positionColor: user.positionColor,
-                                                positionName: user.positionName,
-                                                branchDisplayName:user.branchDisplayName,
-                                                    userType:user.type,avatarFullPath: user.fullAvatarPath,
-                                                    userTypeName: user.userTypeName,
-                                                     userLevel: user.level}">
+                                            <app-user-info [userData]="user">
                                             </app-user-info>
                                         </div>
                                         <div style="display: flex; align-items: center;">
