@@ -51,6 +51,9 @@
                                                     branchDisplayName:user.branchDisplayName,
                                                     userType:user.userType,emailAddress:user.emailAddress, avatarFullPath:user.avatarFullPath,
                                                     userLevel: user.userLevel,
+                                                    position: user.position,
+                                                                    positionColor: user.positionColor,
+                                                                    positionName: user.positionName,
                                                     rateStar: user.starRate}">
                                                 </app-user-info>
                                             </div>
@@ -257,9 +260,12 @@
                                                     <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
                                                         branchColor:user.branchColor,
                                                         branchDisplayName:user.branchDisplayName,
-                                                userType:user.userType,emailAddress:user.emailAddress, avatarFullPath:user.avatarFullPath,
-                                                userLevel: user.userLevel,
-                                                rateStar: user.starRate}">
+                                                        userType:user.userType,emailAddress:user.emailAddress, avatarFullPath:user.avatarFullPath,
+                                                        userLevel: user.userLevel,
+                                                        position: user.position,
+                                                            positionColor: user.positionColor,
+                                                            positionName: user.positionName,
+                                                        rateStar: user.starRate}">
                                                     </app-user-info>
                                                 </div>
                                                 <div *ngIf="user.createMode" class="form-group row required">
@@ -504,6 +510,12 @@
                                                         </span>
                                                         <span [ngClass]="APP_CONST.userTypeStyle[item.planUserInfo.employee.userType]">
                                                             {{item.planUserInfo.employee.userTypeName}}
+                                                        </span>
+                                                        <span
+                                                            class="ml-1 badge text-white"
+                                                            [style.backgroundColor]="item.planUserInfo.employee.positionColor"
+                                                        >
+                                                            {{ item.planUserInfo.employee.positionName }}
                                                         </span>
                                                         <span class="ml-1 badge text-white" [ngStyle]="Utils.getUserLevel(item.planUserInfo.employee.userLevel).style">
                                                             {{item.planUserInfo.employee.levelName}}

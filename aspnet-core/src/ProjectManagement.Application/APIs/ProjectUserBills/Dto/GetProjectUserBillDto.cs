@@ -30,13 +30,16 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public string AvatarFullPath => FileUtils.FullFilePath(AvatarPath);
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
+        public UserLevel UserLevel { get; set; }
         public byte? LastInvoiceNumber { get; set; }
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
         public ChargeType? ChargeType { get; set; }
         public string BillAccountName => string.IsNullOrEmpty(AccountName) ? FullName : AccountName;
         public string ChargeTypeName => CommonUtil.ChargeTypeName(ChargeType);
-       
+        public long? PositionId { get; set; }
+        public string PositionName { get; set; }
+        public string PositionColor { get; set; }
 
     }
 }

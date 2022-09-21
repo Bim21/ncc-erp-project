@@ -116,9 +116,13 @@
                                         <span *ngIf="!bill.createMode">
                                             <app-user-info
                                                 [userData]="{fullName:bill.fullName,branch:bill.branch,
-                                                    branchColor:bill.branchColor,
-                                                    branchDisplayName:bill.branchDisplayName,
-                                        userType:bill.userType,emailAddress:bill.emailAddress, avatarFullPath:bill.avatarFullPath}">
+                                                            branchColor:bill.branchColor,
+                                                            branchDisplayName:bill.branchDisplayName,
+                                                            position: bill.position,
+                                                            positionColor: bill.positionColor,
+                                                            positionName: bill.positionName,
+                                                            userLevel: bill.userLevel,
+                                                            userType:bill.userType,emailAddress:bill.emailAddress, avatarFullPath:bill.avatarFullPath}">
                                             </app-user-info>
                                         </span>
                                         <div *ngIf="bill.createMode">

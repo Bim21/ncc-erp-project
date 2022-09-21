@@ -382,6 +382,12 @@
                           </span>
                           <span
                             class="ml-1 badge text-white"
+                            [style.backgroundColor]="item.planUserInfo.employee.positionColor"
+                          >
+                            {{ item.planUserInfo.employee.positionName }}
+                          </span>
+                          <span
+                            class="ml-1 badge text-white"
                             [ngStyle]="
                               Utils.getUserLevel(
                                 item.planUserInfo.employee.userLevel

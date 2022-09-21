@@ -851,7 +851,7 @@ namespace ProjectManagement.Users
                 {
                     AvatarPath = s.AvatarPath,
                     Branch = s.BranchOld,
-                    Position = s.Position.ShortName,
+                    PositionName = s.Position.ShortName,
                     EmailAddress = s.EmailAddress,
                     FullName = s.FullName,
                     Id = s.Id,

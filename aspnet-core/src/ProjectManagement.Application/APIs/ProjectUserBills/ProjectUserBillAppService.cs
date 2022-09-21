@@ -64,8 +64,12 @@ namespace ProjectManagement.APIs.ProjectUserBills
                             Branch = x.User.BranchOld,
                             BranchColor = x.User.Branch.Color,
                             BranchDisplayName = x.User.Branch.DisplayName,
+                            PositionId = x.User.PositionId,
+                            PositionName = x.User.Position.ShortName,
+                            PositionColor = x.User.Position.Color,
                             EmailAddress = x.User.EmailAddress,
                             UserType = x.User.UserType,
+                            UserLevel = x.User.UserLevel,
                             ChargeType = x.ChargeType.HasValue ? x.ChargeType : x.Project.ChargeType,
                         });
             return await query.ToListAsync();
