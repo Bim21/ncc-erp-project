@@ -18,6 +18,7 @@ import { UserService } from '@app/service/api/user.service';
 import { ClientService } from '@app/service/api/client.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
+import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -138,6 +139,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   constructor(
     private timesheetService: TimesheetService,
     public timesheetProjectService: TimesheetProjectService,
+    private projectUserBillService: ProjectUserBillService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector: Injector,
@@ -518,6 +520,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         projectName: item.projectName,
         transferFee: item.transferFee,
         discount: item.discount,
+        isMainProjectInvoice: item.isMainProjectInvoice,
+        mainProjectId: item.mainProjectId,
+        subProjects: item.subProjects,
+        subProjectIds: item.subProjectIds,
+        projectId: item.projectId
       },
 
     });
@@ -567,6 +574,22 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       default:
         return '#F675A8';
     }
+  }
+
+  sendInvoiceToFinfast(){
+    this.projectUserBillService.checkInvoiceSetting().subscribe(rs => {
+      if(rs.result.length){
+        abp.message.warn(rs.result);
+        this.isLoading = false;
+        return;
+      } 
+      this.timesheetProjectService.sendInvoiceToFinfast(this.timesheetId).subscribe(rs => {
+        if(rs.result){
+          abp.message.success(rs.result.message)
+        }
+        this.isLoading = false;
+      })
+    })
   }
 }
 export const UpdateAction = {

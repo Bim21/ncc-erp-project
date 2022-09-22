@@ -73,7 +73,8 @@ export class InvoiceSettingDialogComponent implements OnInit {
         .subscribe(() => {
           this.matDialogRef.close();
           this.onSave.emit();
-          abp.notify.success("Updated Note");
+          const message = this.updateInvoiceDto.isMainProjectInvoice ? "Update main project": "Update sub project"
+          abp.notify.success(message);
         })
     );
   }

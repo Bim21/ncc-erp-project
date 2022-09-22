@@ -100,8 +100,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long? MainProjectId { get; set; }
         public string MainProjectName { get; set; }
         public List<IdNameDto> SubProjects { get; set; }
-        public List<string> SubProjectNames => SubProjects.Select(s => s.Name).ToList();        
-        public List<long> SubProjectIds => SubProjects.Select(s => s.Id).ToList();
+        public List<string> SubProjectNames => SubProjects != null ? SubProjects.Select(s => s.Name).ToList() : null;        
+        public List<long> SubProjectIds => SubProjects != null ? SubProjects.Select(s => s.Id).ToList() : null;
     }
 
     public class IdNameDto

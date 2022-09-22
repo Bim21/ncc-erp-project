@@ -2,8 +2,8 @@
     <mat-label>{{selectLabel}}</mat-label>
     <mat-select disableOptionCentering="true" [required]="required" (openedChange)="onOpenedChange($event)" [(ngModel)]="selectedValues" (ngModelChange)="onMultiSelectChange($event)" multiple>
         <mat-form-field class="w-100 px-3">
-            <input matInput name="multi" [(ngModel)]="searchString" (ngModelChange)="onSearch($event)" placeholder=""
-            appearance="outline">
+            <input matInput #search name="multi" [(ngModel)]="searchString" (keydown)="$event.stopPropagation()" (ngModelChange)="onSearch($event)" #inputSearch placeholder="">
+            {{inputSearch.focus()}}
         </mat-form-field>
         <mat-option *ngFor="let item of tempData" [value]="item.value">
             {{item.displayName}}
@@ -16,9 +16,9 @@
 <mat-form-field class="w-100" appearance="outline" *ngIf="!multiple">
     <mat-label>{{selectLabel}}</mat-label>
     <mat-select disableOptionCentering="true" [required]="required" (openedChange)="onOpenedChange($event)" [(ngModel)]="selectedValue" (ngModelChange)="onSingleSelectChange($event)">
-        <mat-form-field class="w-100 px-3">
-            <input matInput name="single" [(ngModel)]="searchString" (ngModelChange)="onSearch($event)" placeholder=""
-            appearance="outline">
+        <mat-form-field [floatLabel]="true" class="w-100 px-3">
+            <input #inputSearch matInput name="single" [(ngModel)]="searchString" (keydown)="$event.stopPropagation()" (ngModelChange)="onSearch($event)" #search placeholder="">
+            {{search.focus()}}
         </mat-form-field>
         <mat-option *ngFor="let item of tempData" [value]="item.value">
             {{item.displayName}}

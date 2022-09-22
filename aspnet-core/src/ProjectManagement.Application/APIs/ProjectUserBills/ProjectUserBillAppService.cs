@@ -185,7 +185,8 @@ namespace ProjectManagement.APIs.ProjectUserBills
                                     CurrencyName = x.Currency.Name,
                                     Discount = x.Discount,
                                     InvoiceNumber = x.LastInvoiceNumber,
-                                    MainProjectId = x.ParentInvoiceId,          
+                                    MainProjectId = x.ParentInvoiceId,
+                                    IsMainProjectInvoice = !x.ParentInvoiceId.HasValue,
                                     SubProjects = subProjects,
                                 }).FirstOrDefaultAsync();
 

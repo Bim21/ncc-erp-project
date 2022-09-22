@@ -49,13 +49,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     key: item[0],
     value: item[1]
   }))
-  public selectedSubProjects: number[] = []
-  public selectedMainProject: number
+  public showInvoiceSetting: true;
   public listProjectOfClient: SubInvoice[] = []
   public listSelectProject: DropDownDataDto[] = []
   public currentProjectInfo: ProjectDto
   public projectInvoiceSetting: ProjectInvoiceSettingDto;
-  public updateInvoiceDto: UpdateInvoiceDto;
+  public updateInvoiceDto: UpdateInvoiceDto = {} as UpdateInvoiceDto;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
@@ -154,8 +153,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       .subscribe(response => {
         if (!response.success) return;
         this.parentInvoice = response.result;
-        this.selectedSubProjects = response.result.subInvoices.map(item => item.projectId)
-        this.selectedMainProject = response.result.parentId
       });
   }
   //#endregion
@@ -314,16 +311,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.getParentInvoice()
   }
 
-  onSelectSubProjects(event) {
-    this.selectedSubProjects = event;
-  }
-
   saveInvoiceSetting() {
-    const addSubInvoices: AddSubInvoicesDto = {
-      parentInvoiceId: this.parentInvoice.isMainInvoice ? this.projectId : this.selectedMainProject,
-      subInvoiceIds: this.parentInvoice.isMainInvoice ? this.selectedSubProjects : [this.projectId]
-    }
-    const warningMessage = this.getWarningProjectMessage();
     // if (warningMessage.length) {
     //   abp.message.confirm(`${warningMessage}`, "", (result) => {
     //     if (result) {
@@ -343,28 +331,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     // }
   }
 
-  getWarningProjectMessage(){
-    const warningProjects = []
-    this.listProjectOfClient.forEach(p => {
-      if (this.selectedSubProjects.find(value => value == p.projectId && p.parentId != this.projectId && p.parentId)) {
-        warningProjects.push({ projectName: p.projectName, parentName: p.parentName })
-      }
-    })
-    const warningMessage = warningProjects.map(value => `Project ${value.projectName} already has a main project ${value.parentName}`).join('\n')
-    return warningMessage
-  }
-
-  validateSaveInvoiceSetting(){
-    if(!this.parentInvoice.isMainInvoice){
-      return this.selectedMainProject == null
-    }
-    return false;
-  }
-
-  onSingleSelectionChange(selectedValue){
-    this.selectedMainProject = selectedValue
-  }
-
   openInvoiceSettingDialog(){
     const editDialogRef = this.dialog.open(InvoiceSettingDialogComponent, {
       width: '700px',
@@ -378,6 +344,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
     editDialogRef.afterClosed().subscribe(() => {
       this.getProjectBillInfo();
+      this.getParentInvoice();
     })
   }
 }

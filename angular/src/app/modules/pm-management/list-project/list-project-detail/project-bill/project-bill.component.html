@@ -1,116 +1,99 @@
 <section class="content px-2 mt-2"
     *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
-        <div class="row col-12">
-            <button class="btn btn-primary" (click)="openInvoiceSettingDialog()">Update Invoice Setting</button>
-        </div>
         <div class="card mt-2 mb-1">
-            <div class="row p-2">
-                <div class="col-6">
-                    <div class="m-0 p-0"
-                        *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
+            <mat-expansion-panel [expanded]="showInvoiceSetting">
+                <mat-expansion-panel-header class="mt-2 mb-2" (click)="showInvoiceSetting=!showInvoiceSetting">
+                    <h4 class="d-inline">Invoice settings:</h4>
+                    <button *ngIf="showInvoiceSetting" style="border: none; height: fit-content;"
+                    class="btn btn-secondary ml-3 btn-sm mb-2" (click)="openInvoiceSettingDialog();$event.stopPropagation()">
+                        <i class="fas fa-edit m-0"></i>
+                    </button>
+                </mat-expansion-panel-header>
+                <div class="row p-2">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="m-0 p-0"
+                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
+                            <div class="form-group row col-12">
+                                <label class="col-form-label col-6">
+                                    Last Invoice Number:
+                                </label>
+                                <div class="col-6 d-flex align-items-center">
+                                    <span style="width: 30px;" *ngIf="!isEditLastInvoiceNumber">
+                                        {{lastInvoiceNumber}}
+                                    </span>
+                                    <mat-form-field style="width:120px" appearance="outline"
+                                        *ngIf="isEditLastInvoiceNumber">
+                                        <input type="number" style="padding-bottom: 5px;" matInput
+                                            [(ngModel)]="lastInvoiceNumber" name="lastInvoiceNumber"
+                                            placeholder="Last Invoice Number" />
+
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=""
+                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
+                            <div class="form-group row col-12">
+                                <label class="col-form-label col-6">Discount(%): </label>
+                                <div class="col-6 d-flex align-items-center">
+                                    <span style="width: 30px;" *ngIf="!isEditDiscount">
+                                        {{updateInvoiceDto.discount}}
+                                    </span>
+                                    <mat-form-field style="width:120px" appearance="outline" *ngIf="isEditDiscount">
+                                        <input type="number" style="padding-bottom: 5px;" matInput
+                                            [(ngModel)]="updateInvoiceDto.discount" name="discount"
+                                            placeholder="Discount" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
                         <div class="form-group row col-12">
-                            <label class="col-form-label col-3">
-                                Last Invoice Number:
+                            <label class="col-form-label col-6 pt-2">
+                                Invoice Setting:
+                            </label>
+                            <div class="col-6 d-flex align-items-center">
+                                <span class="text-primary text-bold" *ngIf="parentInvoice.isMainInvoice">
+                                    Main
+                                </span>
+                                <span class="text-secondary text-bold" *ngIf="!parentInvoice.isMainInvoice">
+                                    Sub
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="parentInvoice.isMainInvoice == APP_ENUM.InvoiceSetting.Main"
+                            class="form-group row col-12">
+                            <label class="col-form-label col-6 pt-2">
+                                Sub projects:
+                            </label>
+                            <div class="col-6 d-flex align-items-center">
+                                <ng-container *ngIf="parentInvoice.projectId && parentInvoice.subInvoices.length">
+                                    <span class="badge bg-secondary mr-2"
+                                        *ngFor="let item of parentInvoice.subInvoices">{{item.projectName}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="parentInvoice.projectId && !parentInvoice.subInvoices.length">
+                                    No sub project
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngIf="!parentInvoice.isMainInvoice" class="form-group row col-12">
+                            <label class="col-form-label col-3 pt-2">
+                                Main project:
                             </label>
                             <div class="col-9 d-flex align-items-center">
-                                <span style="width: 30px;" *ngIf="!isEditLastInvoiceNumber">
-                                    {{lastInvoiceNumber}}
-                                </span>
-                                <mat-form-field style="width:120px" appearance="outline"
-                                    *ngIf="isEditLastInvoiceNumber">
-                                    <input type="number" style="padding-bottom: 5px;" matInput
-                                        [(ngModel)]="lastInvoiceNumber" name="lastInvoiceNumber"
-                                        placeholder="Last Invoice Number" />
-
-                                </mat-form-field>
-                                <div class="d-inline ml-2 pt-1 text-right row">
-                                    <i *ngIf="!isEditLastInvoiceNumber && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)"
-                                        class="fas fa-edit fa-lg" style="font-size: 17px;"
-                                        (click)="isEditLastInvoiceNumber = true">
-                                    </i>
-                                    <i *ngIf="isEditLastInvoiceNumber" (click)="cancelLastInvoiceNumber()"
-                                        style="color: red;" class="fas fa-times fa-lg ml-2">
-                                    </i>
-                                    <i *ngIf="isEditLastInvoiceNumber" style="color: green ;" class="fas ml-2 fa-check fa-lg"
-                                        (click)="updateLastInvoiceNumber()">
-                                    </i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class=""
-                        *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
-                        <div class="form-group row col-12">
-                            <label class="col-form-label col-3">Discount(%): </label>
-                            <div class="col-9 d-flex align-items-center">
-                                <span style="width: 30px;" *ngIf="!isEditDiscount">
-                                    {{discount}}
-                                </span>
-                                <mat-form-field style="width:120px" appearance="outline" *ngIf="isEditDiscount">
-                                    <input type="number" style="padding-bottom: 5px;" matInput [(ngModel)]="discount"
-                                        name="discount" placeholder="Discount" />
-                                </mat-form-field>
-                                <div class="d-inline ml-2 pt-1 text-right row">
-                                    <i *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit) && !isEditDiscount"
-                                        style="font-size: 17px;" class="fas fa-edit mb-2 fa-lg"
-                                        (click)="isEditDiscount = true">
-                                    </i>
-                                    <i *ngIf="isEditDiscount" (click)="cancelDiscount();" style="color: red;"
-                                        class="fas fa-times fa-lg ml-2">
-                                    </i>
-                                    <i style="color: green ;" class="fas fa-check ml-2 fa-lg" *ngIf="isEditDiscount"
-                                        (click)="updateDiscount()">
-                                    </i>
-                                </div>
+                                <ng-container *ngIf="parentInvoice.parentName">
+                                    <span class="badge bg-primary mr-2">{{parentInvoice.parentName}}</span>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group row col-12">
-                        <label class="col-form-label col-3 pt-2">
-                            Invoice Setting:
-                        </label>
-                        <div class="col-9 d-flex align-items-center">
-                            <span class="text-primary" *ngIf="parentInvoice.isMainInvoice">
-                                Main
-                            </span>
-                            <span class="text-secondary" *ngIf="!parentInvoice.isMainInvoice">
-                                Sub
-                            </span>
-                        </div>
-                    </div>
-                    <div *ngIf="parentInvoice.isMainInvoice == APP_ENUM.InvoiceSetting.Main"
-                        class="form-group row col-12">
-                        <label class="col-form-label col-3 pt-2">
-                            Sub projects:
-                        </label>
-                        <div class="col-9 d-flex align-items-center">
-                            <ng-container *ngIf="parentInvoice.projectId && parentInvoice.subInvoices.length">
-                                <span class="badge bg-secondary mr-2" *ngFor="let item of parentInvoice.subInvoices">{{item.projectName}}</span>
-                            </ng-container>
-                            <ng-container *ngIf="parentInvoice.projectId && !parentInvoice.subInvoices.length">
-                                No sub project
-                            </ng-container>
-                        </div>
-                    </div>
-                    <div *ngIf="!parentInvoice.isMainInvoice" class="form-group row col-12">
-                        <label class="col-form-label col-3 pt-2">
-                            Main project:
-                        </label>
-                        <div class="col-9 d-flex align-items-center">
-                            <ng-container *ngIf="parentInvoice.parentName">
-                                <span class="badge bg-primary mr-2">{{parentInvoice.parentName}}</span>
-                            </ng-container>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </mat-expansion-panel>
         </div>
         <div class="card mt-2">
-
             <mat-expansion-panel [expanded]="!isShowUserBill">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Bill accounts:</h4>

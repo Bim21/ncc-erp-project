@@ -7,32 +7,55 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
+import { SubInvoice } from '@app/service/model/bill-info.model';
+import { APP_ENUMS } from '@shared/AppEnums';
+import { DropDownDataDto } from '@shared/filter/filter.component';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-
+import { UpdateTimesheetProjectDto } from '@app/service/model/updateTimesheetProject.dto'
 @Component({
   selector: 'app-edit-timesheet-project-dialog',
   templateUrl: './edit-timesheet-project-dialog.component.html',
   styleUrls: ['./edit-timesheet-project-dialog.component.css']
 })
 export class EditTimesheetProjectDialogComponent implements OnInit {
-
+  public APP_ENUMS = APP_ENUMS
   id: number;
   invoiceNumber: number;
   workingDay: number;
   transferFee: number;
   discount: number;
+  projectId: number;
   projectName: string;
   saving = false;
+  isMainProjectInvoice: boolean;
+  subProjectIds: number[] = []
+  mainProjectId: number
+  listSelectProject: DropDownDataDto[] = []
+  public invoiceSettingOptions = Object.entries(APP_ENUMS.InvoiceSetting).map((item) => ({
+    key: item[0],
+    value: item[1]
+  }))
   @Output() onSave = new EventEmitter<null>();
 
   subscription: Subscription[] = [];
-  constructor(public bsModalRef: BsModalRef, private timesheetProjectService:TimesheetProjectService) {}
+  constructor(
+    public bsModalRef: BsModalRef, 
+    private timesheetProjectService:TimesheetProjectService,
+    private projectUserBillService: ProjectUserBillService
+    ) {}
 
   ngOnInit(): void {
-   
+   this.getAvailableProject();
+  }
+
+  getAvailableProject(){
+    this.projectUserBillService.getAvailableProjectsForSettingInvoice(this.projectId).subscribe(rs => {
+      this.listSelectProject = rs.result.map(item => ({displayName: item.projectName, value: item.projectId}))
+     })
   }
 
   SaveAndClose() {
@@ -52,12 +75,15 @@ export class EditTimesheetProjectDialogComponent implements OnInit {
       abp.message.error("Discount must be bigger than or equal to 0!");
       return;
     }
-    let requestBody = {
+    let requestBody: UpdateTimesheetProjectDto = {
       id : this.id,
       invoiceNumber: this.invoiceNumber,
       workingDay: this.workingDay,
       transferFee: this.transferFee,
       discount: this.discount,
+      isMainProjectInvoice: this.isMainProjectInvoice,
+      mainProjectId: this.isMainProjectInvoice? null : this.mainProjectId,
+      subProjectIds: this.isMainProjectInvoice? this.subProjectIds : [],
     }
     this.saving = true;
     this.subscription.push(

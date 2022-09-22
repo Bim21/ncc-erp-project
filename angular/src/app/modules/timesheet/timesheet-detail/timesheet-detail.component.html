@@ -56,6 +56,9 @@
             </button>
           </mat-menu>
         </div>
+        <div class="mr-2">
+          <button class="btn bg-warning text-black mr-2" (click)="sendInvoiceToFinfast()">Send Invoice To Finfast</button>
+        </div>
         <div class="">
           <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_AddProjectToTimesheet)" (click)="createTimeSheet()"
             class="btn bg-blue">
@@ -242,10 +245,23 @@
                 <td class="td-invoice-info">
                       <div class="d-flex" style="align-items: center">
                           <div style="width: 90%">
-                            <p class="m-0"><strong>Invoice Number: </strong>{{ item.invoiceNumber }}</p>
-                            <p class="m-0" matTooltip="Working day of {{item.projectName}}: {{item.workingDay}} days"><strong>Working Day:</strong> {{ item.workingDay }}</p>
-                            <p class="m-0"><strong>Transfer Fee: </strong>{{ item.transferFee }}</p>
-                            <p class="m-0"><strong>Discount: </strong>{{ item.discount }} (%)</p>
+                            <p class="m-0">Invoice Number: <strong>{{ item.invoiceNumber }}</strong></p>
+                            <p class="m-0" matTooltip="Working day of {{item.projectName}}: {{item.workingDay}} days">Working Day: <strong>{{ item.workingDay }}</strong></p>
+                            <p class="m-0">Transfer Fee: <strong>{{ item.transferFee }}</strong></p>
+                            <p class="m-0">Discount: <strong>{{ item.discount }} (%)</strong></p>
+                            <p *ngIf="item.isMainProjectInvoice" class="m-0">
+                              <span class="text-primary"><strong>Main </strong></span>
+                            </p>
+                            <ng-container *ngIf="item.isMainProjectInvoice">
+                              <p *ngFor="let project of item.subProjects"  class="m-0">                              
+                                <span  class="badge bg-secondary">{{project.name}}</span>
+                              </p>
+                            </ng-container>
+                           <p *ngIf="!item.isMainProjectInvoice" class="m-0">
+                              <span class="text-secondary"><strong>Sub</strong></span>
+                              <span> of </span>
+                              <span class="badge bg-primary">{{item.mainProjectName}}</span>
+                           </p>
                           </div>
                           <div style="width: 10%; text-align: right;" class="ml-1" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_EditInvoiceInfo) && isActive">
                               <i class="fas fa-edit " (click)="updateTimesheetProject(item)" ></i>

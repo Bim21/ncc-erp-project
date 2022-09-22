@@ -147,16 +147,23 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var listProject = WorkScope.GetAll<Project>()
               .Where(s => s.ProjectType == ProjectType.ODC || s.ProjectType == ProjectType.TimeAndMaterials || s.ProjectType == ProjectType.FIXPRICE)
-              .Select(s => new { s.Id, s.Name, s.ParentInvoiceId })
+              .Select(s => new { s.Id, s.Name })
               .AsEnumerable();
 
-            var dicProjectIdToName = listProject.ToDictionary(s => s.Id, s => s.Name);            
+            var dicProjectIdToName = listProject.ToDictionary(s => s.Id, s => s.Name);
+
+            var lstTSProject = WorkScope.GetAll<TimesheetProject>()
+                .Where(s => s.TimesheetId == timesheetId)
+                .Select(s => new { s.Id, s.ParentInvoiceId, TSProjectName = s.Project.Name, s.ProjectId })
+                .AsEnumerable();
 
             list.ForEach(dto =>
             {
                 if (dto.IsMainProjectInvoice)
                 {
-                    dto.SubProjects = listProject.Where(s => s.ParentInvoiceId.HasValue).Where(s => s.ParentInvoiceId.Value == dto.ProjectId).Select(s => new IdNameDto { Id = s.Id, Name = s.Name}).ToList();
+                    dto.SubProjects = lstTSProject.Where(s => s.ParentInvoiceId.HasValue)
+                    .Where(s => s.ParentInvoiceId == dto.ProjectId)
+                    .Select(s => new IdNameDto { Id = s.ProjectId, Name = s.TSProjectName }).ToList();
                 }
                 else
                 {
@@ -175,8 +182,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                         Amount = x.Sum(x => x.TotalAmountProjectBillInfomation.Value)
                                     }).ToList();
 
-           
-                       
+
+
 
 
             var result = new ResultTimesheetDetail
@@ -993,7 +1000,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             long timesheetId = timesheetProject.TimesheetId;
             var timesheet = await WorkScope.GetAll<Timesheet>().Where(x => x.Id == timesheetId).Where(x => x.IsActive).FirstOrDefaultAsync();
-            
+
             if (timesheet == default)
             {
                 throw new UserFriendlyException($"Unable to update for closed timesheet Id {timesheet}");
