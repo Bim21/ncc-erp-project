@@ -78,7 +78,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   TrainingRequest_EditDmNote = PERMISSIONS_CONSTANT.TrainingRequest_EditDmNote;
   TrainingRequest_Edit = PERMISSIONS_CONSTANT.TrainingRequest_Edit;
   TrainingRequest_Delete = PERMISSIONS_CONSTANT.TrainingRequest_Delete;
-  TrainingRequest_ViewRecruitment = PERMISSIONS_CONSTANT.TrainingRequest_ViewRecruitment;
   TrainingRequest_SendRecruitment = PERMISSIONS_CONSTANT.TrainingRequest_SendRecruitment;
 
   @ViewChildren('sortThead') private elementRefSortable: QueryList<any>;
@@ -461,12 +460,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
       && item.planUserInfo
       && this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_SetDone)
-  }
-
-  isShowBtnViewRecruitment(item) {
-    return item.status == RESOURCE_REQUEST_STATUS.PENDING
-      && (!item.isRecruitmentView || !item.recruitmentUrl)
-      && this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_ViewRecruitment)
   }
 
   isShowBtnSendRecruitment(item) {

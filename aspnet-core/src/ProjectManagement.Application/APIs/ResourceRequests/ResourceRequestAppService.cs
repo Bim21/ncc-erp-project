@@ -123,8 +123,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                 throw new UserFriendlyException("Select at least 1 skill");
 
             List<long> createdRequestIds = new List<long>();
-            for (int i = 0; i < input.Quantity; i++)
-            {
                 var request = ObjectMapper.Map<ResourceRequest>(input);
                 request.Quantity = 1;
                 request.Id = await WorkScope.InsertAndGetIdAsync(request);
@@ -143,7 +141,6 @@ namespace ProjectManagement.APIs.ResourceRequests
                 }
 
                 //SendKomuNotify(model.Name, project.Name, model.Status);
-            }
             CurrentUnitOfWork.SaveChanges();
 
             var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()

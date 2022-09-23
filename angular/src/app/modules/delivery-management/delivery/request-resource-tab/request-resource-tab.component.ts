@@ -448,12 +448,6 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SetDone)
   }
 
-  isShowBtnViewRecruitment(item) {
-    return item.status == RESOURCE_REQUEST_STATUS.PENDING
-      && (!item.isRecruitmentView || !item.recruitmentUrl)
-      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_ViewRecruitment)
-  }
-
   isShowBtnSendRecruitment(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
       && (!item.isRecruitmentSend || !item.recruitmentUrl)
