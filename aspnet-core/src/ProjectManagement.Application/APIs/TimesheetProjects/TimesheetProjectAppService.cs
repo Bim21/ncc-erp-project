@@ -1011,6 +1011,13 @@ namespace ProjectManagement.APIs.TimesheetProjects
             timesheetProject.TransferFee = input.TransferFee;
             timesheetProject.Discount = input.Discount;
 
+            var listTimesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetProject.TimesheetId).Where(x => x.ParentInvoiceId == timesheetProject.ProjectId).ToList();
+            listTimesheetProjects.ForEach(tsp =>
+            {
+                tsp.ParentInvoiceId = null;
+                tsp.LastModificationTime = DateTimeUtils.GetNow();
+                tsp.LastModifierUserId = AbpSession.UserId;
+            });
             if (!input.IsMainProjectInvoice)
             {
                 timesheetProject.ParentInvoiceId = input.MainProjectId;
@@ -1031,6 +1038,39 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             return timesheetProject.WorkingDay;
 
+
+        }
+        [HttpGet]
+        public string CheckTimesheetProjectSetting(long timesheetId)
+        {
+            var listTimesheetProject = WorkScope.GetAll<TimesheetProject>()
+             .Where(t => t.TimesheetId == timesheetId)
+             .Where(s => s.Project.ProjectType == ProjectType.ODC || s.Project.ProjectType == ProjectType.TimeAndMaterials || s.Project.ProjectType == ProjectType.FIXPRICE)
+             .Select(s => new { Id = s.Id, ProjectName = s.Project.Name,ParentInvoiceId = s.ParentInvoiceId, ProjectId = s.Project.Id })
+             .AsEnumerable();
+
+            var sb = new StringBuilder();
+            foreach (var project in listTimesheetProject)
+            {
+                if (project.ParentInvoiceId.HasValue)
+                {
+                    var parrentProject = listTimesheetProject.Where(s => s.ProjectId == project.ParentInvoiceId.Value).FirstOrDefault();
+                    if (parrentProject == default)
+                    {
+                        sb.AppendLine($"{project.ProjectName} is Sub but not found main project");
+                    }
+                    else
+                    {
+                        if (parrentProject.ParentInvoiceId.HasValue)
+                        {
+                            sb.AppendLine($"{project.ProjectName} is Sub of {parrentProject.ProjectName} but {parrentProject.ProjectName} is SUB too");
+                        }
+                    }
+
+                }
+
+            }
+            return sb.ToString();
 
         }
 

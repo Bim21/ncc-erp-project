@@ -8,7 +8,7 @@ import { TimesheetDetailDto,TotalAmountByCurrencyDto} from './../../../service/m
 import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
@@ -45,7 +45,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         item.isTrue = true
       }
     })
-    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
+    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError)).pipe(finalize(()=>finishedCallback()))
       .subscribe((res) => {
         let timesheetDetaiList = res.result.listTimesheetDetail;
         this.TimesheetDetaiList = timesheetDetaiList.items.map(el => {
@@ -584,9 +584,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         return;
       } 
       this.timesheetProjectService.sendInvoiceToFinfast(this.timesheetId).subscribe(rs => {
-        if(rs.result){
-          abp.message.success(rs.result.message)
-        }
+        abp.message.success("Invoice sended to finfast")
         this.isLoading = false;
       })
     })

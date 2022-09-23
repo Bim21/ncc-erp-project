@@ -2,10 +2,10 @@
     *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
         <div class="card mt-2 mb-1">
-            <mat-expansion-panel [expanded]="showInvoiceSetting">
+            <mat-expansion-panel [expanded]="!showInvoiceSetting">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="showInvoiceSetting=!showInvoiceSetting">
                     <h4 class="d-inline">Invoice settings:</h4>
-                    <button *ngIf="showInvoiceSetting" style="border: none; height: fit-content;"
+                    <button *ngIf="!showInvoiceSetting" style="border: none; height: fit-content;"
                     class="btn btn-secondary ml-3 btn-sm mb-2" (click)="openInvoiceSettingDialog();$event.stopPropagation()">
                         <i class="fas fa-edit m-0"></i>
                     </button>
@@ -80,10 +80,10 @@
                             </div>
                         </div>
                         <div *ngIf="!parentInvoice.isMainInvoice" class="form-group row col-12">
-                            <label class="col-form-label col-3 pt-2">
+                            <label class="col-form-label col-6 pt-2">
                                 Main project:
                             </label>
-                            <div class="col-9 d-flex align-items-center">
+                            <div class="col-6 d-flex align-items-center">
                                 <ng-container *ngIf="parentInvoice.parentName">
                                     <span class="badge bg-primary mr-2">{{parentInvoice.parentName}}</span>
                                 </ng-container>
