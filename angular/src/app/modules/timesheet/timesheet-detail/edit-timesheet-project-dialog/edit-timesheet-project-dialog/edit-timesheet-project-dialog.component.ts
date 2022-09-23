@@ -75,6 +75,10 @@ export class EditTimesheetProjectDialogComponent implements OnInit {
       abp.message.error("Discount must be bigger than or equal to 0!");
       return;
     }
+    if(this.mainProjectId == null && !this.isMainProjectInvoice){
+      abp.message.error("Main project must not be null!")
+      return;
+    }
     let requestBody: UpdateTimesheetProjectDto = {
       id : this.id,
       invoiceNumber: this.invoiceNumber,
@@ -83,7 +87,7 @@ export class EditTimesheetProjectDialogComponent implements OnInit {
       discount: this.discount,
       isMainProjectInvoice: this.isMainProjectInvoice,
       mainProjectId: this.isMainProjectInvoice? null : this.mainProjectId,
-      subProjectIds: this.isMainProjectInvoice? this.subProjectIds : [],
+      subProjectIds: this.isMainProjectInvoice? (this.subProjectIds ? this.subProjectIds : []) : [],
     }
     this.saving = true;
     this.subscription.push(

@@ -56,8 +56,8 @@
             </button>
           </mat-menu>
         </div>
-        <div class="mr-2">
-          <button class="btn bg-warning text-black mr-2" (click)="sendInvoiceToFinfast()">Send Invoice To Finfast</button>
+        <div *ngIf="permission.isGranted(Timesheets_TimesheetDetail_SendInvoiceToFinfast)" class="mr-2">
+          <button [disabled]="sending" class="btn bg-warning text-black mr-2" (click)="sendInvoiceToFinfast()">Send Invoice To Finfast</button>
         </div>
         <div class="">
           <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_AddProjectToTimesheet)" (click)="createTimeSheet()"

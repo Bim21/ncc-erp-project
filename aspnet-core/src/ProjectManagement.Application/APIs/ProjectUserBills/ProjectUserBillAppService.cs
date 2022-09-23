@@ -115,7 +115,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_Edit)]
         public async Task<long> UpdateLastInvoiceNumber(UpdateLastInvoiceNumberDto input)
         {
             var project = await GetProjectById(input.ProjectId);
@@ -140,7 +140,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpPut]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_Edit)]
         public async Task<float> UpdateDiscount(UpdateDiscountDto input)
         {
             var project = await GetProjectById(input.ProjectId);
@@ -354,6 +354,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_Edit)]
         public void UpdateInvoiceSetting(UpdateInvoiceDto input)
         {
 
@@ -406,6 +407,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpGet]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting)]
         public string CheckInvoiceSetting()
         {
             var listProject = WorkScope.GetAll<Project>()

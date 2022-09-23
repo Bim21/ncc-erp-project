@@ -1,19 +1,18 @@
 <section class="content px-2 mt-2"
     *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
-        <div class="card mt-2 mb-1">
-            <mat-expansion-panel [expanded]="!showInvoiceSetting">
-                <mat-expansion-panel-header class="mt-2 mb-2" (click)="showInvoiceSetting=!showInvoiceSetting">
+        <div *ngIf="isShowInvoiceSetting()" class="card mt-2 mb-1">
+            <mat-expansion-panel [expanded]="!expandInvoiceSetting">
+                <mat-expansion-panel-header class="mt-2 mb-2" (click)="expandInvoiceSetting=!expandInvoiceSetting">
                     <h4 class="d-inline">Invoice settings:</h4>
-                    <button *ngIf="!showInvoiceSetting" style="border: none; height: fit-content;"
+                    <button *ngIf="canEditInvoiceSetting() && !expandInvoiceSetting" style="border: none; height: fit-content;"
                     class="btn btn-secondary ml-3 btn-sm mb-2" (click)="openInvoiceSettingDialog();$event.stopPropagation()">
                         <i class="fas fa-edit m-0"></i>
                     </button>
                 </mat-expansion-panel-header>
                 <div class="row p-2">
                     <div class="col-lg-4 col-md-12">
-                        <div class="m-0 p-0"
-                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
+                        <div class="m-0 p-0">
                             <div class="form-group row col-12">
                                 <label class="col-form-label col-6">
                                     Last Invoice Number:
@@ -22,30 +21,17 @@
                                     <span style="width: 30px;" *ngIf="!isEditLastInvoiceNumber">
                                         {{lastInvoiceNumber}}
                                     </span>
-                                    <mat-form-field style="width:120px" appearance="outline"
-                                        *ngIf="isEditLastInvoiceNumber">
-                                        <input type="number" style="padding-bottom: 5px;" matInput
-                                            [(ngModel)]="lastInvoiceNumber" name="lastInvoiceNumber"
-                                            placeholder="Last Invoice Number" />
-
-                                    </mat-form-field>
                                 </div>
                             </div>
                         </div>
 
-                        <div class=""
-                            *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
+                        <div class="">
                             <div class="form-group row col-12">
                                 <label class="col-form-label col-6">Discount(%): </label>
                                 <div class="col-6 d-flex align-items-center">
                                     <span style="width: 30px;" *ngIf="!isEditDiscount">
                                         {{updateInvoiceDto.discount}}
                                     </span>
-                                    <mat-form-field style="width:120px" appearance="outline" *ngIf="isEditDiscount">
-                                        <input type="number" style="padding-bottom: 5px;" matInput
-                                            [(ngModel)]="updateInvoiceDto.discount" name="discount"
-                                            placeholder="Discount" />
-                                    </mat-form-field>
                                 </div>
                             </div>
                         </div>

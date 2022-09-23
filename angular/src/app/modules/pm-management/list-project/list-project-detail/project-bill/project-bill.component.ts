@@ -34,7 +34,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public userBillProcess: boolean = false;
   public panelOpenState: boolean = false;
   public isShowUserBill: boolean = false;
-  public isEditInvoiceSetting: boolean = false;
   public searchUserBill: string = ""
   public searchBillCharge: number
   private projectId: number
@@ -49,7 +48,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     key: item[0],
     value: item[1]
   }))
-  public showInvoiceSetting: true;
+  public expandInvoiceSetting: true;
   public listProjectOfClient: SubInvoice[] = []
   public listSelectProject: DropDownDataDto[] = []
   public currentProjectInfo: ProjectDto
@@ -59,10 +58,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit;
   constructor(
@@ -80,18 +75,23 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.getUserBill();
     this.getAllFakeUser();
-    // this.getRate();
-    // this.getLastInvoiceNumber();
-    // this.getDiscount();
     this.getParentInvoice();
     this.getAllProject();
     this.getCurrentProjectInfo();
     this.getProjectBillInfo();
+
   }
+  isShowInvoiceSetting(){
+    return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_View)
+  }
+
+  canEditInvoiceSetting(){
+    return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_Edit)
+  }
+
   getRate() {
     this.projectUserBillService.getRate(this.projectId).subscribe(data => {
       this.rateInfo = data.result;
-      console.log('rate', this.rateInfo)
     })
   }
   getLastInvoiceNumber() {
@@ -99,6 +99,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.lastInvoiceNumber = data.result;
     })
   }
+
   updateLastInvoiceNumber() {
     let data = {
       projectId: this.projectId,
@@ -301,34 +302,6 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.discount = rs.result.discount,
       this.lastInvoiceNumber = rs.result.invoiceNumber
     })
-  }
-  toggleEdit() {
-    this.isEditInvoiceSetting = !this.isEditInvoiceSetting
-  }
-
-  cancelInvoiceSetting() {
-    this.isEditInvoiceSetting = false;
-    this.getParentInvoice()
-  }
-
-  saveInvoiceSetting() {
-    // if (warningMessage.length) {
-    //   abp.message.confirm(`${warningMessage}`, "", (result) => {
-    //     if (result) {
-    //       this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
-    //         abp.notify.success(rs.result)
-    //         this.isEditInvoiceSetting = false;
-    //         this.getParentInvoice()
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.projectUserBillService.addSubInvoices(addSubInvoices).subscribe(rs => {
-    //     abp.notify.success(rs.result)
-    //     this.isEditInvoiceSetting = false;
-    //     this.getParentInvoice()
-    //   })
-    // }
   }
 
   openInvoiceSettingDialog(){

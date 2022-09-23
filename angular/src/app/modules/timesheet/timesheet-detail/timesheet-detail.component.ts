@@ -110,7 +110,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public clientIdInvoice: number = -1;
   public totalAmount: number;
   public listTotalAmountByCurrency: TotalAmountByCurrencyDto[] = [];
-  
+  public sending: boolean = false;
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
   contextMenuPosition = { x: '0', y: '0' }
@@ -136,6 +136,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill;
   Timesheets_TimesheetDetail_ExportInvoiceForTax = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoiceForTax;
   Timesheets_TimesheetDetail_EditInvoiceInfo = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_EditInvoiceInfo;
+  Timesheets_TimesheetDetail_SendInvoiceToFinfast = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_SendInvoiceToFinfast;
   constructor(
     private timesheetService: TimesheetService,
     public timesheetProjectService: TimesheetProjectService,
@@ -576,17 +577,27 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     }
   }
 
-  sendInvoiceToFinfast(){
-    this.projectUserBillService.checkInvoiceSetting().subscribe(rs => {
-      if(rs.result.length){
-        abp.message.warn(rs.result);
-        this.isLoading = false;
-        return;
-      } 
-      this.timesheetProjectService.sendInvoiceToFinfast(this.timesheetId).subscribe(rs => {
-        abp.message.success("Invoice sended to finfast")
-        this.isLoading = false;
-      })
+  sendInvoiceToFinfast() {
+    this.sending = true;
+    abp.message.confirm("Send invoice to finfast", "", (result) => {
+      if (result) {
+        this.timesheetProjectService.checkTimesheetProjectSetting(this.timesheetId).subscribe(rs => {
+          if (rs.result.length) {
+            abp.message.warn(rs.result);
+            this.sending = false;
+            return;
+          }
+          this.timesheetProjectService.sendInvoiceToFinfast(this.timesheetId).subscribe(rs => {
+            if (rs.result.isSuccess) {
+              abp.message.success("Invoice sended to finfast")
+            }
+            else {
+              abp.message.error(rs.result.message)
+            }
+          })
+        })
+      }
+      this.sending = false;
     })
   }
 }

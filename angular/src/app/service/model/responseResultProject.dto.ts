@@ -1,4 +1,4 @@
 export interface ResponseResultProjectDto{
-    code: number,
+    isSuccess: boolean,
     message: string,
 }
