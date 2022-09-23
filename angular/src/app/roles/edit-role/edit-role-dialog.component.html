@@ -178,9 +178,16 @@
                           class="label tag bg-green">{{userTypes[member.userType].label}}</span>
                         <span style="margin-left: 10px;" *ngIf="member.userType == 2"
                           class="label tag bg-blue">{{userTypes[member.userType].label}}</span>
+                          <span *ngIf="member.positionName"
+                            class="ml-1 badge text-white"
+                            [style.backgroundColor]="member.positionColor"
+                          >
+                            {{ member.positionName }}
+                          </span>
                         <label class="tag" [style.background-color]="styleTagLevel(member.userLevel)">
                           {{findDevLevelName(member.userLevel)}}
                         </label>
+                        
                         <br>
                         <span>{{member.email}}</span>
                       </div>
