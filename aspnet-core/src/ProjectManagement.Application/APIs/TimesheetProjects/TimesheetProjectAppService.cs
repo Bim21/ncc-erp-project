@@ -1094,7 +1094,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     TransferFee = invoice.Info.TransferFee,
                 });
             }
-            return await _financeService.CreateAllInvoices(listInvoices);
+            var rs = await _financeService.CreateAllInvoices(listInvoices);
+            if (rs == default)
+                return new ResponseResultProjectDto
+                {
+                    IsSuccess = false,
+                    Message = "Can't Connect to Finfast"
+                };
+            return rs;
         }
         [HttpGet]
         public async Task<List<InvoiceDataForFinfast>> GetDataTimeSheet(long timesheetId)
