@@ -578,7 +578,7 @@
                       </button>
 
                       <button
-                        *ngIf="isShowBtnSendRecruitment(item)"
+                        *ngIf="isShowBtnViewRecruitment(item) && isShowBtnSendRecruitment(item)"
                         class="btn btn-block text-left"
                         mat-button
                         (click)="sendRecruitment(item)"

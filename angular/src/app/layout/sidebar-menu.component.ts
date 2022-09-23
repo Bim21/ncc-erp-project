@@ -180,7 +180,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         this.l('Training Requests'),
         '/app/training-request',
         'fas fa-mail-bulk',
-        'ResourceRequest'
+        'TrainingRequest'
       ),
       new MenuItem(
         this.l('Resources'),

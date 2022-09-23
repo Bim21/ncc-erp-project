@@ -11,6 +11,7 @@ using ProjectManagement.APIs.PMReportProjectIssues;
 using ProjectManagement.APIs.ProjectUsers;
 using ProjectManagement.APIs.ResourceRequests;
 using ProjectManagement.APIs.ResourceRequests.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
@@ -68,6 +69,7 @@ namespace ProjectManagement.APIs.TrainingRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.TrainingRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
             var query = _resourceRequestManager.IQGetResourceRequest();

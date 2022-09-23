@@ -432,7 +432,26 @@ namespace ProjectManagement.Authorization
         public const string ResourceRequest_EditDmNote = "ResourceRequest.EditDmNote";
         public const string ResourceRequest_Edit = "ResourceRequest.Edit";
         public const string ResourceRequest_Delete = "ResourceRequest.Delete";
+        public const string ResourceRequest_ViewRecruitment = "ResourceRequest.ViewRecruitment";
         public const string ResourceRequest_SendRecruitment = "ResourceRequest.SendRecruitment";
+
+        //Training Request 
+        public const string TrainingRequest = "TrainingRequest";
+        public const string TrainingRequest_View = "TrainingRequest.View";
+        public const string TrainingRequest_CreateNewRequestForAllProject = "TrainingRequest.CreateNewRequest";
+        public const string TrainingRequest_CreateNewRequestByPM = "TrainingRequest.CreateNewRequestByPM";
+        public const string TrainingRequest_PlanNewTrainingForRequest = "TrainingRequest.PlanNewTrainingForRequest";
+        //public const string TrainingRequest_UpdateTrainingRequestPlan = "TrainingRequest.UpdateTrainingRequestPlan";
+        //public const string TrainingRequest_RemoveTrainingRequestPlan = "TrainingRequest.RemoveTrainingRequestPlan";
+        public const string TrainingRequest_SetDone = "TrainingRequest.SetDone";
+        public const string TrainingRequest_CancelAllRequest = "TrainingRequest.CancelAllRequest";
+        public const string TrainingRequest_CancelMyRequest = "TrainingRequest.CancelMyRequest";
+        public const string TrainingRequest_EditPmNote = "TrainingRequest.EditPmNote";
+        public const string TrainingRequest_EditDmNote = "TrainingRequest.EditDmNote";
+        public const string TrainingRequest_Edit = "TrainingRequest.Edit";
+        public const string TrainingRequest_Delete = "TrainingRequest.Delete";
+        public const string TrainingRequest_ViewRecruitment = "TrainingRequest.ViewRecruitment";
+        public const string TrainingRequest_SendRecruitment = "TrainingRequest.SendRecruitment";
 
         //Resource
         public const string Resource = "Resource";
@@ -936,7 +955,26 @@ namespace ProjectManagement.Authorization
                     PermissionNames.ResourceRequest_EditDmNote ,
                     PermissionNames.ResourceRequest_Edit ,
                     PermissionNames.ResourceRequest_Delete ,
+                    PermissionNames.ResourceRequest_ViewRecruitment ,
                     PermissionNames.ResourceRequest_SendRecruitment ,
+
+                    //TrainingRequest
+                    PermissionNames.TrainingRequest ,
+                    PermissionNames.TrainingRequest_View ,
+                    PermissionNames.TrainingRequest_CreateNewRequestForAllProject ,
+                    PermissionNames.TrainingRequest_CreateNewRequestByPM ,
+                    PermissionNames.TrainingRequest_PlanNewTrainingForRequest ,
+                    //PermissionNames.TrainingRequest_UpdateTrainingRequestPlan ,
+                    //PermissionNames.TrainingRequest_RemoveTrainingRequestPlan ,
+                    PermissionNames.TrainingRequest_SetDone ,
+                    PermissionNames.TrainingRequest_CancelAllRequest ,
+                    PermissionNames.TrainingRequest_CancelMyRequest ,
+                    PermissionNames.TrainingRequest_EditPmNote ,
+                    PermissionNames.TrainingRequest_EditDmNote ,
+                    PermissionNames.TrainingRequest_Edit ,
+                    PermissionNames.TrainingRequest_Delete ,
+                    PermissionNames.TrainingRequest_ViewRecruitment ,
+                    PermissionNames.TrainingRequest_SendRecruitment ,
 
                     //Resource
                     PermissionNames.Resource ,
@@ -1415,7 +1453,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
 
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request"},
-                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View list Resource request"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestForAllProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request For All Project"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create request for his/her project only"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_PlanNewResourceForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Resource For Request"},
@@ -1428,7 +1466,25 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+                 new SystemPermission{ Name =  PermissionNames.ResourceRequest_ViewRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Recruitment"},
                  new SystemPermission{ Name =  PermissionNames.ResourceRequest_SendRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment"},
+
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Training Request"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View list Training request"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_CreateNewRequestForAllProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create New Request For All Project"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create request for his/her project only"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_PlanNewTrainingForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan New Training For Request"},
+                 //new SystemPermission{ Name =  PermissionNames.TrainingRequest_UpdateTrainingRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
+                 //new SystemPermission{ Name =  PermissionNames.TrainingRequest_RemoveTrainingRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_CancelAllRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel All Request"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_CancelMyRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Cancel Request for My Project"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_EditPmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit PM Note"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_ViewRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Recruitment"},
+                 new SystemPermission{ Name =  PermissionNames.TrainingRequest_SendRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment"},
 
 
                  new SystemPermission{ Name =  PermissionNames.Resource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource"},
@@ -2059,7 +2115,7 @@ namespace ProjectManagement.Authorization
 
        new SystemPermission { Name =  PermissionNames.ResourceRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource Request",
                     Childrens = new List<SystemPermission>() {
-                        new SystemPermission { Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
+                        new SystemPermission { Name =  PermissionNames.ResourceRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View list Resource request"},
                         new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create new request for his/her project only"},
                         new SystemPermission{ Name =  PermissionNames.ResourceRequest_CreateNewRequestForAllProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new request for all project"},
 
@@ -2073,11 +2129,32 @@ namespace ProjectManagement.Authorization
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+                        new SystemPermission { Name =  PermissionNames.ResourceRequest_ViewRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Recruitment"},
                         new SystemPermission { Name =  PermissionNames.ResourceRequest_SendRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment"},
                     },
                 },
 
+       // Training Request
+       new SystemPermission { Name =  PermissionNames.TrainingRequest, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Training Request",
+                    Childrens = new List<SystemPermission>() {
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View list Training request"},
+                        new SystemPermission{ Name =  PermissionNames.TrainingRequest_CreateNewRequestByPM ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM create new request for his/her project only"},
+                        new SystemPermission{ Name =  PermissionNames.TrainingRequest_CreateNewRequestForAllProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create new request for all project"},
 
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_PlanNewTrainingForRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Plan Training For Request"},
+                        //new SystemPermission { Name =  PermissionNames.TrainingRequest_UpdateTrainingRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Plan"},
+                        //new SystemPermission { Name =  PermissionNames.TrainingRequest_RemoveTrainingRequestPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Remove Plan"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_SetDone ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"},
+                        new SystemPermission{ Name =  PermissionNames.TrainingRequest_CancelAllRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel All Request"},
+                        new SystemPermission{ Name =  PermissionNames.TrainingRequest_CancelMyRequest ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Cancel Request for his/her Project only"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_EditPmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit PM Note"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_EditDmNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit DM Note"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_Delete ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_ViewRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Recruitment"},
+                        new SystemPermission { Name =  PermissionNames.TrainingRequest_SendRecruitment ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Send Recruitment"},
+                    },
+                },
                    new SystemPermission { Name =  PermissionNames.Resource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Resource",
                     Childrens = new List<SystemPermission>() {
                         // Tab Pool

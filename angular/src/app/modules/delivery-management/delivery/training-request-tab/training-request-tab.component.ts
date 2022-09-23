@@ -67,18 +67,19 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   public resourceRequestId: number
   public sortable = new SortableModel('', 0, '')
 
-  ResourceRequest_View = PERMISSIONS_CONSTANT.ResourceRequest_View;
-  ResourceRequest_PlanNewResourceForRequest = PERMISSIONS_CONSTANT.ResourceRequest_PlanNewResourceForRequest;
-  ResourceRequest_UpdateResourceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_UpdateResourceRequestPlan;
-  ResourceRequest_RemoveResouceRequestPlan = PERMISSIONS_CONSTANT.ResourceRequest_RemoveResouceRequestPlan;
-  ResourceRequest_SetDone = PERMISSIONS_CONSTANT.ResourceRequest_SetDone;
-  ResourceRequest_CancelAllRequest = PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest;
-  ResourceRequest_CancelMyRequest = PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest;
-  ResourceRequest_EditPmNote = PERMISSIONS_CONSTANT.ResourceRequest_EditPmNote;
-  ResourceRequest_EditDmNote = PERMISSIONS_CONSTANT.ResourceRequest_EditDmNote;
-  ResourceRequest_Edit = PERMISSIONS_CONSTANT.ResourceRequest_Edit;
-  ResourceRequest_Delete = PERMISSIONS_CONSTANT.ResourceRequest_Delete;
-  ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment;
+  TrainingRequest_View = PERMISSIONS_CONSTANT.TrainingRequest_View;
+  TrainingRequest_PlanNewTrainingForRequest = PERMISSIONS_CONSTANT.TrainingRequest_PlanNewTrainingForRequest;
+  TrainingRequest_UpdateTrainingRequestPlan = PERMISSIONS_CONSTANT.TrainingRequest_UpdateTrainingRequestPlan;
+  TrainingRequest_RemoveResouceRequestPlan = PERMISSIONS_CONSTANT.TrainingRequest_RemoveTrainingRequestPlan;
+  TrainingRequest_SetDone = PERMISSIONS_CONSTANT.TrainingRequest_SetDone;
+  TrainingRequest_CancelAllRequest = PERMISSIONS_CONSTANT.TrainingRequest_CancelAllRequest;
+  TrainingRequest_CancelMyRequest = PERMISSIONS_CONSTANT.TrainingRequest_CancelMyRequest;
+  TrainingRequest_EditPmNote = PERMISSIONS_CONSTANT.TrainingRequest_EditPmNote;
+  TrainingRequest_EditDmNote = PERMISSIONS_CONSTANT.TrainingRequest_EditDmNote;
+  TrainingRequest_Edit = PERMISSIONS_CONSTANT.TrainingRequest_Edit;
+  TrainingRequest_Delete = PERMISSIONS_CONSTANT.TrainingRequest_Delete;
+  TrainingRequest_ViewRecruitment = PERMISSIONS_CONSTANT.TrainingRequest_ViewRecruitment;
+  TrainingRequest_SendRecruitment = PERMISSIONS_CONSTANT.TrainingRequest_SendRecruitment;
 
   @ViewChildren('sortThead') private elementRefSortable: QueryList<any>;
 
@@ -105,7 +106,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   }
 
   showDetail(item: any) {
-    if (this.permission.isGranted(this.DeliveryManagement_ResourceRequest_ViewDetailResourceRequest)) {
+    if (this.permission.isGranted(this.DeliveryManagement_TrainingRequest_ViewDetailTrainingRequest)) {
       this.router.navigate(['app/resourceRequestDetail'], {
         queryParams: {
           id: item.id,
@@ -441,35 +442,41 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   }
 
   isShowBtnCreate() {
-    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequest)
-      || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CreateNewRequestByPM)
+    return this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_CreateNewRequest)
+      || this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_CreateNewRequestByPM)
   }
 
   isShowBtnCancel(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
-      && (this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelAllRequest)
-        || this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_CancelMyRequest))
+      && (this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_CancelAllRequest)
+        || this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_CancelMyRequest))
   }
 
   isShowBtnEdit(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
-      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Edit)
+      && this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_Edit)
   }
 
   isShowBtnSetDone(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
       && item.planUserInfo
-      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SetDone)
+      && this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_SetDone)
+  }
+
+  isShowBtnViewRecruitment(item) {
+    return item.status == RESOURCE_REQUEST_STATUS.PENDING
+      && (!item.isRecruitmentView || !item.recruitmentUrl)
+      && this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_ViewRecruitment)
   }
 
   isShowBtnSendRecruitment(item) {
     return item.status == RESOURCE_REQUEST_STATUS.PENDING
       && (!item.isRecruitmentSend || !item.recruitmentUrl)
-      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_SendRecruitment)
+      && this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_SendRecruitment)
   }
 
   isShowBtnDelete(item) {
-    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
+    return this.isGranted(PERMISSIONS_CONSTANT.TrainingRequest_Delete)
   }
 }
 

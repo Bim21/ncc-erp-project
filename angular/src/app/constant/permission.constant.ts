@@ -422,7 +422,26 @@ export const PERMISSIONS_CONSTANT = {
        ResourceRequest_EditDmNote: "ResourceRequest.EditDmNote",
        ResourceRequest_Edit: "ResourceRequest.Edit",
        ResourceRequest_Delete: "ResourceRequest.Delete",
+       ResourceRequest_ViewRecruitment: "ResourceRequest.ViewRecruitment",
        ResourceRequest_SendRecruitment: "ResourceRequest.SendRecruitment",
+
+       //Training Request 
+       TrainingRequest: "TrainingRequest",
+       TrainingRequest_View: "TrainingRequest.View",
+       TrainingRequest_CreateNewRequest: "TrainingRequest.CreateNewRequest",
+       TrainingRequest_CreateNewRequestByPM: "TrainingRequest.CreateNewRequestByPM",
+       TrainingRequest_PlanNewTrainingForRequest: "TrainingRequest.PlanNewTrainingForRequest",
+       TrainingRequest_UpdateTrainingRequestPlan: "TrainingRequest.UpdateTrainingRequestPlan",
+       TrainingRequest_RemoveTrainingRequestPlan: "TrainingRequest.RemoveTrainingRequestPlan",
+       TrainingRequest_SetDone: "TrainingRequest.SetDone",
+       TrainingRequest_CancelAllRequest: "TrainingRequest.CancelAllRequest",
+       TrainingRequest_CancelMyRequest: "TrainingRequest.CancelMyRequest",
+       TrainingRequest_EditPmNote: "TrainingRequest.EditPmNote",
+       TrainingRequest_EditDmNote: "TrainingRequest.EditDmNote",
+       TrainingRequest_Edit: "TrainingRequest.Edit",
+       TrainingRequest_Delete: "TrainingRequest.Delete",
+       TrainingRequest_ViewRecruitment: "TrainingRequest.ViewRecruitment",
+       TrainingRequest_SendRecruitment: "TrainingRequest.SendRecruitment",
 
        //Resource
        Resource: "Resource",

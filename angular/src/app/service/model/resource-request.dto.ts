@@ -9,6 +9,7 @@ export class ResourceRequestDto {
     pmNote: string;
     dmNote: string;
     isRecruitmentSend: boolean;
+    isRecruitmentView: boolean;
     recruitmentUrl: string;
     skills: ResourceRequestSkillDto[];
     planUserInfo: UserPlanDto;
@@ -36,6 +37,7 @@ export class ResourceRequestTrainingDto {
     priority: number;
     pmNote: string;
     dmNote: string;
+    isRecruitmentView: boolean;
     isRecruitmentSend: boolean;
     recruitmentUrl: string;
     skills: ResourceRequestSkillDto[];
