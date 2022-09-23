@@ -235,6 +235,27 @@ namespace ProjectManagement.Services.Timesheet.Dto
 
             return DateTimeUtils.FormatDateToInvoice(date);
         }
+        public DateTime PaymentDueByDate()
+        {
+            var date = new DateTime(Year, Month, 1).AddMonths(2).AddDays(-1);
+            if (PaymentDueBy >= 1 && PaymentDueBy <= 100)
+            {
+                int months = PaymentDueBy / 30 + 1;
+                try
+                {
+                    date = new DateTime(Year, Month, PaymentDueBy % 30).AddMonths(months);
+                }
+                catch
+                {
+                    date = new DateTime(Year, Month, 1).AddMonths(months + 1).AddDays(-1);
+                }
+            }
+            if (PaymentDueBy > CommonUtil.LastDateNextThan2Month)
+            {
+                date = new DateTime(Year, Month, 1).AddMonths(PaymentDueBy%100).AddDays(-1);
+            }
+            return date;
+        }
     }
     public class InvoiceDataForFinfast
     {

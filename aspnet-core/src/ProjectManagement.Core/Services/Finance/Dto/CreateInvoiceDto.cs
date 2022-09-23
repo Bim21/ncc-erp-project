@@ -15,7 +15,7 @@ namespace ProjectManagement.Services.Finance.Dto
         public double CollectionDebt { get; set; }
         public string CurrencyCode { get; set; }
         public float TransferFee { get; set; }
-        public string Deadline { get; set; }
+        public DateTime Deadline { get; set; }
     }
 
     public class InvoiceDetailDto
