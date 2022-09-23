@@ -1092,6 +1092,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     Year = invoice.Info.Year,
                     NameInvoice = $"Invoice number {invoice.Info.InvoiceNumber} tháng {invoice.Info.Month}/{invoice.Info.Year}",
                     TransferFee = invoice.Info.TransferFee,
+                    Deadline = invoice.Info.PaymentDueByStr()
                 });
             }
             var rs = await _financeService.CreateAllInvoices(listInvoices);
