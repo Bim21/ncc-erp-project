@@ -182,6 +182,7 @@ import { FormSendRecruitmentComponent } from './modules/delivery-management/deli
 import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
 import { AddSubInvoiceDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/add-sub-invoice-dialog/add-sub-invoice-dialog.component';
+import { InvoiceSettingDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/invoice-setting-dialog/invoice-setting-dialog.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -346,7 +347,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     FormSendRecruitmentComponent,
     PositionComponent,
     CreateUpdatePositionComponent,
-    AddSubInvoiceDialogComponent
+    AddSubInvoiceDialogComponent,
+    InvoiceSettingDialogComponent
   ],
   imports: [
     CommonModule,

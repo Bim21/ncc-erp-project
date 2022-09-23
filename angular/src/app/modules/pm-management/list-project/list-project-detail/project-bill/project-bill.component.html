@@ -1,98 +1,92 @@
-<section class="content px-2 mt-2"  *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
+<section class="content px-2 mt-2"
+    *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View)">
     <div class="container-fluid">
-        <div class="card">
-            <div class="row p-1" style="margin:16px 16.5px;">
-                <div class="col-4 m-0 p-0" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View)">
-                    <span classs="col-12" style="font-size: 20px;">Last Invoice Number: </span>
-                    <span *ngIf="!isEditLastInvoiceNumber"
-                        style="word-wrap: break-word; white-space: pre-line;font-size: 18px; text-align: justify;"
-                        class="m-0">
-                        {{lastInvoiceNumber}}
-                    </span>
-                    <mat-form-field style="width:10%" appearance="outline"
-                            *ngIf="isEditLastInvoiceNumber">
-                            <input type="number"
-                                style="padding-bottom: 5px;" matInput
-                                [(ngModel)]="lastInvoiceNumber" name="lastInvoiceNumber" placeholder="Last Invoice Number" />
+        <div *ngIf="isShowInvoiceSetting()" class="card mt-2 mb-1">
+            <mat-expansion-panel [expanded]="!expandInvoiceSetting">
+                <mat-expansion-panel-header class="mt-2 mb-2" (click)="expandInvoiceSetting=!expandInvoiceSetting">
+                    <h4 class="d-inline">Invoice settings:</h4>
+                    <button *ngIf="canEditInvoiceSetting() && !expandInvoiceSetting" style="border: none; height: fit-content;"
+                    class="btn btn-secondary ml-3 btn-sm mb-2" (click)="openInvoiceSettingDialog();$event.stopPropagation()">
+                        <i class="fas fa-edit m-0"></i>
+                    </button>
+                </mat-expansion-panel-header>
+                <div class="row p-2">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="m-0 p-0">
+                            <div class="form-group row col-12">
+                                <label class="col-form-label col-6">
+                                    Last Invoice Number:
+                                </label>
+                                <div class="col-6 d-flex align-items-center">
+                                    <span style="width: 30px;" *ngIf="!isEditLastInvoiceNumber">
+                                        {{lastInvoiceNumber}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
 
-                    </mat-form-field>
-
-                    <div class="d-inline ml-2 pt-1 text-right row">
-                        <i  *ngIf="!isEditLastInvoiceNumber && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit)"
-                            class="fas fa-edit mb-2  fa-lg"
-                            style="font-size: 17px;"
-                            (click)="isEditLastInvoiceNumber = true">
-                        </i>
-                        <i *ngIf="isEditLastInvoiceNumber"
-                            (click)="cancelLastInvoiceNumber()"
-                            style="color: red;"
-                            class="fas fa-times fa-lg mr-2">
-                            </i>
-                        <i
-                            *ngIf="isEditLastInvoiceNumber"
-                            style="color: green ;"
-                            class="fas fa-check fa-lg"
-                            (click)="updateLastInvoiceNumber()" >
-                        </i>
+                        <div class="">
+                            <div class="form-group row col-12">
+                                <label class="col-form-label col-6">Discount(%): </label>
+                                <div class="col-6 d-flex align-items-center">
+                                    <span style="width: 30px;" *ngIf="!isEditDiscount">
+                                        {{updateInvoiceDto.discount}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="form-group row col-12">
+                            <label class="col-form-label col-6 pt-2">
+                                Invoice Setting:
+                            </label>
+                            <div class="col-6 d-flex align-items-center">
+                                <span class="text-primary text-bold" *ngIf="parentInvoice.isMainInvoice">
+                                    Main
+                                </span>
+                                <span class="text-secondary text-bold" *ngIf="!parentInvoice.isMainInvoice">
+                                    Sub
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="parentInvoice.isMainInvoice == APP_ENUM.InvoiceSetting.Main"
+                            class="form-group row col-12">
+                            <label class="col-form-label col-6 pt-2">
+                                Sub projects:
+                            </label>
+                            <div class="col-6 d-flex align-items-center">
+                                <ng-container *ngIf="parentInvoice.projectId && parentInvoice.subInvoices.length">
+                                    <span class="badge bg-secondary mr-2"
+                                        *ngFor="let item of parentInvoice.subInvoices">{{item.projectName}}</span>
+                                </ng-container>
+                                <ng-container *ngIf="parentInvoice.projectId && !parentInvoice.subInvoices.length">
+                                    No sub project
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div *ngIf="!parentInvoice.isMainInvoice" class="form-group row col-12">
+                            <label class="col-form-label col-6 pt-2">
+                                Main project:
+                            </label>
+                            <div class="col-6 d-flex align-items-center">
+                                <ng-container *ngIf="parentInvoice.parentName">
+                                    <span class="badge bg-primary mr-2">{{parentInvoice.parentName}}</span>
+                                </ng-container>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-4" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View)">
-                    <span style="font-size: 20px;">Discount(%): </span>
-                    <span *ngIf="!isEditDiscount"
-                        style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;"
-                        class="m-0">
-                        {{discount}}
-                    </span>
-                    <mat-form-field style="width:10%" appearance="outline"
-                        *ngIf="isEditDiscount">
-                        <input type="number"
-                            style="padding-bottom: 5px;" matInput [(ngModel)]="discount"
-                            name="discount" placeholder="Discount"
-                        />
-                    </mat-form-field>
-
-                    <div class="d-inline ml-2 pt-1 text-right row">
-                        <i *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit) && !isEditDiscount"
-                            style="font-size: 17px;"
-                            class="fas fa-edit mb-2 fa-lg"
-                            (click)="isEditDiscount = true">
-                        </i>
-                        <i *ngIf="isEditDiscount"
-                            (click)="cancelDiscount();"
-                            style="color: red;"
-                             class="fas fa-times fa-lg mr-2">
-                        </i>
-                        <i style="color: green ;"
-                            class="fas fa-check fa-lg"
-                            *ngIf="isEditDiscount"
-                            (click)="updateDiscount()" >
-                        </i>
-                    </div>
-                </div>
-
-                <!--Parent Invoice-->
-                <div class="col-4">
-                    <ng-template #invoiceMain [ngIf]="parentInvoice.isMainInvoice" [ngIfElse]="invoiceSub">
-                        <mat-checkbox class="checkbox-invoice" [(ngModel)]="parentInvoice.isMainInvoice">Main Invoice</mat-checkbox>
-                        <button class="btn btn-xs btn-primary ml-1" matTooltip="Add Sub Invoice" (click)="showAddSubInvoiceDialog()"><i class="fas fa-plus"></i></button>
-                    </ng-template>
-                    <ng-template #invoiceSub>
-                        <button class="btn btn-xs btn-danger" matTooltip="Out Parent Invoice"><i class="fas fa-times"></i></button>
-                    </ng-template>
-                </div>
-            </div>
+            </mat-expansion-panel>
         </div>
-
-
-
-        <div class="card mt-3">
-
-            <mat-expansion-panel [expanded]="!isShowUserBill" >
+        <div class="card mt-2">
+            <mat-expansion-panel [expanded]="!isShowUserBill">
                 <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Bill accounts:</h4>
-                    <button *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create)"
-                        [hidden]="isShowUserBill" style="border: none; height: fit-content;" class="btn bg-blue ml-3 btn-sm mb-2"
+                    <button
+                        *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create)"
+                        [hidden]="isShowUserBill" style="border: none; height: fit-content;"
+                        class="btn bg-blue ml-3 btn-sm mb-2"
                         (click)="addUserBill();userBillCurrentPage=1; $event.stopPropagation()">
                         <i class="fa fa-plus m-0"></i>
 
@@ -111,7 +105,9 @@
                                     <th>Employee</th>
                                     <th>Charge Name</th>
                                     <th>Charge Role</th>
-                                    <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View)">Rate  <br>({{rateInfo.currencyName}})</th>
+                                    <th
+                                        *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View)">
+                                        Rate <br>({{rateInfo.currencyName}})</th>
                                     <th>Charge Type</th>
                                     <th>Start charge</th>
                                     <th>End charge</th>
@@ -135,8 +131,9 @@
                                         <div *ngIf="bill.createMode">
 
                                             <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select (closed)="focusOut()" [(ngModel)]="bill.userId" name="userBill"
-                                                    placeholder="select an user *" required #userBill="ngModel">
+                                                <mat-select (closed)="focusOut()" [(ngModel)]="bill.userId"
+                                                    name="userBill" placeholder="select an user *" required
+                                                    #userBill="ngModel">
                                                     <mat-form-field class="w-100 px-3 "
                                                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                                         <input matInput [(ngModel)]="searchUserBill"
@@ -163,8 +160,9 @@
                                         <div *ngIf="bill.createMode">
 
                                             <input style="min-width: 150px;" class="form-control mt-1"
-                                                #accountName="ngModel" #accountNameEl type="text" placeholder="Charge Name"
-                                                name="accountName" [(ngModel)]="bill.accountName" />
+                                                #accountName="ngModel" #accountNameEl type="text"
+                                                placeholder="Charge Name" name="accountName"
+                                                [(ngModel)]="bill.accountName" />
 
                                             <abp-validation-summary [control]="accountName" [controlEl]="accountNameEl">
                                             </abp-validation-summary>
@@ -185,8 +183,10 @@
 
                                         </div>
                                     </td>
-                                    <td class="text-center" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View)">
-                                        <span class="text-center" *ngIf="!bill.createMode">{{bill.billRate | number:'1.0':'en-US'}}
+                                    <td class="text-center"
+                                        *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View)">
+                                        <span class="text-center" *ngIf="!bill.createMode">{{bill.billRate |
+                                            number:'1.0':'en-US'}}
                                         </span>
                                         <div *ngIf="bill.createMode">
                                             <input style="min-width: 125px;" required class="form-control mt-1"
@@ -197,15 +197,15 @@
                                             </abp-validation-summary>
                                         </div>
                                     </td>
-                                    <td class="text-center" >
+                                    <td class="text-center">
                                         <span class="text-center" *ngIf="!bill.createMode">
                                             {{bill.chargeTypeName}}</span>
                                         <div *ngIf="bill.createMode" style="width: 100px; ">
                                             <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select (closed)="focusOut()" [(ngModel)]="bill.chargeType" name="chargeTypes"
-                                                    placeholder="select Charge" #chargeTypes="ngModel">
-                                                    <mat-option
-                                                        *ngFor="let item of chargeTypeList"
+                                                <mat-select (closed)="focusOut()" [(ngModel)]="bill.chargeType"
+                                                    name="chargeTypes" placeholder="select Charge"
+                                                    #chargeTypes="ngModel">
+                                                    <mat-option *ngFor="let item of chargeTypeList"
                                                         [value]="item.value">
                                                         {{item.name}}
                                                     </mat-option>
@@ -233,7 +233,8 @@
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        <span class="text-center" *ngIf="!bill.createMode">{{bill.endTime |date:"dd/MM/yyyy"}}</span>
+                                        <span class="text-center" *ngIf="!bill.createMode">{{bill.endTime
+                                            |date:"dd/MM/yyyy"}}</span>
                                         <div *ngIf="bill.createMode">
                                             <mat-form-field appearance="outline" style="width: 125px;">
                                                 <input matInput [matDatepicker]="billEndtimepicker"
@@ -261,18 +262,22 @@
                                                 </span>
                                             </div>
                                             <div *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit)"
-                                                 style="width: 10%; text-align: right;" class="ml-1">
-                                                <i class="fas fa-edit " (click)="updateNote(bill.id, bill.fullName,bill.projectName,bill.note)" matTooltip="Edit note"></i>
+                                                style="width: 10%; text-align: right;" class="ml-1">
+                                                <i class="fas fa-edit "
+                                                    (click)="updateNote(bill.id, bill.fullName,bill.projectName,bill.note)"
+                                                    matTooltip="Edit note"></i>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <div *ngIf="!bill.createMode">
-                                            <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit)"
+                                            <button
+                                                *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-secondary mr-1"
                                                 (click)="editUserBill(bill)"><i
                                                     class="fas fa-pencil-alt"></i>Edit</button>
-                                            <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete)"
+                                            <button
+                                                *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete)"
                                                 [disabled]="userBillProcess" class="btn btn-sm bg-danger ml-1"
                                                 (click)="removeUserBill(bill)"><i
                                                     class="fas fa-trash"></i>delete</button>

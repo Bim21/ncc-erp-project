@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ParentInvoice } from '../model/bill-info.model';
 import { ApiResponse } from '../model/api-response.dto';
-
+import {UpdateInvoiceDto} from '../model/updateInvoice.dto'
+import { ProjectInvoiceSettingDto } from '@app/service/model/projectInvoiceSetting.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -54,6 +55,18 @@ export class ProjectUserBillService extends BaseApiService {
   }
   getSubInvoiceByProjectId(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
     return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + '/GetSubInoviceByProjectId?projectId='+projectId);
+  }
+  getAvailableProjectsForSettingInvoice(projectId: number): Observable<ApiResponse<SubInvoice[]>>{
+    return this.http.get<ApiResponse<SubInvoice[]>>(this.rootUrl + `/GetAvailableProjectsForSettingInvoice?projectId=${projectId}`)
+  }
+  updateInvoiceSetting(payload: UpdateInvoiceDto){
+    return this.http.post(this.rootUrl + '/UpdateInvoiceSetting', payload)
+  }
+  getBillInfo(projectId: number): Observable<ApiResponse<ProjectInvoiceSettingDto>>{
+    return this.http.get<ApiResponse<ProjectInvoiceSettingDto>>(this.rootUrl + `/GetBillInfo?projectId=${projectId}`)
+  }
+  checkInvoiceSetting(): Observable<ApiResponse<string>>{
+    return this.http.get<ApiResponse<string>>(this.rootUrl + '/CheckInvoiceSetting');
   }
   //#endregion
 }

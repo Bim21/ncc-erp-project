@@ -6,6 +6,9 @@
                 <h1>Outsourcing Projects</h1>
             </div>
             <div class="col-6 text-right">
+                <button type="button" *ngIf="permission.isGranted(Projects_OutsourcingProjects_CheckProjectInvoiceSetting)" (click)="checkProjectInvoiceSetting()" class=" btn btn-success mr-2">
+                    Check Project Invoice Setting
+                </button>
                 <button type="button" class="btn bg-blue" (click)="createProject()"
                     *ngIf="permission.isGranted(Projects_OutsourcingProjects_Create)">
                     <i class="fa fa-plus-square"></i>

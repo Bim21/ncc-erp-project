@@ -8,6 +8,7 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
     {
         public long ProjectId { get; set; }
         public long? ParentId { get; set; }
+        public string? ParentName { get; set; }
         public bool IsMainInvoice => !ParentId.HasValue ? true : false;
         public IEnumerable<SubInvoiceDto> SubInvoices { get; set; }
     }
@@ -15,5 +16,7 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
     {
         public long ProjectId { get; set; }
         public string ProjectName { get; set; }
+        public long? ParentId { get; set; }
+        public string? ParentName { get; set; }
     }
 }

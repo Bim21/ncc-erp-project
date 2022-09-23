@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.APIs.ProjectUserBills.Dto;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {
@@ -42,7 +43,10 @@ namespace ProjectManagement.APIs.Timesheets.Dto
 
         public string ProjectCurrency { get; set; }
         public ChargeType? ProjectChargeType { get; set; }
-
+        public string? ParentName { get; set; }
+        public long? ParentInvoiceId { get; set; }
+        public IEnumerable<SubInvoiceDto> SubInvoices { get; set; }
+            
         public string Currency
         {
             get
@@ -91,7 +95,21 @@ namespace ProjectManagement.APIs.Timesheets.Dto
 
             return amount;
         }
+
+        public bool IsMainProjectInvoice => !MainProjectId.HasValue;
+        public long? MainProjectId { get; set; }
+        public string MainProjectName { get; set; }
+        public List<IdNameDto> SubProjects { get; set; }
+        public List<string> SubProjectNames => SubProjects != null ? SubProjects.Select(s => s.Name).ToList() : null;        
+        public List<long> SubProjectIds => SubProjects != null ? SubProjects.Select(s => s.Id).ToList() : null;
     }
+
+    public class IdNameDto
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+
 
     public class TotalAmountByCurrencyDto
     {

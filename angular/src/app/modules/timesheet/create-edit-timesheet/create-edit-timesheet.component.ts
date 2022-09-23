@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TimesheetDto } from '@app/service/model/timesheet.dto';
 import { TimesheetService } from '@app/service/api/timesheet.service';
 import { catchError } from 'rxjs/operators';
+import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 
 // tslint:disable-next-line:no-duplicate-imports
 
@@ -33,6 +34,7 @@ export class CreateEditTimesheetComponent extends AppComponentBase implements On
     public dialogRef: MatDialogRef<CreateEditTimesheetComponent>,
     private timesheetService: TimesheetService,
     private router: Router,
+    private projectUserBillService: ProjectUserBillService,
     injector: Injector,){super(injector) }
 
   ngOnInit(): void {
