@@ -116,11 +116,6 @@ namespace ProjectManagement.APIs.TrainingRequests
         [AbpAuthorize]
         public async Task<List<GetResourceRequestDto>> Create(CreateResourceRequestDto input)
         {
-            int year = DateTime.Now.Year;
-
-            int month = DateTime.Now.Month;
-
-            var defaultDate = new DateTime(year, month + 1, 15);
 
             if (input.Quantity <= 0)
                 throw new UserFriendlyException("Quantity must be >= 1");
@@ -130,8 +125,6 @@ namespace ProjectManagement.APIs.TrainingRequests
 
             List<long> createdRequestIds = new List<long>();
             var request = ObjectMapper.Map<ResourceRequest>(input);
-            //request.Level = UserLevel.Intern_0;
-            //request.TimeNeed = defaultDate;
             request.Id = await WorkScope.InsertAndGetIdAsync(request);
             createdRequestIds.Add(request.Id);
             CurrentUnitOfWork.SaveChanges();
