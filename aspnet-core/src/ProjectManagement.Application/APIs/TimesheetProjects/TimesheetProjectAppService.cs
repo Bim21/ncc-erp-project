@@ -1048,12 +1048,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
              .Where(s => s.Project.ProjectType == ProjectType.ODC || s.Project.ProjectType == ProjectType.TimeAndMaterials || s.Project.ProjectType == ProjectType.FIXPRICE)
              .Select(s => new { Id = s.Id, ProjectName = s.Project.Name,ParentInvoiceId = s.ParentInvoiceId, ProjectId = s.Project.Id })
              .AsEnumerable();
-            var listTimesheetProject1 = WorkScope.GetAll<TimesheetProject>()
-             .Where(t => t.TimesheetId == timesheetId)
-             .Where(s => s.Project.ProjectType == ProjectType.ODC || s.Project.ProjectType == ProjectType.TimeAndMaterials || s.Project.ProjectType == ProjectType.FIXPRICE)
-             .Select(s => new { Id = s.Id, ProjectName = s.Project.Name, ParentInvoiceId = s.ParentInvoiceId, ProjectId = s.Project.Id })
-             .ToList();
-
             var sb = new StringBuilder();
             foreach (var project in listTimesheetProject)
             {
