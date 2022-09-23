@@ -18,6 +18,8 @@ namespace ProjectManagement.Roles.Dto
         public UserType UserType { get; set; }
         public UserLevel UserLevel { get; set; }
         public Branch Branch { get; set; }
-
+        public long? PositionId { get; set; }
+        public string PositionColor { get; set; }
+        public string PositionName { get; set; }
     }
 }
