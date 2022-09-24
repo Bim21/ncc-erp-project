@@ -422,7 +422,6 @@ export const PERMISSIONS_CONSTANT = {
        ResourceRequest_EditDmNote: "ResourceRequest.EditDmNote",
        ResourceRequest_Edit: "ResourceRequest.Edit",
        ResourceRequest_Delete: "ResourceRequest.Delete",
-       ResourceRequest_ViewRecruitment: "ResourceRequest.ViewRecruitment",
        ResourceRequest_SendRecruitment: "ResourceRequest.SendRecruitment",
 
        //Training Request 
@@ -440,7 +439,6 @@ export const PERMISSIONS_CONSTANT = {
        TrainingRequest_EditDmNote: "TrainingRequest.EditDmNote",
        TrainingRequest_Edit: "TrainingRequest.Edit",
        TrainingRequest_Delete: "TrainingRequest.Delete",
-       TrainingRequest_ViewRecruitment: "TrainingRequest.ViewRecruitment",
        TrainingRequest_SendRecruitment: "TrainingRequest.SendRecruitment",
 
        //Resource
