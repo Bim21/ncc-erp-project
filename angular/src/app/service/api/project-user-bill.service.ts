@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { ParentInvoice } from '../model/bill-info.model';
 import { ApiResponse } from '../model/api-response.dto';
 import {UpdateInvoiceDto} from '../model/updateInvoice.dto'
-import { ProjectInvoiceSettingDto } from '@app/service/model/projectInvoiceSetting.dto';
+import { ProjectInvoiceSettingDto } from '@app/service/model/project-invoice-setting.dto';
 @Injectable({
   providedIn: 'root'
 })
