@@ -1,4 +1,4 @@
-<div *ngIf="permission.isGranted(ResourceRequest_View)">
+<div *ngIf="permission.isGranted(TrainingRequest_View)">
   <section class="content-header pb-1">
     <div class="container-fluid">
       <div class="row">
@@ -409,7 +409,7 @@
                       *ngIf="
                         item.statusName == 'PENDING' &&
                         permission.isGranted(
-                          ResourceRequest_PlanNewResourceForRequest
+                          TrainingRequest_PlanNewTrainingForRequest
                         )
                       "
                     >
@@ -443,7 +443,7 @@
                     </div>
                     <div
                       class="col-md-2"
-                      *ngIf="permission.isGranted(ResourceRequest_EditPmNote)"
+                      *ngIf="permission.isGranted(TrainingRequest_EditPmNote)"
                     >
                       <i
                         class="fa fa-edit"
@@ -477,7 +477,7 @@
                     </div>
                     <div
                       class="col-md-2"
-                      *ngIf="permission.isGranted(ResourceRequest_EditDmNote)"
+                      *ngIf="permission.isGranted(TrainingRequest_EditDmNote)"
                     >
                       <i
                         class="fa fa-edit"

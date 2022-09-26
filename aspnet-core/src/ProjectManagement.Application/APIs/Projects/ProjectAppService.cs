@@ -246,10 +246,10 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.ResourceRequest_CreateNewRequestByPM, PermissionNames.ResourceRequest_CreateNewRequestForAllProject)]
+        [AbpAuthorize(PermissionNames.TrainingRequest_CreateNewRequestByPM, PermissionNames.TrainingRequest_CreateNewRequestForAllProject)]
         public List<GetProjectDto> GetMyTrainingProjects()
         {
-            var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
+            var isGetAll = this.IsGranted(PermissionNames.TrainingRequest_CreateNewRequestForAllProject);
 
             var queryPM = WorkScope.GetAll<Project>()
                             .Where(x => x.ProjectType == ProjectType.TRAINING)

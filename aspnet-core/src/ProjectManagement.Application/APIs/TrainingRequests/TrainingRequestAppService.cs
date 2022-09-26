@@ -1,7 +1,6 @@
 ﻿using Abp.Authorization;
 using Abp.Configuration;
 using Abp.UI;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
@@ -9,11 +8,10 @@ using NccCore.Paging;
 using NccCore.Uitls;
 using ProjectManagement.APIs.PMReportProjectIssues;
 using ProjectManagement.APIs.ProjectUsers;
-using ProjectManagement.APIs.ResourceRequests;
 using ProjectManagement.APIs.ResourceRequests.Dto;
+using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
-using ProjectManagement.Constants;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.Komu;
 using ProjectManagement.Services.Komu.KomuDto;
@@ -32,7 +30,7 @@ using static ProjectManagement.Constants.Enum.ProjectEnum;
 namespace ProjectManagement.APIs.TrainingRequests
 {
     [AbpAuthorize]
-    public class TrainingRequestAppService: ProjectManagementAppServiceBase
+    public class TrainingRequestAppService : ProjectManagementAppServiceBase
     {
         private readonly ProjectUserAppService _projectUserAppService;
         private readonly PMReportProjectIssueAppService _pMReportProjectIssueAppService;
@@ -68,6 +66,7 @@ namespace ProjectManagement.APIs.TrainingRequests
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.TrainingRequest)]
         public async Task<GridResult<GetResourceRequestDto>> GetAllPaging(InputGetAllRequestResourceDto input)
         {
             var query = _resourceRequestManager.IQGetResourceRequest();
@@ -117,6 +116,7 @@ namespace ProjectManagement.APIs.TrainingRequests
         [AbpAuthorize]
         public async Task<List<GetResourceRequestDto>> Create(CreateResourceRequestDto input)
         {
+
             if (input.Quantity <= 0)
                 throw new UserFriendlyException("Quantity must be >= 1");
 
@@ -124,27 +124,24 @@ namespace ProjectManagement.APIs.TrainingRequests
                 throw new UserFriendlyException("Select at least 1 skill");
 
             List<long> createdRequestIds = new List<long>();
-            for (int i = 0; i < input.Quantity; i++)
+            var request = ObjectMapper.Map<ResourceRequest>(input);
+            request.Id = await WorkScope.InsertAndGetIdAsync(request);
+            createdRequestIds.Add(request.Id);
+            CurrentUnitOfWork.SaveChanges();
+            foreach (var skillId in input.SkillIds)
             {
-                var request = ObjectMapper.Map<ResourceRequest>(input);
-                request.Quantity = 1;
-                request.Id = await WorkScope.InsertAndGetIdAsync(request);
-                createdRequestIds.Add(request.Id);
-                CurrentUnitOfWork.SaveChanges();
-                foreach (var skillId in input.SkillIds)
+                var requestSkill = new ResourceRequestSkill()
                 {
-                    var requestSkill = new ResourceRequestSkill()
-                    {
-                        ResourceRequestId = request.Id,
-                        SkillId = skillId,
-                        Quantity = 1
-                    };
+                    ResourceRequestId = request.Id,
+                    SkillId = skillId,
+                    Quantity = 1
+                };
 
-                    await WorkScope.InsertAsync(requestSkill);
-                }
-
-                //SendKomuNotify(model.Name, project.Name, model.Status);
+                await WorkScope.InsertAsync(requestSkill);
             }
+
+            //SendKomuNotify(model.Name, project.Name, model.Status);
+
             CurrentUnitOfWork.SaveChanges();
 
             var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
@@ -258,7 +255,7 @@ namespace ProjectManagement.APIs.TrainingRequests
                 throw new UserFriendlyException($"Request Id {requestId} is for your project. You can't change to other project");
             }
 
-      /*      var isGrantedCancelAll = IsGranted(PermissionNames.ResourceRequest_CancelAllRequest);*/
+            /*      var isGrantedCancelAll = IsGranted(PermissionNames.ResourceRequest_CancelAllRequest);*/
 
             if (project.PMId != AbpSession.UserId.Value)
             {
@@ -395,7 +392,6 @@ namespace ProjectManagement.APIs.TrainingRequests
                 {
                     CreateDate = DateTimeUtils.GetNow(),
                     Message = komuMessage.ToString()
-
                 },
                trainingRequestChannel);
             }
