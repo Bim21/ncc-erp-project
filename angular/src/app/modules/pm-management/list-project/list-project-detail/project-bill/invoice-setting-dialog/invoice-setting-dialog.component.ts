@@ -38,9 +38,7 @@ export class InvoiceSettingDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.updateInvoiceDto = this.data.dialogData.updateInvoiceDto;
-    this.projectId = this.data.dialogData.projectId;
-    this.projectName = this.data.dialogData.projectName;
+    Object.assign(this, this.data.dialogData);
     this.getAvailableProjectForSettingInvoice();
   }
 

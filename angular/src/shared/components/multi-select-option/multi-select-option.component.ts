@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild, ElementRef, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 import { DropDownDataDto } from '@shared/filter/filter.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { DropDownDataDto } from '@shared/filter/filter.component';
   templateUrl: './multi-select-option.component.html',
   styleUrls: ['./multi-select-option.component.css']
 })
-export class MultiSelectOptionComponent implements OnInit, OnChanges, AfterViewInit {
+export class MultiSelectOptionComponent implements OnInit, OnChanges {
   @Input() searchPlaceHolder = ''
   @Input() dropdownData: DropDownDataDto[] = []
   @Input() selectedValues: any[] = []
@@ -16,7 +16,6 @@ export class MultiSelectOptionComponent implements OnInit, OnChanges, AfterViewI
   @Input() required:  boolean = false;
   @Output() onMultiSelectionChange: EventEmitter<any[]> = new EventEmitter<any[]>()
   @Output() onSingleSelectionChange: EventEmitter<any[]> = new EventEmitter<any[]>()
-  @ViewChildren(HTMLInputElement) items:QueryList<HTMLInputElement>
   public searchString: string = ''
   public tempData: DropDownDataDto[]
   constructor() { }
@@ -32,14 +31,6 @@ export class MultiSelectOptionComponent implements OnInit, OnChanges, AfterViewI
     this.tempData = [...this.dropdownData]
   }
 
-  ngAfterViewInit(): void {
-    this.items.changes.subscribe(rs => {
-      console.log(rs)
-      if(rs.length){
-        rs[0].nativeElement.focus()
-      }
-    })
-  }
   onSearch(value: string){
     if(this.searchString){
       this.tempData = this.dropdownData.filter(item => item.displayName.toLowerCase().includes(this.searchString.toLowerCase()))

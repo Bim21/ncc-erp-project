@@ -16,7 +16,7 @@ import { DropDownDataDto } from '@shared/filter/filter.component';
 import { ProjectDto } from '@app/service/model/list-project.dto';
 import { ListProjectService } from '@app/service/api/list-project.service';
 import { InvoiceSettingDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/project-bill/invoice-setting-dialog/invoice-setting-dialog.component';
-import { ProjectInvoiceSettingDto } from '@app/service/model/projectInvoiceSetting.dto';
+import { ProjectInvoiceSettingDto } from '@app/service/model/project-invoice-setting.dto';
 import { UpdateInvoiceDto } from '@app/service/model/updateInvoice.dto';
 import { MatDialog } from '@angular/material/dialog';
 
