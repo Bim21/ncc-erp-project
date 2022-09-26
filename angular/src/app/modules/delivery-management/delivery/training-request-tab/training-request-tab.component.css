@@ -14,6 +14,10 @@ table td {
     vertical-align: top;
 }
 
+table > thead > tr > th {
+    width: 500px;
+}
+
 ::ng-deep .mat-radio-button .mat-radio-label-content {
     padding-left: 5px;
 }

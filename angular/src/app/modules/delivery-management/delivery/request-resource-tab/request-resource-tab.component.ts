@@ -46,12 +46,12 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   public skillIds: number[]
   public theadTable: THeadTable[] = [
     { name: '#' },
-    { name: 'Priority', sortName: 'priority', defaultSort: 'DESC' },
-    { name: 'Project', sortName: 'projectName', defaultSort: '' },
+    { name: 'Priority', sortName: 'priority', defaultSort: 'DESC', width: '88px' },
+    { name: 'Project', sortName: 'projectName', defaultSort: '', width: '88px' },
     { name: 'Skill' },
     { name: 'Level', sortName: 'level', defaultSort: '' },
-    { name: 'Time request', sortName: 'creationTime', defaultSort: '' },
-    { name: 'Time need', sortName: 'timeNeed', defaultSort: '' },
+    { name: 'Time request', sortName: 'creationTime', defaultSort: '', width: '128px' },
+    { name: 'Time need', sortName: 'timeNeed', defaultSort: '', width: '128px' },
     { name: 'Planned resource' },
     { name: 'PM Note' },
     { name: 'HR/DM Note' },
