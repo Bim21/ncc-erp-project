@@ -41,5 +41,8 @@ namespace ProjectManagement.APIs.TimeSheetProjectBills.Dto
         public string BranchColor { get; set; }
         public string BranchDisplayName { get; set; }
         public string BillAccountName => string.IsNullOrEmpty(AccountName) ? FullName : AccountName;
+        public long? PositionId { get; set; }
+        public string PositionColor { get; set; }
+        public string PositionName { get; set; }
     }
 }

@@ -71,4 +71,7 @@ public getMyProjects(): Observable<any>{
   return this.http.get<any>(this.rootUrl + '/GetMyProjects');
 }
 
+public getMyTrainingProjects(): Observable<any> {
+  return this.http.get<any>(this.rootUrl + '/GetMyTrainingProjects');
+}
 }

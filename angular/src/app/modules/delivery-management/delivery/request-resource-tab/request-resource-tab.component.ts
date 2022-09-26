@@ -282,6 +282,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
       }
     })
 
+    requestBody.isTraining = false;
     if (this.sortable.sort) {
       requestBody.sort = this.sortable.sort;
       requestBody.sortDirection = this.sortable.sortDirection
@@ -454,9 +455,7 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   }
 
   isShowBtnDelete(item) {
-    return item.status == RESOURCE_REQUEST_STATUS.CANCELLED
-      && !item.isRecruitmentSend
-      && this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
+    return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
   }
 
 }

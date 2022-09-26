@@ -3174,6 +3174,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("ProjectId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("RecruitmentUrl")
                         .HasColumnType("nvarchar(max)");
 

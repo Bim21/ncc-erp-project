@@ -297,7 +297,10 @@
                                                     branchColor:user.branchColor,
                                                     branchDisplayName:user.branchDisplayName,
                                                     userType: user.userType, avatarFullPath: user.avatarFullPath,
-                                                     userLevel: user.userLevel}">
+                                                    position: user.position,
+                                                    positionColor: user.positionColor,
+                                                    positionName: user.positionName,
+                                                    userLevel: user.userLevel}">
                                                     </app-user-info>
                                                 </div>
                                                 <div style="visibility: hidden; position: fixed"
@@ -388,13 +391,7 @@
                                             *ngFor="let user of projectCurrentSupportUser; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">                                               
                                                 <div style="width: 80%;">
-                                                    <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
-                                                    branchColor: user.branchColor,
-                                                    branchDisplayName:user.branchDisplayName,
-                                                    userType: user.type, 
-                                                    avatarFullPath: user.fullAvatarPath,
-                                                    userTypeName: user.userTypeName,
-                                                    userLevel: user.level}">
+                                                    <app-user-info [userData]="user">
                                                     </app-user-info>
                                                 </div>
                                                 <div style="display: flex; align-items: center;">
@@ -503,11 +500,7 @@
                                                                     class="d-flex justify-content-between">
                                                                     <app-user-info
                                                                         style="width: -webkit-fill-available;"
-                                                                        [userData]="{fullName:report.fullName,branch:report.branch,
-                                                                            branchColor:report.branchColor,
-                                                                            branchDisplayName:report.branchDisplayName,
-                                                                            userLevel: report.userLevel,
-                                                                        userType:report.userType,emailAddress:report.emailAddress, avatarFullPath:report.avatarFullPath}">
+                                                                        [userData]="report">
                                                                     </app-user-info>
 
                                                                     <i style="margin-top: 23px ; color: #585858;"
@@ -677,11 +670,7 @@
                                                                     class="d-flex justify-content-between">
                                                                     <app-user-info
                                                                         style="width: -webkit-fill-available;"
-                                                                        [userData]="{fullName:report.fullName,branch:report.branch,
-                                                                            branchColor:report.branchColor,
-                                                                            branchDisplayName:report.branchDisplayName,
-                                                                            userLevel: report.userLevel,
-                                                                userType:report.userType,emailAddress:report.emailAddress,avatarFullPath: report.avatarFullPath}">
+                                                                        [userData]="report">
                                                                     </app-user-info>
 
                                                                 </div>

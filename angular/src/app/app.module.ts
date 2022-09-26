@@ -153,7 +153,7 @@ import { AddNoteDialogComponent } from '@app/modules/delivery-management/deliver
 import { ProjectFileComponent } from './modules/pm-management/list-project/list-project-detail/project-file/project-file.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import {DateAdapter,MAT_DATE_FORMATS} from '@angular/material/core'
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core'
 import { DATE_FORMATS } from '@shared/AppEnums';
 import { CollectTimesheetDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/collect-timesheet-dialog/collect-timesheet-dialog.component';
 import { ListTimesheetByProjectCodeDialogComponent } from './modules/delivery-management/delivery/weekly-report-tab/list-timesheet-by-project-code-dialog/list-timesheet-by-project-code-dialog.component';
@@ -183,6 +183,10 @@ import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
 import { AddSubInvoiceDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/add-sub-invoice-dialog/add-sub-invoice-dialog.component';
 import { InvoiceSettingDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/invoice-setting-dialog/invoice-setting-dialog.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { TrainingRequestTabComponent } from './modules/delivery-management/delivery/training-request-tab/training-request-tab.component';
+import { CreateUpdateTrainingRequestComponent } from './modules/delivery-management/delivery/training-request-tab/create-update-training-request/create-update-training-request.component';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -348,7 +352,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     PositionComponent,
     CreateUpdatePositionComponent,
     AddSubInvoiceDialogComponent,
-    InvoiceSettingDialogComponent
+    InvoiceSettingDialogComponent,
+    TrainingRequestTabComponent,
+    CreateUpdateTrainingRequestComponent
   ],
   imports: [
     CommonModule,
@@ -369,6 +375,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     Ng2SearchPipeModule,
     ImageCropperModule,
     CdTimerModule,
+    NgxMatSelectSearchModule,
 
     TranslateModule.forRoot({
       loader: {
@@ -419,4 +426,4 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ResetPasswordDialogComponent,
   ],
 })
-export class AppModule {}
+export class AppModule { }

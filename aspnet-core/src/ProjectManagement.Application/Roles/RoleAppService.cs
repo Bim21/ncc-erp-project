@@ -181,6 +181,9 @@ namespace ProjectManagement.Roles
                                 UserLevel = u.UserLevel,
                                 UserName = u.UserName,
                                 UserType = u.UserType,
+                                PositionId = u.PositionId,
+                                PositionName = u.Position.ShortName,
+                                PositionColor = u.Position.Color
                             };
             var allUsers = await qallUsers.Distinct().ToListAsync();
             return allUsers;

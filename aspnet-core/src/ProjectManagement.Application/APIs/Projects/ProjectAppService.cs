@@ -100,9 +100,13 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
+                            PmUserLevel = p.PM.UserLevel,
                             PmBranch = p.PM.BranchOld,
                             PmBranchColor = p.PM.Branch.Color,
                             PmBranchDisplayName = p.PM.Branch.DisplayName,
+                            PositionId = p.PM.PositionId,
+                            PositionName = p.PM.Position.ShortName,
+                            PositionColor = p.PM.Position.Color,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
@@ -229,6 +233,26 @@ namespace ProjectManagement.APIs.Projects
             var isGetAll = this.IsGranted(PermissionNames.ResourceRequest_CreateNewRequestForAllProject);
 
             var queryPM = WorkScope.GetAll<Project>()
+                            .Where(x => x.ProjectType != ProjectType.TRAINING)
+                            .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
+                            .Where(x => x.Status != ProjectStatus.Closed)
+                            .Select(x => new GetProjectDto
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Code = x.Code
+                            });
+            return queryPM.ToList();
+        }
+
+        [HttpGet]
+        [AbpAuthorize(PermissionNames.TrainingRequest_CreateNewRequestByPM, PermissionNames.TrainingRequest_CreateNewRequestForAllProject)]
+        public List<GetProjectDto> GetMyTrainingProjects()
+        {
+            var isGetAll = this.IsGranted(PermissionNames.TrainingRequest_CreateNewRequestForAllProject);
+
+            var queryPM = WorkScope.GetAll<Project>()
+                            .Where(x => x.ProjectType == ProjectType.TRAINING)
                             .Where(x => isGetAll || x.PMId == AbpSession.UserId.Value)
                             .Where(x => x.Status != ProjectStatus.Closed)
                             .Select(x => new GetProjectDto
@@ -593,9 +617,13 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
+                            PmUserLevel = p.PM.UserLevel,
                             PmBranch = p.PM.BranchOld,
                             PmBranchColor = p.PM.Branch.Color,
                             PmBranchDisplayName = p.PM.Branch.DisplayName,
+                            PositionId = p.PM.PositionId,
+                            PositionName = p.PM.Position.ShortName,
+                            PositionColor = p.PM.Position.Color,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
@@ -725,6 +753,9 @@ namespace ProjectManagement.APIs.Projects
                                     PmAvatarPath = x.PM.AvatarPath,
                                     PmBranch = x.PM.BranchOld,
                                     PmUserType = x.PM.UserType,
+                                    PositionId = x.PM.PositionId,
+                                    PositionName = x.PM.Position.ShortName,
+                                    PositionColor = x.PM.Position.Color
                                 });
             return await query.FirstOrDefaultAsync();
         }
@@ -770,6 +801,10 @@ namespace ProjectManagement.APIs.Projects
                             PmEmailAddress = p.PM.EmailAddress,
                             PmUserName = p.PM.UserName,
                             PmUserType = p.PM.UserType,
+                            PmUserLevel = p.PM.UserLevel,
+                            PositionId = p.PM.PositionId,
+                            PositionName = p.PM.Position.ShortName,
+                            PositionColor = p.PM.Position.Color,
                             PmBranch = p.PM.BranchOld,
                             PmBranchColor = p.PM.Branch.Color,
                             PmBranchDisplayName = p.PM.Branch.DisplayName,

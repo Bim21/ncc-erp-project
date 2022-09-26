@@ -27,6 +27,10 @@ namespace ProjectManagement.Services.ResourceManager.Dto
         public DateTime StartTime { get; set; }
         public int? StarRate { get; set; }
 
+        public long? PositionId { get; set; }
+        public string PositionColor { get; set; }
+        public string PositionName { get; set; }
+
         public ProjectUserStatus PUStatus { get; set; }
         public ProjectUserRole ProjectRole { get; set; }
         public List<UserSkillDto> UserSkills { get; set; }

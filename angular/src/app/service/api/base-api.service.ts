@@ -77,5 +77,4 @@ export abstract class BaseApiService {
         abp.notify.error(errorMessage);
         return throwError(errorMessage);
     }
-
 }

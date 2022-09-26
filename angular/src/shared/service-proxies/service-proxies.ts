@@ -4286,7 +4286,7 @@ export class UserDto implements IUserDto {
   managerId: number;
   managerAvatarPath: string;
   managerName: string;
-  rateStar?:number;
+  starRate?:number;
   branchColor: string | undefined;
   branchDisplayName: string | undefined;
   userTypeName: string;

@@ -124,7 +124,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             'Projects.OutsourcingProjects'
           ),
           new MenuItem(
-            this.l('Training Projects'), 
+            this.l('Training Projects'),
             '/app/training-projects',
             'fas fa-chalkboard',
             'Projects.TrainingProjects'
@@ -175,6 +175,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         '/app/resource-request',
         'fab fa-chromecast',
         'ResourceRequest'
+      ),
+      new MenuItem(
+        this.l('Training Requests'),
+        '/app/training-request',
+        'fas fa-mail-bulk',
+        'TrainingRequest'
       ),
       new MenuItem(
         this.l('Resources'),

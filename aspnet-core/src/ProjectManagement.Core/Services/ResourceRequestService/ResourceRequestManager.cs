@@ -50,12 +50,17 @@ namespace ProjectManagement.Services.ResourceRequestService
                             Level = request.Level,
                             CreationTime = request.CreationTime,
 
+                            Quantity = request.Quantity,
+
                             Skills = request.ResourceRequestSkills.Select(p => new ResourceRequestSkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
                             PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
                             {
                                 ProjectUserId = s.Id,
                                 Employee = new UserBaseDto
                                 {
+                                    PositionId = s.User.PositionId,
+                                    PositionName = s.User.Position.ShortName,
+                                    PositionColor = s.User.Position.Color,
                                     Branch = s.User.BranchOld,
                                     BranchColor = s.User.Branch.Color,
                                     BranchDisplayName = s.User.Branch.DisplayName,

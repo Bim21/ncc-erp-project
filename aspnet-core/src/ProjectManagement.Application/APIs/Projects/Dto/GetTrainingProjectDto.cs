@@ -29,6 +29,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string PmAvatarPath { get; set; }
         public string PmAvatarFullPath => FileUtils.FullFilePath(PmAvatarPath);
         public UserType PmUserType { get; set; }
+        public UserLevel PmUserLevel { get; set; }
         public Branch PmBranch { get; set; }
         public PMReportProjectStatus IsSent { get; set; }
         public DateTime? TimeSendReport { get; set; }
@@ -36,5 +37,8 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string Evaluation { get; set; }
         public string PmBranchColor { get; set; }
         public string PmBranchDisplayName { get; set; }
+        public long? PositionId { get; set; }
+        public string PositionColor { get; set; }
+        public string PositionName { get; set; }
     }
 }

@@ -60,7 +60,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { PercentageMaskDirective } from './directives/percentage-mask.directive';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { RadioDropdownComponent } from './components/radio-dropdown/radio-dropdown.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
@@ -68,7 +68,6 @@ import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
 import { MainSubInvoiceComponent } from './components/main-sub-invoice/main-sub-invoice.component';
 import { MultiSelectOptionComponent } from './components/multi-select-option/multi-select-option.component';
-
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
@@ -118,7 +117,8 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
         MatSelectModule,
         FormsModule,
         NgxStarsModule,
-        DragDropModule
+        DragDropModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -182,6 +182,7 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
         MatTooltipModule,
         MatTreeModule,
         MatFormFieldModule,
+        FormsModule,
         PercentageMaskDirective,
         UserInfoComponent,
         RadioDropdownComponent,
