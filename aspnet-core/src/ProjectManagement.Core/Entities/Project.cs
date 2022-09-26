@@ -44,6 +44,7 @@ namespace ProjectManagement.Entities
         public bool RequireTimesheetFile { get; set; }
         public long LastInvoiceNumber { get; set; }
         public float Discount { get; set; }
+        public long? ParentInvoiceId { get; set; }
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
     }
 }

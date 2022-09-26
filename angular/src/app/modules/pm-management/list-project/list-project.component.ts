@@ -15,6 +15,7 @@ import { CreateEditListProjectComponent } from './create-edit-list-project/creat
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ProductProjectDto } from '@app/service/model/project.dto';
 import * as moment from 'moment';
+import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 
 @Component({
   selector: 'app-list-project',
@@ -35,7 +36,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
   Projects_OutsourcingProjects_ViewBillInfo = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillInfo
-
+  Projects_OutsourcingProjects_CheckProjectInvoiceSetting = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_CheckProjectInvoiceSetting 
 
  
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
@@ -101,7 +102,9 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   constructor(injector: Injector, public dialog: MatDialog, private userService: UserService,
     public listProjectService: ListProjectService ,
-    public sessionService:AppSessionService) {
+    public sessionService:AppSessionService,
+    public projectUserBillService: ProjectUserBillService
+    ) {
     super(injector);
     this.pmId = Number(this.sessionService.userId);
   }
@@ -381,6 +384,17 @@ window.open(url, '_blank');
       })
     }
     return billInfoAfterFilter
+  }
+
+  checkProjectInvoiceSetting(){
+    this.projectUserBillService.checkInvoiceSetting().subscribe(rs => {
+      if(rs.result.length){
+        abp.message.warn(rs.result)
+      }
+      else {
+        abp.notify.success("No problem with project invoice setting")
+      }
+    })
   }
 
   getChargeType(chargeType){

@@ -2730,6 +2730,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("PMId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ParentInvoiceId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("ProjectType")
                         .HasColumnType("int");
 
@@ -3469,6 +3472,9 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
+
+                    b.Property<long?>("ParentInvoiceId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("ProjectBillInfomation")
                         .HasColumnType("nvarchar(max)");

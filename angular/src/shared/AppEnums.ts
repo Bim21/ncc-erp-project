@@ -249,4 +249,8 @@ export const APP_ENUMS = {
         Normal: 0,
         MontlyToDaily: 1
     },   
+    InvoiceSetting: {
+        Main: true,
+        Sub: false
+    }
 }

@@ -8,7 +8,7 @@ import { TimesheetDetailDto,TotalAmountByCurrencyDto} from './../../../service/m
 import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { TimesheetService } from '@app/service/api/timesheet.service'
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportFileTimesheetDetailComponent } from './import-file-timesheet-detail/import-file-timesheet-detail.component';
 import * as FileSaver from 'file-saver';
@@ -18,6 +18,7 @@ import { UserService } from '@app/service/api/user.service';
 import { ClientService } from '@app/service/api/client.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
+import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -44,7 +45,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         item.isTrue = true
       }
     })
-    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError))
+    this.timesheetProjectService.GetTimesheetDetail(this.timesheetId, request).pipe(catchError(this.timesheetProjectService.handleError)).pipe(finalize(()=>finishedCallback()))
       .subscribe((res) => {
         let timesheetDetaiList = res.result.listTimesheetDetail;
         this.TimesheetDetaiList = timesheetDetaiList.items.map(el => {
@@ -109,7 +110,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public clientIdInvoice: number = -1;
   public totalAmount: number;
   public listTotalAmountByCurrency: TotalAmountByCurrencyDto[] = [];
-  
+  public sending: boolean = false;
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
   contextMenuPosition = { x: '0', y: '0' }
@@ -135,9 +136,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_UpdateBill = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateBill;
   Timesheets_TimesheetDetail_ExportInvoiceForTax = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoiceForTax;
   Timesheets_TimesheetDetail_EditInvoiceInfo = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_EditInvoiceInfo;
+  Timesheets_TimesheetDetail_SendInvoiceToFinfast = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_SendInvoiceToFinfast;
   constructor(
     private timesheetService: TimesheetService,
     public timesheetProjectService: TimesheetProjectService,
+    private projectUserBillService: ProjectUserBillService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     injector: Injector,
@@ -518,6 +521,11 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         projectName: item.projectName,
         transferFee: item.transferFee,
         discount: item.discount,
+        isMainProjectInvoice: item.isMainProjectInvoice,
+        mainProjectId: item.mainProjectId,
+        subProjects: item.subProjects,
+        subProjectIds: item.subProjectIds,
+        projectId: item.projectId
       },
 
     });
@@ -567,6 +575,30 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       default:
         return '#F675A8';
     }
+  }
+
+  sendInvoiceToFinfast() {
+    this.sending = true;
+    abp.message.confirm("Send invoice to finfast", "", (result) => {
+      if (result) {
+        this.timesheetProjectService.checkTimesheetProjectSetting(this.timesheetId).subscribe(rs => {
+          if (rs.result.length) {
+            abp.message.warn(rs.result);
+            this.sending = false;
+            return;
+          }
+          this.timesheetProjectService.sendInvoiceToFinfast(this.timesheetId).subscribe(rs => {
+            if (rs.result.isSuccess) {
+              abp.message.success("Invoice sended to finfast")
+            }
+            else {
+              abp.message.error(rs.result.message)
+            }
+          })
+        })
+      }
+      this.sending = false;
+    })
   }
 }
 export const UpdateAction = {

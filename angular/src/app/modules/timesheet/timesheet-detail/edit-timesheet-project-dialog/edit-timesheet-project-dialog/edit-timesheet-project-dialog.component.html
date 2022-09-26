@@ -75,6 +75,45 @@
             </abp-validation-summary>
           </div>
         </div>
+        <div class="form-group row">
+          <label class="col-form-label col-md-4 pt-2">
+              Invoice Setting:
+          </label>
+          <div class="col-md-8">
+              <mat-form-field class="w-100" appearance="outline">
+                  <mat-select name="invoiceSetting" [(ngModel)]="isMainProjectInvoice">
+                      <mat-option *ngFor="let item of invoiceSettingOptions" [value]="item.value">
+                          {{item.key}}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+          </div>
+      </div>
+      <div *ngIf="isMainProjectInvoice == APP_ENUMS.InvoiceSetting.Main" class="form-group row">
+          <label class="col-form-label col-md-4 pt-2">
+              Sub projects:
+          </label>
+          <div class="col-md-8">
+              <app-multi-select-option class="w-100" [dropdownData]="listSelectProject"
+                  [selectLabel]="'Select sub projects'" [selectedValues]="subProjectIds"
+                  (onMultiSelectionChange)="subProjectIds = $event"
+                  [searchPlaceHolder]="'Search projects'">
+              </app-multi-select-option>
+          </div>
+      </div>
+      <div *ngIf="!isMainProjectInvoice" class="form-group row required">
+          <label class="col-form-label col-md-4 pt-2">
+              Main project:
+          </label>
+          <div class="col-md-8" appearance="outline">
+              <app-multi-select-option class="w-100" [required]="true" [searchLabel]="'Search project'"
+                  [selectLabel]="'Select main project'" [selectedValue]="mainProjectId"
+                  [dropdownData]="listSelectProject" [multiple]="false"
+                  (onSingleSelectionChange)="mainProjectId = $event;"
+                  [searchPlaceHolder]="'Search project'">
+              </app-multi-select-option>
+          </div>
+      </div>
     </div>
   
     <abp-modal-footer

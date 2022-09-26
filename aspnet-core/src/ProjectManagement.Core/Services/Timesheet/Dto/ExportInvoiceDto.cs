@@ -181,4 +181,95 @@ namespace ProjectManagement.Services.Timesheet.Dto
         Normal = 0,
         MontlyToDaily = 1
     }
+    #region Finfast Integrate
+    public class InvoiceGeneralInfoForFinfast
+    {
+        public long ProjectId { get; set; }
+        public string ClientName { get; set; }
+        public float TransferFee { get; set; }
+        public float Discount { get; set; }
+        public long InvoiceNumber { get; set; }
+        public string ProjectCode { get; set; }
+        public string ClientAddress { get; set; }
+        public string PaymentInfo { get; set; }
+        public byte PaymentDueBy { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public double TimesheetWorkingDay { get; set; }
+        public InvoiceDateSetting InvoiceDateSetting { get; set; }
+        public string AccountCode { get; set; }
+        public string[] PaymentInfoArr()
+        {
+            return PaymentInfo.Split("\n");
+        }
+        public string InvoiceDateStr()
+        {
+            var date = new DateTime(Year, Month, 1).AddMonths(1);
+            if (InvoiceDateSetting == InvoiceDateSetting.LastDateThisMonth)
+            {
+                date = date.AddDays(-1);
+            }
+
+            return DateTimeUtils.FormatDateToInvoice(date);
+        }
+
+        public string PaymentDueByStr()
+        {
+            var date = new DateTime(Year, Month, 1).AddMonths(2).AddDays(-1);
+            if (PaymentDueBy >= 1 && PaymentDueBy <= 100)
+            {
+                int months = PaymentDueBy / 30 + 1;
+                try
+                {
+                    date = new DateTime(Year, Month, PaymentDueBy % 30).AddMonths(months);
+                }
+                catch
+                {
+                    date = new DateTime(Year, Month, 1).AddMonths(months + 1).AddDays(-1);
+                }
+            }
+            if (PaymentDueBy > CommonUtil.LastDateNextThan2Month)
+            {
+                date = new DateTime(Year, Month, 1).AddMonths(PaymentDueBy%100).AddDays(-1);
+            }
+
+            return DateTimeUtils.FormatDateToInvoice(date);
+        }
+        public DateTime PaymentDueByDate()
+        {
+            var date = new DateTime(Year, Month, 1).AddMonths(2).AddDays(-1);
+            if (PaymentDueBy >= 1 && PaymentDueBy <= 100)
+            {
+                int months = PaymentDueBy / 30 + 1;
+                try
+                {
+                    date = new DateTime(Year, Month, PaymentDueBy % 30).AddMonths(months);
+                }
+                catch
+                {
+                    date = new DateTime(Year, Month, 1).AddMonths(months + 1).AddDays(-1);
+                }
+            }
+            if (PaymentDueBy > CommonUtil.LastDateNextThan2Month)
+            {
+                date = new DateTime(Year, Month, 1).AddMonths(PaymentDueBy%100).AddDays(-1);
+            }
+            return date;
+        }
+    }
+    public class InvoiceDataForFinfast
+    {
+        public InvoiceGeneralInfoForFinfast Info { get; set; }
+        public List<TimesheetUserForFinfast> TimesheetUsers { get; set; }
+        public List<string> ProjectCodes { get; set; }
+        public string CurrencyCode => TimesheetUsers.Select(s => s.CurrencyName).FirstOrDefault();
+        public string ClientCode => Info.AccountCode;
+        private double NetTotal => TimesheetUsers.Sum(s => s.LineTotal);
+        public double InvoiceTotal => this.NetTotal - (Info.Discount * this.NetTotal) / 100;
+    }
+    public class TimesheetUserForFinfast : TimesheetUser
+    {
+        public string CurrencyCode { get; set; }
+    }
+    #endregion
 }

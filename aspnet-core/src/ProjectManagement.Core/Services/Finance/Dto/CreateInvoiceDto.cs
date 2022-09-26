@@ -7,14 +7,15 @@ namespace ProjectManagement.Services.Finance.Dto
 {
     public class CreateInvoiceDto
     {
-        public string Name { get; set; }
-        public string ClientName { get; set; }
-        public string Project { get; set; }
-        public string AccountCode { get; set; }
-        public double TotalPrice { get; set; }
-        public InvoiceStatus Status { get; set; }
-        public string Note { get; set; }
-        public List<InvoiceDetailDto> Detail { get; set; }
+        public string NameInvoice { get; set; }
+        public string InvoiceNumber { get; set; }
+        public string ClientCode { get; set; }
+        public short Month { get; set; }
+        public int Year { get; set; }
+        public double CollectionDebt { get; set; }
+        public string CurrencyCode { get; set; }
+        public float TransferFee { get; set; }
+        public DateTime Deadline { get; set; }
     }
 
     public class InvoiceDetailDto

@@ -66,6 +66,8 @@ import { ListFilterPipe } from './pipes/list-filter.pipe';
 import { NgxStarsModule } from 'ngx-stars';
 import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
+import { MainSubInvoiceComponent } from './components/main-sub-invoice/main-sub-invoice.component';
+import { MultiSelectOptionComponent } from './components/multi-select-option/multi-select-option.component';
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
@@ -132,7 +134,9 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         FileUploadComponent,
         ListFilterPipe,
         SortableComponent,
-        SubpositionFilterPipe
+        SubpositionFilterPipe,
+        MainSubInvoiceComponent,
+        MultiSelectOptionComponent
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -187,7 +191,7 @@ import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
         NgxStarsModule,
         DragDropModule,
         SubpositionFilterPipe,
-        
+        MultiSelectOptionComponent
     ]
 })
 export class SharedModule {

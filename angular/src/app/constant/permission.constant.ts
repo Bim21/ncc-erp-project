@@ -91,6 +91,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_Delete: "Projects.OutsourcingProjects.Delete",
        Projects_OutsourcingProjects_Close: "Projects.OutsourcingProjects.Close",
        Projects_OutsourcingProjects_ProjectDetail: "Projects.OutsourcingProjects.ProjectDetail",
+       Projects_OutsourcingProjects_CheckProjectInvoiceSetting: "Projects.OutsourcingProjects.CheckProjectInvoiceSetting",
 
        Projects_OutsourcingProjects_ProjectDetail_TabGeneral: "Projects.OutsourcingProjects.ProjectDetail.TabGeneral",
        Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View: "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.View",
@@ -163,10 +164,8 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Create",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Edit",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Delete",
-       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_View",
-       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.LastInvoiceNumber_Edit",
-       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_View",
-       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Discount_Edit",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.InvoiceSetting_View",
+       Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.InvoiceSetting_Edit",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Rate_View",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Note_Edit",
 
@@ -509,7 +508,7 @@ export const PERMISSIONS_CONSTANT = {
        Timesheets_TimesheetDetail_EditInvoiceInfo: "Timesheets.TimesheetDetail.EditInvoiceInfo",
        Timesheets_TimesheetDetail_UpdateNote: "Timesheets.TimesheetDetail.UpdateNote",
        Timesheets_TimesheetDetail_Delete: "Timesheets.TimesheetDetail.Delete",
-
+       Timesheets_TimesheetDetail_SendInvoiceToFinfast: "Timesheets.TimesheetDetail.SendInvoiceToFinfast",
        Timesheets_TimesheetDetail_UpdateBill: "Timesheets.TimesheetDetail.UpdateBill",
        Timesheets_TimesheetDetail_UpdateBill_Edit: "Timesheets.TimesheetDetail.UpdateBill.Edit",
        Timesheets_TimesheetDetail_UpdateBill_SetDone: "Timesheets.TimesheetDetail.UpdateBill.SetDone",

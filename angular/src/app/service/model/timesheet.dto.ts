@@ -1,3 +1,5 @@
+import { IdNameDto } from "./project-invoice-setting.dto";
+
 export class TimesheetDto {
 
     name: string;
@@ -26,6 +28,12 @@ export class TimesheetDetailDto {
     chargeType: string;
     totalAmountProjectBillInfomation: number;
     roundTotalAmountProjectBillInfomation: number;
+    isMainProjectInvoice: boolean;
+    mainProjectId?: number;
+    mainProjectName: string;
+    subProjects: IdNameDto[];
+    subProjectsName: string[];
+    subProjectIds: number[];
 }
 
 export class ProjectBillInfoDto{

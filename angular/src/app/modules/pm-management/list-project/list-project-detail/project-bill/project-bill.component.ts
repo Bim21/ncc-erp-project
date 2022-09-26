@@ -1,3 +1,5 @@
+import { AddSubInvoiceDialogComponent } from './add-sub-invoice-dialog/add-sub-invoice-dialog.component';
+import { ParentInvoice, SubInvoice } from './../../../../../service/model/bill-info.model';
 import { ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { UserService } from '@app/service/api/user.service';
@@ -10,7 +12,13 @@ import { Component, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditNoteDialogComponent } from './add-note-dialog/edit-note-dialog.component';
-import { APP_ENUMS } from '@shared/AppEnums';
+import { DropDownDataDto } from '@shared/filter/filter.component';
+import { ProjectDto } from '@app/service/model/list-project.dto';
+import { ListProjectService } from '@app/service/api/list-project.service';
+import { InvoiceSettingDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/project-bill/invoice-setting-dialog/invoice-setting-dialog.component';
+import { ProjectInvoiceSettingDto } from '@app/service/model/project-invoice-setting.dto';
+import { UpdateInvoiceDto } from '@app/service/model/updateInvoice.dto';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -21,6 +29,7 @@ import { APP_ENUMS } from '@shared/AppEnums';
 export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public userBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
+  public parentInvoice: ParentInvoice = new ParentInvoice();
   public isEditUserBill: boolean = false;
   public userBillProcess: boolean = false;
   public panelOpenState: boolean = false;
@@ -32,18 +41,23 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public rateInfo = {} as ProjectRateDto;
   public lastInvoiceNumber;
   public discount;
-  public chargeTypeList = [{name:'Daily', value: 0}, {name:'Monthly', value: 1}, {name:'Hourly', value: 2}];
+  public chargeTypeList = [{ name: 'Daily', value: 0 }, { name: 'Monthly', value: 1 }, { name: 'Hourly', value: 2 }];
   public isEditLastInvoiceNumber: boolean = false;
   public isEditDiscount: boolean = false;
-
+  public invoiceSettingOptions = Object.entries(this.APP_ENUM.InvoiceSetting).map((item) => ({
+    key: item[0],
+    value: item[1]
+  }))
+  public expandInvoiceSetting: true;
+  public listProjectOfClient: SubInvoice[] = []
+  public listSelectProject: DropDownDataDto[] = []
+  public currentProjectInfo: ProjectDto
+  public projectInvoiceSetting: ProjectInvoiceSettingDto;
+  public updateInvoiceDto: UpdateInvoiceDto = {} as UpdateInvoiceDto;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Delete;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_View;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_LastInvoiceNumber_Edit;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_View;
-  Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Discount_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View;
   Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit;
   constructor(
@@ -51,24 +65,33 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     private route: ActivatedRoute,
     injector: Injector,
     private userService: UserService,
-    private _modalService: BsModalService) {
+    private _modalService: BsModalService,
+    private dialog: MatDialog,
+    private projectService: ListProjectService) {
     super(injector)
     this.projectId = Number(this.route.snapshot.queryParamMap.get("id"));
-
   }
 
   ngOnInit(): void {
-
     this.getUserBill();
     this.getAllFakeUser();
-    this.getRate();
-    this.getLastInvoiceNumber();
-    this.getDiscount();
+    this.getParentInvoice();
+    this.getAllProject();
+    this.getCurrentProjectInfo();
+    this.getProjectBillInfo();
+
   }
+  isShowInvoiceSetting(){
+    return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_View)
+  }
+
+  canEditInvoiceSetting(){
+    return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_Edit)
+  }
+
   getRate() {
     this.projectUserBillService.getRate(this.projectId).subscribe(data => {
       this.rateInfo = data.result;
-      console.log('rate', this.rateInfo)
     })
   }
   getLastInvoiceNumber() {
@@ -76,12 +99,13 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.lastInvoiceNumber = data.result;
     })
   }
-  updateLastInvoiceNumber(){
+
+  updateLastInvoiceNumber() {
     let data = {
-      projectId : this.projectId,
-      lastInvoiceNumber : this.lastInvoiceNumber,
+      projectId: this.projectId,
+      lastInvoiceNumber: this.lastInvoiceNumber,
     }
-    if(+this.lastInvoiceNumber <= 0) {
+    if (+this.lastInvoiceNumber <= 0) {
       abp.message.error(this.l("Last Invoice Number must be bigger than 0!"));
       this.getLastInvoiceNumber();
       return;
@@ -98,12 +122,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.discount = data.result;
     })
   }
-  updateDiscount(){
+  updateDiscount() {
     let data = {
-      projectId : this.projectId,
-      discount : this.discount,
+      projectId: this.projectId,
+      discount: this.discount,
     }
-    if(+this.discount < 0) {
+    if (+this.discount < 0) {
       abp.message.error(this.l("Discount must be bigger than or equal to 0!"));
       this.getLastInvoiceNumber();
       return;
@@ -115,6 +139,24 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
   }
 
+  //#region Integrate Finfast
+  showAddSubInvoiceDialog(): void {
+    const subInvoiceDialog = this._modalService.show(AddSubInvoiceDialogComponent, {
+      class: 'modal',
+      initialState: {
+        projectId: this.projectId,
+        subInvoices: this.parentInvoice.subInvoices
+      }
+    })
+  }
+  private getParentInvoice(): void {
+    this.projectUserBillService.getParentInvoice(this.projectId)
+      .subscribe(response => {
+        if (!response.success) return;
+        this.parentInvoice = response.result;
+      });
+  }
+  //#endregion
 
   private getAllFakeUser() {
     this.userService.GetAllUserActive(false, true).pipe(catchError(this.userService.handleError)).subscribe(data => {
@@ -210,7 +252,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.isEditDiscount = false;
   }
 
-  updateNote(id, fullName,projectName,note) {
+  updateNote(id, fullName, projectName, note) {
     let editNoteDialog: BsModalRef;
     editNoteDialog = this._modalService.show(EditNoteDialogComponent, {
       class: 'modal',
@@ -227,5 +269,60 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     });
   }
 
+  getAllProject() {
+    this.projectUserBillService.getAllProjectCanUsing(this.projectId).subscribe(rs => {
+      this.listProjectOfClient = rs.result
+      this.listSelectProject = this.listProjectOfClient.map(item => ({
+        displayName: item.projectName,
+        value: item.projectId
+      }))
+    })
+  }
 
+  getCurrentProjectInfo(){
+    this.projectService.getProjectById(this.projectId).subscribe(rs => {
+      this.currentProjectInfo = rs.result
+    })
+  }
+
+  getProjectBillInfo(){
+    this.projectUserBillService.getBillInfo(this.projectId).subscribe((rs) => {
+      this.projectInvoiceSetting = rs.result;
+      this.updateInvoiceDto = {
+        discount: rs.result.discount,
+        invoiceNumber: rs.result.invoiceNumber,
+        isMainProjectInvoice: rs.result.isMainProjectInvoice,
+        mainProjectId: rs.result.mainProjectId,
+        projectId: this.projectId,
+        subProjectIds: rs.result.subProjectIds,
+      }
+      this.rateInfo = {
+        currencyName: rs.result.currencyName
+      } as ProjectRateDto
+      this.discount = rs.result.discount,
+      this.lastInvoiceNumber = rs.result.invoiceNumber
+    })
+  }
+
+  openInvoiceSettingDialog(){
+    const editDialogRef = this.dialog.open(InvoiceSettingDialogComponent, {
+      width: '700px',
+      data: {
+        dialogData: {
+          projectId: this.projectId,
+          projectName: this.currentProjectInfo.name,
+          updateInvoiceDto: this.updateInvoiceDto
+        }
+      }
+    })
+    editDialogRef.afterClosed().subscribe(() => {
+      this.getProjectBillInfo();
+      this.getParentInvoice();
+    })
+  }
+}
+
+export interface AddSubInvoicesDto {
+  parentInvoiceId: number,
+  subInvoiceIds: number[]
 }

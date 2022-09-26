@@ -25,9 +25,13 @@ namespace ProjectManagement.Services.Finance
         ) : base(httpClient, configuration, logger, abpSession, serviceName)
         {
         }
-        public async Task<CreateInvoiceDto> CreateInvoiceToFinance(List<CreateInvoiceDto> input)
+        public async Task<CreateInvoiceDto> CreateInvoiceToFinance(CreateInvoiceDto input)
         {
             return await PostAsync<CreateInvoiceDto>($"api/services/app/ProjectManagement/CreateInvoice", input);
+        }
+        public async Task<ResponseResultProjectDto> CreateAllInvoices(List<CreateInvoiceDto> input)
+        {
+            return await PostAsync<ResponseResultProjectDto>("api/services/app/ProjectTool/CreateAllInvoices", input);
         }
     }
 }

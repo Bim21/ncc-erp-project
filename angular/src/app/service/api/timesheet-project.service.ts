@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApiService } from './base-api.service';
-
+import { ApiResponse } from '../model/api-response.dto';
+import { ResponseResultProjectDto } from '../model/responseResultProject.dto'
 @Injectable({
   providedIn: 'root'
 })
@@ -102,4 +103,11 @@ export class TimesheetProjectService extends BaseApiService {
     return this.http.put<any>(this.rootUrl + '/UpdateTimesheetProject', item);
   }
   
+  checkTimesheetProjectSetting(timesheetId: number):Observable<ApiResponse<string>>{
+    return this.http.get<ApiResponse<string>>(this.rootUrl + `/CheckTimesheetProjectSetting?timesheetId=${timesheetId}`)
+  }
+
+  sendInvoiceToFinfast(timesheetId: number): Observable<ApiResponse<ResponseResultProjectDto>>{
+    return this.http.get<ApiResponse<ResponseResultProjectDto>>(this.rootUrl + `/SendInvoiceToFinfast?timesheetId=${timesheetId}`)
+  }
 }

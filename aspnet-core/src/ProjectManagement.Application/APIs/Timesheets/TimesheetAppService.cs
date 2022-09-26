@@ -135,8 +135,8 @@ namespace ProjectManagement.APIs.TimeSheets
 
             var mapProject = await WorkScope.GetAll<Project>().Where(s => projectIds.Contains(s.Id)).ToDictionaryAsync(s => s.Id);
 
-            var listProjectIdToBillInfo = listPUB.GroupBy(s => new { s.ProjectId, s.Discount, s.TransferFee, s.LastInvoiceNumber })
-                .Select(s => new { s.Key.ProjectId, s.Key.Discount, s.Key.TransferFee, s.Key.LastInvoiceNumber, ListBillInfo = s.ToList() });
+            var listProjectIdToBillInfo = listPUB.GroupBy(s => new { s.ProjectId, s.Discount, s.TransferFee, s.LastInvoiceNumber, s.ParentInvoiceId })
+                .Select(s => new { s.Key.ProjectId, s.Key.Discount, s.Key.TransferFee, s.Key.LastInvoiceNumber, s.Key.ParentInvoiceId, ListBillInfo = s.ToList() });
 
 
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
@@ -154,7 +154,8 @@ namespace ProjectManagement.APIs.TimeSheets
                     Discount = item.Discount,
                     TransferFee = item.TransferFee,
                     WorkingDay = input.TotalWorkingDay.Value,
-                    InvoiceNumber = lastInvoiceNumber
+                    InvoiceNumber = lastInvoiceNumber,
+                    ParentInvoiceId = item.ParentInvoiceId
                 };
 
                 listTimesheetProject.Add(timesheetProject);

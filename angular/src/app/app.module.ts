@@ -181,6 +181,8 @@ import { EditNoteDialogComponent } from './modules/pm-management/list-project/li
 import { FormSendRecruitmentComponent } from './modules/delivery-management/delivery/request-resource-tab/form-send-recruitment/form-send-recruitment.component';
 import { PositionComponent } from './modules/admin/position/position.component';
 import { CreateUpdatePositionComponent } from './modules/admin/position/create-update-position/create-update-position.component';
+import { AddSubInvoiceDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/add-sub-invoice-dialog/add-sub-invoice-dialog.component';
+import { InvoiceSettingDialogComponent } from './modules/pm-management/list-project/list-project-detail/project-bill/invoice-setting-dialog/invoice-setting-dialog.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TrainingRequestTabComponent } from './modules/delivery-management/delivery/training-request-tab/training-request-tab.component';
 import { CreateUpdateTrainingRequestComponent } from './modules/delivery-management/delivery/training-request-tab/create-update-training-request/create-update-training-request.component';
@@ -349,6 +351,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     FormSendRecruitmentComponent,
     PositionComponent,
     CreateUpdatePositionComponent,
+    AddSubInvoiceDialogComponent,
+    InvoiceSettingDialogComponent,
     TrainingRequestTabComponent,
     CreateUpdateTrainingRequestComponent
   ],

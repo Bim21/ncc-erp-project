@@ -83,6 +83,10 @@ namespace ProjectManagement.Services
                     }
                     return JsonConvert.DeserializeObject<T>(responseContent);
                 }
+                else
+                {
+                    logger.LogError($"Post: {fullUrl} error: {response.Content}");
+                }
             }
             catch (Exception ex)
             {
