@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
+using NccCore.Extension;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {
@@ -79,15 +80,17 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public string ClientCode { get; set; }
         public string PmBranchColor { get; set; }
         public string PmBranchDisplayName { get; set; }
-        public double? TotalAmountProjectBillInfomation => GetIntoMoneyProject();
-        public double RoundTotalAmountProjectBillInfomation => Math.Round(TotalAmountProjectBillInfomation.Value);
+        public double TotalAmountProjectBillInfomation => GetIntoMoneyProject();
+        public double RoundTotalAmountProjectBillInfomation => Math.Round(TotalAmountProjectBillInfomation);
         private double GetIntoMoneyProject()
         {
-            double amount = ProjectBillInfomation.Sum(x => x.Amount).Value;
-            if (this.ProjectBillInfomation.DefaultIfEmpty() == default)
+            if (this.ProjectBillInfomation == null || ProjectBillInfomation.IsEmpty())
             {
-                return default;
+                return 0;
             }
+
+            double amount = ProjectBillInfomation.Sum(x => x.Amount);
+            
             if (amount > 0)
             {
                 return (100 - Discount) / 100 * amount + TransferFee;
