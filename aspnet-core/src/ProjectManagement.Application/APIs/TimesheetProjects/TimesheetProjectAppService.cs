@@ -144,7 +144,34 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var query = GetTimesheetDetail(input, timesheetId).ApplySearchAndFilter(input);
             var list = await query.TakePage(input).ToListAsync();
+                       
+            UpdateMainSubInInvoiceSetting(list, timesheetId);
 
+            var total = await query.CountAsync();
+
+            var gridResult = new GridResult<GetTimesheetDetailDto>(list, total);
+
+            var listTotalAmountByCurrency = query.ToList().GroupBy(x => x.Currency)
+                                    .Select(x => new TotalAmountByCurrencyDto
+                                    {
+                                        CurrencyName = x.Key,
+                                        Amount = x.Sum(x => x.TotalAmountProjectBillInfomation)
+                                    }).ToList();
+
+
+
+            var result = new ResultTimesheetDetail
+            {
+                ListTimesheetDetail = gridResult,
+                ListTotalAmountByCurrency = listTotalAmountByCurrency,
+            };
+
+            return result;
+        }
+
+
+        private void UpdateMainSubInInvoiceSetting(List<GetTimesheetDetailDto> listToUpdate, long timesheetId)
+        {
             var listProject = WorkScope.GetAll<Project>()
               .Where(s => s.ProjectType == ProjectType.ODC || s.ProjectType == ProjectType.TimeAndMaterials || s.ProjectType == ProjectType.FIXPRICE)
               .Select(s => new { s.Id, s.Name })
@@ -157,42 +184,24 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 .Select(s => new { s.Id, s.ParentInvoiceId, TSProjectName = s.Project.Name, s.ProjectId })
                 .ToList();
 
-            list.ForEach(dto =>
+            var discountOfMain = listToUpdate.Where(s => s.IsMainProjectInvoice).Select(s => s.Discount).FirstOrDefault();
+
+            listToUpdate.ForEach(dto =>
             {
                 if (dto.IsMainProjectInvoice)
                 {
                     dto.SubProjects = lstTSProject.Where(s => s.ParentInvoiceId.HasValue)
                     .Where(s => s.ParentInvoiceId == dto.ProjectId)
-                    .Select(s => new IdNameDto { Id = s.ProjectId, Name = s.TSProjectName }).ToList();
+                    .Select(s => new IdNameDto { Id = s.ProjectId, Name = s.TSProjectName }).ToList();                   
                 }
                 else
                 {
                     dto.MainProjectName = dicProjectIdToName.ContainsKey(dto.MainProjectId.Value) ? dicProjectIdToName[dto.MainProjectId.Value] : null;
+                    dto.TransferFee = 0;
+                    dto.Discount = discountOfMain != default ? discountOfMain : dto.Discount;
                 }
             });
 
-            var total = await query.CountAsync();
-
-            var listTimesheetDetail = new GridResult<GetTimesheetDetailDto>(list, total);
-
-            var listTotalAmountByCurrency = query.ToList().GroupBy(x => x.Currency)
-                                    .Select(x => new TotalAmountByCurrencyDto
-                                    {
-                                        CurrencyName = x.Key,
-                                        Amount = x.Sum(x => x.TotalAmountProjectBillInfomation.Value)
-                                    }).ToList();
-
-
-
-
-
-            var result = new ResultTimesheetDetail
-            {
-                ListTimesheetDetail = listTimesheetDetail,
-                ListTotalAmountByCurrency = listTotalAmountByCurrency,
-            };
-
-            return result;
         }
 
         private IOrderedQueryable<GetTimesheetDetailDto> GetTimesheetDetail(GridParam input, long timesheetId)
@@ -678,7 +687,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 .Where(s => s.WorkingTime > 0)
                 .Where(s => input.ProjectIds.Contains(s.ProjectId));
 
-            result.Info = await qtimesheetProject
+            result.Info = qtimesheetProject
+                .Where(s => !s.ParentInvoiceId.HasValue)
                 .Select(s => new InvoiceGeneralInfo
                 {
                     ClientAddress = s.Project.Client.Address,
@@ -691,11 +701,16 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     Year = s.Timesheet.Year,
                     Month = s.Timesheet.Month,
                     InvoiceDateSetting = s.Project.Client.InvoiceDateSetting
-                }).FirstOrDefaultAsync();
+                }).FirstOrDefault();
+
+            if (result.Info == default)
+            {
+                throw new UserFriendlyException("You have to select at least 1 project is MAIN in Invoice Setting");
+            }
 
 
             result.TimesheetUsers = await (from tpb in qtimesheetProjectBill
-                                           from tp in qtimesheetProject
+                                           from tp in qtimesheetProject.Select(s => new {s.ProjectId, s.WorkingDay})
                                            where tpb.ProjectId == tp.ProjectId
                                            select new TimesheetUser
                                            {
