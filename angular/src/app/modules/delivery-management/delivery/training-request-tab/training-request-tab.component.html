@@ -252,9 +252,8 @@
               <tr>
                 <th
                   *ngFor="let thead of theadTable; let i = index"
-                  [ngStyle]="styleThead(thead)"
                 >
-                  <div class="row sortHeader">
+                  <div class="row sortHeader" [ngStyle]="styleThead(thead)" >
                     <div class="col-xl-8 col-lg-12 rsp-th-name text-left">
                       {{ thead.name }}
                     </div>
@@ -423,8 +422,8 @@
                 <td
                   style="
                     white-space: normal;
-                    max-width: 250px;
-                    min-width: 150px;
+                    max-width: 140px;
+                    min-width: 100px;
                   "
                 >
                   <div class="row">
@@ -457,8 +456,8 @@
                 <td
                   style="
                     white-space: normal;
-                    max-width: 250px;
-                    min-width: 150px;
+                    max-width: 160px;
+                    min-width: 100px;
                   "
                 >
                   <div class="row">
