@@ -125,6 +125,7 @@ namespace ProjectManagement.APIs.TrainingRequests
 
             List<long> createdRequestIds = new List<long>();
             var request = ObjectMapper.Map<ResourceRequest>(input);
+            request.Level = UserLevel.Intern_0;
             request.Id = await WorkScope.InsertAndGetIdAsync(request);
             createdRequestIds.Add(request.Id);
             CurrentUnitOfWork.SaveChanges();

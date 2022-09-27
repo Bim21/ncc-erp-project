@@ -99,7 +99,7 @@
               style="text-align: end"
             >
               <div class="row">
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-4 col-lg-4" style="margin-left: 36px;">
                   <div class="row">
                     <div
                       class="col-md-2 col-xl-4 d-flex rsp-label justify-content-end align-items-center"
@@ -127,34 +127,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-xl-4 col-lg-4">
-                  <div class="row">
-                    <div
-                      class="col-md-2 col-xl-4 d-flex rsp-label justify-content-end align-items-center"
-                    >
-                      <label class="mr-2 mb-0">Level:</label>
-                    </div>
-                    <div class="col-md-10 col-xl-8 rsp-group-form-field">
-                      <mat-form-field
-                        appearance="outline"
-                        class="rsp-form-field"
-                      >
-                        <mat-select
-                          [(ngModel)]="selectedLevel"
-                          (selectionChange)="getDataPage(1)"
-                        >
-                          <mat-option
-                            *ngFor="let level of listLevels"
-                            [value]="level.id"
-                          >
-                            {{ level.name }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-4 col-lg-4">
+                <div class="col-xl-4 col-lg-4" style="margin-left: 66px">
                   <div class="row">
                     <div
                       class="col-md-2 col-xl-4 d-flex rsp-label justify-content-end align-items-center"
@@ -220,7 +193,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xl-1 pt-1 clear" style="text-align: end">
+            <div class="col-xl-1 pt-1 clear" style="margin-left: -76px;">
               <div class="row">
                 <div class="rsp-total-rows" style="display: none">
                   <label class="mb-0">Total:</label>
@@ -229,7 +202,7 @@
                 <div class="col-md-12 clear-button">
                   <button
                     type="button"
-                    class="btn btn-light"
+                    class="btn btn-outline-secondary"
                     matTooltip="Clear Filter"
                     (click)="clearAllFilter()"
                   >
@@ -328,20 +301,12 @@
                 <td class="text-center">
                   {{ item.quantity }}
                 </td>
-                <td>
+                <td style="width: 150px;">
                   <ul class="pl-3 m-0">
                     <li *ngFor="let skill of item.skills">
                       {{ skill.name }}
                     </li>
                   </ul>
-                </td>
-                <td class="text-center">
-                  <span
-                    class="ml-1 badge text-white"
-                    [ngStyle]="Utils.getUserLevel(item.level).style"
-                  >
-                    {{ item.levelName }}
-                  </span>
                 </td>
                 <td class="text-center">
                   <b>{{ item.creationTime | date: "dd/MM/yyyy" }}</b>
@@ -411,6 +376,9 @@
                           TrainingRequest_PlanNewTrainingForRequest
                         )
                       "
+                      style="width: 80px;
+                      max-height: 80px;
+                      white-space: normal;"
                     >
                       <i
                         class="fa fa-edit"
@@ -422,7 +390,7 @@
                 <td
                   style="
                     white-space: normal;
-                    max-width: 140px;
+                    max-width: 150px;
                     min-width: 100px;
                   "
                 >
@@ -441,11 +409,11 @@
                       </pre>
                     </div>
                     <div
-                      class="col-md-2"
+                      class="col-md-2" style="margin-left: -10px;"
                       *ngIf="permission.isGranted(TrainingRequest_EditPmNote)"
                     >
                       <i
-                        class="fa fa-edit"
+                        class="fa fa-edit mr-1"
                         (click)="
                           openModal(item.name, 'PM', item.pmNote, item.id)
                         "
@@ -456,8 +424,8 @@
                 <td
                   style="
                     white-space: normal;
-                    max-width: 160px;
-                    min-width: 100px;
+                    max-width: 250px;
+                    min-width: 150px;
                   "
                 >
                   <div class="row">
