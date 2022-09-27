@@ -148,14 +148,14 @@ namespace ProjectManagement.APIs.TimesheetProjects
             var listProject = WorkScope.GetAll<Project>()
               .Where(s => s.ProjectType == ProjectType.ODC || s.ProjectType == ProjectType.TimeAndMaterials || s.ProjectType == ProjectType.FIXPRICE)
               .Select(s => new { s.Id, s.Name })
-              .AsEnumerable();
+              .ToList();
 
             var dicProjectIdToName = listProject.ToDictionary(s => s.Id, s => s.Name);
 
             var lstTSProject = WorkScope.GetAll<TimesheetProject>()
                 .Where(s => s.TimesheetId == timesheetId)
                 .Select(s => new { s.Id, s.ParentInvoiceId, TSProjectName = s.Project.Name, s.ProjectId })
-                .AsEnumerable();
+                .ToList();
 
             list.ForEach(dto =>
             {
@@ -1011,7 +1011,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
             timesheetProject.TransferFee = input.TransferFee;
             timesheetProject.Discount = input.Discount;
 
-            var listTimesheetProjects = WorkScope.GetAll<TimesheetProject>().Where(x => x.TimesheetId == timesheetProject.TimesheetId).Where(x => x.ParentInvoiceId == timesheetProject.ProjectId).ToList();
+            var listTimesheetProjects = WorkScope.GetAll<TimesheetProject>()
+                .Where(x => x.TimesheetId == timesheetProject.TimesheetId)
+                .Where(x => x.ParentInvoiceId == timesheetProject.ProjectId)
+                .ToList();
+
             listTimesheetProjects.ForEach(tsp =>
             {
                 tsp.ParentInvoiceId = null;
@@ -1047,7 +1051,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
              .Where(t => t.TimesheetId == timesheetId)
              .Where(s => s.Project.ProjectType == ProjectType.ODC || s.Project.ProjectType == ProjectType.TimeAndMaterials || s.Project.ProjectType == ProjectType.FIXPRICE)
              .Select(s => new { Id = s.Id, ProjectName = s.Project.Name,ParentInvoiceId = s.ParentInvoiceId, ProjectId = s.Project.Id })
-             .AsEnumerable();
+             .ToList();
+
             var sb = new StringBuilder();
             foreach (var project in listTimesheetProject)
             {
