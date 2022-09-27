@@ -33,3 +33,7 @@ table td {
 .badge {
     height: fit-content;
 }
+
+.col-lg-4 {
+    margin-left: 65px;
+}

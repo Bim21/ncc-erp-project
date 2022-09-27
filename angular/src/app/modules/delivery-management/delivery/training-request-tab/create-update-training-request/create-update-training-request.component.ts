@@ -19,7 +19,6 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
   public isLoading: boolean = false;
   public listProject: ProjectDto[] = [];
   public priorityList: string[] = Object.keys(this.APP_ENUM.Priority)
-  public userLevelList: string[] = Object.keys(this.APP_ENUM.UserLevel)
   public trainingRequestDto = {} as TrainingRequestDto;
   public title: string = ""
   public searchProject: string = ""
@@ -28,6 +27,9 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
   public listSkillDetail: any[] = []
   public filteredSkillList: SkillDto[] = []
   public typeControl: string    //include: request, requestProject
+
+  year: number = new Date().getFullYear();
+  month: number = new Date().getMonth();
 
   constructor(
     injector: Injector,
@@ -48,6 +50,11 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
       this.trainingRequestDto = new TrainingRequestDto()
       //if create from resource request project then command = 'create' & projectId != 0
       //assign projectId in dto = projectId
+      if(this.month == 12){
+        this.trainingRequestDto.timeNeed = new Date(this.year + 1, 1, 15);
+      }else{
+        this.trainingRequestDto.timeNeed = new Date(this.year, this.month + 1, 15);
+      }
       if (this.data.item.projectId > 0) {
         this.trainingRequestDto.projectId = this.data.item.projectId
       }
@@ -57,8 +64,8 @@ export class CreateUpdateTrainingRequestComponent extends AppComponentBase imple
     }
     this.listSkill = this.data.skills
     this.filteredSkillList = this.data.skills
-    this.userLevelList = this.data.levels
-    this.trainingRequestDto.level = this.APP_ENUM.UserLevel.Intern_3
+
+    this.trainingRequestDto.level = this.APP_ENUM.UserLevel.Intern_0
   }
 
   ngAfterViewChecked(): void {

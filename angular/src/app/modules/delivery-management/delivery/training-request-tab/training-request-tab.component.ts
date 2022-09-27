@@ -42,7 +42,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
   public listSkills: SkillDto[] = [];
   public listProjectUserRoles: IDNameDto[] = []
   public listPriorities: any[] = []
-  public selectedLevel: any = this.APP_ENUM.UserLevel.Intern_3
+  public selectedLevel: any = this.APP_ENUM.UserLevel.Intern_0
   public isAndCondition: boolean = false;
   public skillIds: number[]
   public theadTable: THeadTable[] = [
@@ -50,11 +50,10 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     { name: 'Priority', sortName: 'priority', defaultSort: 'DESC', width: '88px' },
     { name: 'Project', sortName: 'projectName', defaultSort: '', width: '88px' },
     { name: 'Quantity', sortName: 'quantity', defaultSort: '', width: '95px' },
-    { name: 'Skill', width: '35px'  },
-    { name: 'Level', sortName: 'level', defaultSort: '' },
+    { name: 'Skill', width: '5px'  },
     { name: 'Time request', sortName: 'creationTime', defaultSort: '', width: '128px' },
     { name: 'Time need', sortName: 'timeNeed', defaultSort: '', width: '108px' },
-    { name: 'Planned resource', width: '05px' },
+    { name: 'Planned resource'},
     { name: 'PM Note' },
     { name: 'HR/DM Note' },
     { name: 'Status' },
@@ -277,7 +276,6 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     requestBody.isAndCondition = this.isAndCondition
     let objFilter = [
       { name: 'status', isTrue: false, value: this.selectedStatus },
-      { name: 'level', isTrue: false, value: this.selectedLevel },
     ];
 
     objFilter.forEach((item) => {
@@ -332,7 +330,7 @@ export class TrainingRequestTabComponent extends PagedListingComponentBase<Train
     this.filterItems = []
     this.searchText = ''
     this.skillIds = []
-    this.selectedLevel = this.APP_ENUM.UserLevel.Intern_3
+    this.selectedLevel = this.APP_ENUM.UserLevel.Intern_0
     this.selectedStatus = 0
     this.changeSortableByName('priority', 'DESC')
     this.sortable = new SortableModel('', 1, '')
