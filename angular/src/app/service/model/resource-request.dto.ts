@@ -25,6 +25,7 @@ export class ResourceRequestDto {
     statusName: string;
     priorityName: string;
     levelName: string;
+    quantity: number;
 }
 
 export class ResourceRequestTrainingDto {

@@ -176,6 +176,7 @@ namespace ProjectManagement.APIs.ResourceRequests
 
             var resourceRequest = await WorkScope.GetAsync<ResourceRequest>(input.Id);
             ObjectMapper.Map(input, resourceRequest);
+            resourceRequest.Quantity = 1;
             await WorkScope.UpdateAsync(resourceRequest);
 
             var dbRequestSkills = await WorkScope.GetAll<ResourceRequestSkill>()

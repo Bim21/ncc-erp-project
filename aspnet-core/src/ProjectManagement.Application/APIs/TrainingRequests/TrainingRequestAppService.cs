@@ -256,15 +256,16 @@ namespace ProjectManagement.APIs.TrainingRequests
                 throw new UserFriendlyException($"Request Id {requestId} is for your project. You can't change to other project");
             }
 
-            /*      var isGrantedCancelAll = IsGranted(PermissionNames.ResourceRequest_CancelAllRequest);*/
+            var isGrantedCancelAll = IsGranted(PermissionNames.TrainingRequest_CancelAllRequest);
 
-            if (project.PMId != AbpSession.UserId.Value)
+            if (!isGrantedCancelAll && project.PMId != AbpSession.UserId.Value)
             {
                 throw new UserFriendlyException($"Request Id {requestId} is for project that you are NOT PM.");
             }
         }
 
         [HttpPost]
+        [AbpAuthorize(PermissionNames.TrainingRequest_CancelAllRequest, PermissionNames.TrainingRequest_CancelMyRequest)]
         public async Task<GetResourceRequestDto> CancelRequest(long requestId)
         {
             await CheckRequestIsForMyProject(requestId, null);

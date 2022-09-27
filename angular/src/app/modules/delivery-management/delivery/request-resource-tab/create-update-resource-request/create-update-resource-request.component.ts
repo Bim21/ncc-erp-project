@@ -104,7 +104,7 @@ export class CreateUpdateResourceRequestComponent extends AppComponentBase imple
       }, () => this.isLoading = false)
     } else {
       this.resourceRequestService.update(request).pipe(catchError(this.resourceRequestService.handleError)).subscribe((res) => {
-        let updateRequest = {...request, }
+        let updateRequest = {...request, quantity: this.resourceRequestDto.quantity};
         abp.notify.success("Update Successfully!");
         this.dialogRef.close(res.result);
       }, () => this.isLoading = false)
