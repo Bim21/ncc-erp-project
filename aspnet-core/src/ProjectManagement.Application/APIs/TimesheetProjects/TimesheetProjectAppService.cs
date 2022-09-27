@@ -151,7 +151,23 @@ namespace ProjectManagement.APIs.TimesheetProjects
 
             var gridResult = new GridResult<GetTimesheetDetailDto>(list, total);
 
-            var listTotalAmountByCurrency = query.ToList().GroupBy(x => x.Currency)
+            var listAllProject = query.ToList();
+
+            var dicProjectIdToInvoiceInfo = listAllProject.Where(s => s.IsMainProjectInvoice)
+                .GroupBy(s => s.ProjectId)
+                .ToDictionary(s => s.Key, s => s.Select(x => new {x .Discount, x.TransferFee }).FirstOrDefault());
+
+            foreach ( var item in listAllProject)
+            {
+                if (!item.IsMainProjectInvoice)
+                {
+                    item.Discount = dicProjectIdToInvoiceInfo.ContainsKey(item.ParentInvoiceId.Value) ? dicProjectIdToInvoiceInfo[item.ParentInvoiceId.Value].Discount : 0;
+                    item.TransferFee = 0;
+                }
+            }
+            
+
+            var listTotalAmountByCurrency = listAllProject.GroupBy(x => x.Currency)
                                     .Select(x => new TotalAmountByCurrencyDto
                                     {
                                         CurrencyName = x.Key,
