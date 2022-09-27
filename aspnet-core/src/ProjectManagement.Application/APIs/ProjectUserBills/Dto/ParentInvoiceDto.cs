@@ -19,4 +19,11 @@ namespace ProjectManagement.APIs.ProjectUserBills.Dto
         public long? ParentId { get; set; }
         public string? ParentName { get; set; }
     }
+    public class ProjectInvoiceDto
+    {
+        public long ProjectId { get; set; }
+        public string Name { get; set; }
+        public long? ParentInvoiceId { get; set; }
+        public long? ClientId { get; set; }
+    }
 }

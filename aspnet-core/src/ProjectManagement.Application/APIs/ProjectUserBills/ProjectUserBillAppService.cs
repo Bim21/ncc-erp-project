@@ -292,38 +292,55 @@ namespace ProjectManagement.APIs.ProjectUserBills
             return input;
         }
         #region Integrate Finfast
+
+        private IQueryable<ProjectInvoiceDto> GetAllProject()
+        {
+            return WorkScope.GetAll<Project>()
+                 .Select(x => new ProjectInvoiceDto
+                 {
+                     Name = x.Name,
+                     ProjectId = x.Id,
+                     ParentInvoiceId = x.ParentInvoiceId,
+                     ClientId = x.ClientId,
+                 });
+        }
+
         [HttpGet]
         public async Task<List<SubInvoiceDto>> GetAllProjectCanUsing(long projectId)
         {
             var clientId = WorkScope.Get<Project>(projectId).ClientId;
-            return await WorkScope.GetAll<Project>()
-                .Where(p => p.ClientId == clientId)
-                .Where(s => s.Id != projectId)
+            var listProjectAll = GetAllProject();
+            return listProjectAll
+                .Where(pa => pa.ClientId == clientId)
+                .Where(pa => pa.ProjectId != projectId)
                 .Select(x => new SubInvoiceDto
                 {
-                    ProjectId = x.Id,
+                    ProjectId = x.ProjectId,
                     ProjectName = x.Name,
                     ParentId = x.ParentInvoiceId,
-                    ParentName = x.ParentInvoiceId.HasValue ? WorkScope.Get<Project>((long)x.ParentInvoiceId).Name: null,
-                }).ToListAsync();
+                    ParentName = x.ParentInvoiceId.HasValue ?
+                        listProjectAll.FirstOrDefault(pa=>pa.ProjectId==x.ParentInvoiceId.Value).Name : null,
+                }).ToList();
         }
         [HttpGet]
         public async Task<ParentInvoiceDto> GetParentInvoiceByProject(long projectId)
         {
-            var project = await WorkScope.GetAll<Project>()
-                .Where(s => s.Id == projectId)
+            var listProjectAll = GetAllProject();
+            return  listProjectAll
+                .Where(s => s.ProjectId == projectId)
                 .Select(s => new ParentInvoiceDto
                 {
-                    ProjectId = s.Id,
+                    ProjectId = s.ProjectId,
                     ParentId = s.ParentInvoiceId,
-                    ParentName = s.ParentInvoiceId.HasValue ? WorkScope.Get<Project>((long)s.ParentInvoiceId).Name : null,
-                    SubInvoices = WorkScope.GetAll<Project>().Where(s => s.ParentInvoiceId == projectId).Select(x => new SubInvoiceDto
-                    {
-                        ProjectId = x.Id,
-                        ProjectName = x.Name
-                    }).ToList()
-                }).FirstOrDefaultAsync();
-            return project;
+                    ParentName = s.ParentInvoiceId.HasValue ? listProjectAll
+                                .FirstOrDefault(pa => pa.ProjectId == s.ParentInvoiceId.Value).Name : null,
+                    SubInvoices = listProjectAll.Where(s => s.ParentInvoiceId == projectId)
+                                                .Select(x => new SubInvoiceDto
+                                                {
+                                                    ProjectId = x.ProjectId,
+                                                    ProjectName = x.Name
+                                                }).ToList()
+                }).FirstOrDefault();
         }
         [HttpPost]
         public async Task<string> AddSubInvoice(AddSubInvoiceDto input)
