@@ -428,13 +428,13 @@ namespace ProjectManagement.APIs.ProjectUserBills
         }
 
         [HttpGet]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting)]
+        [AbpAuthorize]
         public string CheckInvoiceSetting()
         {
             var listProject = WorkScope.GetAll<Project>()
              .Where(s => s.ProjectType == ProjectType.ODC || s.ProjectType == ProjectType.TimeAndMaterials || s.ProjectType == ProjectType.FIXPRICE)
              .Select(s => new { s.Id, s.Name, s.ParentInvoiceId })
-             .AsEnumerable();
+             .ToList();
 
             var sb = new StringBuilder();
             foreach(var project in listProject)
