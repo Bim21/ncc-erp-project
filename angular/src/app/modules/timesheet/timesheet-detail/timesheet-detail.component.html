@@ -250,7 +250,8 @@
                             <p class="m-0">Transfer Fee: <strong>{{ item.transferFee }}</strong></p>
                             <p class="m-0">Discount: <strong>{{ item.discount }} (%)</strong></p>
                             <p *ngIf="item.isMainProjectInvoice" class="m-0">
-                              <span class="text-primary"><strong>Main </strong></span>
+                              <span class="text-danger"><strong>Main </strong></span>
+                              <span> of </span>
                             </p>
                             <ng-container *ngIf="item.isMainProjectInvoice">
                               <p *ngFor="let project of item.subProjects"  class="m-0">                              
@@ -258,7 +259,7 @@
                               </p>
                             </ng-container>
                            <p *ngIf="!item.isMainProjectInvoice" class="m-0">
-                              <span class="text-secondary"><strong>Sub</strong></span>
+                              <span><strong>Sub</strong></span>
                               <span> of </span>
                               <span class="badge bg-primary">{{item.mainProjectName}}</span>
                            </p>
