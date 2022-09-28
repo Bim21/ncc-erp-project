@@ -161,7 +161,10 @@ namespace ProjectManagement.APIs.TimesheetProjects
             {
                 if (!item.IsMainProjectInvoice)
                 {
-                    item.Discount = dicProjectIdToInvoiceInfo.ContainsKey(item.ParentInvoiceId.Value) ? dicProjectIdToInvoiceInfo[item.ParentInvoiceId.Value].Discount : 0;
+                    if (item.MainProjectId.HasValue)
+                    {
+                        item.Discount = dicProjectIdToInvoiceInfo.ContainsKey(item.MainProjectId.Value) ? dicProjectIdToInvoiceInfo[item.MainProjectId.Value].Discount : 0;
+                    }                    
                     item.TransferFee = 0;
                 }
             }

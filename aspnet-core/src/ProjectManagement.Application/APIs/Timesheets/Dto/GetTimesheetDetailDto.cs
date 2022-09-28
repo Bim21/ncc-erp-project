@@ -44,8 +44,8 @@ namespace ProjectManagement.APIs.Timesheets.Dto
 
         public string ProjectCurrency { get; set; }
         public ChargeType? ProjectChargeType { get; set; }
-        public string? ParentName { get; set; }
-        public long? ParentInvoiceId { get; set; }
+        //public string? ParentName { get; set; }
+        //public long? ParentInvoiceId { get; set; }
         public IEnumerable<SubInvoiceDto> SubInvoices { get; set; }
             
         public string Currency
