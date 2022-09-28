@@ -144,31 +144,33 @@ namespace ProjectManagement.APIs.TimesheetProjects
         {
             var query = GetTimesheetDetail(input, timesheetId).ApplySearchAndFilter(input);
             var list = await query.TakePage(input).ToListAsync();
-                       
-            UpdateMainSubInInvoiceSetting(list, timesheetId);
-
-            var total = await query.CountAsync();
-
-            var gridResult = new GridResult<GetTimesheetDetailDto>(list, total);
 
             var listAllProject = query.ToList();
 
-            var dicProjectIdToInvoiceInfo = listAllProject.Where(s => s.IsMainProjectInvoice)
-                .GroupBy(s => s.ProjectId)
-                .ToDictionary(s => s.Key, s => s.Select(x => new {x .Discount, x.TransferFee }).FirstOrDefault());
+            var listMainProjectInfo = listAllProject.Where(s => s.IsMainProjectInvoice).Select(s => new { s.ProjectId, s.ProjectName, s.Discount, s.TransferFee }).ToList();
 
-            foreach ( var item in listAllProject)
-            {
-                if (!item.IsMainProjectInvoice)
-                {
-                    if (item.MainProjectId.HasValue)
-                    {
-                        item.Discount = dicProjectIdToInvoiceInfo.ContainsKey(item.MainProjectId.Value) ? dicProjectIdToInvoiceInfo[item.MainProjectId.Value].Discount : 0;
-                    }                    
-                    item.TransferFee = 0;
-                }
-            }
-            
+            var listSubProject = listAllProject.Where(s => s.MainProjectId.HasValue).Select(s => new {s.ProjectId, MainProjectId = s.MainProjectId.Value, s.ProjectName }).ToList();
+
+            var dicProjectIdToInvoiceInfo = (from m in listMainProjectInfo
+                       join s in listSubProject on m.ProjectId equals s.MainProjectId into ss
+                       select new
+                       {
+                           m.ProjectId,
+                           InvoiceInfo = new InvoiceSettingDto
+                           {
+                               ProjectName = m.ProjectName,
+                               TransferFee = m.TransferFee,
+                               Discount = m.Discount,
+                               SubProjects = ss.Select(x => new IdNameDto { Id = x.ProjectId, Name = x.ProjectName }).ToList()
+                           }
+                       }).ToDictionary(s => s.ProjectId, s => s.InvoiceInfo);
+        
+            UpdateInvoiceSetting(list, dicProjectIdToInvoiceInfo);
+
+            var total = await query.CountAsync();
+            var gridResult = new GridResult<GetTimesheetDetailDto>(list, total);
+
+            UpdateInvoiceSetting(listAllProject, dicProjectIdToInvoiceInfo);
 
             var listTotalAmountByCurrency = listAllProject.GroupBy(x => x.Currency)
                                     .Select(x => new TotalAmountByCurrencyDto
@@ -176,7 +178,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                                         CurrencyName = x.Key,
                                         Amount = x.Sum(x => x.TotalAmountProjectBillInfomation)
                                     }).ToList();
-
 
 
             var result = new ResultTimesheetDetail
@@ -188,36 +189,23 @@ namespace ProjectManagement.APIs.TimesheetProjects
             return result;
         }
 
-
-        private void UpdateMainSubInInvoiceSetting(List<GetTimesheetDetailDto> listToUpdate, long timesheetId)
+        private void UpdateInvoiceSetting(List<GetTimesheetDetailDto> listToUpdate, Dictionary<long, InvoiceSettingDto> dicProjectIdToInvoiceInfo)
         {
-            var listProject = WorkScope.GetAll<Project>()
-              .Where(s => s.ProjectType == ProjectType.ODC || s.ProjectType == ProjectType.TimeAndMaterials || s.ProjectType == ProjectType.FIXPRICE)
-              .Select(s => new { s.Id, s.Name })
-              .ToList();
-
-            var dicProjectIdToName = listProject.ToDictionary(s => s.Id, s => s.Name);
-
-            var lstTSProject = WorkScope.GetAll<TimesheetProject>()
-                .Where(s => s.TimesheetId == timesheetId)
-                .Select(s => new { s.Id, s.ParentInvoiceId, TSProjectName = s.Project.Name, s.ProjectId })
-                .ToList();
-
-            var discountOfMain = listToUpdate.Where(s => s.IsMainProjectInvoice).Select(s => s.Discount).FirstOrDefault();
-
             listToUpdate.ForEach(dto =>
             {
                 if (dto.IsMainProjectInvoice)
                 {
-                    dto.SubProjects = lstTSProject.Where(s => s.ParentInvoiceId.HasValue)
-                    .Where(s => s.ParentInvoiceId == dto.ProjectId)
-                    .Select(s => new IdNameDto { Id = s.ProjectId, Name = s.TSProjectName }).ToList();                   
+                    dto.SubProjects = dicProjectIdToInvoiceInfo.ContainsKey(dto.ProjectId) ? dicProjectIdToInvoiceInfo[dto.ProjectId].SubProjects : null;
                 }
                 else
                 {
-                    dto.MainProjectName = dicProjectIdToName.ContainsKey(dto.MainProjectId.Value) ? dicProjectIdToName[dto.MainProjectId.Value] : null;
-                    dto.TransferFee = 0;
-                    dto.Discount = discountOfMain != default ? discountOfMain : dto.Discount;
+                    if (dto.MainProjectId.HasValue)
+                    {
+                        dto.MainProjectName = dicProjectIdToInvoiceInfo.ContainsKey(dto.MainProjectId.Value) ? dicProjectIdToInvoiceInfo[dto.MainProjectId.Value].ProjectName : null;
+
+                        dto.Discount = dicProjectIdToInvoiceInfo.ContainsKey(dto.MainProjectId.Value) ? dicProjectIdToInvoiceInfo[dto.MainProjectId.Value].Discount : 0;
+                    }
+                    dto.TransferFee = 0;                        
                 }
             });
 
