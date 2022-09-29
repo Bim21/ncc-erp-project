@@ -83,7 +83,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public string PmBranchColor { get; set; }
         public string PmBranchDisplayName { get; set; }
         public double TotalAmountProjectBillInfomation => GetIntoMoneyProject();
-        public double RoundTotalAmountProjectBillInfomation => Math.Round(TotalAmountProjectBillInfomation);
+        public double RoundTotalAmountProjectBillInfomation => CommonUtil.Round(TotalAmountProjectBillInfomation);
         private double GetIntoMoneyProject()
         {
             if (this.ProjectBillInfomation == null || ProjectBillInfomation.IsEmpty())

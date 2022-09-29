@@ -317,5 +317,10 @@ namespace ProjectManagement.Utils
         }
 
         public static int LastDateNextThan2Month = 102;  
+
+        public static double Round(double value)
+        {
+            return Math.Round(value);
+        }
     }
 }
