@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using ProjectManagement.Utils;
+
 namespace NccCore.Uitls
 {
     public class DateTimeUtils
@@ -57,6 +60,27 @@ namespace NccCore.Uitls
             return s.Substring(s.IndexOf(",") + 2);
         }
 
+        public static DateTime PaymentDueByDate(int year, int month, int paymentDueBy)
+        {
+            var date = new DateTime(year, month, 1).AddMonths(2).AddDays(-1);
+            if (paymentDueBy >= 1 && paymentDueBy <= 100)
+            {
+                int months = paymentDueBy / 30 + 1;
+                try
+                {
+                    date = new DateTime(year, month, paymentDueBy % 30).AddMonths(months);
+                }
+                catch
+                {
+                    date = new DateTime(year, month, 1).AddMonths(months + 1).AddDays(-1);
+                }
+            }
+            if (paymentDueBy > CommonUtil.LastDateNextThan2Month)
+            {
+                date = new DateTime(year, month, 1).AddMonths(paymentDueBy % 100).AddDays(-1);
+            }
+            return date;
+        }
         public static long DateDiff(DateTime date1, DateTime date2)
         {
             return date1.Ticks - date2.Ticks;
