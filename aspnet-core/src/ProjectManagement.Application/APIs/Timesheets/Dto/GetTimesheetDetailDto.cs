@@ -9,6 +9,8 @@ using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
 using NccCore.Extension;
+using NccCore.Uitls;
+using ProjectManagement.Services.Finance.Dto;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {
@@ -105,6 +107,9 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public List<IdNameDto> SubProjects { get; set; }
         public List<string> SubProjectNames => SubProjects != null ? SubProjects.Select(s => s.Name).ToList() : null;        
         public List<long> SubProjectIds => SubProjects != null ? SubProjects.Select(s => s.Id).ToList() : null;
+
+        public byte PaymentDueBy { get; set; }
+       
     }
 
     public class IdNameDto
@@ -114,17 +119,12 @@ namespace ProjectManagement.APIs.Timesheets.Dto
     }
 
 
-    public class TotalAmountByCurrencyDto
-    {
-        public string CurrencyName { get; set; }
-        public double Amount { get; set; }
-        public double RoundAmount => Math.Round(Amount);
-    }
+
 
     public class ResultTimesheetDetail
     {
         public GridResult<GetTimesheetDetailDto> ListTimesheetDetail { get; set; }
-        public List<TotalAmountByCurrencyDto> ListTotalAmountByCurrency { get; set; }
+        public List<TotalMoneyByCurrencyDto> ListTotalAmountByCurrency { get; set; }
     }
 
 }
