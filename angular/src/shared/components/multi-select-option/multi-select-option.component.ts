@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, AfterViewInit, ViewChild, QueryList, ViewChildren, ElementRef } from '@angular/core';
 import { DropDownDataDto } from '@shared/filter/filter.component';
 
 @Component({
@@ -16,6 +16,7 @@ export class MultiSelectOptionComponent implements OnInit, OnChanges {
   @Input() required:  boolean = false;
   @Output() onMultiSelectionChange: EventEmitter<any[]> = new EventEmitter<any[]>()
   @Output() onSingleSelectionChange: EventEmitter<any[]> = new EventEmitter<any[]>()
+  @ViewChildren('search') inputSearch: QueryList<ElementRef>;
   public searchString: string = ''
   public tempData: DropDownDataDto[]
   constructor() { }
@@ -52,5 +53,8 @@ export class MultiSelectOptionComponent implements OnInit, OnChanges {
       this.tempData = [...this.dropdownData]
       this.searchString = ''
     }
+    this.inputSearch.forEach(ref => {
+      ref.nativeElement.focus()
+    })
   }
 }
