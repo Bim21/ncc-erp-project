@@ -92,7 +92,27 @@ namespace ProjectManagement.APIs.HRMv2
                 return positionDevId;
             return positionId;
         }
+        public async Task AddUserSkills(long userId, List<string> skillNames)
+        {
 
+            if (skillNames == null || skillNames.Count == 0)
+            {
+                return;
+            }
+
+            var skillIds = WorkScope.GetAll<Skill>()
+                                  .Where(s => skillNames.Contains(s.Name))
+                                  .Select(s => s.Id)
+                                  .ToList();
+
+            List<UserSkill> listToAdd = skillIds.Select(skillId => new UserSkill
+            {
+                UserId = userId,
+                SkillId = skillId
+            }).ToList();
+
+            await WorkScope.InsertRangeAsync(listToAdd);
+        }
         [AbpAllowAnonymous]
         [HttpPost]
         public async Task<User> CreateUserByHRM(CreateUpdateUserFromHRMV2Dto input)
@@ -122,8 +142,12 @@ namespace ProjectManagement.APIs.HRMv2
                 BranchId = branch.Id,
                 PositionId = positionId,
             };
+
             user.Password = RandomPasswordHelper.CreateRandomPassword(8);
-            await WorkScope.InsertAsync(user);
+            var userId = await WorkScope.InsertAndGetIdAsync(user);
+
+            await AddUserSkills(userId, input.SkillNames);
+
             var userName = UserHelper.GetUserName(user.EmailAddress);
             var messageToGeneral = $"Welcome **{userName}** [{branch.DisplayName}] to **NCC**";
 

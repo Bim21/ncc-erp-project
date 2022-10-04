@@ -1,6 +1,7 @@
 ﻿using ProjectManagement.APIs.HRM.Dto;
 using ProjectManagement.Utils;
 using System;
+using System.Collections.Generic;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.HRMv2.Dto
@@ -15,6 +16,7 @@ namespace ProjectManagement.APIs.HRMv2.Dto
         public string LevelCode { get; set; }
         public string PositionCode { get; set; }
         public DateTime WorkingStartDate { get; set; }
+        public List<string> SkillNames { get; set; }
         public UserLevel Level
         {
             get
