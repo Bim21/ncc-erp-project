@@ -95,33 +95,34 @@ namespace ProjectManagement.APIs.HRMv2
 
         [AbpAllowAnonymous]
         [HttpPost]
-        public async Task<User> CreateUserByHRM(CreateUpdateUserFromHRMV2Dto model)
+        public async Task<User> CreateUserByHRM(CreateUpdateUserFromHRMV2Dto input)
         {
             CheckSecurityCode();
             var existUser = WorkScope.GetAll<User>()
-                .Where(x => x.EmailAddress.ToLower().Trim() == model.EmailAddress.ToLower().Trim());
+                .Where(x => x.EmailAddress.ToLower().Trim() == input.EmailAddress.ToLower().Trim());
 
             if (existUser.Any())
             {
-                throw new UserFriendlyException($"failed to create user from HRM, user with email {model.EmailAddress} is already exist");
+                throw new UserFriendlyException($"failed to create user from HRM, user with email {input.EmailAddress} is already exist");
             }
-            var branch = await GetBranchByCode(model.BranchCode);
-            var positionId = GetPositionIdByCode(model.PositionCode);
+            var branch = await GetBranchByCode(input.BranchCode);
+            var positionId = GetPositionIdByCode(input.PositionCode);
             var user = new User
             {
-                UserName = model.EmailAddress.ToLower(),
-                Name = model.Name,
-                Surname = model.Surname,
-                EmailAddress = model.EmailAddress,
-                NormalizedEmailAddress = model.EmailAddress.ToUpper(),
-                NormalizedUserName = model.EmailAddress.Replace("@ncc.asia", "").ToLower(),
-                UserType = model.Type,
-                UserLevel = model.Level,
+                UserName = input.EmailAddress.ToLower(),
+                Name = input.Name,
+                Surname = input.Surname,
+                EmailAddress = input.EmailAddress,
+                NormalizedEmailAddress = input.EmailAddress.ToUpper(),
+                NormalizedUserName = input.EmailAddress.Replace("@ncc.asia", "").ToLower(),
+                UserType = input.Type,
+                UserLevel = input.Level,
                 IsActive = true,
-                Password = RandomPasswordHelper.CreateRandomPassword(8),
+                //Password = input.Password,
                 BranchId = branch.Id,
                 PositionId = positionId,
             };
+            user.Password = RandomPasswordHelper.CreateRandomPassword(8);
             await WorkScope.InsertAsync(user);
             var userName = UserHelper.GetUserName(user.EmailAddress);
             var messageToGeneral = $"Welcome **{userName}** [{branch.DisplayName}] to **NCC**";
