@@ -322,5 +322,10 @@ namespace ProjectManagement.Utils
         {
             return Math.Round(value);
         }
+
+        public static UserLevel GetUserLevelByLevelCode(string levelCode)
+        {
+            return Enum.Parse<UserLevel>(levelCode);
+        }
     }
 }
