@@ -2,17 +2,17 @@
     <div class="row w-100">
 
         <div class="d-flex w-100">
-            <div class="col-4 text-center">
-                <img [src]="getAvatar(user)" class="rounded-circle  mt-1" width="50px" style="max-width: 100%;"
+            <div class="col-3 text-center">
+                <img [src]="getAvatar(user)" class="rounded-circle  mt-1" style="max-width: 100%;"
                     alt="avatar">
                 <ngx-stars style="z-index: 1 !important; margin-top: 10px;" [readonly]="true" [wholeStars]="true"
                     [size]="1" [color]="getStarColor(user.starRate, false)" [initialStars]="user.starRate"
                     [maxStars]="user.starRate ? user.starRate : 0 ">
                 </ngx-stars>
             </div>
-            <div class="col-8  text-left">
-                <p class="m-0 text-overflow"><strong>{{user?.fullName}}</strong></p>
-                <p class="m-0 text-left text-overflow">
+            <div class="col-9  text-left">
+                <p class="m-0"><strong>{{user?.fullName}}</strong></p>
+                <p class="m-0 text-left">
                     <span *ngIf="user.branchDisplayName" class="mr-1 badge badge-pill text-white" [style.backgroundColor]="user.branchColor">
                         {{user.branchDisplayName}}</span>
                     <span *ngIf="user.userTypeName" [ngClass]="APP_CONST.userTypeStyle[user.userType]">{{user.userTypeName}}</span>
@@ -23,7 +23,7 @@
                     <span *ngIf="user.userLevel || user.userLevel == 0" class="ml-1 badge text-white" [ngStyle]="getUserLevel().style">{{getUserLevel().userLevel}}
                     </span>
                 </p>
-                <p class="text-overflow m-0"><span>{{user?.emailAddress}}</span></p>
+                <p class="m-0"><span>{{user?.emailAddress}}</span></p>
             </div>
         </div>
     </div>

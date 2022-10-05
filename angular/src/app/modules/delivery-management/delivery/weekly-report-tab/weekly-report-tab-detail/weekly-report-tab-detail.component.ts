@@ -145,6 +145,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isShowWarning = false;
   countdownInterval: FormControl = new FormControl(null, [Validators.min(30)]);
   isShowSettingCountDown = false;
+  isShowWarningTimeOut = false;
 
   constructor(public pmReportProjectService: PMReportProjectService,
     private tsProjectService: TimesheetProjectService,
@@ -231,6 +232,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isRefresh = true
     this.isStart = false
     this.isShowWarning = false;
+    this.isShowWarningTimeOut = false;
   }
   public resumeTimmer() {
     this.timmerCount.resume()
@@ -1217,7 +1219,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.isShowSettingCountDown = false;
       this.isShowWarning = true;
     }
-   
+    if (this.isShowWarning && data.minutes === 0 && data.seconds === 0) {
+      this.isShowWarningTimeOut = true;
+    }
     if(data.minutes === 0 && data.seconds <= 10) {
       new Audio('/assets/audio/beep_sound.mp3').play();
     }
