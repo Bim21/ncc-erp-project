@@ -210,6 +210,26 @@ th {
     animation: ring 1s infinite ease-in-out;
 }
 
+
+.warning-count-down.warning-count-down-time-out::after {
+    content: '';
+    border: 15px solid #e51e25;
+    transition: all 0.25s;
+    -webkit-animation: ring1 1s infinite ease-in-out;
+    animation: ring1 1s infinite ease-in-out;
+}
+
+.warning-count-down.warning-count-down-time-out::before {
+    content: '';
+    border: 15px solid #e51e25;
+    transition: all 0.1s;
+    -webkit-animation: ring 1s infinite ease-in-out;
+    animation: ring 1s infinite ease-in-out;
+}
+.warning-count-down-time-out cd-timer,.warning-count-down-time-out .btn-sm{
+    color: #e51e25;
+}
+
 .warning-count-down:hover {
     -webkit-animation-play-state: paused;
     animation-play-state: paused;

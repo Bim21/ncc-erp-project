@@ -173,6 +173,7 @@
                         <div class="float-timmer"  *ngIf="countdownInterval.value !== null"
                             cdkDrag
                             [class.warning-count-down]="isShowWarning"
+                            [class.warning-count-down-time-out]="isShowWarningTimeOut"
                             [cdkDragDisabled]="isShowWarning"
                             >
                             <div class="count-timer" >
@@ -200,7 +201,6 @@
                                     [startTime]="countdownInterval.value"
                                     [autoStart]="false" 
                                     (onTick)="onTick($event)"
-                                    (onComplete)="refreshTimmer()"
                                 >
                                     {{ countdownInterval.value * 1000 | date:'mm:ss' }}
                                 </cd-timer>
