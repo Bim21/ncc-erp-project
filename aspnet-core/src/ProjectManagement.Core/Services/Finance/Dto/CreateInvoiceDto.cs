@@ -12,7 +12,8 @@ namespace ProjectManagement.Services.Finance.Dto
         public string ClientCode { get; set; }
         public short Month { get; set; }
         public int Year { get; set; }
-        public double CollectionDebt { get; set; }
+        public double CollectionDebt => InvoiceMoney - TransferFee;
+        public double InvoiceMoney { get; set; }
         public string CurrencyCode { get; set; }
         public float TransferFee { get; set; }
         public DateTime Deadline { get; set; }
