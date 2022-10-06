@@ -1189,7 +1189,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     NameInvoice = $"Invoice number {item.Value.InvoiceNumber}",
                     TransferFee = item.Value.TransferFee,
                     Deadline = DateTimeUtils.PaymentDueByDate(timesheet.Year, timesheet.Month, item.Value.PaymentDueBy),
-                    CollectionDebt =  CommonUtil.Round(mainProjectInvoiceMoney + subProjectInvoiceMoney),
+                    InvoiceMoney =  CommonUtil.Round(mainProjectInvoiceMoney + subProjectInvoiceMoney),
                 });
             }
 
