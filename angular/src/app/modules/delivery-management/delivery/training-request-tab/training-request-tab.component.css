@@ -37,3 +37,12 @@ table td {
 .col-lg-4 {
     margin-left: 65px;
 }
+.tl-link {
+    color: #1769aa;
+    display: inline-block;
+    font-weight: 600;
+  }
+.tl-link:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}

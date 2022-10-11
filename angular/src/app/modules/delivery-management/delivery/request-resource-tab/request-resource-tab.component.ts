@@ -1,6 +1,6 @@
 import { FormSendRecruitmentComponent } from './form-send-recruitment/form-send-recruitment.component';
 import { ResourceRequestDto } from './../../../../service/model/resource-request.dto';
-import { result } from 'lodash-es';
+import { isEmpty, isNull, result } from 'lodash-es';
 import { FormSetDoneComponent } from './form-set-done/form-set-done.component';
 import { SortableComponent, SortableModel } from './../../../../../shared/components/sortable/sortable.component';
 import { AppComponentBase } from 'shared/app-component-base';
@@ -457,7 +457,13 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
   isShowBtnDelete(item) {
     return this.isGranted(PERMISSIONS_CONSTANT.ResourceRequest_Delete)
   }
-
+  public sliceUrl(url: string): string{
+    if (isNull(url)||isEmpty(url)) {
+      return "";
+    }
+    var regexp = new RegExp(/\/[\d]\d{0,}/g)
+    return regexp.exec(url).toString().slice(1);
+  }
 }
 
 export class THeadTable {
