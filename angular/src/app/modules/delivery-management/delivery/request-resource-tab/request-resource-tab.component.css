@@ -33,3 +33,12 @@ table td {
 .badge {
     height: fit-content;
 }
+.tl-link {
+    color: #1769aa;
+    display: inline-block;
+    font-weight: 600;
+  }
+.tl-link:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
