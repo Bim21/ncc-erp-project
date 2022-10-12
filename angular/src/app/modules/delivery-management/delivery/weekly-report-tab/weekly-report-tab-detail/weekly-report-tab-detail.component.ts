@@ -1222,9 +1222,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if (this.isShowWarning && data.minutes === 0 && data.seconds === 0) {
       this.isShowWarningTimeOut = true;
     }
-    if(data.minutes === 0 && data.seconds <= 10) {
-      new Audio('/assets/audio/beep_sound.mp3').play();
-    }
 
   }
 
