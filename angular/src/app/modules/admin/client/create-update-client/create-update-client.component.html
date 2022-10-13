@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="pm"> Transfer Fee: </label>
       <div class="col-md-9">
         <input
@@ -106,6 +106,8 @@
           #transferFeeEl
           suffix="%"
         />
+        <abp-validation-summary [control]="transferFee" [controlEl]="transferFeeEl">
+        </abp-validation-summary>
      
       </div>
     </div>

@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Utils;
+using ProjectManagement.Services.Finance;
 
 namespace ProjectManagement.APIs.Clients
 {
@@ -21,9 +22,11 @@ namespace ProjectManagement.APIs.Clients
     public class ClientAppService : ProjectManagementAppServiceBase
     {
         private readonly TimesheetService _timesheetService;
-        public ClientAppService(TimesheetService timesheetService)
+        private readonly FinfastService _finfastService;
+        public ClientAppService(TimesheetService timesheetService, FinfastService finfastService)
         {
             _timesheetService = timesheetService;
+            _finfastService = finfastService;
         }
 
         [HttpPost]
@@ -71,7 +74,12 @@ namespace ProjectManagement.APIs.Clients
             await WorkScope.InsertAndGetIdAsync(ObjectMapper.Map<Client>(input));
 
             var createCustomer = await _timesheetService.CreateCustomer(input.Name, input.Code, input.Address);
-            return createCustomer;
+            var createAccount = await _finfastService.CreateAccount(input.Name, input.Code);
+            var sb = new StringBuilder();
+            sb.AppendLine(createCustomer);
+            sb.AppendLine("");
+            sb.AppendLine(createAccount);
+            return sb.ToString();
         }
         [HttpPut]
         [AbpAuthorize(PermissionNames.Admin_Clients_Edit)]
