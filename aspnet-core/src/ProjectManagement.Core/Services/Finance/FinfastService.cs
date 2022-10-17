@@ -33,5 +33,14 @@ namespace ProjectManagement.Services.Finance
         {
             return await PostAsync<ResponseResultProjectDto>("api/services/app/ProjectTool/CreateAllInvoices", input);
         }
+        public async Task<string> CreateAccount(string name, string code)
+        {
+            var item = new
+            {
+                Name = name,
+                Code = code
+            };
+            return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateAccount", item);
+        }
     }
 }

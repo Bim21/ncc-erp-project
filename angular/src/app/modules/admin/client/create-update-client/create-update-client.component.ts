@@ -27,6 +27,10 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
       this.client = this.data.item;
       this.title = this.data.item.name ? this.data.item.name : ''
     }
+    else{
+      //create
+      this.client.transferFee = 0;
+    }
     this.getPaymentDueBy();
     this.getAllInvoiceDate();
   }
@@ -47,20 +51,14 @@ export class CreateUpdateClientComponent extends AppComponentBase implements OnI
     this.paymentDueByList = this.temppaymentDueByList.filter(item => item.text.trim().toLowerCase().includes(this.searchPaymentDueBy.trim().toLowerCase()));
   }
   SaveAndClose() {
+    this.isLoading = true; 
     if (this.data.command == "create") {
       this.clientService.create(this.client).pipe(catchError(this.clientService.handleError)).subscribe((res) => {
         abp.notify.success("Create Client Successfully!");
         this.dialogRef.close(this.client);
-        if(res.result == null || res.result == ""){
-          abp.message.success(`<p>Create client name <b>${this.client.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-          <p style='color:#28a745'>Create client name <b>${this.client.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
-         'Create client result',true);
-        }
-        else{
-          abp.message.error(`<p>Create client name <b>${this.client.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-          <p style='color:#dc3545'>${res.result}</p>`, 
-          'Create client result',true);
-        }
+        abp.message.success(`<p>Create client name <b>${this.client.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
+        ${res.result}`, 
+        'Create client result',true);
       }, () => { this.isLoading = false })
     }
     else {
