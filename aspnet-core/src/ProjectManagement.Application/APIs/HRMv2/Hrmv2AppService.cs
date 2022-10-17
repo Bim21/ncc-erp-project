@@ -203,7 +203,7 @@ namespace ProjectManagement.APIs.HRMv2
 
         [HttpPost]
         [AbpAllowAnonymous]
-        public async Task<string> ConfirmUserQuitJob(UpdateUserWorkingStatusFromHRMV2Dto input)
+        public async Task<string> ConfirmUserQuit(UpdateUserWorkingStatusFromHRMV2Dto input)
         {
             CheckSecurityCode();
             var user = WorkScope.GetAll<User>()
@@ -253,7 +253,7 @@ namespace ProjectManagement.APIs.HRMv2
 
         [HttpPost]
         [AbpAllowAnonymous]
-        public async Task<string> ConfirmUserStatusToPause(UpdateUserWorkingStatusFromHRMV2Dto input)
+        public async Task<string> ConfirmUserPause(UpdateUserWorkingStatusFromHRMV2Dto input)
         {
             CheckSecurityCode();
             var user = WorkScope.GetAll<User>()
@@ -271,7 +271,7 @@ namespace ProjectManagement.APIs.HRMv2
             var activeReportId = await _resourceManager.GetActiveReportId();
             string note = "Tạm nghỉ từ HRM Tool";
 
-            // Join dự án nghỉ việc dưới dạng Temp
+            // Join dự án tạm nghỉ dạng official
             var inputToJoinQuitProject = new InputUpdateUserIntoProjectDto()
             {
                 UserId = user.Id,
@@ -282,7 +282,7 @@ namespace ProjectManagement.APIs.HRMv2
             };
 
             
-            await JoinOrUpdateUserIntoQuitProject(inputToJoinQuitProject);
+            await JoinOrUpdateUserIntoPauseProject(inputToJoinQuitProject);
 
             // Ra khỏi các dự án đang làm việc
             var employee = new KomuUserInfoDto
@@ -398,7 +398,7 @@ namespace ProjectManagement.APIs.HRMv2
 
         [HttpPost]
         [AbpAllowAnonymous]
-        public async Task<string> PlanUserQuitJob(UpdateUserWorkingStatusFromHRMV2Dto input)
+        public async Task<string> PlanUserQuit(UpdateUserWorkingStatusFromHRMV2Dto input)
         {
             CheckSecurityCode();
             bool IsPool = false;
@@ -408,11 +408,11 @@ namespace ProjectManagement.APIs.HRMv2
 
         [HttpPost]
         [AbpAllowAnonymous]
-        public async Task<string> PlanUserStatusPause(UpdateUserWorkingStatusFromHRMV2Dto input)
+        public async Task<string> PlanUserPause(UpdateUserWorkingStatusFromHRMV2Dto input)
         {
             CheckSecurityCode();
-            bool IsPool = true;
-            await PlanUserFromHRMToProject(input, AppConsts.CHO_NGHI_PROJECT_CODE, IsPool);
+            bool IsPool = false;
+            await PlanUserFromHRMToProject(input, AppConsts.TAM_NGHI_PROJECT_CODE, IsPool);
             return "Successful plan user to project CHO_NGHI";
         }
 
@@ -537,7 +537,42 @@ namespace ProjectManagement.APIs.HRMv2
 
                 var newPU = new ProjectUser
                 {
-                    IsPool = input.IsPool, // IsPool == true (Temp) IsPool == false (Official)
+                    IsPool = false, // IsPool == true (Temp) IsPool == false (Official)
+                    UserId = input.UserId,
+                    ProjectId = projectId,
+                    Status = ProjectUserStatus.Present,
+                    AllocatePercentage = 100,
+                    StartTime = input.StartTime,
+                    PMReportId = input.ActiveReportId
+                };
+                await WorkScope.InsertAsync(newPU);
+            }
+            return pu;
+        }
+
+
+        private async Task<ProjectUser> JoinOrUpdateUserIntoPauseProject(InputUpdateUserIntoProjectDto input)
+        {
+            var pu = WorkScope.GetAll<ProjectUser>()
+             .Where(x => x.UserId == input.UserId)
+             .Where(x => x.Status == ProjectUserStatus.Future)
+             .Where(x => x.Project.Code == AppConsts.TAM_NGHI_PROJECT_CODE)
+             .FirstOrDefault();
+            if (pu != default)
+            {
+                pu.Status = ProjectUserStatus.Present;
+                pu.StartTime = input.StartTime;
+                pu.IsPool = input.IsPool;
+                pu.PMReportId = input.ActiveReportId;
+                await WorkScope.UpdateAsync(pu);
+            }
+            else
+            {
+                var projectId = await GetProjectIdByCode(AppConsts.TAM_NGHI_PROJECT_CODE);
+
+                var newPU = new ProjectUser
+                {
+                    IsPool = false, // IsPool == true (Temp) IsPool == false (Official)
                     UserId = input.UserId,
                     ProjectId = projectId,
                     Status = ProjectUserStatus.Present,
