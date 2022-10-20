@@ -278,7 +278,7 @@ namespace ProjectManagement.APIs.HRMv2
                 Note = note,
                 ActiveReportId = activeReportId,
                 StartTime = input.DateAt,
-                IsPool = true,
+                IsPool = false,
             };
 
             
