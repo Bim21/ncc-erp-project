@@ -63,6 +63,7 @@
                         <tr>
                             <th>STT</th>
                             <th>Name</th>
+                            <th>Code</th>
                             <th>Invoice Payment Info</th>
                             <th *ngIf="permission.isGranted(Admin_Currencies_Edit) || permission.isGranted(Admin_Currencies_Delete)">Actions</th>
                         </tr>
@@ -77,6 +78,7 @@
                               }; let i = index"  >
                             <td class="text-center stt"><span>{{ i +1 }}</span></td>
                             <td class="text-center">{{item.name}}</td>
+                            <td class="text-center">{{item.code}}</td>
                             <td class="text-left"
                                 style="
                                 white-space: pre-line;
