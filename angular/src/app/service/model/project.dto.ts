@@ -119,6 +119,7 @@ export class MilestoneDto {
 export class ProjectInfoDto {
   projectName: string;
   clientName: string;
+  clientCode: string;
   pmName: string;
   totalBill: number;
   totalResource: number;

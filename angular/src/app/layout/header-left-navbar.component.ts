@@ -80,6 +80,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
 
     this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
     this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
+    this.projectInfo.clientCode = this.route.snapshot.queryParamMap.get("clientCode")
     this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
     this.projectHealth = Number(this.route.snapshot.queryParamMap.get("projectHealth"))
    
@@ -124,6 +125,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
             this.pmReportProjectId = this.route.snapshot.queryParamMap.get("pmReportProjectId")
             this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
             this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
+            this.projectInfo.clientCode = this.route.snapshot.queryParamMap.get("clientCode")
             this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
           }
         

@@ -121,6 +121,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                                             ProjectCode = x.Project.Code,
                                             ProjectName = x.Project.Name,
                                             ClientName = x.Project.Client.Name,
+                                            ClientCode = x.Project.Client.Code,
                                             PmName = x.PM.FullName,
                                             TotalBill = projectUserBill.Where(b => b.ProjectId == x.ProjectId).Count(),
                                             TotalResource = projectUser.Where(r => r.ProjectId == x.ProjectId).Count(),

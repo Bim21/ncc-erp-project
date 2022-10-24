@@ -283,6 +283,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             queryParams: {
               name: this.projectInfo.projectName,
               client: this.projectInfo.clientName,
+              clientCode: this.projectInfo.clientCode,
               pmName: this.projectInfo.pmName,
               pmReportProjectId: this.pmReportProjectId,
               projectHealth: this.projectHealth,
