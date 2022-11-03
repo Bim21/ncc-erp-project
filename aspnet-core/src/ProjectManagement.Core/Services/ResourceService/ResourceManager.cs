@@ -182,6 +182,17 @@ namespace ProjectManagement.Services.ResourceManager
                     }
                 }).FirstOrDefaultAsync();
         }
+        public async Task<ProjectTypeAndPMEmailDto> GetProjectTypeAndPM(long projectId)
+        {
+            return await _workScope.GetAll<Project>()
+                .Select(s => new {s.ProjectType, s.Id, s.PM.EmailAddress})
+                .Where(s => s.Id == projectId)
+                .Select(s => new ProjectTypeAndPMEmailDto
+                {
+                    PMEmail = s.EmailAddress,
+                    ProjectType = s.ProjectType
+                }).FirstOrDefaultAsync();
+        }
 
         public async Task<long> GetActiveReportId()
         {
@@ -304,6 +315,7 @@ namespace ProjectManagement.Services.ResourceManager
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(input.UserId);
             var projectToJoin = await GetKomuProjectInfo(input.ProjectId);
+            var projectTypeAndPMEmail = await GetProjectTypeAndPM(input.ProjectId);
 
             if (projectToJoin.Status == ProjectStatus.Closed)
             {
@@ -329,7 +341,14 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
             nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
-            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
+            if(projectTypeAndPMEmail.ProjectType == ProjectType.TRAINING)
+            {
+                UserAndBasicTranerJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime, projectTypeAndPMEmail.PMEmail);
+            }
+            else
+            {
+                UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
+            }    
 
             return joinPU;
         }
@@ -350,6 +369,18 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role, startDate);
+        }
+        [HttpPost]
+        private void UserAndBasicTranerJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate, string basicTranerEmail)
+        {
+            if (!IsEnableAutoCreateUpdateToTimsheetTool())
+            {
+                Logger.Info("UserJoinProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
+                return;
+            }
+
+            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role, startDate);
+            _timesheetService.UpateBasicTraner(new Timesheet.Dto.UpateBasicTranerDto { UserEmail = emailAddress, BasicTranerEmail = basicTranerEmail });
         }
 
         private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)

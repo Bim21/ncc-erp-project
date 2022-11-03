@@ -101,6 +101,12 @@ namespace ProjectManagement.Services.Timesheet
             Post($"/api/services/app/ProjectManagement/UserJoinProject", item);
         }
 
+
+        public Task UpateBasicTraner(UpateBasicTranerDto upateBasicTranerDto)
+        {
+            return PostAsync<string>($"/api/services/app/ProjectManagement/UpdateBasicTraner", upateBasicTranerDto);
+        }
+
       
 
     }
