@@ -315,6 +315,7 @@ namespace ProjectManagement.Services.ResourceManager
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(input.UserId);
             var projectToJoin = await GetKomuProjectInfo(input.ProjectId);
+            var projectTypeAndPMEmail = await GetProjectTypeAndPM(input.ProjectId);
 
             if (projectToJoin.Status == ProjectStatus.Closed)
             {
@@ -340,7 +341,15 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
             nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
-            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
+            if (projectTypeAndPMEmail.ProjectType == ProjectType.TRAINING)
+            {
+                UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime, projectTypeAndPMEmail.PMEmail);
+            }
+            else
+            {
+                UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
+            }
+            
 
             return joinPU;
         }
