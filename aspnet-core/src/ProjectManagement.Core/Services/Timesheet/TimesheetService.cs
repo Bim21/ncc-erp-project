@@ -87,8 +87,7 @@ namespace ProjectManagement.Services.Timesheet
         }
 
 
-      
-        public void UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate)
+        public void UserJoinProject(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate, string PMEmail = "")
         {
             var item = new
             {
@@ -96,15 +95,10 @@ namespace ProjectManagement.Services.Timesheet
                 EmailAddress = emailAddress,
                 IsPool = isPool,
                 Role = role,
-                StartDate = startDate
+                StartDate = startDate,
+                PMEmail = PMEmail
             };
             Post($"/api/services/app/ProjectManagement/UserJoinProject", item);
-        }
-
-
-        public Task UpateBasicTraner(UpateBasicTranerDto upateBasicTranerDto)
-        {
-            return PostAsync<string>($"/api/services/app/ProjectManagement/UpdateBasicTraner", upateBasicTranerDto);
         }
 
       

@@ -315,7 +315,6 @@ namespace ProjectManagement.Services.ResourceManager
             var sessionUser = await getSessionKomuUserInfo();
             var employee = await getKomuUserInfo(input.UserId);
             var projectToJoin = await GetKomuProjectInfo(input.ProjectId);
-            var projectTypeAndPMEmail = await GetProjectTypeAndPM(input.ProjectId);
 
             if (projectToJoin.Status == ProjectStatus.Closed)
             {
@@ -341,14 +340,7 @@ namespace ProjectManagement.Services.ResourceManager
                 await _userManager.DeactiveUser(employee.UserId);
             }
             nofityCreatePresentPU(joinPU, sbKomuMessage, sessionUser, employee, projectToJoin);
-            if(projectTypeAndPMEmail.ProjectType == ProjectType.TRAINING)
-            {
-                UserAndBasicTranerJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime, projectTypeAndPMEmail.PMEmail);
-            }
-            else
-            {
-                UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
-            }    
+            UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
 
             return joinPU;
         }
@@ -360,7 +352,7 @@ namespace ProjectManagement.Services.ResourceManager
         }
 
         [HttpPost]
-        private void UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate)
+        private void UserJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate, string PMEmail = "")
         {
             if (!IsEnableAutoCreateUpdateToTimsheetTool())
             {
@@ -368,19 +360,7 @@ namespace ProjectManagement.Services.ResourceManager
                 return;
             }
 
-            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role, startDate);
-        }
-        [HttpPost]
-        private void UserAndBasicTranerJoinProjectInTimesheetTool(string projectCode, string emailAddress, bool isPool, ProjectUserRole role, DateTime startDate, string basicTranerEmail)
-        {
-            if (!IsEnableAutoCreateUpdateToTimsheetTool())
-            {
-                Logger.Info("UserJoinProjectInTimesheetTool() IsEnableAutoCreateUpdateToTimsheetTool = false");
-                return;
-            }
-
-            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role, startDate);
-            _timesheetService.UpateBasicTraner(new Timesheet.Dto.UpateBasicTranerDto { UserEmail = emailAddress, BasicTranerEmail = basicTranerEmail });
+            _timesheetService.UserJoinProject(projectCode, emailAddress, isPool, role, startDate, PMEmail);
         }
 
         private void nofityCreatePresentPU(ProjectUser joinPU, StringBuilder sbKomuMessage, KomuUserInfoDto sessionUser, KomuUserInfoDto employee, KomuProjectInfoDto project)
@@ -419,6 +399,7 @@ namespace ProjectManagement.Services.ResourceManager
             var resourceRequest = _workScope.GetAll<ResourceRequest>()
                .Where(s => s.Id == futurePU.ResourceRequestId)
                .FirstOrDefault();
+            var projectTypeAndPMEmail = await GetProjectTypeAndPM(futurePU.ProjectId);
 
             if (resourceRequest != null)
             {
@@ -447,7 +428,15 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             nofityCreatePresentPU(futurePU, sbKomuMessage, sessionUser, employee, project);
-            UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime);
+            if (projectTypeAndPMEmail.ProjectType == ProjectType.TRAINING)
+            {
+                UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime, projectTypeAndPMEmail.PMEmail);
+            }
+            else
+            {
+                UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime);
+            }
+            
 
             return confirmPUExt;
         }
