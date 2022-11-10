@@ -78,7 +78,7 @@ namespace ProjectManagement.APIs.Resource
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Resource_TabPool_EditTempProject)]
+        [AbpAuthorize(PermissionNames.Resource_TabPool_AddTempProject, PermissionNames.Resource_TabPool_EditTempProject)]
         public async Task AddUserFromPoolToTempProject(AddResourceToProjectDto input)
         {
             var allowConfirmMoveEmployeeToOtherProject
