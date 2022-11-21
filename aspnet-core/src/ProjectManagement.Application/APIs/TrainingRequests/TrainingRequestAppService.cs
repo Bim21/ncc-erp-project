@@ -149,7 +149,7 @@ namespace ProjectManagement.APIs.TrainingRequests
                 .Where(s => createdRequestIds.Contains(s.Id))
                 .ToListAsync();
 
-            await notifyToKomu(listRequestDto.FirstOrDefault(), Action.Create, listRequestDto.Count);
+            await notifyToKomu(listRequestDto.FirstOrDefault(), Action.Create, request.Quantity);
 
             return listRequestDto;
         }
