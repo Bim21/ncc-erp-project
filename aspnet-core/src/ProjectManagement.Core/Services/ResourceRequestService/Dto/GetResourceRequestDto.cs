@@ -62,7 +62,7 @@ namespace ProjectManagement.Services.ResourceRequestService.Dto
                 $"Level: {LevelName}\n" +
                 $"Time Need: {DateTimeUtils.ToString(TimeNeed)}\n" +
                 $"Priority: {PriorityName}\n" +
-                $"PM Note: {PMNote}";
+                $"PM Note: {PMNote}\n";
         }
         
         public List<long> SkillIds
