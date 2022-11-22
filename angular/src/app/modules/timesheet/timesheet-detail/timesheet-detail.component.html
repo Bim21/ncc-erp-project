@@ -174,7 +174,7 @@
                     <span *ngFor="let totalAmountByCurrency of listTotalAmountByCurrency" 
                           [style.color]="getColorByCurrency(totalAmountByCurrency.currencyName)"
                           class="ml-4">
-                          {{totalAmountByCurrency.roundAmount | number : "1.0"}} 
+                          {{totalAmountByCurrency.roundAmount | number : "1.0":"en-US"}} 
                           {{totalAmountByCurrency.currencyName}} 
                     </span>
                   </div>
@@ -215,20 +215,20 @@
 
                       <div class="row" [style.color]="getColorByCurrency(item.currency)">
                         <div class="col-6"><label>Total</label></div>
-                        <div class="col-4"><label class="ml-5">{{item.roundTotalAmountProjectBillInfomation | number : "1.0"}} {{item.currency}}</label></div>
-                        <div class="col-2 text-center">Note</div>
+                        <div class="col-4"><label style="margin-left: 60px;">{{item.roundTotalAmountProjectBillInfomation | number : "1.0":"en-US"}} {{item.currency}}</label></div>
+                        <div class="col-2">Note</div>
                       </div>
                      
                       <div class="row" *ngFor="let bill of item.projectBillInfomation">
                           <div class="col-3 text-special"><label>{{bill.fullName}}</label></div>
                           <div class="col-2 text-special role"><span>{{bill.billRole}}</span></div>
-                          <div class="col-2 billRate" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">
-                            <label class="ml-1"  style="font-weight: 500;margin-left: -30px;">
-                              {{covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType)}}
+                          <div class="col-2 billRate" >
+                            <label class="ml-1"  style="font-weight: 500;margin-left: -30px;" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">
+                              {{(covertMoneyType(bill.billRate)+' '+item.currency + getChargeType(bill.chargeType))}}
                             </label>
                           </div>
                           <div class="col-1 ml-2"><label style="font-weight: 500;">{{bill.workingTime}}d</label></div>
-                          <div class="col-2" style="margin-left: -40px;"><label class="ml-1">{{bill.roundAmount | number : "1.0"}} {{item.currency}}</label></div>
+                          <div class="col-2" style="margin-left: -40px;"><label class="ml-1">{{bill.roundAmount | number: "1.0":"en-US" }} {{item.currency}}</label></div>
 
                           <div class="col-3 text-left note"
                               style="word-break: break-all; white-space: pre-line;">
