@@ -83,8 +83,8 @@ button.special span{
 }
 #timesheet-detail .td-project{
   white-space: normal; 
-  min-width: 195px;
-  max-width: 195px;
+  min-width: 150px;
+  max-width: 190px;
 }
 
 #timesheet-detail .td-note{
@@ -96,7 +96,7 @@ button.special span{
   white-space: pre-line;
   word-wrap: break-word;
   min-width: 150px;
-  max-width: 350px;
+  max-width: 200px;
 }
 #timesheet-detail .td-invoice-info{
   white-space: pre-line;
@@ -106,4 +106,17 @@ button.special span{
 }
 #timesheet-detail .text-special{
  font-size: 15.5px;
+}
+
+#timesheet-detail .role{
+  margin-left: -45px;
+}
+
+#timesheet-detail .billRate{
+  margin-left: -3px;
+}
+
+#timesheet-detail .note{
+  width: 10px;
+  margin-left: 12px;
 }
