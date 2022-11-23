@@ -14,6 +14,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   Admin_Configuartions_ViewHrmSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewHrmSetting;
   Admin_Configuartions_ViewTimesheetSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewTimesheetSetting;
   Admin_Configuartions_ViewFinanceSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewFinanceSetting;
+  Admin_Configuartions_ViewTalentSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewTalentSetting;
   Admin_Configuartions_ViewGoogleClientAppSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewGoogleClientAppSetting;
   Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting;
 
@@ -31,6 +32,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isShowHRMSetting: boolean = false;
   public isShowTimesheetSetting: boolean = false;
   public isShowFinanceSetting: boolean = false;
+  public isShowTalentSetting: boolean = false;
   public isShowGoogleClientApp: boolean = false;
   public isShowDefaultWorking: boolean = false;
   public isShowDiscordChannel: boolean = false;
@@ -121,6 +123,9 @@ export class ConfigurationDto {
   noticeToKomu: string;
   autoUpdateProjectInfoToTimesheetTool: string;
   trainingRequestChannel: string;
+  talentUriBA: string;
+  talentUriFE: string;
+  talentSecurityCode: string;
 }
 
 export class ProjectSetting{

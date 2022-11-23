@@ -50,6 +50,7 @@ namespace ProjectManagement.Authorization
         public const string Admin_Configuartions_ViewHrmSetting = "Admin.Configuartions.ViewHrmSetting";
         public const string Admin_Configuartions_ViewTimesheetSetting = "Admin.Configuartions.ViewTimesheetSetting";
         public const string Admin_Configuartions_ViewFinanceSetting = "Admin.Configuartions.ViewFinanceSetting";
+        public const string Admin_Configuartions_ViewTalentSetting = "Admin.Configuartions.ViewTalentSetting";
         public const string Admin_Configuartions_ViewSendReportSetting = "Admin.Configuartions.ViewSendReportSetting";
         public const string Admin_Configuartions_ViewGoogleClientAppSetting = "Admin.Configuartions.ViewGoogleClientAppSetting";
         public const string Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting";
@@ -573,6 +574,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Configuartions_ViewHrmSetting ,
                     PermissionNames.Admin_Configuartions_ViewTimesheetSetting ,
                     PermissionNames.Admin_Configuartions_ViewFinanceSetting ,
+                    PermissionNames.Admin_Configuartions_ViewTalentSetting,
                     PermissionNames.Admin_Configuartions_ViewSendReportSetting ,
                     PermissionNames.Admin_Configuartions_ViewGoogleClientAppSetting ,
                     PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting ,
@@ -1094,6 +1096,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewHrmSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view HRM Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewTimesheetSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Timesheet Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewFinanceSetting , MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Finance Setting" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewTalentSetting , MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Talent Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewSendReportSetting , MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Send Report Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewGoogleClientAppSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Google Client App Setting" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "view Default Working Hour Per Day Setting" },
@@ -1611,6 +1614,7 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewHrmSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Hrm Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewTimesheetSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Timesheet Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewFinanceSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Finance Setting"},
+                                 new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewTalentSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Talent Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewSendReportSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Send Report Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewGoogleClientAppSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Google Client App Setting"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Default Working Hour Per Day Setting"},

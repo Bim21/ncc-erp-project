@@ -55,7 +55,10 @@ namespace ProjectManagement.Configuration
                 HRMSecretCode = _appConfiguration.GetValue<string>("HRMService:SecurityCode"),
                 KomuRoom = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.KomuRoom),
                 DefaultWorkingHours = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours),
-                TrainingRequestChannel = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TrainingRequestChannel)
+                TrainingRequestChannel = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TrainingRequestChannel),
+                TalentUriBA = _appConfiguration.GetValue<string>("TalentService:BaseAddress"),
+                TalentUriFE = _appConfiguration.GetValue<string>("TalentService:FEAddress"),
+                TalentSecurityCode = _appConfiguration.GetValue<string>("TalentService:SecurityCode"),
 
             };
         }
