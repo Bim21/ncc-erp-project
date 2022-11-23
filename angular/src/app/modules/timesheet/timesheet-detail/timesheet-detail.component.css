@@ -82,13 +82,13 @@ button.special span{
   padding: 0px 8px;
 }
 #timesheet-detail .td-project{
-  white-space: normal; 
+  white-space: normal;
   min-width: 150px;
   max-width: 190px;
 }
 
 #timesheet-detail .td-note{
-  white-space: normal; 
+  white-space: normal;
   min-width: 195px;
   max-width: 195px;
 }
@@ -118,5 +118,4 @@ button.special span{
 
 #timesheet-detail .note{
   width: 10px;
-  margin-left: 10px;
 }

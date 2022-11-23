@@ -169,13 +169,13 @@
                 <th class="stt">#</th>
                 <th>Project</th>
                 <th class="text-left">
-                  Bill Info 
+                  Bill Info
                   <div class="total-amount" *ngIf="isGranted(this.Timesheets_TimesheetDetail_ViewBillRate)" >
-                    <span *ngFor="let totalAmountByCurrency of listTotalAmountByCurrency" 
+                    <span *ngFor="let totalAmountByCurrency of listTotalAmountByCurrency"
                           [style.color]="getColorByCurrency(totalAmountByCurrency.currencyName)"
                           class="ml-4">
-                          {{totalAmountByCurrency.roundAmount | number : "1.0":"en-US"}} 
-                          {{totalAmountByCurrency.currencyName}} 
+                          {{totalAmountByCurrency.roundAmount | number : "1.0":"en-US"}}
+                          {{totalAmountByCurrency.currencyName}}
                     </span>
                   </div>
                 </th>
@@ -214,11 +214,10 @@
                   <div *ngIf="item.projectBillInfomation" style="min-width: 800px;">
 
                       <div class="row" [style.color]="getColorByCurrency(item.currency)">
-                        <div class="col-6"><label>Total</label></div>
-                        <div class="col-4"><label style="margin-left: 60px;">{{item.roundTotalAmountProjectBillInfomation | number : "1.0":"en-US"}} {{item.currency}}</label></div>
+                        <div class="col-6"><label *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">Total</label></div>
+                        <div class="col-4"><label style="margin-left: 60px;" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">{{item.roundTotalAmountProjectBillInfomation | number : "1.0":"en-US"}} {{item.currency}}</label></div>
                         <div class="col-2">Note</div>
                       </div>
-                     
                       <div class="row" *ngFor="let bill of item.projectBillInfomation">
                           <div class="col-3 text-special"><label>{{bill.fullName}}</label></div>
                           <div class="col-2 text-special role"><span>{{bill.billRole}}</span></div>
@@ -228,7 +227,7 @@
                             </label>
                           </div>
                           <div class="col-1 ml-2"><label style="font-weight: 500;">{{bill.workingTime}}d</label></div>
-                          <div class="col-2" style="margin-left: -40px;"><label class="ml-1">{{bill.roundAmount | number: "1.0":"en-US" }} {{item.currency}}</label></div>
+                          <div class="col-2" style="margin-left: -40px;"><label class="ml-1" *ngIf="isGranted(Timesheets_TimesheetDetail_ViewBillRate)">{{bill.roundAmount | number: "1.0":"en-US" }} {{item.currency}}</label></div>
 
                           <div class="col-3 text-left note"
                               style="word-break: break-all; white-space: pre-line;">
@@ -251,7 +250,7 @@
                               <span> of </span>
                             </p>
                             <ng-container *ngIf="item.isMainProjectInvoice">
-                              <p *ngFor="let project of item.subProjects"  class="m-0">                              
+                              <p *ngFor="let project of item.subProjects"  class="m-0">
                                 <span  class="badge bg-secondary">{{project.name}}</span>
                               </p>
                             </ng-container>
