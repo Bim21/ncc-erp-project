@@ -29,6 +29,9 @@ namespace ProjectManagement.Configuration.Dto
         public string KomuRoom { get; set; }
         public string DefaultWorkingHours { get; set; }
         public string TrainingRequestChannel { get; set; }
+        public string TalentUriBA { get; set; }
+        public string TalentUriFE { get; set; }
+        public string TalentSecurityCode { get; set; }
     }
 
     public class ProjectSetting

@@ -21,6 +21,7 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Configuartions_ViewHrmSetting: "Admin.Configuartions.ViewHrmSetting",
        Admin_Configuartions_ViewTimesheetSetting: "Admin.Configuartions.ViewTimesheetSetting",
        Admin_Configuartions_ViewFinanceSetting: "Admin.Configuartions.ViewFinanceSetting",
+       Admin_Configuartions_ViewTalentSetting: "Admin.Configuartions.ViewTalentSetting",
        Admin_Configuartions_ViewSendReportSetting: "Admin.Configuartions.ViewSendReportSetting",
        Admin_Configuartions_ViewGoogleClientAppSetting: "Admin.Configuartions.ViewGoogleClientAppSetting",
        Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting: "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting",
