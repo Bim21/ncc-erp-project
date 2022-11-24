@@ -69,7 +69,7 @@ namespace ProjectManagement.APIs.HRMv2
             if (secretCode == securityCodeHeader)
                 return;
 
-            throw new UserFriendlyException($"SecretCode does not match! {secretCode.Substring(0, secretCode.Length / 2)} != {securityCodeHeader.Substring(0, securityCodeHeader.Length / 2)}");
+            throw new UserFriendlyException($"SecretCode does not match: ProjectCode: {secretCode.Substring(secretCode.Length - 3)} != {securityCodeHeader}");
         }
         private async Task<ProjectManagement.Entities.Branch> GetBranchByCode(string code)
         {
@@ -598,6 +598,20 @@ namespace ProjectManagement.APIs.HRMv2
         private async Task SendKomu(StringBuilder sb)
         {
             await SendKomu(sb.ToString());
+        }
+
+        [HttpGet]
+        [AbpAllowAnonymous]
+        public GetResultConnectDto CheckConnectToHRM()
+        {
+            CheckSecurityCode();
+            return new GetResultConnectDto()
+            {
+                IsConnected = true,
+                Message = "Connected"
+            };
+
+
         }
     }
 
