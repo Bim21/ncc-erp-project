@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjectManagement.APIs.HRMv2.Dto
+namespace ProjectManagement.Services.Dto
 {
-    public class GetResultConnectDto
+    public class GetConnectResultDto
     {
         public bool IsConnected { get; set; }
         public string Message { get; set; }

@@ -9,6 +9,7 @@ using ProjectManagement.APIs.Public.Dto;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Dto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
@@ -159,6 +160,20 @@ namespace ProjectManagement.APIs.Public
 
             return resourceManager.QueryPMOfUser(userId);
 
+        }
+
+
+
+        [HttpGet]
+        [AbpAllowAnonymous]
+        public GetConnectResultDto CheckConnect()
+        {
+            CheckSecurityCode();
+            return new GetConnectResultDto()
+            {
+                IsConnected = true,
+                Message = "Connected"
+            };
         }
     }
 }

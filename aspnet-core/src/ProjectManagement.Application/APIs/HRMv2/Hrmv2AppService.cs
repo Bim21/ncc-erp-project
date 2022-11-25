@@ -599,20 +599,6 @@ namespace ProjectManagement.APIs.HRMv2
         {
             await SendKomu(sb.ToString());
         }
-
-        [HttpGet]
-        [AbpAllowAnonymous]
-        public GetResultConnectDto CheckConnectToHRM()
-        {
-            CheckSecurityCode();
-            return new GetResultConnectDto()
-            {
-                IsConnected = true,
-                Message = "Connected"
-            };
-
-
-        }
     }
 
     
