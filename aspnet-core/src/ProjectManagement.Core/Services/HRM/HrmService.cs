@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.HRM.Dto;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,28 @@ namespace ProjectManagement.Services.HRM
         public async Task<AutoUpdateUserDto> GetUserFromHRMByEmail(string email)
         {
             return await GetAsync<AutoUpdateUserDto>($"/api/services/app/ProjectManagement/GetUserByEmail?email={email}");
+        }
+
+        public async Task<GetResultConnectDto> CheckConnectToHRM()
+        {
+            var res = await GetAsync<GetResultConnectDto>($"/api/services/app/Public/CheckConnect");
+            if (res == null)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = "Can not connect to HRM"
+                };
+            }
+            if (res.IsConnected == false)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = res.Message
+                };
+            }
+            return res;
         }
 
     }

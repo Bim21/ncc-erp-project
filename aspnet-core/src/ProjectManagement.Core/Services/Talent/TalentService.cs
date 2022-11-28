@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NccCore.IoC;
 using Newtonsoft.Json;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.Talent.Dtos;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,27 @@ namespace ProjectManagement.Services.Talent
         public async Task<List<BranchDto>> GetBranches()
         {
             return await GetAsync<List<BranchDto>>($"{pathUrl}/GetBranches");
+        }
+        public async Task<GetResultConnectDto> CheckConnectToTalent()
+        {
+            var res = await GetAsync<GetResultConnectDto>($"api/services/app/Public/CheckConnect");
+            if (res == null)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = "Can not connect to Talent"
+                };
+            }
+            if (res.IsConnected == false)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = res.Message
+                };
+            }
+            return res;
         }
     }
 }

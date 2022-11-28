@@ -119,9 +119,28 @@
       <mat-expansion-panel [expanded]="isShowHRMSetting">
         <mat-expansion-panel-header (click)="isShowHRMSetting = !isShowHRMSetting"  class="panel-header">
           <mat-panel-title>
-            <p class="title">{{"HRM Setting"}}</p>
+            <div class="row col-11">
+              <p class="title">{{"HRM Setting"}}</p>
+              <div class="ml-3 mt-3">
+                <div *ngIf="!hrmConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
+                <div *ngIf="hrmConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="hrmConnectResult?.isConnected == false" class="text-danger" [matTooltip]="hrmConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+              </div>
+            </div>
+            <div class="my-1 col-md-1 justify-content-end">
+              <div class="text-center ml-5">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                  <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
+                </button>
+                <mat-menu #headerMenu1="matMenu">
+                  <button mat-menu-item (click)="checkConnectToHRM()">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    <span class="ml-1 mr-2">Check connect</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
           </mat-panel-title>
-  
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
@@ -159,43 +178,66 @@
       <mat-expansion-panel [expanded]="isShowTimesheetSetting">
         <mat-expansion-panel-header (click)="isShowTimesheetSetting = !isShowTimesheetSetting" class="panel-header">
           <mat-panel-title>
-            <p class="title">{{"Timesheet Setting"}}</p>
-            <div class="edit-save" *ngIf="isShowTimesheetSetting">
-              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                href="javascript:;"
-                class="btn bg-blue mr-3"
-                (click)="isEditingTimesheet = !isEditingTimesheet; $event.stopPropagation()"
-                [hidden]="isEditingTimesheet"
-              >
-                <i class="fas fa-edit"></i>
-                Edit
-              </a>
+            <div class="row col-11">
+              <p class="title">{{"Timesheet Setting"}}</p>
+              <div class="ml-3 mt-3">
+                <div *ngIf="!timesheetConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
+                <div *ngIf="timesheetConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="timesheetConnectResult?.isConnected == false" class="text-danger" [matTooltip]="timesheetConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+              </div>
+              <div class="edit-save" *ngIf="isShowTimesheetSetting">
+                <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
+                  href="javascript:;"
+                  class="btn bg-blue mr-3 float-right"
+                  (click)="isEditingTimesheet = !isEditingTimesheet; $event.stopPropagation()"
+                  [hidden]="isEditingTimesheet"
+                >
+                  <i class="fas fa-edit"></i>
+                  Edit
+                </a>
 
-              <a
-                href="javascript:;"
-                class="btn bg-secondary"
-                (click)="
-                  isEditingTimesheet = !isEditingTimesheet;
-                  getSetting();
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditingTimesheet"
-              >
-                Cancel
-              </a>
-              <a
-                href="javascript:;"
-                class="btn btn-primary btn-action ml-3"
-                (click)="
-                  saveConfiguration();
-                  isEditingTimesheet = !isEditingTimesheet;
-                  $event.stopPropagation()
-                "
-                [hidden]="!isEditingTimesheet"
-              >
-                Save
-              </a>
+                <a
+                  href="javascript:;"
+                  class="btn bg-secondary"
+                  (click)="
+                    isEditingTimesheet = !isEditingTimesheet;
+                    getSetting();
+                    $event.stopPropagation()
+                  "
+                  [hidden]="!isEditingTimesheet"
+                >
+                  Cancel
+                </a>
+                <a
+                  href="javascript:;"
+                  class="btn btn-primary btn-action ml-3"
+                  (click)="
+                    saveConfiguration();
+                    isEditingTimesheet = !isEditingTimesheet;
+                    $event.stopPropagation()
+                  "
+                  [hidden]="!isEditingTimesheet"
+                >
+                  Save
+                </a>
+              </div>
+              
             </div>
+            
+            <div class="my-1 col-md-1 justify-content-end">
+              <div class="text-center ml-5">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                  <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
+                </button>
+                <mat-menu #headerMenu1="matMenu">
+                  <button mat-menu-item (click)="checkConnectToTimesheet()">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    <span class="ml-1 mr-2">Check connect</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+            
           </mat-panel-title>
   
         </mat-expansion-panel-header>
@@ -242,7 +284,27 @@
       <mat-expansion-panel [expanded]="isShowFinanceSetting">
         <mat-expansion-panel-header (click)="isShowFinanceSetting = !isShowFinanceSetting"  class="panel-header">
           <mat-panel-title>
-            <p class="title">{{"Finance Setting"}}</p>
+            <div class="row col-11">
+              <p class="title">{{"Finance Setting"}}</p>
+              <div class="ml-3 mt-3">
+                <div *ngIf="!finfastConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
+                <div *ngIf="finfastConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="finfastConnectResult?.isConnected == false" class="text-danger" [matTooltip]="finfastConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+              </div>
+            </div>
+            <div class="my-1 col-md-1 justify-content-end">
+              <div class="text-center ml-5">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                  <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
+                </button>
+                <mat-menu #headerMenu1="matMenu">
+                  <button mat-menu-item (click)="checkConnectToFinance()">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    <span class="ml-1 mr-2">Check connect</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
           </mat-panel-title>
   
         </mat-expansion-panel-header>
@@ -281,12 +343,32 @@
       <mat-expansion-panel [expanded]="isShowTalentSetting">
         <mat-expansion-panel-header (click)="isShowTalentSetting = !isShowTalentSetting"  class="panel-header">
           <mat-panel-title>
-            <p class="title">{{"Talent Setting"}}</p>
+            <div class="row col-11">
+              <p class="title">{{"Talent Setting"}}</p>
+              <div class="ml-3 mt-3">
+                <div *ngIf="!talentConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
+                <div *ngIf="talentConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="talentConnectResult?.isConnected == false" class="text-danger" [matTooltip]="talentConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+              </div>
+            </div>
+            <div class="my-1 col-md-1 justify-content-end text-right">
+              <div class="text-center ml-5">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                  <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
+                </button>
+                <mat-menu #headerMenu1="matMenu">
+                  <button mat-menu-item (click)="checkConnectToTalent()">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    <span class="ml-1 mr-2">Check connect</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
           </mat-panel-title>
   
         </mat-expansion-panel-header>
         <div class="row">
-          <div class="col col-12 col-md-12">
+          <div class="col col-12 col-md-12 mt-2">
             <mat-form-field class="w-50 mt-2">
               <input
                 readonly
