@@ -88,7 +88,7 @@ namespace ProjectManagement
             if (secretCode == securityCodeHeader)
                 return;
 
-            throw new UserFriendlyException($"SecretCode does not match! {secretCode.Substring(0, secretCode.Length / 2)} != {securityCodeHeader.Substring(0, securityCodeHeader.Length / 2)}");
+            throw new UserFriendlyException($"SecretCode does not match! {secretCode.Substring(secretCode.Length - 3)} != {securityCodeHeader}");
         }
     }
 }
