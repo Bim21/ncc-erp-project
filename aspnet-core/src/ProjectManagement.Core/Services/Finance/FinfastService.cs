@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ProjectManagement.Configuration;
+using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.Finance.Dto;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,28 @@ namespace ProjectManagement.Services.Finance
                 Code = code
             };
             return await PostAsync<string>($"/api/services/app/ProjectManagement/CreateAccount", item);
+        }
+
+        public async Task<GetResultConnectDto> CheckConnectToFinance()
+        {
+            var res = await GetAsync<GetResultConnectDto>($"api/services/app/Public/CheckConnect");
+            if (res == null)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = "Can not connect to Finfast"
+                };
+            }
+            if (res.IsConnected == false)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = res.Message
+                };
+            }
+            return res;
         }
     }
 }

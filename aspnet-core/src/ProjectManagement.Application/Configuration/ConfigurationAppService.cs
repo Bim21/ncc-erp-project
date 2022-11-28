@@ -3,10 +3,26 @@ using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Runtime.Session;
 using Abp.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ProjectManagement.Authorization;
 using ProjectManagement.Configuration.Dto;
+using ProjectManagement.Services.CheckConnectDto;
+using ProjectManagement.Services.Finance;
+using ProjectManagement.Services.Finance.Dto;
+using ProjectManagement.Services.HRM;
+using ProjectManagement.Services.HRM.Dto;
+using ProjectManagement.Services.ProjectTimesheet;
+using ProjectManagement.Services.ProjectTimesheet.Dto;
+using ProjectManagement.Services.ResourceRequestService.Dto;
+using ProjectManagement.Services.Talent;
+using ProjectManagement.Services.Talent.Dtos;
+using ProjectManagement.Services.Timesheet;
+using ProjectManagement.Services.Timesheet.Dto;
+using System.Net.Http;
+using System.Net.NetworkInformation;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Configuration
 {
@@ -14,10 +30,22 @@ namespace ProjectManagement.Configuration
     public class ConfigurationAppService : ProjectManagementAppServiceBase, IConfigurationAppService
     {
         private static IConfiguration _appConfiguration;
+        private readonly TalentService _talentService;
+        private readonly HRMService _hrmService;
+        private readonly FinfastService _finfastService;
+        private readonly TimesheetService _timesheetService;
 
-        public ConfigurationAppService(IConfiguration appConfiguration)
+        public ConfigurationAppService(IConfiguration appConfiguration,
+            TalentService talentService,
+            HRMService hrmService,
+            FinfastService finfastService,
+            TimesheetService timesheetService)
         {
             _appConfiguration = appConfiguration;
+            _talentService = talentService;
+            _hrmService = hrmService;
+            _finfastService = finfastService;
+            _timesheetService = timesheetService;
         }
         public async Task ChangeUiTheme(ChangeUiThemeInput input)
         {
@@ -141,5 +169,25 @@ namespace ProjectManagement.Configuration
             return input;
         }
 
+        [HttpGet]
+        public async Task<GetResultConnectDto> CheckConnectToTimesheet()
+        {
+            return await _timesheetService.CheckConnectToTimesheet();
+        }
+        [HttpGet]
+        public async Task<GetResultConnectDto> CheckConnectToTalent()
+        {
+            return await _talentService.CheckConnectToTalent();
+        }
+        [HttpGet]
+        public async Task<GetResultConnectDto> CheckConnectToFinfast()
+        {
+            return await _finfastService.CheckConnectToFinance();
+        }
+        [HttpGet]
+        public async Task<GetResultConnectDto> CheckConnectToHRM()
+        {
+            return await _hrmService.CheckConnectToHRM();
+        }
     }
 }

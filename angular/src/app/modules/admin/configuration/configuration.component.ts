@@ -37,6 +37,10 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isShowDefaultWorking: boolean = false;
   public isShowDiscordChannel: boolean = false;
   public isEditDiscordChannel: boolean = false;
+  public  timesheetConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
+  public  talentConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
+  public  hrmConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
+  public  finfastConnectResult: GetConnectResultDto = {} as GetConnectResultDto
  
   public listDays: any[] = [
     { value: '2', text: 'Monday' },
@@ -63,12 +67,46 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
       this.listHours.push(hour);
     }
     this.getSetting();
+    this.checkConnectToHRM();
+    this.checkConnectToTimesheet();
+    this.checkConnectToFinance();
+    this.checkConnectToTalent();
   }
   getSetting() {
     this.settingService.getConfiguration().subscribe((data) => {
       this.configuration = data.result;
     });
   }
+
+  checkConnectToFinance(){
+    this.finfastConnectResult = {} as GetConnectResultDto;
+    this.settingService.checkConnectToFinfast().subscribe((data) => {
+      this.finfastConnectResult = data.result;
+    })
+  }
+
+  checkConnectToTalent(){
+    this.talentConnectResult = {} as GetConnectResultDto;
+    this.settingService.checkConnectToTalent().subscribe((data) => {
+      this.talentConnectResult = data.result;
+    })
+  }
+
+  checkConnectToTimesheet(){
+    this.timesheetConnectResult = {} as GetConnectResultDto;
+    this.settingService.checkConnectToTimesheet().subscribe((data) => {
+      this.timesheetConnectResult = data.result;
+    })
+  }
+
+  checkConnectToHRM(){
+    this.hrmConnectResult = {} as GetConnectResultDto;
+    this.settingService.checkConnectToHRM().subscribe((data) => {
+      this.hrmConnectResult = data.result;
+      console.log(this.hrmConnectResult.isConnected)
+    })
+  }
+
   saveConfiguration() {
     this.settingService
       .editConfiguration(this.configuration)
@@ -130,4 +168,9 @@ export class ConfigurationDto {
 
 export class ProjectSetting{
   securityCode: string;
+}
+
+export class GetConnectResultDto {
+  isConnected: boolean;
+  message: string;
 }

@@ -40,4 +40,20 @@ export class AppConfigurationService extends BaseApiService {
   getTimeCountDown():Observable<ApiResponse<{timeCountDown: number}>>{
     return this.http.get<any>(this.rootUrl + '/GetTimeCountDown') 
   }
+
+  checkConnectToHRM():Observable<any>{
+    return this.http.get(this.rootUrl + '/CheckConnectToHRM');
+  }
+
+  checkConnectToTimesheet():Observable<any>{
+    return this.http.get(this.rootUrl + '/CheckConnectToTimesheet');
+  }
+
+  checkConnectToFinfast():Observable<any>{
+    return this.http.get(this.rootUrl + '/CheckConnectToFinfast');
+  }
+
+  checkConnectToTalent():Observable<any>{
+    return this.http.get(this.rootUrl + '/CheckConnectToTalent');
+  }
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.Timesheet.Dto;
 using System;
 using System.Collections.Generic;
@@ -101,7 +102,26 @@ namespace ProjectManagement.Services.Timesheet
             Post($"/api/services/app/ProjectManagement/UserJoinProject", item);
         }
 
-      
-
+        public async Task<GetResultConnectDto> CheckConnectToTimesheet()
+        {
+            var res = await GetAsync<GetResultConnectDto>($"/api/services/app/Public/CheckConnect");
+            if (res == null)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = "Can not connect to Timesheet"
+                };
+            }
+            if (res.IsConnected == false)
+            {
+                return new GetResultConnectDto
+                {
+                    IsConnected = false,
+                    Message = res.Message
+                };
+            }
+            return res;
+        }
     }
 }
