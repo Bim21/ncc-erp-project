@@ -113,7 +113,6 @@ namespace ProjectManagement.Services.Timesheet
                     Message = "Can not connect to Timesheet"
                 };
             }
-            //res.
             if (res.IsConnected == false)
             {
                 return new GetResultConnectDto
