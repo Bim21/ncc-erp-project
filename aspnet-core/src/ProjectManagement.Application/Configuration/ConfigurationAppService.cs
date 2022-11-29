@@ -184,10 +184,5 @@ namespace ProjectManagement.Configuration
         {
             return await _finfastService.CheckConnectToFinance();
         }
-        [HttpGet]
-        public async Task<GetResultConnectDto> CheckConnectToHRM()
-        {
-            return await _hrmService.CheckConnectToHRM();
-        }
     }
 }
