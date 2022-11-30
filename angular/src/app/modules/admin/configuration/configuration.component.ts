@@ -67,7 +67,6 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
       this.listHours.push(hour);
     }
     this.getSetting();
-    this.checkConnectToHRM();
     this.checkConnectToTimesheet();
     this.checkConnectToFinance();
     this.checkConnectToTalent();
@@ -96,14 +95,6 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     this.timesheetConnectResult = {} as GetConnectResultDto;
     this.settingService.checkConnectToTimesheet().subscribe((data) => {
       this.timesheetConnectResult = data.result;
-    })
-  }
-
-  checkConnectToHRM(){
-    this.hrmConnectResult = {} as GetConnectResultDto;
-    this.settingService.checkConnectToHRM().subscribe((data) => {
-      this.hrmConnectResult = data.result;
-      console.log(this.hrmConnectResult.isConnected)
     })
   }
 

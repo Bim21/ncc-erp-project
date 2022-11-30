@@ -121,24 +121,6 @@
           <mat-panel-title>
             <div class="row col-11">
               <p class="title">{{"HRM Setting"}}</p>
-              <div class="ml-3 mt-3">
-                <div *ngIf="!hrmConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
-                <div *ngIf="hrmConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="hrmConnectResult?.isConnected == false" class="text-danger" [matTooltip]="hrmConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
-              </div>
-            </div>
-            <div class="my-1 col-md-1 justify-content-end">
-              <div class="text-center ml-5">
-                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
-                  <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
-                </button>
-                <mat-menu #headerMenu1="matMenu">
-                  <button mat-menu-item (click)="checkConnectToHRM()">
-                    <i class="fa fa-question-circle" aria-hidden="true"></i>
-                    <span class="ml-1 mr-2">Check connect</span>
-                  </button>
-                </mat-menu>
-              </div>
             </div>
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -183,7 +165,7 @@
               <div class="ml-3 mt-3">
                 <div *ngIf="!timesheetConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
                 <div *ngIf="timesheetConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="timesheetConnectResult?.isConnected == false" class="text-danger" [matTooltip]="timesheetConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+                <div class="message" *ngIf="timesheetConnectResult?.isConnected == false" class="text-danger"><i class="fa fa-solid fa-times mr-2"></i>connect fail. {{timesheetConnectResult?.message}}</div>
               </div>
               <div class="edit-save" *ngIf="isShowTimesheetSetting">
                 <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
@@ -289,7 +271,7 @@
               <div class="ml-3 mt-3">
                 <div *ngIf="!finfastConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
                 <div *ngIf="finfastConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="finfastConnectResult?.isConnected == false" class="text-danger" [matTooltip]="finfastConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+                <div class="message" *ngIf="finfastConnectResult?.isConnected == false" class="text-danger"><i class="fa fa-solid fa-times mr-2"></i>connect fail. {{finfastConnectResult?.message}}</div>
               </div>
             </div>
             <div class="my-1 col-md-1 justify-content-end">
@@ -348,7 +330,7 @@
               <div class="ml-3 mt-3">
                 <div *ngIf="!talentConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
                 <div *ngIf="talentConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="talentConnectResult?.isConnected == false" class="text-danger" [matTooltip]="talentConnectResult?.message"><i class="fa fa-solid fa-times mr-2"></i>Fail connected</div>
+                <div class="message" *ngIf="talentConnectResult?.isConnected == false" class="text-danger"><i class="fa fa-solid fa-times mr-2"></i>connect fail. {{talentConnectResult?.message}}</div>
               </div>
             </div>
             <div class="my-1 col-md-1 justify-content-end text-right">

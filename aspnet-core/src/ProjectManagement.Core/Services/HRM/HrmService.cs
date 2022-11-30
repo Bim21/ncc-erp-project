@@ -33,28 +33,5 @@ namespace ProjectManagement.Services.HRM
         {
             return await GetAsync<AutoUpdateUserDto>($"/api/services/app/ProjectManagement/GetUserByEmail?email={email}");
         }
-
-        public async Task<GetResultConnectDto> CheckConnectToHRM()
-        {
-            var res = await GetAsync<GetResultConnectDto>($"/api/services/app/Public/CheckConnect");
-            if (res == null)
-            {
-                return new GetResultConnectDto
-                {
-                    IsConnected = false,
-                    Message = "Can not connect to HRM"
-                };
-            }
-            if (res.IsConnected == false)
-            {
-                return new GetResultConnectDto
-                {
-                    IsConnected = false,
-                    Message = res.Message
-                };
-            }
-            return res;
-        }
-
     }
 }
