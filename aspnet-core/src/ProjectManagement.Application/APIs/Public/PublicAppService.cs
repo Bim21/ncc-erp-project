@@ -1,6 +1,7 @@
 ﻿using Abp;
 using Abp.Authorization;
 using Abp.UI;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +10,7 @@ using ProjectManagement.APIs.Public.Dto;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
-using ProjectManagement.Services.Dto;
+using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
@@ -26,11 +27,13 @@ namespace ProjectManagement.APIs.Public
     {
         private readonly IConfiguration _appConfiguration;
         private readonly ResourceManager resourceManager;
-        
-        public PublicAppService(ResourceManager resourceManager, IConfiguration appConfiguration)
+        protected IHttpContextAccessor _httpContextAccessor { get; set; }
+
+        public PublicAppService(ResourceManager resourceManager, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             this.resourceManager = resourceManager;
             this._appConfiguration = appConfiguration;
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpGet]
         public async Task<GetURIDto> GetConfigUri()
@@ -166,14 +169,21 @@ namespace ProjectManagement.APIs.Public
 
         [HttpGet]
         [AbpAllowAnonymous]
-        public GetConnectResultDto CheckConnect()
+        public GetResultConnectDto CheckConnect()
         {
-            CheckSecurityCode();
-            return new GetConnectResultDto()
+            var secretCode = SettingManager.GetSettingValue(AppSettingNames.SecurityCode);
+            var header = _httpContextAccessor.HttpContext.Request.Headers;
+            var securityCodeHeader = header["X-Secret-Key"].ToString();
+            var result = new GetResultConnectDto();
+            if (secretCode != securityCodeHeader)
             {
-                IsConnected = true,
-                Message = "Connected"
-            };
+                result.IsConnected = false;
+                result.Message = $"SecretCode does not match: " + securityCodeHeader + " != ***" + secretCode.Substring(secretCode.Length - 3);
+                return result;
+            }
+            result.IsConnected = true;
+            result.Message = "Connected";
+            return result;
         }
     }
 }
