@@ -299,6 +299,17 @@ namespace ProjectManagement.APIs.TimeSheets
             await WorkScope.UpdateAsync(user);
         }
 
+        [HttpGet]
+        public List<GetProjectPMNameDto> GetListPMByProjectCode()
+        {
+            return  WorkScope.GetAll<Project>()
+                .Select(x => new GetProjectPMNameDto {
+                    ProjectCode = x.Code,
+                    PMEmail = x.PM.EmailAddress
+                })
+                .ToList();
+        }
+
     }
 }
    
