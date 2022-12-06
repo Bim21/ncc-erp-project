@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ProjectManagement.Services.Dto
 {
-    public class GetConnectResultDto
+    public class GetResultConnectDto
     {
         public bool IsConnected { get; set; }
         public string Message { get; set; }
