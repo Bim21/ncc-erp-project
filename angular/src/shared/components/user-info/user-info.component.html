@@ -5,10 +5,15 @@
             <div class="col-3 text-center">
                 <img [src]="getAvatar(user)" class="rounded-circle  mt-1" style="max-width: 100%;"
                     alt="avatar">
-                <ngx-stars style="z-index: 1 !important; margin-top: 10px;" [readonly]="true" [wholeStars]="true"
+                <!-- <ngx-stars style="z-index: 1 !important; margin-top: 10px;" [readonly]="true" [wholeStars]="true"
                     [size]="1" [color]="getStarColor(user.starRate, false)" [initialStars]="user.starRate"
                     [maxStars]="user.starRate ? user.starRate : 0 ">
-                </ngx-stars>
+                </ngx-stars> -->
+                <div *ngIf="averagePoint != null" style="display: flex; align-items: center; justify-content: center;">
+                    {{averagePoint | number:'0.1'}}<ngx-stars style="z-index: 1 !important; margin-left: 3px;"
+                    [color]="getStarColorforReviewInternCapability(averagePoint, false)"
+                    [maxStars]="1" [initialStars]="1" [readonly]="true"></ngx-stars>
+                </div>
             </div>
             <div class="col-9  text-left">
                 <p class="m-0"><strong>{{user?.fullName}}</strong></p>

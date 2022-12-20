@@ -98,12 +98,19 @@
                                 </td>
                                 <td style="width: 350px;">
                                     <div style="width: 100%; display: flex; flex-direction: row; align-items: center;">
-                                        <app-user-info class="w-100" [userData]="item">
+                                        <app-user-info class="w-100" [userData]="item" [averagePoint] = "item.avgPoint">
                                         </app-user-info>
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <i *ngIf="permission.isGranted(Resource_TabPool_ViewHistory)" class="fas fa-history fa-lg" (click)="projectHistorUser(item)" matTooltip="Xem dự án trước đây"></i>
+                                    <div style="display: inline">
+                                        <div>
+                                            <i *ngIf="permission.isGranted(Resource_TabPool_ViewHistory)" class="fas fa-history fa-lg" (click)="projectHistorUser(item)" matTooltip="Xem dự án trước đây"></i>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <i *ngIf="permission.isGranted(Resource_TabPool_ViewHistory)" class="fa fa-file" (click)="RetroReviewHistoryUser(item)" matTooltip="Xem lịch sử của Retro và Review trước đây"></i>
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td style="white-space: normal;">

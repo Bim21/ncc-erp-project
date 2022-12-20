@@ -12,6 +12,7 @@ import { AppConsts } from '@shared/AppConsts';
 })
 export class UserInfoComponent extends AppComponentBase implements OnInit {
   @Input() userData: UserDto
+  @Input() averagePoint : number
   public user: UserDto
   constructor(injector: Injector) {
     super(injector)
@@ -136,6 +137,20 @@ export class UserInfoComponent extends AppComponentBase implements OnInit {
           style: {'background-color': '#902ee1'}
         }
       }
+    }
+  }
+  public getStarColorforReviewInternCapability(average, isClass) {
+    if (average < 2.5) {
+      return 'grey'
+    }
+    if (average < 3.5) {
+      return 'yellow'
+    }
+    if (average < 4.5) {
+      return 'orange'
+    }
+    else {
+      return ''
     }
   }
 }

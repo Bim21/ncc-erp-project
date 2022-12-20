@@ -1,0 +1,42 @@
+<abp-modal-header title="Retro and review point history of {{ emailAddress }}" (onCloseClick)="dialogRef.close()">
+</abp-modal-header>
+<div class="modal-body">
+  <div class="fixTableHead">
+    <table [busy]="isLoading" style="border-collapse: collapse" class="table table-hover text-nowrap"
+      *ngIf="reviewInternRetroHisotyDto.length > 0; else other_template">
+      <thead class="bg-light">
+        <tr style="border: none">
+          <th class="stt">#</th>
+          <th>Time</th>
+          <th>Type</th>
+          <th style="width: 100px;">Detail</th>
+          <th style="width: 100px;">Point</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of reviewInternRetroHisotyDto; let i= index">
+          <td>{{i+1}}</td>
+          <td><strong>{{ item.averagePoint }}</strong></td>
+          <td><span [ngClass]="item.pointHistories.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
+              item.pointHistories.isRetro > 0?'ReviewIntern':'Retro'}}</span></td>
+          <td><strong>{{ item.averagePoint }}</strong></td>
+          <td><strong>{{ item.averagePoint }}</strong></td>
+          <!-- <td class="text-center"><span [ngClass]="item.pointHistories.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
+              item.pointHistories.isRetro > 0?'ReviewIntern':'Retro'}}</span>
+          </td> -->
+          <!-- <td class="text-center">
+            {{ item.averagePoint | date: 'dd/MM/yyyy' }}
+          </td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #other_template>
+    <div>Chưa có dữ liệu</div>
+  </ng-template>
+</div>
+<div>
+  <div align="end" class="row justify-content-end">
+    <button class="btn btn-secondary" mat-dialog-close>Close</button>
+  </div>
+</div>
