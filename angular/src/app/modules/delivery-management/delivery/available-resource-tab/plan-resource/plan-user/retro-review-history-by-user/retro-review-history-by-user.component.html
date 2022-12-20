@@ -9,18 +9,21 @@
           <th class="stt">#</th>
           <th>Time</th>
           <th>Type</th>
-          <th style="width: 100px;">Detail</th>
+          <!-- <th style="width: 100px;">Detail</th> -->
           <th style="width: 100px;">Point</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of reviewInternRetroHisotyDto; let i= index">
+        <tr *ngFor="let item of reviewInternRetroHisotyDto[0]?.pointHistories; let i= index">
           <td>{{i+1}}</td>
-          <td><strong>{{ item.averagePoint }}</strong></td>
-          <td><span [ngClass]="item.pointHistories.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
-              item.pointHistories.isRetro > 0?'ReviewIntern':'Retro'}}</span></td>
-          <td><strong>{{ item.averagePoint }}</strong></td>
-          <td><strong>{{ item.averagePoint }}</strong></td>
+          <td>
+              <strong *ngIf="item.isRetro == 0">{{ item.month }}/{{item.year}}</strong>
+              <strong *ngIf="item.isRetro == 1">{{ item.startDate | date: 'dd/MM/yyyy' }}</strong>
+          </td>
+          <td><span [ngClass]="item.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
+              item.isRetro > 0?'Retro':'ReviewIntern'}}</span></td>
+          <!-- <td><strong>{{ item.averagePoint }}</strong></td> -->
+          <td><strong>{{ item.point }}</strong></td>
           <!-- <td class="text-center"><span [ngClass]="item.pointHistories.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
               item.pointHistories.isRetro > 0?'ReviewIntern':'Retro'}}</span>
           </td> -->
