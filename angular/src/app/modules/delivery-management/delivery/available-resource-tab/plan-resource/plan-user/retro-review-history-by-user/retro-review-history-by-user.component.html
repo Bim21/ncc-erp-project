@@ -9,8 +9,9 @@
           <th class="stt">#</th>
           <th>Time</th>
           <th>Type</th>
-          <!-- <th style="width: 100px;">Detail</th> -->
           <th style="width: 100px;">Point</th>
+          <th>Project Name</th>
+          <th  style="max-width: 100px;">Note</th>
         </tr>
       </thead>
       <tbody>
@@ -22,14 +23,14 @@
           </td>
           <td><span [ngClass]="item.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
               item.isRetro > 0?'Retro':'ReviewIntern'}}</span></td>
-          <!-- <td><strong>{{ item.averagePoint }}</strong></td> -->
           <td><strong>{{ item.point }}</strong></td>
-          <!-- <td class="text-center"><span [ngClass]="item.pointHistories.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
-              item.pointHistories.isRetro > 0?'ReviewIntern':'Retro'}}</span>
-          </td> -->
-          <!-- <td class="text-center">
-            {{ item.averagePoint | date: 'dd/MM/yyyy' }}
-          </td> -->
+          <td>{{item.projectName}}</td>
+          <td style="max-width: 100px;">
+            <div data-toggle="tooltip"
+            [title]="item.note"style="overflow: hidden; text-overflow: ellipsis;" >
+              {{item.note}}
+            </div>
+          </td>  
         </tr>
       </tbody>
     </table>
