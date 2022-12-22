@@ -32,6 +32,7 @@ namespace ProjectManagement.Configuration.Dto
         public string TalentUriBA { get; set; }
         public string TalentUriFE { get; set; }
         public string TalentSecurityCode { get; set; }
+        public string MaxCountHistory { get; set; }
     }
 
     public class ProjectSetting

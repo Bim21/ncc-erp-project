@@ -18,12 +18,19 @@
         <tr *ngFor="let item of reviewInternRetroHisotyDto[0]?.pointHistories; let i= index">
           <td>{{i+1}}</td>
           <td>
-              <strong *ngIf="item.isRetro == 0">{{ item.month }}/{{item.year}}</strong>
+              <strong *ngIf="item.isRetro == 0">{{ item.startDate | date: 'dd/MM/yyyy' }}</strong>
               <strong *ngIf="item.isRetro == 1">{{ item.startDate | date: 'dd/MM/yyyy' }}</strong>
           </td>
           <td><span [ngClass]="item.isRetro > 0 ? 'text-success' : 'text-danger' "> {{
               item.isRetro > 0?'Retro':'ReviewIntern'}}</span></td>
-          <td><strong>{{ item.point }}</strong></td>
+          <td>
+            <div *ngIf="item.point != null" style="display: flex; justify-content: center;">
+              <strong style="margin-top: 2px;">{{ item.point }}</strong>
+              <ngx-stars style="z-index: 1 !important; margin-left: 6px;"
+              [color]="getStarColorforReviewInternCapability(item.point, false)"
+              [maxStars]="1" [initialStars]="1" [readonly]="true"></ngx-stars>
+            </div>
+          </td>
           <td>{{item.projectName}}</td>
           <td style="max-width: 100px;">
             <div data-toggle="tooltip"

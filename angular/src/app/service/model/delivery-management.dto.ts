@@ -133,7 +133,5 @@ export class ReviewRetroInfoDto{
   point: number
   isRetro: boolean
   startDate: string
-  year: string
-  month: string
   projectName: string
 }

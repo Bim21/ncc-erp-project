@@ -87,6 +87,7 @@ namespace ProjectManagement.Configuration
                 TalentUriBA = _appConfiguration.GetValue<string>("TalentService:BaseAddress"),
                 TalentUriFE = _appConfiguration.GetValue<string>("TalentService:FEAddress"),
                 TalentSecurityCode = _appConfiguration.GetValue<string>("TalentService:SecurityCode"),
+                MaxCountHistory = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory),
 
             };
         }
@@ -114,7 +115,8 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.HRMUri) ||
                 string.IsNullOrEmpty(input.HRMSecretCode) ||
                 string.IsNullOrEmpty(input.KomuRoom) ||
-                string.IsNullOrEmpty(input.DefaultWorkingHours)
+                string.IsNullOrEmpty(input.DefaultWorkingHours) ||
+                string.IsNullOrEmpty(input.MaxCountHistory)
                 )
             {
                 throw new UserFriendlyException("All setting values need to be completed");
@@ -141,6 +143,7 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.KomuRoom, input.KomuRoom);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.DefaultWorkingHours, input.DefaultWorkingHours);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TrainingRequestChannel, input.TrainingRequestChannel);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.MaxCountHistory, input.MaxCountHistory);
             return input;
         }
 

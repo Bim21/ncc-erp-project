@@ -17,6 +17,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   Admin_Configuartions_ViewTalentSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewTalentSetting;
   Admin_Configuartions_ViewGoogleClientAppSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewGoogleClientAppSetting;
   Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting;
+  Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint;
 
   configuration = {} as ConfigurationDto;
   googleToken: string = '';
@@ -27,6 +28,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditPassBot: boolean = false;
   public isEditKomuUrl: boolean = false;
   public isEditDefaultWorkingHours: boolean = false;
+  public isEditMaxCountHistory: boolean = false;
   public isShowKomuSetting: boolean = false;
   public isExpandingProjectSetting: boolean = false;
   public isShowHRMSetting: boolean = false;
@@ -35,6 +37,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isShowTalentSetting: boolean = false;
   public isShowGoogleClientApp: boolean = false;
   public isShowDefaultWorking: boolean = false;
+  public isShowMaxCountHistory: boolean = false;
   public isShowDiscordChannel: boolean = false;
   public isEditDiscordChannel: boolean = false;
   public  timesheetConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
@@ -155,6 +158,7 @@ export class ConfigurationDto {
   talentUriBA: string;
   talentUriFE: string;
   talentSecurityCode: string;
+  maxCountHistory: number;
 }
 
 export class ProjectSetting{
