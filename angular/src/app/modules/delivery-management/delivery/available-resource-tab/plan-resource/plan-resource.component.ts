@@ -475,8 +475,6 @@ export class PlanResourceComponent
       this.availableResourceList.forEach(x => {
           x.avgPoint = this.reviewInternRetroHisoties.find(s => s.email == x.emailAddress)?.averagePoint
       })
-      console.log(this.availableResourceList)
-      console.log(this.reviewInternRetroHisoties)
     })
   }
 
