@@ -28,5 +28,6 @@
         public const string DefaultWorkingHours = "App.DefaultWorkingHours";
         public const string TimeCountDown = "App.TimeCountDown";
         public const string TrainingRequestChannel = "TrainingRequestChannel";
+        public const string MaxCountHistory = "MaxCountHistory";
     }
 }

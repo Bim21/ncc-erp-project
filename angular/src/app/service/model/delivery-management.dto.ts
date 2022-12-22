@@ -89,6 +89,7 @@ export class availableResourceDto {
   listSkills: any[];
   totalFreeDay: any;
   starRate: number;
+  avgPoint:number
 }
 export class planUserDto {
   projectId: number;
@@ -121,4 +122,16 @@ export class futureResourceDto {
   use: number;
   status: number;
   id?: number;
+}
+
+export class ReviewInternRetroHisotyDto{
+  email: string
+  pointHistories: ReviewRetroInfoDto[]
+  averagePoint: number
+}
+export class ReviewRetroInfoDto{
+  point: number
+  isRetro: boolean
+  startDate: string
+  projectName: string
 }

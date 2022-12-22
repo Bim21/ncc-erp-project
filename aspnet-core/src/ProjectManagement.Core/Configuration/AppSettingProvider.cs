@@ -34,6 +34,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.DefaultWorkingHours,"8",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.TimeCountDown,"180",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.TrainingRequestChannel, "1008574549283061820",scopes: SettingScopes.Application |SettingScopes.Tenant),
+                new SettingDefinition(AppSettingNames.MaxCountHistory, "12",scopes: SettingScopes.Application |SettingScopes.Tenant),
             };
         }
     }

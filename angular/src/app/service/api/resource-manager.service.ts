@@ -1,3 +1,4 @@
+import { RetroReviewInternHistoriesDto } from './../model/resource-plan.dto';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -108,5 +109,7 @@ export class ResourceManagerService extends BaseApiService{
   public planUser(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
   }
-
+  public GetTimesheetOfRetroReviewInternHistories(input:RetroReviewInternHistoriesDto): Observable<any> {
+    return this.http.post("this.configURI.timesheetURI" + `api/services/app/Public/GetRetroReviewInternHistories`, input)
+  }
 }

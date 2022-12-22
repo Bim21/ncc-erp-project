@@ -186,6 +186,7 @@ import { InvoiceSettingDialogComponent } from './modules/pm-management/list-proj
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TrainingRequestTabComponent } from './modules/delivery-management/delivery/training-request-tab/training-request-tab.component';
 import { CreateUpdateTrainingRequestComponent } from './modules/delivery-management/delivery/training-request-tab/create-update-training-request/create-update-training-request.component';
+import { RetroReviewHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/retro-review-history-by-user/retro-review-history-by-user.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -354,7 +355,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddSubInvoiceDialogComponent,
     InvoiceSettingDialogComponent,
     TrainingRequestTabComponent,
-    CreateUpdateTrainingRequestComponent
+    CreateUpdateTrainingRequestComponent,
+    RetroReviewHistoryByUserComponent
   ],
   imports: [
     CommonModule,

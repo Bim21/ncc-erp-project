@@ -1,3 +1,5 @@
+import { RetroReviewHistoryByUserComponent } from './plan-user/retro-review-history-by-user/retro-review-history-by-user.component';
+import { RetroReviewInternHistoriesDto } from './../../../../../service/model/resource-plan.dto';
 import { ResourceManagerService } from './../../../../../service/api/resource-manager.service';
 import { AddUserToTempProjectDialogComponent } from './add-user-to-temp-project-dialog/add-user-to-temp-project-dialog.component';
 import { ProjectUserService } from '@app/service/api/project-user.service';
@@ -8,7 +10,7 @@ import { ProjectDetailComponent } from './plan-user/project-detail/project-detai
 import { SkillService } from './../../../../../service/api/skill.service';
 import { InputFilterDto } from './../../../../../../shared/filter/filter.component';
 import { DeliveryResourceRequestService } from './../../../../../service/api/delivery-request-resource.service';
-import { availableResourceDto } from './../../../../../service/model/delivery-management.dto';
+import { availableResourceDto, ReviewInternRetroHisotyDto } from './../../../../../service/model/delivery-management.dto';
 import { AppComponentBase } from '@shared/app-component-base';
 import { PlanUserComponent } from './plan-user/plan-user.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -90,6 +92,8 @@ export class PlanResourceComponent
           });
           this.showPaging(data.result, pageNumber);
           this.isLoading = false;
+          let listEmail = this.availableResourceList.map(rs => rs.emailAddress)
+          this.GetTimesheetOfRetroReviewInternHistories(listEmail)
         })
     )
   }
@@ -123,6 +127,7 @@ export class PlanResourceComponent
   ];
 
   public availableResourceList: availableResourceDto[] = [];
+  private reviewInternRetroHisoties: ReviewInternRetroHisotyDto[] = []
 
   constructor(
     public injector: Injector,
@@ -224,6 +229,28 @@ export class PlanResourceComponent
 
   projectHistorUser(user: availableResourceDto) {
     this.showDialogProjectHistoryUser(user);
+  }
+  showDialogRetroReviewHistoryUser(user: availableResourceDto) {
+    let userInfo = {
+      userId: user.userId,
+      emailAddress: user.emailAddress,
+    };
+
+    const show = this.dialog.open(RetroReviewHistoryByUserComponent, {
+      width: '800px',
+      disableClose: true,
+      data: {
+        item: userInfo,
+      },
+    });
+    show.afterClosed().subscribe((result) => {
+      if (result) {
+        this.refresh();
+      }
+    });
+  }
+  RetroReviewHistoryUser(user: availableResourceDto) {
+    this.showDialogRetroReviewHistoryUser(user);
   }
   planUser(user: any,) {
     this.showDialogPlanUser('plan', user);
@@ -439,6 +466,15 @@ export class PlanResourceComponent
       if (rs) {
         this.refresh()
       }
+    })
+  }
+  GetTimesheetOfRetroReviewInternHistories(emails: string[]) {
+    var input = {emails: emails} as RetroReviewInternHistoriesDto
+    this.availableRerourceService.GetTimesheetOfRetroReviewInternHistories(input).subscribe(rs => {
+      this.reviewInternRetroHisoties = rs.result
+      this.availableResourceList.forEach(x => {
+          x.avgPoint = this.reviewInternRetroHisoties.find(s => s.email == x.emailAddress)?.averagePoint
+      })
     })
   }
 

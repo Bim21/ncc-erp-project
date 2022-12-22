@@ -546,5 +546,67 @@
         </div>
       </mat-expansion-panel>
     </div>
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint)">
+      <mat-expansion-panel [expanded]="isShowMaxCountHistory">
+        <mat-expansion-panel-header (click)="isShowMaxCountHistory = !isShowMaxCountHistory" class="panel-header">
+          <mat-panel-title>
+            <p class="title">{{"Max Count History Of Retro And Review Point"}}</p>
+            <div class="edit-save" *ngIf="isShowMaxCountHistory">
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
+                href="javascript:;"
+                class="btn bg-blue mr-3"
+                (click)="
+                  isEditMaxCountHistory = !isEditMaxCountHistory;
+                  clientId.focus();$event.stopPropagation()
+                "
+                [hidden]="isEditMaxCountHistory"
+              >
+                <i class="fas fa-edit"></i>
+                Edit
+              </a>
+              
+              <a
+                href="javascript:;"
+                class="btn bg-secondary"
+                (click)="
+                  isEditMaxCountHistory = !isEditMaxCountHistory;
+                  getSetting();$event.stopPropagation()
+                "
+                [hidden]="!isEditMaxCountHistory"
+              >
+                Cancel
+              </a>
+              <a
+                href="javascript:;"
+                class="btn btn-primary btn-action ml-3"
+                (click)="
+                  saveConfiguration();
+                  isEditMaxCountHistory = !isEditMaxCountHistory;$event.stopPropagation()
+                "
+                [hidden]="!isEditMaxCountHistory"
+              >
+                Save
+              </a>
+            </div>
+          </mat-panel-title>
+  
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 ml-1">
+              <input
+                [disabled]="!isEditMaxCountHistory"
+                class="w-100"
+                type="text"
+                placeholder="Max Count History Of Retro And Review Point"
+                matInput
+                [(ngModel)]="configuration.maxCountHistory"
+                #clientId
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
   </div>
 </section>
