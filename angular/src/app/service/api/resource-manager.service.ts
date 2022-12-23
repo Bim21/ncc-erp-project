@@ -110,6 +110,6 @@ export class ResourceManagerService extends BaseApiService{
     return this.http.post<any>(this.rootUrl + '/PlanEmployeeJoinOrOutProject', item);
   }
   public GetTimesheetOfRetroReviewInternHistories(input:RetroReviewInternHistoriesDto): Observable<any> {
-    return this.http.post("this.configURI.timesheetURI" + `api/services/app/Public/GetRetroReviewInternHistories`, input)
+    return this.http.post(this.configURI.timesheetURI + `api/services/app/Public/GetRetroReviewInternHistories`, input)
   }
 }
