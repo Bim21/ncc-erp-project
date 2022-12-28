@@ -17,8 +17,10 @@ using ProjectManagement.Services.Komu.KomuDto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
+using ProjectManagement.Services.Timesheet.Dto;
 using ProjectManagement.Users;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -240,6 +242,11 @@ namespace ProjectManagement.APIs.Resource
             var user = await _userManager.GetUserByIdAsync(input.UserId);
             user.PoolNote = input.Note;
             await WorkScope.UpdateAsync<User>(user);
+        }
+        [HttpPost]
+        public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(InputRetroReviewInternHistoriesDto input)
+        {
+            return await _resourceManager.GetRetroReviewInternHistories(input);
         }
     }
 }

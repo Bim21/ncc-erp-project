@@ -1,3 +1,4 @@
+import { AppConfigurationService } from './../../../../../service/api/app-configuration.service';
 import { RetroReviewHistoryByUserComponent } from './plan-user/retro-review-history-by-user/retro-review-history-by-user.component';
 import { RetroReviewInternHistoriesDto } from './../../../../../service/model/resource-plan.dto';
 import { ResourceManagerService } from './../../../../../service/api/resource-manager.service';
@@ -93,7 +94,7 @@ export class PlanResourceComponent
           this.showPaging(data.result, pageNumber);
           this.isLoading = false;
           let listEmail = this.availableResourceList.map(rs => rs.emailAddress)
-          this.GetTimesheetOfRetroReviewInternHistories(listEmail)
+          this.GetRetroAndReviewInternHistories(listEmail)
         })
     )
   }
@@ -136,6 +137,7 @@ export class PlanResourceComponent
     private dialog: MatDialog,
     private skillService: SkillService,
     private projectUserService: ProjectUserService,
+    private appConfigurationService: AppConfigurationService,
     private branchService: BranchService
   ) {
     super(injector);
@@ -468,8 +470,22 @@ export class PlanResourceComponent
       }
     })
   }
-  GetTimesheetOfRetroReviewInternHistories(emails: string[]) {
-    var input = {emails: emails} as RetroReviewInternHistoriesDto
+  public GetRetroAndReviewInternHistories(emails: string[]) {
+    this.isLoading = true
+    this.appConfigurationService.getConfiguration()
+        .pipe(catchError(this.projectUserService.handleError))
+        .subscribe((data) => {
+          if (data.result.maxCountHistory)
+          {
+            this.GetTimesheetOfRetroReviewInternHistories(emails, Number(data.result.maxCountHistory)); 
+          } else {
+            this.GetTimesheetOfRetroReviewInternHistories(emails); 
+          }
+          this.isLoading = false
+        });
+  }
+  GetTimesheetOfRetroReviewInternHistories(emails: string[], maxCountHistory = 12) {
+    var input = {emails: emails, maxCountHistory : maxCountHistory} as RetroReviewInternHistoriesDto
     this.availableRerourceService.GetTimesheetOfRetroReviewInternHistories(input).subscribe(rs => {
       this.reviewInternRetroHisoties = rs.result
       this.availableResourceList.forEach(x => {

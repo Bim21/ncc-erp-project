@@ -20,6 +20,7 @@ using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Timesheet;
+using ProjectManagement.Services.Timesheet.Dto;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
@@ -1108,6 +1109,10 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             return presentPUs;
+        }
+        public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(InputRetroReviewInternHistoriesDto input)
+        {
+            return await _timesheetService.GetRetroReviewInternHistories(input);
         }
     }
 }

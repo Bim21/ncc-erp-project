@@ -123,5 +123,9 @@ namespace ProjectManagement.Services.Timesheet
             }
             return res;
         }
+        public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(InputRetroReviewInternHistoriesDto input)
+        {
+            return await PostAsync<List<RetroReviewInternHistoriesDto>>($"/api/services/app/ProjectManagement/GetRetroReviewInternHistories", input);
+        }
     }
 }
