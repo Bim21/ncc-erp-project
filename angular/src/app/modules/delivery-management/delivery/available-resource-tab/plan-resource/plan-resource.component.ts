@@ -1,4 +1,3 @@
-import { AppConfigurationService } from './../../../../../service/api/app-configuration.service';
 import { RetroReviewHistoryByUserComponent } from './plan-user/retro-review-history-by-user/retro-review-history-by-user.component';
 import { RetroReviewInternHistoriesDto } from './../../../../../service/model/resource-plan.dto';
 import { ResourceManagerService } from './../../../../../service/api/resource-manager.service';
@@ -137,7 +136,6 @@ export class PlanResourceComponent
     private dialog: MatDialog,
     private skillService: SkillService,
     private projectUserService: ProjectUserService,
-    private appConfigurationService: AppConfigurationService,
     private branchService: BranchService
   ) {
     super(injector);
