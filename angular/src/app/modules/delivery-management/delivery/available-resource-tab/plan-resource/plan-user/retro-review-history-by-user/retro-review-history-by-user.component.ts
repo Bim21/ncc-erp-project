@@ -43,27 +43,13 @@ export class RetroReviewHistoryByUserComponent extends AppComponentBase
     this.emailAddress = data.item.emailAddress
   }
   ngOnInit(): void {
-    this.GetMaxCount();
+    this.GetRetroAndReviewInternHistories();
     
   }
-  public GetMaxCount() {
-    this.isLoading = true
-    this.appConfigurationService.getConfiguration()
-        .pipe(catchError(this.projectUserService.handleError))
-        .subscribe((data) => {
-          if (data.result.maxCountHistory)
-          {
-            this.GetTimesheetOfRetroReviewInternHistories(Number(data.result.maxCountHistory)); 
-          } else {
-            this.GetTimesheetOfRetroReviewInternHistories(); 
-          }
-          this.isLoading = false
-        });
-  }
-  public GetTimesheetOfRetroReviewInternHistories(maxCountHistory = 12) {
+  public GetRetroAndReviewInternHistories() {
     this.isLoading = true
     this.projectUserService
-      .GetTimesheetOfRetroReviewInternHistories({emails:[this.emailAddress],  maxCountHistory: maxCountHistory})
+      .GetTimesheetOfRetroReviewInternHistories({emails:[this.emailAddress]})
       .pipe(catchError(this.projectUserService.handleError))
       .subscribe((data) => {
         this.reviewInternRetroHisotyDto = data.result;

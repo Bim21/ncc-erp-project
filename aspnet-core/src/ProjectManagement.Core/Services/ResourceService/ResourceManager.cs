@@ -20,6 +20,7 @@ using ProjectManagement.Services.ResourceRequestService;
 using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Timesheet;
+using ProjectManagement.Services.Timesheet.Dto;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
@@ -1108,6 +1109,21 @@ namespace ProjectManagement.Services.ResourceManager
             }
 
             return presentPUs;
+        }
+        public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(List<string> emails)
+        {
+            int maxCount;
+            var defaultMaxCount = int.TryParse(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory), out maxCount);
+            if (!defaultMaxCount)
+            {
+                maxCount = 12;
+            }
+            return await _timesheetService.GetRetroReviewInternHistories(
+                new InputRetroReviewInternHistoriesDto 
+                { 
+                    Emails = emails, 
+                    MaxCountHistory = maxCount
+                });
         }
     }
 }

@@ -93,7 +93,7 @@ export class PlanResourceComponent
           this.showPaging(data.result, pageNumber);
           this.isLoading = false;
           let listEmail = this.availableResourceList.map(rs => rs.emailAddress)
-          this.GetTimesheetOfRetroReviewInternHistories(listEmail)
+          this.GetRetroAndReviewInternHistories(listEmail)
         })
     )
   }
@@ -468,16 +468,16 @@ export class PlanResourceComponent
       }
     })
   }
-  GetTimesheetOfRetroReviewInternHistories(emails: string[]) {
-    var input = {emails: emails} as RetroReviewInternHistoriesDto
-    this.availableRerourceService.GetTimesheetOfRetroReviewInternHistories(input).subscribe(rs => {
+  public GetRetroAndReviewInternHistories(emails: string[]) {
+    this.isLoading = true
+    this.availableRerourceService.GetTimesheetOfRetroReviewInternHistories({ emails: emails} as RetroReviewInternHistoriesDto).subscribe(rs => {
       this.reviewInternRetroHisoties = rs.result
       this.availableResourceList.forEach(x => {
           x.avgPoint = this.reviewInternRetroHisoties.find(s => s.email == x.emailAddress)?.averagePoint
       })
-    })
+      this.isLoading = false;
+    }, error => {this.isLoading = false})
   }
-
 
 
 
