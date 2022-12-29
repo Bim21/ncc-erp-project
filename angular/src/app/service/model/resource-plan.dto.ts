@@ -14,5 +14,4 @@ export class ResourcePlanDto{
 }
 export class RetroReviewInternHistoriesDto {
     emails: string[]
-    maxCountHistory: number
 }

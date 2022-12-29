@@ -472,28 +472,14 @@ export class PlanResourceComponent
   }
   public GetRetroAndReviewInternHistories(emails: string[]) {
     this.isLoading = true
-    this.appConfigurationService.getConfiguration()
-        .pipe(catchError(this.projectUserService.handleError))
-        .subscribe((data) => {
-          if (data.result.maxCountHistory)
-          {
-            this.GetTimesheetOfRetroReviewInternHistories(emails, Number(data.result.maxCountHistory)); 
-          } else {
-            this.GetTimesheetOfRetroReviewInternHistories(emails); 
-          }
-          this.isLoading = false
-        });
-  }
-  GetTimesheetOfRetroReviewInternHistories(emails: string[], maxCountHistory = 12) {
-    var input = {emails: emails, maxCountHistory : maxCountHistory} as RetroReviewInternHistoriesDto
-    this.availableRerourceService.GetTimesheetOfRetroReviewInternHistories(input).subscribe(rs => {
+    this.availableRerourceService.GetTimesheetOfRetroReviewInternHistories({ emails: emails} as RetroReviewInternHistoriesDto).subscribe(rs => {
       this.reviewInternRetroHisoties = rs.result
       this.availableResourceList.forEach(x => {
           x.avgPoint = this.reviewInternRetroHisoties.find(s => s.email == x.emailAddress)?.averagePoint
       })
-    })
+      this.isLoading = false;
+    }, error => {this.isLoading = false})
   }
-
 
 
 

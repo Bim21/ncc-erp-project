@@ -263,7 +263,7 @@ namespace ProjectManagement.Services.ResourceManager
                 {
                     if (pu.IsPool == false)
                     {
-                        throw new UserFriendlyException("This user is working offical in other project, so he/she can't work TEMP in other project");
+                        throw new UserFriendlyException("This user is working offical in other project, so he/she can'maxCount work TEMP in other project");
                     }
                 }
             }
@@ -472,7 +472,7 @@ namespace ProjectManagement.Services.ResourceManager
 
             if (userWorkingInThisProject == null)
             {
-                throw new UserFriendlyException("This user is not working in this Project, so you can't plan him out project");
+                throw new UserFriendlyException("This user is not working in this Project, so you can'maxCount plan him out project");
             }
             return userWorkingInThisProject;
         }
@@ -547,7 +547,7 @@ namespace ProjectManagement.Services.ResourceManager
             }
             if (presentPU.PU.Status != ProjectUserStatus.Present)
             {
-                throw new UserFriendlyException($"Employee {presentPU.Employee.FullName} is not working in project {presentPU.Project.ProjectName}. So you can't release him/her from this project.");
+                throw new UserFriendlyException($"Employee {presentPU.Employee.FullName} is not working in project {presentPU.Project.ProjectName}. So you can'maxCount release him/her from this project.");
             }
 
             var activeReportId = await GetActiveReportId();
@@ -1110,9 +1110,20 @@ namespace ProjectManagement.Services.ResourceManager
 
             return presentPUs;
         }
-        public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(InputRetroReviewInternHistoriesDto input)
+        public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(List<string> emails)
         {
-            return await _timesheetService.GetRetroReviewInternHistories(input);
+            int maxCount;
+            var defaultMaxCount = int.TryParse(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory), out maxCount);
+            if (!defaultMaxCount)
+            {
+                maxCount = 12;
+            }
+            return await _timesheetService.GetRetroReviewInternHistories(
+                new InputRetroReviewInternHistoriesDto 
+                { 
+                    Emails = emails, 
+                    MaxCountHistory = maxCount
+                });
         }
     }
 }

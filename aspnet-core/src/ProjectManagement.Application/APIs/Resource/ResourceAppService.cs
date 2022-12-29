@@ -246,7 +246,7 @@ namespace ProjectManagement.APIs.Resource
         [HttpPost]
         public async Task<List<RetroReviewInternHistoriesDto>> GetRetroReviewInternHistories(InputRetroReviewInternHistoriesDto input)
         {
-            return await _resourceManager.GetRetroReviewInternHistories(input);
+            return await _resourceManager.GetRetroReviewInternHistories(input.Emails);
         }
     }
 }
