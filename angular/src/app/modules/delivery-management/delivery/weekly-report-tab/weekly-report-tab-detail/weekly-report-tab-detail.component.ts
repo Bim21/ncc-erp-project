@@ -97,7 +97,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus);
   public activeReportId: number;
   public typeSort: string = "No_Order";
-  
+
   public pmReportProjectId: number;
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
@@ -265,7 +265,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
 
-  
+
 
 
   getProjectInfo() {
@@ -273,6 +273,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if (this.pmReportProjectId) {
       this.pmReportProjectService.GetInfoProject(this.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
+        this.generalNote = data.result.pmNote
+        this.automationNote= data.result.automationNote
         this.isLoading = false;
         this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
@@ -354,6 +356,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
           this.projectHealth = data.result.projectHealth;
           this.pmReportProjectService.projectHealth = this.projectHealth
+          this.pmReportProjectList.find(x => x.id == data.result.pmReportProjectId).status = data.result.status
+          this.pmReportProjectList.find(x => x.id == data.result.pmReportProjectId).projectHealth = data.result.projectHealthString
 
         } else {
           this.problemList = [];
