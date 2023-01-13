@@ -4,6 +4,13 @@
             <div class="col-6">
                 <h1>Criteria</h1>
             </div>
+            <div class="col-6 text-right">
+                <button   (click)="create()"
+                    class="btn bg-blue">
+                    <i class="fa fa-plus-square"></i>
+                   Create
+                </button>
+            </div>
         </div>
     </div>
 </section>
@@ -12,29 +19,18 @@
         <div class="card">
             <div class="card-header">
 
-                <div class='row'>
-                    <div class="col-6">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <input type="text" class="form-control" name="keyword" placeholder="Search"
-                                [(ngModel)]="searchText" (keyup.enter)="getDataPage(1)" />
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-default" (click)="checkAddFilter()">
-                                    <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
-                                        [class.fa-angle-down]="!advancedFiltersVisible"></i>
-                                </button>
-                            </div>
-                        </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn bg-blue" (click)="getDataPage(1)">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
-
-                    <div class="col-6 text-right">
-                        <button (click)="create()" class="btn bg-blue">
-                            <i class="fa fa-plus-square"></i>
-                            Create
+                    <input type="text" class="form-control" name="keyword" placeholder="Search" [(ngModel)]="searchText"
+                        (keyup.enter)="getDataPage(1)" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-default" (click)="checkAddFilter()">
+                            <i class="fas" [class.fa-angle-up]="advancedFiltersVisible"
+                                [class.fa-angle-down]="!advancedFiltersVisible"></i>
                         </button>
                     </div>
                 </div>
@@ -45,7 +41,7 @@
                         <div class="row">
                             <div class="col-md-12 col-xl-12">
                                 <div class="mb-0">
-                                    <div>
+                                    <div> 
                                         <div *ngFor="let item of filterItems; let i = index">
                                             <app-filter [item]="item" (emitChange)="onEmitChange($event, i)"
                                                 (deleteDataFilter)="deleteFilterItem(i)" [inputFilters]="FILTER_CONFIG">
@@ -65,8 +61,10 @@
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
-                            <th>Criteria Name</th>
-                            <th>Guideline/Note</th>
+                            <th>Name</th>
+                            <th>Weight</th>
+                            <th>Description</th>
+                            <th>Category</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -74,6 +72,8 @@
                         <tr *ngFor="let item of criteriaList; let i=index">
                             <td>{{i+1}}</td>
                             <td>{{item.name}}</td>
+                            <td>{{item.weight}}</td>
+                            <td>{{item.note}}</td>
                             <td>{{item.criteriaCategoryName}}</td>
                             <td class="text-center">
                                 <button class="btn btn-secondary mr-2" (click)="edit(item)">
@@ -130,3 +130,4 @@
         </div>
     </div>
 </section>
+
