@@ -211,14 +211,16 @@ namespace ProjectManagement.APIs.PMReportProjects
                             TotalWeekAgo = (DateTimeUtils.GetNow() - prpi.CreationTime).Days
                         };
 
-            var result = query.Select(x => new GetResultpmReportProjectIssue
+            var result = new GetResultpmReportProjectIssue
             {
                 PmReportProjectId = pmReportProject.Id,
                 ProjectHealth = pmReportProject.ProjectHealth,
+                Status = Enum.GetName(typeof(PMReportProjectStatus),pmReportProject.Status),
+                ProjectHealthString = Enum.GetName(typeof(ProjectHealth),pmReportProject.ProjectHealth),
                 Result = query.ToList()
-            });
+            };
 
-            return await result.FirstOrDefaultAsync();
+            return result;
         }
 
         [HttpGet]

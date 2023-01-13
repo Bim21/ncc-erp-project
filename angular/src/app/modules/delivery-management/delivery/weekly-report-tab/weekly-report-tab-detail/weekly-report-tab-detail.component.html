@@ -20,7 +20,7 @@
                             <mat-list-item style="cursor:pointer," id="list" role="item.projectId" (click)="view(item);"  [matTooltip]="item.projectCode"  matTooltipPosition="right">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
-                                        <strong>{{item.projectName}} </strong>
+                                        <i *ngIf="item.status=='Sent'" style="color: green;" class="fas fa-check-circle fa-xs"></i>&nbsp;<strong>{{item.projectName}} </strong>
                                     </div>
                                     <div class="project-list">
                                         {{item.pmEmailAddress}}
@@ -194,12 +194,12 @@
                                     </button>
                                 </span>
 
-                                <cd-timer 
-                                    #timmer 
+                                <cd-timer
+                                    #timmer
                                     format="ms"
-                                    countdown="true"  
+                                    countdown="true"
                                     [startTime]="countdownInterval.value"
-                                    [autoStart]="false" 
+                                    [autoStart]="false"
                                     (onTick)="onTick($event)"
                                 >
                                     {{ countdownInterval.value * 1000 | date:'mm:ss' }}
@@ -222,7 +222,7 @@
                                             (keydown)="$event.stopPropagation()" placeholder="(s)">
                                         </mat-form-field>
                                       </div>
-                                      
+
                                       <div class="col-4">
                                         <button
                                             class="btn btn-sm  mb-2 pr-0">
@@ -258,8 +258,8 @@
                                             </th>
                                             <th style="width: 80px; vertical-align: middle;">Role</th>
                                             <th style="width: 80px;">Normal
-                                                <div [matTooltip]="totalNormalWorkingTime + 'h of project' 
-                                                        + ' / ' + totalNormalWorkingTimeOfWeekly + 'h all' 
+                                                <div [matTooltip]="totalNormalWorkingTime + 'h of project'
+                                                        + ' / ' + totalNormalWorkingTimeOfWeekly + 'h all'
                                                         + ' / ' + totalNormalWorkingTimeStandard + 'h standard' ">
                                                     <strong>({{totalNormalWorkingTime}}h</strong> /
                                                     <strong>{{totalNormalWorkingTimeOfWeekly}}h</strong>/
@@ -326,9 +326,9 @@
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <div [matTooltip]="user.normalWorkingTime + 'h of project' 
+                                                <div [matTooltip]="user.normalWorkingTime + 'h of project'
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
-                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'"> 
+                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
                                                     <strong>{{user?.normalWorkingTime}}</strong> /
                                                     <strong [ngClass] = "(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong> /
                                                     <strong>{{user?.normalWorkingTimeStandard}}</strong>
@@ -363,7 +363,7 @@
                                         <tr>
                                             <th style="vertical-align: middle;">Employee</th>
                                             <th style="width: 80px;">Normal
-                                                <div [matTooltip]="totalNormalWorkingTime1 + 'h of project' 
+                                                <div [matTooltip]="totalNormalWorkingTime1 + 'h of project'
                                                 + ' / ' + totalNormalWorkingTimeOfWeekly1 + 'h all'
                                                 + ' / ' + totalNormalWorkingTimeStandard1 + 'h standard'">
                                                     <strong>({{totalNormalWorkingTime1}}h</strong> /
@@ -389,7 +389,7 @@
                                     <tbody>
                                         <tr
                                             *ngFor="let user of projectCurrentSupportUser; let i =index">
-                                            <td class="d-flex justify-content-between" style="border: none;">                                               
+                                            <td class="d-flex justify-content-between" style="border: none;">
                                                 <div style="width: 80%;">
                                                     <app-user-info [userData]="user">
                                                     </app-user-info>
@@ -412,9 +412,9 @@
                                                 </mat-menu>
                                             </td>
                                             <td class="text-center">
-                                                <div [matTooltip]="user.normalWorkingTime + 'h of project' 
+                                                <div [matTooltip]="user.normalWorkingTime + 'h of project'
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
-                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'"> 
+                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
                                                     <strong>{{user?.normalWorkingTime}}</strong> /
                                                     <strong [ngClass] = "(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong> /
                                                     <strong>{{user?.normalWorkingTimeStandard}}</strong>
