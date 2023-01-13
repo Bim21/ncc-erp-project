@@ -100,6 +100,11 @@ import { TrainingRequestTabComponent } from './modules/delivery-management/deliv
             canActivate: [AppRouteGuard],
           },
           {
+            path: 'criterias',
+            component: CriteriaComponent,
+            canActivate: [AppRouteGuard]
+          },
+          {
             path: "edit-role",
             component: EditRoleDialogComponent,
             canActivate: [AppRouteGuard]

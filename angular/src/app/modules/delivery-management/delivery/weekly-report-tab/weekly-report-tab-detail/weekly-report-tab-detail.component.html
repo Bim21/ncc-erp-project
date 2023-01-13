@@ -13,11 +13,12 @@
                 </div>
             </div>
             <div style="margin-bottom: 20px;">
-                <mat-list  *ngFor="let item of pmReportProjectList">
+                <mat-list *ngFor="let item of pmReportProjectList">
                     <div class="row sidebar-item" [ngClass]="item.setBackground==true?'projectActive':''">
                         <div class="col-10 project-menu-item"
                             [ngClass]="item.projectHealth ==='Green'?'green':item.projectHealth ==='Red'?'red':'yellow'">
-                            <mat-list-item style="cursor:pointer," id="list" role="item.projectId" (click)="view(item);"  [matTooltip]="item.projectCode"  matTooltipPosition="right">
+                            <mat-list-item style="cursor:pointer," id="list" role="item.projectId" (click)="view(item);"
+                                [matTooltip]="item.projectCode" matTooltipPosition="right">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
                                         <strong>{{item.projectName}} </strong>
@@ -42,19 +43,62 @@
         <section class="content ">
             <div class="row justify-content-between">
                 <div style="width: 59%;">
+
+                    <div class="px-4 pb-2 pt-2 card"
+                        style="display: flex; flex-direction: column; justify-content: space-between; ">
+
+
+                        <div class="row p-1">
+                            <div class="col-8 m-0 p-0">
+                                <strong classs="col-12" style="font-size: 20px;">Criteria status: </strong>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <div class="fixTableHead" style="max-height: none;">
+                                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                                    <thead class="bg-light" style="z-index: 1;">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Criteria </th>
+                                            <th>Note</th>
+                                            <th class="col-time">Status</th>
+                                            <th class="col-action-menu">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Test</td>
+                                            <td>Alo alo</td>
+                                            <td>Done</td>
+                                            <td>Action</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="px-4 pb-2 pt-2 card pm-note-section"
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
                             <div class="col-8">
                                 <strong style="font-size: 20px;">PM note: </strong>
-                                <div class="d-inline  pt-1 text-right   ml-2 text-nowrap" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
+                                <div class="d-inline  pt-1 text-right   ml-2 text-nowrap"
+                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
                                         style="font-size: 17px;" (click)="isEditingNote = true"></i>
-                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote()"  style="color: red;" class="fas fa-times fa-2x mr-3"></i>
-                                    <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingNote" (click)="updateNote()" ></i>
+                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote()" style="color: red;"
+                                        class="fas fa-times fa-2x mr-3"></i>
+                                    <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingNote"
+                                        (click)="updateNote()"></i>
                                 </div>
                                 <p *ngIf="!isEditingNote"
-                                    style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify;" class="mt-2">
+                                    style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify;"
+                                    class="mt-2">
                                     {{generalNote}}
                                 </p>
                                 <mat-form-field class="ml-1" style="width:100%" appearance="outline"
@@ -67,15 +111,19 @@
                             </div>
                             <div class="col-4" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
                                 <strong style="font-size: 20px;">Automation test: </strong>
-                                <div class="d-inline  pt-1 text-right ml-2 text-nowrap" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
+                                <div class="d-inline  pt-1 text-right ml-2 text-nowrap"
+                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
                                     <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
                                         class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
-                                    <i *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();"  style="color: red;" class="fas fa-times fa-2x mr-3"></i>
-                                    <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingAutomationNote" (click)="updateAutoNote()" ></i>
+                                    <i *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();"
+                                        style="color: red;" class="fas fa-times fa-2x mr-3"></i>
+                                    <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingAutomationNote"
+                                        (click)="updateAutoNote()"></i>
 
                                 </div>
                                 <p *ngIf="!isEditingAutomationNote"
-                                    style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify" class="mt-2">
+                                    style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify"
+                                    class="mt-2">
                                     {{automationNote}}
                                 </p>
                                 <mat-form-field class="ml-1" style="width:100%" appearance="outline"
@@ -88,7 +136,8 @@
                             </div>
                         </div>
 
-                        <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)" style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                        <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)"
+                            style="border-collapse: collapse;" class="table table-hover text-nowrap">
                             <thead class="bg-light">
                                 <tr>
                                     <th>#</th>
@@ -107,13 +156,13 @@
                                     currentPage: problemCurrentPage
                                     }; let i =index">
                                     <td style="width: 26px">
-                                        <i style="margin-top: 8px ; color: #585858;"
-                                        class="fas fa-ellipsis-v ml-1"
-                                        [matMenuTriggerFor]="menu3"></i>
+                                        <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1"
+                                            [matMenuTriggerFor]="menu3"></i>
 
                                         <mat-menu #menu3="matMenu">
-                                            <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)"
-                                            (click)="setDone(problem)" class="mat-menu-item  w-100">
+                                            <button
+                                                *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)"
+                                                (click)="setDone(problem)" class="mat-menu-item  w-100">
                                                 <i class="fas fa-check mr-2 fa-lg "></i>
                                                 <span *ngIf="isShowChangeDoneText(problem)">Set Done</span>
                                                 <span *ngIf="isShowChangeInProgressText(problem)">Set InProgress</span>
@@ -134,7 +183,9 @@
                                         <div class="d-flex">
                                             <div class="col-11 break-word">{{problem.meetingSolution}}</div>
                                             <div class="col-1 center-item">
-                                            <i class="fas fa-edit mr-1" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_AddMeetingNote)" (click)="editMeetingNote(problem)"></i>
+                                                <i class="fas fa-edit mr-1"
+                                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_AddMeetingNote)"
+                                                    (click)="editMeetingNote(problem)"></i>
                                             </div>
                                         </div>
                                     </td>
@@ -170,21 +221,18 @@
                             </tbody>
                         </table>
 
-                        <div class="float-timmer"  *ngIf="countdownInterval.value !== null"
-                            cdkDrag
+                        <div class="float-timmer" *ngIf="countdownInterval.value !== null" cdkDrag
                             [class.warning-count-down]="isShowWarning"
                             [class.warning-count-down-time-out]="isShowWarningTimeOut"
-                            [cdkDragDisabled]="isShowWarning"
-                            >
-                            <div class="count-timer" >
+                            [cdkDragDisabled]="isShowWarning">
+                            <div class="count-timer">
                                 <span class="action-timmer mr-2" *ngIf="!isShowWarning">
                                     <button (click)="stopTimmer(); $event.stopPropagation()"
-                                    *ngIf="!isStopCounting && isStart " class="btn btn-sm mb-2 pr-0">
-                                    <i class="fas fa-pause fa-lg"></i>
+                                        *ngIf="!isStopCounting && isStart " class="btn btn-sm mb-2 pr-0">
+                                        <i class="fas fa-pause fa-lg"></i>
                                     </button>
                                     <button (click)="startTimmer(); $event.stopPropagation()"
-                                        *ngIf="!isStart && !isShowSettingCountDown"
-                                        class="btn btn-sm mb-2 pr-0">
+                                        *ngIf="!isStart && !isShowSettingCountDown" class="btn btn-sm mb-2 pr-0">
                                         <i class="fas fa-play fa-lg"></i>
                                     </button>
                                     <button (click)="resumeTimmer(); $event.stopPropagation()"
@@ -194,19 +242,12 @@
                                     </button>
                                 </span>
 
-                                <cd-timer 
-                                    #timmer 
-                                    format="ms"
-                                    countdown="true"  
-                                    [startTime]="countdownInterval.value"
-                                    [autoStart]="false" 
-                                    (onTick)="onTick($event)"
-                                >
+                                <cd-timer #timmer format="ms" countdown="true" [startTime]="countdownInterval.value"
+                                    [autoStart]="false" (onTick)="onTick($event)">
                                     {{ countdownInterval.value * 1000 | date:'mm:ss' }}
                                 </cd-timer>
 
-                                <button
-                                    *ngIf="permission.isGranted(Admin_Configuartions_WeeklyReportTime_Edit)"
+                                <button *ngIf="permission.isGranted(Admin_Configuartions_WeeklyReportTime_Edit)"
                                     class="btn btn-sm  mb-2 pr-0">
                                     <i class="fas fa-clock fa-lg" (click)="openSettingCountDown()"></i>
                                 </button>
@@ -216,24 +257,23 @@
                                         <mat-form-field class="w-100">
                                             <mat-label>
                                                 Input time
-                                                <span *ngIf="countdownInterval.invalid">{{'(Min 30s)' | localize}}</span>
+                                                <span *ngIf="countdownInterval.invalid">{{'(Min 30s)' |
+                                                    localize}}</span>
                                             </mat-label>
-                                            <input matInput [formControl]="countdownInterval" name="searchPmReportName" min="30"
-                                            (keydown)="$event.stopPropagation()" placeholder="(s)">
+                                            <input matInput [formControl]="countdownInterval" name="searchPmReportName"
+                                                min="30" (keydown)="$event.stopPropagation()" placeholder="(s)">
                                         </mat-form-field>
-                                      </div>
-                                      
-                                      <div class="col-4">
-                                        <button
-                                            class="btn btn-sm  mb-2 pr-0">
+                                    </div>
+
+                                    <div class="col-4">
+                                        <button class="btn btn-sm  mb-2 pr-0">
                                             <i class="fas fa-check fa-lg" (click)="setTimeCountDown()"></i>
                                         </button>
 
-                                        <button
-                                        class="btn btn-sm  mb-2 pr-0">
-                                        <i class="fas fa-times fa-lg" (click)="closeSettingCountDown()"></i>
-                                    </button>
-                                      </div>
+                                        <button class="btn btn-sm  mb-2 pr-0">
+                                            <i class="fas fa-times fa-lg" (click)="closeSettingCountDown()"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -242,7 +282,8 @@
 
 
 
-                    <div class="card" id="current-resource" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
+                    <div class="card" id="current-resource"
+                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
                         <div class="card-body">
                             <h4 class="d-inline-block mb-2">Current Resource</h4>&nbsp;
                             <strong style="font-size: 20px;">({{projectCurrentResource?.length}})</strong>
@@ -267,28 +308,31 @@
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
-                                                <div [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
+                                                <div
+                                                    [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">
+                                                    (
                                                     <strong [ngClass]="overTimeNoCharge>0?'ot-noCharge':''"
-                                                            style="font-size: 17px;">{{overTimeNoCharge}}h
+                                                        style="font-size: 17px;">{{overTimeNoCharge}}h
                                                     </strong> /
                                                     <strong [ngClass]="totalOverTime>0?'text-danger':''"
-                                                            style="font-size: 17px;">{{totalOverTime}}h
+                                                        style="font-size: 17px;">{{totalOverTime}}h
                                                     </strong>
                                                     )
                                                 </div>
                                             </th>
-                                                <!-- <th style="width: 50px;">Action</th> -->
+                                            <!-- <th style="width: 50px;">Action</th> -->
                                             <th style="vertical-align: middle;">Timesheet</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            *ngFor="let user of projectCurrentResource; let i =index">
+                                        <tr *ngFor="let user of projectCurrentResource; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">
                                                 <i class="fas fa-ellipsis-v ml-1 menu-4-icon"
-                                                [matMenuTriggerFor]="menu4"></i>
-                                                <mat-menu #menu4="matMenu" >
-                                                    <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                    [matMenuTriggerFor]="menu4"></i>
+                                                <mat-menu #menu4="matMenu">
+                                                    <button
+                                                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)"
+                                                        [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                         (click)="releaseUser(user)">
                                                         <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                                 </mat-menu>
@@ -308,11 +352,12 @@
                                                     [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="menu">
                                                 </div>
                                                 <button mat-icon-button [matMenuTriggerFor]="menu"
-                                                    style="display: none;"
-                                                    >
+                                                    style="display: none;">
                                                 </button>
                                                 <mat-menu #menu="matMenu">
-                                                    <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                    <button
+                                                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)"
+                                                        [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                         (click)="releaseUser(user)">
                                                         <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                                 </mat-menu>
@@ -328,16 +373,22 @@
                                             <td class="text-center">
                                                 <div [matTooltip]="user.normalWorkingTime + 'h of project' 
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
-                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'"> 
+                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
                                                     <strong>{{user?.normalWorkingTime}}</strong> /
-                                                    <strong [ngClass] = "(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong> /
+                                                    <strong
+                                                        [ngClass]="(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong>
+                                                    /
                                                     <strong>{{user?.normalWorkingTimeStandard}}</strong>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
-                                                    <strong [ngClass]="user.overTimeNoCharge>0?'ot-noCharge': ''">{{user.overTimeNoCharge}}</strong> /
-                                                    <strong [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
+                                                <div
+                                                    [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
+                                                    <strong
+                                                        [ngClass]="user.overTimeNoCharge>0?'ot-noCharge': ''">{{user.overTimeNoCharge}}</strong>
+                                                    /
+                                                    <strong
+                                                        [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
                                                 </div>
                                             </td>
                                             <td style="text-align: -webkit-center;">
@@ -353,7 +404,8 @@
 
                         </div>
                     </div>
-                    <div class="card" id="support-resource" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
+                    <div class="card" id="support-resource"
+                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
                         <div class="card-body">
                             <h4 class="d-inline-block mb-2">Support User</h4>&nbsp;
                             <strong style="font-size: 20px;">({{projectCurrentSupportUser?.length}})</strong>
@@ -372,41 +424,45 @@
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
-                                                <div [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">(
+                                                <div
+                                                    [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">
+                                                    (
                                                     <strong [ngClass]="overTimeNoCharge1>0?'ot-noCharge':''"
-                                                            style="font-size: 17px;">{{overTimeNoCharge1}}h
+                                                        style="font-size: 17px;">{{overTimeNoCharge1}}h
                                                     </strong> /
                                                     <strong [ngClass]="totalOverTime1>0?'text-danger':''"
-                                                            style="font-size: 17px;">{{totalOverTime1}}h
+                                                        style="font-size: 17px;">{{totalOverTime1}}h
                                                     </strong>
                                                     )
                                                 </div>
                                             </th>
-                                                <!-- <th style="width: 50px;">Action</th> -->
+                                            <!-- <th style="width: 50px;">Action</th> -->
                                             <th style="vertical-align: middle;">Timesheet</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            *ngFor="let user of projectCurrentSupportUser; let i =index">
-                                            <td class="d-flex justify-content-between" style="border: none;">                                               
+                                        <tr *ngFor="let user of projectCurrentSupportUser; let i =index">
+                                            <td class="d-flex justify-content-between" style="border: none;">
                                                 <div style="width: 80%;">
                                                     <app-user-info [userData]="user">
                                                     </app-user-info>
                                                 </div>
                                                 <div style="display: flex; align-items: center;">
-                                                    <span class="badge" style="background-color: red; border-radius: 1rem; color: white;" *ngIf = "!user.isActive">Đã Nghỉ</span>
+                                                    <span class="badge"
+                                                        style="background-color: red; border-radius: 1rem; color: white;"
+                                                        *ngIf="!user.isActive">Đã Nghỉ</span>
                                                 </div>
                                                 <div style="visibility: hidden; position: fixed"
                                                     [style.left]="contextMenuPosition.x"
                                                     [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="menu">
                                                 </div>
                                                 <button mat-icon-button [matMenuTriggerFor]="menu"
-                                                    style="display: none;"
-                                                    >
+                                                    style="display: none;">
                                                 </button>
                                                 <mat-menu #menu="matMenu">
-                                                    <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                    <button
+                                                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)"
+                                                        [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                         (click)="releaseUser(user)">
                                                         <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                                 </mat-menu>
@@ -414,16 +470,20 @@
                                             <td class="text-center">
                                                 <div [matTooltip]="user.normalWorkingTime + 'h of project' 
                                                 + ' / ' + user.normalWorkingTimeAll + 'h all'
-                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'"> 
+                                                + ' / ' + user.normalWorkingTimeStandard + 'h standard'">
                                                     <strong>{{user?.normalWorkingTime}}</strong> /
-                                                    <strong [ngClass] = "(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong> /
+                                                    <strong
+                                                        [ngClass]="(user.normalWorkingTimeAll <= user.normalWorkingTimeStandard)?'':'time-over'">{{user?.normalWorkingTimeAll}}</strong>
+                                                    /
                                                     <strong>{{user?.normalWorkingTimeStandard}}</strong>
                                                 </div>
                                             </td>
                                             <td class="text-center">
-                                                <div [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
+                                                <div
+                                                    [matTooltip]="user.overTimeNoCharge + 'h OT NoCharge' + ' / ' + user.overTime + 'h OT'">
                                                     <strong
-                                                        [ngClass]="user.overTimeNoCharge>0?'ot-noCharge': ''">{{user.overTimeNoCharge}}</strong> / <strong
+                                                        [ngClass]="user.overTimeNoCharge>0?'ot-noCharge': ''">{{user.overTimeNoCharge}}</strong>
+                                                    / <strong
                                                         [ngClass]="user.overTime>0?'text-danger': ''">{{user.overTime}}</strong>
                                                 </div>
                                             </td>
@@ -466,7 +526,8 @@
 
                             <div class="d-flex">
                                 <div class="w-100">
-                                    <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_View)">
+                                    <div class="card"
+                                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_View)">
                                         <mat-expansion-panel [expanded]="isShowFutureList">
                                             <mat-expansion-panel-header class="m-0"
                                                 (click)="isShowFutureList=!isShowFutureList">
@@ -508,25 +569,33 @@
                                                                         [matMenuTriggerFor]="menu2"></i>
 
                                                                     <mat-menu #menu2="matMenu">
-                                                                        <button *ngIf="report.allocatePercentage <= 0 && permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_ConfirmOut)" [disabled]="planResourceProcess"
+                                                                        <button
+                                                                            *ngIf="report.allocatePercentage <= 0 && permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_ConfirmOut)"
+                                                                            [disabled]="planResourceProcess"
                                                                             class="mat-menu-item  w-100"
                                                                             (click)="confirm(report)"> <i
                                                                                 class="fas fa-check mr-1"></i>Confirm
-                                                                                Out</button>
+                                                                            Out</button>
 
-                                                                            <button *ngIf="report.allocatePercentage > 0 && (permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject)
-                                                                                || permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther) )" [disabled]="planResourceProcess"
+                                                                        <button
+                                                                            *ngIf="report.allocatePercentage > 0 && (permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject)
+                                                                                || permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther) )"
+                                                                            [disabled]="planResourceProcess"
                                                                             class="mat-menu-item  w-100"
                                                                             (click)="confirm(report)"> <i
                                                                                 class="fas fa-check mr-1"></i>Confirm
-                                                                                Join</button>
+                                                                            Join</button>
 
-                                                                        <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CancelPlan)" [disabled]="planResourceProcess"
+                                                                        <button
+                                                                            *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CancelPlan)"
+                                                                            [disabled]="planResourceProcess"
                                                                             class="mat-menu-item  w-100"
                                                                             (click)="cancelResourcePlan(report)"> <i
                                                                                 class="fas fa-times mr-1"></i>Cancel
                                                                             Plan</button>
-                                                                        <button *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_Edit)" [disabled]="planResourceProcess"
+                                                                        <button
+                                                                            *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_Edit)"
+                                                                            [disabled]="planResourceProcess"
                                                                             class="mat-menu-item  w-100"
                                                                             (click)="editResourcePlan(report)"> <i
                                                                                 class="fas fa-edit mr-1"></i>Edit</button>
@@ -637,7 +706,8 @@
 
                                     </div>
 
-                                    <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ChangedResource)">
+                                    <div class="card"
+                                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ChangedResource)">
                                         <mat-expansion-panel [expanded]="isShowWeeklyList">
                                             <mat-expansion-panel-header class="m-0"
                                                 (click)="isShowWeeklyList=!isShowWeeklyList">
@@ -795,7 +865,3 @@
         </section>
     </div>
 </div>
-
-
-
-
