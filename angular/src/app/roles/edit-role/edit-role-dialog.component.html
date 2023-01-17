@@ -12,7 +12,7 @@
   <form class="form-horizontal" autocomplete="off" #editRoleForm="ngForm">
     <div class="modal-body">
       <tabset>
-        <tab [heading]="'Details' | localize" class="pt-3 px-2">
+        <tab name="tab_detail" [heading]="'Details' | localize" class="pt-3 px-2">
           <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="name">
               {{ "Name" | localize }}
@@ -56,7 +56,7 @@
           </div>
         </tab>
         <!-- TAB PERMISSIONS -->
-        <tab class="tab-permission" [heading]="'Permissions' | localize" class="pt-3 px-2 test" style="height : 90% !important">
+        <tab name="tab_permission" class="tab-permission" [heading]="'Permissions' | localize" class="pt-3 px-2 test" style="height : 90% !important">
           <br />
           <div class="row-fluid">
             <div class="col-md-12">
@@ -97,14 +97,14 @@
           </div>
         </tab>
         <!-- TAB USER -->
-        <tab class="tab-user" [heading]="'Users' | localize" class="pt-3 px-2 test" style="height : auto !important; width: 100%;">
+        <tab name="tab_user" class="tab-user" [heading]="'Users' | localize" class="pt-3 px-2 test" style="height : auto !important; width: 100%;">
           <div class="row mt-2">
             <div class="col-10">
               <div class="row form-search-role">
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Branch</mat-label>
-                    <mat-select [(value)]='userBranchForFilter' (selectionChange)="searchMember()">
+                    <mat-select name="slt_branch" [(value)]='userBranchForFilter' (selectionChange)="searchMember()">
                       <mat-option [value]='-1'>All</mat-option>
                       <mat-option [value]='0'>Ha Noi</mat-option>
                       <mat-option [value]='1'>Da Nang</mat-option>
@@ -118,7 +118,7 @@
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Type</mat-label>
-                    <mat-select [(value)]='userTypeForFilter' (selectionChange)="searchMember()">
+                    <mat-select name="slt_usertype" [(value)]='userTypeForFilter' (selectionChange)="searchMember()">
                       <mat-option [value]="-1">All</mat-option>
                       <mat-option *ngFor="let item of userTypes" [value]="item.value">
                         {{item.label}}
@@ -129,7 +129,7 @@
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Level</mat-label>
-                    <mat-select [(value)]='userLevelForFilter' (selectionChange)="searchMember()">
+                    <mat-select name="slt_userlevel" [(value)]='userLevelForFilter' (selectionChange)="searchMember()">
                       <mat-option [value]="-1">All</mat-option>
                       <mat-option *ngFor="let item of listUserLevel" [value]="item.id">
                         {{item.name}}
@@ -139,14 +139,14 @@
                 </div>
                 <div class="col-md-6">
                   <mat-form-field>
-                    <input type="text" #name matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
+                    <input name="ipt_search" type="text" #name matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
                       name="searchMember" (keyup)="searchMember()" (keypress)="keyPressed($event)">
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div class="col-2 text-right">
-              <a href="javascript:;" class="btn bg-blue" (click)="addUserInRole()">
+              <a name="btn_create" href="javascript:;" class="btn bg-blue" (click)="addUserInRole()">
                 <i class="fa fa-plus-square"></i>
                 {{ "Add" | localize }}
               </a>
@@ -154,7 +154,7 @@
           </div>
           <div class="row bg-white mt-1">
             <div class="col-md-12 scroll-user-role">
-              <table class="table table-striped table-hover">
+              <table name="tbl_userRole" class="table table-striped table-hover">
                 <tbody>
                   <tr *ngFor="let member of listUsers">
                     <div class="row">
@@ -170,8 +170,8 @@
                         <span class="label tag bg-green " *ngIf="member.branch == 1">ĐN</span>
                         <span class="label tag bg-blue " *ngIf="member.branch == 2">HCM</span>
                         <span class="label tag bg-orange " *ngIf="member.branch == 3">Vinh</span>
-      
-      
+
+
                         <span style="margin-left: 10px;" *ngIf="member.userType == 0"
                           class="label tag bg-red">{{userTypes[member.userType].label}}</span>
                         <span style="margin-left: 10px;" *ngIf="member.userType == 1"
@@ -187,12 +187,12 @@
                         <label class="tag" [style.background-color]="styleTagLevel(member.userLevel)">
                           {{findDevLevelName(member.userLevel)}}
                         </label>
-                        
+
                         <br>
                         <span>{{member.email}}</span>
                       </div>
                     </div>
-                  </tr>  
+                  </tr>
                 </tbody>
               </table>
             </div>

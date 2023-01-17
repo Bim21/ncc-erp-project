@@ -6,7 +6,7 @@
                 <h1>Currency</h1>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(Admin_Currencies_Create)" (click)="createCurrency()" class="btn bg-blue">
+                <button name="btn_create" *ngIf="permission.isGranted(Admin_Currencies_Create)" (click)="createCurrency()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                     Create
                 </button>
@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                <table name="tbl_currency" style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>
@@ -75,7 +75,7 @@
                                 itemsPerPage: pageSize,
                                 currentPage: pageNumber,
                                 totalItems: totalItems
-                              }; let i = index"  >
+                            }; let i = index"  >
                             <td class="text-center stt"><span>{{ i +1 }}</span></td>
                             <td class="text-center">{{item.name}}</td>
                             <td class="text-center">{{item.code}}</td>
@@ -98,7 +98,7 @@
                             <button  *ngIf="permission.isGranted(Admin_Currencies_Delete)"
                                 class="btn btn-sm bg-danger ml-1"
                                 (click)="delete(item);$event.stopPropagation()"
-                                 #deleteBtn>
+                                #deleteBtn>
                                 <i class="fas fa-trash"></i>
                                 Delete
                             </button>

@@ -6,16 +6,16 @@
           <h1>{{ "Users" | localize }}</h1>
         </div>
         <div class="col-6 text-right">
-          <a href="javascript:;" class="btn btn-success mr-2"
+          <button name="btn_sync" href="javascript:;" class="btn btn-success mr-2"
             *ngIf="permission.isGranted(Admin_Users_SyncDataFromHrm) " (click)="updateDataHRM()">
             <i class="fas fa-sync-alt mr-1"></i>
             {{ "Sync data from HRM" | localize }}
-          </a>
-          <a href="javascript:;" class="btn bg-blue" *ngIf="permission.isGranted(Admin_Users_Create) "
+          </button>
+          <button name="btn_create" href="javascript:;" class="btn bg-blue" *ngIf="permission.isGranted(Admin_Users_Create) "
             (click)="createUser()">
             <i class="fa fa-plus-square"></i>
             {{ "Create User" | localize }}
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div class="card-body table-responsive p-0">
-          <table class="table text-nowrap" [busy]="isLoading">
+          <table name="tbl_User" class="table text-nowrap" [busy]="isLoading">
             <thead class="bg-light">
               <tr>
                 <th class="stt">#</th>
@@ -105,15 +105,15 @@
                   <p *ngFor="let project of user.workingProjects" class="mb-1">
                     <strong>{{project.projectName}} </strong> <strong [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong>&nbsp;
                     <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
-                      {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>  
+                      {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
                       <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date: "dd/MM/yyyy"}}</span>
-                      
+
                   </p>
                   <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!user.isshowProjectHistory" matTooltip="View project history"
                     (click)="getHistoryProjectsByUserId(user)"></i>
                   <div *ngIf="user.isshowProjectHistory" [ngClass]="user.showAllHistory == false ? 'preHistory' : 'history'">
                     <div  *ngIf="user.userProjectHistory && user.userProjectHistory.length > 0" [innerHTML]="user.userProjectHistory" style="white-space: nowrap;"></div>
-                    
+
                     <p *ngIf="!user.userProjectHistory || user.userProjectHistory.length == 0">
                       No project history!
                     </p>
