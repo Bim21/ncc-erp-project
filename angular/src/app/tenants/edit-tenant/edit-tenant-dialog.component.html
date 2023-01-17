@@ -14,7 +14,7 @@
         {{ "TenancyName" | localize }}
       </label>
       <div class="col-md-9">
-        <input
+        <input name="ipt_TenancyName_edit"
           type="text"
           class="form-control"
           name="tenancyName"
@@ -37,7 +37,7 @@
         {{ "Name" | localize }}
       </label>
       <div class="col-md-9">
-        <input
+        <input name="ipt_Name_edit"
           type="text"
           class="form-control"
           name="name"
@@ -60,7 +60,7 @@
       </label>
       <div class="col-md-9">
         <div class="custom-control custom-checkbox">
-          <input
+          <input name="ipt_IsActive_edit"
             type="checkbox"
             class="custom-control-input"
             name="isActive"
@@ -72,7 +72,7 @@
       </div>
     </div>
   </div>
-  <abp-modal-footer
+  <abp-modal-footer name="mdl_action_edit"
     [cancelDisabled]="saving"
     [saveDisabled]="!editTenantForm.form.valid || saving"
     (onCancelClick)="dialogRef.close()"

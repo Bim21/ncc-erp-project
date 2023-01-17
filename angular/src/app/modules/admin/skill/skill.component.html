@@ -8,7 +8,7 @@
                 <h1>Skill</h1>
             </div>
             <div class="col-6 text-right">
-                <button *ngIf="permission.isGranted(Admin_Skills_Create)" (click)="createSkill()" class="btn bg-blue">
+                <button name="btn_create" *ngIf="permission.isGranted(Admin_Skills_Create)" (click)="createSkill()" class="btn bg-blue">
                     <i class="fa fa-plus-square"></i>
                     Create
                 </button>
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                <table name="tbl_skill" style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th>STT</th>

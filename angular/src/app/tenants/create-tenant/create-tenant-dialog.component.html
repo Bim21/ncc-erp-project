@@ -14,7 +14,7 @@
         {{ "TenancyName" | localize }}
       </label>
       <div class="col-md-9">
-        <input
+        <input name="ipt_tenancyname"
           type="text"
           class="form-control"
           name="tenancyName"
@@ -37,7 +37,7 @@
         {{ "Name" | localize }}
       </label>
       <div class="col-md-9">
-        <input
+        <input name="ipt_name"
           type="text"
           class="form-control"
           name="name"
@@ -59,7 +59,7 @@
         {{ "DatabaseConnectionString" | localize }}
       </label>
       <div class="col-md-9">
-        <input
+        <input name="ipt_dbConnectionStr"
           type="text"
           class="form-control"
           name="connectionString"
@@ -74,7 +74,7 @@
         {{ "AdminEmailAddress" | localize }}
       </label>
       <div class="col-md-9">
-        <input
+        <input name="ipt_AdminEmailAddress"
           type="email"
           class="form-control"
           name="adminEmailAddress"
@@ -98,7 +98,7 @@
       </label>
       <div class="col-md-9">
         <div class="custom-control custom-checkbox">
-          <input
+          <input name="ipt_IsActive"
             type="checkbox"
             class="custom-control-input"
             name="isActive"
@@ -113,7 +113,7 @@
       {{ "DefaultPasswordIs" | localize: "123qwe" }}
     </p>
   </div>
-  <abp-modal-footer
+  <abp-modal-footer name="mdl_action_create"
   [cancelDisabled]="saving"
   [saveDisabled]="!createTenantForm.form.valid || saving"
   (onCancelClick)="dialogRef.close()"

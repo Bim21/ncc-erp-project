@@ -6,10 +6,10 @@
           <h1>{{ "Tenants" | localize }}</h1>
         </div>
         <div class="col-6 text-right">
-          <a *ngIf="permission.isGranted(Admin_Tenants_Create)" href="javascript:;" class="btn bg-blue" (click)="createTenant()">
+          <button name="btn_create" *ngIf="permission.isGranted(Admin_Tenants_Create)" href="javascript:;" class="btn bg-blue" (click)="createTenant()">
             <i class="fa fa-plus-square"></i>
             {{ "Create" | localize }}
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -131,7 +131,7 @@
           </div>
         </div>
         <div class="card-body table-responsive p-0">
-          <table class="table table-hover text-nowrap" [busy]="isLoading">
+          <table name="tbl_tenant" class="table table-hover text-nowrap" [busy]="isLoading">
             <thead class="bg-light">
               <tr>
                 <th>{{ "TenancyName" | localize }}</th>

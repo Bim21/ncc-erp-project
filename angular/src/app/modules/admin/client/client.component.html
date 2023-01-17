@@ -6,7 +6,7 @@
         <h1>Client</h1>
       </div>
       <div class="col-6 text-right">
-        <button *ngIf="permission.isGranted(Admin_Clients_Create)" (click)="createClient()" class="btn bg-blue">
+        <button name="btn_create" *ngIf="permission.isGranted(Admin_Clients_Create)" (click)="createClient()" class="btn bg-blue">
           <i class="fa fa-plus-square"></i>
           Create
         </button>
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="card-body table-responsive p-4">
-        <table
+        <table name="tbl_client"
           style="border-collapse: collapse"
           class="table table-hover text-nowrap"
           [busy]="isLoading"

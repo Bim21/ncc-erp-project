@@ -6,10 +6,10 @@
           <h1>{{ "Roles" | localize }}</h1>
         </div>
         <div class="col-6 text-right">
-          <a *ngIf="permission.isGranted(Admin_Roles_Create)" href="javascript:;" class="btn bg-blue" (click)="createRole()">
+          <button name="btn_create" *ngIf="permission.isGranted(Admin_Roles_Create)" href="javascript:;" class="btn bg-blue" (click)="createRole()">
             <i class="fa fa-plus-square"></i>
             {{ "Create" | localize }}
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="card-body table-responsive p-0">
-          <table class="table table-hover text-nowrap" [busy]="isLoading">
+          <table name="tbl_role" class="table table-hover text-nowrap" [busy]="isLoading">
             <thead class="bg-light">
               <tr>
                 <th>{{ "RoleName" | localize }}</th>
