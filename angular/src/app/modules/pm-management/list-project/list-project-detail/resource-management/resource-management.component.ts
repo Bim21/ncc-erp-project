@@ -61,7 +61,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_Delete;
   Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_ResourceRequest_SendRecruitment;
 
-  
+
 
   private projectId: number;
   public userBillCurrentPage = 1;
@@ -109,15 +109,15 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   public listProjectUserRoles: IDNameDto[] = []
 
   constructor(
-    injector: Injector, 
-    private projectUserService: ProjectUserService, 
-    private projectUserBillService: ProjectUserBillService, 
+    injector: Injector,
+    private projectUserService: ProjectUserService,
+    private projectUserBillService: ProjectUserBillService,
     private userService: UserService,
-    private projectRequestService: ProjectResourceRequestService, 
-    private route: ActivatedRoute, 
+    private projectRequestService: ProjectResourceRequestService,
+    private route: ActivatedRoute,
     private dialog: MatDialog,
     private resourceRequestService: DeliveryResourceRequestService
-  ) 
+  )
   {
       super(injector)
       this.tomorrowDate.setDate(this.tomorrowDate.getDate() + 1)
@@ -175,7 +175,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       data: {
         userSkills: user?.userSkills,
         id: user.userId,
-        fullName: user.fullName
+        fullName: user.fullName,
       }
 
     });
@@ -530,7 +530,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   showDialog(command: string, request: any) {
     let resourceRequest = {
       id: request.id ? request.id : null,
-      projectId: this.projectId 
+      projectId: this.projectId
     }
     const show = this.dialog.open(CreateUpdateResourceRequestComponent, {
       data: {
@@ -586,8 +586,8 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
 
   public setDoneRequest(item){
     let data = {
-      ...item.planUserInfo, 
-      requestName: item.name, 
+      ...item.planUserInfo,
+      requestName: item.name,
       resourceRequestId: item.id
     }
     const showModal = this.dialog.open(FormSetDoneComponent, {

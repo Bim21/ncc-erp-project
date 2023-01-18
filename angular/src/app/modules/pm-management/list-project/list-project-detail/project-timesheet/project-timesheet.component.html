@@ -13,7 +13,7 @@
     <div class="container-fluid">
         <div class="">
             <div class="card-body table-responsive p-4">
-                <table style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                <table name="tbl-timeSheet" style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
                     <thead class="bg-light">
                         <tr>
                             <th class="stt">STT</th>
@@ -44,14 +44,14 @@
                             <td style="white-space: normal; max-width: 250px;">
                                 <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
                                 font-family: sans-serif; align-self:flex-start; line-height: initial;">
-                                  {{timesheet.note}}
-                              </pre>
+                                    {{timesheet.note}}
+                                </pre>
 
                             </td>
                             <td>
-                                <button *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject)"
-                                class="btn btn-sm bg-success" (click)="importExcel(timesheet.id)"
-                                    #importFileBtn>
+                                <button
+                                    *ngIf="permission.isGranted(Timesheet_TimesheetProject_UploadFileTimesheetProject)"
+                                    class="btn btn-sm bg-success" (click)="importExcel(timesheet.id)" #importFileBtn>
                                     <i class="fas fa-upload"></i>
                                     Import File
                                 </button>

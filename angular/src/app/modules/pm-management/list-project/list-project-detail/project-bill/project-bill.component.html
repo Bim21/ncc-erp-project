@@ -3,10 +3,12 @@
     <div class="container-fluid">
         <div *ngIf="isShowInvoiceSetting()" class="card mt-2 mb-1">
             <mat-expansion-panel [expanded]="!expandInvoiceSetting">
-                <mat-expansion-panel-header class="mt-2 mb-2" (click)="expandInvoiceSetting=!expandInvoiceSetting">
+                <mat-expansion-panel-header name="panel-InvoiceSetting" class="mt-2 mb-2"
+                    (click)="expandInvoiceSetting=!expandInvoiceSetting">
                     <h4 class="d-inline">Invoice settings:</h4>
-                    <button *ngIf="canEditInvoiceSetting() && !expandInvoiceSetting" style="border: none; height: fit-content;"
-                    class="btn btn-secondary ml-3 btn-sm mb-2" (click)="openInvoiceSettingDialog();$event.stopPropagation()">
+                    <button name="btn-editInvoiceSetting" *ngIf="canEditInvoiceSetting() && !expandInvoiceSetting"
+                        style="border: none; height: fit-content;" class="btn btn-secondary ml-3 btn-sm mb-2"
+                        (click)="openInvoiceSettingDialog();$event.stopPropagation()">
                         <i class="fas fa-edit m-0"></i>
                     </button>
                 </mat-expansion-panel-header>
@@ -81,9 +83,10 @@
         </div>
         <div class="card mt-2">
             <mat-expansion-panel [expanded]="!isShowUserBill">
-                <mat-expansion-panel-header class="mt-2 mb-2" (click)="isShowUserBill=!isShowUserBill">
+                <mat-expansion-panel-header name="pannel-userBill" class="mt-2 mb-2"
+                    (click)="isShowUserBill=!isShowUserBill">
                     <h4 class="d-inline">Bill accounts:</h4>
-                    <button
+                    <button name="btn-createUserBill"
                         *ngIf="!userBillProcess && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Create)"
                         [hidden]="isShowUserBill" style="border: none; height: fit-content;"
                         class="btn bg-blue ml-3 btn-sm mb-2"
@@ -97,8 +100,8 @@
                     <div class="">
 
 
-                        <table style="border-collapse: collapse;" class="table table-hover text-nowrap"
-                            [busy]="isLoading">
+                        <table name="tbl-UserBill" style="border-collapse: collapse;"
+                            class="table table-hover text-nowrap" [busy]="isLoading">
                             <thead class="bg-light">
                                 <tr>
                                     <th class="stt">#</th>
@@ -121,8 +124,7 @@
                                     <td><span>{{ i +1 }}</span></td>
                                     <td class="text-left" style="min-width: 250px;">
                                         <span *ngIf="!bill.createMode">
-                                            <app-user-info
-                                                [userData]="bill">
+                                            <app-user-info [userData]="bill">
                                             </app-user-info>
                                         </span>
                                         <div *ngIf="bill.createMode">
@@ -249,9 +251,9 @@
                                         </mat-checkbox>
                                     </td>
                                     <td style="white-space: pre-line;
-                                               word-break: break-all;
-                                               min-width: 150px;
-                                               text-align: left;">
+                                                word-break: break-all;
+                                                min-width: 150px;
+                                                text-align: left;">
                                         <div class="d-flex" style="align-items: center">
                                             <div style="width: 90%">
                                                 <span>

@@ -17,7 +17,7 @@
     <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="pm"> Name: </label>
       <div class="col-md-9">
-        <input name="{{data.command == 'create'?'ipt_technologyName':'ipt_technologyName_edit'}}"
+        <input name="{{data.command == 'create'?'ipt-technologyName':'ipt-technologyName_edit'}}"
           class="form-control mt-1"
           type="text"
           placeholder="Name"
@@ -36,7 +36,7 @@
     <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="pm"> Color: </label>
       <div class="col-md-9">
-        <input name="{{data.command == 'create'?'ipt_color':'ipt_color_edit'}}"
+        <input name="{{data.command == 'create'?'ipt-color':'ipt-color_edit'}}"
           class="form-control mt-1"
           type="text"
           placeholder="Color"
@@ -54,8 +54,8 @@
 
   </div>
   <div align="end" class="row justify-content-end">
-    <button name="btn_cancel" class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
-    <button name="btn_save"
+    <button name="btn-cancel" class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
+    <button name="btn-save"
       class="btn btn-primary btn-action"
       [disabled]="!resourceRequestForm.valid || isLoading"
       (click)="SaveAndClose()"

@@ -1,4 +1,3 @@
-
 <div>
   <section class="content-header">
     <div class="container-fluid">
@@ -12,7 +11,7 @@
   <form class="form-horizontal" autocomplete="off" #editRoleForm="ngForm">
     <div class="modal-body">
       <tabset>
-        <tab name="tab_detail" [heading]="'Details' | localize" class="pt-3 px-2">
+        <tab id="tab_detail" [heading]="'Details' | localize" class="pt-3 px-2">
           <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="name">
               {{ "Name" | localize }}
@@ -50,13 +49,15 @@
             <button class="btn btn-secondary btn-action btn-action mr-3" (click)="onCancelClick()">
               Cancel
             </button>
-            <button class="btn btn-primary btn-action btn-action" (click)="onSaveClick()" [disabled]="!editRoleForm.valid">
+            <button class="btn btn-primary btn-action btn-action" (click)="onSaveClick()"
+              [disabled]="!editRoleForm.valid">
               Save
             </button>
           </div>
         </tab>
         <!-- TAB PERMISSIONS -->
-        <tab name="tab_permission" class="tab-permission" [heading]="'Permissions' | localize" class="pt-3 px-2 test" style="height : 90% !important">
+        <tab id="tab_permission" class="tab-permission" [heading]="'Permissions' | localize" class="pt-3 px-2 test"
+          style="height : 90% !important">
           <br />
           <div class="row-fluid">
             <div class="col-md-12">
@@ -67,8 +68,9 @@
                     <div class="spinner" *ngIf="node.isLoading">
                       <mat-spinner [diameter]="16" style="margin-right: 8px;"></mat-spinner>{{node.displayName}}
                     </div>
-                    <mat-checkbox [ngClass]="node.childrens == null?'noChild':''" color="primary" *ngIf="!node.isLoading"
-                      [disabled]="isStatic " [checked]="isSelected(node)" (change)="todoLeafItemSelectionToggle(node)">
+                    <mat-checkbox [ngClass]="node.childrens == null?'noChild':''" color="primary"
+                      *ngIf="!node.isLoading" [disabled]="isStatic " [checked]="isSelected(node)"
+                      (change)="todoLeafItemSelectionToggle(node)">
                       {{node.displayName}}</mat-checkbox>
                   </li>
                 </mat-tree-node>
@@ -97,14 +99,15 @@
           </div>
         </tab>
         <!-- TAB USER -->
-        <tab name="tab_user" class="tab-user" [heading]="'Users' | localize" class="pt-3 px-2 test" style="height : auto !important; width: 100%;">
+        <tab id="tab_user" class="tab-user" [heading]="'Users' | localize" class="pt-3 px-2 test"
+          style="height : auto !important; width: 100%;">
           <div class="row mt-2">
             <div class="col-10">
               <div class="row form-search-role">
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Branch</mat-label>
-                    <mat-select name="slt_branch" [(value)]='userBranchForFilter' (selectionChange)="searchMember()">
+                    <mat-select name="slt-branch" [(value)]='userBranchForFilter' (selectionChange)="searchMember()">
                       <mat-option [value]='-1'>All</mat-option>
                       <mat-option [value]='0'>Ha Noi</mat-option>
                       <mat-option [value]='1'>Da Nang</mat-option>
@@ -118,7 +121,7 @@
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Type</mat-label>
-                    <mat-select name="slt_usertype" [(value)]='userTypeForFilter' (selectionChange)="searchMember()">
+                    <mat-select name="slt-usertype" [(value)]='userTypeForFilter' (selectionChange)="searchMember()">
                       <mat-option [value]="-1">All</mat-option>
                       <mat-option *ngFor="let item of userTypes" [value]="item.value">
                         {{item.label}}
@@ -129,7 +132,7 @@
                 <div class="col-md-2">
                   <mat-form-field>
                     <mat-label>Level</mat-label>
-                    <mat-select name="slt_userlevel" [(value)]='userLevelForFilter' (selectionChange)="searchMember()">
+                    <mat-select name="slt-userlevel" [(value)]='userLevelForFilter' (selectionChange)="searchMember()">
                       <mat-option [value]="-1">All</mat-option>
                       <mat-option *ngFor="let item of listUserLevel" [value]="item.id">
                         {{item.name}}
@@ -139,14 +142,15 @@
                 </div>
                 <div class="col-md-6">
                   <mat-form-field>
-                    <input name="ipt_search" type="text" #name matInput placeholder="Search by name, email" [(ngModel)]="searchMemberText"
-                      name="searchMember" (keyup)="searchMember()" (keypress)="keyPressed($event)">
+                    <input name="ipt-search" type="text" #name matInput placeholder="Search by name, email"
+                      [(ngModel)]="searchMemberText" name="searchMember" (keyup)="searchMember()"
+                      (keypress)="keyPressed($event)">
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div class="col-2 text-right">
-              <a name="btn_create" href="javascript:;" class="btn bg-blue" (click)="addUserInRole()">
+              <a name="btn-create" href="javascript:;" class="btn bg-blue" (click)="addUserInRole()">
                 <i class="fa fa-plus-square"></i>
                 {{ "Add" | localize }}
               </a>
@@ -159,10 +163,11 @@
                   <tr *ngFor="let member of listUsers">
                     <div class="row">
                       <div class="col-1 col-sm-2 col-md-1 col-lg-1">
-                        <button type="button" (click)="removeMemberFromProject(member.id, member.fullName)" class="text-danger" mat-icon-button>
+                        <button type="button" (click)="removeMemberFromProject(member.id, member.fullName)"
+                          class="text-danger" mat-icon-button>
                           <i class="fa fa-times"></i>
                         </button>
-                        <img [src]="getAvatar(member)" width="60" height="60"  style="border-radius: 50%;" />
+                        <img [src]="getAvatar(member)" width="60" height="60" style="border-radius: 50%;" />
                       </div>
                       <div class="col-11 col-sm-10 col-md-11 col-lg-11 name">
                         <b>{{member.fullName}}</b>
@@ -178,12 +183,10 @@
                           class="label tag bg-green">{{userTypes[member.userType].label}}</span>
                         <span style="margin-left: 10px;" *ngIf="member.userType == 2"
                           class="label tag bg-blue">{{userTypes[member.userType].label}}</span>
-                          <span *ngIf="member.positionName"
-                            class="ml-1 badge text-white"
-                            [style.backgroundColor]="member.positionColor"
-                          >
-                            {{ member.positionName }}
-                          </span>
+                        <span *ngIf="member.positionName" class="ml-1 badge text-white"
+                          [style.backgroundColor]="member.positionColor">
+                          {{ member.positionName }}
+                        </span>
                         <label class="tag" [style.background-color]="styleTagLevel(member.userLevel)">
                           {{findDevLevelName(member.userLevel)}}
                         </label>
@@ -202,4 +205,3 @@
     </div>
   </form>
 </div>
-
