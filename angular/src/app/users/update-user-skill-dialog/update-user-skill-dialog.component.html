@@ -7,7 +7,7 @@
         <mat-form-field class="w-100" appearance="outline">
             <mat-select multiple [(ngModel)]="userSkillList" required name="userSkills" placeholder="select skill" #userSkills="ngModel">
                 <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
-                    <input matInput [(ngModel)]="searchSkill" name="searchPMName" placeholder="Search" #search (input)="$event.stopPropagation();
+                    <input matInput [(ngModel)]="searchSkill" name="searchSkillName" placeholder="Search" #search (input)="$event.stopPropagation();
                      filterSkill()">{{search.focus()}}
                 </mat-form-field>
                 <mat-option *ngFor="let skill of skillList" [value]="skill.id">

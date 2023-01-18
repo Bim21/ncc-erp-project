@@ -6,12 +6,12 @@
           <h1>{{ "Users" | localize }}</h1>
         </div>
         <div class="col-6 text-right">
-          <button name="btn_sync" href="javascript:;" class="btn btn-success mr-2"
+          <button name="btn-sync" href="javascript:;" class="btn btn-success mr-2"
             *ngIf="permission.isGranted(Admin_Users_SyncDataFromHrm) " (click)="updateDataHRM()">
             <i class="fas fa-sync-alt mr-1"></i>
             {{ "Sync data from HRM" | localize }}
           </button>
-          <button name="btn_create" href="javascript:;" class="btn bg-blue" *ngIf="permission.isGranted(Admin_Users_Create) "
+          <button name="btn-create" href="javascript:;" class="btn bg-blue" *ngIf="permission.isGranted(Admin_Users_Create) "
             (click)="createUser()">
             <i class="fa fa-plus-square"></i>
             {{ "Create User" | localize }}

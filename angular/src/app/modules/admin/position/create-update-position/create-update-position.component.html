@@ -17,7 +17,7 @@
     <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="pm"> Name: </label>
       <div class="col-md-9">
-        <input name="{{data.command == 'create'?'ipt_positionName':'ipt_positionName_edit'}}"
+        <input name="{{data.command == 'create'?'ipt-positionName':'ipt-positionName_edit'}}"
           (ngModelChange)="nameChange($event)"
           class="form-control mt-1"
           type="text"
@@ -37,7 +37,7 @@
     <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="pm"> Short Name: </label>
       <div class="col-md-9">
-        <input name="{{data.command == 'create'?'ipt_shortName':'ipt_shortName_edit'}}"
+        <input name="{{data.command == 'create'?'ipt-shortName':'ipt-shortName_edit'}}"
           class="form-control mt-1"
           type="text"
           placeholder="Short Name"
@@ -56,7 +56,7 @@
     <div class="form-group row required">
       <label class="col-md-3 col-form-label" for="pm"> Code: </label>
       <div class="col-md-9">
-        <input name="{{data.command == 'create'?'ipt_code':'ipt_code_edit'}}"
+        <input name="{{data.command == 'create'?'ipt-code':'ipt-code_edit'}}"
           class="form-control mt-1"
           type="text"
           placeholder="Code"
@@ -78,7 +78,7 @@
       </label>
       <div class="d-flex align-items-center pl-2">
           <mat-form-field appearance="outline" class="common-input">
-              <input name="{{data.command == 'create'?'ipt_color':'ipt_color_edit'}}"
+              <input name="{{data.command == 'create'?'ipt-color':'ipt-color_edit'}}"
               matInput class="form-control mt-1"
               placeholder="Color"
               required
@@ -100,8 +100,8 @@
     </div>
   </div>
   <div align="end" class="row justify-content-end">
-    <button name="btn_cancel" class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
-    <button name="btn_save"
+    <button name="btn-cancel" class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
+    <button name="btn-save"
       class="btn btn-primary btn-action"
       [disabled]="!resourceRequestForm.valid || isLoading"
       (click)="SaveAndClose()"

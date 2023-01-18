@@ -8,7 +8,7 @@
                 Name:
             </label>
             <div class="col-md-9">
-                <input name="{{data.command == 'create'?'ipt_name':'ipt_name_edit'}}" class="form-control mt-1"
+                <input name="{{data.command == 'create'?'ipt-name':'ipt-name_edit'}}" class="form-control mt-1"
                     type="text" placeholder="Name" required name="name" [(ngModel)]="currency.name" #name="ngModel"
                     #nameEl suffix="%" [ngClass]="(checkNull && name.touched)?'is-check':''"
                     (input)="enterName($event.target.value);" />
@@ -23,7 +23,7 @@
                 Code:
             </label>
             <div class="col-md-9">
-                <input name="{{data.command == 'create'?'ipt_code':'ipt_code_edit'}}" class="form-control mt-1"
+                <input name="{{data.command == 'create'?'ipt-code':'ipt-code_edit'}}" class="form-control mt-1"
                     type="text" placeholder="Code" required name="code" [(ngModel)]="currency.code" #code="ngModel"
                     #codeEl suffix="%" />
                 <abp-validation-summary [control]="code" [controlEl]="codeEl">
@@ -36,7 +36,7 @@
                 Invoice Payment Info:
             </label>
             <div class="col-md-9">
-                <textarea name="{{data.command == 'create'?'ipt_invoicePaymentInfo':'ipt_invoicePaymentInfo_edit'}}"
+                <textarea name="{{data.command == 'create'?'ipt-invoicePaymentInfo':'ipt-invoicePaymentInfo_edit'}}"
                     class="form-control mt-1" placeholder="Invoice Payment Info" name="invoicePaymentInfo"
                     [(ngModel)]="currency.invoicePaymentInfo" maxlength="1000" rows="10">
             </textarea>
@@ -45,8 +45,8 @@
 
     </div>
     <div align="end" class="row justify-content-end">
-        <button name="btn_cancel" class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
-        <button name="btn_save" class="btn btn-primary btn-action"
+        <button name="btn-cancel" class="btn btn-secondary mr-2 btn-action" mat-dialog-close>Cancel</button>
+        <button name="btn-save" class="btn btn-primary btn-action"
             [disabled]="!resourceRequestForm.valid || checkNull || isLoading" (click)="SaveAndClose()">Save</button>
     </div>
 </form>

@@ -6,7 +6,7 @@
           <h1>{{ "Roles" | localize }}</h1>
         </div>
         <div class="col-6 text-right">
-          <button name="btn_create" *ngIf="permission.isGranted(Admin_Roles_Create)" href="javascript:;" class="btn bg-blue" (click)="createRole()">
+          <button name="btn-create" *ngIf="permission.isGranted(Admin_Roles_Create)" href="javascript:;" class="btn bg-blue" (click)="createRole()">
             <i class="fa fa-plus-square"></i>
             {{ "Create" | localize }}
           </button>

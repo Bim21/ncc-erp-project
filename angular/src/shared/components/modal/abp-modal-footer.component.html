@@ -1,5 +1,5 @@
 <div class="modal-footer justify-content-en">
-  <button
+  <button name="btn-cancel"
     type="button"
     class="btn btn-secondary btn-action mr-2"
     [disabled]="cancelDisabled"
@@ -7,7 +7,7 @@
   >
     {{ cancelLabel }}
   </button>
-  <button type="submit" class="btn btn-primary btn-action" [disabled]="saveDisabled">
+  <button name="btn-save" type="submit" class="btn btn-primary btn-action" [disabled]="saveDisabled">
     {{ saveLabel }}
   </button>
 </div>

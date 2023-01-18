@@ -6,10 +6,10 @@
                 <h1>Outsourcing Projects</h1>
             </div>
             <div class="col-6 text-right">
-                <button type="button" *ngIf="permission.isGranted(Projects_OutsourcingProjects_CheckProjectInvoiceSetting)" (click)="checkProjectInvoiceSetting()" class=" btn btn-success mr-2">
+                <button name="btn-checkInvoice" type="button" *ngIf="permission.isGranted(Projects_OutsourcingProjects_CheckProjectInvoiceSetting)" (click)="checkProjectInvoiceSetting()" class=" btn btn-success mr-2">
                     Check Project Invoice Setting
                 </button>
-                <button type="button" class="btn bg-blue" (click)="createProject()"
+                <button name="btn-create" type="button" class="btn bg-blue" (click)="createProject()"
                     *ngIf="permission.isGranted(Projects_OutsourcingProjects_Create)">
                     <i class="fa fa-plus-square"></i>
                     Create
@@ -27,7 +27,7 @@
                 <div class="row g-3">
                     <div class="input-group col-6 pt-1">
                         <div class="input-group-prepend">
-                            <button type="button" class="btn bg-blue" (click)="searchProject()">
+                            <button name="btn-search" type="button" class="btn bg-blue" (click)="searchProject()">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -49,7 +49,7 @@
                                 <mat-form-field appearance="outline">
                                     <mat-label>PM</mat-label>
 
-                                    <mat-select [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
+                                    <mat-select name="slt-PM" [(ngModel)]="pmId" name="pmId" placeholder="select a PM"
                                         (selectionChange)="getDataPage(1)"
                                         [disabled]="!isEnablePMFilter()">
                                         <mat-form-field class="w-100 px-3 "
@@ -65,13 +65,13 @@
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                
+
                             </div>
                             <div class="col-5 search-status pr-2">
                                 <!-- <label class="mt-3 label-status"><span class="pr-2">Trạng thái:</span></label> -->
                                 <mat-form-field appearance="outline" class="listStatus">
                                     <mat-label>Status</mat-label>
-                                    <mat-select [(ngModel)]="projectStatus" name="status" placeholder="Status"
+                                    <mat-select name="slt-status" [(ngModel)]="projectStatus" name="status" placeholder="Status"
                                         (selectionChange)="getDataPage(1)">
                                         <mat-option value="-1">All</mat-option>
                                         <mat-option *ngFor="let item of statusFilterList" [value]="item.value">
@@ -81,11 +81,11 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-2" style="margin-top: 10px;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo)">
-                                    <mat-checkbox [(ngModel)]="isShowBillInfo">Show bill info</mat-checkbox>
+                                    <mat-checkbox name="cbx-showBillInfo" [(ngModel)]="isShowBillInfo">Show bill info</mat-checkbox>
                             </div>
 
                         </div>
-                    </div>     
+                    </div>
                 </div>
             </div>
             <div *ngIf="advancedFiltersVisible" class="mb-0 mt-1">
@@ -111,7 +111,7 @@
             </div>
             <div class="card-body table-responsive px-4 pb-2">
                 <div class="fixTableHead">
-                    <table style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
+                    <table name="tbl_listProject" style="border-collapse: collapse;" class="table table-hover text-nowrap w-100"
                         [busy]="isLoading">
                         <thead class="bg-light">
                             <tr style="border: none;">
@@ -147,7 +147,7 @@
                                 <td class="text-center" style="width: 60px; max-width: 60px;"> {{ i+1 }}</td>
                                 <td style="max-width: 250px; white-space: normal;">
                                     <div class="project-wrap">
-                                        <div > 
+                                        <div >
                                             <a style="cursor: pointer; font-weight: bold;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" (click)="viewProjectDetail(project)" >
                                                 {{ project.name }}
                                             </a>
@@ -160,7 +160,7 @@
                                             <div>
                                                 <span>{{project.clientName}}</span>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="project-type-wrap">
                                             <span [ngClass]=" APP_CONST.ProjectTypeStyle[getByEnum(project.projectType,APP_ENUM.ProjectType)]">
@@ -169,7 +169,7 @@
                                         </div>
                                     </div>
                                 </td>
-                               
+
                                 <td>
                                     <div>
                                         <app-user-info
@@ -188,12 +188,12 @@
                                     <div *ngFor="let bill of filterBillInfo(project)" matTooltip="{{bill.fullName + ' ['+bill.billRole +'] '
                                     +'charged from '+ (bill.startTime | date:'dd/MM/yyyy')  + ( bill.endTime? ' to '+ (bill.endTime | date:'dd/MM/yyyy') : '')
                                 + ' with rate: '+ (bill.billRate | number:'1.0') +' '+ (project.currencyName | lowercase)+'/' + getChargeType(project.chargeType)}}">
-                                        <strong>{{bill.fullName}} </strong> 
-                                        <span>[{{bill.billRole}}] </span> 
+                                        <strong>{{bill.fullName}} </strong>
+                                        <span>[{{bill.billRole}}] </span>
                                         <strong class="text-danger"> {{bill.billRate | number: "1.0"}} </strong>
                                         <span>{{project.currencyName | lowercase}}/{{getChargeType(project.chargeType)}}</span>
                                     </div>
-                             
+
                                   <i [ngClass]="project.isViewAllBillInfo ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="project.billInfo.length > 5"
                                     (click)="project.isViewAllBillInfo = !project.isViewAllBillInfo; filterBillInfo(project)"></i>
 
@@ -248,7 +248,7 @@
                                             <i class="fas fa-trash fa-lg mr-1"></i>
                                             Delete
                                         </button>
-                                        <button mat-menu-item *ngIf="project.status != APP_ENUM.ProjectStatus.Closed && permission.isGranted(Projects_OutsourcingProjects_Close)" 
+                                        <button mat-menu-item *ngIf="project.status != APP_ENUM.ProjectStatus.Closed && permission.isGranted(Projects_OutsourcingProjects_Close)"
                                             (click)="closeProject(project)">
                                             <i class="fas fa-check mr-1"></i>
                                             <span>{{ "Close" | localize }}</span>
