@@ -76,6 +76,7 @@ import { BranchComponent } from './modules/admin/branch/branch.component';
 import { TechnologyComponent } from './modules/admin/technology/technology.component';
 import { PositionComponent } from './modules/admin/position/position.component';
 import { TrainingRequestTabComponent } from './modules/delivery-management/delivery/training-request-tab/training-request-tab.component';
+import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component';
 
 @NgModule({
   imports: [
@@ -97,6 +98,11 @@ import { TrainingRequestTabComponent } from './modules/delivery-management/deliv
           {
             path: "roles",
             component: RolesComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "audit-logs",
+            component: AuditLogComponent,
             canActivate: [AppRouteGuard],
           },
           {

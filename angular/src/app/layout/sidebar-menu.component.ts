@@ -109,6 +109,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             'fas fa-theater-masks',
             'Admin.Roles'
           ),
+          new MenuItem(
+            this.l('Audit Logs'),
+            '/app/audit-logs',
+            'fas fa-cogs',
+            'Admin.AuditLogs.View'
+          ),
         ]
       ),
       new MenuItem(
