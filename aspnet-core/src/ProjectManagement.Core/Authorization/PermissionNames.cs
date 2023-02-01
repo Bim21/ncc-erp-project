@@ -91,6 +91,10 @@ namespace ProjectManagement.Authorization
         public const string Admin_Roles_Edit = "Admin.Roles.Edit";
         public const string Admin_Roles_Delete = "Admin.Roles.Delete";
 
+        //auditLog
+        public const string Admin_AuditLogs = "Admin.AuditLogs";
+        public const string Admin_AuditLogs_View = "Admin.AuditLogs.View";
+
         //Project
         //Projects > Outsourcing Project
         public const string Projects = "Projects";
@@ -616,6 +620,10 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Roles_Edit ,
                     PermissionNames.Admin_Roles_Delete,
 
+                    //AuditLog
+                    PermissionNames.Admin_AuditLogs,
+                    PermissionNames.Admin_AuditLogs_View,
+
                     //Project
                     //Projects > Outsourcing Project
                     PermissionNames.Projects ,
@@ -1138,6 +1146,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
+
+                 new SystemPermission{ Name =  PermissionNames.Admin_AuditLogs, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "AuditLogs" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_AuditLogs_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Projects" },
 
@@ -1671,6 +1682,13 @@ namespace ProjectManagement.Authorization
                                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                                  new SystemPermission{ Name =  PermissionNames.Admin_Roles_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"},
+
+                            }
+                        },
+                                new SystemPermission { Name =  PermissionNames.Admin_AuditLogs, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "AuditLogs",
+                            Childrens = new List<SystemPermission>()
+                            {
+                                 new SystemPermission{ Name =  PermissionNames.Admin_AuditLogs_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
 
                             }
                         },
