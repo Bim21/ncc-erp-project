@@ -13,6 +13,7 @@ namespace ProjectManagement.APIs.AuditLogs.Dto
         public string EmailAddress { get; set; }
         [ApplySearch]
         public string MethodName { get; set; }
+        [ApplySearch]
         public string Parameters { get; set; }
         public DateTime ExecutionTime { get; set; }
         public int ExecutionDuration { get; set; }

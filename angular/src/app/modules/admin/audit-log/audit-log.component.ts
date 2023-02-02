@@ -21,6 +21,7 @@ export class AuditLogComponent extends PagedListingComponentBase<AuditlogsDto> i
   sortDrirect: number = 0;
   transDate: string = "";
   iconSort: string = "";
+  public isLoading:boolean = false;
 
   constructor(
     private auditlog: AuditlogService,
@@ -94,7 +95,7 @@ export class AuditLogComponent extends PagedListingComponentBase<AuditlogsDto> i
     if (this.searchText) {
       request.searchText = this.searchText;
     }
-
+    this.isLoading = true;
     this.auditlog
       .getAllAuditLogs(request)
       .pipe(finalize(() => {
@@ -106,7 +107,8 @@ export class AuditLogComponent extends PagedListingComponentBase<AuditlogsDto> i
           this.auditlogs[i].hideNote = false;
         }
         this.showPaging(result.result, pageNumber);
-      });
+        this.isLoading = false;
+      },()=> this.isLoading = false);
 
   }
 
