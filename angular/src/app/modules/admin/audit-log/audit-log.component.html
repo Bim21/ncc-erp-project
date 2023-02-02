@@ -26,7 +26,13 @@
                     <mat-form-field style="width: 100%;" appearance="outline">
                       <mat-label >Email Address</mat-label>
                       <mat-select name="selecteduserId" [(value)]="selecteduserId" (selectionChange)="getDataPage(1)">
-                        <mat-form-field style="width: 100%;" class="p-2 input-wrapper">
+                        <mat-form-field class="p-2 input-wrapper" style="
+                        position: sticky;
+                        top: 0;
+                        z-index: 2;
+                        background-color: white;
+                        width: 100%;
+                      ">
                           <input type="text" matInput class="search-input" placeholder="Search" [(ngModel)]="this.emailAddressSearch"
                             (keydown)="$event.stopPropagation()" (ngModelChange)="handleSearch()"/>
                         </mat-form-field>
