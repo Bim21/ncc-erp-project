@@ -52,6 +52,10 @@ export class AppConsts {
         Sent: "badge badge-pill badge-success",
         Unsent: "badge badge-pill badge-secondary"
     }
+    static readonly criteriaStatus = {
+        Active: "badge badge-pill badge-success",
+        DeActive: "badge badge-pill badge-danger"
+    }
     static readonly projectRole = {
 
         PM: "badge bg-danger",
@@ -101,19 +105,25 @@ export class AppConsts {
         Done: "badge badge-pill badge-success"
     }
     static readonly projectHealth = {
-        0: "badge  badge-success",
-        1: "badge  badge-warning",
-        2: "badge  badge-danger"
+        1: "badge  badge-success",
+        2: "badge  badge-warning",
+        3: "badge  badge-danger"
     }
     static readonly projectHealthBGStyle = {
-        0: "badge  bg-success",
-        1: "badge  bg-warning",
-        2: "badge  bg-danger"
+        1: "badge  bg-success",
+        2: "badge  bg-warning",
+        3: "badge  bg-danger"
     }
     static readonly projectHealthStyle = {
-        0: "text-success",
-        1: "text-warning",
-        2: "text-danger"
+        1: "text-success",
+        2: "text-warning",
+        3: "text-danger"
+    }
+    static readonly bgProjectReportStyle = {
+        Green: 'green',
+        Red: 'red',
+        Yellow: 'yellow',
+        Grey: 'grey'
     }
     static readonly  PMReportProjectIssueStatus =
     {

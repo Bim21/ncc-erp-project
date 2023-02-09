@@ -1,3 +1,5 @@
+import { EProjectReport } from "@shared/AppEnums";
+
 export class projectReportDto{
     userId: number;
     userName: string;
@@ -28,5 +30,6 @@ export class projectProblemDto{
     status: string;
     id: number;
     createMode?:boolean;
-    flag:string;
+    flag: string;
+    reportType: EProjectReport
 }

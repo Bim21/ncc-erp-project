@@ -27,10 +27,15 @@ import { TimesheetProjectService } from '@app/service/api/timesheet-project.serv
 import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/add-future-resource-dialog.component';
 import { EditMeetingNoteDialogComponent } from './edit-meeting-note-dialog/edit-meeting-note-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
-import { APP_ENUMS } from '@shared/AppEnums';
+import { APP_ENUMS, EProjectReport } from '@shared/AppEnums';
 import { TimeInterface } from 'angular-cd-timer';
 import { AppConfigurationService } from '@app/service/api/app-configuration.service';
 import { FormControl, Validators } from '@angular/forms';
+import { CriteriaService } from '@app/service/api/criteria.service';
+import { ProjectCriteriaResultService } from '@app/service/api/project-criteria-result.service';
+import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
+import { ProjectCriteriaResultDto } from '@app/service/model/project-criteria-result.dto';
+import { log } from 'console';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -40,10 +45,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_View;
   WeeklyReport_ReportDetail_UpdateNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateNote;
   WeeklyReport_ReportDetail_UpdateProjectHealth = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_UpdateProjectHealth;
-  WeeklyReport_ReportDetail_Issue = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue;
-  WeeklyReport_ReportDetail_Issue_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_View;
-  WeeklyReport_ReportDetail_Issue_AddMeetingNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_AddMeetingNote;
-  WeeklyReport_ReportDetail_Issue_SetDone = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_Issue_SetDone;
+  WeeklyReport_ReportDetail_Issue = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PMIssue;
+  WeeklyReport_ReportDetail_Issue_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PMIssue_View;
+  WeeklyReport_ReportDetail_Issue_AddMeetingNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PMIssue_AddMeetingNote;
+  WeeklyReport_ReportDetail_Issue_SetDone = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PMIssue_SetDone;
   WeeklyReport_ReportDetail_CurrentResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource;
   WeeklyReport_ReportDetail_CurrentResource_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_View;
   WeeklyReport_ReportDetail_CurrentResource_Release = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_Release;
@@ -57,6 +62,14 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_PlannedResource_CancelPlan = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_CancelPlan;
   WeeklyReport_ReportDetail_ChangedResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ChangedResource;
   Admin_Configuartions_WeeklyReportTime_Edit = PERMISSIONS_CONSTANT.Admin_Configuartions_WeeklyReportTime_Edit;
+
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
+
+  WeeklyReport_ReportDetail_PQAIssue_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PQAIssue_View
+  WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote
+  WeeklyReport_ReportDetail_PQAIssue_SetDone = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PQAIssue_SetDone
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // this.pmReportProjectService.GetAllByPmReport(this.pmReportId, request).pipe(finalize(()=>{
@@ -92,11 +105,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
+  public PQAList: projectProblemDto[] = [];
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus);
   public activeReportId: number;
   public typeSort: string = "No_Order";
+  public weeklyReportStatus: string;
 
   public pmReportProjectId: number;
   public isEditWeeklyReport: boolean = false;
@@ -147,6 +162,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   isShowSettingCountDown = false;
   isShowWarningTimeOut = false;
 
+  public listCriteria: ProjectCriteriaDto[] = []
+  public listCriteriaResult: ProjectCriteriaResultDto[] = []
+  public bgFlag: string = 'bg-success'
+  public status: string = 'Green'
+  public processCriteria: boolean = false
+
   constructor(public pmReportProjectService: PMReportProjectService,
     private tsProjectService: TimesheetProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
@@ -157,7 +178,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private dialog: MatDialog,
     private requestservice: ProjectResourceRequestService,
     private _layoutStore: LayoutStoreService,
-    private _configuration: AppConfigurationService
+    private _configuration: AppConfigurationService,
+    private pjCriteriaService: CriteriaService,
+    private pjCriteriaResultService: ProjectCriteriaResultService,
   ) {
     super(injector)
   }
@@ -251,17 +274,119 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.automationNote = this.pmReportProjectList[0]?.automationNote
         this.totalOverTime = this.pmReportProjectList[0]?.totalOverTime
         this.projectHealth = this.APP_ENUM.ProjectHealth[this.pmReportProjectList[0]?.projectHealth]
-        this.pmReportProjectService.projectHealth = this.projectHealth
+        //this.pmReportProjectService.projectHealth = this.projectHealth
         this.pmReportProjectId = this.pmReportProjectList[0]?.id
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
         }
+        this.getAllCriteria();
         this.getProjectInfo();
         this.getChangedResource();
         this.getFuturereport();
         this.getProjectProblem();
         this.search()
       }))
+    }
+  }
+
+
+  public getAllCriteria() {
+    forkJoin([this.pjCriteriaService.getAll(), this.pjCriteriaResultService.getAllCriteriaResult(this.projectId, this.pmReportId)])
+      .subscribe(([resCriteria, resCriteriaResult]) => {
+        this.bgFlag = 'bg-success';
+        this.status = 'Green'
+        this.listCriteriaResult = []
+        const listTmpCriteria = resCriteria.result as ProjectCriteriaDto[];
+        const listTmpCriteriaResult = resCriteriaResult.result as ProjectCriteriaResultDto[];
+        for (let i = 0; i < listTmpCriteria.length; i++) {
+          const criteria = listTmpCriteria[i];
+          const check = listTmpCriteriaResult.find(item => item.projectCriteriaId === listTmpCriteria[i].id);
+          const itemCriteriaResult = {
+            criteriaName: criteria.name,
+            note: check?.note || '',
+            status: check?.status,
+            editMode: false,
+            projectCriteriaId: criteria.id,
+            projectId: Number(this.projectId),
+            pmReportId: Number(this?.pmReportId),
+            id: check?.id || undefined,
+            isActive: criteria.isActive
+          } as ProjectCriteriaResultDto
+          if (this.isActive == true) {
+            if (itemCriteriaResult.id) {
+              this.listCriteriaResult.push(itemCriteriaResult);
+            }
+            else if (itemCriteriaResult.isActive) {
+              this.listCriteriaResult.push(itemCriteriaResult);
+            }
+          }
+          else {
+            if (itemCriteriaResult.id) {
+              this.listCriteriaResult.push(itemCriteriaResult);
+            }
+          }
+        }
+        for (let i = 0; i < this.listCriteriaResult.length; i++) {
+          if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
+            this.bgFlag = 'bg-danger';
+            this.status = 'Red';
+            break;
+          }
+          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
+            this.bgFlag = 'bg-warning';
+            this.status = 'Yellow'
+          }
+        }
+    })
+  }
+
+  public handleEditCriteriaResult(index: number) {
+    this.listCriteriaResult[index].editMode = true;
+    this.processCriteria = true;
+  }
+
+  public cancelEditCriteriaResult(index: number) {
+    this.listCriteriaResult[index].editMode = false;
+    this.processCriteria = false;
+    this.getAllCriteria();
+  }
+
+  public handleChangeStatus(item: ProjectCriteriaResultDto) {
+    if (!item.editMode) {
+      if (item.id) {
+        this.pjCriteriaResultService.update(item).subscribe(res => {
+          abp.notify.success(`Change status ${item.criteriaName} successfully`);
+          this.getAllCriteria();
+          this.getProjectProblem();
+        });
+      }
+      else {
+        this.pjCriteriaResultService.create(item).subscribe(res => {
+          abp.notify.success(`Change status ${item.criteriaName} successfully`);
+          this.getAllCriteria();
+          this.getProjectProblem();
+        })
+      }
+    }
+  }
+
+  public saveCriteriaResult(item: ProjectCriteriaResultDto) {
+    item.pmReportId = this.pmReportId;
+    if (item.id) {
+      this.pjCriteriaResultService.update(item).subscribe(res => {
+        abp.notify.success(`Update ${item.criteriaName} successfully`);
+        item.editMode = false;
+        this.processCriteria = false;
+        this.getProjectProblem();
+      });
+    }
+    else {
+      this.pjCriteriaResultService.create(item).subscribe(res => {
+        abp.notify.success(`Update ${item.criteriaName} successfully`);
+        item.editMode = false;
+        this.processCriteria = false;
+        this.getProjectProblem();
+      })
     }
   }
 
@@ -278,21 +403,40 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.isLoading = false;
         this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
-        this.router.navigate(
-          [],
-          {
-            relativeTo: this.route,
-            queryParams: {
-              name: this.projectInfo.projectName,
-              client: this.projectInfo.clientName,
-              clientCode: this.projectInfo.clientCode,
-              pmName: this.projectInfo.pmName,
-              pmReportProjectId: this.pmReportProjectId,
-              projectHealth: this.projectHealth,
-              projectType: this.projectType
-            },
-            queryParamsHandling: 'merge',
-          });
+        if (this.weeklyReportStatus == 'Sent') {
+          this.router.navigate(
+            [],
+            {
+              relativeTo: this.route,
+              queryParams: {
+                name: this.projectInfo.projectName,
+                client: this.projectInfo.clientName,
+                clientCode: this.projectInfo.clientCode,
+                pmName: this.projectInfo.pmName,
+                pmReportProjectId: this.pmReportProjectId,
+                projectHealth: this.projectHealth,
+                projectType: this.projectType
+              },
+              queryParamsHandling: 'merge',
+            });
+        }
+        else {
+          this.router.navigate(
+            [],
+            {
+              relativeTo: this.route,
+              queryParams: {
+                name: this.projectInfo.projectName,
+                client: this.projectInfo.clientName,
+                clientCode: this.projectInfo.clientCode,
+                pmName: this.projectInfo.pmName,
+                pmReportProjectId: this.pmReportProjectId,
+                projectHealth: 0,
+                projectType: this.projectType
+              },
+              queryParamsHandling: 'merge',
+            });
+        }
       },
         () => { this.isLoading = false })
     }
@@ -302,8 +446,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.projectId = projectReport.projectId;
     this.isEditingNote = false;
     this.isEditingAutomationNote = false
-    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth]
-    this.pmReportProjectService.projectHealth = this.projectHealth
+    this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth];
+    //this.pmReportProjectService.projectHealth = this.projectHealth
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
@@ -315,11 +459,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.generalNote = projectReport.note
     this.automationNote = projectReport.automationNote
 
-
+    this.getAllCriteria();
+    this.getProjectProblem();
     this.getProjectInfo();
     this.getChangedResource();
     this.getFuturereport();
-    this.getProjectProblem();
     this.isEditWeeklyReport = false;
     this.isEditFutureReport = false;
     this.isEditProblem = false;
@@ -352,15 +496,61 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if (this.projectId) {
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
-            this.problemList = data.result.result;
+          this.problemList = [];
+          this.PQAList = []
+          for (let i = 0; i < data.result.result.length; i++) {
+            if (data.result.result[i].reportType === EProjectReport.PM) {
+              this.problemList.push(data.result.result[i]);
+            }
+            else {
+              this.PQAList.push(data.result.result[i])
+            }
+          }
 
           this.projectHealth = data.result.projectHealth;
-          this.pmReportProjectService.projectHealth = this.projectHealth
+          this.weeklyReportStatus = data.result.status;
+          if (data.result.status === 'Sent') {
+            this.pmReportProjectService.projectHealth = this.projectHealth
+            this.router.navigate(
+              [],
+              {
+                relativeTo: this.route,
+                queryParams: {
+                  name: this.projectInfo.projectName,
+                  client: this.projectInfo.clientName,
+                  clientCode: this.projectInfo.clientCode,
+                  pmName: this.projectInfo.pmName,
+                  pmReportProjectId: this.pmReportProjectId,
+                  projectHealth: this.projectHealth,
+                  projectType: this.projectType
+                },
+                queryParamsHandling: 'merge',
+              });
+          }
+          else {
+            this.pmReportProjectService.projectHealth = ""
+            this.router.navigate(
+              [],
+              {
+                relativeTo: this.route,
+                queryParams: {
+                  name: this.projectInfo.projectName,
+                  client: this.projectInfo.clientName,
+                  clientCode: this.projectInfo.clientCode,
+                  pmName: this.projectInfo.pmName,
+                  pmReportProjectId: this.pmReportProjectId,
+                  projectHealth: 0,
+                  projectType: this.projectType
+                },
+                queryParamsHandling: 'merge',
+              });
+          }
           this.pmReportProjectList.find(x => x.id == data.result.pmReportProjectId).status = data.result.status
           this.pmReportProjectList.find(x => x.id == data.result.pmReportProjectId).projectHealth = data.result.projectHealthString
 
         } else {
           this.problemList = [];
+          this.PQAList = [];
 
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
@@ -536,7 +726,17 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     newIssue.createMode = true;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
+    newIssue.reportType = EProjectReport.PM
   }
+
+  public addPQAIssueReport() {
+    let newIssue = {} as projectProblemDto
+    newIssue.createMode = true;
+    newIssue.reportType = EProjectReport.PQA;
+    this.PQAList.unshift(newIssue)
+    this.processProblem = true;
+  }
+
   public saveProblemReport(problem: projectProblemDto) {
     problem.createdAt = moment(this.createdDate).format("YYYY-MM-DD");
     delete problem["createMode"]

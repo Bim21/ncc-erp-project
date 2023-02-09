@@ -327,5 +327,9 @@ namespace ProjectManagement.Utils
         {
             return Enum.Parse<UserLevel>(levelCode);
         }
+        public static ProjectHealth GetProjectHealthByString(string health)
+        {
+            return Enum.Parse<ProjectHealth>(health);
+        }
     }
 }

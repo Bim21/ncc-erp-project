@@ -70,9 +70,9 @@ export const APP_ENUMS = {
     },
     ProjectHealth:
     {
-        Green: 0,
-        Yellow: 1,
-        Red: 2
+        Green: 1,
+        Yellow: 2,
+        Red: 3
     },
     ProjectMilestoneStatus:
     {
@@ -187,14 +187,14 @@ export const APP_ENUMS = {
         "T.Việc": 3,
         FakeUser: 4,
         Vendor: 5
-        
+
     },
     UserTypeTabAllResource: {
         TTS: 0,
         CTV: 1,
         Staff: 2,
         "T.Việc": 3,
-        
+
     },
     WeeklySent: {
         Unsent: 0,
@@ -248,9 +248,14 @@ export const APP_ENUMS = {
     {
         Normal: 0,
         MontlyToDaily: 1
-    },   
+    },
     InvoiceSetting: {
         Main: true,
         Sub: false
     }
+}
+
+export enum EProjectReport {
+    PM = 0,
+    PQA = 1
 }

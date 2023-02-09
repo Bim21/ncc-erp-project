@@ -9,18 +9,28 @@ import { Injectable, Injector } from '@angular/core';
 })
 export class  CriteriaService extends BaseApiService{
   changeUrl() {
-    return "Criteria"
+    return "ProjectCriteria"
   }
 
-  constructor(http:HttpClient) { 
+  constructor(http:HttpClient) {
     super(http)
   }
   public getAllCriteria(request: PagedRequestDto): Observable<any>{
     return this.http.post<any>(this.rootUrl+"/GetAll",request);
   }
-  public deleteCriteria(criteriaId:any): Observable<any>{
+  public deleteCriteria(prjCriteriaId:any): Observable<any>{
     return this.http.delete<any>(this.rootUrl + '/Delete', {
-      params: new HttpParams().set('criteriaId',criteriaId)
+      params: new HttpParams().set('prjCriteriaId',prjCriteriaId)
+  })
+  }
+  public deActiveCriteria(prjCriteriaId:any): Observable<any>{
+    return this.http.delete<any>(this.rootUrl + '/DeActive', {
+      params: new HttpParams().set('prjCriteriaId',prjCriteriaId)
+  })
+  }
+  public activeCriteria(prjCriteriaId:any): Observable<any>{
+    return this.http.delete<any>(this.rootUrl + '/Active', {
+      params: new HttpParams().set('prjCriteriaId',prjCriteriaId)
   })
   }
 }

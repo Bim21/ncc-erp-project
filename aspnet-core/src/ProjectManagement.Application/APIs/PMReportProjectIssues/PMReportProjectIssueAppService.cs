@@ -37,7 +37,8 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
                             Solution = prpi.Solution,
                             MeetingSolution = prpi.MeetingSolution,
                             Status = prpi.Status.ToString(),
-                            CreatedAt = prpi.CreationTime
+                            CreatedAt = prpi.CreationTime,
+                            ReportType = prpi.ReportType
                         };
             return await query.ToListAsync();
         }
@@ -73,7 +74,7 @@ namespace ProjectManagement.APIs.PMReportProjectIssues
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_Issue_AddMeetingNote)]
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_PMIssue_AddMeetingNote)]
         public async Task<EditMeetingNoteDto> EditMeetingNote(EditMeetingNoteDto input)
         {
             var projectIssue = await WorkScope.GetAll<PMReportProjectIssue>()

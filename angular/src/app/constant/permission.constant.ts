@@ -1,19 +1,25 @@
 export const PERMISSIONS_CONSTANT = {
-       //Admin 
+       // #region Admin
        Admin: "Admin",
-       //Tenants
+       // #endregion
+
+       // #region Tenants
        Admin_Tenants: "Admin.Tenants",
        Admin_Tenants_View: "Admin.Tenants.View",
        Admin_Tenants_Create: "Admin.Tenants.Create",
        Admin_Tenants_Edit: "Admin.Tenants.Edit",
        Admin_Tenants_Delete: "Admin.Tenants.Delete",
-       //Clients 
+       // #endregion
+
+       // #region Clients
        Admin_Clients: "Admin.Clients",
        Admin_Clients_View: "Admin.Clients.View",
        Admin_Clients_Create: "Admin.Clients.Create",
        Admin_Clients_Edit: "Admin.Clients.Edit",
        Admin_Clients_Delete: "Admin.Clients.Delete",
-       //Configuration
+       // #endregion
+
+       // #region Configuration
        Admin_Configuartions: "Admin.Configuartions",
        Admin_Configuartions_Edit: "Admin.Configuartions.Edit",
        Admin_Configuartions_ViewKomuSetting: "Admin.Configuartions.ViewKomuSetting",
@@ -27,19 +33,25 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting: "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting",
        Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint: "Admin.Configuartions.ViewMaxCountHistoryOfRetroAndReviewPoint",
        Admin_Configuartions_WeeklyReportTime_Edit: "Admin.Configuartions.WeeklyReportTimeEdit",
-       //Skill 
+       // #endregion
+
+       // #region Skill
        Admin_Skills: "Admin.Skills",
        Admin_Skills_View: "Admin.Skills.View",
        Admin_Skills_Create: "Admin.Skills.Create",
        Admin_Skills_Edit: "Admin.Skills.Edit",
        Admin_Skills_Delete: "Admin.Skills.Delete",
-       //Currencies
+       // #endregion
+
+       // #region Currencies
        Admin_Currencies: "Admin.Currencies",
        Admin_Currencies_View: "Admin.Currencies.View",
        Admin_Currencies_Create: "Admin.Currencies.Create",
        Admin_Currencies_Edit: "Admin.Currencies.Edit",
        Admin_Currencies_Delete: "Admin.Currencies.Delete",
-       //User
+       // #endregion
+
+       // #region User
        Admin_Users: "Admin.Users",
        Admin_Users_View: "Admin.Users.View",
        Admin_Users_Create: "Admin.Users.Create",
@@ -52,37 +64,43 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Users_UploadAvatar: "Admin.Users.UploadAvatar",
        Admin_Users_ResetPassword: "Admin.Users.ResetPassword",
        Admin_Users_DeleteFakeUser: "Admin.Users.DeleteFakeUser",
+       // #endregion
 
-       //role
+       // #region Role
        Admin_Roles: "Admin.Roles",
        Admin_Roles_View: "Admin.Roles.View",
        Admin_Roles_Create: "Admin.Roles.Create",
        Admin_Roles_Edit: "Admin.Roles.Edit",
        Admin_Roles_Delete: "Admin.Roles.Delete",
+       // #endregion
 
-        //Branchs 
-        Admin_Branchs: "Admin.Branchs",
-        Admin_Branchs_View: "Admin.Branchs.View",
-        Admin_Branchs_Create: "Admin.Branchs.Create",
-        Admin_Branchs_Edit: "Admin.Branchs.Edit",
-        Admin_Branchs_Delete: "Admin.Branchs.Delete",
+       // #region Branchs
+       Admin_Branchs: "Admin.Branchs",
+       Admin_Branchs_View: "Admin.Branchs.View",
+       Admin_Branchs_Create: "Admin.Branchs.Create",
+       Admin_Branchs_Edit: "Admin.Branchs.Edit",
+       Admin_Branchs_Delete: "Admin.Branchs.Delete",
+       // #endregion
 
-        //Positions 
-        Admin_Positions: "Admin.Positions",
-        Admin_Positions_View: "Admin.Positions.View",
-        Admin_Positions_Create: "Admin.Positions.Create",
-        Admin_Positions_Edit: "Admin.Positions.Edit",
-        Admin_Positions_Delete: "Admin.Positions.Delete",
+       // #region Positions
+       Admin_Positions: "Admin.Positions",
+       Admin_Positions_View: "Admin.Positions.View",
+       Admin_Positions_Create: "Admin.Positions.Create",
+       Admin_Positions_Edit: "Admin.Positions.Edit",
+       Admin_Positions_Delete: "Admin.Positions.Delete",
+       // #endregion
 
-       //Technologies 
+       // #region Technologies
        Admin_Technologies: "Admin. Technologies",
        Admin_Technologies_View: "Admin.Technologies.View",
        Admin_Technologies_Create: "Admin.Technologies.Create",
        Admin_Technologies_Edit: "Admin.Technologies.Edit",
        Admin_Technologies_Delete: "Admin.Technologies.Delete",
+       // #endregion
 
-       //Project
-       //Projects > Outsourcing Project
+       // #region Project
+
+       // #region Projects > Outsourcing Project
        Projects: "Projects",
        Projects_OutsourcingProjects: "Projects.OutsourcingProjects",
        Projects_OutsourcingProjects_ViewAllProject: "Projects.OutsourcingProjects.ViewAllProject",
@@ -137,12 +155,19 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth: "Projects.OutsourcingProjects.ProjectDetail.UpdateProjectHealth",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport: "Projects.OutsourcingProjects.ProjectDetail.SendWeeklyReport",
 
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.View",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.AddNewIssue",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Edit",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Delete",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.SetDone",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.View",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_AddNewIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.AddNewIssue",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Edit",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
+
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone",
 
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
@@ -160,6 +185,10 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ChangedResource",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View",
 
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
 
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.View",
@@ -171,7 +200,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Rate_View: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Rate_View",
        Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Note_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabBillInfo.Note_Edit",
 
-       Projects_OutsourcingProjects_ProjectDetail_TabTimesheet : "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet",
+       Projects_OutsourcingProjects_ProjectDetail_TabTimesheet: "Projects.OutsourcingProjects.ProjectDetail.TabTimesheet",
 
        Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription: "Projects.OutsourcingProjects.ProjectDetail.TabProjectDescription",
        Projects_OutsourcingProjects_ProjectDetail_TabProjectDescription_View: "Projects.OutsourcingProjects.ProjectDetail.TabProjectDescription.View",
@@ -181,8 +210,9 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_View: "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile.View",
        Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_UploadFile: "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile.UploadFile",
        Projects_OutsourcingProjects_ProjectDetail_TabProjectFile_DeleteFile: "Projects.OutsourcingProjects.ProjectDetail.TabProjectFile.DeleteFile",
+       // #endregion
 
-       //Projects > Product Project
+       // #region Projects > Product Project
 
        Projects_ProductProjects: "Projects.ProductProjects",
        Projects_ProductProjects_ViewAllProject: "Projects.ProductProjects.ViewAllProject",
@@ -236,12 +266,19 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth: "Projects.ProductProjects.ProjectDetail.UpdateProjectHealth",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport: "Projects.ProductProjects.ProjectDetail.SendWeeklyReport",
 
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.View",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.AddNewIssue",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Edit",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Delete",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.SetDone",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.View",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_AddNewIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.AddNewIssue",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Edit",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
+
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.View",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.AddNewIssue",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Edit",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
 
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
@@ -259,6 +296,10 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ChangedResource",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View",
 
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
 
        Projects_ProductProjects_ProjectDetail_TabBillInfo: "Projects.ProductProjects.ProjectDetail.TabBillInfo",
        Projects_ProductProjects_ProjectDetail_TabBillInfo_View: "Projects.ProductProjects.ProjectDetail.TabBillInfo.View",
@@ -266,7 +307,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabBillInfo_Edit: "Projects.ProductProjects.ProjectDetail.TabBillInfo.Edit",
        Projects_ProductProjects_ProjectDetail_TabBillInfo_Delete: "Projects.ProductProjects.ProjectDetail.TabBillInfo.Delete",
 
-       Projects_ProductProjects_ProjectDetail_TabTimesheet : "Projects.ProductProjects.ProjectDetail.TabTimesheet",
+       Projects_ProductProjects_ProjectDetail_TabTimesheet: "Projects.ProductProjects.ProjectDetail.TabTimesheet",
 
        Projects_ProductProjects_ProjectDetail_TabProjectDescription: "Projects.ProductProjects.ProjectDetail.TabProjectDescription",
        Projects_ProductProjects_ProjectDetail_TabProjectDescription_View: "Projects.ProductProjects.ProjectDetail.TabProjectDescription.View",
@@ -276,9 +317,9 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabProjectFile_View: "Projects.ProductProjects.ProjectDetail.TabProjectFile.View",
        Projects_ProductProjects_ProjectDetail_TabProjectFile_UploadFile: "Projects.ProductProjects.ProjectDetail.TabProjectFile.UploadFile",
        Projects_ProductProjects_ProjectDetail_TabProjectFile_DeleteFile: "Projects.ProductProjects.ProjectDetail.TabProjectFile.DeleteFile",
+       // #endregion
 
-
-       //Projects > training Project
+       // #region Projects > Training Project
 
        Projects_TrainingProjects: "Projects.TrainingProjects",
        Projects_TrainingProjects_ViewAllProject: "Projects.TrainingProjects.ViewAllProject",
@@ -332,12 +373,19 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth: "Projects.TrainingProjects.ProjectDetail.UpdateProjectHealth",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport: "Projects.TrainingProjects.ProjectDetail.SendWeeklyReport",
 
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.View",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.AddNewIssue",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Edit",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.Delete",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectIssue.SetDone",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.View",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_AddNewIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.AddNewIssue",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Edit: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Edit",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
+
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone",
 
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
@@ -355,6 +403,10 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ChangedResource",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View",
 
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
 
        Projects_TrainingProjects_ProjectDetail_TabBillInfo: "Projects.TrainingProjects.ProjectDetail.TabBillInfo",
        Projects_TrainingProjects_ProjectDetail_TabBillInfo_View: "Projects.TrainingProjects.ProjectDetail.TabBillInfo.View",
@@ -362,7 +414,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabBillInfo_Edit: "Projects.TrainingProjects.ProjectDetail.TabBillInfo.Edit",
        Projects_TrainingProjects_ProjectDetail_TabBillInfo_Delete: "Projects.TrainingProjects.ProjectDetail.TabBillInfo.Delete",
 
-       Projects_TrainingProjects_ProjectDetail_TabTimesheet : "Projects.TrainingProjects.ProjectDetail.TabTimesheet",
+       Projects_TrainingProjects_ProjectDetail_TabTimesheet: "Projects.TrainingProjects.ProjectDetail.TabTimesheet",
 
        Projects_TrainingProjects_ProjectDetail_TabProjectDescription: "Projects.TrainingProjects.ProjectDetail.TabProjectDescription",
        Projects_TrainingProjects_ProjectDetail_TabProjectDescription_View: "Projects.TrainingProjects.ProjectDetail.TabProjectDescription.View",
@@ -372,8 +424,11 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabProjectFile_View: "Projects.TrainingProjects.ProjectDetail.TabProjectFile.View",
        Projects_TrainingProjects_ProjectDetail_TabProjectFile_UploadFile: "Projects.TrainingProjects.ProjectDetail.TabProjectFile.UploadFile",
        Projects_TrainingProjects_ProjectDetail_TabProjectFile_DeleteFile: "Projects.TrainingProjects.ProjectDetail.TabProjectFile.DeleteFile",
+       // #endregion
 
-       // Weekly report
+       // #endregion
+
+       // #region Weekly report
        WeeklyReport: "WeeklyReport",
        WeeklyReport_View: "WeeklyReport.View",
        WeeklyReport_CloseAndAddNew: "WeeklyReport.CloseAndAddNew",
@@ -386,10 +441,20 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_UpdateNote: "WeeklyReport.ReportDetail.UpdateNote",
        WeeklyReport_ReportDetail_UpdateProjectHealth: "WeeklyReport.ReportDetail.UpdateProjectHealth",
 
-       WeeklyReport_ReportDetail_Issue: "WeeklyReport.ReportDetail.Issue",
-       WeeklyReport_ReportDetail_Issue_View: "WeeklyReport.ReportDetail.Issue.View",
-       WeeklyReport_ReportDetail_Issue_AddMeetingNote: "WeeklyReport.ReportDetail.Issue.AddMeetingNote",
-       WeeklyReport_ReportDetail_Issue_SetDone: "WeeklyReport.ReportDetail.Issue.SetDone",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria: "WeeklyReport.ReportDetail.ProjectHealthCriteria",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_View: "WeeklyReport.ReportDetail.ProjectHealthCriteria.View",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus: "WeeklyReport.ReportDetail.ProjectHealthCriteria.ChangeStatus",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit: "WeeklyReport.ReportDetail.ProjectHealthCriteria.Edit",
+
+       WeeklyReport_ReportDetail_PMIssue: "WeeklyReport.ReportDetail.PMIssue",
+       WeeklyReport_ReportDetail_PMIssue_View: "WeeklyReport.ReportDetail.PMIssue.View",
+       WeeklyReport_ReportDetail_PMIssue_AddMeetingNote: "WeeklyReport.ReportDetail.PMIssue.AddMeetingNote",
+       WeeklyReport_ReportDetail_PMIssue_SetDone: "WeeklyReport.ReportDetail.PMIssue.SetDone",
+
+       WeeklyReport_ReportDetail_PQAIssue: "WeeklyReport.ReportDetail.PQAIssue",
+       WeeklyReport_ReportDetail_PQAIssue_View: "WeeklyReport.ReportDetail.PQAIssue.View",
+       WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote: "WeeklyReport.ReportDetail.PQAIssue.AddMeetingNote",
+       WeeklyReport_ReportDetail_PQAIssue_SetDone: "WeeklyReport.ReportDetail.PQAIssue.SetDone",
 
        WeeklyReport_ReportDetail_CurrentResource: "WeeklyReport.ReportDetail.CurrentResource",
        WeeklyReport_ReportDetail_CurrentResource_View: "WeeklyReport.ReportDetail.CurrentResource.View",
@@ -406,9 +471,9 @@ export const PERMISSIONS_CONSTANT = {
 
        WeeklyReport_ReportDetail_ChangedResource: "WeeklyReport.ReportDetail.ChangedResource",
        WeeklyReport_ReportDetail_ChangedResource_View: "WeeklyReport.ReportDetail.ChangedResource.View",
+       // #endregion
 
-
-       //Resource Request 
+       // #region Resource Request
        ResourceRequest: "ResourceRequest",
        ResourceRequest_View: "ResourceRequest.View",
        ResourceRequest_CreateNewRequest: "ResourceRequest.CreateNewRequest",
@@ -424,8 +489,9 @@ export const PERMISSIONS_CONSTANT = {
        ResourceRequest_Edit: "ResourceRequest.Edit",
        ResourceRequest_Delete: "ResourceRequest.Delete",
        ResourceRequest_SendRecruitment: "ResourceRequest.SendRecruitment",
+       // #endregion
 
-       //Training Request 
+       // #region Training Request
        TrainingRequest: "TrainingRequest",
        TrainingRequest_View: "TrainingRequest.View",
        TrainingRequest_CreateNewRequest: "TrainingRequest.CreateNewRequest",
@@ -441,8 +507,9 @@ export const PERMISSIONS_CONSTANT = {
        TrainingRequest_Edit: "TrainingRequest.Edit",
        TrainingRequest_Delete: "TrainingRequest.Delete",
        TrainingRequest_SendRecruitment: "TrainingRequest.SendRecruitment",
+       // #endregion
 
-       //Resource
+       // #region Resource
        Resource: "Resource",
        Resource_TabPool: "Resource.TabPool",
        Resource_TabPool_View: "Resource.TabPool.View",
@@ -455,7 +522,7 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabPool_CancelMyPlan: "Resource.TabPool.CancelMyPlan",
        Resource_TabPool_CancelAnyPlan: "Resource.TabPool.CancelAnyPlan",
        Resource_TabPool_EditTempProject: "Resource.TabPool.EditTempProject",
-       Resource_TabPool_AddTempProject : "Resource.TabPool.AddTempProject",
+       Resource_TabPool_AddTempProject: "Resource.TabPool.AddTempProject",
        Resource_TabPool_Release: "Resource.TabPool.Release",
 
 
@@ -485,8 +552,9 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabVendor_CancelMyPlan: "Resource.TabVendor.CancelMyPlan",
        Resource_TabVendor_CancelAnyPlan: "Resource.TabVendor.CancelAnyPlan",
        Resource_TabVendor_UpdateSkill: "Resource.TabVendor.UpdateSkill",
+       // #endregion
 
-       //Timesheet
+       // #region Timesheet
        Timesheets: "Timesheets",
        Timesheets_View: "Timesheets.View",
        Timesheets_ViewList: "Timesheets.ViewList",
@@ -515,9 +583,16 @@ export const PERMISSIONS_CONSTANT = {
        Timesheets_TimesheetDetail_UpdateBill_Edit: "Timesheets.TimesheetDetail.UpdateBill.Edit",
        Timesheets_TimesheetDetail_UpdateBill_SetDone: "Timesheets.TimesheetDetail.UpdateBill.SetDone",
 
-       Timesheets_TimesheetDetail_UpdateTimsheet : "Timesheets.TimesheetDetail.UpdateTimsheet",
-       Timesheets_TimesheetDetail_RemoveAccount : "Timesheets.TimesheetDetail.RemoveAccount"
-       
+       Timesheets_TimesheetDetail_UpdateTimsheet: "Timesheets.TimesheetDetail.UpdateTimsheet",
+       Timesheets_TimesheetDetail_RemoveAccount: "Timesheets.TimesheetDetail.RemoveAccount",
+       // #endregion
 
-
+       // #region Criteria
+       Admin_Criteria: "Admin.Criteria",
+       Admin_Criteria_View: "Admin.Criteria.View",
+       Admin_Criteria_Create: "Admin.Criteria.Create",
+       Admin_Criteria_Edit: "Admin.Criteria.Edit",
+       Admin_Criteria_Delete: "Admin.Criteria.Delete",
+       Admin_Criteria_Active_DeActive: "Admin.Criteria.Active/DeActive",
+       //#endregion
 }

@@ -10,3 +10,9 @@ export class CriteriaDto{
     id?: number
     criteriaCategoryId:number;
 }
+export class ProjectCriteriaDto{
+    id?: number;
+    name: string;
+    guideline: string;
+    isActive: boolean;
+}

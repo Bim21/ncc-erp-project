@@ -29,6 +29,8 @@
     <Compile Remove="Migrations\20220830005426_RemoveColumnNoteInPositionTable.Designer.cs" />
     <Compile Remove="Migrations\20220830013636_AddSomeDataForPositionTable.cs" />
     <Compile Remove="Migrations\20220830013636_AddSomeDataForPositionTable.Designer.cs" />
+    <Compile Remove="Migrations\20230115191736_add_tbls_for_ProjectCriteria_Feature.cs" />
+    <Compile Remove="Migrations\20230115191736_add_tbls_for_ProjectCriteria_Feature.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />

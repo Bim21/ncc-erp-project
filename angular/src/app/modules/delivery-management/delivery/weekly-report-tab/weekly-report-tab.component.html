@@ -74,10 +74,15 @@
                                 </td>
                                 <td class="text-center">
                                     <strong>{{item.numberOfProject}} </strong>(
-                                    <span [ngClass]="" *ngFor="let project of item.countProjectHeath; let i =index">
-                                        {{project.number}} <span
-                                            [ngClass]="getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)">{{getByEnum(project.projectHealth,APP_ENUM.ProjectHealth)}}</span>
-                                        <span *ngIf="i < item.countProjectHeath.length-1">/</span> </span> )
+                                    <span>{{item.countDraft }} </span>
+                                    <span>{{getByEnum(0,APP_ENUM.PMReportProjectStatus) }} / </span>
+                                    <span>{{item.countGreen }} </span>
+                                    <span [ngClass]="getByEnum(1,APP_ENUM.ProjectHealth)">{{getByEnum(1,APP_ENUM.ProjectHealth)}} / </span>
+                                    <span>{{item.countRed }} </span>
+                                    <span [ngClass]="getByEnum(3,APP_ENUM.ProjectHealth)">{{getByEnum(3,APP_ENUM.ProjectHealth)}} / </span>
+                                    <span>{{item.countYellow }} </span>
+                                    <span [ngClass]="getByEnum(2,APP_ENUM.ProjectHealth)">{{getByEnum(2,APP_ENUM.ProjectHealth)}}</span>
+                                    )
                                 </td>
                                 <td style="white-space: normal; max-width: 300px;">
                                     <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
@@ -88,9 +93,9 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <button *ngIf="(item.isActive || permission.isGranted(WeeklyReport_CloseAndAddNew) 
+                                    <button *ngIf="(item.isActive || permission.isGranted(WeeklyReport_CloseAndAddNew)
                                     || permission.isGranted(WeeklyReport_CollectTimesheet)
-                                    || permission.isGranted(WeeklyReport_Rename) 
+                                    || permission.isGranted(WeeklyReport_Rename)
                                     || permission.isGranted(WeeklyReport_View))
                                     && item.isActive ==true
                                     " mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">

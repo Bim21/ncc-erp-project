@@ -7,8 +7,8 @@
 
     <li *ngIf="isShowReportBar" class="ml-4 mt-1">
         <button class="btn btn-info text-nowrap" (click)="showDialog()">
-      <i class="fas fa-sticky-note mr-1"></i> Note
-    </button>
+            <i class="fas fa-sticky-note mr-1"></i> Note
+        </button>
     </li>
     <li style="margin-left: 30px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="mt-1" style="font-size: 20px;">
@@ -19,54 +19,46 @@
     </li>
 
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
-            <mat-form-field style="font-size: 16px !important;" [ngClass]="APP_CONST.projectHealthStyle[projectHealth]" class="myFilter ml-2" appearance="outline">
-                <mat-select  [disabled]="!permission.isGranted(WeeklyReport_ReportDetail_UpdateProjectHealth)"
-                  name="flag" placeholder="Project health" name="flag" placeholder="Project health" [(ngModel)]="projectHealth" (click)="$event.stopPropagation()">
-                    <ng-container *ngFor="let flag of projectHealthList">
-                        <mat-option style="border:1px white solid;" [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]" (click)="updateHealth(APP_ENUM.ProjectHealth[flag]);"
-                         [value]="APP_ENUM.ProjectHealth[flag]" >
-                            <span style="font-weight: 100 !important;">
-                                {{flag}}
-                            </span>
+        <div class="d-flex align-items-center h-100" style="margin-left: 30px !important;">
+            <span [ngClass]="APP_CONST.projectHealthBGStyle[projectHealth]" class="header-status-wrapper">
+                {{problemIssueList[projectHealth - 1]}}
+            </span>
+        </div>
 
-                        </mat-option>
-                    </ng-container>
+    </li>
+    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+        <div class="form-froup row header-report-nav" style="margin-left: 30px!important;">
+            <mat-form-field appearance="outline" class="ml-2">
+                <mat-label>Project Type:</mat-label>
+                <mat-select [(ngModel)]="projectType" (selectionChange)="changeProjectType($event.value)">
+                    <mat-option *ngFor="let type of projectTypeList" [value]="type">
+                        {{type}}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
 
     </li>
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
-          <mat-form-field appearance="outline" class="ml-2">
-            <mat-label>Project Type:</mat-label>
-            <mat-select [(ngModel)]="projectType" (selectionChange)="changeProjectType($event.value)">
-              <mat-option *ngFor="let type of projectTypeList" [value] = "type">
-                    {{type}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-      </li>
-    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>PM Report: </mat-label>
-                <mat-select [(ngModel)]="pmReport" placeholder="select a report" (selectionChange)="routingReportDetail()">
+                <mat-select [(ngModel)]="pmReport" placeholder="select a report"
+                    (selectionChange)="routingReportDetail()">
                     <mat-form-field class="w-100 px-3 "
                         style="position: sticky; top: 0; z-index: 2; background-color: white;">
                         <input matInput [(ngModel)]="searchPmReport" name="searchPmReportName"
-                        (keydown)="$event.stopPropagation()" placeholder="search">
+                            (keydown)="$event.stopPropagation()" placeholder="search">
                     </mat-form-field>
-                    <mat-option *ngFor="let report of pmReportList | listFilter: 'name' :searchPmReport" [value]="report">
+                    <mat-option *ngFor="let report of pmReportList | listFilter: 'name' :searchPmReport"
+                        [value]="report">
                         <div class="row">
                             <div class="col-10 text-overflow">
                                 {{report.name}}
                             </div>
                             <div class="col-2">
-                                <i class="fas fa-circle float-right mt-3" [ngClass]="report.isActive==true?'text-success':'text-secondary'"></i>
+                                <i class="fas fa-circle float-right mt-3"
+                                    [ngClass]="report.isActive==true?'text-success':'text-secondary'"></i>
                             </div>
                         </div>
 
@@ -79,38 +71,38 @@
     <li>
         <div class="mt-1" style="font-size: 21px;" *ngIf="projectName && projectCode">
             <strong>
-        {{projectName}}
-      </strong> [
+                {{projectName}}
+            </strong> [
             <span>
-        {{projectCode}}
-      </span> ]
+                {{projectCode}}
+            </span> ]
         </div>
     </li>
-    
+
 
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
+        <div class="form-froup row header-report-nav" style="margin-left: 30px!important;">
             <mat-form-field appearance="outline" class="ml-2">
-              <mat-label>Status</mat-label>
-              <mat-select [(ngModel)]="filterProjectHealth" (selectionChange)="onChangeFilterProjectHealth()">
-                <mat-option *ngFor="let item of projectHeathList"  [value] = "item.value">
-                      {{item.displayName}}
-                </mat-option>
-              </mat-select>
+                <mat-label>Status</mat-label>
+                <mat-select [(ngModel)]="filterProjectHealth" (selectionChange)="onChangeFilterProjectHealth()">
+                    <mat-option *ngFor="let item of projectHeathList" [value]="item.value">
+                        {{item.displayName}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
         </div>
     </li>
     <li *ngIf="isShowReportBar" style="cursor: pointer; display: flex; white-space: nowrap;">
-        <div class="form-froup row header-report-nav"  style="margin-left: 30px!important;">
+        <div class="form-froup row header-report-nav" style="margin-left: 30px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Sort Status:</mat-label>
-                <mat-select [(ngModel)]="filterSort" (selectionChange)="onChangeFilterSort()" > 
-                    <mat-option *ngFor="let item of filterSortList" [value] = "item">
+                <mat-select [(ngModel)]="filterSort" (selectionChange)="onChangeFilterSort()">
+                    <mat-option *ngFor="let item of filterSortList" [value]="item">
                         {{item}}
                     </mat-option>
                 </mat-select>
-            </mat-form-field>    
+            </mat-form-field>
         </div>
-        
+
     </li>
 </ul>

@@ -106,6 +106,11 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
             canActivate: [AppRouteGuard],
           },
           {
+            path: 'criterias',
+            component: CriteriaComponent,
+            canActivate: [AppRouteGuard]
+          },
+          {
             path: "edit-role",
             component: EditRoleDialogComponent,
             canActivate: [AppRouteGuard]

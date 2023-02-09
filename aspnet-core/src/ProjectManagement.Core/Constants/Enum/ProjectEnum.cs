@@ -57,9 +57,9 @@
 
         public enum ProjectHealth
         {
-            Green = 0,
-            Yellow = 1,
-            Red = 2
+            Green = 1,
+            Yellow = 2,
+            Red = 3
         }
 
         public enum ProjectMilestoneStatus
@@ -244,8 +244,20 @@
         public enum WeeklyReportSort
         {
             No_Order,
-            Green_Yellow_Red,
-            Red_Yellow_Green,
+            Draft_Green_Yellow_Red,
+            Draft_Red_Yellow_Green,
+        }
+        public enum ProjectCriteriaResultStatus
+        {
+            NotReported = 0,
+            Green = 1,
+            Yellow = 2,
+            Red = 3
+        }
+        public enum PMReportProjectIssueType
+        {
+            PMIssue,
+            PQAIssue
         }
     }
 }

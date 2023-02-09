@@ -30,6 +30,11 @@ import { WeeklyReportComponent } from '@app/modules/pm-management/list-project/l
 import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-dropdown.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { forkJoin } from 'rxjs';
+import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
+import { ProjectCriteriaResultDto } from '@app/service/model/project-criteria-result.dto';
+import { CriteriaService } from '@app/service/api/criteria.service';
+import { ProjectCriteriaResultService } from '@app/service/api/project-criteria-result.service';
+import { APP_ENUMS, EProjectReport } from '@shared/AppEnums';
 
 @Component({
   selector: 'app-training-weekly-report',
@@ -69,6 +74,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
+  public PQAList: projectProblemDto[] = []
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
@@ -120,18 +126,28 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public searchPmReport: string = "";
   public projectHealth: any;
   allowSendReport: boolean = true;
+
+  public listCriteria: ProjectCriteriaDto[] = []
+  public listCriteriaResult: ProjectCriteriaResultDto[] = []
+  public bgFlag: string = ''
+  public status: string = ''
+  public processCriteria: boolean = false;
+  public isShowActionPM: boolean;
+  public isShowActionPQA: boolean;
+  public isValidCriteria: boolean;
+
   public defaultStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.issueStatusList[0]];
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport;
 
-  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue;
-  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View;
-  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue;
-  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit;
-  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete;
-  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_View;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_AddNewIssue;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Edit;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete;
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone;
 
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View;
@@ -149,6 +165,16 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View;
 
+  TabWeeklyReport_PQAProjectIssue_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View;
+  TabWeeklyReport_PQAProjectIssue_AddNewIssue = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue;
+  TabWeeklyReport_PQAProjectIssue_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit;
+  TabWeeklyReport_PQAProjectIssue_Delete = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete;
+  TabWeeklyReport_PQAProjectIssue_SetDone = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone;
+
+  ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View;
+  ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus;
+  ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit;
+
   constructor(public pmReportProjectService: PMReportProjectService,
     private tsProjectService: TimesheetProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
@@ -160,11 +186,23 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     private requestservice: ProjectResourceRequestService,
     private _layoutStore: LayoutStoreService,
     private reportService: PMReportProjectService,
-    private router:Router
+    private router: Router,
+    private pjCriteriaService: CriteriaService,
+    private pjCriteriaResultService: ProjectCriteriaResultService
   ) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
-    this.projectType = route.snapshot.queryParamMap.get("type")
+    this.projectType = route.snapshot.queryParamMap.get("type");
+
+    this.isShowActionPQA = this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_Edit) ||
+    this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_Delete) ||
+      this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_SetDone) ||
+      this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_AddNewIssue);
+
+      this.isShowActionPM = this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit) ||
+      this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete) ||
+        this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone) ||
+        this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue);
   }
   ngOnInit(): void {
     this.getAllPmReport();
@@ -226,7 +264,8 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
       this.selectedReport = this.pmReportList.filter(item => item.isActive == true)[0];
       this.isSentReport = this.selectedReport.status == 'Draft' ? true : false
       this.allowSendReport = this.selectedReport.note == null || this.selectedReport.note == '' ? false : true;
-      this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
+      this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth];
+      this.getAllCriteria();
       this.getProjectInfo();
       this.getFuturereport();
       this.getProjectProblem();
@@ -234,6 +273,132 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     })
   }
 
+  public handleBGStatus(priority: number) {
+    if (priority === APP_ENUMS.ProjectHealth.Red) {
+      this.bgFlag = 'bg-danger';
+      this.status = 'Red';
+    }
+    else if (priority === APP_ENUMS.ProjectHealth.Yellow) {
+      this.bgFlag = 'bg-warning';
+      this.status = 'Yellow';
+    }
+    else if (priority === APP_ENUMS.ProjectHealth.Green) {
+      this.bgFlag = 'bg-success';
+      this.status = 'Green';
+    }
+  }
+
+  public getAllCriteria() {
+    forkJoin([this.pjCriteriaService.getAll(), this.pjCriteriaResultService.getAllCriteriaResult(this.projectId, this.selectedReport.reportId)])
+      .subscribe(([resCriteria, resCriteriaResult]) => {
+        this.bgFlag = '';
+        this.status = ''
+        this.listCriteriaResult = [];
+        this.isValidCriteria = true;
+        const listTmpCriteria = resCriteria.result as ProjectCriteriaDto[];
+        const listTmpCriteriaResult = resCriteriaResult.result as ProjectCriteriaResultDto[];
+        for (let i = 0; i < listTmpCriteria.length; i++) {
+          const criteria = listTmpCriteria[i];
+          const check = listTmpCriteriaResult.find(item => item.projectCriteriaId === listTmpCriteria[i].id);
+          const itemCriteriaResult = {
+            criteriaName: criteria.name,
+            note: check?.note || '',
+            status: check?.status,
+            editMode: false,
+            projectCriteriaId: criteria.id,
+            projectId: this.projectId,
+            pmReportId: this.selectedReport?.reportId,
+            id: check?.id,
+            isActive: criteria.isActive
+          } as ProjectCriteriaResultDto
+          if (this.selectedReport.isActive == true) {
+            if (itemCriteriaResult.id) {
+              this.listCriteriaResult.push(itemCriteriaResult);
+            }
+            else if (itemCriteriaResult.isActive) {
+              this.listCriteriaResult.push(itemCriteriaResult);
+            }
+          }
+          else {
+            if (itemCriteriaResult.id) {
+              this.listCriteriaResult.push(itemCriteriaResult);
+            }
+          }
+        }
+        let priority: number = 1;
+        for (let i = 0; i < this.listCriteriaResult.length; i++) {
+          let tmpPriority = 1;
+          if (!this.listCriteriaResult[i].status) {
+            tmpPriority = 100;
+          }
+          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
+            tmpPriority = 3;
+          }
+          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
+            tmpPriority = 2;
+          }
+
+          if (!this.listCriteriaResult[i].note || !this.listCriteriaResult[i].status) {
+            this.isValidCriteria = false;
+          }
+
+          if (tmpPriority > priority) {
+            priority = tmpPriority;
+          }
+        }
+        this.handleBGStatus(priority);
+    })
+  }
+
+  public handleEditCriteriaResult(index: number) {
+    this.listCriteriaResult[index].editMode = true;
+    this.processCriteria = true;
+  }
+
+  public cancelEditCriteriaResult(index: number) {
+    this.listCriteriaResult[index].editMode = false;
+    this.processCriteria = false;
+    this.getAllCriteria();
+  }
+
+  public handleChangeStatus(item: ProjectCriteriaResultDto) {
+    if (!item.editMode) {
+      item.pmReportId = this.selectedReport.reportId;
+      if (item.id) {
+        this.pjCriteriaResultService.update(item).subscribe(res => {
+          abp.notify.success(`Change status ${item.criteriaName} successfully`)
+          this.getAllCriteria();
+        });
+      }
+      else {
+        this.pjCriteriaResultService.create(item).subscribe(res => {
+          abp.notify.success(`Change status ${item.criteriaName} successfully`)
+          this.getAllCriteria();
+        })
+      }
+    }
+  }
+
+  public saveCriteriaResult(item: ProjectCriteriaResultDto) {
+    item.pmReportId = this.selectedReport.reportId;
+    if (item.id) {
+      this.pjCriteriaResultService.update(item).subscribe(res => {
+        abp.notify.success(`Update ${item.criteriaName} successfully`);
+        item.editMode = false;
+        this.processCriteria = false;
+        this.getAllCriteria();
+
+      });
+    }
+    else {
+      this.pjCriteriaResultService.create(item).subscribe(res => {
+        abp.notify.success(`Update ${item.criteriaName} successfully`);
+        item.editMode = false;
+        this.processCriteria = false;
+        this.getAllCriteria();
+      })
+    }
+  }
 
   public sendWeeklyreport() {
     abp.message.confirm(
@@ -241,7 +406,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
       "",
       (result: boolean) => {
         if (result) {
-          this.reportService.sendReport(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportService.handleError)).subscribe(data => {
+          this.reportService.sendReport(this.projectId, this.selectedReport.reportId,this.status).pipe(catchError(this.reportService.handleError)).subscribe(data => {
             abp.notify.success("Send report successful");
             this.getAllPmReport();
           })
@@ -298,7 +463,16 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     if (this.projectId) {
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
-          this.problemList = data.result.result;
+          this.problemList = [];
+          this.PQAList = []
+          for (let i = 0; i < data.result.result.length; i++) {
+            if (data.result.result[i].reportType === EProjectReport.PM) {
+              this.problemList.push(data.result.result[i]);
+            }
+            else {
+              this.PQAList.push(data.result.result[i])
+            }
+          }
 
           this.projectHealth = data.result.projectHealth;
           this.pmReportProjectService.projectHealth = this.projectHealth
@@ -500,9 +674,20 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
     newIssue.status = this.defaultStatus;
+    newIssue.reportType = EProjectReport.PM;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
   }
+
+  public addPQAIssueReport() {
+    let newIssue = {} as projectProblemDto
+    newIssue.createMode = true;
+    newIssue.status = this.defaultStatus;
+    newIssue.reportType = EProjectReport.PQA;
+    this.PQAList.unshift(newIssue)
+    this.processProblem = true;
+  }
+
   public saveProblemReport(problem: projectProblemDto) {
     problem.createdAt = moment(this.createdDate).format("YYYY-MM-DD");
     delete problem["createMode"]
@@ -665,6 +850,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     this.getFuturereport();
     this.getProjectProblem();
     this.getProjectInfo();
+    this.getAllCriteria();
     this.isEditingNote = false;
     this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
   }

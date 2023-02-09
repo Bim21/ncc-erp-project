@@ -52,6 +52,10 @@
     border-left: 7px solid #ffc107;
 }
 
+.grey {
+    border-left: 7px solid rgb(185, 184, 184);
+}
+
 .submit-btn:disabled i {
     color: gray !important;
 }
@@ -65,6 +69,7 @@ button {
         display: flex;
         max-width: 15%;
     }
+
     .res-area {
         max-width: 90% !important;
     }
@@ -74,6 +79,7 @@ button {
     .res-area {
         max-width: 85% !important;
     }
+
     .res-btn {
         margin-top: 5px;
         display: flex;
@@ -140,21 +146,27 @@ th {
     vertical-align: middle;
     white-space: nowrap;
 }
-#current-resource td, th{
+
+#current-resource td,
+th {
     padding: 0;
 }
-.ot-noCharge{
+
+.ot-noCharge {
     color: #ff7136;
 }
-::ng-deep .project-menu-item .mat-list-item-content{
+
+::ng-deep .project-menu-item .mat-list-item-content {
     padding: 0 0 0 16px !important;
 }
-.menu-4-icon{
+
+.menu-4-icon {
     margin-right: 10px;
-    margin-top: 8px ; color: #585858;
+    margin-top: 8px;
+    color: #585858;
 }
 
-.time-over{
+.time-over {
     color: darkviolet;
     text-decoration: underline;
     text-decoration-style: double;
@@ -226,7 +238,9 @@ th {
     -webkit-animation: ring 1s infinite ease-in-out;
     animation: ring 1s infinite ease-in-out;
 }
-.warning-count-down-time-out cd-timer,.warning-count-down-time-out .btn-sm{
+
+.warning-count-down-time-out cd-timer,
+.warning-count-down-time-out .btn-sm {
     color: #e51e25;
 }
 
@@ -235,22 +249,25 @@ th {
     animation-play-state: paused;
     animation: 0;
 }
+
 .warning-count-down::before:hover {
     -webkit-animation-play-state: paused;
     animation-play-state: paused;
     animation: 0;
 }
+
 .warning-count-down::after:hover {
     -webkit-animation-play-state: paused;
-     animation-play-state: paused;
-     animation: 0;
+    animation-play-state: paused;
+    animation: 0;
 }
 
 @keyframes shake {
-	50%{
+    50% {
         outline: 8px solid gold;
         opacity: 0.6;
-	}
+    }
+
     100% {
         outline: 5px solid gold;
         opacity: 0.2;
@@ -279,4 +296,8 @@ th {
         border: 1px solid orangered;
         opacity: 0;
     }
+}
+
+::ng-deep #status-option-weekly-report-tab .mat-form-field-wrapper {
+    width: 150px;
 }

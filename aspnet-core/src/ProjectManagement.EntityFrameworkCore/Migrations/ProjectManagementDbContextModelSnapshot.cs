@@ -2533,6 +2533,9 @@ namespace ProjectManagement.Migrations
                     b.Property<long>("PMReportProjectId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("ReportType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Solution")
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
@@ -2812,6 +2815,108 @@ namespace ProjectManagement.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectCheckLists");
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.ProjectCriteria", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Guideline")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProjectCriterias");
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.ProjectCriteriaResult", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("PMReportId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProjectCriteriaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PMReportId");
+
+                    b.HasIndex("ProjectCriteriaId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectCriteriaResults");
                 });
 
             modelBuilder.Entity("ProjectManagement.Entities.ProjectFile", b =>
@@ -4096,6 +4201,27 @@ namespace ProjectManagement.Migrations
                     b.HasOne("ProjectManagement.Entities.CheckListItem", "CheckListItem")
                         .WithMany()
                         .HasForeignKey("CheckListItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectManagement.Entities.ProjectCriteriaResult", b =>
+                {
+                    b.HasOne("ProjectManagement.Entities.PMReport", "PMReport")
+                        .WithMany()
+                        .HasForeignKey("PMReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Entities.ProjectCriteria", "ProjectCriteria")
+                        .WithMany()
+                        .HasForeignKey("ProjectCriteriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

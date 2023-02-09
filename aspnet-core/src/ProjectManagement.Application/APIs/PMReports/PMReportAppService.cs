@@ -1,22 +1,16 @@
-﻿
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.BackgroundJobs;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
-using NccCore.Uitls;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.PMReports.Dto;
-using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Configuration;
 using ProjectManagement.Entities;
-using ProjectManagement.NccCore.BackgroundJob;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
@@ -32,8 +26,11 @@ namespace ProjectManagement.APIs.PMReports
     public class PMReportAppService : ProjectManagementAppServiceBase
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
+
         private readonly TimesheetService _timesheetService;
+
         private readonly ResourceManager _resourceManager;
+
         public PMReportAppService(IBackgroundJobManager backgroundJobManager, TimesheetService timesheetService, ResourceManager resourceManager)
         {
             _backgroundJobManager = backgroundJobManager;
@@ -57,23 +54,10 @@ namespace ProjectManagement.APIs.PMReports
                     Type = x.Type,
                     PMReportStatus = x.PMReportStatus,
                     NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count(),
-                    CountProjectHeath = new List<CountProjectHealth> {
-                    new CountProjectHealth
-                    {
-                        ProjectHealth = ProjectHealth.Green,
-                        Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Green),
-                    },
-                    new CountProjectHealth
-                    {
-                        ProjectHealth = ProjectHealth.Red,
-                        Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Red),
-                    },
-                    new CountProjectHealth
-                    {
-                        ProjectHealth = ProjectHealth.Yellow,
-                        Number = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x=>x.ProjectHealth == ProjectHealth.Yellow),
-                    },
-                },
+                    CountGreen = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Green),
+                    CountRed = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Red),
+                    CountYellow = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Yellow),
+                    CountDraft = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.Status == PMReportProjectStatus.Draft),
                     Note = x.Note,
                 });
             return await query.GetGridResult(query, input);
@@ -133,9 +117,7 @@ namespace ProjectManagement.APIs.PMReports
                         PMName = pmReport.pmName,
                         Note = "Not found in Timesheet tool"
                     });
-
                 }
-
             }
 
             return result;
@@ -238,7 +220,8 @@ namespace ProjectManagement.APIs.PMReports
                     PMReportId = input.Id,
                     ProjectId = project.Id,
                     Status = PMReportProjectStatus.Draft,
-                    ProjectHealth = mapInprogressIssues.ContainsKey(project.Id) ? ProjectHealth.Yellow : ProjectHealth.Green,
+
+                    //ProjectHealth = mapInprogressIssues.ContainsKey(project.Id) ? ProjectHealth.Yellow : ProjectHealth.Green,
                     PMId = project.PMId,
                     Note = project.ProjectType == ProjectType.TRAINING && mapPMNote.ContainsKey(project.Id) ? mapPMNote[project.Id] : null,
                 };
@@ -382,7 +365,6 @@ namespace ProjectManagement.APIs.PMReports
 
             var totalPercentageFuture = futureUser.Where(x => !changeInFuture.Select(r => r.UserId).Contains(x.Id) && !changeInFuture.Select(r => r.ProjectId).Contains(x.ProjectId));
 
-
             var query = from u in WorkScope.GetAll<User>().ToList()
                         join pu in projectUser on u.Id equals pu.UserId into pUser
                         join b in WorkScope.GetAll<ProjectManagement.Entities.Branch>() on u.BranchId equals b.Id into bUser
@@ -394,7 +376,7 @@ namespace ProjectManagement.APIs.PMReports
                             FullName = u.Name + " " + u.Surname,
                             Avatar = u.AvatarPath,
                             UserType = u.UserType,
-                            BranchColor = bUser.Select(x=>x.Color).FirstOrDefault().ToString(),
+                            BranchColor = bUser.Select(x => x.Color).FirstOrDefault().ToString(),
                             BranchDislayName = bUser.Select(x => x.DisplayName).FirstOrDefault().ToString(),
                             UserEmail = u.EmailAddress,
                             TotalInTheWeek = pUser.Where(x => x.PMReportId == pmReportId && x.Status == ProjectUserStatus.Present).Sum(x => x.AllocatePercentage),
@@ -411,6 +393,7 @@ namespace ProjectManagement.APIs.PMReports
                     FullName = x.FullName,
                     Avatar = x.Avatar,
                     UserType = x.UserType,
+
                     //Branch = x.Branch,
                     BranchColor = x.BranchColor,
                     BranchDisplayName = x.BranchDislayName,
@@ -423,6 +406,7 @@ namespace ProjectManagement.APIs.PMReports
                     FullName = x.FullName,
                     Avatar = x.Avatar,
                     UserType = x.UserType,
+
                     //Branch = x.Branch,
                     BranchColor = x.BranchColor,
                     BranchDisplayName = x.BranchDislayName,
@@ -447,7 +431,6 @@ namespace ProjectManagement.APIs.PMReports
                 Type = pmReport.Type,
                 Year = pmReport.Year
             };
-
         }
     }
 }

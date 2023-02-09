@@ -52,13 +52,13 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           new MenuItem(
             this.l('Tenants'),
             '/app/tenants',
-            'fas fa-building',
+            'fas fa-users-cog',
             'Admin.Tenants'
           ),
           new MenuItem(
             this.l('Clients'),
             '/app/clients',
-            'fas fa-users',
+            'fas fa-user-friends',
             'Admin.Clients'
           ),
           new MenuItem(
@@ -88,7 +88,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
           new MenuItem(
             this.l('Skills'),
             '/app/skills',
-            'fas fa-users',
+            'fas fa-cogs',
             'Admin.Skills'
           ),
           new MenuItem(
@@ -115,6 +115,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             'fas fa-cogs',
             'Admin.AuditLogs.View'
           ),
+          new MenuItem(
+            this.l('Criteria '),
+            '/app/criterias',
+            'fas fa-tasks',
+            'Admin.Criteria'
+          )
         ]
       ),
       new MenuItem(

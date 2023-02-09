@@ -68,6 +68,9 @@ import { SortableComponent } from './components/sortable/sortable.component';
 import { SubpositionFilterPipe } from './pipes/subposition-filter.pipe';
 import { MainSubInvoiceComponent } from './components/main-sub-invoice/main-sub-invoice.component';
 import { MultiSelectOptionComponent } from './components/multi-select-option/multi-select-option.component';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
+import { ResizeContentDirective } from './directives/resize-content.directive';
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
@@ -118,7 +121,9 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
         FormsModule,
         NgxStarsModule,
         DragDropModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        EditorModule
+
     ],
     declarations: [
         AbpPaginationControlsComponent,
@@ -136,7 +141,10 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
         SortableComponent,
         SubpositionFilterPipe,
         MainSubInvoiceComponent,
-        MultiSelectOptionComponent
+        MultiSelectOptionComponent,
+        SafeHtmlPipe,
+        ResizeContentDirective
+
     ],
     exports: [
         AbpPaginationControlsComponent,
@@ -191,7 +199,14 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
         NgxStarsModule,
         DragDropModule,
         SubpositionFilterPipe,
-        MultiSelectOptionComponent
+        MultiSelectOptionComponent,
+        EditorModule,
+        SafeHtmlPipe,
+        ResizeContentDirective
+
+    ],
+    providers: [
+        { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
     ]
 })
 export class SharedModule {

@@ -188,6 +188,7 @@ import { TrainingRequestTabComponent } from './modules/delivery-management/deliv
 import { CreateUpdateTrainingRequestComponent } from './modules/delivery-management/delivery/training-request-tab/create-update-training-request/create-update-training-request.component';
 import { RetroReviewHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/retro-review-history-by-user/retro-review-history-by-user.component';
 import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component';
+import { CriteriasComponent } from './modules/admin/criterias/criterias.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -358,7 +359,9 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     TrainingRequestTabComponent,
     CreateUpdateTrainingRequestComponent,
     RetroReviewHistoryByUserComponent,
-    AuditLogComponent
+    AuditLogComponent,
+    RetroReviewHistoryByUserComponent,
+    CriteriasComponent
   ],
   imports: [
     CommonModule,

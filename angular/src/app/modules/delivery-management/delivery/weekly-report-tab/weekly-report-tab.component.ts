@@ -22,12 +22,12 @@ import { CollectTimesheetDialogComponent } from './collect-timesheet-dialog/coll
 export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyReportTabComponent> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     this.isLoading = true
-    this.pmReportService.getAllPaging(request).pipe(finalize(()=>{
+    this.pmReportService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
-    }),catchError(this.pmReportService.handleError)).subscribe((data)=>{
-      this.pmReportList=data.result.items;
-      this.showPaging(data.result,pageNumber);
-      this.isLoading =false;
+    }), catchError(this.pmReportService.handleError)).subscribe((data) => {
+      this.pmReportList = data.result.items;
+      this.showPaging(data.result, pageNumber);
+      this.isLoading = false;
 
     })
   }
@@ -35,9 +35,9 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
     throw new Error('Method not implemented.');
   }
 
-  public pmReportList:pmReportDto[]=[];
+  public pmReportList: pmReportDto[] = [];
   public closeReportMessage;
-  
+
   WeeklyReport_CollectTimesheet = PERMISSIONS_CONSTANT.WeeklyReport_CollectTimesheet;
   WeeklyReport_Rename = PERMISSIONS_CONSTANT.WeeklyReport_Rename
   WeeklyReport_View = PERMISSIONS_CONSTANT.WeeklyReport_View
@@ -50,21 +50,21 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
     { propertyName: 'year', comparisions: [0, 1, 3], displayName: "Year" },
   ];
 
-  constructor(public router:Router,
-    private pmReportService:PmReportService, private dialog:MatDialog,
-    public injector:Injector) { super(injector)}
+  constructor(public router: Router,
+    private pmReportService: PmReportService, private dialog: MatDialog,
+    public injector: Injector) { super(injector) }
 
 
   ngOnInit(): void {
     this.refresh();
 
   }
-  showDetail(item:any){
-    if(this.permission.isGranted(this.WeeklyReport_ReportDetail)){
+  showDetail(item: any) {
+    if (this.permission.isGranted(this.WeeklyReport_ReportDetail)) {
       this.router.navigate(['app/weeklyReportTabDetail'], {
         queryParams: {
-          id:item.id,
-          isActive:item.isActive
+          id: item.id,
+          isActive: item.isActive
 
         }
       })
@@ -72,7 +72,7 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
 
   }
 
-  closeReport(report:any){
+  closeReport(report: any) {
     let dialogData = {
       name: "",
       isActive: 1,
@@ -95,35 +95,35 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       }
     });
   }
-  editReport(pmReport:any){
-   let dialogData = {} as any
-      dialogData = {
-        id: pmReport.id,
-        name: pmReport.name,
-        isActive: pmReport.isActive,
-        year: pmReport.year,
-        type: pmReport.type,
-        pmReportStatus: pmReport.pmReportStatus,
-        note: pmReport.note
-      }
+  editReport(pmReport: any) {
+    let dialogData = {} as any
+    dialogData = {
+      id: pmReport.id,
+      name: pmReport.name,
+      isActive: pmReport.isActive,
+      year: pmReport.year,
+      type: pmReport.type,
+      pmReportStatus: pmReport.pmReportStatus,
+      note: pmReport.note
+    }
 
-   const dialogRef = this.dialog.open(EditReportComponent, {
-     width: '700px',
-     disableClose: true,
-     data: {
-       dialogData: dialogData,
-     },
-   });
-   dialogRef.afterClosed().subscribe(result => {
-     if (result) {
-       this.refresh()
-     }
-   });
+    const dialogRef = this.dialog.open(EditReportComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {
+        dialogData: dialogData,
+      },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refresh()
+      }
+    });
   }
 
-  viewReportInfo(report){
+  viewReportInfo(report) {
     let dialogRef = this.dialog.open(ReportInfoComponent, {
-      width:'90vw',
+      width: '90vw',
       height: "93vh",
       disableClose: true,
       data: {
@@ -132,7 +132,7 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
     })
   }
 
-  collectTimesheet(pmReportId:number){
+  collectTimesheet(pmReportId: number) {
     this.dialog.open(CollectTimesheetDialogComponent, {
       width: "700px",
       data: pmReportId

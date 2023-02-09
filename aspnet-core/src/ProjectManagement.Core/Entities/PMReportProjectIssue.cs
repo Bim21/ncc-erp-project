@@ -26,6 +26,6 @@ namespace ProjectManagement.Entities
         public string Solution { get; set; }
         public string MeetingSolution { get; set; }// consider
         public PMReportProjectIssueStatus Status { get; set; }
-
+        public PMReportProjectIssueType ReportType { get; set; }
     }
 }

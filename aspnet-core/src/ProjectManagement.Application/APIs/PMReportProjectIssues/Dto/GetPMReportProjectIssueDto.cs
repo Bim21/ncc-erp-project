@@ -43,5 +43,6 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
         public DateTime CreatedAt { get; set; }
 
         public int TotalWeekAgo { get; set; }
+        public PMReportProjectIssueType ReportType { get; set; }
     }
 }

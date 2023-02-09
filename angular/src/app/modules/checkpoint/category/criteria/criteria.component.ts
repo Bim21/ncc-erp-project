@@ -2,11 +2,13 @@ import { CreateEditCriteriaComponent } from './create-edit-criteria/create-edit-
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { result } from 'lodash-es';
-import { catchError } from 'rxjs/operators';
-import { CriteriaDto } from './../../../../service/model/criteria-category.dto';
+import { catchError,finalize } from 'rxjs/operators';
+import { ProjectCriteriaDto } from './../../../../service/model/criteria-category.dto';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { Component, OnInit, Injector } from '@angular/core';
 import { CriteriaService } from '@app/service/api/criteria.service';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-criteria',
@@ -15,69 +17,112 @@ import { CriteriaService } from '@app/service/api/criteria.service';
 })
 export class CriteriaComponent extends PagedListingComponentBase<CriteriaComponent> implements OnInit {
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.criteriaService.getAllPaging(request).pipe(catchError(this.criteriaService.handleError)).subscribe((data)=>{
-      this.criteriaList=data.result.items;
+    this.criteriaService.getAllPaging(request).pipe(finalize(() => {
+      finishedCallback();
+    })).subscribe((data) => {
+      this.criteriaList = data.result.items;
       this.showPaging(data.result, pageNumber);
-    },()=>{})
+    }, () => { })
   }
-  protected delete(item): void {
+  delete(item): void {
+    if (item.isExist == true) { abp.message.error("This criterion has been used!"); }
+    else {
+      abp.message.confirm(
+        "Delete project criterion " + item.name + "?",
+        "",
+        (result: boolean) => {
+          if (result) {
+            this.criteriaService.deleteCriteria(item.id).pipe(catchError(this.criteriaService.handleError)).subscribe((res) => {
+              abp.notify.success("Delete " + item.name + " successfully!");
+              this.refresh();
+            })
+          }
+        }
+      )
+    }
+  }
+  deActive(item): void {
     abp.message.confirm(
-      "Delete criteria category"+ item.name +"?",
+      "DeActivate project criterion " + item.name + "?",
       "",
-      (result:boolean)=>{
-        if(result){
-          this.criteriaService.deleteCriteria(item.id).pipe(catchError(this.criteriaService.handleError)).subscribe((res)=>{
-            abp.notify.success("Delete "+ item.name+ " successfully!");
+      (result: boolean) => {
+        if (result) {
+          this.criteriaService.deActiveCriteria(item.id).pipe(catchError(this.criteriaService.handleError)).subscribe((res) => {
+            abp.notify.success("DeActive " + item.name + " successfully!");
             this.refresh();
           })
         }
-
       }
-      
+    )
+  }
+  active(item): void {
+    abp.message.confirm(
+      "Activate project criterion " + item.name + "?",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.criteriaService.activeCriteria(item.id).pipe(catchError(this.criteriaService.handleError)).subscribe((res) => {
+            abp.notify.success("Active " + item.name + " successfully!");
+            this.refresh();
+          })
+        }
+      }
     )
   }
 
-  public criteriaList: CriteriaDto[]=[];
-  public criteriaCategoryId;
-  constructor(public injector:Injector,
+  Admin_Criteria_View = PERMISSIONS_CONSTANT.Admin_Criteria_View;
+  Admin_Criteria_Create = PERMISSIONS_CONSTANT.Admin_Criteria_Create;
+  Admin_Criteria_Edit = PERMISSIONS_CONSTANT.Admin_Criteria_Edit;
+  Admin_Criteria_Delete = PERMISSIONS_CONSTANT.Admin_Criteria_Delete;
+  Admin_Criteria_Active_DeActive = PERMISSIONS_CONSTANT.Admin_Criteria_Active_DeActive;
+  menu: MatMenuTrigger;
+  contextMenuPosition = { x: '0px', y: '0px' };
+  public criteriaList: ProjectCriteriaDto[] = [];
+  constructor(public injector: Injector,
     private criteriaService: CriteriaService,
-    private route:ActivatedRoute,
-    private dialog:MatDialog) {super(injector) }
+    private route: ActivatedRoute,
+    private dialog: MatDialog) { super(injector) }
 
   ngOnInit(): void {
-    this.criteriaCategoryId = this.route.snapshot.queryParamMap.get("id");
     this.refresh();
   }
-  public showDialog(command: string, Criteria){
-    let item={
-      name:Criteria.name,
-      weight:Criteria.weight,
-      note:Criteria.note,
-      criteriaCategoryId:Criteria.criteriaCategoryId,
-      id:Criteria.id
+  public showDialog(command: string, ProjectCriteria) {
+    let item = {
+      name: ProjectCriteria.name,
+      guideline: ProjectCriteria.guideline,
+      id: ProjectCriteria.id,
+      isActive: ProjectCriteria.isActive
 
     }
-    const show= this.dialog.open(CreateEditCriteriaComponent,{
-      data:{
-        item:item,
-        command:command,
-        
+    const show = this.dialog.open(CreateEditCriteriaComponent, {
+      data: {
+        item: item,
+        command: command,
+
       },
-      width: "700px"
+      width: "60%",
+      height: "90%",
+
     })
-    show.afterClosed().subscribe((res)=>{
-      if(res){
+    show.afterClosed().subscribe((res) => {
+      if (res) {
         this.refresh();
       }
     })
   }
-  
-  public create(){
-    this.showDialog("create",{})
+
+  public create() {
+    this.showDialog("create", {})
   }
-  public edit(item){
+  public edit(item) {
     this.showDialog("edit", item);
   }
 
+  showActions(e , item){
+    e.preventDefault();
+    this.contextMenuPosition.x = e.clientX + 'px';
+    this.contextMenuPosition.y = e.clientY + 'px';
+    this.menu.openMenu();
+  }
 
 }

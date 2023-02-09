@@ -311,3 +311,17 @@ cd-timer {
     justify-content: end;
   }
 }
+.make-max-line-content(@line){
+  .max-line-content-@{line}{
+    display: -webkit-box;
+    -webkit-line-clamp: @line;
+    overflow: hidden;
+    white-space: initial;
+    text-overflow: ellipsis;
+    line-clamp: @line;
+    -webkit-box-orient: vertical;
+  }
+}
+.make-max-line-content(1);
+.make-max-line-content(2);
+.make-max-line-content(3);

@@ -7,7 +7,7 @@ import { BaseApiService } from './base-api.service';
   providedIn: 'root'
 })
 export class PMReportProjectService extends BaseApiService {
-  
+
   public projectHealth: string
 
   changeUrl() {
@@ -28,8 +28,8 @@ export class PMReportProjectService extends BaseApiService {
   public GetAllByPmReport(pmReportId: number, projectType: any, health: any, sort: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllByPmReport?pmReportId=' + pmReportId+'&projectType='+ projectType + '&health=' + (health == 'ALL'? '': health) + '&sort=' + sort);
   }
-  public sendReport(projectId: number, pmReportId: number): Observable<any> {
-    return this.http.post<any>(this.rootUrl + `/SendReport?projectId=${projectId}&pmReportId=${pmReportId}`, {});
+  public sendReport(projectId: number, pmReportId: number, status: string): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/SendReport?projectId=${projectId}&pmReportId=${pmReportId}&status=${status}`, {});
   }
   public problemsOfTheWeekForReport(projectId: number, pmReportId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/ProblemsOfTheWeekForReport?projectId=${projectId}&pmReportId=${pmReportId}`);
@@ -79,7 +79,7 @@ export class PMReportProjectService extends BaseApiService {
     return this.http.post<any>(this.rootUrl + `/GetWorkingTimeFromTimesheet?pmReportProjectId=${pmReportProjectId}&startTime=${startTime}&endTime=${endTime}`, {});
   }
 
-  
+
   public CancelResourcePlan(projectUserId: number) {
     return this.http.delete(this.rootUrl + `/CancelResourcePlan?projectUserId=${projectUserId}`)
   }

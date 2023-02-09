@@ -40,11 +40,10 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   isRefresh: boolean = false
   isStart: boolean = false
   pmReportProjectId:string
-  public problemIssueList: string[] = []
   public searchPmReport: string ="";
   public selectedNumberStatus: number;
   projectType = this.reportService.projectType.getValue();
-  
+
   projectTypeList = [
     "ALL",
     "OUTSOURCING",
@@ -55,35 +54,36 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   filterProjectHealth = this.reportService.filterProjectHealth.getValue();
   public projectHeathList = [
     {displayName: "ALL", value: "ALL"},
-    {displayName: "Green", value: 0},
-    {displayName: "Yellow", value: 1},
-    {displayName: "Red", value: 2},
+    {displayName: "Green", value: 1},
+    {displayName: "Yellow", value: 2},
+    {displayName: "Red", value: 3},
   ];
+
+  public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
 
   filterSort = this.reportService.filterSort.getValue();
   filterSortList = [
     "No_Order",
-    "Green_Yellow_Red",
-    "Red_Yellow_Green",
+    "Draft_Green_Yellow_Red",
+    "Draft_Red_Yellow_Green"
   ]
 
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
-    private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService, 
+    private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService,
     private pmReportProjectService: PMReportProjectService) {
     super(injector)
   }
 
 
   ngOnInit(): void {
-     
 
     this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
     this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
     this.projectInfo.clientCode = this.route.snapshot.queryParamMap.get("clientCode")
     this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
     this.projectHealth = Number(this.route.snapshot.queryParamMap.get("projectHealth"))
-   
+
     this.projectName = this.route.snapshot.queryParamMap.get("projectName")
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
     this.projectType = this.route.snapshot.queryParamMap.get("projectType")
@@ -113,7 +113,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
             this.isShowReportBar = true;
             this.getPmReportList();
             this._layoutStore.setSidebarExpanded(true);
-  
+
           }
           else {
             this.isShowReportBar = false;
@@ -128,7 +128,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
             this.projectInfo.clientCode = this.route.snapshot.queryParamMap.get("clientCode")
             this.projectInfo.pmName = this.route.snapshot.queryParamMap.get("pmName")
           }
-        
+
           this.projectName = this.route.snapshot.queryParamMap.get("projectName")
           this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
 
@@ -211,7 +211,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   onChangeFilterSort(){
     this.reportService.changeFilterSort(this.filterSort);
   }
-  
+
   updateHealth(projectHealth) {
     this.pmReportProjectService.updateHealth(this.pmReportProjectId, projectHealth).pipe(catchError(this.pmReportProjectService.handleError))
       .subscribe((data) => {

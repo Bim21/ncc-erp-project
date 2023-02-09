@@ -20,13 +20,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
-
+using ProjectManagement.Utils;
 namespace ProjectManagement.APIs.PMReportProjects
 {
     [AbpAuthorize]
     public class PMReportProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly TimesheetService _timesheetService;
+
         private readonly ResourceManager _resourceManager;
 
         public PMReportProjectAppService(TimesheetService timesheetService, ResourceManager resourceManager)
@@ -41,48 +42,47 @@ namespace ProjectManagement.APIs.PMReportProjects
         {
             var query = WorkScope.GetAll<PMReportProject>()
                 .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill)
-                .WhereIf(health.HasValue, x => x.ProjectHealth == health.Value)       
+                .WhereIf(health.HasValue, x => x.ProjectHealth == health.Value)
                 .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
                 .WhereIf(projectType == "TRAINING", x => x.Project.ProjectType == ProjectType.TRAINING)
                 .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT)
                 .Select(x => new GetPMReportProjectDto
-                 {
-                     Id = x.Id,
-                     PMReportId = x.PMReportId,
-                     PMReportName = x.PMReport.Name,
-                     ProjectId = x.ProjectId,
-                     ProjectName = x.Project.Name,
-                     ProjectCode = x.Project.Code,
-                     Status = x.Status.ToString(),
-                     ProjectHealthEnum = x.ProjectHealth,
-                     PMId = x.PMId,
-                     PmName = x.PM.Name,
-                     Note = x.Note,
-                     AutomationNote = x.AutomationNote,
-                     PmBranch = x.PM.BranchOld,
-                     PmEmailAddress = x.PM.EmailAddress,
-                     PmAvatarPath = x.PM.AvatarPath,
-                     PmFullName = x.PM.Name + " " + x.PM.Surname,
-                     PmUserName = x.PM.UserName,
-                     PmUserType = x.PM.UserType,
-                     Seen = x.Seen,
-                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
-                     TotalOverTime = x.TotalOverTime,
-                 });
+                {
+                    Id = x.Id,
+                    PMReportId = x.PMReportId,
+                    PMReportName = x.PMReport.Name,
+                    ProjectId = x.ProjectId,
+                    ProjectName = x.Project.Name,
+                    ProjectCode = x.Project.Code,
+                    Status = x.Status.ToString(),
+                    StatusEnum = x.Status,
+                    ProjectHealthEnum = x.ProjectHealth,
+                    PMId = x.PMId,
+                    PmName = x.PM.Name,
+                    Note = x.Note,
+                    AutomationNote = x.AutomationNote,
+                    PmBranch = x.PM.BranchOld,
+                    PmEmailAddress = x.PM.EmailAddress,
+                    PmAvatarPath = x.PM.AvatarPath,
+                    PmFullName = x.PM.Name + " " + x.PM.Surname,
+                    PmUserName = x.PM.UserName,
+                    PmUserType = x.PM.UserType,
+                    Seen = x.Seen,
+                    TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                    TotalOverTime = x.TotalOverTime,
+                });
 
-            
-
-            if (sort == WeeklyReportSort.Green_Yellow_Red)
+            if (sort == WeeklyReportSort.Draft_Green_Yellow_Red)
             {
                 return await query
-                        .OrderBy(x => x.ProjectHealthEnum)
+                        .OrderBy(x => x.StatusEnum).ThenBy(x=>x.ProjectHealthEnum)
                         .ToListAsync();
             }
 
-            if (sort == WeeklyReportSort.Red_Yellow_Green)
+            if (sort == WeeklyReportSort.Draft_Red_Yellow_Green)
             {
                 return await query
-                        .OrderByDescending(x => x.ProjectHealthEnum)
+                        .OrderBy(x => x.StatusEnum).ThenByDescending(x=>x.ProjectHealthEnum)
                         .ToListAsync();
             }
 
@@ -208,40 +208,41 @@ namespace ProjectManagement.APIs.PMReportProjects
                             MeetingSolution = prpi.MeetingSolution,
                             Status = prpi.Status.ToString(),
                             CreatedAt = prpi.CreationTime,
-                            TotalWeekAgo = (DateTimeUtils.GetNow() - prpi.CreationTime).Days
+                            TotalWeekAgo = (DateTimeUtils.GetNow() - prpi.CreationTime).Days,
+                            ReportType = prpi.ReportType
                         };
 
             var result = new GetResultpmReportProjectIssue
             {
                 PmReportProjectId = pmReportProject.Id,
                 ProjectHealth = pmReportProject.ProjectHealth,
-                Status = Enum.GetName(typeof(PMReportProjectStatus),pmReportProject.Status),
-                ProjectHealthString = Enum.GetName(typeof(ProjectHealth),pmReportProject.ProjectHealth),
+                Status = Enum.GetName(typeof(PMReportProjectStatus), pmReportProject.Status),
+                ProjectHealthString = pmReportProject.ProjectHealth == 0 ? "Grey" : Enum.GetName(typeof(ProjectHealth), pmReportProject.ProjectHealth),
                 Result = query.ToList()
             };
 
             return result;
         }
 
-        [HttpGet]
-        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth,
-            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth,
-            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth,
-            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth)
-        ]
-        public async Task UpdateHealth(long pmReportProjectId, ProjectHealth projectHealth)
-        {
-            var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
-                                        .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
+        //[HttpGet]
+        //[AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth,
+        //    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth,
+        //    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth,
+        //    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateProjectHealth)
+        //]
+        //public async Task UpdateHealth(long pmReportProjectId, ProjectHealth projectHealth)
+        //{
+        //    var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
+        //                                .Where(x => x.Id == pmReportProjectId).FirstOrDefaultAsync();
 
-            if (!pmReportProject.PMReport.IsActive)
-            {
-                throw new UserFriendlyException("Report has been closed !");
-            }
+        //    if (!pmReportProject.PMReport.IsActive)
+        //    {
+        //        throw new UserFriendlyException("Report has been closed !");
+        //    }
 
-            pmReportProject.ProjectHealth = projectHealth;
-            await WorkScope.UpdateAsync(pmReportProject);
-        }
+        //    pmReportProject.ProjectHealth = projectHealth;
+        //    await WorkScope.UpdateAsync(pmReportProject);
+        //}
 
         [HttpGet]
         public async Task SetDoneIssue(long id)
@@ -421,15 +422,16 @@ namespace ProjectManagement.APIs.PMReportProjects
             PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport,
             PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport)
         ]
-        public async Task SendReport(long projectId, long pmReportId)
+        public async Task SendReport(long projectId, long pmReportId, string status)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Include(x => x.PMReport)
                 .Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
             if (pmReportProject.Status == PMReportProjectStatus.Sent)
                 throw new UserFriendlyException("Report has been sent !");
-
+            
             pmReportProject.Status = PMReportProjectStatus.Sent;
             pmReportProject.TimeSendReport = DateTimeUtils.GetNow();
+            pmReportProject.ProjectHealth = CommonUtil.GetProjectHealthByString(status);
             // phạt nhẹ nếu quá hạn
             if (pmReportProject.PMReport.PMReportStatus == PMReportStatus.Expired && pmReportProject.PMReport.Type == PMReportType.Weekly)
             {
