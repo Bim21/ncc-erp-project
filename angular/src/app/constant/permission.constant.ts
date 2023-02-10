@@ -273,12 +273,12 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
 
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.View",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.AddNewIssue",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Edit",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone",
 
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
