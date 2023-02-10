@@ -7,11 +7,6 @@ namespace ProjectManagement.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "Quantity",
-                table: "ResourceRequests",
-                nullable: false,
-                defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
                 name: "ReportType",
@@ -108,10 +103,6 @@ namespace ProjectManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectCriterias");
-
-            migrationBuilder.DropColumn(
-                name: "Quantity",
-                table: "ResourceRequests");
 
             migrationBuilder.DropColumn(
                 name: "ReportType",
