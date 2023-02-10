@@ -129,7 +129,7 @@
                                         </mat-form-field>
                                     </ng-container>
 
-                                    <span *ngIf="!permission.isGranted(ProjectHealthCriteria_ChangeStatus)"
+                                    <span *ngIf="!permission.isGranted(ProjectHealthCriteria_ChangeStatus) || !selectedReport.isActive"
                                         [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
                                         {{problemIssueList[item.status - 1]}}</span>
                                 </td>

@@ -447,7 +447,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isEditingNote = false;
     this.isEditingAutomationNote = false
     this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth];
-    //this.pmReportProjectService.projectHealth = this.projectHealth
+    this.pmReportProjectService.projectHealth = this.projectHealth
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
