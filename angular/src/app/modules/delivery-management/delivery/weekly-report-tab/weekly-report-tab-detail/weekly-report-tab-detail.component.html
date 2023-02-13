@@ -216,16 +216,16 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)">
                             <div class="d-flex justify-content-between pt-2">
                                 <strong style="font-size: 20px;">PM Issues:</strong>
                             </div>
 
-                            <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)"
+                            <table
                                 style="border-collapse: collapse;" class="table table-hover text-nowrap">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>#</th>
+                                        <th *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)">#</th>
                                         <th>Issues</th>
                                         <th>Impact</th>
                                         <th>Solution</th>
@@ -240,14 +240,11 @@
                                         itemsPerPage: itemPerPage,
                                         currentPage: problemCurrentPage
                                         }; let i =index">
-                                        <td style="width: 26px">
-                                            <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1"
-                                                [matMenuTriggerFor]="menu3"></i>
+                                        <td *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)" style="width: 26px">
+                                            <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1" [matMenuTriggerFor]="menu3"></i>
 
                                             <mat-menu #menu3="matMenu">
-                                                <button
-                                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)"
-                                                    (click)="setDone(problem)" class="mat-menu-item  w-100">
+                                                <button (click)="setDone(problem)" class="mat-menu-item  w-100">
                                                     <i class="fas fa-check mr-2 fa-lg "></i>
                                                     <span *ngIf="isShowChangeDoneText(problem)">Set Done</span>
                                                     <span *ngIf="isShowChangeInProgressText(problem)">Set
@@ -309,16 +306,16 @@
                             </table>
                         </div>
 
-                        <div>
+                        <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PQAIssue_View)">
                             <div class="d-flex justify-content-between pt-2">
                                 <strong style="font-size: 20px;">PQA Issues:</strong>
                             </div>
 
-                            <table *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PQAIssue_View)"
+                            <table
                                 style="border-collapse: collapse;" class="table table-hover text-nowrap">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>#</th>
+                                        <th *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PQAIssue_SetDone)">#</th>
                                         <th>Issues</th>
                                         <th>Impact</th>
                                         <th>Solution</th>
@@ -333,14 +330,11 @@
                                         itemsPerPage: itemPerPage,
                                         currentPage: problemCurrentPage
                                         }; let i =index">
-                                        <td style="width: 26px">
-                                            <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1"
-                                                [matMenuTriggerFor]="menu3"></i>
+                                        <td *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PQAIssue_SetDone)" style="width: 26px">
+                                            <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1" [matMenuTriggerFor]="menu3"></i>
 
                                             <mat-menu #menu3="matMenu">
-                                                <button
-                                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PQAIssue_SetDone)"
-                                                    (click)="setDone(problem)" class="mat-menu-item  w-100">
+                                                <button (click)="setDone(problem)" class="mat-menu-item  w-100">
                                                     <i class="fas fa-check mr-2 fa-lg "></i>
                                                     <span *ngIf="isShowChangeDoneText(problem)">Set Done</span>
                                                     <span *ngIf="isShowChangeInProgressText(problem)">Set
@@ -508,11 +502,10 @@
                                     <tbody>
                                         <tr *ngFor="let user of projectCurrentResource; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">
-                                                <i class="fas fa-ellipsis-v ml-1 menu-4-icon"
+                                                <i *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" class="fas fa-ellipsis-v ml-1 menu-4-icon"
                                                     [matMenuTriggerFor]="menu4"></i>
                                                 <mat-menu #menu4="matMenu">
                                                     <button
-                                                        *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)"
                                                         [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                         (click)="releaseUser(user)">
                                                         <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
@@ -745,7 +738,7 @@
                                                                         [userData]="report">
                                                                     </app-user-info>
 
-                                                                    <i style="margin-top: 23px ; color: #585858;"
+                                                                    <i *ngIf="isShowMenuPlannedResource" style="margin-top: 23px ; color: #585858;"
                                                                         class="fas fa-ellipsis-v fa-lg"
                                                                         [matMenuTriggerFor]="menu2"></i>
 

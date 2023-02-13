@@ -137,6 +137,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public lastWeekSunday: any
   public tempResourceList: any[] = []
   public officalResourceList: any[] = [];
+  public isShowMenuPlannedResource: boolean;
 
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
@@ -183,6 +184,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     private pjCriteriaResultService: ProjectCriteriaResultService,
   ) {
     super(injector)
+    this.isShowMenuPlannedResource =
+      this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_Edit) ||
+      this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_CancelPlan) ||
+      this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther) ||
+      this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_ConfirmPickEmployeeFromPoolToProject) ||
+      this.permission.isGranted(this.WeeklyReport_ReportDetail_PlannedResource_ConfirmOut);
   }
   ngOnInit(): void {
     let currentDate = new Date()

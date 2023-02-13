@@ -20,7 +20,9 @@ namespace ProjectManagement.APIs.ProjectCriteriaResults
             PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria,
             PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
             PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
-            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
             )]
         [HttpPost]
         public async Task<CreateProjectCriteriaResultDto> Create(CreateProjectCriteriaResultDto input)
@@ -54,7 +56,9 @@ namespace ProjectManagement.APIs.ProjectCriteriaResults
             PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria,
             PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
             PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
-            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
             )]
         [HttpDelete]
         public async Task Delete(long projectCriteriaResultId)
@@ -103,7 +107,9 @@ namespace ProjectManagement.APIs.ProjectCriteriaResults
             PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria,
             PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
             PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
-            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
             )]
         [HttpPut]
         public async Task<CreateProjectCriteriaResultDto> Update(CreateProjectCriteriaResultDto input)

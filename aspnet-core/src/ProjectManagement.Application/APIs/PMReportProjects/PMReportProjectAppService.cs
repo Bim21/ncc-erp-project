@@ -523,7 +523,8 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(
               PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
               PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
-              PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)
+              PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
+              PermissionNames.WeeklyReport_ReportDetail_UpdateNote)
           ]
         public async Task<UpdateNoteDto> UpdateNote(UpdateNoteDto input)
         {
@@ -541,7 +542,8 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
               PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
-              PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)]
+              PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_UpdateNote,
+              PermissionNames.WeeklyReport_ReportDetail_UpdateNote)]
         public async Task<UpdateNoteDto> UpdateAutomationNote(UpdateNoteDto input)
         {
             var pmReportProject = await WorkScope.GetAll<PMReportProject>()
