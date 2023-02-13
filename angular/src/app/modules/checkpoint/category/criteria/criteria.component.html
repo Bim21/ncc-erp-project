@@ -70,7 +70,7 @@
                                 <th>Guideline/Note</th>
                                 <th style="width: 72px;">Status</th>
                                 <th style="width: 72px;"
-                                    *ngIf="permission.isGranted( Admin_Criteria_View)">Actions
+                                    *ngIf="isShowMenu">Actions
                                 </th>
                             </tr>
                         </thead>
@@ -87,7 +87,7 @@
                                 <td><span PrjResizeContent [collapseLine]="3" class="max-line-content-3" [innerHTML]="item.guideline | safeHtml"></span></td>
                                 <td class="text-center"><span [ngClass]="item.isActive?APP_CONST.criteriaStatus.Active:APP_CONST.criteriaStatus.DeActive">{{ item.isActive?"Active":"Deactive" }}</span></td>
                                 <td class="text-center"
-                                    *ngIf="permission.isGranted( Admin_Criteria_View)">
+                                    *ngIf="isShowMenu">
                                     <div style="visibility: hidden; position: fixed" [style.left]="contextMenuPosition.x"
                                         [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="menu"></div>
                                     <button mat-button [matMenuTriggerFor]="menu">

@@ -75,13 +75,20 @@ export class CriteriaComponent extends PagedListingComponentBase<CriteriaCompone
   Admin_Criteria_Edit = PERMISSIONS_CONSTANT.Admin_Criteria_Edit;
   Admin_Criteria_Delete = PERMISSIONS_CONSTANT.Admin_Criteria_Delete;
   Admin_Criteria_Active_DeActive = PERMISSIONS_CONSTANT.Admin_Criteria_Active_DeActive;
+  public isShowMenu: boolean;
   menu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };
   public criteriaList: ProjectCriteriaDto[] = [];
   constructor(public injector: Injector,
     private criteriaService: CriteriaService,
     private route: ActivatedRoute,
-    private dialog: MatDialog) { super(injector) }
+    private dialog: MatDialog) {
+    super(injector)
+    this.isShowMenu =
+      this.permission.isGranted(this.Admin_Criteria_Edit) ||
+      this.permission.isGranted(this.Admin_Criteria_Delete) ||
+      this.permission.isGranted(this.Admin_Criteria_Active_DeActive);
+  }
 
   ngOnInit(): void {
     this.refresh();
