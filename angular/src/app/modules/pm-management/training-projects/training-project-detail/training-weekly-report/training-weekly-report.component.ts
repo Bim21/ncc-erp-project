@@ -325,7 +325,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
             }
           }
         }
-        let priority: number = 1;
+        let priority: number = 0;
         for (let i = 0; i < this.listCriteriaResult.length; i++) {
           let tmpPriority = 1;
           if (!this.listCriteriaResult[i].status) {

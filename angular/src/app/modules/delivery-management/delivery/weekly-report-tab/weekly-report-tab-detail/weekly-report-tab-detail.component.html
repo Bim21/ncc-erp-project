@@ -59,104 +59,59 @@
                         <div>
                             <div class="fixTableHead" style="max-height: none;"
                                 *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View)">
-                                <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
-                                    <thead class="bg-light" style="z-index: 1;">
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Criteria Name</th>
-                                            <th>Note</th>
-                                            <th class="col-time">Status</th>
-                                            <th class="col-action-menu"
-                                                *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit)">
-                                                Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of listCriteriaResult |paginate:{
-                                            id: 'itemPaging',
-                                        itemsPerPage: itemPerPage,
-                                        currentPage: itemCurrentPage
-                                        }; let i =index">
-                                            <td>{{i+1}}</td>
-                                            <td style="white-space: normal;max-width: 200px;">
-                                                <div class="text-danger break-word">
-                                                    {{item.criteriaName}}</div>
-                                            </td>
-                                            <td style="white-space: normal;max-width: 200px;min-width: 110px;">
-                                                <div class="break-word" *ngIf="!item.editMode">{{item.note}}</div>
+                                <div *ngFor="let item of listCriteriaResult let i =index">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span style="white-space: normal;" class="text-primary"><strong>{{item.criteriaName}}</strong></span>
+                                        <div class="d-flex align-items-center">
+                                            <ng-container
+                                                *ngIf="(permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) && isActive && !item.editMode)
+                                                ||(permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) && permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit)  && isActive && item.editMode)">
+                                                <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[item.status]"
+                                                    style="margin-left: 10px !important;width: 100px;" class="ml-3" appearance="outline">
+                                                    <mat-select name="flag" placeholder="Select Status" [(ngModel)]="item.status"
+                                                        (ngModelChange)="handleChangeStatus(item)">
+                                                        <ng-container *ngFor="let flag of problemIssueList">
+                                                            <mat-option style="border: 1px white solid;"
+                                                                [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
+                                                                [value]="APP_ENUM.ProjectHealth[flag]">
+                                                                <span style="font-weight: 100 !important;">
+                                                                    {{flag}}
+                                                                </span>
+                                                            </mat-option>
+                                                        </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </ng-container>
 
-                                                <div *ngIf="item.editMode ">
-                                                    <mat-form-field class="w-100" appearance="outline">
-                                                        <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                                            cdkAutosizeMinRows="2" placeholder="Note" name="note"
-                                                            [(ngModel)]="item.note" matInput></textarea>
-                                                    </mat-form-field>
-                                                </div>
-                                            </td>
-                                            <td class="text-center" id="status-option-weekly-report-tab">
-                                                <ng-container *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) && this.isActive && !item.editMode ">
-                                                    <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[item.status]" style="margin-left: 10px !important;"
-                                                        class="ml-3" appearance="outline">
-                                                        <mat-select name="flag" placeholder="Select Status" [(ngModel)]="item.status"
-                                                            (ngModelChange)="handleChangeStatus(item)">
-                                                            <ng-container *ngFor="let flag of problemIssueList">
-                                                                <mat-option style="border: 1px white solid;"
-                                                                    [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
-                                                                    [value]="APP_ENUM.ProjectHealth[flag]">
-                                                                    <span style="font-weight: 100 !important;">
-                                                                        {{flag}}
-                                                                    </span>
-                                                                </mat-option>
-                                                            </ng-container>
-                                                        </mat-select>
-                                                    </mat-form-field>
-                                                </ng-container>
-
-                                                <ng-container *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) &&permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) && this.isActive && item.editMode ">
-                                                    <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[item.status]" style="margin-left: 10px !important;"
-                                                        class="ml-3" appearance="outline">
-                                                        <mat-select name="flag" placeholder="Select Status" [(ngModel)]="item.status"
-                                                            (ngModelChange)="handleChangeStatus(item)">
-                                                            <ng-container *ngFor="let flag of problemIssueList">
-                                                                <mat-option style="border: 1px white solid;"
-                                                                    [ngClass]="APP_CONST.projectHealthBGStyle[APP_ENUM.ProjectHealth[flag]]"
-                                                                    [value]="APP_ENUM.ProjectHealth[flag]">
-                                                                    <span style="font-weight: 100 !important;">
-                                                                        {{flag}}
-                                                                    </span>
-                                                                </mat-option>
-                                                            </ng-container>
-                                                        </mat-select>
-                                                    </mat-form-field>
-                                                </ng-container>
-
-                                                <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) || !this.isActive"
-                                                    [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
-                                                    {{problemIssueList[item.status - 1]}}</span>
-                                            </td>
-                                            <td class="text-center"
-                                                *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit)">
-                                                <button *ngIf="!item.editMode" mat-button [disabled]="processCriteria"
+                                            <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) || !isActive"
+                                                [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
+                                                {{problemIssueList[item.status - 1]}}</span>
+                                            <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) ">
+                                                <button *ngIf="!item.editMode && isActive" mat-button [disabled]="processCriteria"
                                                     (click)="handleEditCriteriaResult(i)">
                                                     <i class="fas fa-pencil-alt fa-lg "></i>
                                                 </button>
-
-                                                <div *ngIf="item.editMode" class="d-flex align-items-center pt-2">
-                                                    <button class=" mr-3 submit-btn"
-                                                        style="background: none; border: none;"
-                                                        (click)="saveCriteriaResult(item)">
-                                                        <i style="color: green;font-size: 24px;"
-                                                            class="fas fa-check"></i>
+                                                <div *ngIf="item.editMode && isActive" class="d-flex align-items-center ">
+                                                    <button class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveCriteriaResult(item)">
+                                                        <i style="color: green;font-size: 24px;" class="fas fa-check"></i>
                                                     </button>
-
-                                                    <i style="color: red; font-size: 24px;" class="fas fa-times"
-                                                        (click)="cancelEditCriteriaResult(i)"></i>
-
+                                                    <button class=" submit-btn" style="background: none; border: none;" (click)="cancelEditCriteriaResult(i)">
+                                                        <i style="color: red; font-size: 24px;" class="fas fa-times" ></i>
+                                                    </button>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="break-word" *ngIf="!item.editMode">{{item.note}}</div>
+
+                                    <div *ngIf="item.editMode && isActive">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" placeholder="Note"
+                                                name="note" [(ngModel)]="item.note" matInput></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                    <hr *ngIf="i<listCriteriaResult.length-1">
+                                </div>
                             </div>
                         </div>
                     </div>

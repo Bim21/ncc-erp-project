@@ -384,6 +384,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
+        this.getAllCriteria();
         this.getProjectProblem();
       });
     }
@@ -392,6 +393,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
+        this.getAllCriteria();
         this.getProjectProblem();
       })
     }
@@ -410,7 +412,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.isLoading = false;
         this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode)
-        if (this.weeklyReportStatus == 'Sent') {
+        if (this.weeklyReportStatus === 'Sent') {
           this.router.navigate(
             [],
             {
@@ -454,7 +456,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isEditingNote = false;
     this.isEditingAutomationNote = false
     this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth];
-    this.pmReportProjectService.projectHealth = this.projectHealth
+    this.getProjectProblem();
+    if (this.weeklyReportStatus === 'Sent') {
+      this.pmReportProjectService.projectHealth = this.projectHealth
+    }
     this.pmReportProjectList.forEach(element => {
       if (element.projectId == projectReport.projectId) {
         element.setBackground = true;
@@ -467,7 +472,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.automationNote = projectReport.automationNote
 
     this.getAllCriteria();
-    this.getProjectProblem();
     this.getProjectInfo();
     this.getChangedResource();
     this.getFuturereport();
