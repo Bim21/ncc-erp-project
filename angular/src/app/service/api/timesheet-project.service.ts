@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { BaseApiService } from './base-api.service';
 import { ApiResponse } from '../model/api-response.dto';
 import { ResponseResultProjectDto } from '../model/responseResultProject.dto'
+import { TimesheetInfoDto } from '../model/timesheet.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -48,7 +49,7 @@ export class TimesheetProjectService extends BaseApiService {
   public GetTimesheetDetail(id: any, request: PagedRequestDto): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/GetAllProjectTimesheetByTimesheet?timesheetId=' + id, request);
   }
- 
+
   public getAllByProject(projectId: number) {
     return this.http.get<any>(this.rootUrl + '/GetAllByProject?projectId=' + projectId);
 
@@ -102,12 +103,18 @@ export class TimesheetProjectService extends BaseApiService {
     //update invoice number and working day
     return this.http.put<any>(this.rootUrl + '/UpdateTimesheetProject', item);
   }
-  
+
   checkTimesheetProjectSetting(timesheetId: number):Observable<ApiResponse<string>>{
     return this.http.get<ApiResponse<string>>(this.rootUrl + `/CheckTimesheetProjectSetting?timesheetId=${timesheetId}`)
   }
 
   sendInvoiceToFinfast(timesheetId: number): Observable<ApiResponse<ResponseResultProjectDto>>{
     return this.http.get<ApiResponse<ResponseResultProjectDto>>(this.rootUrl + `/SendInvoiceToFinfast?timesheetId=${timesheetId}`)
+  }
+  getExchangeRate(date: string, baseCurrency: string, symbols: string, places: number): Observable<ApiResponse<any>>{
+    return this.http.get<ApiResponse<any>>(this.rootUrl + `/GetExchangeRate?date=${date}&baseCurrency=${baseCurrency}&symbols=${symbols}&places=${places}`);
+  }
+  exportAllTimeSheetProjectToExcel( currencies: TimesheetInfoDto): Observable<any>{
+    return this.http.post(this.rootUrl + `/ExportAllTimeSheetProjectToExcel`, currencies);
   }
 }

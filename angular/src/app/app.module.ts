@@ -189,6 +189,7 @@ import { CreateUpdateTrainingRequestComponent } from './modules/delivery-managem
 import { RetroReviewHistoryByUserComponent } from './modules/delivery-management/delivery/available-resource-tab/plan-resource/plan-user/retro-review-history-by-user/retro-review-history-by-user.component';
 import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component';
 import { CriteriasComponent } from './modules/admin/criterias/criterias.component';
+import { ExchangeRateComponent } from './modules/timesheet/timesheet-detail/exchange-rate/exchange-rate/exchange-rate.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -361,7 +362,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     RetroReviewHistoryByUserComponent,
     AuditLogComponent,
     RetroReviewHistoryByUserComponent,
-    CriteriasComponent
+    CriteriasComponent,
+    ExchangeRateComponent
   ],
   imports: [
     CommonModule,

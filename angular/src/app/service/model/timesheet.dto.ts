@@ -1,3 +1,4 @@
+import { number } from "echarts";
 import { IdNameDto } from "./project-invoice-setting.dto";
 
 export class TimesheetDto {
@@ -107,4 +108,15 @@ export class TotalAmountByCurrencyDto{
     CurrencyName : string;
     Amount : string;
     RoundAmount : string;
+}
+export class TimesheetInfoDto {
+    timesheetId: number;
+    timesheetName: string;
+    date: string;
+    currencies: CurrencyDto[];
+}
+
+export class CurrencyDto {
+    currencyName: string;
+    exchangeRate: number
 }

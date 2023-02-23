@@ -19,6 +19,7 @@ import { ClientService } from '@app/service/api/client.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
 import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
+import { ExchangeRateComponent } from './exchange-rate/exchange-rate/exchange-rate.component';
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -128,6 +129,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   Timesheets_TimesheetDetail_AddProjectToTimesheet = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_AddProjectToTimesheet;
   Timesheets_TimesheetDetail_UploadTimesheetFile = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UploadTimesheetFile;
   Timesheets_TimesheetDetail_ExportInvoice = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoice;
+  Timesheets_TimesheetDetail_ExportInvoiceAllProject = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ExportInvoiceAllProject;
   Timesheets_TimesheetDetail_UpdateNote = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_UpdateNote;
   Timesheets_TimesheetDetail_Delete = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_Delete;
   Timesheets_TimesheetDetail_ViewAll = PERMISSIONS_CONSTANT.Timesheets_TimesheetDetail_ViewAll;
@@ -437,8 +439,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.currency = checkCurrency;
       this.clientIdInvoice = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
-      this.listExportInvoiceChargeType.push(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);        
-    }    
+      this.listExportInvoiceChargeType.push(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);
+    }
     if(this.listExportInvoiceChargeType.indexOf(this.APP_ENUM.ChargeType.Monthly) !== -1){
       this.isMonthlyToDaily = true;
     }
@@ -559,7 +561,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       && item.projectBillInfomation
       && item.projectBillInfomation.find(s => s.chargeType == this.APP_ENUM.ChargeType.Monthly)
   }
-  
+
   getColorByCurrency(currencyName: string){
     switch(currencyName) {
       case 'VND':
@@ -598,6 +600,20 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
         })
       }
       this.sending = false;
+    })
+  }
+  confirmExport() {
+    const show = this.dialog.open(ExchangeRateComponent, {
+      width: "30%",
+      data: {
+        timesheetId: this.timesheetId,
+        timesheetName: this.titleTimesheet,
+        currencyInfor: this.listTotalAmountByCurrency.map((x:any) => ({ currencyName: x.currencyName, exchangeRate: 0 })),
+      },
+      autoFocus: false
+    })
+    show.afterClosed().subscribe((res) => {
+      this.refresh();
     })
   }
 }

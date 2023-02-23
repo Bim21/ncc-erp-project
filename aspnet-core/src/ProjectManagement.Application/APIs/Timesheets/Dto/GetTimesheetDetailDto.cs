@@ -109,7 +109,9 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public List<long> SubProjectIds => SubProjects != null ? SubProjects.Select(s => s.Id).ToList() : null;
 
         public byte PaymentDueBy { get; set; }
-       
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+
     }
 
     public class IdNameDto

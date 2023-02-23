@@ -119,3 +119,8 @@ button.special span{
 #timesheet-detail .note{
   width: 10px;
 }
+.btn-export-all-project{
+  background-color: rgb(201, 125, 119);
+  color:white;
+  margin-right: 8px;
+}

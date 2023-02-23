@@ -15,7 +15,8 @@ import { AppComponentBase } from '@shared/app-component-base';
 })
 export class AbpModalHeaderComponent extends AppComponentBase {
   @Input() title: string;
-
+  @Input() isShowClose: boolean = true;
+  @Input() subTitle: string = '';
   @Output() onCloseClick = new EventEmitter<number>();
 
   constructor(injector: Injector) {
