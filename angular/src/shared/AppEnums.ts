@@ -255,7 +255,3 @@ export const APP_ENUMS = {
     }
 }
 
-export enum EProjectReport {
-    PM = 0,
-    PQA = 1
-}

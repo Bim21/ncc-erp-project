@@ -161,13 +161,6 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone";
         
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone";
-
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
@@ -272,13 +265,6 @@ namespace ProjectManagement.Authorization
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone";
         
-        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue";                             
-        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View";
-        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue";
-        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit";
-        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete";
-        public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone";
-
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
@@ -378,13 +364,6 @@ namespace ProjectManagement.Authorization
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone";
         
-        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue";
-        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View";
-        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue";
-        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit";
-        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete";
-        public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone";
-
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
@@ -447,12 +426,7 @@ namespace ProjectManagement.Authorization
         public const string WeeklyReport_ReportDetail_PMIssue_View = "WeeklyReport.ReportDetail.PMIssue.View";
         public const string WeeklyReport_ReportDetail_PMIssue_AddMeetingNote = "WeeklyReport.ReportDetail.PMIssue.AddMeetingNote";
         public const string WeeklyReport_ReportDetail_PMIssue_SetDone = "WeeklyReport.ReportDetail.PMIssue.SetDone";
-        
-        public const string WeeklyReport_ReportDetail_PQAIssue = "WeeklyReport.ReportDetail.PQAIssue";
-        public const string WeeklyReport_ReportDetail_PQAIssue_View = "WeeklyReport.ReportDetail.PQAIssue.View";
-        public const string WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote = "WeeklyReport.ReportDetail.PQAIssue.AddMeetingNote";
-        public const string WeeklyReport_ReportDetail_PQAIssue_SetDone = "WeeklyReport.ReportDetail.PQAIssue.SetDone";
-        
+               
         public const string WeeklyReport_ReportDetail_CurrentResource = "WeeklyReport.ReportDetail.CurrentResource";
         public const string WeeklyReport_ReportDetail_CurrentResource_View = "WeeklyReport.ReportDetail.CurrentResource.View";
         public const string WeeklyReport_ReportDetail_CurrentResource_Release = "WeeklyReport.ReportDetail.CurrentResource.Release";
@@ -747,13 +721,6 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone ,
 
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone ,
-
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
@@ -856,13 +823,6 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone ,
 
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete ,
-                    PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone ,
-
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
@@ -963,13 +923,6 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone ,
 
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete ,
-                    PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone ,
-
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
@@ -1029,11 +982,6 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_PMIssue_AddMeetingNote ,
                     PermissionNames.WeeklyReport_ReportDetail_PMIssue_SetDone ,
                     
-                    PermissionNames.WeeklyReport_ReportDetail_PQAIssue ,
-                    PermissionNames.WeeklyReport_ReportDetail_PQAIssue_View ,
-                    PermissionNames.WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote ,
-                    PermissionNames.WeeklyReport_ReportDetail_PQAIssue_SetDone ,
-
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource ,
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release ,
@@ -1329,13 +1277,6 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Project Issues" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
-
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
@@ -1437,13 +1378,6 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Project Issues" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
-
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
@@ -1540,13 +1474,6 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
 
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Project Issues" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
-
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
@@ -1606,11 +1533,6 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PMIssue_AddMeetingNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Meeting Note" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PMIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
                  
-                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PQAIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQAIssues" },
-                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PQAIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
-                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Meeting Note" },
-                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PQAIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
-
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
@@ -2216,26 +2138,6 @@ namespace ProjectManagement.Authorization
                                                                         },
                                                                 },
                                                                 new SystemPermission {
-                                                                    Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Project Issues",
-                                                                        Childrens = new List < SystemPermission > () {
-                                                                            new SystemPermission {
-                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"
-                                                                            },
-                                                                            new SystemPermission {
-                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"
-                                                                            },
-                                                                            new SystemPermission {
-                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit "
-                                                                            },
-                                                                            new SystemPermission {
-                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"
-                                                                            },
-                                                                            new SystemPermission {
-                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"
-                                                                            },
-                                                                        },
-                                                                },
-                                                                new SystemPermission {
                                                                     Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                                                         Childrens = new List < SystemPermission > () {
                                                                             new SystemPermission {
@@ -2526,26 +2428,6 @@ namespace ProjectManagement.Authorization
                                                             },
                                                     },
                                                     new SystemPermission {
-                                                        Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Project Issues",
-                                                            Childrens = new List < SystemPermission > () {
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit "
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"
-                                                                },
-                                                            },
-                                                    },
-                                                    new SystemPermission {
                                                         Name = PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                                             Childrens = new List < SystemPermission > () {
                                                                 new SystemPermission {
@@ -2808,26 +2690,6 @@ namespace ProjectManagement.Authorization
                                                             },
                                                     },
                                                     new SystemPermission {
-                                                        Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Project Issues",
-                                                            Childrens = new List < SystemPermission > () {
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit "
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete"
-                                                                },
-                                                                new SystemPermission {
-                                                                    Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"
-                                                                },
-                                                            },
-                                                    },
-                                                    new SystemPermission {
                                                         Name = PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resources",
                                                             Childrens = new List < SystemPermission > () {
                                                                 new SystemPermission {
@@ -2967,20 +2829,6 @@ namespace ProjectManagement.Authorization
                                                     },
                                                     new SystemPermission {
                                                         Name = PermissionNames.WeeklyReport_ReportDetail_PMIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"
-                                                    },
-                                                }
-                                        },
-                                        new SystemPermission {
-                                            Name = PermissionNames.WeeklyReport_ReportDetail_PQAIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PQA Issues",
-                                                Childrens = new List < SystemPermission > () {
-                                                    new SystemPermission {
-                                                        Name = PermissionNames.WeeklyReport_ReportDetail_PQAIssue_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"
-                                                    },
-                                                    new SystemPermission {
-                                                        Name = PermissionNames.WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Meeting Note"
-                                                    },
-                                                    new SystemPermission {
-                                                        Name = PermissionNames.WeeklyReport_ReportDetail_PQAIssue_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done"
                                                     },
                                                 }
                                         },

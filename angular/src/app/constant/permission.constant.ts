@@ -162,13 +162,6 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
 
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone",
-
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release",
@@ -273,13 +266,6 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
 
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone",
-
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release",
@@ -380,13 +366,6 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
 
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.View",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.AddNewIssue",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Edit",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.Delete",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PQAProjectIssue.SetDone",
-
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release",
@@ -450,11 +429,6 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_PMIssue_View: "WeeklyReport.ReportDetail.PMIssue.View",
        WeeklyReport_ReportDetail_PMIssue_AddMeetingNote: "WeeklyReport.ReportDetail.PMIssue.AddMeetingNote",
        WeeklyReport_ReportDetail_PMIssue_SetDone: "WeeklyReport.ReportDetail.PMIssue.SetDone",
-
-       WeeklyReport_ReportDetail_PQAIssue: "WeeklyReport.ReportDetail.PQAIssue",
-       WeeklyReport_ReportDetail_PQAIssue_View: "WeeklyReport.ReportDetail.PQAIssue.View",
-       WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote: "WeeklyReport.ReportDetail.PQAIssue.AddMeetingNote",
-       WeeklyReport_ReportDetail_PQAIssue_SetDone: "WeeklyReport.ReportDetail.PQAIssue.SetDone",
 
        WeeklyReport_ReportDetail_CurrentResource: "WeeklyReport.ReportDetail.CurrentResource",
        WeeklyReport_ReportDetail_CurrentResource_View: "WeeklyReport.ReportDetail.CurrentResource.View",

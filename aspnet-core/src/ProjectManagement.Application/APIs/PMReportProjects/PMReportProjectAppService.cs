@@ -209,7 +209,6 @@ namespace ProjectManagement.APIs.PMReportProjects
                             Status = prpi.Status.ToString(),
                             CreatedAt = prpi.CreationTime,
                             TotalWeekAgo = (DateTimeUtils.GetNow() - prpi.CreationTime).Days,
-                            ReportType = prpi.ReportType
                         };
 
             var result = new GetResultpmReportProjectIssue

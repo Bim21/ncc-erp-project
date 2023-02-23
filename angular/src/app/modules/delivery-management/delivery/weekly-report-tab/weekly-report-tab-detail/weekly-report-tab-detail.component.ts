@@ -27,7 +27,7 @@ import { TimesheetProjectService } from '@app/service/api/timesheet-project.serv
 import { AddFutureResourceDialogComponent } from './add-future-resource-dialog/add-future-resource-dialog.component';
 import { EditMeetingNoteDialogComponent } from './edit-meeting-note-dialog/edit-meeting-note-dialog.component';
 import { Observable, forkJoin } from 'rxjs';
-import { APP_ENUMS, EProjectReport } from '@shared/AppEnums';
+import { APP_ENUMS } from '@shared/AppEnums';
 import { TimeInterface } from 'angular-cd-timer';
 import { AppConfigurationService } from '@app/service/api/app-configuration.service';
 import { FormControl, Validators } from '@angular/forms';
@@ -67,10 +67,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
   WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
 
-  WeeklyReport_ReportDetail_PQAIssue_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PQAIssue_View
-  WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PQAIssue_AddMeetingNote
-  WeeklyReport_ReportDetail_PQAIssue_SetDone = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PQAIssue_SetDone
-
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // this.pmReportProjectService.GetAllByPmReport(this.pmReportId, request).pipe(finalize(()=>{
     //   finishedCallback();
@@ -105,7 +101,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
-  public PQAList: projectProblemDto[] = [];
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus);
@@ -508,16 +503,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.pmReportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
           this.problemList = [];
-          this.PQAList = []
           for (let i = 0; i < data.result.result.length; i++) {
-            if (data.result.result[i].reportType === EProjectReport.PM) {
               this.problemList.push(data.result.result[i]);
-            }
-            else {
-              this.PQAList.push(data.result.result[i])
-            }
           }
-
           this.projectHealth = data.result.projectHealth;
           this.weeklyReportStatus = data.result.status;
           if (data.result.status === 'Sent') {
@@ -561,7 +549,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
         } else {
           this.problemList = [];
-          this.PQAList = [];
 
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
@@ -736,15 +723,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
     this.problemList.unshift(newIssue)
-    this.processProblem = true;
-    newIssue.reportType = EProjectReport.PM
-  }
-
-  public addPQAIssueReport() {
-    let newIssue = {} as projectProblemDto
-    newIssue.createMode = true;
-    newIssue.reportType = EProjectReport.PQA;
-    this.PQAList.unshift(newIssue)
     this.processProblem = true;
   }
 

@@ -254,10 +254,5 @@
             Yellow = 2,
             Red = 3
         }
-        public enum PMReportProjectIssueType
-        {
-            PMIssue,
-            PQAIssue
-        }
     }
 }
