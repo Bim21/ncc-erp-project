@@ -1,11 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
-using ProjectManagement.Constants.Enum;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
@@ -26,6 +22,5 @@ namespace ProjectManagement.Entities
         public string Solution { get; set; }
         public string MeetingSolution { get; set; }// consider
         public PMReportProjectIssueStatus Status { get; set; }
-        public PMReportProjectIssueType ReportType { get; set; }
     }
 }

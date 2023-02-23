@@ -34,7 +34,7 @@ import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
 import { ProjectCriteriaResultDto } from '@app/service/model/project-criteria-result.dto';
 import { CriteriaService } from '@app/service/api/criteria.service';
 import { ProjectCriteriaResultService } from '@app/service/api/project-criteria-result.service';
-import { APP_ENUMS, EProjectReport } from '@shared/AppEnums';
+import { APP_ENUMS } from '@shared/AppEnums';
 
 @Component({
   selector: 'app-training-weekly-report',
@@ -74,7 +74,6 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
-  public PQAList: projectProblemDto[] = []
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
@@ -133,7 +132,6 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   public status: string = ''
   public processCriteria: boolean = false;
   public isShowActionPM: boolean;
-  public isShowActionPQA: boolean;
   public isValidCriteria: boolean;
 
   public defaultStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.issueStatusList[0]];
@@ -165,12 +163,6 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View;
 
-  TabWeeklyReport_PQAProjectIssue_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View;
-  TabWeeklyReport_PQAProjectIssue_AddNewIssue = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue;
-  TabWeeklyReport_PQAProjectIssue_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit;
-  TabWeeklyReport_PQAProjectIssue_Delete = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete;
-  TabWeeklyReport_PQAProjectIssue_SetDone = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone;
-
   ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View;
   ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus;
   ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit;
@@ -193,11 +185,6 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
     this.projectType = route.snapshot.queryParamMap.get("type");
-
-    this.isShowActionPQA = this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_Edit) ||
-    this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_Delete) ||
-      this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_SetDone) ||
-      this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_AddNewIssue);
 
       this.isShowActionPM = this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit) ||
       this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete) ||
@@ -464,14 +451,8 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
           this.problemList = [];
-          this.PQAList = []
           for (let i = 0; i < data.result.result.length; i++) {
-            if (data.result.result[i].reportType === EProjectReport.PM) {
               this.problemList.push(data.result.result[i]);
-            }
-            else {
-              this.PQAList.push(data.result.result[i])
-            }
           }
 
           this.projectHealth = data.result.projectHealth;
@@ -674,17 +655,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
     newIssue.status = this.defaultStatus;
-    newIssue.reportType = EProjectReport.PM;
     this.problemList.unshift(newIssue)
-    this.processProblem = true;
-  }
-
-  public addPQAIssueReport() {
-    let newIssue = {} as projectProblemDto
-    newIssue.createMode = true;
-    newIssue.status = this.defaultStatus;
-    newIssue.reportType = EProjectReport.PQA;
-    this.PQAList.unshift(newIssue)
     this.processProblem = true;
   }
 

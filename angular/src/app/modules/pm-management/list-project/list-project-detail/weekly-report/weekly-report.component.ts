@@ -39,7 +39,7 @@ import { RadioDropdownComponent } from '@shared/components/radio-dropdown/radio-
 import { LayoutStoreService } from '@shared/layout/layout-store.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { forkJoin } from 'rxjs';
-import { APP_ENUMS, EProjectReport } from '@shared/AppEnums';
+import { APP_ENUMS } from '@shared/AppEnums';
 import { CriteriaService } from '@app/service/api/criteria.service';
 import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
 import { log } from 'console';
@@ -83,7 +83,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public weeklyReportList: projectReportDto[] = [];
   public futureReportList: projectReportDto[] = [];
   public problemList: projectProblemDto[] = [];
-  public PQAList: projectProblemDto[] = []
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
@@ -130,7 +129,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public status: string = ''
   public processCriteria: boolean = false;
   public isShowActionPM: boolean;
-  public isShowActionPQA: boolean;
   public isShowOptionNotRp: boolean = true;
   public isValidCriteria: boolean;
 
@@ -175,12 +173,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View;
 
-  TabWeeklyReport_PQAProjectIssue_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_View;
-  TabWeeklyReport_PQAProjectIssue_AddNewIssue = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_AddNewIssue;
-  TabWeeklyReport_PQAProjectIssue_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Edit;
-  TabWeeklyReport_PQAProjectIssue_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_Delete;
-  TabWeeklyReport_PQAProjectIssue_SetDone = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PQAProjectIssue_SetDone;
-
   ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View;
   ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus;
   ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit;
@@ -202,11 +194,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
     this.projectType = route.snapshot.queryParamMap.get("type");
-
-    this.isShowActionPQA = this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_Edit) ||
-    this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_Delete) ||
-      this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_SetDone) ||
-      this.permission.isGranted(this.TabWeeklyReport_PQAProjectIssue_AddNewIssue);
 
     this.isShowActionPM = this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit) ||
     this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete) ||
@@ -472,14 +459,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.pmReportProjectService.problemsOfTheWeekForReport(this.projectId, this.selectedReport.reportId).pipe(catchError(this.reportIssueService.handleError)).subscribe(data => {
         if (data.result) {
           this.problemList = [];
-          this.PQAList = []
           for (let i = 0; i < data.result.result.length; i++) {
-            if (data.result.result[i].reportType === EProjectReport.PM) {
               this.problemList.push(data.result.result[i]);
-            }
-            else {
-              this.PQAList.push(data.result.result[i])
-            }
           }
 
           this.projectHealth = data.result.projectHealth;
@@ -682,19 +663,10 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     let newIssue = {} as projectProblemDto
     newIssue.createMode = true;
     newIssue.status = this.defaultStatus;
-    newIssue.reportType = EProjectReport.PM;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
   }
 
-  public addPQAIssueReport() {
-    let newIssue = {} as projectProblemDto
-    newIssue.createMode = true;
-    newIssue.status = this.defaultStatus;
-    newIssue.reportType = EProjectReport.PQA;
-    this.PQAList.unshift(newIssue)
-    this.processProblem = true;
-  }
   public saveProblemReport(problem: projectProblemDto) {
     problem.createdAt = moment(this.createdDate).format("YYYY-MM-DD");
     delete problem["createMode"]

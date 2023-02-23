@@ -19,6 +19,5 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
         public string Solution { get; set; }
         public string MeetingSolution { get; set; }
         public PMReportProjectIssueStatus Status { get; set; }
-        public PMReportProjectIssueType ReportType { get; set; }
     }
 }
