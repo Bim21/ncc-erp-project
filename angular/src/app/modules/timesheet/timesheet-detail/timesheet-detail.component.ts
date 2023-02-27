@@ -3,6 +3,7 @@ import { ViewBillComponent } from './view-bill/view-bill.component';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { CreateEditTimesheetDetailComponent } from './create-edit-timesheet-detail/create-edit-timesheet-detail.component';
+import { ExportInvoiceComponent } from './export-invoice/export-invoice.component';
 import { ActivatedRoute } from '@angular/router';
 import { TimesheetDetailDto,TotalAmountByCurrencyDto} from './../../../service/model/timesheet.dto';
 import { Component, OnInit, Injector, ViewChild, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
@@ -20,6 +21,9 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-dialog/edit-timesheet-project-dialog/edit-timesheet-project-dialog.component';
 import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 import { ExchangeRateComponent } from './exchange-rate/exchange-rate/exchange-rate.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+
 @Component({
   selector: 'app-timesheet-detail',
   templateUrl: './timesheet-detail.component.html',
@@ -150,6 +154,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     private userService: UserService,
     private clientService: ClientService,
     private _modalService: BsModalService,
+    private sanitizer: DomSanitizer
   ) {
     super(injector)
 
@@ -394,6 +399,22 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       abp.notify.success("Export Invoice Successfully!");
     })
   }
+
+  exportInvocieAsPDF(item: any,exportInvoiceMode) : void {
+    this.timesheetProjectService.exportInvoiceAsPDF(this.timesheetId, item.projectId,exportInvoiceMode).pipe(catchError(this.timesheetProjectService.handleError)).subscribe(res => {
+    this.dialog.open(ExportInvoiceComponent,{
+      data: {
+        fileName: res.result.fileName,
+        html: res.result.html
+      },
+      width: '85%',
+      maxWidth: '85%',
+      panelClass: 'invoice-dialog',
+    });
+  });
+  }
+
+
   exportQuickInvoiceForTax(item: any,exportInvoiceMode) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
@@ -448,6 +469,7 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       this.isMonthlyToDaily = false;
     }
   }
+
   exportInvoiceClient(exportInvoiceMode) {
     let invoiceExcelDto = {
       timesheetId: this.timesheetId,
@@ -463,6 +485,26 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       FileSaver.saveAs(file, res.result.fileName);
       abp.notify.success("Export Invoice Successfully!");
     })
+  }
+
+  // Use this function when you want to preview or edit template
+  public exportInvoiceClientAsPDF(exportInvoiceMode): void {
+    let invoicePdfDto = {
+      timesheetId: this.timesheetId,
+      projectIds: this.listExportInvoice,
+      mode: exportInvoiceMode
+    };
+    this.timesheetProjectService.exportInvoiceClientAsPDF(invoicePdfDto).subscribe((res) => {
+    this.dialog.open(ExportInvoiceComponent,{
+      data: {
+        fileName: res.result.fileName,
+        html: res.result.html
+      },
+      width: '85%',
+      maxWidth: '85%',
+      panelClass: 'invoice-dialog',
+    });
+  });
   }
 
   exportInvoiceForTax(exportInvoiceMode) {

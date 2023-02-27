@@ -18,21 +18,49 @@
                 Export Invoice All Project
               </button>
               <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice)"
-                [disabled]="listExportInvoice?.length <= 0" type="submit" class="btn bg-success "
+                [disabled]="listExportInvoice?.length <= 0" type="submit" class="btn bg-success mr-2"
                 [matMenuTriggerFor]="actionsMenu">
                 Export Invoice
               </button>
             </div>
-            <mat-menu #actionsMenu="matMenu">
 
-              <button mat-menu-item [disabled]="listExportInvoice?.length <= 0"
-                (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.Normal)">
-                <i class="fa fa-file"></i> Normally
-              </button>
-              <button class="special" *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0"
+            <mat-menu #actionsMenu="matMenu">
+              <div class="form-group form-float">
+                <button mat-menu-item [matMenuTriggerFor]="exportNormalTypes">
+                  <i class="fa fa-file"></i> Normally
+                </button>
+              </div>
+              <mat-menu #exportNormalTypes="matMenu">
+                <button mat-menu-item [disabled]="listExportInvoice?.length <= 0"
+                  (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.Normal)">
+                  <i class="fa fa-file-excel"></i> Export Excel
+                </button>
+                <button mat-menu-item [disabled]="listExportInvoice?.length <= 0"
+                  (click)="exportInvoiceClientAsPDF(APP_ENUM.ExportInvoiceMode.Normal)">
+                  <i class="fa fa-file-pdf"></i> Export PDF
+                </button>
+              </mat-menu>
+
+              <div class="form-group form-float">
+                <button class="special" *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0" [matMenuTriggerFor]="exportMonthlyToDailyTypes">
+                  <i class="fa fa-file-code"></i> Monthly to daily
+                </button>
+              </div>
+              <mat-menu #exportMonthlyToDailyTypes="matMenu">
+                <button mat-menu-item [disabled]="listExportInvoice?.length <= 0"
+                  (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
+                  <i class="fa fa-file-excel"></i> Export Excel
+                </button>
+                <button mat-menu-item [disabled]="listExportInvoice?.length <= 0"
+                  (click)="exportInvoiceClientAsPDF(APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
+                  <i class="fa fa-file-pdf"></i> Export PDF
+                </button>
+              </mat-menu>
+
+              <!-- <button class="special" *ngIf="isMonthlyToDaily" mat-menu-item [disabled]="listExportInvoice?.length <= 0"
                 (click)="exportInvoiceClient(APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
                 <i class="fa fa-file-excel"></i> Monthly to daily
-              </button>
+              </button> -->
             </mat-menu>
           </div>
           <div class="mr-2">
@@ -319,21 +347,48 @@
                       <i class="fas fa-edit"></i>
                       Update TS
                     </button>
-                    <button *ngIf="
-                        permission.isGranted(
-                          Timesheets_TimesheetDetail_ExportInvoice
-                        )
-                      " (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.Normal)"
-                      class="btn mat-menu-item w-100">
-                      <i class="fas fa-file-invoice-dollar mr-1"></i>
-                      Export Invoice
-                    </button>
-                    <button *ngIf="isShowExportInvoiceMonthlyToDaily(item)"
-                      (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)"
-                      class="btn mat-menu-item w-100 special">
-                      <i class="fas fa-file-invoice-dollar mr-1"></i>
-                      Export Invoice<span>(Monthly to daily)</span>
-                    </button>
+
+                    <div class="form-group form-float">
+                      <button
+                        class="btn mat-menu-item w-100 special"
+                        mat-menu-item [matMenuTriggerFor]="exportNormallyTypesPerProject">
+                        <i class="fas fa-file-invoice-dollar mr-1"></i>
+                        Export Invoice <span>(Normally)</span>
+                      </button>
+                    </div>
+
+                      <mat-menu #exportNormallyTypesPerProject="matMenu">
+                        <button mat-menu-item
+                          (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.Normal)">
+                          <i class="fa fa-file-excel"></i> Export Excel
+                        </button>
+                        <button mat-menu-item
+                          (click)="exportInvocieAsPDF(item,APP_ENUM.ExportInvoiceMode.Normal)">
+                          <i class="fa fa-file-pdf"></i> Export PDF
+                        </button>
+                      </mat-menu>
+
+                    <div class="form-group form-float">
+                      <button *ngIf="isShowExportInvoiceMonthlyToDaily(item)"
+                        class="btn mat-menu-item w-100 special"
+                        mat-menu-item [matMenuTriggerFor]="exportMonthlyToDailyTypesPerProject">
+                        <i class="fas fa-file-invoice-dollar mr-1"></i>
+                        Export Invoice <span>(Monthly to daily)</span>
+                      </button>
+                    </div>
+
+                      <mat-menu #exportMonthlyToDailyTypesPerProject="matMenu">
+                        <button mat-menu-item
+                          (click)="exportInvocie(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
+                          <i class="fa fa-file-excel"></i> Export Excel
+                        </button>
+                        <button mat-menu-item
+                          (click)="exportInvocieAsPDF(item,APP_ENUM.ExportInvoiceMode.MontlyToDaily)">
+                          <i class="fa fa-file-pdf"></i> Export PDF
+                        </button>
+                      </mat-menu>
+
+
                     <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)"
                       (click)="exportQuickInvoiceForTax(item,APP_ENUM.ExportInvoiceMode.Normal)"
                       class="btn mat-menu-item w-100">

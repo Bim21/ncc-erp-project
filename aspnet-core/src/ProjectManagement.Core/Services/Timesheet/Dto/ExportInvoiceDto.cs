@@ -37,6 +37,13 @@ namespace ProjectManagement.Services.Timesheet.Dto
 
             return FilesHelper.SetFileName($"{Info.ClientName}{projectName}_Invoice{Info.InvoiceNumber}_{date.ToString("yyyyMM")}");
         }
+        public string ExportFileNameAsPDF()
+        {
+            string projectName = IsInvoiceHaveOneProject() ? "_" + ProjectName() : "";
+            var date = new DateTime(Info.Year, Info.Month, 1);
+
+            return FilesHelper.SetFileNameAsPDF($"{Info.ClientName}{projectName}_Invoice{Info.InvoiceNumber}_{date.ToString("yyyyMM")}");
+        }
     }
 
     public class InvoiceGeneralInfo

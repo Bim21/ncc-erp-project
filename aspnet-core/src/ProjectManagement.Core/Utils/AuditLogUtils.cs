@@ -227,6 +227,7 @@ namespace ProjectManagement.Utils
             {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService Delete", "Trang Timesheets"},
             {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService DownloadFileTimesheetProject", "Trang Timesheets"},
             {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService ExportInvoice", "Trang Timesheets"},
+            {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService ExportInvoiceAsPDF", "Trang Timesheets"},
             {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService ExportInvoiceForTax", "Trang Timesheets"},
             {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService GetAllByProject", "Trang Timesheets"},
             {"ProjectManagement.APIs.TimesheetProjects.TimesheetProjectAppService GetAllPM", "Trang Timesheets"},

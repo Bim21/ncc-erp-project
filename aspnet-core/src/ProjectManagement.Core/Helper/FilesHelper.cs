@@ -10,5 +10,9 @@ namespace ProjectManagement.Helper
         {
             return fileName.Replace("/", "").Replace(":", "").Replace(" ", "_")+".xlsx";
         }
+        public static string SetFileNameAsPDF(string fileName)
+        {
+            return fileName.Replace("/", "").Replace(":", "").Replace(" ", "_") + ".pdf";
+        }
     }
 }

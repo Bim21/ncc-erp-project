@@ -89,7 +89,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public weeklyCurrentPage: number = 1;
   public futureCurrentPage: number = 1;
   public problemCurrentPage: number = 1;
-  public searchText = "";
+  public searchText = "" ;
+  public searchTextValue: string;
   public pmReportProjectList: pmReportProjectDto[] = [];
   public tempPmReportProjectList: pmReportProjectDto[] = [];
   public show: boolean = false;
@@ -445,9 +446,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         () => { this.isLoading = false })
     }
   }
+
+
   public view(projectReport) {
-    this.pmReportProjectId = projectReport.id
+    this.pmReportProjectId = projectReport.id;
+
     this.projectId = projectReport.projectId;
+
     this.isEditingNote = false;
     this.isEditingAutomationNote = false
     this.projectHealth = this.APP_ENUM.ProjectHealth[projectReport.projectHealth];
@@ -556,14 +561,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
   public search() {
+    let value = this.searchText;
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
+        if(item.projectId != this.projectId && item.setBackground == true){
+          item.setBackground= false
+        }
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.pmEmailAddress?.toLowerCase().includes(this.searchText.toLowerCase());
-
     });
-
-
     this.searchUser = ""
+    //localStorage.setItem('searchText', this.searchText);
   }
 
   public markRead(project) {

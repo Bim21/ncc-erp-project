@@ -72,6 +72,12 @@ export class ClientInvoiceDto {
     clientName: string;
     totalProject: number
 }
+export class FileExportInvoiceDto {
+    fileName: string;
+    message: string;
+    html: string
+}
+
 export class TimesheetProjectBill {
     userId: number
     userName: string
@@ -120,3 +126,4 @@ export class CurrencyDto {
     currencyName: string;
     exchangeRate: number
 }
+

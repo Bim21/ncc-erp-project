@@ -532,7 +532,6 @@ namespace ProjectManagement.Authorization
         public const string Timesheets_TimesheetDetail_ViewAll = "Timesheets.TimesheetDetail.ViewAll";
         public const string Timesheets_TimesheetDetail_ViewMyProjectOnly = "Timesheets.TimesheetDetail.ViewMyProjectOnly";
 
-
         public const string Timesheets_TimesheetDetail_ViewBillRate = "Timesheets.TimesheetDetail.ViewBillRate";
         public const string Timesheets_TimesheetDetail_AddProjectToTimesheet = "Timesheets.TimesheetDetail.AddProjectToTimesheet";
         public const string Timesheets_TimesheetDetail_UploadTimesheetFile = "Timesheets.TimesheetDetail.UploadTimesheetFile";

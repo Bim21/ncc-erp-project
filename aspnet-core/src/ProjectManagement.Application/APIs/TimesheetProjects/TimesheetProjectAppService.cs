@@ -19,6 +19,7 @@ using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
 using ProjectManagement.Entities;
+using ProjectManagement.Helper;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Net.MimeTypes;
 using ProjectManagement.Services.ExchangeRate;
@@ -39,6 +40,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using ProjectManagement.Helper;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -861,7 +863,83 @@ namespace ProjectManagement.APIs.TimesheetProjects
             }
         }
 
-        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax)]
+        [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoice)]
+        public async Task<FileExportInvoiceDto> ExportInvoiceAsPDF(InputExportInvoiceDto input)
+        {
+
+            var defaultWorkingHours = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.DefaultWorkingHours));
+            var result = new InvoiceData();
+
+            var qtimesheetProject = WorkScope.All<TimesheetProject>()
+                .Where(s => s.TimesheetId == input.TimesheetId)
+                .Where(s => input.ProjectIds.Contains(s.ProjectId));
+
+            var qtimesheetProjectBill = WorkScope.All<TimesheetProjectBill>()
+                .Where(s => s.TimesheetId == input.TimesheetId)
+                .Where(s => s.IsActive)
+                .Where(s => s.WorkingTime > 0)
+                .Where(s => input.ProjectIds.Contains(s.ProjectId));
+
+            result.Info = qtimesheetProject
+                .Where(s => !s.ParentInvoiceId.HasValue)
+                .Select(s => new InvoiceGeneralInfo
+                {
+                    ClientAddress = s.Project.Client.Address,
+                    ClientName = s.Project.Client.Name,
+                    Discount = s.Discount,
+                    InvoiceNumber = s.InvoiceNumber,
+                    PaymentDueBy = s.Project.Client.PaymentDueBy,
+                    PaymentInfo = s.Project.Currency.InvoicePaymentInfo,
+                    TransferFee = s.TransferFee,
+                    Year = s.Timesheet.Year,
+                    Month = s.Timesheet.Month,
+                    InvoiceDateSetting = s.Project.Client.InvoiceDateSetting
+                }).FirstOrDefault();
+
+
+            if (result.Info == default)
+            {
+                throw new UserFriendlyException("You have to select at least 1 project is MAIN in Invoice Setting");
+            }
+
+            result.TimesheetUsers = await (from tpb in qtimesheetProjectBill
+                                           from tp in qtimesheetProject.Select(s => new { s.ProjectId, s.WorkingDay })
+                                           where tpb.ProjectId == tp.ProjectId
+                                           select new TimesheetUser
+                                           {
+                                               BillRate = tpb.BillRate,
+                                               ChargeType = tpb.ChargeType.HasValue ? tpb.ChargeType.Value : tpb.Project.ChargeType.Value,
+                                               CurrencyName = tpb.Currency.Name,
+                                               UserFullName = tpb.User.FullName,
+                                               AccountName = tpb.AccountName,
+                                               Mode = input.Mode,
+                                               DefaultWorkingHours = defaultWorkingHours,
+                                               ProjectName = tpb.Project.Name,
+                                               TimesheetWorkingDay = tp.WorkingDay,
+                                               WorkingDay = tpb.WorkingTime,
+                                               UserId = tpb.UserId,
+                                               EmailAddress = tpb.User.EmailAddress,
+                                               ProjectCode = tpb.Project.Code,
+                                               EndTime = tpb.EndTime,
+                                               StartTime = tpb.StartTime,
+                                           }).ToListAsync();
+
+            result.ProjectCodes = await qtimesheetProject.Select(x => x.Project.Code).ToListAsync();
+
+            try
+            {
+                ExportInvoicePDFHelper export = new ExportInvoicePDFHelper(this._hostingEnvironment);
+                FileExportInvoiceDto fileExport = export.ExportInvoiceDataPdf(result);
+                return fileExport;
+            }
+            catch (Exception ex)
+            {
+               throw ex;
+              
+            }
+        }
+
+            [AbpAuthorize(PermissionNames.Timesheets_TimesheetDetail_ExportInvoiceForTax)]
         public async Task<FileBase64Dto> ExportInvoiceForTax(InputExportInvoiceDto input)
         {
             var dataInvoice = await GetInvoiceData(input);
