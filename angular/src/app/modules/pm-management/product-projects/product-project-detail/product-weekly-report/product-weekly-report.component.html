@@ -56,7 +56,7 @@
                     *ngIf="permission.isGranted(ProjectHealthCriteria_View)">
                     <div *ngFor="let item of listCriteriaResult let i =index">
                         <div class="d-flex justify-content-between align-items-center">
-                            <span style="white-space: normal;" class="text-primary"><strong>{{item.criteriaName}}</strong></span>
+                            <lable style="white-space: normal;" class="text-primary guide-line" (click)="showGuideLine(item)"><strong>{{item.criteriaName}}</strong></lable>
                             <div class="d-flex align-items-center">
                                 <ng-container
                                     *ngIf="(permission.isGranted(ProjectHealthCriteria_ChangeStatus) && selectedReport.isActive && !item.editMode) ||

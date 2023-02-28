@@ -43,6 +43,7 @@ import { APP_ENUMS } from '@shared/AppEnums';
 import { CriteriaService } from '@app/service/api/criteria.service';
 import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
 import { log } from 'console';
+import { GuideLineDialogComponent } from './guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 
 
 @Component({
@@ -305,7 +306,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             projectId: this.projectId,
             pmReportId: this.selectedReport?.reportId,
             id: check?.id,
-            isActive: criteria.isActive
+            isActive: criteria.isActive,
+            guideline: criteria.guideline
           } as ProjectCriteriaResultDto
           if (this.selectedReport.isActive == true) {
             if (itemCriteriaResult.id) {
@@ -363,13 +365,19 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       if (item.id) {
         this.pjCriteriaResultService.update(item).subscribe(res => {
           abp.notify.success(`Change status ${item.criteriaName} successfully`);
-          this.getAllCriteria();
+          this.processCriteria = false;
+          if (res.success === true) {
+            this.getAllCriteria();
+          }
         });
       }
       else {
         this.pjCriteriaResultService.create(item).subscribe(res => {
-          abp.notify.success(`Change status ${item.criteriaName} successfully`)
-          this.getAllCriteria();
+          abp.notify.success(`Change status ${item.criteriaName} successfully`);
+          this.processCriteria = false;
+          if (res.success === true) {
+            this.getAllCriteria();
+          }
         })
       }
     }
@@ -382,7 +390,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
-        this.getAllCriteria();
+        if (res.success === true) {
+          this.getAllCriteria();
+        }
       });
     }
     else {
@@ -390,7 +400,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
-        this.getAllCriteria();
+        if (res.success === true) {
+          this.getAllCriteria();
+        }
       })
     }
   }
@@ -1353,7 +1365,12 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         }
       })
     }
-
+  showGuideLine(item) {
+    const show = this.dialog.open(GuideLineDialogComponent,{
+      width: "60%",
+      data:item
+      })
+    }
 
 }
 

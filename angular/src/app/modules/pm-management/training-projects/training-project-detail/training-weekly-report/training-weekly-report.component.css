@@ -141,3 +141,7 @@ button {
 ::ng-deep #status-option-training-weekly-report .mat-form-field-wrapper {
   width: 100px;
 }
+.guide-line:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}

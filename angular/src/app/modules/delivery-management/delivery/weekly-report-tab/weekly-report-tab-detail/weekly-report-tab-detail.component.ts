@@ -36,6 +36,7 @@ import { ProjectCriteriaResultService } from '@app/service/api/project-criteria-
 import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
 import { ProjectCriteriaResultDto } from '@app/service/model/project-criteria-result.dto';
 import { log } from 'console';
+import { GuideLineDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/weekly-report/guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -313,7 +314,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             projectId: Number(this.projectId),
             pmReportId: Number(this?.pmReportId),
             id: check?.id || undefined,
-            isActive: criteria.isActive
+            isActive: criteria.isActive,
+            guideline: criteria.guideline
           } as ProjectCriteriaResultDto
           if (this.isActive == true) {
             if (itemCriteriaResult.id) {
@@ -359,15 +361,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       if (item.id) {
         this.pjCriteriaResultService.update(item).subscribe(res => {
           abp.notify.success(`Change status ${item.criteriaName} successfully`);
-          this.getAllCriteria();
-          this.getProjectProblem();
+          this.processCriteria = false;
+          if (res.success === true)
+          {
+            this.getAllCriteria();
+            this.getProjectProblem();
+          }
         });
       }
       else {
         this.pjCriteriaResultService.create(item).subscribe(res => {
           abp.notify.success(`Change status ${item.criteriaName} successfully`);
-          this.getAllCriteria();
-          this.getProjectProblem();
+          this.processCriteria = false;
+          if (res.success === true)
+          {
+            this.getAllCriteria();
+            this.getProjectProblem();
+          }
         })
       }
     }
@@ -380,8 +390,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
-        this.getAllCriteria();
-        this.getProjectProblem();
+        if (res.success === true)
+        {
+          this.getAllCriteria();
+          this.getProjectProblem();
+        }
       });
     }
     else {
@@ -389,8 +402,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
-        this.getAllCriteria();
-        this.getProjectProblem();
+        if (res.success === true)
+        {
+          this.getAllCriteria();
+          this.getProjectProblem();
+        }
       })
     }
   }
@@ -1450,4 +1466,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isShowSettingCountDown = !this.isShowSettingCountDown;
     this.getTimeCountDown();
   }
+  showGuideLine(item) {
+    const show = this.dialog.open(GuideLineDialogComponent,{
+      width: "60%",
+      data:item
+      })
+    }
 }

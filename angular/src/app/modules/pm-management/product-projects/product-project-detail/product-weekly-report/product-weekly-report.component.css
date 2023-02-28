@@ -155,3 +155,7 @@ button {
 ::ng-deep #status-option-product-weekly-report .mat-form-field-wrapper {
   width: 100px;
 }
+.guide-line:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}

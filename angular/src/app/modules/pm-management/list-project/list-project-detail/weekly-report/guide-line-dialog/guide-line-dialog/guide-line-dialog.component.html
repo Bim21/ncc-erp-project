@@ -1,0 +1,7 @@
+<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
+    <abp-modal-header [title]="'Guideline: '+ data.criteriaName" (onCloseClick)="dialogRef.close()">
+    </abp-modal-header>
+    <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+        <span [innerHTML]="data.guideline | safeHtml">{{data.guideline}}</span>
+    </div>
+</form>

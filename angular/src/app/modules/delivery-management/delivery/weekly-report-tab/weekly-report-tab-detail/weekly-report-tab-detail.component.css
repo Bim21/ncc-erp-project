@@ -301,3 +301,7 @@ th{
 ::ng-deep #status-option-weekly-report-tab .mat-form-field-wrapper {
     width: 150px;
 }
+.guide-line:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}

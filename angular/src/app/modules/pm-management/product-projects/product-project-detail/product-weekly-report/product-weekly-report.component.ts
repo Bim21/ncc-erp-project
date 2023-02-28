@@ -35,6 +35,7 @@ import { ProjectCriteriaResultService } from '@app/service/api/project-criteria-
 import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
 import { ProjectCriteriaResultDto } from '@app/service/model/project-criteria-result.dto';
 import { APP_ENUMS } from '@shared/AppEnums';
+import { GuideLineDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/weekly-report/guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 
 @Component({
   selector: 'app-product-weekly-report',
@@ -302,7 +303,8 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
             projectId: this.projectId,
             pmReportId: this.selectedReport?.reportId,
             id: check?.id,
-            isActive: criteria.isActive
+            isActive: criteria.isActive,
+            guideline: criteria.guideline
           } as ProjectCriteriaResultDto
           if (this.selectedReport.isActive == true) {
             if (itemCriteriaResult.id) {
@@ -360,13 +362,19 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
       if (item.id) {
         this.pjCriteriaResultService.update(item).subscribe(res => {
           abp.notify.success(`Change status ${item.criteriaName} successfully`)
-          this.getAllCriteria();
+          this.processCriteria = false;
+          if (res.success === true) {
+            this.getAllCriteria();
+          }
         });
       }
       else {
         this.pjCriteriaResultService.create(item).subscribe(res => {
           abp.notify.success(`Change status ${item.criteriaName} successfully`)
-          this.getAllCriteria();
+          this.processCriteria = false;
+          if (res.success === true) {
+            this.getAllCriteria();
+          }
         })
       }
     }
@@ -379,7 +387,9 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
-        this.getAllCriteria();
+        if (res.success === true) {
+          this.getAllCriteria();
+        }
       });
     }
     else {
@@ -387,7 +397,9 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
         this.processCriteria = false;
-        this.getAllCriteria();
+        if (res.success === true) {
+          this.getAllCriteria();
+        }
       })
     }
   }
@@ -1365,6 +1377,11 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
     isShowChangeInProgressText(issue){
       return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.Done
     }
-
+    showGuideLine(item) {
+      const show = this.dialog.open(GuideLineDialogComponent,{
+        width: "60%",
+        data:item
+        })
+      }
 }
 

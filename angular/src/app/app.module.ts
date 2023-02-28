@@ -191,6 +191,7 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
 import { CriteriasComponent } from './modules/admin/criterias/criterias.component';
 import { ExchangeRateComponent } from './modules/timesheet/timesheet-detail/exchange-rate/exchange-rate/exchange-rate.component';
 import { ExportInvoiceComponent } from './modules/timesheet/timesheet-detail/export-invoice/export-invoice.component';
+import { GuideLineDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -365,7 +366,8 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     RetroReviewHistoryByUserComponent,
     CriteriasComponent,
     ExportInvoiceComponent,
-    ExchangeRateComponent
+    ExchangeRateComponent,
+    GuideLineDialogComponent
   ],
   imports: [
     CommonModule,
