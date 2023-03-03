@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Abp.Timing;
 
 namespace ProjectManagement.EntityFrameworkCore.Seed.Host
 {
@@ -28,7 +27,11 @@ namespace ProjectManagement.EntityFrameworkCore.Seed.Host
                 .ToList();
             oldPMReportProject.ForEach(x =>
             {
-                x.ProjectHealth += 1;
+                if (x.Check == false)
+                {
+                    x.ProjectHealth += 1;
+                    x.Check = true;
+                }
             });
             _context.SaveChanges();
         }
