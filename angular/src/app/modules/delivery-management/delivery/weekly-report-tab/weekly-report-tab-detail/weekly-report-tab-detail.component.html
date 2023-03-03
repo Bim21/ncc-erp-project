@@ -120,7 +120,7 @@
                     <div class="px-4 pb-2 pt-2 card pm-note-section"
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
-                            <div class="col-8">
+                            <div class="col">
                                 <strong style="font-size: 20px;">PM note: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2 text-nowrap"
                                     *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
@@ -142,31 +142,6 @@
                                         style="padding-bottom: 20px;" rows="2" id="message" matInput
                                         [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
                                 </textarea>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-4" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
-                                <strong style="font-size: 20px;">Automation test: </strong>
-                                <div class="d-inline  pt-1 text-right ml-2 text-nowrap"
-                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
-                                    <i [hidden]="!isActive" *ngIf="!isEditingAutomationNote" style="font-size: 17px;"
-                                        class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
-                                    <i *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();"
-                                        style="color: red;" class="fas fa-times fa-2x mr-3"></i>
-                                    <i style="color: green ;" class="fas fa-check fa-2x" *ngIf="isEditingAutomationNote"
-                                        (click)="updateAutoNote()"></i>
-
-                                </div>
-                                <p *ngIf="!isEditingAutomationNote"
-                                    style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify"
-                                    class="mt-2">
-                                    {{automationNote}}
-                                </p>
-                                <mat-form-field class="ml-1" style="width:100%" appearance="outline"
-                                    *ngIf="isEditingAutomationNote">
-                                    <textarea #autoNoteFocus cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                        style="padding-bottom: 20px;" rows="2" matInput [(ngModel)]="automationNote"
-                                        name="autoNotePM" placeholder="Automation note">{{autoNoteFocus.focus()}}
-                            </textarea>
                                 </mat-form-field>
                             </div>
                         </div>

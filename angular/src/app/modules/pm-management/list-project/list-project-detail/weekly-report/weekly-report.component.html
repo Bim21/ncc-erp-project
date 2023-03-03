@@ -36,12 +36,12 @@
                             </mat-select>
                         </mat-form-field>
                         <button name="btn-send" (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
-                            style="margin-bottom: 10px;" [disabled]="!allowSendReport || !isValidCriteria"
+                            style="margin-bottom: 10px;" [disabled]="!isValidCriteria"
                             *ngIf="selectedReport.isActive && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport) && isSentReport && selectedReport.pmReportProjectId!=0">
                             <i class="fas fa-paper-plane"></i>
                         </button>
-                        <span class="ml-2" *ngIf="(!allowSendReport && selectedReport.isActive) || !isValidCriteria"
-                            matTooltip="{{selectedReport.pmReportProjectId==0?'Project không có trong đợt report tuần này!':'Cần nhập PM note và Criteria để có thể gửi report!'}}"><i
+                        <span class="ml-2" *ngIf="(selectedReport.isActive) || !isValidCriteria"
+                            matTooltip="{{selectedReport.pmReportProjectId==0?'Project không có trong đợt report tuần này!':'Cần nhập Criteria để có thể gửi report!'}}"><i
                                 class="fas fa-question-circle text-danger fa-lg"></i></span>
 
                     </div>
@@ -117,7 +117,7 @@
                 style="display: flex; flex-direction: column; justify-content: space-between; ">
 
                 <div class="row p-1">
-                    <div class="col-8 m-0 p-0">
+                    <div class="col m-0 p-0">
                         <strong classs="col-12" style="font-size: 20px;">PM note: </strong>
                         <div class="d-inline ml-2 pt-1 text-right row">
                             <i [hidden]="!selectedReport.isActive || selectedReport.pmReportProjectId==0"
@@ -139,30 +139,6 @@
                                 rows="2" id="message" matInput [(ngModel)]="projectInfo.pmNote" name="notePM"
                                 placeholder="General note">
                                 </textarea>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-4" style="border-left: 0.2px solid rgba(204, 204, 204, 0.35)">
-                        <strong style="font-size: 20px;">Automation test: </strong>
-                        <div class="d-inline ml-2 pt-1 text-right row">
-                            <i *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote) && !isEditingAutomationNote"
-                                [hidden]="!selectedReport.isActive || selectedReport.pmReportProjectId==0" style="font-size: 17px;"
-                                class="fas fa-edit mb-2 fa-lg" (click)="isEditingAutomationNote = true"></i>
-                            <i *ngIf="isEditingAutomationNote" (click)="cancelUpdateAutoNote();" style="color: red;"
-                                class="fas fa-times fa-lg mr-2"></i>
-                            <i style="color: green ;" class="fas fa-check fa-lg" *ngIf="isEditingAutomationNote"
-                                (click)="updateAutoNote()"></i>
-                        </div>
-                        <p *ngIf="!isEditingAutomationNote"
-                            style="word-wrap: break-word; white-space: pre-line;font-size: 18px;  text-align: justify;"
-                            class="m-0">
-                            {{projectInfo.automationNote}}
-                        </p>
-                        <mat-form-field class="ml-1" style="width:100%" appearance="outline"
-                            *ngIf="isEditingAutomationNote">
-                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" style="padding-bottom: 20px;"
-                                rows="2" matInput [(ngModel)]="projectInfo.automationNote" name="autoNotePM"
-                                placeholder="Automation note">
-                        </textarea>
                         </mat-form-field>
                     </div>
                 </div>

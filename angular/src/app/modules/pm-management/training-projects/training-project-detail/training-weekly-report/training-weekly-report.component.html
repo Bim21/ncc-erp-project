@@ -35,12 +35,12 @@
                             </mat-select>
                         </mat-form-field>
                         <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
-                            style="margin-bottom: 10px;" [disabled]="!allowSendReport || !isValidCriteria"
+                            style="margin-bottom: 10px;" [disabled]="!isValidCriteria"
                             *ngIf="selectedReport.isActive && permission.isGranted(Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport) && isSentReport && selectedReport.pmReportProjectId!=0">
                             <i class="fas fa-paper-plane"></i>
                         </button>
-                        <span class="ml-2" *ngIf="(!allowSendReport && selectedReport.isActive) || !isValidCriteria"
-                        matTooltip="{{selectedReport.pmReportProjectId==0?'Project không có trong đợt report tuần này!':'Cần nhập PM note và Criteria để có thể gửi report!'}}"><i
+                        <span class="ml-2" *ngIf="selectedReport.isActive || !isValidCriteria"
+                        matTooltip="{{selectedReport.pmReportProjectId==0?'Project không có trong đợt report tuần này!':'Cần nhập Criteria để có thể gửi report!'}}"><i
                                 class="fas fa-question-circle text-danger fa-lg"></i></span>
 
                     </div>

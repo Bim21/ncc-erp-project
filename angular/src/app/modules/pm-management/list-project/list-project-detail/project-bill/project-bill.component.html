@@ -285,7 +285,7 @@
                                         </div>
                                         <div *ngIf="bill.createMode" class="pt-1">
 
-                                            <button [disabled]="!bill?.userId   || !bill?.startTime  || !bill?.billRate"
+                                            <button [disabled]="!bill?.userId   || !bill?.startTime  || bill?.billRate<0"
                                                 class=" mr-3 submit-btn" style="background: none; border: none;"
                                                 (click)="saveUserBill(bill)">
                                                 <i style="color: green;" class="fas fa-check fa-2x "></i>
