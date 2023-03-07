@@ -2419,9 +2419,6 @@ namespace ProjectManagement.Migrations
                     b.Property<string>("AutomationNote")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Check")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
