@@ -15,8 +15,6 @@
             new DefaultLanguagesCreator(_context).Create();
             new HostRoleAndUserCreator(_context).Create();
             new DefaultSettingsCreator(_context).Create();
-            new MigrateProjectHealth(_context).Create();
-
             _context.SaveChanges();
         }
     }

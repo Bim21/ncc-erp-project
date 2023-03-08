@@ -34,6 +34,5 @@ namespace ProjectManagement.Entities
         public PunishStatus IsPunish { get; set; }
         public int TotalNormalWorkingTime { get; set; }
         public int TotalOverTime { get; set; }
-        public bool Check { get; set; }
     }
 }
