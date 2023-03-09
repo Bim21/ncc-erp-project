@@ -16,5 +16,6 @@ namespace ProjectManagement.APIs.PMReports.Dto
         public PMReportStatus PMReportStatus { get; set; }
         public DateTime? CanSendTime { get; set; }
         public DateTime? ExpiredTime { get; set; }
+        public DateTime? LastReviewDate { get; set; }
     }
 }

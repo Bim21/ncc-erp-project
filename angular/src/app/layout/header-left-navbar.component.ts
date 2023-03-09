@@ -65,9 +65,11 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   filterSortList = [
     "No_Order",
     "Draft_Green_Yellow_Red",
-    "Draft_Red_Yellow_Green"
+    "Draft_Red_Yellow_Green",
+    "Latest_Review_Last"
   ]
 
+  private filterSortStorageKey = 'filterSort';
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService,
@@ -88,12 +90,18 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
     this.projectType = this.route.snapshot.queryParamMap.get("projectType")
 
+    const storedFilterSort = localStorage.getItem(this.filterSortStorageKey) || sessionStorage.getItem(this.filterSortStorageKey);
+    if (storedFilterSort) {
+      this.filterSort = storedFilterSort;
+    }
+
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
     });
     this.currentUrl = this.router.url
     if (this.currentUrl.includes("weeklyReportTabDetail")) {
       this.reportId = this.route.snapshot.queryParamMap.get("id")
+      this.filterSort = this.reportService.filterSort.getValue();
       this.isShowReportBar = true
       this.getPmReportList();
       this._layoutStore.setSidebarExpanded(true);
@@ -208,8 +216,11 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.reportService.changeProjectHealth(data)
   }
 
-  onChangeFilterSort(){
-    this.reportService.changeFilterSort(this.filterSort);
+  onChangeFilterSort(filterSort){
+    this.reportService.changeFilterSort(filterSort);
+    this.filterSort = filterSort;
+    localStorage.setItem(this.filterSortStorageKey, filterSort);
+    sessionStorage.setItem(this.filterSortStorageKey, filterSort);
   }
 
   updateHealth(projectHealth) {

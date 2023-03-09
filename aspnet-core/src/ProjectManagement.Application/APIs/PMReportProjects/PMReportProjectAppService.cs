@@ -21,6 +21,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using ProjectManagement.Utils;
+using Microsoft.Extensions.Logging;
+
 namespace ProjectManagement.APIs.PMReportProjects
 {
     [AbpAuthorize]
@@ -70,6 +72,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     Seen = x.Seen,
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                     TotalOverTime = x.TotalOverTime,
+                    LastReviewDate = x.LastReviewDate
                 });
 
             if (sort == WeeklyReportSort.Draft_Green_Yellow_Red)
@@ -83,6 +86,13 @@ namespace ProjectManagement.APIs.PMReportProjects
             {
                 return await query
                         .OrderBy(x => x.StatusEnum).ThenByDescending(x=>x.ProjectHealthEnum)
+                        .ToListAsync();
+            }
+
+            if(sort == WeeklyReportSort.Latest_Review_Last)
+            {
+                return await query
+                        .OrderBy(x => x.LastReviewDate)
                         .ToListAsync();
             }
 
@@ -191,7 +201,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             var pmReportProject = await WorkScope.GetAll<PMReportProject>().Where(x => x.ProjectId == ProjectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
             if (pmReportProject == null)
             {
-                throw new UserFriendlyException("This project don't have report for this week");
+                throw new UserFriendlyException("This project doesn't have report for this week");
             }
             var query = from prpi in WorkScope.GetAll<PMReportProjectIssue>()
                          .Where(x => x.PMReportProject.ProjectId == ProjectId && x.PMReportProject.PMReportId == pmReportId)
@@ -437,8 +447,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                 pmReportProject.IsPunish = PunishStatus.Low;
             }
 
-            await WorkScope.UpdateAsync(pmReportProject);
-        }
+            await WorkScope.UpdateAsync(pmReportProject);        }
 
         [HttpPost]
         public async Task<PMReportProjectDto> Create(PMReportProjectDto input)
@@ -489,11 +498,16 @@ namespace ProjectManagement.APIs.PMReportProjects
             await WorkScope.DeleteAsync<PMReportProject>(pmPeportProjectId);
         }
 
-        public async Task ReverseSeen(long pmReportProjectId)
+        public async Task<DateTime?> ReverseSeen(long pmReportProjectId)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            if (pmReportProject.Seen != true) 
+            {
+                pmReportProject.LastReviewDate = DateTime.Now; 
+            }
             pmReportProject.Seen = !pmReportProject.Seen;
             await WorkScope.UpdateAsync(pmReportProject);
+            return pmReportProject.LastReviewDate;
         }
 
         [HttpGet]

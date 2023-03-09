@@ -305,3 +305,21 @@ th{
     cursor: pointer;
     text-decoration: underline;
 }
+
+/* Last Review Date Style */
+mat-list-item.checked {
+    height: 90px;
+}
+.mat-list-item.unchecked {
+    height: 90px;
+  }
+
+.checkbox-text{
+    color: #585858;
+    font-size: 13px;
+    position: relative;
+}
+
+.inline-block {
+    display: inline-block;
+}

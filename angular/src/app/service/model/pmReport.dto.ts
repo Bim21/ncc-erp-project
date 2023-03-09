@@ -12,7 +12,7 @@ export class pmReportDto {
     pmReportProjectId: number;
     projectHealth:string;
     id:number;
-
+    lastPreviewDate: Date;
 }
 export class pmReportProjectDto {
     pmReportId: number;
@@ -31,6 +31,7 @@ export class pmReportProjectDto {
     pmEmailAddress: string;
     totalNormalWorkingTime: number;
     totalOverTime: number;
+    lastPreviewDate: Date;
 }
 export class PmReportInfoDto {
     note: string;

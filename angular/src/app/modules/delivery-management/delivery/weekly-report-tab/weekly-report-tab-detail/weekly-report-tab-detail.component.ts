@@ -109,6 +109,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public activeReportId: number;
   public typeSort: string = "No_Order";
   public weeklyReportStatus: string;
+  public recentDate: string;
+  public iconCheckedDate: string = "<i class='fas fa-calendar-check'></i>&nbsp;";
 
   public pmReportProjectId: number;
   public isEditWeeklyReport: boolean = false;
@@ -364,8 +366,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.processCriteria = false;
           if (res.success === true)
           {
-            this.getAllCriteria();
-            this.getProjectProblem();
+          this.getAllCriteria();
+          this.getProjectProblem();
           }
         });
       }
@@ -375,8 +377,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.processCriteria = false;
           if (res.success === true)
           {
-            this.getAllCriteria();
-            this.getProjectProblem();
+          this.getAllCriteria();
+          this.getProjectProblem();
           }
         })
       }
@@ -392,8 +394,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processCriteria = false;
         if (res.success === true)
         {
-          this.getAllCriteria();
-          this.getProjectProblem();
+        this.getAllCriteria();
+        this.getProjectProblem();
         }
       });
     }
@@ -404,15 +406,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processCriteria = false;
         if (res.success === true)
         {
-          this.getAllCriteria();
-          this.getProjectProblem();
+        this.getAllCriteria();
+        this.getProjectProblem();
         }
       })
     }
   }
-
-
-
 
   getProjectInfo() {
     this.isLoading = true;
@@ -590,17 +589,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public markRead(project) {
-    this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
-
-      if (project.seen == false) {
-        abp.notify.success("Mark Read!");
-      } else {
-        abp.notify.success("Mark Unread!");
-      }
-      project.seen = !project.seen
-
-    })
-
+    if (project.seen == false) {
+      abp.notify.success("Mark Read!");
+      this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
+        project.seen = !project.seen;
+        if (project.seen) {
+        project.lastReviewDate = new Date();
+        }
+      });
+    } else {
+      abp.notify.success("Mark Unread!");
+      this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
+        project.seen = !project.seen;
+        if (project.lastReviewDate != null) {
+          project.lastReviewDate = res.result.format('DD/MM/YYYY hh:mm:ss');
+        }
+      });
+    }
   }
 
   setDone(issue) {
@@ -1466,10 +1471,4 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isShowSettingCountDown = !this.isShowSettingCountDown;
     this.getTimeCountDown();
   }
-  showGuideLine(item) {
-    const show = this.dialog.open(GuideLineDialogComponent,{
-      width: "60%",
-      data:item
-      })
-    }
 }

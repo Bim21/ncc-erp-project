@@ -29,10 +29,11 @@ namespace ProjectManagement.Entities
         [MaxLength(10000)]
         public string Note { get; set; }
         public string AutomationNote { get; set; }
-
         public bool Seen { get; set; }
         public PunishStatus IsPunish { get; set; }
         public int TotalNormalWorkingTime { get; set; }
         public int TotalOverTime { get; set; }
+
+        public DateTime? LastReviewDate { get; set; }
     }
 }

@@ -80,6 +80,7 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       type: this.pmReportList[0].type,
       pmReportProjectId: this.pmReportList[0].pmReportProjectId,
       pmReportStatus: this.pmReportList[0].status,
+      lastReviewDate: this.pmReportList[0].lastPreviewDate
     }
     const dialogRef = this.dialog.open(EditReportComponent, {
       width: '700px',
@@ -104,7 +105,8 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       year: pmReport.year,
       type: pmReport.type,
       pmReportStatus: pmReport.pmReportStatus,
-      note: pmReport.note
+      note: pmReport.note,
+      lastPreviewDate: pmReport.lastPreviewDate
     }
 
     const dialogRef = this.dialog.open(EditReportComponent, {

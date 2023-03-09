@@ -246,6 +246,7 @@
             No_Order,
             Draft_Green_Yellow_Red,
             Draft_Red_Yellow_Green,
+            Latest_Review_Last
         }
         public enum ProjectCriteriaResultStatus
         {

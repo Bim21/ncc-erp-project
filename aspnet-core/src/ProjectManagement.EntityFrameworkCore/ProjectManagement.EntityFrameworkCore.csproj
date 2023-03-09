@@ -31,6 +31,8 @@
     <Compile Remove="Migrations\20220830013636_AddSomeDataForPositionTable.Designer.cs" />
     <Compile Remove="Migrations\20230115191736_add_tbls_for_ProjectCriteria_Feature.cs" />
     <Compile Remove="Migrations\20230115191736_add_tbls_for_ProjectCriteria_Feature.Designer.cs" />
+    <Compile Remove="Migrations\20230303033422_add-lastReviewDate-PMReportProject.cs" />
+    <Compile Remove="Migrations\20230303033422_add-lastReviewDate-PMReportProject.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />

@@ -207,7 +207,19 @@ namespace ProjectManagement.APIs.PMReports
                     Note = s.Note
                 }).ToListAsync())
                 .GroupBy(s => s.ProjectId)
-                .ToDictionary(s => s.Key, s => s.Select(s => s.Note).FirstOrDefault());
+                .ToDictionary(s => s.Key, s => s.Select(s => new { Note = s.Note }
+                ).FirstOrDefault());
+
+            var mapPMLastPreviewDate = (await WorkScope.GetAll<PMReportProject>()
+                .Where(s => s.PMReportId == lastReportId)
+                .Select(s => new
+                {
+                    s.ProjectId,
+                    LastReviewDate = s.LastReviewDate
+                }).ToListAsync())
+                .GroupBy(s => s.ProjectId)
+                .ToDictionary(s => s.Key, s => s.Select(s => new { LastReviewDate = s.LastReviewDate }
+                ).FirstOrDefault());
 
             var activeProjects = await WorkScope.GetAll<Project>()
                 .Where(x => x.Status == ProjectStatus.InProgress)
@@ -220,10 +232,10 @@ namespace ProjectManagement.APIs.PMReports
                     PMReportId = input.Id,
                     ProjectId = project.Id,
                     Status = PMReportProjectStatus.Draft,
-
                     //ProjectHealth = mapInprogressIssues.ContainsKey(project.Id) ? ProjectHealth.Yellow : ProjectHealth.Green,
                     PMId = project.PMId,
-                    Note = project.ProjectType == ProjectType.TRAINING && mapPMNote.ContainsKey(project.Id) ? mapPMNote[project.Id] : null,
+                    Note = project.ProjectType == ProjectType.TRAINING && mapPMNote.ContainsKey(project.Id) ? mapPMNote[project.Id].Note : null,
+                    LastReviewDate = mapPMLastPreviewDate.ContainsKey(project.Id) ? mapPMLastPreviewDate[project.Id].LastReviewDate : null,
                 };
                 pmReportProject.Id = await WorkScope.InsertAndGetIdAsync(pmReportProject);
 

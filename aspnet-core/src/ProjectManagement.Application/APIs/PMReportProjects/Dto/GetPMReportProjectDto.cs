@@ -1,5 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using ProjectManagement.Utils;
+using System;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReportProjects.Dto
@@ -51,5 +52,6 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public int TotalOverTime { get; set; }
 
         public PMReportProjectStatus StatusEnum { get; set; }
+        public DateTime? LastReviewDate { get; set; }
     }
 }
