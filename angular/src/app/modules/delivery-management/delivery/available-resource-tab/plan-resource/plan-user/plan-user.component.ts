@@ -63,7 +63,7 @@ export class PlanUserComponent extends AppComponentBase implements OnInit {
   }
 
   public getAllProject() {
-    this.listProjectService.getAll().subscribe(data => {
+    this.listProjectService.getAllFilter(true).subscribe(data => {
       this.listProject = data.result;
 
     })

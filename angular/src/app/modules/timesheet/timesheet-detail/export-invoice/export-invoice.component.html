@@ -11,13 +11,11 @@
             Print Invoice
         </button>
     </div>
-    <div class="card mb-0 mt-2" style="max-height: 90vh;overflow-y: auto;" *ngIf="html">
-        <!-- <div id="bodyMess" class="html-container" [innerHtml]="sanitizer.bypassSecurityTrustHtml(html)">
-        </div> -->
-          <div id="bodyMess" class="html-container" style="display: flex;justify-content: center;align-items: center;"
-           [innerHtml]="sanitizer.bypassSecurityTrustHtml(html)">
+    <div class="card mb-0 mt-2 rounded p-3" style="max-height: 70vh;overflow-y: auto;" *ngIf="html">
+        <div class="table table-responsive w-100 mb-0">
+            <div id="bodyMess" class="html-container" [innerHtml]="sanitizer.bypassSecurityTrustHtml(html)">
+            </div>
         </div>
-
     </div>
 </div>
 <div class="modal-footer">

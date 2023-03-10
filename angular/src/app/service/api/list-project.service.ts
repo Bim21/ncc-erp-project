@@ -74,4 +74,7 @@ public getMyProjects(): Observable<any>{
 public getMyTrainingProjects(): Observable<any> {
   return this.http.get<any>(this.rootUrl + '/GetMyTrainingProjects');
 }
+public getAllFilter(isFilter:boolean):Observable<any>{
+  return this.http.get<any>(this.rootUrl+'/GetAll' + `?isfilter=${isFilter}`)
+}
 }

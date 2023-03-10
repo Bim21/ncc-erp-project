@@ -3,6 +3,7 @@ using Abp.Authorization;
 using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -200,11 +201,11 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        public async Task<List<GetProjectDto>> GetAll()
+        public async Task<List<GetProjectDto>> GetAll(bool isfilter=false)
         {
             var query = WorkScope.GetAll<Project>()
                 .Include(x => x.Currency)
-                //.Where(x => x.Status != ProjectStatus.Potential && x.Status != ProjectStatus.Closed)
+                .WhereIf(isfilter = true,x => x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,

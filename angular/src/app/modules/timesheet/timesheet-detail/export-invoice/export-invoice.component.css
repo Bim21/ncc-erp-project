@@ -1,15 +1,9 @@
-.html-container {
-    max-height: 70vh;
-    overflow-y: auto;
-  }
+body {
+  background-color: grey;
+}
 
-  .html-container p {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .html-container a {
-    color: blue;
-    text-decoration: none;
-  }
+#bodyMess {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
