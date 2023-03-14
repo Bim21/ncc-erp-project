@@ -13,7 +13,8 @@ export interface ProjectDto {
     pmName?: string;
     id: number;
     currencyId: string;
-    requireTimesheetFile?: boolean
+    requireTimesheetFile?: boolean;
+    isRequiredWeeklyReport: boolean;
 }
 
 export interface ClientDto {

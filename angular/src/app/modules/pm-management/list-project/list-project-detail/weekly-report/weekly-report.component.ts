@@ -1417,6 +1417,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       && this.listCriteriaResult
       && this.listCriteriaResult.length
       && this.isShowEditBtnOnRow()
+      && this.selectedReport.isActive
   }
   editAllRow() {
     this.setEditingAllRow();

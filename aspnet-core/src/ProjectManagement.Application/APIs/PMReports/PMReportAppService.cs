@@ -231,7 +231,7 @@ namespace ProjectManagement.APIs.PMReports
                 ).FirstOrDefault());
 
             var activeProjects = await WorkScope.GetAll<Project>()
-                .Where(x => x.Status == ProjectStatus.InProgress)
+                .Where(x => x.Status == ProjectStatus.InProgress && x.IsRequiredWeeklyReport)
                 .ToListAsync();
 
             foreach (var project in activeProjects)

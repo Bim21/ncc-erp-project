@@ -1,10 +1,7 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Projects.Dto
@@ -30,5 +27,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
         public bool RequireTimesheetFile { get; set; }
+        public bool IsRequiredWeeklyReport { get; set; }
     }
 }

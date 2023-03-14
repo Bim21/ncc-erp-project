@@ -112,6 +112,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_Close: "Projects.OutsourcingProjects.Close",
        Projects_OutsourcingProjects_ProjectDetail: "Projects.OutsourcingProjects.ProjectDetail",
        Projects_OutsourcingProjects_CheckProjectInvoiceSetting: "Projects.OutsourcingProjects.CheckProjectInvoiceSetting",
+       Projects_OutsourcingProjects_UpdateRequireWeeklyReport: "Projects.OutsourcingProjects.UpdateRequireWeeklyReport",
 
        Projects_OutsourcingProjects_ProjectDetail_TabGeneral: "Projects.OutsourcingProjects.ProjectDetail.TabGeneral",
        Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View: "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.View",

@@ -1,12 +1,9 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
@@ -33,7 +30,6 @@ namespace ProjectManagement.Entities
         public PunishStatus IsPunish { get; set; }
         public int TotalNormalWorkingTime { get; set; }
         public int TotalOverTime { get; set; }
-
         public DateTime? LastReviewDate { get; set; }
     }
 }

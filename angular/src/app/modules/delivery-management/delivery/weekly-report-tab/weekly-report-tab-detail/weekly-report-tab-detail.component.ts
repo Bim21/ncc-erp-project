@@ -1510,6 +1510,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       && this.listCriteriaResult
       && this.listCriteriaResult.length
       && this.isShowEditBtnOnRow()
+      && this.isActive
   }
   editAllRow() {
     this.setEditingAllRow();

@@ -77,4 +77,7 @@ public getMyTrainingProjects(): Observable<any> {
 public getAllFilter(isFilter:boolean):Observable<any>{
   return this.http.get<any>(this.rootUrl+'/GetAll' + `?isfilter=${isFilter}`)
 }
+public changeRequireWeeklyReport(projectID:number): Observable<any> {
+  return this.http.put<any>(this.rootUrl + `/ChangeRequireWeeklyReport?projectID=${projectID}`,null);
+}
 }

@@ -1,10 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Projects.Dto
@@ -23,6 +21,7 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long? ClientId { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
+        public string ClientCode { get; set; }
         public long? CurrencyId { get; set; }
         public string CurrencyName { get; set; }
         public bool? IsCharge { get; set; }
@@ -49,5 +48,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long? PositionId { get; set; }
         public string PositionColor { get; set; }
         public string PositionName { get; set; }
+        public bool IsRequiredWeeklyReport { get; set; }
     }
 }

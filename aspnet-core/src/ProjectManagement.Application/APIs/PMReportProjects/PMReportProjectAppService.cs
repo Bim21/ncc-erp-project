@@ -15,13 +15,12 @@ using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
-using ProjectManagement.Utils;
-using Microsoft.Extensions.Logging;
 
 namespace ProjectManagement.APIs.PMReportProjects
 {
@@ -78,18 +77,18 @@ namespace ProjectManagement.APIs.PMReportProjects
             if (sort == WeeklyReportSort.Draft_Green_Yellow_Red)
             {
                 return await query
-                        .OrderBy(x => x.StatusEnum).ThenBy(x=>x.ProjectHealthEnum)
+                        .OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum)
                         .ToListAsync();
             }
 
             if (sort == WeeklyReportSort.Draft_Red_Yellow_Green)
             {
                 return await query
-                        .OrderBy(x => x.StatusEnum).ThenByDescending(x=>x.ProjectHealthEnum)
+                        .OrderBy(x => x.StatusEnum).ThenByDescending(x => x.ProjectHealthEnum)
                         .ToListAsync();
             }
 
-            if(sort == WeeklyReportSort.Latest_Review_Last)
+            if (sort == WeeklyReportSort.Latest_Review_Last)
             {
                 return await query
                         .OrderBy(x => x.LastReviewDate)
@@ -437,7 +436,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                 .Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).FirstOrDefaultAsync();
             if (pmReportProject.Status == PMReportProjectStatus.Sent)
                 throw new UserFriendlyException("Report has been sent !");
-            
+
             pmReportProject.Status = PMReportProjectStatus.Sent;
             pmReportProject.TimeSendReport = DateTimeUtils.GetNow();
             pmReportProject.ProjectHealth = CommonUtil.GetProjectHealthByString(status);
@@ -447,7 +446,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                 pmReportProject.IsPunish = PunishStatus.Low;
             }
 
-            await WorkScope.UpdateAsync(pmReportProject);        }
+            await WorkScope.UpdateAsync(pmReportProject);
+        }
 
         [HttpPost]
         public async Task<PMReportProjectDto> Create(PMReportProjectDto input)
@@ -501,9 +501,9 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<DateTime?> ReverseSeen(long pmReportProjectId)
         {
             var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
-            if (pmReportProject.Seen != true) 
+            if (pmReportProject.Seen != true)
             {
-                pmReportProject.LastReviewDate = DateTime.Now; 
+                pmReportProject.LastReviewDate = DateTime.Now;
             }
             pmReportProject.Seen = !pmReportProject.Seen;
             await WorkScope.UpdateAsync(pmReportProject);
