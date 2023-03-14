@@ -9,4 +9,5 @@ export interface ProjectCriteriaResultDto {
     projectCriteriaId: number;
     editMode: boolean;
     isActive: boolean;
+    isShowHistory: boolean;
 }

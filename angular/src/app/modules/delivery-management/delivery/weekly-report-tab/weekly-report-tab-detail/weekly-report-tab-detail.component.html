@@ -68,12 +68,16 @@
                                 <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()" (click)="editAllRow()">
                                     <i class="fas fa-pencil-alt mr-1"></i> Edit All</button>
                                 <div *ngIf="isEditingAllRow()" class="pt-1 ml-4">
-                                    <button class="mr-3 submit-btn"
-                                        style="background: none; border: none" (click)="saveAllUpdate()">
+                                    <button class="mr-3 submit-btn" style="background: none; border: none" (click)="saveAllUpdate()">
                                         <i style="color: green" class="fas fa-check fa-2x"></i>
                                     </button>
                                     <i style="color: red" class="fas fa-times fa-2x" (click)="cancelUpdateAll()"></i>
                                 </div>
+                                <mat-checkbox [color]="'primary'" class="pl-1" (change)="showLastWeek(listCriteriaResult,$event.checked)"
+                                    [checked]="isShowLastWeek()&&isSwitch">Show all last week</mat-checkbox>
+                            </div>
+                            <div class="col-4">
+                                <span>Time send report: {{timeSentReport}}</span>
                             </div>
                         </div>
 
@@ -108,6 +112,9 @@
                                             <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) || !isActive"
                                                 [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
                                                 {{problemIssueList[item.status - 1]}}</span>
+                                            <button mat-button (click)="showCriteriaHistory(item,i)">
+                                                <i class="fas " [ngClass]="item.isShowHistory==false?'fa-eye':'fa-eye-slash'"></i>
+                                            </button>
                                             <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) &&!isEditingAllRow()">
                                                 <button *ngIf="!item.editMode && isActive" mat-button
                                                     (click)="handleEditCriteriaResult(i)">
@@ -131,6 +138,17 @@
                                             <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" placeholder="Note"
                                                 name="note" [(ngModel)]="item.note" matInput></textarea>
                                         </mat-form-field>
+                                    </div>
+                                    <div *ngIf="item.isShowHistory==true"  class="rounded my-4" style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
+                                        <div class="d-flex align-items-baseline">
+                                            <span>
+                                                <i class="m-2 fas fa-circle fa-lg" [ngClass]="getOldCriteriaHealth(item)"></i>
+                                            </span>
+                                            <span class="m-2 overflow-auto">
+                                                <strong>{{oldWeeklyReport.pmReportName}}: </strong>
+                                                <span>{{getOldNote(item)}}</span>
+                                            </span>
+                                        </div>
                                     </div>
                                     <hr *ngIf="i<listCriteriaResult.length-1">
                                 </div>
@@ -165,6 +183,15 @@
                                         [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
                                 </textarea>
                                 </mat-form-field>
+                                <div *ngIf="isShowPMNote()" class="rounded my-4"
+                                    style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
+                                    <div class="d-flex align-items-baseline">
+                                        <span class="m-2 overflow-auto">
+                                            <strong>{{oldWeeklyReport.pmReportName}}: </strong>
+                                            <span>{{oldWeeklyReport.note}}</span>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
