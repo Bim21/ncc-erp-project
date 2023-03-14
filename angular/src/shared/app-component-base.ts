@@ -86,6 +86,9 @@ export abstract class AppComponentBase {
       if (member.avatarFullPath) {
         return member.avatarFullPath;
       }
+      if (member.fullAvatarPath) {
+        return member.fullAvatarPath;
+      }
       return '/assets/img/user.png';
     }
 }

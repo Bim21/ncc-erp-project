@@ -286,9 +286,8 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
     forkJoin([this.pjCriteriaService.getAll(), this.pjCriteriaResultService.getAllCriteriaResult(this.projectId, this.selectedReport.reportId)])
       .subscribe(([resCriteria, resCriteriaResult]) => {
         this.bgFlag = '';
-        this.status = ''
-        this.listCriteriaResult = [];
-        this.isValidCriteria = true;
+        this.status = '';
+        this.listCriteriaResult = []
         const listTmpCriteria = resCriteria.result as ProjectCriteriaDto[];
         const listTmpCriteriaResult = resCriteriaResult.result as ProjectCriteriaResultDto[];
         for (let i = 0; i < listTmpCriteria.length; i++) {
@@ -297,7 +296,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
           const itemCriteriaResult = {
             criteriaName: criteria.name,
             note: check?.note || '',
-            status: check?.status,
+            status: check?.status ,
             editMode: false,
             projectCriteriaId: criteria.id,
             projectId: this.projectId,
@@ -320,29 +319,31 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
             }
           }
         }
-        let priority: number = 0;
-        for (let i = 0; i < this.listCriteriaResult.length; i++) {
-          let tmpPriority = 1;
-          if (!this.listCriteriaResult[i].status) {
-            tmpPriority = 100;
-          }
-          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
-            tmpPriority = 3;
-          }
-          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
-            tmpPriority = 2;
-          }
-
-          if (!this.listCriteriaResult[i].note || !this.listCriteriaResult[i].status) {
-            this.isValidCriteria = false;
-          }
-
-          if (tmpPriority > priority) {
-            priority = tmpPriority;
-          }
-        }
-        this.handleBGStatus(priority);
+    this.setTotalHealth();
     })
+  }
+
+  setTotalHealth() {
+    let priority: number = 0;
+    for (let i = 0; i < this.listCriteriaResult.length; i++) {
+      let tmpPriority = 1;
+      if (!this.listCriteriaResult[i].status) {
+        tmpPriority = 100;
+      }
+      else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
+        tmpPriority = 3;
+      }
+      else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
+        tmpPriority = 2;
+      }
+
+      if (tmpPriority > priority) {
+        priority = tmpPriority;
+      }
+    }
+    const empty = this.listCriteriaResult.filter(x => x.note == '' || !x.status || x.editMode);
+    empty.length > 0 ? this.isValidCriteria = false : this.isValidCriteria = true;
+    this.handleBGStatus(priority);
   }
 
   public handleEditCriteriaResult(index: number) {
@@ -353,7 +354,6 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
   public cancelEditCriteriaResult(index: number) {
     this.listCriteriaResult[index].editMode = false;
     this.processCriteria = false;
-    this.getAllCriteria();
   }
 
   public handleChangeStatus(item: ProjectCriteriaResultDto) {
@@ -361,19 +361,26 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
       item.pmReportId = this.selectedReport.reportId;
       if (item.id) {
         this.pjCriteriaResultService.update(item).subscribe(res => {
-          abp.notify.success(`Change status ${item.criteriaName} successfully`)
+          abp.notify.success(`Change status ${item.criteriaName} successfully`);
           this.processCriteria = false;
           if (res.success === true) {
-            this.getAllCriteria();
+            item.status = res.result.status;
+            item.note = res.result.note;
+            item.editMode = false;
+            this.setTotalHealth();
           }
         });
       }
       else {
         this.pjCriteriaResultService.create(item).subscribe(res => {
-          abp.notify.success(`Change status ${item.criteriaName} successfully`)
+          abp.notify.success(`Change status ${item.criteriaName} successfully`);
           this.processCriteria = false;
           if (res.success === true) {
-            this.getAllCriteria();
+            item.id = res.result.id;
+            item.note = res.result.note;
+            item.status = res.result.status;
+            item.editMode = false;
+            this.setTotalHealth()
           }
         })
       }
@@ -388,7 +395,10 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         item.editMode = false;
         this.processCriteria = false;
         if (res.success === true) {
-          this.getAllCriteria();
+          item.status = res.result.status;
+          item.note = res.result.note;
+          item.editMode = false;
+          this.setTotalHealth()
         }
       });
     }
@@ -398,12 +408,15 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
         item.editMode = false;
         this.processCriteria = false;
         if (res.success === true) {
-          this.getAllCriteria();
+          item.id = res.result.id;
+          item.status = res.result.status;
+          item.note = res.result.note;
+          item.editMode = false;
+          this.setTotalHealth()
         }
       })
     }
   }
-
 
   public sendWeeklyreport() {
     abp.message.confirm(

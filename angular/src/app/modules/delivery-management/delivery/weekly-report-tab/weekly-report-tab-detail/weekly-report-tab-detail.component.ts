@@ -35,7 +35,7 @@ import { CriteriaService } from '@app/service/api/criteria.service';
 import { ProjectCriteriaResultService } from '@app/service/api/project-criteria-result.service';
 import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
 import { ProjectCriteriaResultDto } from '@app/service/model/project-criteria-result.dto';
-import { log } from 'console';
+import { cloneDeep } from 'lodash';
 import { GuideLineDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/weekly-report/guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
@@ -94,6 +94,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public searchTextValue: string;
   public pmReportProjectList: pmReportProjectDto[] = [];
   public tempPmReportProjectList: pmReportProjectDto[] = [];
+  public listPreEditCriteriaResult: ProjectCriteriaResultDto[] = [];
   public show: boolean = false;
   public pmReportProject = {} as pmReportProjectDto;
   public pmReportId: any;
@@ -333,20 +334,24 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             }
           }
         }
-        for (let i = 0; i < this.listCriteriaResult.length; i++) {
-          if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
-            this.bgFlag = 'bg-danger';
-            this.status = 'Red';
-            break;
-          }
-          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
-            this.bgFlag = 'bg-warning';
-            this.status = 'Yellow'
-          }
-        }
+        this.listPreEditCriteriaResult = cloneDeep(this.listCriteriaResult);
+        this.setTotalHealth();
     })
   }
 
+  setTotalHealth() {
+    for (let i = 0; i < this.listCriteriaResult.length; i++) {
+      if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
+        this.bgFlag = 'bg-danger';
+        this.status = 'Red';
+        break;
+      }
+      else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
+        this.bgFlag = 'bg-warning';
+        this.status = 'Yellow'
+      }
+    }
+  }
   public handleEditCriteriaResult(index: number) {
     this.listCriteriaResult[index].editMode = true;
     this.processCriteria = true;
@@ -355,7 +360,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public cancelEditCriteriaResult(index: number) {
     this.listCriteriaResult[index].editMode = false;
     this.processCriteria = false;
-    this.getAllCriteria();
+    this.setTotalHealth();
   }
 
   public handleChangeStatus(item: ProjectCriteriaResultDto) {
@@ -366,7 +371,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.processCriteria = false;
           if (res.success === true)
           {
-          this.getAllCriteria();
+            item.note = res.result.note;
+            item.status = res.result.status;
+          this.setTotalHealth();
           this.getProjectProblem();
           }
         });
@@ -377,7 +384,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.processCriteria = false;
           if (res.success === true)
           {
-          this.getAllCriteria();
+            item.id = res.result.id;
+            item.note = res.result.note;
+            item.status = res.result.status;
+          this.setTotalHealth();
           this.getProjectProblem();
           }
         })
@@ -394,7 +404,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processCriteria = false;
         if (res.success === true)
         {
-        this.getAllCriteria();
+          item.note = res.result.note;
+          item.status = res.result.status;
+        this.setTotalHealth();
         this.getProjectProblem();
         }
       });
@@ -406,7 +418,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.processCriteria = false;
         if (res.success === true)
         {
-        this.getAllCriteria();
+          item.id = res.result.id;
+          item.note = res.result.note;
+          item.status = res.result.status;
+        this.setTotalHealth();
         this.getProjectProblem();
         }
       })
@@ -1470,5 +1485,48 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   closeSettingCountDown() {
     this.isShowSettingCountDown = !this.isShowSettingCountDown;
     this.getTimeCountDown();
+  }
+  showGuideLine(item) {
+    const show = this.dialog.open(GuideLineDialogComponent,{
+      width: "60%",
+      data:item
+      })
+  }
+  public isEditingAllRow() {
+    return this.listCriteriaResult.find(s => !s.editMode) == undefined;
+  }
+
+  public isEditingAnyRow() {
+    return this.listCriteriaResult.find(s => s.editMode) != undefined;
+  }
+
+  public isShowEditBtnOnRow() {
+    return this.isGranted(this.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus)
+      || this.isGranted(this.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit)
+  }
+
+  public isShowEditAllBtn() {
+    return !this.isEditingAllRow()
+      && this.listCriteriaResult
+      && this.listCriteriaResult.length
+      && this.isShowEditBtnOnRow()
+  }
+  editAllRow() {
+    this.setEditingAllRow();
+  }
+  private setEditingAllRow() {
+    this.listCriteriaResult.forEach(s => s.editMode = true);
+  }
+  cancelUpdateAll() {
+    this.listCriteriaResult = cloneDeep(this.listPreEditCriteriaResult);
+  }
+  saveAllUpdate() {
+    this.pjCriteriaResultService.updateAllCriteriaResult(this.listCriteriaResult).subscribe(res => {
+      if (res.success) {
+        abp.notify.success(`Update successfully`);
+        this.getAllCriteria();
+        this.getProjectProblem();
+      }
+    });
   }
 }

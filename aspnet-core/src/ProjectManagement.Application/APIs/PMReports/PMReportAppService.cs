@@ -1,8 +1,11 @@
 ﻿using Abp.Authorization;
 using Abp.BackgroundJobs;
+using Abp.Collections.Extensions;
+using Abp.Linq.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using NccCore.Extension;
 using NccCore.Paging;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
@@ -42,7 +45,12 @@ namespace ProjectManagement.APIs.PMReports
         [AbpAuthorize(PermissionNames.WeeklyReport)]
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
-            var pmReportProject = WorkScope.GetAll<PMReportProject>();
+            var pmReportProject = WorkScope.GetAll<PMReportProject>()
+                .WhereIf(input.FilterItems.Any(x => x.PropertyName == "projectType" && int.Parse(x.Value.ToString()) == 2), x => x.Project.ProjectType == ProjectType.PRODUCT)
+                .WhereIf(input.FilterItems.Any(x => x.PropertyName == "projectType" && int.Parse(x.Value.ToString()) == 1), x => x.Project.ProjectType == ProjectType.TRAINING)
+                .WhereIf(input.FilterItems.Any(x => x.PropertyName == "projectType" && int.Parse(x.Value.ToString()) == 0) ||
+                !input.FilterItems.Any(x => x.PropertyName == "projectType"),
+                x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT && x.Project.ProjectType != ProjectType.NoBill);
             var query = WorkScope.GetAll<PMReport>()
                 .OrderByDescending(x => x.CreationTime)
                 .Select(x => new GetPMReportDto
@@ -54,12 +62,13 @@ namespace ProjectManagement.APIs.PMReports
                     Type = x.Type,
                     PMReportStatus = x.PMReportStatus,
                     NumberOfProject = pmReportProject.Where(y => y.PMReportId == x.Id).Count(),
-                    CountGreen = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Green),
-                    CountRed = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Red),
-                    CountYellow = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Yellow),
+                    CountGreen = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Green && x.Status == PMReportProjectStatus.Sent),
+                    CountRed = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Red && x.Status == PMReportProjectStatus.Sent),
+                    CountYellow = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.ProjectHealth == ProjectHealth.Yellow && x.Status == PMReportProjectStatus.Sent),
                     CountDraft = pmReportProject.Where(y => y.PMReportId == x.Id).Count(x => x.Status == PMReportProjectStatus.Draft),
                     Note = x.Note,
                 });
+            input.FilterItems.RemoveAll(x => x.PropertyName == "projectType");
             return await query.GetGridResult(query, input);
         }
 

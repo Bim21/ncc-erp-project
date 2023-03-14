@@ -1,6 +1,7 @@
 ﻿using Abp.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NccCore.Extension;
 using ProjectManagement.APIs.ProjectCriteriaResults.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
@@ -143,6 +144,57 @@ namespace ProjectManagement.APIs.ProjectCriteriaResults
         {
             var max = input.Status >= listStatus.First() ? input.Status : listStatus.First();
             await UpdateHealth(input.PMReportId, input.ProjectId, CommonUtil.GetProjectHealthByString(max.ToString()));
+        }
+
+        [AbpAuthorize(
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria,
+            PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
+            PermissionNames.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
+            PermissionNames.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
+            )]
+        [HttpPost]
+        public async Task<List<CreateProjectCriteriaResultDto>> UpdateAllCriteriaResult(List<CreateProjectCriteriaResultDto> input)
+        {
+            var newItem = input.Where(x => x.Id <= 0 && (x.Note != "" || x.Status != 0)).Select(x => new ProjectCriteriaResult
+            {
+                Note = x.Note,
+                PMReportId = x.PMReportId,
+                Status = x.Status,
+                ProjectCriteriaId = x.ProjectCriteriaId,
+                ProjectId = x.ProjectId,
+            });
+            var updateItem = input.Where(x => x.Id > 0).Select(x => new ProjectCriteriaResult
+            {
+                Id = x.Id,
+                Note = x.Note,
+                PMReportId = x.PMReportId,
+                Status = x.Status,
+                ProjectCriteriaId = x.ProjectCriteriaId,
+                ProjectId = x.ProjectId,
+            });
+            await WorkScope.UpdateRangeAsync(updateItem);
+            var newItemDic = WorkScope.InsertRange(newItem).ToDictionary(x => x.ProjectCriteriaId);
+            input.ForEach(x =>
+            {
+                if (newItemDic.Count > 0)
+                {
+                    x.Id = newItemDic.ContainsKey(x.ProjectCriteriaId) ? newItemDic[x.ProjectCriteriaId].Id : 0;
+                }
+            });
+            var projectId = input.Select(x => x.ProjectId).First();
+            var pmReportId = input.Select(x => x.PMReportId).First();
+            var projectWeeklyReportStatus = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId).Select(x => x.Status).First();
+            if (projectWeeklyReportStatus == PMReportProjectStatus.Sent)
+            {
+                var max = input.Max(x => x.Status);
+                await UpdateHealth(pmReportId, projectId, CommonUtil.GetProjectHealthByString(max.ToString()));
+            }
+            return input;
         }
     }
 }

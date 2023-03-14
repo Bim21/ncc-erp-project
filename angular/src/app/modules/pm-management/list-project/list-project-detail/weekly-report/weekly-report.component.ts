@@ -26,6 +26,7 @@ import { ConfirmFromPage, ConfirmPopupComponent } from '../resource-management/c
 import { TimesheetProjectService } from '@app/service/api/timesheet-project.service';
 import { ProjectCriteriaResultService } from '../../../../../service/api/project-criteria-result.service'
 import { ProjectCriteriaResultDto } from '../../../../../service/model/project-criteria-result.dto'
+import { cloneDeep } from 'lodash-es';
 
 // import { ApproveDialogComponent } from './../../../../pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
 
@@ -126,6 +127,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
   public listCriteria: ProjectCriteriaDto[] = []
   public listCriteriaResult: ProjectCriteriaResultDto[] = []
+  public listPreEditCriteriaResult: ProjectCriteriaResultDto[] = [];
   public bgFlag: string = ''
   public status: string = ''
   public processCriteria: boolean = false;
@@ -290,7 +292,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       .subscribe(([resCriteria, resCriteriaResult]) => {
         this.bgFlag = '';
         this.status = '';
-        this.isValidCriteria = true;
         this.listCriteriaResult = []
         const listTmpCriteria = resCriteria.result as ProjectCriteriaDto[];
         const listTmpCriteriaResult = resCriteriaResult.result as ProjectCriteriaResultDto[];
@@ -323,29 +324,32 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             }
           }
         }
-        let priority: number = 0;
-        for (let i = 0; i < this.listCriteriaResult.length; i++) {
-          let tmpPriority = 1;
-          if (!this.listCriteriaResult[i].status) {
-            tmpPriority = 100;
-          }
-          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
-            tmpPriority = 3;
-          }
-          else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
-            tmpPriority = 2;
-          }
-
-          if (!this.listCriteriaResult[i].note || !this.listCriteriaResult[i].status) {
-            this.isValidCriteria = false;
-          }
-
-          if (tmpPriority > priority) {
-            priority = tmpPriority;
-          }
-        }
-        this.handleBGStatus(priority);
+    this.listPreEditCriteriaResult = cloneDeep(this.listCriteriaResult);
+    this.setTotalHealth();
     })
+  }
+
+  setTotalHealth() {
+    let priority: number = 0;
+    for (let i = 0; i < this.listCriteriaResult.length; i++) {
+      let tmpPriority = 1;
+      if (!this.listCriteriaResult[i].status && this.selectedReport.status == 'Draft') {
+        tmpPriority = 100;
+      }
+      else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Red) {
+        tmpPriority = 3;
+      }
+      else if (this.listCriteriaResult[i].status === APP_ENUMS.ProjectHealth.Yellow) {
+        tmpPriority = 2;
+      }
+
+      if (tmpPriority > priority) {
+        priority = tmpPriority;
+      }
+    }
+    const empty = this.listCriteriaResult.filter(x => x.note == '' || !x.status || x.editMode);
+    empty.length > 0 ? this.isValidCriteria = false : this.isValidCriteria = true;
+    this.handleBGStatus(priority);
   }
 
   public handleEditCriteriaResult(index: number) {
@@ -354,12 +358,13 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   }
 
   public cancelEditCriteriaResult(index: number) {
+    this.listCriteriaResult[index].note = this.listPreEditCriteriaResult[index].note;
+    this.listCriteriaResult[index].status = this.listPreEditCriteriaResult[index].status;
     this.listCriteriaResult[index].editMode = false;
     this.processCriteria = false;
-    this.getAllCriteria();
   }
 
-  public handleChangeStatus(item: ProjectCriteriaResultDto) {
+  public handleChangeStatus(item: ProjectCriteriaResultDto, index: number) {
     if (!item.editMode) {
       item.pmReportId = this.selectedReport.reportId;
       if (item.id) {
@@ -367,7 +372,12 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           abp.notify.success(`Change status ${item.criteriaName} successfully`);
           this.processCriteria = false;
           if (res.success === true) {
-            this.getAllCriteria();
+            item.status = res.result.status;
+            item.note = res.result.note;
+            item.editMode = false;
+            this.listPreEditCriteriaResult[index].note = item.note;
+            this.listPreEditCriteriaResult[index].status = item.status;
+            this.setTotalHealth();
           }
         });
       }
@@ -376,14 +386,20 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
           abp.notify.success(`Change status ${item.criteriaName} successfully`);
           this.processCriteria = false;
           if (res.success === true) {
-            this.getAllCriteria();
+            item.id = res.result.id;
+            item.note = res.result.note;
+            item.status = res.result.status;
+            item.editMode = false;
+            this.listPreEditCriteriaResult[index].note = item.note;
+            this.listPreEditCriteriaResult[index].status = item.status;
+            this.setTotalHealth()
           }
         })
       }
     }
   }
 
-  public saveCriteriaResult(item: ProjectCriteriaResultDto) {
+  public saveCriteriaResult(item: ProjectCriteriaResultDto, index: number) {
     item.pmReportId = this.selectedReport.reportId;
     if (item.id) {
       this.pjCriteriaResultService.update(item).subscribe(res => {
@@ -391,7 +407,12 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         item.editMode = false;
         this.processCriteria = false;
         if (res.success === true) {
-          this.getAllCriteria();
+          item.status = res.result.status;
+          item.note = res.result.note;
+          item.editMode = false;
+          this.listPreEditCriteriaResult[index].note = item.note;
+          this.listPreEditCriteriaResult[index].status = item.status;
+          this.setTotalHealth()
         }
       });
     }
@@ -401,7 +422,13 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         item.editMode = false;
         this.processCriteria = false;
         if (res.success === true) {
-          this.getAllCriteria();
+          item.id = res.result.id;
+          item.status = res.result.status;
+          item.note = res.result.note;
+          item.editMode = false;
+          this.listPreEditCriteriaResult[index].note = item.note;
+          this.listPreEditCriteriaResult[index].status = item.status;
+          this.setTotalHealth()
         }
       })
     }
@@ -1372,5 +1399,41 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       })
     }
 
+  public isEditingAllRow() {
+    return this.listCriteriaResult.find(s => !s.editMode) == undefined;
+  }
+
+  public isEditingAnyRow() {
+    return this.listCriteriaResult.find(s => s.editMode) != undefined;
+  }
+
+  public isShowEditBtnOnRow() {
+    return this.isGranted(this.ProjectHealthCriteria_ChangeStatus)
+      || this.isGranted(this.ProjectHealthCriteria_Edit)
+  }
+
+  public isShowEditAllBtn() {
+    return !this.isEditingAllRow()
+      && this.listCriteriaResult
+      && this.listCriteriaResult.length
+      && this.isShowEditBtnOnRow()
+  }
+  editAllRow() {
+    this.setEditingAllRow();
+  }
+  private setEditingAllRow() {
+    this.listCriteriaResult.forEach(s => s.editMode = true);
+  }
+  cancelUpdateAll() {
+    this.listCriteriaResult = cloneDeep(this.listPreEditCriteriaResult);
+  }
+  saveAllUpdate() {
+    this.pjCriteriaResultService.updateAllCriteriaResult(this.listCriteriaResult).subscribe(res => {
+      if (res.success) {
+        abp.notify.success(`Update successfully`);
+        this.getAllCriteria();
+      }
+    });
+  }
 }
 

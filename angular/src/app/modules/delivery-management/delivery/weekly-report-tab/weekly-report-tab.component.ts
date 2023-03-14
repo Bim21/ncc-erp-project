@@ -45,9 +45,15 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
   WeeklyReport_ViewInfo = PERMISSIONS_CONSTANT.WeeklyReport_ViewInfo
   WeeklyReport_CloseAndAddNew = PERMISSIONS_CONSTANT.WeeklyReport_CloseAndAddNew
 
+  projectTypeParam = [
+    { displayName: 'OUTSOURCING', value: 0 },
+    { displayName: 'TRAINING', value: 1 },
+    { displayName: 'PRODUCT', value: 2 },
+  ];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Name" },
     { propertyName: 'year', comparisions: [0, 1, 3], displayName: "Year" },
+    { propertyName: 'projectType', comparisions: [0], displayName: "Loại dự án", filterType: 3, dropdownData: this.projectTypeParam }
   ];
 
   constructor(public router: Router,

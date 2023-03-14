@@ -63,8 +63,17 @@
 
 
                         <div class="row p-1">
-                            <div class="col-8 m-0 p-0">
+                            <div class="col-8 m-0 p-0 d-flex align-items-end">
                                 <strong classs="col-12" style="font-size: 20px;">Criteria status: </strong>
+                                <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()" (click)="editAllRow()">
+                                    <i class="fas fa-pencil-alt mr-1"></i> Edit All</button>
+                                <div *ngIf="isEditingAllRow()" class="pt-1 ml-4">
+                                    <button class="mr-3 submit-btn"
+                                        style="background: none; border: none" (click)="saveAllUpdate()">
+                                        <i style="color: green" class="fas fa-check fa-2x"></i>
+                                    </button>
+                                    <i style="color: red" class="fas fa-times fa-2x" (click)="cancelUpdateAll()"></i>
+                                </div>
                             </div>
                         </div>
 
@@ -99,8 +108,8 @@
                                             <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) || !isActive"
                                                 [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
                                                 {{problemIssueList[item.status - 1]}}</span>
-                                            <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) ">
-                                                <button *ngIf="!item.editMode && isActive" mat-button [disabled]="processCriteria"
+                                            <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) &&!isEditingAllRow()">
+                                                <button *ngIf="!item.editMode && isActive" mat-button
                                                     (click)="handleEditCriteriaResult(i)">
                                                     <i class="fas fa-pencil-alt fa-lg "></i>
                                                 </button>

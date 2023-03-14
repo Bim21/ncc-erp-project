@@ -314,7 +314,20 @@ button {
  ::ng-deep #status-option-weekly-report .mat-form-field-wrapper {
      width: 150px;
  }
- .guide-line:hover{
-    cursor: pointer;
-    text-decoration: underline;
+
+ .guide-line:hover {
+     cursor: pointer;
+     text-decoration: underline;
+ }
+
+ .btn-editall-neutral {
+     color: #F75200;
+     background-color: white;
+     border: 2px solid;
+ }
+
+ .btn-editall-neutral:hover {
+     color: white;
+     background-color: #F75200;
+     border: 2px solid;
  }

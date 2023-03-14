@@ -5,25 +5,22 @@
             <div class="px-4 pb-2 pt-2 card"
                 style="display: flex; flex-direction: column; justify-content: space-between; ">
                 <div class="row p-1">
-                    <div class="col-6 d-flex align-items-center">
+                    <div class="col-7 p-0 d-flex align-items-center">
                         <label for="" class="mt-1">Status:</label>
                         <div class="status-label d-flex justify-content-center align-items-center" [ngClass]="bgFlag">
                             <span>{{status}}</span>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <label for="" class="mt-1">PM report:</label>
+                    <div class="col-5 m-0 p-0 d-flex align-items-center">
                         <mat-form-field class="ml-2" style="width: 205px;" appearance="outline">
-                            <mat-select [(ngModel)]="selectedReport" name="pmReport"
-                                (selectionChange)="onReportchange()" placeholder="select a report" required
-                                #projectEmployee="ngModel">
-                                <mat-form-field class="w-100 px-3 "
-                                    style="position: sticky; top: 0; z-index: 2; background-color: white;">
+                            <mat-label>PM report:</mat-label>
+                            <mat-select [(ngModel)]="selectedReport" name="pmReport" (selectionChange)="onReportchange()"
+                                placeholder="select a report" required #projectEmployee="ngModel">
+                                <mat-form-field class="w-100 px-3 " style="position: sticky; top: 0; z-index: 2; background-color: white;">
                                     <input matInput [(ngModel)]="searchPmReport" name="searchPmReportName"
                                         (keydown)="$event.stopPropagation()" placeholder="search">
                                 </mat-form-field>
-                                <mat-option
-                                    *ngFor="let report of pmReportList |listFilter: 'pmReportName' :searchPmReport"
+                                <mat-option *ngFor="let report of pmReportList |listFilter: 'pmReportName' :searchPmReport"
                                     [value]="report">
                                     <div class="row">
                                         <div class="col-10 text-overflow"> {{report.pmReportName}}</div>
@@ -34,15 +31,17 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <button (click)="sendWeeklyreport()" class=" btn btn-success ml-3 mb-2"
-                            style="margin-bottom: 10px;" [disabled]=" !isValidCriteria"
-                            *ngIf="selectedReport.isActive && permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport) && isSentReport&& selectedReport.pmReportProjectId!=0">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                        <span class="ml-2" *ngIf=" selectedReport.isActive || !isValidCriteria"
-                        matTooltip="{{selectedReport.pmReportProjectId==0?'Project không có trong đợt report tuần này!':'Cần nhập Criteria để có thể gửi report!'}}"><i
-                                class="fas fa-question-circle text-danger fa-lg"></i></span>
-
+                        <div class="ml-2" [matTooltip]="!isValidCriteria?'Cần nhập Criteria để có thể gửi report!':''">
+                            <button name="btn-send" (click)="sendWeeklyreport()" class=" btn btn-success"
+                                [disabled]="!isValidCriteria"
+                                *ngIf="selectedReport.isActive && permission.isGranted(Projects_ProductProjects_ProjectDetail_TabWeeklyReport_SendWeeklyReport) && isSentReport && selectedReport.pmReportProjectId!=0">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <span class="ml-2" *ngIf="(selectedReport.isActive &&selectedReport.pmReportProjectId==0)"
+                            matTooltip="Project không có trong đợt report tuần này!">
+                            <i class="fas fa-question-circle text-danger fa-lg"></i>
+                        </span>
                     </div>
                 </div>
 
@@ -82,7 +81,7 @@
                                     [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
                                     {{problemIssueList[item.status - 1]}}</span>
                                 <div *ngIf="permission.isGranted(ProjectHealthCriteria_Edit) && selectedReport.isActive ">
-                                    <button *ngIf="!item.editMode && selectedReport.isActive" mat-button [disabled]="processCriteria || selectedReport.pmReportProjectId==0"
+                                    <button *ngIf="!item.editMode && selectedReport.isActive" mat-button [disabled]=" selectedReport.pmReportProjectId==0"
                                         (click)="handleEditCriteriaResult(i)">
                                         <i class="fas fa-pencil-alt fa-lg "></i>
                                     </button>
