@@ -90,6 +90,7 @@ namespace ProjectManagement.APIs.Projects
                             Status = p.Status,
                             ClientId = p.ClientId,
                             ClientName = p.Client.Name,
+                            ClientCode = p.Client.Code,
                             CurrencyId = p.CurrencyId,
                             CurrencyName = p.Currency.Name,
                             IsCharge = p.IsCharge,
@@ -112,6 +113,7 @@ namespace ProjectManagement.APIs.Projects
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
                             RequireTimesheetFile = p.RequireTimesheetFile,
+                            IsRequiredWeeklyReport = p.IsRequiredWeeklyReport,
                             BillInfo = hasViewBillPermission ? WorkScope.GetAll<ProjectUserBill>()
                             .Where(b => b.ProjectId == p.Id)
                             .Where(b => b.isActive)
@@ -201,11 +203,11 @@ namespace ProjectManagement.APIs.Projects
         }
 
         [HttpGet]
-        public async Task<List<GetProjectDto>> GetAll(bool isfilter=false)
+        public async Task<List<GetProjectDto>> GetAll(bool isfilter = false)
         {
             var query = WorkScope.GetAll<Project>()
                 .Include(x => x.Currency)
-                .WhereIf(isfilter = true,x => x.Status != ProjectStatus.Closed)
+                .WhereIf(isfilter = true, x => x.Status != ProjectStatus.Closed)
                 .Select(x => new GetProjectDto
                 {
                     Id = x.Id,
@@ -293,6 +295,7 @@ namespace ProjectManagement.APIs.Projects
                                     CurrencyId = x.CurrencyId,
                                     CurrencyName = x.Currency.Name,
                                     RequireTimesheetFile = x.RequireTimesheetFile,
+                                    IsRequiredWeeklyReport = x.IsRequiredWeeklyReport
                                 });
             return await query.FirstOrDefaultAsync();
         }
@@ -576,6 +579,15 @@ namespace ProjectManagement.APIs.Projects
                 throw new UserFriendlyException($"Project has Project User !");
 
             await WorkScope.DeleteAsync(project);
+        }
+
+        [HttpPut]
+        public async Task<bool> ChangeRequireWeeklyReport(long projectID)
+        {
+            var project = await WorkScope.GetAsync<Project>(projectID);
+            project.IsRequiredWeeklyReport = !project.IsRequiredWeeklyReport;
+            await WorkScope.UpdateAsync(project);
+            return project.IsRequiredWeeklyReport;
         }
 
         #region PAGE TRAINING PROJECT

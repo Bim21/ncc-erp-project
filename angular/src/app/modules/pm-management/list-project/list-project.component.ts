@@ -36,14 +36,15 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
   Projects_OutsourcingProjects_ViewBillInfo = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillInfo
-  Projects_OutsourcingProjects_CheckProjectInvoiceSetting = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_CheckProjectInvoiceSetting 
+  Projects_OutsourcingProjects_CheckProjectInvoiceSetting = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_CheckProjectInvoiceSetting
+  Projects_OutsourcingProjects_UpdateRequireWeeklyReport= PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_UpdateRequireWeeklyReport
 
- 
+
   statusFilterList = [{ displayName: "Not Closed", value: 3 },
   { displayName: "InProgress", value: 1 }, { displayName: "Potential", value: 0 },
   { displayName: "Closed", value: 2 },
   ]
-  
+
 
   projectTypeParam = Object.entries(this.APP_ENUM.ProjectType).map(item => {
     return {
@@ -75,6 +76,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
     { propertyName: 'startTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian bắt đầu", filterType: 1 },
     { propertyName: 'endTime', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian kết thúc", filterType: 1 },
+    { propertyName: 'isRequiredWeeklyReport', comparisions: [0], displayName: "Require Weekly report", filterType: 2 }
   ];
 
   setValueProjectType(projectType, enumObject) {
@@ -190,7 +192,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     if (this.isEnablePMFilter() && this.searchText != ""){
       this.pmId = -1;
     }
-    this.getDataPage(1);    
+    this.getDataPage(1);
   }
 
 
@@ -202,7 +204,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         this.pmList = data.result;
       })
   }
-  
+
   createProject() {
     this.showDialogListProject('create');
   }
@@ -225,7 +227,8 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         pmId: item.pmId,
         id: item.id,
         currencyId: item.currencyId,
-        requireTimesheetFile: item.requireTimesheetFile
+        requireTimesheetFile: item.requireTimesheetFile,
+        isRequiredWeeklyReport: item.isRequiredWeeklyReport
       }
     }
     const dialogRef = this.dialog.open(CreateEditListProjectComponent, {
@@ -254,7 +257,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   //     })
   //   }
 
-  // } 
+  // }
 
   showActions(e , item){
     e.preventDefault();
@@ -315,7 +318,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
 
   protected closeProject(project: any): void {
     let item = {
-      id: project.id    
+      id: project.id
     }
 
     this.listProjectService.getAllWorkingUserFromProject(project.id).pipe(catchError(this.listProjectService.handleError)).subscribe((res) => {
@@ -331,13 +334,13 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
                 abp.notify.success("Update status project: "+ project.name);
               }
               else if(res.result == null || res.result == ""){
-                abp.message.success(`<p>Update status project name <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-                <p style='color:#28a745'>Update status project name <b>${project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+                abp.message.success(`<p>Update status project name <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p>
+                <p style='color:#28a745'>Update status project name <b>${project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`,
                'Update status project result',true);
               }
               else{
-                abp.message.error(`<p>Update status project <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-                <p style='color:#dc3545'>${res.result}</p>`, 
+                abp.message.error(`<p>Update status project <b>${project.name}</b> in <b>PROJECT TOOL</b> successful!</p>
+                <p style='color:#dc3545'>${res.result}</p>`,
                 'Update status project result',true);
               }
               this.refresh()
@@ -356,15 +359,15 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
     ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
     // this.router.navigate([routingToUrl],{queryParams:{
     //   id: project.id,
-    //   type: project.projectType, 
-    //   projectName: project.name, 
+    //   type: project.projectType,
+    //   projectName: project.name,
     //   projectCode: project.code}
     // })
 
     const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
       id: project.id,
-      type: project.projectType, 
-      projectName: project.name, 
+      type: project.projectType,
+      projectName: project.name,
       projectCode: project.code} }));
 window.open(url, '_blank');
   }
@@ -409,5 +412,11 @@ window.open(url, '_blank');
         return 'h'
       }
     }
+  }
+  changeRequireWeeklyReport(item) {
+    this.listProjectService.changeRequireWeeklyReport(item.id).subscribe((res) => {
+      item.isRequiredWeeklyReport = res.result;
+      abp.notify.success("Change require weekly report sucessful!")
+    });
   }
 }

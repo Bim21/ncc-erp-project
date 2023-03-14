@@ -129,6 +129,17 @@
                 </mat-checkbox>
             </div>
         </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="isRequiredWeeklyReport"></label>
+            <div class="col-md-9 pt-2">
+                <mat-checkbox name="{{data.command == 'create'?'ipt-isRequiredWeeklyReport':'ipt-isRequiredWeeklyReport-edit'}}" [(ngModel)]="project.isRequiredWeeklyReport" name="isRequiredWeeklyReport">
+                    is Require Weekly Report
+                    <span class="ml-2"
+                    matTooltip="Require weekly report tuần đang active!"
+                    ><i class="fas fa-question-circle "></i></span>
+                </mat-checkbox>
+            </div>
+        </div>
         <div class="form-group row required" *ngIf="project.isCharge">
             <label class="col-md-3 col-form-label mt-2" for="chargeType">Charge Type: </label>
             <div class="col-md-9 pt-2">

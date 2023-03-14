@@ -111,6 +111,7 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_Close = "Projects.OutsourcingProjects.Close";
         public const string Projects_OutsourcingProjects_ProjectDetail = "Projects.OutsourcingProjects.ProjectDetail";
         public const string Projects_OutsourcingProjects_CheckProjectInvoiceSetting = "Projects.OutsourcingProjects.CheckProjectInvoiceSetting";
+        public const string Projects_OutsourcingProjects_UpdateRequireWeeklyReport = "Projects.OutsourcingProjects.UpdateRequireWeeklyReport";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.View";
@@ -672,6 +673,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_Close ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail ,
                     PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting,
+                    PermissionNames.Projects_OutsourcingProjects_UpdateRequireWeeklyReport,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View ,
@@ -1230,7 +1232,8 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Project Invoice Setting" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Require WeeklyReport" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_UpdateRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Project Invoice Setting" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
@@ -1983,6 +1986,9 @@ namespace ProjectManagement.Authorization
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Project Invoice Setting"
+                                        },
+                                        new SystemPermission {
+                                            Name = PermissionNames.Projects_OutsourcingProjects_UpdateRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Require WeeklyReport"
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail",

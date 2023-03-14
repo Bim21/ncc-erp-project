@@ -1,13 +1,10 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants;
-using ProjectManagement.Constants.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
@@ -46,5 +43,6 @@ namespace ProjectManagement.Entities
         public float Discount { get; set; }
         public long? ParentInvoiceId { get; set; }
         public virtual ICollection<ProjectUser> ProjectUsers { get; set; }
+        public bool IsRequiredWeeklyReport { get; set; }
     }
 }

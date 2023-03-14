@@ -119,8 +119,9 @@
                                 <th>Projects</th>
                                 <th>{{'PM' | localize}}</th>
                                 <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo) && isShowBillInfo">Bill info</th>
+                                <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_UpdateRequireWeeklyReport)" style="width: 50px;">RequireWR</th>
                                 <th style="width: 110px;">Time</th>
-                                <th style="width: 100px;">Is charged</th>
+                                <th style="width: 50px;">Is charged</th>
                                 <th style="width: 100px;">Status</th>
                                 <th style="width: 120px;">
                                     <div class="weekly-report-header-wrap d-flex align-items-center">
@@ -158,7 +159,7 @@
                                                 <span>[{{ project.code }}]</span>
                                             </div>
                                             <div>
-                                                <span>{{project.clientName}}</span>
+                                                <span>{{project.clientCode}}</span>
                                             </div>
 
                                         </div>
@@ -174,31 +175,44 @@
                                     <div>
                                         <app-user-info
                                             [userData]="{fullName:project.pmFullName,branch:project.pmBranch,
-                                                branchColor:project.pmBranchColor,
-                                                branchDisplayName:project.pmBranchDisplayName,
-                                                position: project.position,
-                                                positionColor: project.positionColor,
-                                                positionName: project.positionName,
-                                                userLevel: project.pmUserLevel,
-                                userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarFullPath:project.pmAvatarFullPath}">
+                                                                                branchColor:project.pmBranchColor,
+                                                                                branchDisplayName:project.pmBranchDisplayName,
+                                                                                position: project.position,
+                                                                                positionColor: project.positionColor,
+                                                                                positionName: project.positionName,
+                                                                userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarFullPath:project.pmAvatarFullPath}">
                                         </app-user-info>
                                     </div>
                                 </td>
                                 <td *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo) && isShowBillInfo">
-                                    <div *ngFor="let bill of filterBillInfo(project)" matTooltip="{{bill.fullName + ' ['+bill.billRole +'] '
-                                    +'charged from '+ (bill.startTime | date:'dd/MM/yyyy')  + ( bill.endTime? ' to '+ (bill.endTime | date:'dd/MM/yyyy') : '')
-                                + ' with rate: '+ (bill.billRate | number:'1.0') +' '+ (project.currencyName | lowercase)+'/' + getChargeType(project.chargeType)}}">
-                                        <strong>{{bill.fullName}} </strong>
-                                        <span>[{{bill.billRole}}] </span>
-                                        <strong class="text-danger"> {{bill.billRate | number: "1.0"}} </strong>
-                                        <span>{{project.currencyName | lowercase}}/{{getChargeType(project.chargeType)}}</span>
+                                    <strong *ngIf="filterBillInfo(project).length>0" style="color: red;">Total:{{project.billInfo.length}}</strong>
+                                    <div *ngFor="let bill of filterBillInfo(project) let j = index;" matTooltip="{{
+                                                                            (bill.fullName + ' ['+bill.billRole +'] '
+                                                                                                    +'charged from '+ (bill.startTime | date:'dd/MM/yyyy')  + ( bill.endTime? ' to '+ (bill.endTime | date:'dd/MM/yyyy') : '')
+                                                                                                + ' with rate: '+ (bill.billRate | number:'1.0') +' '+ (project.currencyName | lowercase)+'/' + getChargeType(project.chargeType))
+                                                                                            }}">
+                                        <strong>{{j+1}}. </strong><strong>{{bill.fullName}} </strong>
+                                        <span
+                                            >[{{bill.billRole}}]
+                                        </span>
+                                        <strong
+                                            class="text-danger"> {{bill.billRate | number: "1.0"}} </strong>
+                                        <span
+                                            >{{project.currencyName
+                                            | lowercase}}/{{getChargeType(project.chargeType)}}</span>
                                     </div>
-
-                                  <i [ngClass]="project.isViewAllBillInfo ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="project.billInfo.length > 5"
-                                    (click)="project.isViewAllBillInfo = !project.isViewAllBillInfo; filterBillInfo(project)"></i>
+                                    <span>
+                                        <i [ngClass]="project.isViewAllBillInfo ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
+                                            *ngIf="project.billInfo.length > 5"
+                                            (click)="project.isViewAllBillInfo = !project.isViewAllBillInfo; filterBillInfo(project)"></i>
+                                    </span>
 
                                 </td>
 
+                                <td *ngIf="permission.isGranted(Projects_OutsourcingProjects_UpdateRequireWeeklyReport)" class="text-center">
+                                    <mat-checkbox class="is-charged-checkbox" (click)="changeRequireWeeklyReport(project)" color="primary" [ngModel]="project.isRequiredWeeklyReport">
+                                    </mat-checkbox>
+                                </td>
                                 <td class="text-center" >
                                     <div class="time-wrap">
                                         <span class="time-item start-time">{{ project.startTime | date:"dd-MM-yyyy" }}</span>
