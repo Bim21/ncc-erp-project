@@ -226,6 +226,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                 ProjectHealth = pmReportProject.ProjectHealth,
                 Status = Enum.GetName(typeof(PMReportProjectStatus), pmReportProject.Status),
                 ProjectHealthString = pmReportProject.ProjectHealth == 0 ? "Grey" : Enum.GetName(typeof(ProjectHealth), pmReportProject.ProjectHealth),
+                TimeSendReport = pmReportProject.TimeSendReport,
                 Result = query.ToList()
             };
 

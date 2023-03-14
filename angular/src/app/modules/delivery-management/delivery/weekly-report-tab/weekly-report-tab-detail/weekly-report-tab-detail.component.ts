@@ -11,7 +11,7 @@ import { projectProblemDto, projectReportDto } from './../../../../../service/mo
 import { finalize, catchError } from 'rxjs/operators';
 
 import { ActivatedRoute } from '@angular/router';
-import { pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
+import { pmReportDto, pmReportProjectDto } from './../../../../../service/model/pmReport.dto';
 import { PMReportProjectService } from './../../../../../service/api/pmreport-project.service';
 import { Component, OnInit, Injector, ViewChild, Input, ElementRef } from '@angular/core';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
@@ -138,6 +138,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public tempResourceList: any[] = []
   public officalResourceList: any[] = [];
   public isShowMenuPlannedResource: boolean;
+  public oldWeeklyReport: pmReportDto;
+  public oldCriteriaResult: ProjectCriteriaResultDto[] = []
+  public oldShowHistoryStatus:ProjectCriteriaResultDto []=[];
+  timeSentReport = "";
 
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
@@ -150,6 +154,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   overTimeNoCharge1: number = 0;
   totalNormalWorkingTimeStandard: number = 0;
   totalNormalWorkingTimeStandard1: number = 0;
+  public showPmNote = false;
 
   sidebarExpanded: boolean;
   isShowCurrentResource: boolean = true;
@@ -286,6 +291,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
         }
+        this.getLastWeek();
         this.getAllCriteria();
         this.getProjectInfo();
         this.getChangedResource();
@@ -297,7 +303,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
 
-  public getAllCriteria() {
+  public getAllCriteria(hasCheck?: boolean) {
     forkJoin([this.pjCriteriaService.getAll(), this.pjCriteriaResultService.getAllCriteriaResult(this.projectId, this.pmReportId)])
       .subscribe(([resCriteria, resCriteriaResult]) => {
         this.bgFlag = 'bg-success';
@@ -318,7 +324,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             pmReportId: Number(this?.pmReportId),
             id: check?.id || undefined,
             isActive: criteria.isActive,
-            guideline: criteria.guideline
+            guideline: criteria.guideline,
+            isShowHistory: false
           } as ProjectCriteriaResultDto
           if (this.isActive == true) {
             if (itemCriteriaResult.id) {
@@ -332,6 +339,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             if (itemCriteriaResult.id) {
               this.listCriteriaResult.push(itemCriteriaResult);
             }
+          }
+        }
+        if (hasCheck) {
+          for (let index = 0; index < this.listCriteriaResult.length; index++) {
+            this.listCriteriaResult[index].isShowHistory = this.oldShowHistoryStatus[index].isShowHistory;
           }
         }
         this.listPreEditCriteriaResult = cloneDeep(this.listCriteriaResult);
@@ -500,7 +512,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.totalOverTime = projectReport.totalOverTime
     this.generalNote = projectReport.note
     this.automationNote = projectReport.automationNote
-
+    this.getLastWeek();
     this.getAllCriteria();
     this.getProjectInfo();
     this.getChangedResource();
@@ -513,6 +525,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processWeekly = false;
     this.searchUser = ""
     this.getTimeCountDown(true);
+    this.showPmNote = false;
   }
 
 
@@ -581,7 +594,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           }
           this.pmReportProjectList.find(x => x.id == data.result.pmReportProjectId).status = data.result.status
           this.pmReportProjectList.find(x => x.id == data.result.pmReportProjectId).projectHealth = data.result.projectHealthString
-
+          this.timeSentReport = data.result.timeSendReport == null ? "Not sent yet!" : moment(data.result.timeSendReport).format("DD/MM/YYYY HH:mm");
         } else {
           this.problemList = [];
 
@@ -1493,11 +1506,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       })
   }
   public isEditingAllRow() {
-    return this.listCriteriaResult.find(s => !s.editMode) == undefined;
+    return this.listCriteriaResult.find(s => !s.editMode) == undefined && this.isActive;
   }
 
   public isEditingAnyRow() {
-    return this.listCriteriaResult.find(s => s.editMode) != undefined;
+    return this.listCriteriaResult.find(s => s.editMode) != undefined && this.isActive;
   }
 
   public isShowEditBtnOnRow() {
@@ -1520,14 +1533,58 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   cancelUpdateAll() {
     this.listCriteriaResult = cloneDeep(this.listPreEditCriteriaResult);
+    for (let index = 0; index < this.listCriteriaResult.length; index++) {
+      this.listCriteriaResult[index].isShowHistory = this.oldShowHistoryStatus[index].isShowHistory;
+    }
   }
   saveAllUpdate() {
     this.pjCriteriaResultService.updateAllCriteriaResult(this.listCriteriaResult).subscribe(res => {
       if (res.success) {
         abp.notify.success(`Update successfully`);
-        this.getAllCriteria();
+        this.getAllCriteria(true);
         this.getProjectProblem();
       }
     });
+  }
+  getLastWeek() {
+    this.pmReportProjectService.GetAllByProject(this.projectId).subscribe((res) => {
+      this.oldWeeklyReport = res.result.find(x => x.pmReportProjectId != 0 && x.reportId < this.pmReportId);
+      this.getOldCriteriaResult();
+    });
+  }
+  getOldCriteriaResult() {
+    this.pjCriteriaResultService.getAllCriteriaResult(this.projectId, this.oldWeeklyReport.reportId).subscribe((res) => {
+      this.oldCriteriaResult = res.result;
+    })
+  }
+  getOldNote(item) {
+    return this.oldCriteriaResult.find(x => x.projectCriteriaId == item.projectCriteriaId)?.note;
+  }
+  getOldCriteriaHealth(item): any {
+    const old = this.oldCriteriaResult.find(x => x.projectCriteriaId == item.projectCriteriaId)?.status;
+    return Number(old) != 0 ? this.APP_CONST.projectHealthStyle[old] : 'text-muted';
+  }
+  showCriteriaHistory(item,index) {
+    item.isShowHistory = !item.isShowHistory;
+    this.oldShowHistoryStatus[index].isShowHistory = item.isShowHistory;
+  }
+  isShowPMNote() {
+    if (this.listCriteriaResult.length < 1) return false
+    else return this.listCriteriaResult.find(x => x.isShowHistory == true) ? true : false;
+  }
+  isShowLastWeek() {
+    if (this.listCriteriaResult.length < 1) return false || this.showPmNote
+    else return this.listCriteriaResult.filter(x => x.isShowHistory == true).length < this.listCriteriaResult.length ? false : true || this.showPmNote;
+  }
+  showLastWeek(list,event) {
+    if (list.length > 0) {
+      list.forEach(element => {
+        element.isShowHistory = event;
+      });
+      this.oldShowHistoryStatus = cloneDeep(list);
+    }
+    if (list.length < 1) {
+      this.showPmNote = !this.showPmNote;
+    }
   }
 }

@@ -16,6 +16,8 @@ namespace ProjectManagement.APIs.PMReportProjectIssues.Dto
         public string ProjectHealthString { get; set; }
 
         public List<GetPMReportProjectIssueDto> Result { get; set; }
+
+        public DateTime? TimeSendReport { get; set; }
     }
 
     public class GetPMReportProjectIssueDto : EntityDto<long>
