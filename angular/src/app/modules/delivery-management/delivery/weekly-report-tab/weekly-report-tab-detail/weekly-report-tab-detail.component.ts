@@ -142,7 +142,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public oldCriteriaResult: ProjectCriteriaResultDto[] = []
   public oldShowHistoryStatus:ProjectCriteriaResultDto []=[];
   timeSentReport = "";
-  public isSwitch: boolean;
 
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
@@ -155,6 +154,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   overTimeNoCharge1: number = 0;
   totalNormalWorkingTimeStandard: number = 0;
   totalNormalWorkingTimeStandard1: number = 0;
+  public showPmNote = false;
 
   sidebarExpanded: boolean;
   isShowCurrentResource: boolean = true;
@@ -523,9 +523,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.processFuture = false;
     this.processProblem = false
     this.processWeekly = false;
-    this.isSwitch = false;
     this.searchUser = ""
     this.getTimeCountDown(true);
+    this.showPmNote = false;
   }
 
 
@@ -1573,16 +1573,18 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     else return this.listCriteriaResult.find(x => x.isShowHistory == true) ? true : false;
   }
   isShowLastWeek() {
-    if (this.listCriteriaResult.length < 1) return false
-    else return this.listCriteriaResult.filter(x => x.isShowHistory == true).length < this.listCriteriaResult.length ? false : true;
+    if (this.listCriteriaResult.length < 1) return false || this.showPmNote
+    else return this.listCriteriaResult.filter(x => x.isShowHistory == true).length < this.listCriteriaResult.length ? false : true || this.showPmNote;
   }
   showLastWeek(list,event) {
     if (list.length > 0) {
-      this.isSwitch = event
       list.forEach(element => {
         element.isShowHistory = event;
       });
       this.oldShowHistoryStatus = cloneDeep(list);
+    }
+    if (list.length < 1) {
+      this.showPmNote = !this.showPmNote;
     }
   }
 }

@@ -74,7 +74,7 @@
                                     <i style="color: red" class="fas fa-times fa-2x" (click)="cancelUpdateAll()"></i>
                                 </div>
                                 <mat-checkbox [color]="'primary'" class="pl-1" (change)="showLastWeek(listCriteriaResult,$event.checked)"
-                                    [checked]="isShowLastWeek()&&isSwitch">Show all last week</mat-checkbox>
+                                    [checked]="isShowLastWeek()">Show all last week</mat-checkbox>
                             </div>
                             <div class="col-4">
                                 <span>Time send report: {{timeSentReport}}</span>
@@ -183,7 +183,7 @@
                                         [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
                                 </textarea>
                                 </mat-form-field>
-                                <div *ngIf="isShowPMNote()" class="rounded my-4"
+                                <div *ngIf="isShowLastWeek() == true || showPmNote==true" class="rounded my-4"
                                     style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
                                     <div class="d-flex align-items-baseline">
                                         <span class="m-2 overflow-auto">
