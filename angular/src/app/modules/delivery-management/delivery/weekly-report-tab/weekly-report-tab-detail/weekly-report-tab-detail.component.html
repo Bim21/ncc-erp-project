@@ -63,7 +63,7 @@
 
 
                         <div class="row p-1">
-                            <div class="col-8 m-0 p-0 d-flex align-items-end">
+                            <div class="col-8 m-0 p-0 d-flex align-items-baseline">
                                 <strong classs="col-12" style="font-size: 20px;">Criteria status: </strong>
                                 <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()" (click)="editAllRow()">
                                     <i class="fas fa-pencil-alt mr-1"></i> Edit All</button>
@@ -73,7 +73,7 @@
                                     </button>
                                     <i style="color: red" class="fas fa-times fa-2x" (click)="cancelUpdateAll()"></i>
                                 </div>
-                                <mat-checkbox [color]="'primary'" class="pl-1" (change)="showLastWeek(listCriteriaResult,$event.checked)"
+                                <mat-checkbox [color]="'primary'" class="pl-3" (change)="showLastWeek(listCriteriaResult,$event.checked)"
                                     [checked]="isShowLastWeek()">Show all last week</mat-checkbox>
                             </div>
                             <div class="col-4">
@@ -139,7 +139,7 @@
                                                 name="note" [(ngModel)]="item.note" matInput></textarea>
                                         </mat-form-field>
                                     </div>
-                                    <div *ngIf="item.isShowHistory==true"  class="rounded my-4" style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
+                                    <div *ngIf="item.isShowHistory==true &&oldWeeklyReport"  class="rounded my-4" style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
                                         <div class="d-flex align-items-baseline">
                                             <span>
                                                 <i class="m-2 fas fa-circle fa-lg" [ngClass]="getOldCriteriaHealth(item)"></i>
@@ -183,7 +183,7 @@
                                         [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
                                 </textarea>
                                 </mat-form-field>
-                                <div *ngIf="isShowLastWeek() == true || showPmNote==true" class="rounded my-4"
+                                <div *ngIf="(isShowLastWeek() == true || showPmNote==true ||isShowPMNote()==true)&&oldWeeklyReport" class="rounded my-4"
                                     style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
                                     <div class="d-flex align-items-baseline">
                                         <span class="m-2 overflow-auto">
@@ -364,23 +364,23 @@
                                             </th>
                                             <th style="width: 80px; vertical-align: middle;">Role</th>
                                             <th style="width: 80px;">Normal
-                                                <div [matTooltip]="totalNormalWorkingTime + 'h of project'
-                                                        + ' / ' + totalNormalWorkingTimeOfWeekly + 'h all'
-                                                        + ' / ' + totalNormalWorkingTimeStandard + 'h standard' ">
-                                                    <strong>({{totalNormalWorkingTime}}h</strong> /
-                                                    <strong>{{totalNormalWorkingTimeOfWeekly}}h</strong>/
-                                                    <strong>{{totalNormalWorkingTimeStandard}}h)</strong>
+                                                <div [matTooltip]="fixedNumber(totalNormalWorkingTime) + 'h of project'
+                                                        + ' / ' + fixedNumber(totalNormalWorkingTimeOfWeekly) + 'h all'
+                                                        + ' / ' + fixedNumber(totalNormalWorkingTimeStandard) + 'h standard' ">
+                                                    <strong>({{fixedNumber(totalNormalWorkingTime)}}h</strong> /
+                                                    <strong>{{fixedNumber(totalNormalWorkingTimeOfWeekly)}}h</strong>/
+                                                    <strong>{{fixedNumber(totalNormalWorkingTimeStandard)}}h)</strong>
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
                                                 <div
-                                                    [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">
+                                                    [matTooltip]="fixedNumber(overTimeNoCharge) + 'h total OT NoCharge' + ' / ' + fixedNumber(totalOverTime) + 'h total OT'">
                                                     (
                                                     <strong [ngClass]="overTimeNoCharge>0?'ot-noCharge':''"
-                                                        style="font-size: 17px;">{{overTimeNoCharge}}h
+                                                        style="font-size: 17px;">{{fixedNumber(overTimeNoCharge)}}h
                                                     </strong> /
                                                     <strong [ngClass]="totalOverTime>0?'text-danger':''"
-                                                        style="font-size: 17px;">{{totalOverTime}}h
+                                                        style="font-size: 17px;">{{fixedNumber(totalOverTime)}}h
                                                     </strong>
                                                     )
                                                 </div>
@@ -479,23 +479,23 @@
                                         <tr>
                                             <th style="vertical-align: middle;">Employee</th>
                                             <th style="width: 80px;">Normal
-                                                <div [matTooltip]="totalNormalWorkingTime1 + 'h of project'
-                                                + ' / ' + totalNormalWorkingTimeOfWeekly1 + 'h all'
-                                                + ' / ' + totalNormalWorkingTimeStandard1 + 'h standard'">
-                                                    <strong>({{totalNormalWorkingTime1}}h</strong> /
-                                                    <strong>{{totalNormalWorkingTimeOfWeekly1}}h</strong>/
-                                                    <strong>{{totalNormalWorkingTimeStandard1}}h)</strong>
+                                                <div [matTooltip]="fixedNumber(totalNormalWorkingTime1) + 'h of project'
+                                                + ' / ' + fixedNumber(totalNormalWorkingTimeOfWeekly1) + 'h all'
+                                                + ' / ' + fixedNumber(totalNormalWorkingTimeStandard1) + 'h standard'">
+                                                    <strong>({{fixedNumber(totalNormalWorkingTime1)}}h</strong> /
+                                                    <strong>{{fixedNumber(totalNormalWorkingTimeOfWeekly1)}}h</strong>/
+                                                    <strong>{{fixedNumber(totalNormalWorkingTimeStandard1)}}h)</strong>
                                                 </div>
                                             </th>
                                             <th style="width: 80px;">OT
                                                 <div
-                                                    [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">
+                                                    [matTooltip]="fixedNumber(overTimeNoCharge) + 'h total OT NoCharge' + ' / ' + fixedNumber(totalOverTime) + 'h total OT'">
                                                     (
                                                     <strong [ngClass]="overTimeNoCharge1>0?'ot-noCharge':''"
-                                                        style="font-size: 17px;">{{overTimeNoCharge1}}h
+                                                        style="font-size: 17px;">{{fixedNumber(overTimeNoCharge1)}}h
                                                     </strong> /
                                                     <strong [ngClass]="totalOverTime1>0?'text-danger':''"
-                                                        style="font-size: 17px;">{{totalOverTime1}}h
+                                                        style="font-size: 17px;">{{fixedNumber(totalOverTime1)}}h
                                                     </strong>
                                                     )
                                                 </div>

@@ -13,6 +13,7 @@ import { EditReportComponent } from './edit-report/edit-report.component';
 import { ReportInfoComponent } from './report-info/report-info.component';
 import { InputFilterDto } from '@shared/filter/filter.component';
 import { CollectTimesheetDialogComponent } from './collect-timesheet-dialog/collect-timesheet-dialog.component';
+import { AddReportNoteComponent } from './weekly-report-tab-detail/add-report-note/add-report-note.component';
 
 @Component({
   selector: 'app-weekly-report-tab',
@@ -145,5 +146,16 @@ export class WeeklyReportTabComponent extends PagedListingComponentBase<WeeklyRe
       width: "700px",
       data: pmReportId
     })
+  }
+  editNote(reportId) {
+    const show = this.dialog.open(AddReportNoteComponent, {
+      data: {
+        reportId: reportId
+      },
+      width: "700px",
+    })
+    show.afterClosed().subscribe(result => {
+        this.refresh()
+    });
   }
 }

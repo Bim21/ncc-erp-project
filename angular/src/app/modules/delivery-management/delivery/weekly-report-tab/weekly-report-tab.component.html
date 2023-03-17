@@ -46,7 +46,7 @@
                         <thead class="bg-light">
                             <tr style="border: none;">
                                 <th class="stt">STT</th>
-                                <th>Weekly Report</th>
+                                <th style="width: 250px;">Weekly Report</th>
                                 <th style="width: 220px;">Projects</th>
                                 <th>Note</th>
                                 <th style="width: 100px;">Actions</th>
@@ -85,48 +85,52 @@
                                     )
                                 </td>
                                 <td style="white-space: normal; max-width: 300px;">
-                                    <pre class="mb-0 p-0  ml-2" style=" white-space: pre-line;
-                                 font-family: sans-serif; align-self:flex-start; line-height: initial;">
-                                   {{item.note}}
-                               </pre>
+                                    <pre PrjResizeContent [collapseLine]="3" class="mb-0 p-0  ml-2 max-line-content-3" style=" white-space: pre-line;
+                                                                font-family: sans-serif; align-self:flex-start; line-height: initial;">
+                                                                    {{item.note}}
+                                                                </pre>
 
                                 </td>
                                 <td class="text-center">
                                     <button *ngIf="(item.isActive || permission.isGranted(WeeklyReport_CloseAndAddNew)
-                                    || permission.isGranted(WeeklyReport_CollectTimesheet)
-                                    || permission.isGranted(WeeklyReport_Rename)
-                                    || permission.isGranted(WeeklyReport_View))
-                                    && item.isActive ==true
-                                    " mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
+                                                                    || permission.isGranted(WeeklyReport_CollectTimesheet)
+                                                                    || permission.isGranted(WeeklyReport_Rename)
+                                                                    || permission.isGranted(WeeklyReport_View))
+                                                                    && item.isActive ==true
+                                                                    " mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
                                         <i class="fas fa-bars fa-lg"></i>
                                     </button>
                                     <mat-menu #menu="matMenu" class="p-2">
                                         <div class="text-center">
-                                            <button
-                                                *ngIf="item.isActive && permission.isGranted(WeeklyReport_CloseAndAddNew)"
+                                            <button *ngIf="item.isActive && permission.isGranted(WeeklyReport_CloseAndAddNew)"
                                                 class="mat-menu-item  w-100" (click)="closeReport(item)">
                                                 <i class="fas fa-times mr-1 text-danger fa-lg"></i>
                                                 Close & Add New
                                             </button>
                                         </div>
-                                        <button *ngIf="permission.isGranted(WeeklyReport_CollectTimesheet)"
-                                        class="mat-menu-item  w-100 " (click)="collectTimesheet(item.id)">
-                                        <i class="fas fa-business-time"></i>
-                                        Collect timesheet
-                                    </button>
-                                        <button
-                                            *ngIf="item.isActive && permission.isGranted(WeeklyReport_Rename)"
-                                            class="mat-menu-item  w-100 " (click)="editReport(item)">
+                                        <!-- <button *ngIf="permission.isGranted(WeeklyReport_CollectTimesheet)" class="mat-menu-item  w-100 "
+                                            (click)="collectTimesheet(item.id)">
+                                            <i class="fas fa-business-time"></i>
+                                            Collect timesheet
+                                        </button> -->
+                                        <button *ngIf="item.isActive && permission.isGranted(WeeklyReport_Rename)" class="mat-menu-item  w-100 "
+                                            (click)="editReport(item)">
                                             <i class="fas fa-pencil-alt mr-1"></i>
                                             Rename
                                         </button>
-                                        <button
-                                            *ngIf="item.isActive && permission.isGranted(WeeklyReport_ViewInfo)"
-                                            class="mat-menu-item  w-100 " (click)="viewReportInfo(item)">
+                                        <button class="btn mat-menu-item  w-100" (click)="editNote(item.id)">
+                                            <i class="fas fa-sticky-note mr-1"></i>
+                                            Edit Note
+                                        </button>
+                                        <!-- <button *ngIf="item.isActive && permission.isGranted(WeeklyReport_ViewInfo)" class="mat-menu-item  w-100 "
+                                            (click)="viewReportInfo(item)">
                                             <i class="fas fa-eye mr-1"></i>
                                             View
-                                        </button>
+                                        </button> -->
                                     </mat-menu>
+                                    <button matTooltip="Edit Note" class="btn" *ngIf="!item.isActive" (click)="editNote(item.id)">
+                                        <i class="fas fa-pencil-alt mr-1"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>

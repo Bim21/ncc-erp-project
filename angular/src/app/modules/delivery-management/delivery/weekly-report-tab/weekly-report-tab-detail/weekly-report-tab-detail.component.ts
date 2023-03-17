@@ -1549,7 +1549,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   getLastWeek() {
     this.pmReportProjectService.GetAllByProject(this.projectId).subscribe((res) => {
       this.oldWeeklyReport = res.result.find(x => x.pmReportProjectId != 0 && x.reportId < this.pmReportId);
-      this.getOldCriteriaResult();
+      if(this.oldWeeklyReport)
+      {
+        this.getOldCriteriaResult();
+      }
     });
   }
   getOldCriteriaResult() {
@@ -1586,5 +1589,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if (list.length < 1) {
       this.showPmNote = !this.showPmNote;
     }
+  }
+  fixedNumber(num: number) {
+    if (num % 1 !== 0) {
+      return Number(num.toFixed(2));
+    }
+    return num;
   }
 }
