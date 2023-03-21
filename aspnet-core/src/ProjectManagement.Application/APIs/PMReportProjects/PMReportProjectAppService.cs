@@ -42,7 +42,7 @@ namespace ProjectManagement.APIs.PMReportProjects
         public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, WeeklyReportSort sort, ProjectHealth? health, string projectType = "OUTSOURCING")
         {
             var query = WorkScope.GetAll<PMReportProject>()
-                .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill)
+                .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill && x.Project.IsRequiredWeeklyReport)
                 .WhereIf(health.HasValue, x => x.ProjectHealth == health.Value)
                 .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
                 .WhereIf(projectType == "TRAINING", x => x.Project.ProjectType == ProjectType.TRAINING)

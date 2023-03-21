@@ -46,6 +46,7 @@ namespace ProjectManagement.APIs.PMReports
         public async Task<GridResult<GetPMReportDto>> GetAllPaging(GridParam input)
         {
             var pmReportProject = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.Project.IsRequiredWeeklyReport)
                 .WhereIf(input.FilterItems.Any(x => x.PropertyName == "projectType" && int.Parse(x.Value.ToString()) == 2), x => x.Project.ProjectType == ProjectType.PRODUCT)
                 .WhereIf(input.FilterItems.Any(x => x.PropertyName == "projectType" && int.Parse(x.Value.ToString()) == 1), x => x.Project.ProjectType == ProjectType.TRAINING)
                 .WhereIf(input.FilterItems.Any(x => x.PropertyName == "projectType" && int.Parse(x.Value.ToString()) == 0) ||
@@ -231,7 +232,7 @@ namespace ProjectManagement.APIs.PMReports
                 ).FirstOrDefault());
 
             var activeProjects = await WorkScope.GetAll<Project>()
-                .Where(x => x.Status == ProjectStatus.InProgress && x.IsRequiredWeeklyReport)
+                .Where(x => x.Status == ProjectStatus.InProgress)
                 .ToListAsync();
 
             foreach (var project in activeProjects)

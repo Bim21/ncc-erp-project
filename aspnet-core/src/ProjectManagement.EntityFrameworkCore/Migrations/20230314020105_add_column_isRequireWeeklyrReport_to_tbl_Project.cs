@@ -10,7 +10,7 @@ namespace ProjectManagement.Migrations
                 name: "IsRequiredWeeklyReport",
                 table: "Projects",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
