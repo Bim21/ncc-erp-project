@@ -67,6 +67,7 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       this.project.startTime = moment(new Date()).format("YYYY-MM-DD")
       this.project.isCharge = true;
       this.project.requireTimesheetFile = true;
+      this.project.isRequiredWeeklyReport = true;
     }
     this.getAllClient()
     this.title = this.project.name;
@@ -104,13 +105,13 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
         abp.notify.success("created new project");
         this.dialogRef.close(this.project);
         if(res.result == null || res.result == ""){
-          abp.message.success(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-          <p style='color:#28a745'>Create project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+          abp.message.success(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p>
+          <p style='color:#28a745'>Create project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`,
          'Create project result',true);
         }
         else{
-          abp.message.error(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-          <p style='color:#dc3545'>${res.result}</p>`, 
+          abp.message.error(`<p>Create project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p>
+          <p style='color:#dc3545'>${res.result}</p>`,
           'Create project result',true);
         }
       }, () => this.isLoading = false);
@@ -122,13 +123,13 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
           abp.notify.success("Edited project: "+this.project.name);
         }
         else if(res.result == null || res.result == ""){
-          abp.message.success(`<p>Edited project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-          <p style='color:#28a745'>Edited project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`, 
+          abp.message.success(`<p>Edited project name <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p>
+          <p style='color:#28a745'>Edited project name <b>${this.project.name}</b> in <b>TIMESHEET TOOL</b> successful!</p>`,
          'Edit project result',true);
         }
         else{
-          abp.message.error(`<p>Edited project <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p> 
-          <p style='color:#dc3545'>${res.result}</p>`, 
+          abp.message.error(`<p>Edited project <b>${this.project.name}</b> in <b>PROJECT TOOL</b> successful!</p>
+          <p style='color:#dc3545'>${res.result}</p>`,
           'Edit project result',true);
         }
         this.dialogRef.close(this.project);

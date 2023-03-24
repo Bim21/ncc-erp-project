@@ -237,7 +237,6 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
         dialogData: project
       },
       width: '700px',
-      maxHeight: '100vh',
       disableClose: true
     });
 
