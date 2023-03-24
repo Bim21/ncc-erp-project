@@ -1400,7 +1400,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     }
 
   public isEditingAllRow() {
-    return this.listCriteriaResult.find(s => !s.editMode) == undefined;
+    return this.listCriteriaResult.find(s => !s.editMode) == undefined && this.selectedReport.isActive;
   }
 
   public isEditingAnyRow() {
