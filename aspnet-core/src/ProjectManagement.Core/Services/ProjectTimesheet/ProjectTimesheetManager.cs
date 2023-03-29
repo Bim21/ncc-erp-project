@@ -1,14 +1,13 @@
 ﻿using Abp.Application.Services;
-using NccCore.IoC;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManagement.Entities;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NccCore.IoC;
+using ProjectManagement.Entities;
 using ProjectManagement.Services.ProjectTimesheet.Dto;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProjectManagement.Services.ProjectTimesheet
 {
@@ -31,6 +30,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
                .Select(x => x.Id)
                .FirstOrDefaultAsync();
         }
+
         public async Task<TimesheetDto> GetActiveTimesheet()
         {
             return await _workScope.GetAll<Entities.Timesheet>()
@@ -61,13 +61,24 @@ namespace ProjectManagement.Services.ProjectTimesheet
                .FirstOrDefaultAsync();
         }
 
-
         public async Task CreateTimesheetProjectBill(ProjectUserBill pub, Project project)
         {
             var activeTimesheetId = await GetActiveTimesheetId();
             if (activeTimesheetId == default)
             {
                 Logger.LogInformation("CreateTimesheetProjectBill() no activeTimesheetId");
+                return;
+            }
+            var timesheetproject = await _workScope.GetAll<TimesheetProject>()
+                .Where(x => x.ProjectId == pub.ProjectId && x.TimesheetId == activeTimesheetId)
+                .FirstOrDefaultAsync();
+            if(timesheetproject == default) 
+            {
+                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProject ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}");
+                return;
+            }
+            if(timesheetproject.IsComplete.HasValue && timesheetproject.IsComplete.Value==true)
+            {
                 return;
             }
             var tpb = new TimesheetProjectBill
@@ -108,10 +119,21 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProjectBill ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}, UserId={pub.UserId}");
                 return;
             }
-
+            var timesheetproject = await _workScope.GetAll<TimesheetProject>()
+                .Where(x => x.ProjectId == pub.ProjectId && x.TimesheetId == activeTimesheetId)
+                .FirstOrDefaultAsync();
+            if(timesheetproject == default) 
+            {
+                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProject ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}");
+                return;
+            }
+            if(timesheetproject.IsComplete.HasValue && timesheetproject.IsComplete.Value==true)
+            {
+                return;
+            }
             tpb.BillRate = pub.BillRate;
             tpb.BillRole = pub.BillRole;
-            tpb.IsActive = pub.isActive;         
+            tpb.IsActive = pub.isActive;
             tpb.AccountName = pub.AccountName;
 
             await _workScope.UpdateAsync(tpb);
@@ -169,8 +191,6 @@ namespace ProjectManagement.Services.ProjectTimesheet
                 AccountName = s.AccountName,
                 ParentInvoiceId = s.Project.ParentInvoiceId
             }).ToListAsync();
-
         }
-
     }
 }
