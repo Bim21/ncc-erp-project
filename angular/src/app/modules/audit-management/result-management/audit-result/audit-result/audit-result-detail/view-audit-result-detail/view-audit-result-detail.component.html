@@ -1,0 +1,27 @@
+<abp-modal-header [title]="data.processCriteria.code +':'+ data.processCriteria.name" (onCloseClick)="dialogRef.close()">
+</abp-modal-header>
+<mat-dialog-content class="mat-typography">
+    <mat-divider></mat-divider>
+    <section>
+        <div class="example-label">NC Status</div>
+        <div class="example-button-row">
+            <div *ngFor="let button of availableColors ">
+                <button mat-raised-button [color]="button.color" [style]="button.style"
+                    *ngIf="data.status === button.status">{{ button.label }}
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <mat-divider></mat-divider>
+    <section style="padding-top: 20px;">
+        <div class="example-label">Note</div>
+        <p style="overflow-wrap: break-word;">{{data.note }}</p>
+    </section>
+    <mat-divider></mat-divider>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

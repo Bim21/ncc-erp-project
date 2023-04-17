@@ -206,6 +206,32 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         'fas fa-calendar-alt',
         'Timesheets'
       ),
+      new MenuItem(
+        this.l('Audits'),
+        '',
+        'fas fa-clipboard-check',
+        'Audits',
+        [
+          new MenuItem(
+            this.l('Criteria'),
+            '/app/criteria-management',
+            'fas fa-check-circle',
+            'Audits.Criteria'
+          ),
+          new MenuItem(
+            this.l('Tailoring'),
+            '/app/tailoring-management',
+            'fas fa-chalkboard',
+            'Audits.Tailoring'
+          ),
+          new MenuItem(
+            this.l('Results'),
+            '/app/audit-result',
+            'fas fa-thumbs-up',
+            'Audits.Results'
+          ),
+        ]
+      ),
     ];
   }
 

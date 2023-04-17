@@ -119,6 +119,11 @@ export class AppConsts {
         2: "text-warning",
         3: "text-danger"
     }
+    static readonly auditStatus = {
+        1: "badge  bg-success",
+        2: "badge  bg-warning",
+        3: "badge  bg-danger"
+    }
     static readonly bgProjectReportStyle = {
         Green: 'green',
         Red: 'red',

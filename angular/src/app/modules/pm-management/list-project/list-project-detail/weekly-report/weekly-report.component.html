@@ -61,7 +61,6 @@
                     </div>
                 </div>
 
-
                 <div class="fixTableHead" style="max-height: none;"
                     *ngIf="permission.isGranted(ProjectHealthCriteria_View)">
                     <div *ngFor="let item of listCriteriaResult let i =index">
@@ -101,7 +100,7 @@
                                             (click)="saveCriteriaResult(item,i)">
                                             <i style="color: green;font-size: 24px;" class="fas fa-check"></i>
                                         </button>
-                                        <button class=" submit-btn" style="background: none; border: none;" (click)="cancelEditCriteriaResult(i)">
+                                        <button class="submit-btn" style="background: none; border: none;" (click)="cancelEditCriteriaResult(i)">
                                             <i style="color: red; font-size: 24px;" class="fas fa-times" ></i>
                                         </button>
                                     </div>
@@ -126,7 +125,7 @@
 
                 <div class="row p-1">
                     <div class="col m-0 p-0">
-                        <strong classs="col-12" style="font-size: 20px;">PM note: </strong>
+                        <strong class="col-12" style="font-size: 20px;">PM note: </strong>
                         <div class="d-inline ml-2 pt-1 text-right row">
                             <i [hidden]="!selectedReport.isActive || selectedReport.pmReportProjectId==0"
                                 *ngIf="!isEditingNote && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)"
@@ -150,7 +149,6 @@
                         </mat-form-field>
                     </div>
                 </div>
-
 
                 <div
                     *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View)">
@@ -295,7 +293,7 @@
                                                 [disabled]=" !problem.description || !problem.impact || !(problem.status.toString())"
                                                 class=" mr-3 submit-btn" style="background: none; border: none;"
                                                 (click)="saveProblemReport(problem)">
-                                                <i style="color: green; ;" class="fas fa-check fa-2x"></i>
+                                                <i style="color: green;" class="fas fa-check fa-2x"></i>
                                             </button>
 
                                             <i style="color: red;" class="fas fa-times fa-2x"
@@ -309,9 +307,6 @@
                     </div>
                 </div>
             </div>
-
-
-
 
             <div class="card" id="current-resource"
                 *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View)">
@@ -408,7 +403,6 @@
                                     </td>
                                 </tr>
                             </tbody>
-
                         </table>
                     </div>
                 </div>
@@ -773,9 +767,6 @@
                                                                 This field is required
                                                             </mat-error>
                                                         </div>
-
-
-
                                                     </td>
 
                                                     <td class="text-center">
@@ -843,25 +834,11 @@
                                     <pagination-controls autoHide="true" id="projectUser"
                                         (pageChange)="weeklyCurrentPage = $event"></pagination-controls>
                                 </mat-expansion-panel>
-
                             </div>
-
-
                         </div>
-
                     </div>
-
-
                 </div>
-
             </div>
-
-
-
-
-
-
-
         </div>
     </div>
 </section>

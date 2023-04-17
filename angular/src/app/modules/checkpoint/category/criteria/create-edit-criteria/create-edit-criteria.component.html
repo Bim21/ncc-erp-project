@@ -29,7 +29,8 @@
                                     class: 'w-100',
                                     menubar: true,
                                     plugins: ['table','code','preview','media', 'image', 'template'],
-                                    toolbars: ['image']
+                                    toolbars: ['image'],
+                                    branding: false
                                     }" [(ngModel)]="criteria.guideline" #criteriaNameModel="ngModel" #criteriaNameEl name="guideline"
                     initialValue="{{criteria.guideline}}">
                 </editor>

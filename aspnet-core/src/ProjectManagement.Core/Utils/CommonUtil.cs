@@ -1,19 +1,17 @@
-﻿using ProjectManagement.Entities;
+﻿using Abp.Timing;
+using ProjectManagement.Constants;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
+using System.Text.RegularExpressions;
+using System.Web;
 using static ProjectManagement.Constants.Enum.ClientEnum;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 using Branch = ProjectManagement.Constants.Enum.ProjectEnum.Branch;
-using Abp.Timing;
-using Microsoft.Extensions.Configuration;
-using ProjectManagement.Constants;
 
 namespace ProjectManagement.Utils
 {
     public class CommonUtil
     {
-
         private static readonly Dictionary<byte, string> PaymentDueByListReadOnly
         = new Dictionary<byte, string>
         {
@@ -155,7 +153,6 @@ namespace ProjectManagement.Utils
                 return "**CONFIRM**";
             }
             return PUStatus.ToString();
-
         }
 
         public static string JoinOrOutProject(byte allocatePercentage)
@@ -167,7 +164,6 @@ namespace ProjectManagement.Utils
         //{
         //    if (pu != null)
         //    {
-
         //    }
         //}
 
@@ -177,32 +173,43 @@ namespace ProjectManagement.Utils
             {
                 case UserLevel.AnyLevel:
                     return "Any Level";
+
                 case UserLevel.Fresher:
                     return "Fresher";
+
                 case UserLevel.FresherMinus:
                     return "Fresher-";
+
                 case UserLevel.FresherPlus:
                     return "Fresher+";
+
                 case UserLevel.JuniorMinus:
                     return "Junior-";
+
                 case UserLevel.JuniorPlus:
                     return "Junior+";
+
                 case UserLevel.MiddleMinus:
                     return "Middle-";
+
                 case UserLevel.MiddlePlus:
                     return "Middle+";
+
                 case UserLevel.SeniorMinus:
                     return "Senior-";
+
                 case UserLevel.Principal:
                     return "Principal";
+
                 case UserLevel.Intern_0:
                     return "Intern_0";
+
                 case UserLevel.Intern_1:
                     return "Intern_1";
+
                 default:
                     return Enum.GetName(typeof(UserLevel), level);
             }
-
         }
 
         public static string BranchName(Branch? branch)
@@ -215,10 +222,13 @@ namespace ProjectManagement.Utils
             {
                 case Branch.DaNang:
                     return "ĐN";
+
                 case Branch.HaNoi:
                     return "HN";
+
                 case Branch.HCM:
                     return "HCM";
+
                 case Branch.Vinh:
                     return "Vinh";
             }
@@ -231,7 +241,7 @@ namespace ProjectManagement.Utils
             {
                 return "null";
             }
-            
+
             return Enum.GetName(typeof(ChargeType), chargeType);
         }
 
@@ -245,10 +255,13 @@ namespace ProjectManagement.Utils
             {
                 case UserType.Staff:
                     return "Staff";
+
                 case UserType.Internship:
                     return "TTS";
+
                 case UserType.Collaborators:
                     return "CTV";
+
                 case UserType.ProbationaryStaff:
                     return "T.Việc";
             }
@@ -260,10 +273,9 @@ namespace ProjectManagement.Utils
             if (!job.HasValue)
             {
                 return "";
-            }           
+            }
             return Enum.GetName(typeof(Job), job.Value);
         }
-
 
         public static string ProjectTypeName(ProjectType projectType)
         {
@@ -273,7 +285,6 @@ namespace ProjectManagement.Utils
                     return "T&M";
             }
             return Enum.GetName(typeof(ProjectType), projectType);
-
         }
 
         public static string ProjectStatusName(ProjectStatus status)
@@ -283,8 +294,8 @@ namespace ProjectManagement.Utils
                 return "";
             }
             return Enum.GetName(typeof(ProjectStatus), status);
-
         }
+
         public static DateTime GetNow()
         {
             return Clock.Provider.Now;
@@ -299,16 +310,18 @@ namespace ProjectManagement.Utils
         {
             return GetNow().ToString("yyyyMMddHHmmss");
         }
-        
+
         public static string GetPathSendRecuitment(string path)
         {
             return string.IsNullOrEmpty(path) ? "" : AppConsts.FE_TALENT_ADDRESS + path;
         }
+
         public static UserType GetProjectUserType(byte type)
         {
             UserType[] userTypes = { UserType.Staff, UserType.Internship, UserType.Collaborators };
             return userTypes[type];
         }
+
         public enum TimeSheetUserType : byte
         {
             Staff = 0,
@@ -316,7 +329,8 @@ namespace ProjectManagement.Utils
             Collaborators = 2
         }
 
-        public static int LastDateNextThan2Month = 102;  
+        public static int LastDateNextThan2Month = 102;
+
 
         public static double Round(double value)
         {
@@ -327,9 +341,66 @@ namespace ProjectManagement.Utils
         {
             return Enum.Parse<UserLevel>(levelCode);
         }
+
         public static ProjectHealth GetProjectHealthByString(string health)
         {
             return Enum.Parse<ProjectHealth>(health);
+        }
+
+        public static string GetProjectTypeString(ProjectType type)
+        {
+            if (type == ProjectType.PRODUCT)
+            {
+                return "Product";
+            }
+            if (type == ProjectType.TRAINING)
+            {
+                return "Training";
+            }
+            return "Outsourcing";
+        }
+        public static Applicable GetPPCApplicable (string apllicable)
+        {
+            return Enum.Parse<Applicable>(apllicable);
+        }
+        public static string ConvertHtmlToPlainText(string html)
+        {
+            if (html == null)
+            {
+                return null;
+            }
+
+            var plainText = HttpUtility.HtmlDecode(
+                Regex.Replace(
+                    Regex.Replace(
+                        Regex.Replace(
+                            Regex.Replace(
+                                html
+                                    .Replace("\\n", "&#10;")
+                                    .Replace("</br>", "\n")
+                                    .Replace("<br>", "\n")
+                                    .Replace("<ul>", "\n")
+                                    .Replace("<li>", "• ")
+                                    .Replace("</ul>", "\n")
+                                    .Replace("<em>", "<i>")
+                                    .Replace("</em>", "</i>")
+                                    .Replace("<p>", "")
+                                    .Replace("</p>", ""),
+                                "<.*?>",
+                                string.Empty
+                            ),
+                            @"&(?!(\w+|#\d+);)",
+                            "&amp;"
+                        ),
+                        "&nbsp;",
+                        " "
+                    ),
+                    @"<br(\s*\/)?>",
+                    "\n"
+                )
+            );
+
+            return plainText;
         }
     }
 }

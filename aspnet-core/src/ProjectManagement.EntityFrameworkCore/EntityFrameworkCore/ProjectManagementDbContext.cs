@@ -86,7 +86,10 @@ namespace ProjectManagement.EntityFrameworkCore
         public DbSet<ProjectCriteria> ProjectCriterias { get; set; }
 
         public DbSet<ProjectCriteriaResult> ProjectCriteriaResults { get; set; }
-
+        public DbSet<ProcessCriteria> ProcessCriterias { get; set; }
+        public DbSet<ProjectProcessCriteria> ProjectProcessCriterias { get; set; }
+        public DbSet<ProjectProcessResult> ProjectProcessResults { get; set; }
+        public DbSet<ProjectProcessCriteriaResult> ProjectProcessCriteriaResults { get; set; }
         public ProjectManagementDbContext(DbContextOptions<ProjectManagementDbContext> options)
             : base(options)
         {

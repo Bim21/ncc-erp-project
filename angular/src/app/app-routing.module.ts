@@ -77,7 +77,12 @@ import { TechnologyComponent } from './modules/admin/technology/technology.compo
 import { PositionComponent } from './modules/admin/position/position.component';
 import { TrainingRequestTabComponent } from './modules/delivery-management/delivery/training-request-tab/training-request-tab.component';
 import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component';
-
+import { CriteriaManagementComponent } from './modules/audit-management/criteria-management/criteria-management.component';
+import { TailoringManagementComponent } from './modules/audit-management/criteria-management/tailoring-management/tailoring-management/tailoring-management.component';
+import {AuditResultComponent} from './modules/audit-management/result-management/audit-result/audit-result/audit-result.component'
+import { ProjectCriteriaAuditComponent } from './modules/audit-management/criteria-management/project-criteria-audit/project-criteria-audit.component';
+import { TaloringProjectComponent } from './modules/audit-management/criteria-management/taloring-project/taloring-project.component';
+import { AuditResultDetailComponent } from './modules/audit-management/result-management/audit-result/audit-result/audit-result-detail/audit-result-detail.component';
 @NgModule({
   imports: [
     RouterModule.forChild([
@@ -209,10 +214,10 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
             component: ListProjectDetailComponent,
             canActivate: [AppRouteGuard],
             children: [
-                {
-                    path: "list-project-general",
-                    component: ListProjectGeneralComponent,
-                    canActivate: [AppRouteGuard],
+              {
+                path: "list-project-general",
+                component: ListProjectGeneralComponent,
+                canActivate: [AppRouteGuard],
               },
               {
                 path: "resourcemanagement",
@@ -263,49 +268,49 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
             children: [
               {
                 path: "training-project-general",
-              component: TrainingProjectGeneralComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "training-resource-management",
-              component: TrainingResourceManagementComponent
-            },
-            {
-              path: "training-milestone",
-              component: TrainingMilestoneComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "training-weekly-report",
-              component: TrainingWeeklyReportComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "training-project-checklist",
-              component: TrainingProjectChecklistComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "training-timesheet-tab",
-              component: TrainingProjectTimesheetComponent,
-              canActivate: [AppRouteGuard]
-            },
-            {
-              path: "training-description-tab",
-              component: TrainingProjectDescriptionComponent,
-              canActivate: [AppRouteGuard]
-            },
-            {
-              path: "training-project-file-tab",
-              component: TrainingProjectFileComponent,
-              canActivate: [AppRouteGuard]
-            },
-            {
-              path: "project-bill-tab",
-              component: ProjectBillComponent,
-              canActivate: [AppRouteGuard]
-            }
-          ],
+                component: TrainingProjectGeneralComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "training-resource-management",
+                component: TrainingResourceManagementComponent
+              },
+              {
+                path: "training-milestone",
+                component: TrainingMilestoneComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "training-weekly-report",
+                component: TrainingWeeklyReportComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "training-project-checklist",
+                component: TrainingProjectChecklistComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "training-timesheet-tab",
+                component: TrainingProjectTimesheetComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "training-description-tab",
+                component: TrainingProjectDescriptionComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "training-project-file-tab",
+                component: TrainingProjectFileComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "project-bill-tab",
+                component: ProjectBillComponent,
+                canActivate: [AppRouteGuard]
+              }
+            ],
           },
           {
             path: "product-project-detail",
@@ -314,49 +319,49 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
             children: [
               {
                 path: "product-project-general",
-              component: ProductProjectGeneralComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "product-resource-management",
-              component: ProductResourceManagementComponent
-            },
-            {
-              path: "product-milestone",
-              component: ProductProjectMilestoneComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "product-weekly-report",
-              component: ProductWeeklyReportComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "product-project-checklist",
-              component: ProductProjectChecklistComponent,
-              canActivate: [AppRouteGuard],
-            },
-            {
-              path: "product-timesheet-tab",
-              component: ProductProjectTimesheetComponent,
-              canActivate: [AppRouteGuard]
-            },
-            {
-              path: "product-description-tab",
-              component: ProductProjectDescriptionComponent,
-              canActivate: [AppRouteGuard]
-            },
-            {
-              path: "product-project-file-tab",
-              component: ProductProjectFileComponent,
-              canActivate: [AppRouteGuard]
-            },
-            {
-              path: "project-bill-tab",
-              component: ProjectBillComponent,
-              canActivate: [AppRouteGuard]
-            }
-          ],
+                component: ProductProjectGeneralComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "product-resource-management",
+                component: ProductResourceManagementComponent
+              },
+              {
+                path: "product-milestone",
+                component: ProductProjectMilestoneComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "product-weekly-report",
+                component: ProductWeeklyReportComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "product-project-checklist",
+                component: ProductProjectChecklistComponent,
+                canActivate: [AppRouteGuard],
+              },
+              {
+                path: "product-timesheet-tab",
+                component: ProductProjectTimesheetComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "product-description-tab",
+                component: ProductProjectDescriptionComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "product-project-file-tab",
+                component: ProductProjectFileComponent,
+                canActivate: [AppRouteGuard]
+              },
+              {
+                path: "project-bill-tab",
+                component: ProjectBillComponent,
+                canActivate: [AppRouteGuard]
+              }
+            ],
           },
           {
             path: "weekly-report",
@@ -377,68 +382,68 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
             path: "available-resource",
             component: AvailableResourceTabComponent,
             canActivate: [AppRouteGuard],
-            children:[
+            children: [
               {
-                path:"pool",
-                component:PlanResourceComponent,
-                canActivate:[AppRouteGuard],
+                path: "pool",
+                component: PlanResourceComponent,
+                canActivate: [AppRouteGuard],
               },
               {
-                path:"future-resource",
-                component:FutureResourceComponent,
-                canActivate:[AppRouteGuard],
+                path: "future-resource",
+                component: FutureResourceComponent,
+                canActivate: [AppRouteGuard],
               },
               {
-                path:"all-resource",
-                component:AllResourceComponent,
-                canActivate:[AppRouteGuard],
+                path: "all-resource",
+                component: AllResourceComponent,
+                canActivate: [AppRouteGuard],
               },
               {
-                path:"vendor",
-                component:VendorComponent,
-                canActivate:[AppRouteGuard],
+                path: "vendor",
+                component: VendorComponent,
+                canActivate: [AppRouteGuard],
               }
             ]
           },
           {
-            path:"tags",
-            component:TagsComponent,
-            canActivate:[AppRouteGuard]
+            path: "tags",
+            component: TagsComponent,
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"phase",
+            path: "phase",
             component: PhaseComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"setup-reviewer",
+            path: "setup-reviewer",
             component: SetUpReviewerComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"result-reviewer",
+            path: "result-reviewer",
             component: ResultReviewerComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"review-user",
+            path: "review-user",
             component: ReviewUserComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"review-yourself",
+            path: "review-yourself",
             component: ReviewYourselfComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"category-criteria",
+            path: "category-criteria",
             component: CategoryCriteriaComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
-            path:"criteria",
+            path: "criteria",
             component: CriteriaComponent,
-            canActivate:[AppRouteGuard]
+            canActivate: [AppRouteGuard]
           },
           {
             path: "resourceRequestDetail",
@@ -452,18 +457,49 @@ import { AuditLogComponent } from './modules/admin/audit-log/audit-log.component
           },
           {
             path: "saodoDetail",
-                component: SaoDoDetailComponent,
-                canActivate: [AppRouteGuard],
+            component: SaoDoDetailComponent,
+            canActivate: [AppRouteGuard],
           },
           {
             path: "saodoProjectDetail",
-                component: SaoDoProjectDetailComponent,
-                canActivate: [AppRouteGuard],
+            component: SaoDoProjectDetailComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "criteria-management",
+            component: CriteriaManagementComponent,
+            canActivate: [AppRouteGuard]
+          },
+          {
+            path: "tailoring-project-edit",
+            component: ProjectCriteriaAuditComponent,
+            canActivate: [AppRouteGuard]
           }
+          ,
+          {
+            path: "tailoring-project",
+            component: TaloringProjectComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path: "tailoring-management",
+            component: TailoringManagementComponent,
+            canActivate: [AppRouteGuard],
+          },
+          {
+            path:"audit-result",
+            component:AuditResultComponent,
+            canActivate:[AppRouteGuard]
+          },
+          {
+            path:"auditResultDetail",
+            component:AuditResultDetailComponent,
+            canActivate:[AppRouteGuard]
+          },
         ]
       }
     ])
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

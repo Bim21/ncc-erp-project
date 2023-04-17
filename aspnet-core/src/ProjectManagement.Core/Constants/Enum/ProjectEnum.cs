@@ -20,7 +20,6 @@
         {
             Green = 0,
             Red = 1
-
         }
 
         public enum PMReportProjectIssueStatus
@@ -248,12 +247,40 @@
             Draft_Red_Yellow_Green,
             Latest_Review_Last
         }
+
         public enum ProjectCriteriaResultStatus
         {
             NotReported = 0,
             Green = 1,
             Yellow = 2,
             Red = 3
+        }
+
+        public enum PMReportProjectIssueType
+        {
+            PMIssue,
+            PQAIssue
+        }
+
+        public enum ProjectScoreKPIStatus
+        {
+            Green = 1,
+            Amber = 2,
+            Red = 3
+        }
+
+        public enum NCStatus
+        {
+            NC = 1,
+            OB = 2,
+            RE = 3,
+            EX = 4
+        }
+
+        public enum Applicable
+        {
+            Standard = 1,
+            Modify = 2
         }
     }
 }

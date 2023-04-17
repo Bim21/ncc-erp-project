@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -42,5 +43,16 @@ namespace ProjectManagement.Configuration.Dto
     public class WeeklyReportSettingDto
     {
         public int TimeCountDown { get; set; } //s
+    }
+    public class AuditScoreDto
+    {
+        public int FINAL_SCORE { get; set; }
+        public int PROJECT_SCORE_WHEN_STATUS_GREEN { get; set; }
+        public int PROJECT_SCORE_WHEN_STATUS_AMBER { get; set; }
+        public int PROJECT_SCORE_WHEN_STATUS_RED { get; set; }
+        public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC { get; set; }
+        public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION { get; set; }
+        public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE { get; set; }
+        public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX { get; set; }
     }
 }

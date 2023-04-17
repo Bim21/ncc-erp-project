@@ -42,6 +42,7 @@ export class ProjectFileComponent extends AppComponentBase implements OnInit {
 
 
   public selectFile(event) {
+    console.log(this.fileList);
     let fileData = this.fileList.map(item => {
       let file = new Blob([this.converFile(atob(item.bytes))], {
         type: ""
@@ -72,7 +73,7 @@ export class ProjectFileComponent extends AppComponentBase implements OnInit {
     for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
     return buf;
   }
-  private downloadFile(projectFile: ProjectFileDto) {
+  downloadFile(projectFile: ProjectFileDto) {
     const file = new Blob([this.converFile(atob(projectFile.bytes))], {
       type: ""
     });

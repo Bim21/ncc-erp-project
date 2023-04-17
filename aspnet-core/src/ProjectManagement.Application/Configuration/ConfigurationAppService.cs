@@ -23,6 +23,7 @@ using ProjectManagement.Services.Timesheet.Dto;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using System.Text.Json;
 
 namespace ProjectManagement.Configuration
 {
@@ -88,7 +89,7 @@ namespace ProjectManagement.Configuration
                 TalentUriFE = _appConfiguration.GetValue<string>("TalentService:FEAddress"),
                 TalentSecurityCode = _appConfiguration.GetValue<string>("TalentService:SecurityCode"),
                 MaxCountHistory = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory),
-
+                
             };
         }
 
@@ -170,6 +171,29 @@ namespace ProjectManagement.Configuration
         {
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TimeCountDown, input.TimeCountDown.ToString());
             return input;
+        }
+
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_Edit)]
+        [HttpPost]
+        public async Task<AuditScoreDto> SetAuditScore(AuditScoreDto input)
+        {
+            var json = JsonSerializer.Serialize(input);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ScoreAudit, json);
+            return input;
+        }
+
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_ViewAuditScoreSetting)]
+        [HttpGet]
+        public async Task<AuditScoreDto> GetAuditScore()
+        {
+            var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ScoreAudit);
+
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<AuditScoreDto>(json);
         }
 
         [HttpGet]

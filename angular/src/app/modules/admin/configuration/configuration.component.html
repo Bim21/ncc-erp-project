@@ -11,46 +11,31 @@
   <div class="container-fluid">
     <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewKomuSetting)">
       <mat-expansion-panel [expanded]="isShowKomuSetting">
-        <mat-expansion-panel-header (click)="isShowKomuSetting = !isShowKomuSetting"  class="panel-header">
+        <mat-expansion-panel-header (click)="isShowKomuSetting = !isShowKomuSetting" class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Komu setting"}}</p>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col-md-12">
-            <mat-checkbox class="example-margin"
-              [checked]="configuration.noticeToKomu == 'true'"
+            <mat-checkbox class="example-margin" [checked]="configuration.noticeToKomu == 'true'"
               onclick="return false;">
               Enable notice to Komu
             </mat-checkbox>
           </div>
           <div class="col col-12 col-md-12">
-                <mat-form-field class="w-50 mt-2">
-                  <input
-                    placeholder="Komu Uri"
-                    readonly
-                    class="w-100"
-                    type="text"
-                    matInput
-                    [(ngModel)]="configuration.komuUrl"
-                    #komuUrl
-                  />
-                </mat-form-field>
+            <mat-form-field class="w-50 mt-2">
+              <input placeholder="Komu Uri" readonly class="w-100" type="text" matInput
+                [(ngModel)]="configuration.komuUrl" #komuUrl />
+            </mat-form-field>
           </div>
           <div class="col col-12 col-md-12">
-                <mat-form-field class="w-50 mt-2">
-                  <input
-                    class="w-100"
-                    type="text"
-                    matInput
-                    readonly
-                    placeholder="Security Code"
-                    [(ngModel)]="configuration.komuSecretCode"
-                    #komuSecretCode
-                  />
-                </mat-form-field>
-              
+            <mat-form-field class="w-50 mt-2">
+              <input class="w-100" type="text" matInput readonly placeholder="Security Code"
+                [(ngModel)]="configuration.komuSecretCode" #komuSecretCode />
+            </mat-form-field>
+
           </div>
         </div>
       </mat-expansion-panel>
@@ -58,58 +43,44 @@
 
     <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewProjectSetting)">
       <mat-expansion-panel [expanded]="isExpandingProjectSetting">
-        <mat-expansion-panel-header (click)="isExpandingProjectSetting = !isExpandingProjectSetting" class="panel-header">
+        <mat-expansion-panel-header (click)="isExpandingProjectSetting = !isExpandingProjectSetting"
+          class="panel-header">
           <mat-panel-title>
             <p class="title">{{"Project Setting"}}</p>
             <div class="edit-save" *ngIf="isExpandingProjectSetting">
-              <button *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                class="btn btn-primary mr-3"
-                (click)="
+              <button *ngIf="permission.isGranted(Admin_Configuartions_Edit)" class="btn btn-primary mr-3" (click)="
                   isEditSecretCode = !isEditSecretCode;
                   $event.stopPropagation()
-                "
-                [hidden]="isEditSecretCode"
-              >
+                " [hidden]="isEditSecretCode">
                 <i class="fas fa-edit"></i>
                 Edit
               </button>
-              
-              <button class="btn btn-secondary"
-                (click)="
+
+              <button class="btn btn-secondary" (click)="
                   isEditSecretCode = !isEditSecretCode;
                   getSetting();
                   $event.stopPropagation()
-                "
-                [hidden]="!isEditSecretCode">
+                " [hidden]="!isEditSecretCode">
                 Cancel
               </button>
-              <button class="btn btn-primary btn-action ml-3"
-                (click)="
+              <button class="btn btn-primary btn-action ml-3" (click)="
                   updateProjectSettingConfig();
                   isEditSecretCode = !isEditSecretCode;
                   $event.stopPropagation()
-                "
-                [hidden]="!isEditSecretCode">
+                " [hidden]="!isEditSecretCode">
                 Save
               </button>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-              [disabled]="!isEditSecretCode"
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Secret Code"
-                [(ngModel)]="configuration.securityCode"
-                #secretCode
-              />
+              <input [disabled]="!isEditSecretCode" class="w-100" type="text" matInput placeholder="Secret Code"
+                [(ngModel)]="configuration.securityCode" #secretCode />
             </mat-form-field>
-              
+
           </div>
         </div>
       </mat-expansion-panel>
@@ -117,7 +88,7 @@
 
     <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewHrmSetting)">
       <mat-expansion-panel [expanded]="isShowHRMSetting">
-        <mat-expansion-panel-header (click)="isShowHRMSetting = !isShowHRMSetting"  class="panel-header">
+        <mat-expansion-panel-header (click)="isShowHRMSetting = !isShowHRMSetting" class="panel-header">
           <mat-panel-title>
             <div class="row col-11">
               <p class="title">{{"HRM Setting"}}</p>
@@ -127,30 +98,16 @@
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="HRM Uri"
-                [(ngModel)]="configuration.hrmUri"
-                #hrmUri
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="HRM Uri"
+                [(ngModel)]="configuration.hrmUri" #hrmUri />
             </mat-form-field>
           </div>
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Secret Code"
-                [(ngModel)]="configuration.hrmSecretCode"
-                #HRMSecretKey
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Secret Code"
+                [(ngModel)]="configuration.hrmSecretCode" #HRMSecretKey />
             </mat-form-field>
-              
+
           </div>
         </div>
       </mat-expansion-panel>
@@ -163,52 +120,44 @@
             <div class="row col-11">
               <p class="title">{{"Timesheet Setting"}}</p>
               <div class="ml-3 mt-3">
-                <div *ngIf="!timesheetConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
-                <div *ngIf="timesheetConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="timesheetConnectResult?.isConnected == false" class="text-danger"><i class="fa fa-solid fa-times mr-2"></i>connect fail. {{timesheetConnectResult?.message}}</div>
+                <div *ngIf="!timesheetConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is
+                  connecting ...</div>
+                <div *ngIf="timesheetConnectResult?.isConnected" class="text-success"><i
+                    class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="timesheetConnectResult?.isConnected == false" class="text-danger"><i
+                    class="fa fa-solid fa-times mr-2"></i>connect fail. {{timesheetConnectResult?.message}}</div>
               </div>
               <div class="edit-save" *ngIf="isShowTimesheetSetting">
-                <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                  href="javascript:;"
+                <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)" href="javascript:;"
                   class="btn bg-blue mr-3 float-right"
                   (click)="isEditingTimesheet = !isEditingTimesheet; $event.stopPropagation()"
-                  [hidden]="isEditingTimesheet"
-                >
+                  [hidden]="isEditingTimesheet">
                   <i class="fas fa-edit"></i>
                   Edit
                 </a>
 
-                <a
-                  href="javascript:;"
-                  class="btn bg-secondary"
-                  (click)="
+                <a href="javascript:;" class="btn bg-secondary" (click)="
                     isEditingTimesheet = !isEditingTimesheet;
                     getSetting();
                     $event.stopPropagation()
-                  "
-                  [hidden]="!isEditingTimesheet"
-                >
+                  " [hidden]="!isEditingTimesheet">
                   Cancel
                 </a>
-                <a
-                  href="javascript:;"
-                  class="btn btn-primary btn-action ml-3"
-                  (click)="
+                <a href="javascript:;" class="btn btn-primary btn-action ml-3" (click)="
                     saveConfiguration();
                     isEditingTimesheet = !isEditingTimesheet;
                     $event.stopPropagation()
-                  "
-                  [hidden]="!isEditingTimesheet"
-                >
+                  " [hidden]="!isEditingTimesheet">
                   Save
                 </a>
               </div>
-              
+
             </div>
-            
+
             <div class="my-1 col-md-1 justify-content-end">
               <div class="text-center ml-5">
-                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()"
+                  class="header-dropdown-mat-icon-button ml-5 pl-4">
                   <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
                 </button>
                 <mat-menu #headerMenu1="matMenu">
@@ -219,44 +168,31 @@
                 </mat-menu>
               </div>
             </div>
-            
+
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
-          
+
           <div class="col-md-12">
-            <mat-checkbox class="example-margin" [disabled]="!isEditingTimesheet" (change)="enableAutoUpdateProjectInfoToTimesheetTool($event.checked)"
+            <mat-checkbox class="example-margin" [disabled]="!isEditingTimesheet"
+              (change)="enableAutoUpdateProjectInfoToTimesheetTool($event.checked)"
               [checked]="configuration.autoUpdateProjectInfoToTimesheetTool == 'true'">
               Enable Auto update project info to timesheet tool
             </mat-checkbox>
           </div>
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Timesheet Uri"
-                [(ngModel)]="configuration.timesheetUri"
-                #timesheetUri
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Timesheet Uri"
+                [(ngModel)]="configuration.timesheetUri" #timesheetUri />
             </mat-form-field>
           </div>
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Secret Code"
-                [(ngModel)]="configuration.timesheetSecretCode"
-                #timesheetSecretKey
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Secret Code"
+                [(ngModel)]="configuration.timesheetSecretCode" #timesheetSecretKey />
             </mat-form-field>
-              
+
           </div>
         </div>
       </mat-expansion-panel>
@@ -264,19 +200,23 @@
 
     <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewFinanceSetting)">
       <mat-expansion-panel [expanded]="isShowFinanceSetting">
-        <mat-expansion-panel-header (click)="isShowFinanceSetting = !isShowFinanceSetting"  class="panel-header">
+        <mat-expansion-panel-header (click)="isShowFinanceSetting = !isShowFinanceSetting" class="panel-header">
           <mat-panel-title>
             <div class="row col-11">
               <p class="title">{{"Finance Setting"}}</p>
               <div class="ml-3 mt-3">
-                <div *ngIf="!finfastConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
-                <div *ngIf="finfastConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="finfastConnectResult?.isConnected == false" class="text-danger"><i class="fa fa-solid fa-times mr-2"></i>connect fail. {{finfastConnectResult?.message}}</div>
+                <div *ngIf="!finfastConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is
+                  connecting ...</div>
+                <div *ngIf="finfastConnectResult?.isConnected" class="text-success"><i
+                    class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="finfastConnectResult?.isConnected == false" class="text-danger"><i
+                    class="fa fa-solid fa-times mr-2"></i>connect fail. {{finfastConnectResult?.message}}</div>
               </div>
             </div>
             <div class="my-1 col-md-1 justify-content-end">
               <div class="text-center ml-5">
-                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()"
+                  class="header-dropdown-mat-icon-button ml-5 pl-4">
                   <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
                 </button>
                 <mat-menu #headerMenu1="matMenu">
@@ -288,33 +228,19 @@
               </div>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Finance Uri"
-                [(ngModel)]="configuration.financeUri"
-                #financeUri
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Finance Uri"
+                [(ngModel)]="configuration.financeUri" #financeUri />
             </mat-form-field>
           </div>
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Secret Code"
-                [(ngModel)]="configuration.financeSecretCode"
-                #financeSecretKey
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Secret Code"
+                [(ngModel)]="configuration.financeSecretCode" #financeSecretKey />
             </mat-form-field>
           </div>
         </div>
@@ -323,19 +249,23 @@
 
     <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewTalentSetting)">
       <mat-expansion-panel [expanded]="isShowTalentSetting">
-        <mat-expansion-panel-header (click)="isShowTalentSetting = !isShowTalentSetting"  class="panel-header">
+        <mat-expansion-panel-header (click)="isShowTalentSetting = !isShowTalentSetting" class="panel-header">
           <mat-panel-title>
             <div class="row col-11">
               <p class="title">{{"Talent Setting"}}</p>
               <div class="ml-3 mt-3">
-                <div *ngIf="!talentConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is connecting ...</div>
-                <div *ngIf="talentConnectResult?.isConnected" class="text-success"><i class="fa fa-solid fa-check mr-2"></i> Connected</div>
-                <div class="message" *ngIf="talentConnectResult?.isConnected == false" class="text-danger"><i class="fa fa-solid fa-times mr-2"></i>connect fail. {{talentConnectResult?.message}}</div>
+                <div *ngIf="!talentConnectResult?.message"><i class="fa fa-spinner fa-spin d-line mr-2"></i>Is
+                  connecting ...</div>
+                <div *ngIf="talentConnectResult?.isConnected" class="text-success"><i
+                    class="fa fa-solid fa-check mr-2"></i> Connected</div>
+                <div class="message" *ngIf="talentConnectResult?.isConnected == false" class="text-danger"><i
+                    class="fa fa-solid fa-times mr-2"></i>connect fail. {{talentConnectResult?.message}}</div>
               </div>
             </div>
             <div class="my-1 col-md-1 justify-content-end text-right">
               <div class="text-center ml-5">
-                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()" class="header-dropdown-mat-icon-button ml-5 pl-4">
+                <button mat-icon-button [matMenuTriggerFor]="headerMenu1" (click)="$event.stopPropagation()"
+                  class="header-dropdown-mat-icon-button ml-5 pl-4">
                   <i class="fa fa-solid fa-ellipsis-v mr-2"></i>
                 </button>
                 <mat-menu #headerMenu1="matMenu">
@@ -347,33 +277,19 @@
               </div>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12 mt-2">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Talent Uri"
-                [(ngModel)]="configuration.talentUriBA"
-                #financeUri
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Talent Uri"
+                [(ngModel)]="configuration.talentUriBA" #financeUri />
             </mat-form-field>
           </div>
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 mt-2">
-              <input
-                readonly
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Talent Secret Code"
-                [(ngModel)]="configuration.talentSecurityCode"
-                #talentSecurityCode
-              />
+              <input readonly class="w-100" type="text" matInput placeholder="Talent Secret Code"
+                [(ngModel)]="configuration.talentSecurityCode" #talentSecurityCode />
             </mat-form-field>
           </div>
         </div>
@@ -387,47 +303,31 @@
           <mat-panel-title>
             <p class="title">{{"GoogleClient App"}}</p>
             <div class="edit-save" *ngIf="isShowGoogleClientApp">
-              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                href="javascript:;"
-                class="btn bg-blue mr-3"
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)" href="javascript:;" class="btn bg-blue mr-3"
                 (click)="isEditClientId = !isEditClientId; clientId.focus();$event.stopPropagation()"
-                [hidden]="isEditClientId"
-              >
+                [hidden]="isEditClientId">
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              <a
-                href="javascript:;"
-                class="btn bg-secondary"
+              <a href="javascript:;" class="btn bg-secondary"
                 (click)="isEditClientId = !isEditClientId; getSetting();$event.stopPropagation()"
-                [hidden]="!isEditClientId"
-              >
+                [hidden]="!isEditClientId">
                 Cancel
               </a>
-              <a
-              href="javascript:;"
-              class="btn btn-primary btn-action ml-3"
-              (click)="saveConfiguration(); isEditClientId = !isEditClientId;$event.stopPropagation()"
-              [hidden]="!isEditClientId"
-            >
-              Save
-            </a>
+              <a href="javascript:;" class="btn btn-primary btn-action ml-3"
+                (click)="saveConfiguration(); isEditClientId = !isEditClientId;$event.stopPropagation()"
+                [hidden]="!isEditClientId">
+                Save
+              </a>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 ml-1">
-              <input
-                [disabled]="!isEditClientId"
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="GoogleClient App"
-                [(ngModel)]="configuration.clientAppId"
-                #clientId
-              />
+              <input [disabled]="!isEditClientId" class="w-100" type="text" matInput placeholder="GoogleClient App"
+                [(ngModel)]="configuration.clientAppId" #clientId />
             </mat-form-field>
           </div>
         </div>
@@ -440,57 +340,37 @@
           <mat-panel-title>
             <p class="title">{{"Default working hours per day"}}</p>
             <div class="edit-save" *ngIf="isShowDefaultWorking">
-              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                href="javascript:;"
-                class="btn bg-blue mr-3"
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)" href="javascript:;" class="btn bg-blue mr-3"
                 (click)="
                   isEditDefaultWorkingHours = !isEditDefaultWorkingHours;
                   clientId.focus();$event.stopPropagation()
-                "
-                [hidden]="isEditDefaultWorkingHours"
-              >
+                " [hidden]="isEditDefaultWorkingHours">
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              
-              <a
-                href="javascript:;"
-                class="btn bg-secondary"
-                (click)="
+
+              <a href="javascript:;" class="btn bg-secondary" (click)="
                   isEditDefaultWorkingHours = !isEditDefaultWorkingHours;
                   getSetting();$event.stopPropagation()
-                "
-                [hidden]="!isEditDefaultWorkingHours"
-              >
+                " [hidden]="!isEditDefaultWorkingHours">
                 Cancel
               </a>
-              <a
-                href="javascript:;"
-                class="btn btn-primary btn-action ml-3"
-                (click)="
+              <a href="javascript:;" class="btn btn-primary btn-action ml-3" (click)="
                   saveConfiguration();
                   isEditDefaultWorkingHours = !isEditDefaultWorkingHours;$event.stopPropagation()
-                "
-                [hidden]="!isEditDefaultWorkingHours"
-              >
+                " [hidden]="!isEditDefaultWorkingHours">
                 Save
               </a>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 ml-1">
-              <input
-                [disabled]="!isEditDefaultWorkingHours"
-                class="w-100"
-                type="text"
-                placeholder="Working hours per day"
-                matInput
-                [(ngModel)]="configuration.defaultWorkingHours"
-                #clientId
-              />
+              <input [disabled]="!isEditDefaultWorkingHours" class="w-100" type="text"
+                placeholder="Working hours per day" matInput [(ngModel)]="configuration.defaultWorkingHours"
+                #clientId />
             </mat-form-field>
           </div>
         </div>
@@ -503,44 +383,31 @@
           <mat-panel-title>
             <p class="title">{{"Discord channels"}}</p>
             <div class="edit-save" *ngIf="isShowDiscordChannel">
-              <button 
-                class="btn bg-blue mr-3"
+              <button class="btn bg-blue mr-3"
                 (click)="isEditDiscordChannel = !isEditDiscordChannel; clientId.focus();$event.stopPropagation()"
-                [hidden]="isEditDiscordChannel"
-              >
+                [hidden]="isEditDiscordChannel">
                 <i class="fas fa-edit"></i>
                 Edit
               </button>
-              <button
-                class="btn bg-secondary"
+              <button class="btn bg-secondary"
                 (click)="isEditDiscordChannel = !isEditDiscordChannel; getSetting();$event.stopPropagation()"
-                [hidden]="!isEditDiscordChannel"
-              >
+                [hidden]="!isEditDiscordChannel">
                 Cancel
               </button>
-              <button
-              class="btn btn-primary btn-action ml-3"
-              (click)="saveConfiguration(); isEditDiscordChannel = !isEditDiscordChannel;$event.stopPropagation()"
-              [hidden]="!isEditDiscordChannel"
-            >
-              Save
-            </button>
+              <button class="btn btn-primary btn-action ml-3"
+                (click)="saveConfiguration(); isEditDiscordChannel = !isEditDiscordChannel;$event.stopPropagation()"
+                [hidden]="!isEditDiscordChannel">
+                Save
+              </button>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 ml-1">
-              <input
-                [disabled]="!isEditDiscordChannel"
-                class="w-100"
-                type="text"
-                matInput
-                placeholder="Training Request Channel"
-                [(ngModel)]="configuration.trainingRequestChannel"
-                #clientId
-              />
+              <input [disabled]="!isEditDiscordChannel" class="w-100" type="text" matInput
+                placeholder="Training Request Channel" [(ngModel)]="configuration.trainingRequestChannel" #clientId />
             </mat-form-field>
           </div>
         </div>
@@ -552,57 +419,125 @@
           <mat-panel-title>
             <p class="title">{{"Max Count History Of Retro And Review Point"}}</p>
             <div class="edit-save" *ngIf="isShowMaxCountHistory">
-              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)"
-                href="javascript:;"
-                class="btn bg-blue mr-3"
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)" href="javascript:;" class="btn bg-blue mr-3"
                 (click)="
                   isEditMaxCountHistory = !isEditMaxCountHistory;
                   clientId.focus();$event.stopPropagation()
-                "
-                [hidden]="isEditMaxCountHistory"
-              >
+                " [hidden]="isEditMaxCountHistory">
                 <i class="fas fa-edit"></i>
                 Edit
               </a>
-              
-              <a
-                href="javascript:;"
-                class="btn bg-secondary"
-                (click)="
+
+              <a href="javascript:;" class="btn bg-secondary" (click)="
                   isEditMaxCountHistory = !isEditMaxCountHistory;
                   getSetting();$event.stopPropagation()
-                "
-                [hidden]="!isEditMaxCountHistory"
-              >
+                " [hidden]="!isEditMaxCountHistory">
                 Cancel
               </a>
-              <a
-                href="javascript:;"
-                class="btn btn-primary btn-action ml-3"
-                (click)="
+              <a href="javascript:;" class="btn btn-primary btn-action ml-3" (click)="
                   saveConfiguration();
                   isEditMaxCountHistory = !isEditMaxCountHistory;$event.stopPropagation()
-                "
-                [hidden]="!isEditMaxCountHistory"
-              >
+                " [hidden]="!isEditMaxCountHistory">
                 Save
               </a>
             </div>
           </mat-panel-title>
-  
+
         </mat-expansion-panel-header>
         <div class="row">
           <div class="col col-12 col-md-12">
             <mat-form-field class="w-50 ml-1">
-              <input
-                [disabled]="!isEditMaxCountHistory"
-                class="w-100"
-                type="text"
-                placeholder="Max Count History Of Retro And Review Point"
-                matInput
-                [(ngModel)]="configuration.maxCountHistory"
-                #clientId
-              />
+              <input [disabled]="!isEditMaxCountHistory" class="w-100" type="text"
+                placeholder="Max Count History Of Retro And Review Point" matInput
+                [(ngModel)]="configuration.maxCountHistory" #clientId />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+
+    <div class="card" *ngIf="permission.isGranted(Admin_Configuartions_ViewAuditScoreSetting)">
+      <mat-expansion-panel [expanded]="isShowHRMSetting">
+        <mat-expansion-panel-header (click)="isShowAuditScore = !isShowAuditScore" class="panel-header">
+          <mat-panel-title>
+              <p class="title">{{"Audit Score Setting"}}</p>
+            <div class="edit-save" *ngIf="isShowAuditScore">
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)" href="javascript:;" class="btn bg-blue mr-3"
+                (click)="isEditAuditScore = !isEditAuditScore; $event.stopPropagation()" [hidden]="isEditAuditScore">
+                <i class="fas fa-edit"></i>
+                Edit
+              </a>
+              <a href="javascript:;" class="btn bg-secondary"
+                (click)="isEditAuditScore = !isEditAuditScore; getAuditScore();$event.stopPropagation()"
+                [hidden]="!isEditAuditScore">
+                Cancel
+              </a>
+              <a href="javascript:;" class="btn btn-primary btn-action ml-3"
+                (click)="saveAuditScore(); isEditAuditScore = !isEditAuditScore;$event.stopPropagation()"
+                [hidden]="!isEditAuditScore">
+                Save
+              </a>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput placeholder="Final Score"
+                [(ngModel)]="auditScore.finaL_SCORE" #finaL_SCORE />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Score When Status Is Green"
+                [(ngModel)]="auditScore.projecT_SCORE_WHEN_STATUS_GREEN" #projecT_SCORE_WHEN_STATUS_GREEN />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Score When Status Is Amber"
+                [(ngModel)]="auditScore.projecT_SCORE_WHEN_STATUS_AMBER" #projecT_SCORE_WHEN_STATUS_AMBER />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Score When Status Is Red" [(ngModel)]="auditScore.projecT_SCORE_WHEN_STATUS_RED"
+                #projecT_SCORE_WHEN_STATUS_RED />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Process Criteria Result When Status Is Non Compliance"
+                [(ngModel)]="auditScore.projecT_PROCESS_CRITERIA_RESULT_STATUS_NC"
+                #projecT_PROCESS_CRITERIA_RESULT_STATUS_NC />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Process Criteria Result When Status Is Observation"
+                [(ngModel)]="auditScore.projecT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION"
+                #projecT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Process Criteria Result When Status Is Recommendation"
+                [(ngModel)]="auditScore.projecT_PROCESS_CRITERIA_RESULT_STATUS_RE"
+                #projecT_PROCESS_CRITERIA_RESULT_STATUS_RE />
+            </mat-form-field>
+          </div>
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditAuditScore" class="w-100" type="text" matInput
+                placeholder="Project Process Criteria Result When Status Is Excellence"
+                [(ngModel)]="auditScore.projecT_PROCESS_CRITERIA_RESULT_STATUS_EX"
+                #projecT_PROCESS_CRITERIA_RESULT_STATUS_EX />
             </mat-form-field>
           </div>
         </div>

@@ -29,5 +29,6 @@
         public const string TimeCountDown = "App.TimeCountDown";
         public const string TrainingRequestChannel = "TrainingRequestChannel";
         public const string MaxCountHistory = "MaxCountHistory";
+        public const string ScoreAudit = "ScoreAudit";
     }
 }

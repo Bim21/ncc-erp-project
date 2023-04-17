@@ -33,6 +33,7 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting: "Admin.Configuartions.ViewDefaultWorkingHourPerDaySetting",
        Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint: "Admin.Configuartions.ViewMaxCountHistoryOfRetroAndReviewPoint",
        Admin_Configuartions_WeeklyReportTime_Edit: "Admin.Configuartions.WeeklyReportTimeEdit",
+       Admin_Configuartions_ViewAuditScoreSetting: "Admin.Configuartions.ViewAuditScoreSetting",
        // #endregion
 
        // #region Skill
@@ -283,10 +284,10 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ChangedResource",
        Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View",
 
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
-       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit : "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
+       Projects_ProductProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit: "Projects.ProductProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
 
        Projects_ProductProjects_ProjectDetail_TabBillInfo: "Projects.ProductProjects.ProjectDetail.TabBillInfo",
        Projects_ProductProjects_ProjectDetail_TabBillInfo_View: "Projects.ProductProjects.ProjectDetail.TabBillInfo.View",
@@ -383,10 +384,10 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ChangedResource",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ChangedResource_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ChangedResource.View",
 
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
-       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit : "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.View",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.ChangeStatus",
+       Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.ProjectHealthCriteria.Edit",
 
        Projects_TrainingProjects_ProjectDetail_TabBillInfo: "Projects.TrainingProjects.ProjectDetail.TabBillInfo",
        Projects_TrainingProjects_ProjectDetail_TabBillInfo_View: "Projects.TrainingProjects.ProjectDetail.TabBillInfo.View",
@@ -570,5 +571,39 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Criteria_Edit: "Admin.Criteria.Edit",
        Admin_Criteria_Delete: "Admin.Criteria.Delete",
        Admin_Criteria_Active_DeActive: "Admin.Criteria.Active/DeActive",
+       //#endregion
+
+       // #region Audit
+       Audits: "Audits",
+       Audits_Criteria: "Audits.Criteria",
+       Audits_Criteria_Create: "Audits.Criteria.Create",
+       Audits_Criteria_Edit: "Audits.Criteria.Edit",
+       Audits_Criteria_Delete: "Audits.Criteria.Delete",
+       Audits_Criteria_Active: "Audits.Criteria.Active",
+       Audits_Criteria_DeActive: "Audits.Criteria.DeActive",
+       Audits_Criteria_ChangeApplicable: "Audits.Criteria.ChangeApplicable",
+
+       Audits_Tailoring: "Audits.Tailoring",
+       Audits_Tailoring_DownLoadTemplate: "Audits.Tailoring.DownLoadTemplate",
+       Audits_Tailoring_Import: "Audits.Tailoring.Import",
+       Audits_Tailoring_Create: "Audits.Tailoring.Create",
+       Audits_Tailoring_Delete: "Audits.Tailoring.Delete",
+       Audits_Tailoring_DownLoadTailoringTemplate: "Audits.Tailoring.DownLoadTailoringTemplate",
+       Audits_Tailoring_Detail: "Audits.Tailoring.Detail",
+       Audits_Tailoring_Detail_ViewNote: "Audits.Tailoring.Detail.ViewNote",
+       Audits_Tailoring_Detail_Update: "Audits.Tailoring.Detail.Update",
+       Audits_Tailoring_Detail_Detele: "Audits.Tailoring.Detail.Delete",
+       Audits_Tailoring_Update_Project: "Audits.Tailoring.Update.Project",
+       Audits_Tailoring_Update_Project_Tailoring: "Audits.Tailoring.Update.Project.Tailoring",
+
+       Audits_Results: "Audits.Results",
+       Audits_Results_DownLoad_Template: "Audits.Results.DownLoadTemplate",
+       Audits_Results_Import_Result: "Audits.Results.ImportResult",
+       Audits_Results_Edit: "Audits.Results.Edit",
+       Audits_Results_Delete: "Audits.Results.Delete",
+       Audits_Results_Detail: "Audits.Results.Detail",
+       Audits_Results_Detail_View: "Audits.Results.Detail.View",
+       Audits_Results_Detail_ViewNote: "Audits.Results.Detail.ViewNote",
+
        //#endregion
 }

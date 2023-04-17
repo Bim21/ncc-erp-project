@@ -12,8 +12,8 @@ export class AppConfigurationService extends BaseApiService {
   changeUrl() {
     return 'Configuration';
   }
- 
-  constructor( http: HttpClient) { 
+
+  constructor( http: HttpClient) {
     super(http)
   }
   getConfiguration():Observable<any>{
@@ -30,6 +30,7 @@ export class AppConfigurationService extends BaseApiService {
     return this.http.post(this.rootUrl + '/ChangeProjectSetting', item)
   }
 
+
   /**
    * @param timeCountDown: seconds
    */
@@ -38,7 +39,7 @@ export class AppConfigurationService extends BaseApiService {
   }
 
   getTimeCountDown():Observable<ApiResponse<{timeCountDown: number}>>{
-    return this.http.get<any>(this.rootUrl + '/GetTimeCountDown') 
+    return this.http.get<any>(this.rootUrl + '/GetTimeCountDown')
   }
 
   checkConnectToTimesheet():Observable<any>{
@@ -51,5 +52,15 @@ export class AppConfigurationService extends BaseApiService {
 
   checkConnectToTalent():Observable<any>{
     return this.http.get(this.rootUrl + '/CheckConnectToTalent');
+  }
+
+  /**
+   * @param auditScore
+   */
+  getAuditScore():Observable<any>{
+    return this.http.get(this.rootUrl + '/GetAuditScore')
+  }
+  editAuditScore(item: any):Observable<any>{
+    return this.http.post(this.rootUrl + '/SetAuditScore', item);
   }
 }

@@ -252,6 +252,11 @@ export const APP_ENUMS = {
     InvoiceSetting: {
         Main: true,
         Sub: false
+    },
+    AuditStatus:{
+        Green:1,
+        Amber: 2,
+        Red: 3
     }
 }
 

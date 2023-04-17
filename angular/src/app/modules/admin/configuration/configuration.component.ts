@@ -18,6 +18,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   Admin_Configuartions_ViewGoogleClientAppSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewGoogleClientAppSetting;
   Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting;
   Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint;
+  Admin_Configuartions_ViewAuditScoreSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewAuditScoreSetting;
 
   configuration = {} as ConfigurationDto;
   googleToken: string = '';
@@ -29,6 +30,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditKomuUrl: boolean = false;
   public isEditDefaultWorkingHours: boolean = false;
   public isEditMaxCountHistory: boolean = false;
+  public isEditAuditScore: boolean = false;
   public isShowKomuSetting: boolean = false;
   public isExpandingProjectSetting: boolean = false;
   public isShowHRMSetting: boolean = false;
@@ -40,11 +42,13 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isShowMaxCountHistory: boolean = false;
   public isShowDiscordChannel: boolean = false;
   public isEditDiscordChannel: boolean = false;
+  public isShowAuditScore: boolean = false;
   public  timesheetConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  talentConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  hrmConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  finfastConnectResult: GetConnectResultDto = {} as GetConnectResultDto
- 
+  public  auditScore: AuditScoreDto = {} as AuditScoreDto;
+
   public listDays: any[] = [
     { value: '2', text: 'Monday' },
     { value: '3', text: 'Tuesday' },
@@ -73,6 +77,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     this.checkConnectToTimesheet();
     this.checkConnectToFinance();
     this.checkConnectToTalent();
+    this.getAuditScore();
   }
   getSetting() {
     this.settingService.getConfiguration().subscribe((data) => {
@@ -126,9 +131,23 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     .updateProjectSettingConfig(projectConfig)
     .subscribe((rs)=>{
       abp.notify.success('Update project setting successful!');
-      
+
     })
 
+  }
+
+  getAuditScore(){
+    this.settingService.getAuditScore().subscribe((data) => {
+      this.auditScore = data.result;
+      console.log(data.result)
+    });
+  }
+  saveAuditScore(){
+    this.settingService
+      .editAuditScore(this.auditScore)
+      .subscribe((data) => {
+        abp.notify.success('Edited successfully!');
+      });
   }
 
 }
@@ -168,4 +187,15 @@ export class ProjectSetting{
 export class GetConnectResultDto {
   isConnected: boolean;
   message: string;
+}
+
+export class AuditScoreDto{
+  finaL_SCORE: number;
+  projecT_PROCESS_CRITERIA_RESULT_STATUS_EX: number
+  projecT_PROCESS_CRITERIA_RESULT_STATUS_NC: number
+  projecT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION: number
+  projecT_PROCESS_CRITERIA_RESULT_STATUS_RE: number
+  projecT_SCORE_WHEN_STATUS_AMBER: number
+  projecT_SCORE_WHEN_STATUS_GREEN: number
+  projecT_SCORE_WHEN_STATUS_RED: number
 }
