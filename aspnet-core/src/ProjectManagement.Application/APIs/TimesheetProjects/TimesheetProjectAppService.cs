@@ -40,7 +40,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
-using ProjectManagement.Helper;
 
 namespace ProjectManagement.APIs.TimesheetProjects
 {
@@ -317,7 +316,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     Note = tsp.Note,
                     HistoryFile = tsp.HistoryFile,
                     HasFile = !string.IsNullOrEmpty(tsp.FilePath),
-                    IsComplete = tsp.IsComplete,
+                    IsComplete = tsp.IsComplete.Value == true ? true : false,
                     RequireTimesheetFile = tsp.Project.RequireTimesheetFile,
                     ProjectCurrency = tsp.Project.Currency.Name,
                     ProjectChargeType = tsp.Project.ChargeType,
@@ -876,7 +875,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
             catch (Exception ex)
             {
                 throw ex;
-
             }
         }
 
@@ -1246,7 +1244,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 .FirstOrDefault();
 
             var result = new NewAndStopProjectDto();
-            if (beforeTimeSheetId !=null)
+            if (beforeTimeSheetId != null)
             {
                 var beforeTimeSheet = await GetAllProjectTimesheetByTimesheet(new GridParam { MaxResultCount = int.MaxValue }, beforeTimeSheetId.Id);
                 var listBeforeTimesheetProjectId = beforeTimeSheet.ListTimesheetDetail.Items.Select(y => y.ProjectId).ToList();
@@ -1425,7 +1423,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 sheetProject.Cells["E2"].Value = "Ngày Stop";
                 var startStopProject = sheetProject.Cells["A3"].Start.Row;
                 var indexStopProject = 1;
-                if (stopAndNew.StopProject !=null )
+                if (stopAndNew.StopProject != null)
                 {
                     foreach (var item in stopAndNew.StopProject)
                     {
