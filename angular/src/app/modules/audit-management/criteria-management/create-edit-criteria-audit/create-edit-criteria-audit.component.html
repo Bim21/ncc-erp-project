@@ -54,7 +54,8 @@
         <div >
           <span>{{ codeParent}} </span>
           <input type="number" [(ngModel)]="codeChild" name="codeChild"  id="codeChild"  #criteriaNameModel="ngModel"
-          #criteriaNameEl  required style="width: 45px;" min="1"/>
+          #criteriaNameEl  required style="width: 45px;" min="1"
+          (ngModelChange)="checkCode($event)"/>
         </div>
         <abp-validation-summary
         [control]="criteriaNameModel"
@@ -69,9 +70,9 @@
           Is Applicable?
         </mat-checkbox>
 
-        <label *ngIf="criteriaAudit.isActive"
+        <!-- <label *ngIf="criteriaAudit.isActive"
           ><span class="label-active">Active</span></label
-        >
+        > -->
       </div>
     </div>
 

@@ -190,10 +190,10 @@ export class GetConnectResultDto {
 }
 
 export class AuditScoreDto{
-  finaL_SCORE: number;
+  giveN_SCORE: number;
   projecT_PROCESS_CRITERIA_RESULT_STATUS_EX: number
   projecT_PROCESS_CRITERIA_RESULT_STATUS_NC: number
-  projecT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION: number
+  projecT_PROCESS_CRITERIA_RESULT_STATUS_OB: number
   projecT_PROCESS_CRITERIA_RESULT_STATUS_RE: number
   projecT_SCORE_WHEN_STATUS_AMBER: number
   projecT_SCORE_WHEN_STATUS_GREEN: number

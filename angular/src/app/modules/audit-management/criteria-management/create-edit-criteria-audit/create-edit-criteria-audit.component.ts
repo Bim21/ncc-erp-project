@@ -33,9 +33,9 @@ export class CreateEditCriteriaAuditComponent
   maxCode:number
 
   public Audits_Criteria_ChangeApplicable = PERMISSIONS_CONSTANT.Audits_Criteria_ChangeApplicable
-  
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any, 
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CreateEditCriteriaAuditComponent>,
     private processCriteriaService: AuditCriteriaProcessService,
     private sanitizer: DomSanitizer,
@@ -48,7 +48,7 @@ export class CreateEditCriteriaAuditComponent
     this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data=>{
           this.listCriteriaAudit=data.result
            this.maxCode= this.listCriteriaAudit.filter(res=> res.level==1).map(res=> {return Number(res.code)}).sort(function(a, b){return a-b}).pop()
-         
+
          if(this.isCreateCriteria&& this.parentCurrent){
           this.codeChild=data.result.find(res=>res.id==this.data.item.id).maxValueOfListCode + 1
          }
@@ -126,7 +126,7 @@ export class CreateEditCriteriaAuditComponent
     name:this.criteriaAudit.name
     }
 
-   
+
 
     if (this.data.command == "create") {
       this.processCriteriaService.create(criteriaCreate ).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
@@ -155,6 +155,11 @@ export class CreateEditCriteriaAuditComponent
         abp.notify.success("Update Successfully!");
         this.dialogRef.close(this.criteriaAudit);
       }, () => { this.isLoading = false })
+    }
+  }
+  checkCode(e) {
+    if (e!=null && e < 1) {
+      this.codeChild=1
     }
   }
 }

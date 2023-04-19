@@ -140,11 +140,11 @@ export class CriteriaManagementComponent
         .subscribe(([rsValid, rsTailoring]) => {
           if (rsValid.success) {
             if (rsTailoring.result) {
-              let message = `<span><strong> Delete <span style="color:#2991BF">${node.code}: ${node.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
+              let message = `<span><strong> Delete <span style="color:#2991BF">${node.code}: ${node.name}</span> will REMOVE it from tailoring</strong></span><br>`;
               abp.message.confirm(`<div style="display: flex; flex-direction: column; align-items: stretch; overflow-y: auto; max-height: 500px;">${message}</div>`, "",
                 (result: boolean) => {
                   if (result) {
-                    this.processCriteriaService.RemoveCriteriaFromTailoring(node.id)
+                    forkJoin([this.processCriteriaService.delete(node.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.id)])
                       .pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
                         abp.notify.success("Delete " + node.name);
                         this.refresh()

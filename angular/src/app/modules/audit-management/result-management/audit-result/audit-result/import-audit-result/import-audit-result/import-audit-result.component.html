@@ -3,7 +3,7 @@
     </abp-modal-header>
     <div class="modal-body row">
         <div class="d-flex align-items-baseline">
-            <label name="btn-uploadFile" class="upload-btn"><i class="fas fa-upload mr-1"></i> Upload file
+            <label name="btn-uploadFile" class="upload-btn"><i class="fas fa-upload mr-1"></i> Upload result file
                 <input type="file" size="60"
                     accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                     (change)="selectFile($event)">
@@ -27,28 +27,33 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field>
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" name="ipt-date" (ngModelChange)="onChangeDate()">
-            <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+            <mat-label>Audit Date</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" name="ipt-date"
+                (ngModelChange)="onChangeDate()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <editor class="w-100" [init]="{
-                    height: 300,
-                    selector: 'textarea',
-                    a_plugin_option: true,
-                    a_configuration_option: 400,
-                    class: 'w-100',
-                    menubar: true,
-                    plugins: ['table','code','preview','media', 'image', 'template'],
-                    toolbars: ['image'],
-                    branding: false
-                    }" [(ngModel)]="import.note" #criteriaNameModel="ngModel" #criteriaNameEl name="note"
-            >
-        </editor>
+        <div class="d-flex flex-column w-100">
+            <label>PQA Note:</label>
+            <editor class="w-100" [init]="{
+                        height: 300,
+                        selector: 'textarea',
+                        a_plugin_option: true,
+                        a_configuration_option: 400,
+                        class: 'w-100',
+                        menubar: true,
+                        plugins: ['table','code','preview','media', 'image', 'template'],
+                        toolbars: ['image'],
+                        branding: false
+                        }" [(ngModel)]="import.note" #criteriaNameModel="ngModel" #criteriaNameEl name="note">
+            </editor>
+        </div>
+
     </div>
     <div class="mat-dialog-actions" mat-dialog-actions="">
         <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
-        <button mat-raised-button color="primary" class="saving-btn" mat-button [disabled]="!import.file || !import.projectId || !import.auditDate"
+        <button mat-raised-button color="primary" class="saving-btn" mat-button
+            [disabled]="!import.file || !import.projectId || !import.auditDate"
             (click)="SaveAndClose(import.projectId)">Save</button>
     </div>
 </form>

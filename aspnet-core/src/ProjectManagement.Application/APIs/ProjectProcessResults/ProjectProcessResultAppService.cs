@@ -480,12 +480,11 @@ namespace ProjectManagement.APIs.ProjectProcessResults
 
             return new AuditScoreDto
             {
-                FINAL_SCORE = jObject[nameof(AuditScoreDto.FINAL_SCORE)].Value<int>(),
+                GIVEN_SCORE = jObject[nameof(AuditScoreDto.GIVEN_SCORE)].Value<int>(),
                 PROJECT_SCORE_WHEN_STATUS_GREEN = jObject[nameof(AuditScoreDto.PROJECT_SCORE_WHEN_STATUS_GREEN)].Value<int>(),
                 PROJECT_SCORE_WHEN_STATUS_AMBER = jObject[nameof(AuditScoreDto.PROJECT_SCORE_WHEN_STATUS_AMBER)].Value<int>(),
-                PROJECT_SCORE_WHEN_STATUS_RED = jObject[nameof(AuditScoreDto.PROJECT_SCORE_WHEN_STATUS_RED)].Value<int>(),
                 PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC)].Value<int>(),
-                PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION)].Value<int>(),
+                PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB)].Value<int>(),
                 PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE)].Value<int>(),
                 PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX)].Value<int>()
             };
@@ -500,7 +499,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC;
 
                 case NCStatus.OB:
-                    return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION;
+                    return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB;
 
                 case NCStatus.RE:
                     return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE;
@@ -514,7 +513,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
         private async Task<int> GetScoreForProject(List<NCStatus> input)
         {
             AuditScoreDto auditScoreDto = await GetAuditScore();
-            var finalScore = auditScoreDto.FINAL_SCORE;
+            var finalScore = auditScoreDto.GIVEN_SCORE;
             input.ForEach(x =>
             {
                 if (x == NCStatus.NC)
@@ -523,7 +522,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                 }
                 if (x == NCStatus.OB)
                 {
-                    finalScore += auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION;
+                    finalScore += auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB;
                 }
                 if (x == NCStatus.RE)
                 {
@@ -788,7 +787,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     }
                 case NCStatus.OB:
                     {
-                        return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION;
+                        return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB;
                     }
                 case NCStatus.RE:
                     {

@@ -90,12 +90,12 @@
                     {{ node.item.processCriteria.name }}
                   </span>
                   &nbsp;
-                  <span>
-                    <i [style.color]="node.item.processCriteria.isApplicable?'#28a745':'#7E7E7E'"
+                  <!-- <span>
+                    <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
                       style="font-size: 15px;" class="fas fa-check-circle"
                       [matTooltip]="node.item.processCriteria.isApplicable ? 'This is applicable' : 'This is not applicable'">
                     </i>
-                  </span>
+                  </span> -->
                 </span>
               </div>
 
@@ -164,12 +164,12 @@
                       {{ node.item.processCriteria.name }}
                     </span>
                     &nbsp;
-                    <span>
+                    <!-- <span>
                       <i [style.color]="node.item.processCriteria.isApplicable?'#28a745':'#7E7E7E'"
                         style="font-size: 15px;" class="fas fa-check-circle"
                         [matTooltip]="node.item.processCriteria.isApplicable ? 'This is applicable' : 'This is not applicable'">
                       </i>
-                    </span>
+                    </span> -->
                   </span>
                 </div>
 

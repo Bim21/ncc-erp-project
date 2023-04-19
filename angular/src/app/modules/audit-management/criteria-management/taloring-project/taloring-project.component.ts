@@ -38,7 +38,7 @@ export class TaloringProjectComponent extends PagedListingComponentBase<Taloring
         queryParams: {
           projectId:this.projectId,
           projectCode: this.projectCode,
-          projectName:this.projectId
+          projectName:this.projectName
         }
       })
     }

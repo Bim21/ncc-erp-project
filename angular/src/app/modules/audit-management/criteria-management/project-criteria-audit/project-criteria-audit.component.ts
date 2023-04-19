@@ -27,12 +27,12 @@ export class ProjectCriteriaAuditComponent
   projectName:string='';
   projectCode:string='';
   listCriteriaChecked = [] as number[]
-  listCriteriaUnChecked =[] 
+  listCriteriaUnChecked =[]
 
   Audits_Tailoring_Update_Project=PERMISSIONS_CONSTANT.Audits_Tailoring_Update_Project
   Audits_Tailoring_Update_Project_Tailoring=PERMISSIONS_CONSTANT.Audits_Tailoring_Update_Project_Tailoring
   Audits_Tailoring_Detail= PERMISSIONS_CONSTANT.Audits_Tailoring_Detail
-  
+
   flatNodeMap = new Map<TodoItemFlatNode, PeriodicElement>();
   nestedNodeMap = new Map<PeriodicElement, TodoItemFlatNode>();
 
@@ -111,7 +111,7 @@ export class ProjectCriteriaAuditComponent
     else{
       this.listCriteriaUnChecked= [...this.listCriteriaUnChecked,node.item.id]
       this.checklistSelection.deselect(node);
-   
+
     }
     this.checkAllParentsSelection(node,callApi);
   }
@@ -143,9 +143,9 @@ export class ProjectCriteriaAuditComponent
       this.listCriteriaChecked=[]
   })}
  }
-   
+
 }
-    
+
   }
 
 
@@ -159,7 +159,7 @@ export class ProjectCriteriaAuditComponent
     if (nodeSelected && !descAllSelected) {
       this.listCriteriaUnChecked=[...this.listCriteriaUnChecked,node.item.id]
       this.checklistSelection.deselect(node);
-    
+
     } else if (!nodeSelected && descAllSelected) {
       this.listCriteriaChecked=[...this.listCriteriaChecked,node.item.id]
       this.checklistSelection.select(node);
@@ -187,6 +187,8 @@ export class ProjectCriteriaAuditComponent
     route:ActivatedRoute) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("projectId"));
+    this.projectCode = route.snapshot.queryParamMap.get("projectCode");
+    this.projectName = route.snapshot.queryParamMap.get("projectName");
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
       this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
@@ -205,7 +207,7 @@ export class ProjectCriteriaAuditComponent
             this.checkAllParentsSelection(itemG,false);
           }
         }
-     })
+    })
 
 };
 
@@ -227,11 +229,11 @@ export class ProjectCriteriaAuditComponent
         queryParams: {
           projectId:this.projectId,
           projectCode: this.projectCode,
-          projectName:this.projectId
+          projectName:this.projectName
         }
       })
     }
-  
+
 }
   searchCriteria() {
   const searchProcessCriteria = this.processCriteriaService.searchCriteriaActive(this.search)

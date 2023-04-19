@@ -57,7 +57,7 @@
               <div style="margin: auto 0;cursor: pointer;" class="name-criteria" (click)="viewGuiline(node)" >
                 {{ node.item.code }} &nbsp;{{ node.item.name }}
                 <span *ngIf="!node.item.isActive" class="label-inactive"
-                  >Inactive</span
+                  >InActive</span
                 >
                 <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
               </div>
@@ -127,7 +127,7 @@
                   (click)="Inactive(node.item)"
                 >
                   <i style="color: #014c6e" class="fas fa-ban mr-3"></i
-                  >Inactive
+                  >DeActive
                 </button>
 
                 <button
@@ -180,7 +180,7 @@
                 <div style="margin: auto 0;cursor: pointer;" class="name-criteria" (click)="viewGuiline(node)" >
                   {{ node.item.code }} &nbsp;{{ node.item.name }}
                   <span *ngIf="!node.item.isActive" class="label-inactive"
-                    >Inactive</span
+                    >InActive</span
                   >
                   <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
                 </div>
@@ -254,7 +254,7 @@
                       (click)="Inactive(node.item)"
                     >
                       <i style="color: #014c6e" class="fas fa-ban mr-3"></i
-                      >Inactive
+                      >DeActive
                     </button>
 
                     <button

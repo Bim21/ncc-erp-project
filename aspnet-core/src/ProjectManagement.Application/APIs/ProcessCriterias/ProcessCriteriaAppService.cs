@@ -93,6 +93,16 @@ namespace ProjectManagement.APIs.ProcessCriterias
                 var parent = await WorkScope.GetAsync<ProcessCriteria>(input.ParentId.Value);
                 parent.IsLeaf = false;
                 entity.Level = parent.Level + 1;
+                //remove parent from Tailoring
+                var parentTailor = WorkScope.GetAll<ProjectProcessCriteria>().Where(x => x.ProcessCriteriaId == input.ParentId.Value).ToList();
+                if (parentTailor.Count > 0)
+                {
+                    parentTailor.ForEach(x =>
+                    {
+                        x.IsDeleted = true;
+                    });
+                }
+
                 CurrentUnitOfWork.SaveChanges();
             }
             else

@@ -35,7 +35,7 @@ namespace ProjectManagement.Configuration
                 new SettingDefinition(AppSettingNames.TimeCountDown,"180",scopes:SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.TrainingRequestChannel, "1008574549283061820",scopes: SettingScopes.Application |SettingScopes.Tenant),
                 new SettingDefinition(AppSettingNames.MaxCountHistory, "12",scopes: SettingScopes.Application |SettingScopes.Tenant),
-                new SettingDefinition(AppSettingNames.ScoreAudit, "{\"FINAL_SCORE\":100,\"PROJECT_SCORE_WHEN_STATUS_GREEN\":85,\"PROJECT_SCORE_WHEN_STATUS_AMBER\":70,\"PROJECT_SCORE_WHEN_STATUS_RED\":70,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC\":-20,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION\":-15,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE\":15,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX\":20}", scopes: SettingScopes.Application | SettingScopes.Tenant)
+                new SettingDefinition(AppSettingNames.ScoreAudit, "{\"GIVEN_SCORE\":100,\"PROJECT_SCORE_WHEN_STATUS_GREEN\":85,\"PROJECT_SCORE_WHEN_STATUS_AMBER\":70,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC\":-20,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION\":-15,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE\":15,\"PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX\":20}", scopes: SettingScopes.Application | SettingScopes.Tenant)
             };
         }
     }

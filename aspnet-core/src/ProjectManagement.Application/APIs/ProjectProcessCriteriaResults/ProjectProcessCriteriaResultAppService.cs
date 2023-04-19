@@ -80,7 +80,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
                     }
                 case NCStatus.OB:
                     {
-                        return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION;
+                        return auditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB;
                     }
                 case NCStatus.RE:
                     {
@@ -107,12 +107,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
 
             return new AuditScoreDto
             {
-                FINAL_SCORE = jObject[nameof(AuditScoreDto.FINAL_SCORE)].Value<int>(),
+                GIVEN_SCORE = jObject[nameof(AuditScoreDto.GIVEN_SCORE)].Value<int>(),
                 PROJECT_SCORE_WHEN_STATUS_GREEN = jObject[nameof(AuditScoreDto.PROJECT_SCORE_WHEN_STATUS_GREEN)].Value<int>(),
                 PROJECT_SCORE_WHEN_STATUS_AMBER = jObject[nameof(AuditScoreDto.PROJECT_SCORE_WHEN_STATUS_AMBER)].Value<int>(),
-                PROJECT_SCORE_WHEN_STATUS_RED = jObject[nameof(AuditScoreDto.PROJECT_SCORE_WHEN_STATUS_RED)].Value<int>(),
                 PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC)].Value<int>(),
-                PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION)].Value<int>(),
+                PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB)].Value<int>(),
                 PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE)].Value<int>(),
                 PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX = jObject[nameof(AuditScoreDto.PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX)].Value<int>()
             };

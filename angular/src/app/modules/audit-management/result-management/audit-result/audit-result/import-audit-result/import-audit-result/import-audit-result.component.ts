@@ -55,6 +55,7 @@ export class ImportAuditResultComponent extends AppComponentBase implements OnIn
   }
   SaveAndClose(projectId) {
     const item = this.listProject.find(x => x.projectId == projectId);
+    if (!this.import.note) { this.import.note = "" }
     this.projectProcessResultAppService.importToProjectProcessResult(this.import).
       pipe(catchError(this.projectProcessResultAppService.handleError)).subscribe((res) => {
         if (res.success) {
@@ -62,7 +63,7 @@ export class ImportAuditResultComponent extends AppComponentBase implements OnIn
           if (!infor.failedList) {
             let message = `<div style="display: flex; flex-direction: column; align-items: stretch;">
           <span>Total Score: ${infor.auditInfo.score}</span><br>
-          <span>Status: <span class="${this.APP_CONST.auditStatus[infor.auditInfo.status]}"> ${this.AuditResultList[infor.auditInfo.status-1]}
+          <span>Status: <span class="${this.APP_CONST.auditStatus[infor.auditInfo.status]}"> ${this.AuditResultList[infor.auditInfo.status - 1]}
           </span> </span><br>
           </div>`
             abp.message.success(message, `Import audit result for project [${item.projectCode}] ${item.projectName} successfully!`, true);

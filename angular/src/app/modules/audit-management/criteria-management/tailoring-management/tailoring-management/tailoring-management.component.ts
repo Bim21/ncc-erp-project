@@ -72,14 +72,18 @@ export class TailoringManagementComponent extends PagedListingComponentBase<Tail
       this.refresh();
     })
   }
-  deleteProject(id) {
-    this.projectProcessCriteriaAppService.deleteProject(id).
+  deleteProject(tailoring) {
+    abp.message.confirm(`Are you sure to remove <strong style="color:#2991BF">[${tailoring.projectCode}] ${tailoring.projectName}</strong> from Tailoring?`, "", (result: boolean)=>{
+      if (result) {
+        this.projectProcessCriteriaAppService.deleteProject(tailoring.projectId).
       pipe(catchError(this.projectProcessCriteriaAppService.handleError)).subscribe((res) => {
         if (res.success) {
-          abp.message.success("Delete Project Tailoring sucessfully!", "Delete Tailoring", true);
+          abp.message.success(`Delete <strong style="color:#2991BF">[${tailoring.projectCode}] ${tailoring.projectName}</strong> Tailoring sucessfully!`, "Delete Tailoring", true);
           this.refresh();
         }
       });
+      }
+    },true)
   }
 
   navigateTaloringProject(tailoring) {

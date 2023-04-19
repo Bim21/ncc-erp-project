@@ -50,8 +50,8 @@
                         <span>{{ node.item.name }}</span>
                        </div>
                   </mat-checkbox>
-                  <i
-                  [style.color]="node.item.isApplicable?'#28a745':'#7E7E7E'"
+                  <i *ngIf="node.item.isApplicable"
+                  [style.color]="'#28a745'"
                   style="font-size: 20px;"
                   class="fas fa-check-circle"
                 ></i>
@@ -78,12 +78,6 @@
                     <span>{{ node.item.name }}</span>
                    </div>
                   </mat-checkbox>
-                  <i
-                  [style.color]="node.item.isApplicable?'#28a745':'#7E7E7E'"
-                  style="font-size: 20px;"
-                  class="fas fa-check-circle"
-                ></i>
-
       </mat-tree-node>
       </mat-tree>
 

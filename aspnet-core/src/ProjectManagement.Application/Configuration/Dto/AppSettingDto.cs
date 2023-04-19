@@ -46,12 +46,11 @@ namespace ProjectManagement.Configuration.Dto
     }
     public class AuditScoreDto
     {
-        public int FINAL_SCORE { get; set; }
+        public int GIVEN_SCORE { get; set; }
         public int PROJECT_SCORE_WHEN_STATUS_GREEN { get; set; }
         public int PROJECT_SCORE_WHEN_STATUS_AMBER { get; set; }
-        public int PROJECT_SCORE_WHEN_STATUS_RED { get; set; }
         public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_NC { get; set; }
-        public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OBSERVATION { get; set; }
+        public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_OB { get; set; }
         public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE { get; set; }
         public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX { get; set; }
     }
