@@ -223,7 +223,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     Score = a.Score,
                     Note = a.Note,
                     Status = a.Status,
-                    PMName = a.PMId != default && mapPMIdToFullName.ContainsKey(a.PMId) ? mapPMIdToFullName[a.PMId] : default,
+                    PMName = a.PMId != default && mapPMIdToFullName.ContainsKey(a.PMId) ? mapPMIdToFullName[a.PMId] : "",
                 }).ToList()
             }).ToList();
 
@@ -293,6 +293,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
         }
 
         [AbpAuthorize(PermissionNames.Audits_Results_Import_Result)]
+        [HttpPost]
         public async Task<ImportProcessCriteriaResultDto> ImportToProjectProcessResult([FromForm] ImportFileDto input)
         {
             var valid = await ValidImport(input);
@@ -338,7 +339,6 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     Id = PPR.Id,
                     AuditDate = PPR.AuditDate,
                     Note = PPR.Note,
-                    PMName = PPR.Project.PM.FullName,
                     Score = PPR.Score,
                     Status = PPR.Status
                 },
@@ -355,7 +355,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
             };
         }
 
-        private async Task<ValidImportDto> ValidImport([FromForm] ImportFileDto input)
+        private async Task<ValidImportDto> ValidImport(ImportFileDto input)
         {
             if (input.File == null || !Path.GetExtension(input.File.FileName).Equals(".xlsx"))
             {
@@ -461,9 +461,10 @@ namespace ProjectManagement.APIs.ProjectProcessResults
 
         private async Task<List<Tuple<string, bool, long>>> GetProcessCriteriaCode(long projectID)
         {
-            List<GetAllProjectProcessCriteriaDto> item = await projectProcessCriteriaAppService.GetAll(new InputToGetAllDto { ProjectId = projectID });
-            var listLeaf = item.Select(x => x.ListProcessCriteriaIds).First().ToList();
-            var listCriteria = await GetListProcessCriteriaForExport(listLeaf,projectID);
+            var listLeaf = WorkScope.GetAll<ProjectProcessCriteria>()
+               .Where(x => x.ProjectId == projectID)
+               .Select(x => x.ProcessCriteriaId).ToList();
+            var listCriteria = await GetListProcessCriteriaForExport(listLeaf, projectID);
             return listCriteria.Select(x => new Tuple<string, bool, long>(x.Code, x.IsLeaf, x.Id)).ToList();
         }
 
@@ -555,13 +556,15 @@ namespace ProjectManagement.APIs.ProjectProcessResults
         [HttpGet]
         public async Task<FileBase64Dto> ExportProjectProcessResultTemplate(long projectID)
         {
-            List<GetAllProjectProcessCriteriaDto> item = await projectProcessCriteriaAppService.GetAll(new InputToGetAllDto { ProjectId = projectID });
-            var listLeaf = item.Select(x => x.ListProcessCriteriaIds).First().ToList();
-            var listCriteria = await GetListProcessCriteriaForExport(listLeaf,projectID);
-            return await ExportProjectProcessCriteriaToExcel(listCriteria, item.First());
+            var listLeaf = WorkScope.GetAll<ProjectProcessCriteria>()
+                .Where(x => x.ProjectId == projectID)
+                .Select(x => x.ProcessCriteriaId).ToList();
+            var projectInfor = WorkScope.Get<Project>(projectID);
+            var listCriteria = await GetListProcessCriteriaForExport(listLeaf, projectID);
+            return await ExportProjectProcessCriteriaToExcel(listCriteria, new GetProjectInfoDto { ProjectCode = projectInfor.Code, ProjectName = projectInfor.Name });
         }
 
-        private async Task<FileBase64Dto> ExportProjectProcessCriteriaToExcel(List<GetProcessCriteriaTemplateDto> input, GetAllProjectProcessCriteriaDto project)
+        private async Task<FileBase64Dto> ExportProjectProcessCriteriaToExcel(List<GetProcessCriteriaTemplateDto> input, GetProjectInfoDto project)
         {
             using (var wb = new ExcelPackage())
             {
@@ -624,6 +627,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                 sheetAudit.Cells.AutoFitColumns();
                 sheetAudit.Column(4).Width = 60;
                 sheetAudit.Column(5).Width = 70;
+                sheetAudit.Column(2).Width = 70;
                 sheetAudit.Cells.Style.WrapText = true;
                 return new FileBase64Dto
                 {
@@ -634,7 +638,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
             }
         }
 
-        private async Task<List<GetProcessCriteriaTemplateDto>> GetListProcessCriteriaForExport(List<long> listLeaf,long projectId)
+        private async Task<List<GetProcessCriteriaTemplateDto>> GetListProcessCriteriaForExport(List<long> listLeaf, long projectId)
         {
             var listID = new List<long>();
             var listAllCriteria = WorkScope.GetAll<ProcessCriteria>().ToList();
@@ -726,8 +730,8 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     ProjectName = x.Key.ProjectName,
                     ProjectCode = x.Key.ProjectCode,
                     ProjectType = x.Key.ProjectType,
-                    ClientName = x.Key.PMName,
-                    ClientCode = x.Key.ClientCode,
+                    ClientName = string.IsNullOrEmpty(x.Key.ClientName) ? "" : x.Key.ClientName,
+                    ClientCode = string.IsNullOrEmpty(x.Key.ClientCode) ? "" : x.Key.ClientCode,
                     ProjectStatus = x.Key.ProjectStatus,
                     PMName = x.Key.PMName,
                     PmId = x.Key.PMId,

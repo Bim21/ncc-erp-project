@@ -12,14 +12,14 @@ namespace ProjectManagement.APIs.ProjectProcessResults.Dto
         public string ProjectName { get; set; }
         [ApplySearchAttribute]
         public string ProjectCode { get; set; }
-        public ProjectType ProjectType { get; set; }
         [ApplySearchAttribute]
         public string ClientName { get; set; }
         [ApplySearchAttribute]
+        public string ClientCode { get; set; }
+        [ApplySearchAttribute]
         public string PMName { get; set; }
         public List<AuditResultInforDto> AuditResultInfor { get; set; }
-        [ApplySearchAttribute]
-        public string ClientCode { get; set; }
+        public ProjectType ProjectType { get; set; }
         public ProjectEnum.ProjectStatus ProjectStatus { get; set; }
         public long PmId { get; set; }
         public long ClientId { get; set; }

@@ -45,6 +45,8 @@ export class CreateEditCriteriaAuditComponent
   }
 
   ngOnInit(): void {
+    console.log(this.data);
+
     this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data=>{
           this.listCriteriaAudit=data.result
            this.maxCode= this.listCriteriaAudit.filter(res=> res.level==1).map(res=> {return Number(res.code)}).sort(function(a, b){return a-b}).pop()

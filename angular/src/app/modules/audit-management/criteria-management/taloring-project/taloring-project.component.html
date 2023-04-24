@@ -48,19 +48,17 @@
             <li class="mat-tree-node d-flex">
               <button mat-icon-button disabled></button>
               <div class="d-flex justify-content-end align-items-center" style="flex: 1;">
-                <div  class="d-flex align-items-center" style="flex: 1;">
-                  <div style="margin: auto 0" class="mr-4">
-                <span class="mr-4"> {{ node.item.code }} </span>
-                <span>{{ node.item.name }}</span>
-              </div>
-              <i *ngIf="node.item.isApplicable"
-              [style.color]="'#28a745'"
-              style="font-size: 15px; "
-              class="fas fa-check-circle">
-            </i>
-            <span *ngIf="node.item.applicable==2" style="font-size: 13px;" class=" ml-4 badge badge-pill badge-info"> Modify</span>
-          </div>
-                <span *ngIf="permission.isGranted(Audits_Tailoring_Detail_ViewNote)"  class="note pointer"  [innerHTML]="node.item.note| safeHtml"  (click)="viewNote(node)" style="width: 200px;margin-right: 200px;"></span>
+                <div style="flex:1;" class=" d-flex align-items-center">
+                  <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
+                  </div>
+                  <div style="flex :1;min-width: fit-content;"> <i *ngIf="node.item.isApplicable" [style.color]="'#28a745'"
+                      style="font-size: 15px; " class="fas fa-check-circle ml-2">
+                    </i>
+                    <span *ngIf="node.item.applicable==2" style="font-size: 13px;" class=" ml-2 badge badge-pill badge-info">
+                      Modify</span>
+                  </div>
+                </div>
+                <span *ngIf="permission.isGranted(Audits_Tailoring_Detail_ViewNote)"  class="note pointer ml-2"  [innerHTML]="node.item.note| safeHtml"  (click)="viewNote(node)" style="width: 200px;margin-right: 200px;"></span>
 
                 <div class="action">
                   <button
@@ -124,14 +122,16 @@
                   ></ng-template>
                 </button>
 
-                <div class="d-flex justify-content-end align-items-center" style="flex: 1;">
-                    <div  class="d-flex align-items-center" style="flex: 1;">
-                      <div style="margin: auto 0" class="mr-4">
-                          <span class="mr-4"> {{ node.item.code }} </span>
-                          <span >{{ node.item.name }}</span>
-                     </div>
+                <div style="flex:1;" class="d-flex align-items-center">
+                  <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
                   </div>
-               </div>
+                  <div style="flex :1;min-width: fit-content;"> <i *ngIf="node.item.isApplicable" [style.color]="'#28a745'"
+                      style="font-size: 15px; " class="fas fa-check-circle">
+                    </i>
+                    <span *ngIf="node.item.applicable==2" style="font-size: 13px;" class=" ml-4 badge badge-pill badge-info">
+                      Modify</span>
+                  </div>
+                </div>
               </div>
               <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
                 <ng-container matTreeNodeOutlet></ng-container>

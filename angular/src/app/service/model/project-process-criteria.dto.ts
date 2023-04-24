@@ -10,12 +10,15 @@ export class GetAllProjectProcessCriteriaDto {
     projectType: string;
 }
 export class GetAllPagingProjectProcessCriteriaDto{
-    projectId: number;
-    projectCode: string;
-    projectName: string;
-    projectType: string;
-    pmName: string;
-    clientName: string;
+    clientCode: string
+    clientName: string
+    countCriteria: number
+    pmName: string
+    projectCode: string
+    projectId: number
+    projectName: string
+    projectStatus: number
+    projectType: number
     selected: boolean;
 }
 export class CreateProjectProcessCriteriaDto{

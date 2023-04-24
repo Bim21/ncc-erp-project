@@ -54,13 +54,15 @@
           <li class="mat-tree-node" >
             <button mat-icon-button disabled></button>
             <div class="item-criteria">
-              <div style="margin: auto 0;cursor: pointer;" class="name-criteria" (click)="viewGuiline(node)" >
-                {{ node.item.code }} &nbsp;{{ node.item.name }}
-                <span *ngIf="!node.item.isActive" class="label-inactive"
-                  >InActive</span
-                >
-                <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+              <div style="margin: auto 0;cursor: pointer;" class="name-criteria d-flex align-items-center"
+                (click)="viewGuiline(node)">
+                <div [matTooltip]="node.item.name"  class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
+                </div>
+                <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">InActive</span>
+                  <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                </div>
               </div>
+
 
               <div class="custom-control custom-checkbox applicable">
                 <mat-checkbox
@@ -177,12 +179,13 @@
               </button>
 
               <div class="item-criteria">
-                <div style="margin: auto 0;cursor: pointer;" class="name-criteria" (click)="viewGuiline(node)" >
-                  {{ node.item.code }} &nbsp;{{ node.item.name }}
-                  <span *ngIf="!node.item.isActive" class="label-inactive"
-                    >InActive</span
-                  >
-                  <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                <div style="margin: auto 0;cursor: pointer;" class="name-criteria d-flex align-items-center"
+                  (click)="viewGuiline(node)">
+                  <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
+                  </div>
+                  <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">InActive</span>
+                    <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                  </div>
                 </div>
 
                 <!-- <div class="custom-control custom-checkbox applicable">

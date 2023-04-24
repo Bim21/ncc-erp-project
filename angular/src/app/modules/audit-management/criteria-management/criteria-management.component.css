@@ -53,6 +53,8 @@
 }
 .name-criteria:hover{
   text-decoration: underline;
+  margin: auto 0;
+  cursor: pointer;
 }
 .applicable {
   width: 200px;
@@ -90,4 +92,16 @@
   font-weight: 400;
   background-color: #b6b1b1;
   color: #000;
+}
+.note{
+  display: block;
+  display: -webkit-box;
+  max-width: 100%;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

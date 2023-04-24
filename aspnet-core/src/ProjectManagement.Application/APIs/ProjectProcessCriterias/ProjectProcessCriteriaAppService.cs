@@ -1,5 +1,6 @@
 ﻿using Abp.Authorization;
 using Abp.Collections.Extensions;
+using Abp.Domain.Uow;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,7 +59,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 ProjectName = x.FirstOrDefault().Project.Name,
                 ProjectType = CommonUtil.GetProjectTypeString(x.FirstOrDefault().Project.ProjectType),
                 PMName = x.FirstOrDefault().Project.PM.FullName,
-                ClientName = x.FirstOrDefault().Project.Client.Name,
+                ClientName = string.IsNullOrEmpty(x.FirstOrDefault().Project.Client.Name) ? "" : x.FirstOrDefault().Project.Client.Name,
                 ListProcessCriteriaIds = x.Select(pc => pc.ProcessCriteriaId).ToList()
             }).ToList();
 
@@ -107,8 +108,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ProjectCode = x.Key.ProjectCode,
                     ProjectType = x.Key.ProjectType,
                     ProjectStatus = x.Key.ProjectStatus,
-                    ClientName = x.Key.PMName,
-                    ClientCode = x.Key.ClientCode,
+                    ClientName = string.IsNullOrEmpty(x.Key.ClientName) ? "" : x.Key.ClientName,
+                    ClientCode = string.IsNullOrEmpty(x.Key.ClientCode) ? "" : x.Key.ClientCode,
                     PMName = x.Key.ProjectName,
                     CountCriteria = x.Select(pc => pc.ProcessCriteriaId).Count()
                 }).AsQueryable();
@@ -255,15 +256,46 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
         [AbpAuthorize(PermissionNames.Audits_Tailoring_Update_Project_Tailoring)]
         public async Task<UpdateProjectProcessCriteriaDto> AddMultiCriteriaToOneProject(UpdateProjectProcessCriteriaDto input)
         {
+            using (UnitOfWorkManager.Current.DisableFilter(AbpDataFilters.SoftDelete))
+            {
+                var listOldPPC = WorkScope.GetAll<ProjectProcessCriteria>()
+                    .Where(x => x.ProjectId == input.ProjectId && input.ProcessCriteriaIds
+                    .Contains(x.ProcessCriteriaId) && x.IsDeleted == true)
+                    .OrderByDescending(x => x.Id)
+                    .ToList();
+
+                var checkList = new List<long>();
+                var listReverse = new List<ProjectProcessCriteria>();
+                listOldPPC.ForEach(x =>
+                {
+                    if (!checkList.Contains(x.ProcessCriteriaId))
+                    {
+                        listReverse.Add(x);
+                        checkList.Add(x.ProcessCriteriaId);
+                    }
+                });
+
+                if (listReverse.Count > 0)
+                {
+                    listReverse.ForEach(x =>
+                    {
+                        x.IsDeleted = false;
+                    });
+                    CurrentUnitOfWork.SaveChanges();
+                    input.ProcessCriteriaIds.RemoveAll(x => listReverse.Any(y => y.ProcessCriteriaId == x));
+                }
+            }
+
             ValidExistProject(input.ProjectId, null);
             var listPCIds = WorkScope.GetAll<ProcessCriteria>()
                 .Where(x => input.ProcessCriteriaIds.Contains(x.Id))
                 .Where(x => x.IsLeaf && x.IsActive)
                 .Select(x => x.Id)
                 .ToList();
+
             if (listPCIds == null || listPCIds.Count() < 1)
             {
-                throw new UserFriendlyException("Can not found any process criteria (IsLeaf, IsActive)");
+                return input;
             }
 
             var listPPCIds = WorkScope.GetAll<ProjectProcessCriteria>()
@@ -282,7 +314,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
 
             if (listToAdd == null || listToAdd.Count() < 1)
             {
-                throw new UserFriendlyException("Project process criteria already exist");
+                return input;
             }
 
             await WorkScope.InsertRangeAsync(listToAdd);
@@ -335,10 +367,9 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
             var listIds = WorkScope.GetAll<ProjectProcessCriteria>()
                 .Where(x => x.ProjectId == input.ProjectId)
                 .Where(x => input.ProcessCriteriaIds.Contains(x.ProcessCriteriaId))
-                .Select(x => x.Id)
                 .ToList();
 
-            await DeleteProjectProcessCriteria(listIds);
+            await DeleteProjectProcessCriterias(listIds);
             return input;
         }
 
@@ -356,28 +387,28 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
             ValidExistProject(projectId, null);
             var listIds = WorkScope.GetAll<ProjectProcessCriteria>()
                 .Where(x => x.ProjectId == projectId)
-                .Select(x => x.Id)
                 .ToList();
-            await DeleteProjectProcessCriteria(listIds);
+            await DeleteProjectProcessCriterias(listIds);
             return projectId;
         }
 
-        private async Task DeleteProjectProcessCriteria(List<long> listIds)
+        private async Task DeleteProjectProcessCriterias(List<ProjectProcessCriteria> listPPCs)
         {
-            if (listIds == null || listIds.Count() < 1)
+            if (listPPCs == null || listPPCs.Count() < 1)
             {
                 throw new UserFriendlyException($"Can not found any project process criteria");
             }
-            if (listIds.Count() == 1)
+            if (listPPCs.Count() == 1)
             {
-                await WorkScope.DeleteAsync<ProjectProcessCriteria>(listIds[0]);
+                await WorkScope.DeleteAsync<ProjectProcessCriteria>(listPPCs[0]);
             }
             else
             {
-                foreach (var id in listIds)
+                listPPCs.ForEach(x =>
                 {
-                    await WorkScope.DeleteAsync<ProjectProcessCriteria>(id);
-                }
+                    x.IsDeleted = true;
+                });
+                CurrentUnitOfWork.SaveChanges();
             }
         }
 
@@ -426,8 +457,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ProjectName = x.Name,
                     ProjectCode = x.Code,
                     ProjectType = x.ProjectType,
-                    ClientName = x.Client.Name,
-                    ClientCode = x.Client.Code,
+                    ClientName = string.IsNullOrEmpty(x.Client.Name) ? "" : x.Client.Name,
+                    ClientCode = string.IsNullOrEmpty(x.Client.Code) ? "" : x.Client.Code,
                     ProjectStatus = x.Status,
                     PMName = x.PM.FullName,
                 }).ToListAsync();
@@ -575,12 +606,12 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 var sheetAudit = wb.Workbook.Worksheets.Add("Audit");
                 sheetAudit.Cells.Style.Font.Name = "Arial";
                 sheetAudit.Cells.Style.Font.Size = 10;
-                sheetAudit.Cells["A1:G1"].Style.Font.Bold = true;
-                sheetAudit.Cells["A1:G1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells["A1:G1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                sheetAudit.Cells["A1:G1"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                sheetAudit.Cells["A1:G1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(112, 173, 71));
-                sheetAudit.Cells["A1:G1"].Style.Font.Color.SetColor(Color.White);
+                sheetAudit.Cells["A1:F1"].Style.Font.Bold = true;
+                sheetAudit.Cells["A1:F1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheetAudit.Cells["A1:F1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheetAudit.Cells["A1:F1"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                sheetAudit.Cells["A1:F1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(112, 173, 71));
+                sheetAudit.Cells["A1:F1"].Style.Font.Color.SetColor(Color.White);
                 sheetAudit.Cells["A1"].Value = "No";
                 sheetAudit.Cells["B1"].Value = "Criteria";
                 sheetAudit.Cells["C1"].Value = "Applicable?";
@@ -628,6 +659,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells[$"D2:F{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheetAudit.Cells.AutoFitColumns();
                 sheetAudit.Column(4).Width = 60;
+                sheetAudit.Column(2).Width = 70;
                 sheetAudit.Cells.Style.WrapText = true;
                 return new FileBase64Dto
                 {

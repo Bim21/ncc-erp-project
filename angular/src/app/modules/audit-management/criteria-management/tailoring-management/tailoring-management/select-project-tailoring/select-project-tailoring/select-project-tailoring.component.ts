@@ -37,6 +37,8 @@ export class SelectProjectTailoringComponent extends AppComponentBase implements
   }
 
   public search() {
+    console.log(this.tempPmReportProjectList);
+
     this.projectList = this.tempPmReportProjectList.filter((item) => {
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.projectCode.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -77,7 +79,7 @@ export class SelectProjectTailoringComponent extends AppComponentBase implements
     this.projectProcessCriteriaAppService.getProjectHaveNotBeenTailor().subscribe(rs => {
       if (rs.success) {
         this.projectList = rs.result as GetAllPagingProjectProcessCriteriaDto[];
-        this.tempPmReportProjectList = rs.result;
+        this.tempPmReportProjectList = rs.result as GetAllPagingProjectProcessCriteriaDto[];
       }
     })
   }

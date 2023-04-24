@@ -83,20 +83,21 @@
           <li style="background-color: rgb(239, 239, 239);" class="mat-tree-node">
             <button mat-icon-button disabled></button>
             <div class="item-criteria d-flex justify-content-end">
-              <div style="margin: auto 0; align-items: center; display: flex; " class="name-criteria">
-                <span>
-                  <span matTooltip="Process Criteria Code" class="mr-4"> {{ node.item.processCriteria.code }} </span>
-                  <span matTooltip="Process Criteria Name">
+              <div [matTooltip]="node.item.processCriteria.name" style="margin: auto 0; align-items: center; display: flex; "
+                class="name-criteria">
+                <div class="d-flex">
+                  <span class="mr-4"> {{ node.item.processCriteria.code }} </span>
+                  <span class="note"  style="flex: 1;">
                     {{ node.item.processCriteria.name }}
                   </span>
                   &nbsp;
                   <!-- <span>
-                    <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
-                      style="font-size: 15px;" class="fas fa-check-circle"
-                      [matTooltip]="node.item.processCriteria.isApplicable ? 'This is applicable' : 'This is not applicable'">
-                    </i>
-                  </span> -->
-                </span>
+                                  <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
+                                    style="font-size: 15px;" class="fas fa-check-circle"
+                                    [matTooltip]="node.item.processCriteria.isApplicable ? 'This is applicable' : 'This is not applicable'">
+                                  </i>
+                                </span> -->
+                </div>
               </div>
 
               <div class="chip-status" style="padding-left: 3%; width: 180px;">
@@ -157,21 +158,22 @@
               </button>
 
               <div class="item-criteria">
-                <div style="margin: auto 0; align-items: center; display: flex; " class="name-criteria">
-                  <span>
-                    <span matTooltip="Process Criteria Code" class="mr-4"> {{ node.item.processCriteria.code }} </span>
-                    <span matTooltip="Process Criteria Name">
-                      {{ node.item.processCriteria.name }}
-                    </span>
-                    &nbsp;
-                    <!-- <span>
-                      <i [style.color]="node.item.processCriteria.isApplicable?'#28a745':'#7E7E7E'"
-                        style="font-size: 15px;" class="fas fa-check-circle"
-                        [matTooltip]="node.item.processCriteria.isApplicable ? 'This is applicable' : 'This is not applicable'">
-                      </i>
-                    </span> -->
+                <div [matTooltip]="node.item.processCriteria.name" style="margin: auto 0; align-items: center; display: flex; "
+                class="name-criteria">
+                <div class="d-flex align-items-center">
+                  <span class="mr-4"> {{ node.item.processCriteria.code }} </span>
+                  <span class="note" style="flex: 1;">
+                    {{ node.item.processCriteria.name }}
                   </span>
+                  &nbsp;
+                  <!-- <span>
+                                  <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
+                                    style="font-size: 15px;" class="fas fa-check-circle"
+                                    [matTooltip]="node.item.processCriteria.isApplicable ? 'This is applicable' : 'This is not applicable'">
+                                  </i>
+                                </span> -->
                 </div>
+              </div>
 
                 <div class="col-lg-2 name-criteria" style="justify-content: space-between; padding-right: 3%; ">
                   <!-- <mat-chip-list aria-label="Status selection">
@@ -187,7 +189,7 @@
                   <ng-container *ngIf="node.item.status == 4">
                       <mat-chip class="assigned-chip" selected>Excellent</mat-chip>
                   </ng-container>
-              </mat-chip-list> -->
+              </mat-chip-list> asdasdas-->
                 </div>
 
                 <div class="col-lg-1" style="padding-left: 30px;">
