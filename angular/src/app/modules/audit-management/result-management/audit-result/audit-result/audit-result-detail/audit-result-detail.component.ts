@@ -8,7 +8,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { ProjectProcessCriteriaResultAppService } from "@app/service/api/project-process-criteria-result.service";
-import { InputToGetProjectProcessCriteriaResultDto, GetProjectProcessCriteriaResultDto, GetProcessCriteriaDto, NCSStatus } from "@app/service/model/project-process-criteria-result.dto";
+import { GetProjectProcessCriteriaResultDto, GetProcessCriteriaDto, NCSStatus } from "@app/service/model/project-process-criteria-result.dto";
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ThemePalette } from '@angular/material/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -22,7 +22,7 @@ import { EditAuditResultDetailComponent } from './edit-audit-result-detail/edit-
   styleUrls: ['./audit-result-detail.component.css']
 })
 export class AuditResultDetailComponent extends PagedListingComponentBase<AuditResultDetailComponent> implements OnInit {
- 
+
   styleChip: string = ' color:black; width:150px; justify-content: center;';
   search = '';
   selectedIsApplicable: string = '';
@@ -45,7 +45,7 @@ export class AuditResultDetailComponent extends PagedListingComponentBase<AuditR
   }
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
-    this.projectProcesCriteriaResultAppService.getTreeListPPCR(this.projectProcessResultId, this.projectId, null)
+    this.projectProcesCriteriaResultAppService.getTreeListPPCR(this.projectProcessResultId, this.projectId)
       .pipe(finalize(() => {
         finishedCallback();
       })).subscribe((data) => {
@@ -86,10 +86,6 @@ export class AuditResultDetailComponent extends PagedListingComponentBase<AuditR
     this.projectName = this.route.snapshot.queryParamMap.get('projectName');
     this.auditDate = this.route.snapshot.queryParamMap.get('auditDate');
     this.pmName = this.route.snapshot.queryParamMap.get('pmName');
-
-    this.projectProcesCriteriaResultAppService.getTreeListPPCR(this.projectProcessResultId, this.projectId, null)
-      .subscribe((data) => {
-      });
     this.refresh();
   }
 

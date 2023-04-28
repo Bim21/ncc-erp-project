@@ -3,9 +3,7 @@ using Abp.Domain.Entities;
 using ProjectManagement.APIs.ProcessCriterias.Dto;
 using ProjectManagement.Entities;
 using ProjectManagement.GeneralModels;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.ProjectProcessCriteriaResults.Dto
@@ -21,6 +19,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults.Dto
 
         public virtual GetProcessCriteriaDto ProcessCriteria { get; set; }
     }
+
     public class TreeCriteriaResultDto
     {
         public int TotalScore { get; set; }
@@ -30,8 +29,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults.Dto
 
     public class InputToGetProjectProcessCriteriaResultDto
     {
+        public long ProjectProcessResultId { get; set; }
+        public long ProjectId { get; set; }
         public string SearchText { get; set; }
         public NCStatus? Status { get; set; }
+
         public bool IsGetAll()
         {
             return string.IsNullOrEmpty(SearchText) && !Status.HasValue;

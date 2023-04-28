@@ -22,6 +22,7 @@ export class CreateEditCriteriaAuditComponent
   tinyMCE2 = new FormControl('');
   criteriaAudit = {} as ProcessCriteria ;
   listCriteriaAudit = []
+  listCriteriaAuditFilter = []
   searchCriteria:string = "";
   parentCurrent:string='';
   nameParent:string=''
@@ -45,43 +46,49 @@ export class CreateEditCriteriaAuditComponent
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
+      this.listCriteriaAudit = data.result
+      this.listCriteriaAuditFilter = data.result.filter(x => x.isActive == true);
+      this.maxCode = this.listCriteriaAudit.filter(res => res.level == 1).map(res => { return Number(res.code) }).sort(function (a, b) { return a - b }).pop()
 
-    this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data=>{
-          this.listCriteriaAudit=data.result
-           this.maxCode= this.listCriteriaAudit.filter(res=> res.level==1).map(res=> {return Number(res.code)}).sort(function(a, b){return a-b}).pop()
-
-         if(this.isCreateCriteria&& this.parentCurrent){
-          this.codeChild=data.result.find(res=>res.id==this.data.item.id).maxValueOfListCode + 1
-         }
-         if(this.isCreateCriteria && !this.parentCurrent){
-          this.codeChild= this.maxCode + 1
-         }
+      if (this.isCreateCriteria && this.parentCurrent) {
+        this.codeChild = data.result.find(res => res.id == this.data.item.id).maxValueOfListCode + 1
+      }
+      if (this.isCreateCriteria && !this.parentCurrent) {
+        if (this.data.childrens.length > 0) {
+          this.codeChild = this.maxCode + 1
+        }
+        else {
+          this.codeChild = 1
+        }
+      }
     })
 
     if (this.data.command == "edit") {
       this.isCreateCriteria = false;
-      if(this.data.item.parentId){this.processCriteriaService.getCriteriaById(this.data.item.parentId).pipe(catchError(this.processCriteriaService.handleError)).subscribe(res=>{
-        this.parentCurrent=res.result.code
-        this.nameParent = res.result.code + ' ' + res.result.name
-      })}
-      else{
+      if (this.data.item.parentId) {
+        this.processCriteriaService.getCriteriaById(this.data.item.parentId).pipe(catchError(this.processCriteriaService.handleError)).subscribe(res => {
+          this.parentCurrent = res.result.code
+          this.nameParent = res.result.code + ' ' + res.result.name
+        })
+      }
+      else {
         this.parentCurrent = null;
       }
       this.criteriaAudit = this.data.item;
       this.tinyMCE1.setValue(this.data.item.guidLine)
       this.tinyMCE2.setValue(this.data.item.qaExample)
-      this.code= this.data.item.code.split('.')
-      this.codeChild = Number(this.code.splice(-1,1))
-      this.codeParent= this.code.join('.')
+      this.code = this.data.item.code.split('.')
+      this.codeChild = Number(this.code.splice(-1, 1))
+      this.codeParent = this.code.join('.')
     } else {
       this.isCreateCriteria = true;
-      this.parentCurrent=this.data.item.code;
-      this.codeParent=this.data.item.code|| '';
-      if(!this.parentCurrent){
-        this.codeChild=this.data.childrens.length+1
+      this.parentCurrent = this.data.item.code;
+      this.codeParent = this.data.item.code || '';
+      if (!this.parentCurrent) {
+        this.codeChild = this.data.childrens.length + 1
       }
-      this.criteriaAudit={...this.criteriaAudit,isApplicable:false,parentId:this.data.item.id,name:this.data.name}
+      this.criteriaAudit = { ...this.criteriaAudit, isApplicable: false, parentId: this.data.item.id, name: this.data.name }
     }
   }
 
@@ -111,49 +118,49 @@ export class CreateEditCriteriaAuditComponent
 
   SaveAndClose() {
     const criteriaCreate = {
-    code: this.codeParent? (this.codeParent+'.'+this.codeChild): this.codeChild,
-    name: this.criteriaAudit.name,
-    isApplicable: this.criteriaAudit.isApplicable,
-    guidLine: this.tinyMCE1.value,
-    qaExample: this.tinyMCE2.value,
-    id: this.criteriaAudit.id,
-    parentId:this.criteriaAudit.parentId
-  }
-    const  criteriaUpdate ={
-    code: this.codeParent? (this.codeParent+'.'+this.codeChild): this.codeChild,
-    isApplicable: this.criteriaAudit.isApplicable,
-    guidLine: this.tinyMCE1.value,
-    qaExample: this.tinyMCE2.value,
-    id: this.criteriaAudit.id,
-    name:this.criteriaAudit.name
+      code: this.codeParent ? (this.codeParent + '.' + this.codeChild) : this.codeChild,
+      name: this.criteriaAudit.name,
+      isApplicable: this.criteriaAudit.isApplicable,
+      guidLine: this.tinyMCE1.value,
+      qaExample: this.tinyMCE2.value,
+      id: this.criteriaAudit.id,
+      parentId: this.criteriaAudit.parentId
+    }
+    const criteriaUpdate = {
+      code: this.codeParent ? (this.codeParent + '.' + this.codeChild) : this.codeChild,
+      isApplicable: this.criteriaAudit.isApplicable,
+      guidLine: this.tinyMCE1.value,
+      qaExample: this.tinyMCE2.value,
+      id: this.criteriaAudit.id,
+      name: this.criteriaAudit.name
     }
 
 
 
     if (this.data.command == "create") {
-      this.processCriteriaService.create(criteriaCreate ).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
+      this.processCriteriaService.create(criteriaCreate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
-        if(!this.isCheckedCreateAnother){
+        if (!this.isCheckedCreateAnother) {
           this.dialogRef.close(this.criteriaAudit)
         }
-        else{
-          this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data=>{
-            this.listCriteriaAudit=data.result
-            this.maxCode= this.listCriteriaAudit.filter(res=> res.level==1).map(res=> {return Number(res.code)}).sort(function(a, b){return a-b}).pop()
-           if(this.parentCurrent){
-            this.codeChild=data.result.find(res=>res.code==this.parentCurrent).maxValueOfListCode + 1
-           }
-           else{
-            this.codeChild= this.maxCode + 1
-           }
+        else {
+          this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
+            this.listCriteriaAudit = data.result
+            this.maxCode = this.listCriteriaAudit.filter(res => res.level == 1).map(res => { return Number(res.code) }).sort(function (a, b) { return a - b }).pop()
+            if (this.parentCurrent) {
+              this.codeChild = data.result.find(res => res.code == this.parentCurrent).maxValueOfListCode + 1
+            }
+            else {
+              this.codeChild = this.maxCode + 1
+            }
           })
-        this.criteriaAudit.name='';
-        this.tinyMCE1.setValue('')
-        this.tinyMCE2.setValue('')
+          this.criteriaAudit.name = '';
+          this.tinyMCE1.setValue('')
+          this.tinyMCE2.setValue('')
         }
       }, () => { this.isLoading = false })
     } else {
-      this.processCriteriaService.update(criteriaUpdate ).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
+      this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
         abp.notify.success("Update Successfully!");
         this.dialogRef.close(this.criteriaAudit);
       }, () => { this.isLoading = false })

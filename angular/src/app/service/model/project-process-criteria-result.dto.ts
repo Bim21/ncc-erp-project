@@ -1,10 +1,4 @@
-export class InputToGetProjectProcessCriteriaResultDto {
-    isActive: boolean;
-    isApplicable: boolean;
-    searchText: string;
-    processCriteriaId: number;
-    id: number;
-}
+
 
 export class GetProjectProcessCriteriaResultDto{
     projectProcessResultId: number;

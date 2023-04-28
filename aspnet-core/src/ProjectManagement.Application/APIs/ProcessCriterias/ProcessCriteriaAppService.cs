@@ -27,7 +27,7 @@ namespace ProjectManagement.APIs.ProcessCriterias
         }
 
         [AbpAuthorize(PermissionNames.Audits_Criteria)]
-        [HttpGet]
+        [HttpPost]
         public async Task<TreeCriteriaDto> GetAll(InputToGetProcessCriteriaDto input)
         {
             var listLCs = WorkScope.GetAll<ProcessCriteria>().ToList();
@@ -59,7 +59,7 @@ namespace ProjectManagement.APIs.ProcessCriterias
                .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive)
                .WhereIf(input.IsApplicable.HasValue, x => x.IsApplicable == input.IsApplicable)
                .WhereIf(!string.IsNullOrEmpty(input.SearchText),
-               (x => x.Name.ToLower().Contains(input.SearchText.ToLower()) || (x.Code.ToLower().Contains(input.SearchText.ToLower()))))
+               (x => x.Name.ToLower().Contains(input.SearchText.Trim().ToLower()) || (x.Code.Trim().ToLower().Contains(input.SearchText.Trim().ToLower()))))
                .Select(x => x.Id)
                .ToList();
 
@@ -82,8 +82,10 @@ namespace ProjectManagement.APIs.ProcessCriterias
         {
             var exist = await WorkScope.GetAll<ProcessCriteria>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
             if (exist)
-                throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!"));
-
+                { throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!")); }
+            if (string.IsNullOrEmpty(input.Name.Trim())) {
+                throw new UserFriendlyException(String.Format("Name of ProcessCriteria can't be Null or Empty!")); 
+            }
             var entity = ObjectMapper.Map<ProcessCriteria>(input);
             entity.IsActive = true;
             entity.IsLeaf = true;
@@ -125,8 +127,10 @@ namespace ProjectManagement.APIs.ProcessCriterias
 
             var exist = await WorkScope.GetAll<ProcessCriteria>().AnyAsync(x => (x.Name == input.Name || x.Code == input.Code) && x.Id != input.Id);
             if (exist)
-                throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!"));
-
+                { throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!")); }
+            if (string.IsNullOrEmpty(input.Name.Trim())) {
+                throw new UserFriendlyException(String.Format("Name of ProcessCriteria can't be Null or Empty!")); 
+            }
             await WorkScope.UpdateAsync(ObjectMapper.Map<UpdateProcessCriteriaDto, ProcessCriteria>(input, processCriteria));
             return input;
         }
@@ -327,8 +331,8 @@ namespace ProjectManagement.APIs.ProcessCriterias
                     Level = x.Level,
                     IsLeaf = x.IsLeaf,
                     MaxValueOfListCode = allProcessCriteria
-                        .Where(y => y.ParentId == x.Id && y.Level >= 2).Count() > 0 ? allProcessCriteria
-                        .Where(y => y.ParentId == x.Id && y.Level >= 2)
+                        .Where(y => y.ParentId == x.Id && y.Level >= 1).Count() > 0 ? allProcessCriteria
+                        .Where(y => y.ParentId == x.Id && y.Level >= 1)
                         .Max(x => GetNumberAfterLastDot(x.Code)) : 0
                 })
                 .OrderBy(x => x.Code)

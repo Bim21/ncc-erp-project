@@ -43,7 +43,8 @@ export class SelectProjectTailoringComponent extends AppComponentBase implements
       return item.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.projectCode.toLowerCase().includes(this.searchText.toLowerCase()) ||
         item.pmName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        item.clientName.toLowerCase().includes(this.searchText.toLowerCase());
+        item.clientName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        item.clientCode.toLowerCase().includes(this.searchText.toLowerCase());
     });
   }
 

@@ -166,6 +166,7 @@ export class AuditResultComponent extends PagedListingComponentBase<AuditResultC
         this.projectProcessResultAppService.deleteResult(id).subscribe((rs) => {
           if (rs.success) {
             abp.message.success("Delete Result Successful!", "Delete Audit result", true);
+            this.isLoading = false;
             this.refresh();
           }
         })
@@ -182,6 +183,7 @@ export class AuditResultComponent extends PagedListingComponentBase<AuditResultC
       }
     })
     show.afterClosed().subscribe(re => {
+      this.isLoading = false;
       this.refresh();
     });
   }
@@ -195,6 +197,7 @@ export class AuditResultComponent extends PagedListingComponentBase<AuditResultC
       }
     })
     show.afterClosed().subscribe(re => {
+      this.isLoading = false;
       this.refresh();
     });
   }

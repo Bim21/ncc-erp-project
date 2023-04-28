@@ -31,11 +31,16 @@ export class TailoringManagementComponent extends PagedListingComponentBase<Tail
     this.permission.isGranted(this.Audits_Tailoring_Delete) ||
     this.permission.isGranted(this.Audits_Tailoring_Update_Project);
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
+    this.isLoading = true;
     this.projectProcessCriteriaAppService.getAllPaging(request).pipe(finalize(() => {
       finishedCallback();
     })).subscribe((data) => {
-      this.listTailoring = data.result.items;
-      this.showPaging(data.result, pageNumber);
+      if (data.success) {
+        this.listTailoring = data.result.items;
+        this.showPaging(data.result, pageNumber);
+        this.isLoading=false
+      }
+
     }, () => { })
   }
   protected delete(entity: TailoringManagementComponent): void {

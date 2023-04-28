@@ -73,7 +73,7 @@
                   [checked]="node.item.isApplicable"
                   [disabled]="!node.item.isActive || !permission.isGranted(Audits_Criteria_ChangeApplicable)"
                   [color]="'primary'"
-                  (change)="setIsApplicable(node.item.id)"
+                  (change)="setIsApplicable(node.item)"
                 ></mat-checkbox>
               </div>
 

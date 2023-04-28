@@ -12,7 +12,7 @@
         </div>
         <mat-form-field class=" w-100">
             <mat-label>Project</mat-label>
-            <mat-select (closed)="focusOutProject()" [ngModel]="import.projectId" name="select-Project"
+            <mat-select (closed)="focusOutProject()" [ngModel]="import.projectId" name="select-Project" #projectModel="ngModel" #projectEl  required
                 (selectionChange)="onSelectChange($event)">
                 <mat-form-field class="w-100 px-3 "
                     style="position: sticky; top: 0; z-index: 2; background-color: white;">
@@ -25,14 +25,16 @@
                             {{item.projectName}} - </strong></span>
                     <span> {{item.pmName}}</span></mat-option>
             </mat-select>
+        <abp-validation-summary [control]="projectModel" [controlEl]="projectEl"></abp-validation-summary>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Audit Date</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" name="ipt-date"
+            <input matInput [matDatepicker]="picker" [(ngModel)]="startDate" name="ipt-date" #auditDateModel="ngModel" #auditDateEl  required
                 (ngModelChange)="onChangeDate()">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+        <abp-validation-summary [control]="auditDateModel" [controlEl]="auditDateEl"></abp-validation-summary>
         <div class="d-flex flex-column w-100">
             <label>PQA Note:</label>
             <editor class="w-100" [init]="{

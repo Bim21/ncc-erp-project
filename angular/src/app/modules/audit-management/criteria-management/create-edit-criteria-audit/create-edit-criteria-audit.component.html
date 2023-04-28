@@ -33,7 +33,7 @@
               matInput [(ngModel)]="searchCriteria" name="searchCriteria" placeholder="Search" #search
               (keydown)="$event.stopPropagation()">{{search.focus()}}
             </mat-form-field>
-                <mat-option  *ngFor="let item of listCriteriaAudit | listFilter:  'name' : searchCriteria: 'code'" [value]="item.code" [style.paddingLeft] = "item.level * 20 + 'px'"><strong class="mr-1">{{item.code}}</strong>  {{item.name}}
+                <mat-option  *ngFor="let item of listCriteriaAuditFilter | listFilter:  'name' : searchCriteria: 'code'" [value]="item.code" [style.paddingLeft] = "item.level * 20 + 'px'"><strong class="mr-1">{{item.code}}</strong>  {{item.name}}
               </mat-option>
             </mat-select>
 
@@ -53,7 +53,7 @@
       <div class="w-75 d-flex justify-content-between align-items-center">
         <div >
           <span>{{ codeParent}} </span>
-          <input [disabled]="!data.item.isLeaf && data.command == 'edit'" type="number" [(ngModel)]="codeChild" name="codeChild"  id="codeChild"  #criteriaNameModel="ngModel"
+          <input [disabled]="!data.item.isLeaf && data.command == 'edit'" type="number" [(ngModel)]="codeChild" name="codeChild"  id="codeChild"  #criteriaNameModel="ngModel" [value]="codeChild"
           #criteriaNameEl  required style="width: 45px;" min="1"
           (ngModelChange)="checkCode($event)"/>
         </div>
@@ -62,7 +62,7 @@
         [controlEl]="criteriaNameEl"
       >
       </abp-validation-summary>
-        <mat-checkbox
+        <mat-checkbox *ngIf="criteriaAudit.isLeaf"
           [(ngModel)]="criteriaAudit.isApplicable"
           name="isApplicable"
           [disabled]="!permission.isGranted(Audits_Criteria_ChangeApplicable)"

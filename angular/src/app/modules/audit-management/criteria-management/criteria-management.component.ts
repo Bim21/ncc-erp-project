@@ -21,7 +21,7 @@ export class CriteriaManagementComponent
   extends PagedListingComponentBase<ProcessCriteria>
   implements OnInit {
 
-  search:string = ''
+  search = ""
 
   public Audits_Criteria = PERMISSIONS_CONSTANT.Audits_Criteria
   public Audits_Criteria_Create = PERMISSIONS_CONSTANT.Audits_Criteria_Create
@@ -243,8 +243,9 @@ export class CriteriaManagementComponent
 
     });
   }
-  setIsApplicable(id) {
-    this.processCriteriaService.ChangeApplicable(id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
+  setIsApplicable(item) {
+    this.processCriteriaService.ChangeApplicable(item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
+      item.isApplicable = !item.isApplicable;
       abp.notify.success("Change applicable successfully!");
     });
   }

@@ -141,15 +141,14 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
         }
 
         [AbpAuthorize(PermissionNames.Audits_Results_Detail_View)]
+        [HttpPost]
         public async Task<TreeCriteriaResultDto> GetTreeListProjectProcessCriteriaResults(
-            long projectProcessResultId,
-            long projectId,
             InputToGetProjectProcessCriteriaResultDto input)
         {
-            var PPR = WorkScope.Get<ProjectProcessResult>(projectProcessResultId);
+            var PPR = WorkScope.Get<ProjectProcessResult>(input.ProjectProcessResultId);
             var listPCs = WorkScope.GetAll<ProcessCriteria>().ToList();
             var dicItem = WorkScope.GetAll<ProjectProcessCriteriaResult>()
-                .Where(x => x.ProjectProcessResultId == projectProcessResultId && x.ProjectId == projectId)
+                .Where(x => x.ProjectProcessResultId == input.ProjectProcessResultId && x.ProjectId == input.ProjectId)
                 .ToDictionary(x => x.ProcessCriteriaId, y => new { y.Status, y.Score, y.Note, y.Id });
             var idsContain = new List<long>();
             foreach (var x in dicItem.Select(y => y.Key))
@@ -162,8 +161,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
                 {
                     Id = dicItem.ContainsKey(x.Id) ? dicItem[x.Id].Id : 0,
                     Note = dicItem.ContainsKey(x.Id) ? dicItem[x.Id].Note : "",
-                    ProjectId = projectId,
-                    ProjectProcessResultId = projectProcessResultId,
+                    ProjectId = input.ProjectId,
+                    ProjectProcessResultId = input.ProjectProcessResultId,
                     Score = dicItem.ContainsKey(x.Id) ? dicItem[x.Id].Score : 0,
                     Status = dicItem.ContainsKey(x.Id) ? dicItem[x.Id].Status : 0,
                     ProcessCriteria = new GetProcessCriteriaDto
@@ -190,7 +189,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
                 };
             }
             var listFilterIds = listResult
-                .WhereIf(!string.IsNullOrEmpty(input.SearchText),x => (x.ProcessCriteria.Name.ToLower().Contains(input.SearchText.ToLower())) || (x.ProcessCriteria.Code.ToLower().Contains(input.SearchText.ToLower())))
+                .WhereIf(!string.IsNullOrEmpty(input.SearchText),x => (x.ProcessCriteria.Name.ToLower().Contains(input.SearchText.Trim().ToLower())) || (x.ProcessCriteria.Code.ToLower().Contains(input.SearchText.Trim().ToLower())))
                 .WhereIf(input.Status.HasValue, x => x.Status == input.Status)
                 .Select(x => x.ProcessCriteria.Id).ToList();
             var idsFilterContains = new List<long>();

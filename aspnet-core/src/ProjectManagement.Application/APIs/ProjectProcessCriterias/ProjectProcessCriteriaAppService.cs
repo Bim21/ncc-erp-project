@@ -59,7 +59,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 ProjectName = x.FirstOrDefault().Project.Name,
                 ProjectType = CommonUtil.GetProjectTypeString(x.FirstOrDefault().Project.ProjectType),
                 PMName = x.FirstOrDefault().Project.PM.FullName,
-                ClientName = string.IsNullOrEmpty(x.FirstOrDefault().Project.Client.Name) ? "" : x.FirstOrDefault().Project.Client.Name,
+                ClientName = x.FirstOrDefault().Project.Client.Name ?? "",
                 ListProcessCriteriaIds = x.Select(pc => pc.ProcessCriteriaId).ToList()
             }).ToList();
 
@@ -108,8 +108,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ProjectCode = x.Key.ProjectCode,
                     ProjectType = x.Key.ProjectType,
                     ProjectStatus = x.Key.ProjectStatus,
-                    ClientName = string.IsNullOrEmpty(x.Key.ClientName) ? "" : x.Key.ClientName,
-                    ClientCode = string.IsNullOrEmpty(x.Key.ClientCode) ? "" : x.Key.ClientCode,
+                    ClientName = x.Key.ClientName ?? "",
+                    ClientCode = x.Key.ClientCode ?? "",
                     PMName = x.Key.ProjectName,
                     CountCriteria = x.Select(pc => pc.ProcessCriteriaId).Count()
                 }).AsQueryable();
@@ -466,7 +466,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
 
         [AbpAuthorize(PermissionNames.Audits_Tailoring_Import)]
         [HttpPost]
-        public async Task<long> ImportProjectProcessCriteriaFromExcel([FromForm] ImportProjecProcessCriteriaDto input)
+        public async Task<List<ResponseFailDto>> ImportProjectProcessCriteriaFromExcel([FromForm] ImportProjecProcessCriteriaDto input)
         {
             if (input.File == null || !Path.GetExtension(input.File.FileName).Equals(".xlsx"))
             {
@@ -486,9 +486,9 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 using (var package = new ExcelPackage(stream))
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+
                     var mapCodeToId = await WorkScope.GetAll<ProcessCriteria>()
-                        .Where(x => x.IsLeaf && x.IsActive)
-                        .ToDictionaryAsync(x => x.Code.Trim(), y => y.Id);
+                        .ToDictionaryAsync(x => x.Code.Trim(), y => new { y.Id, y.IsActive, y.IsLeaf});
 
                     var rowCount = worksheet.Dimension.End.Row;
                     if (rowCount < 2)
@@ -501,13 +501,24 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     var listCriteriaIds = new List<long>();
                     for (int row = 2; row < rowCount; row++)
                     {
+                        //Code không tồn tại, code null, code sai => trả ra thông báo lỗi Row n: Code number is not exsit or null
                         var code = worksheet.Cells[row, 1].Value.ToString().Trim();
+                        if (string.IsNullOrEmpty(code) || !mapCodeToId.ContainsKey(code))
+                        {
+                            listWarning.Add(new ResponseFailDto { Row = row, ReasonFail = "Code number is not exsit or null" });
+                            continue;
+                        }
                         var applicable = worksheet.Cells[row, 3].Value != null ? worksheet.Cells[row, 3].Value.ToString() : "";
                         var pmNote = worksheet.Cells[row, 4].Value != null ? worksheet.Cells[row, 4].Value.ToString() : "";
 
-                        if (mapCodeToId.ContainsKey(code) && !string.IsNullOrEmpty(applicable) && (applicable == "Standard" || applicable == "Modify"))
+                        if (mapCodeToId.ContainsKey(code) && !string.IsNullOrEmpty(applicable) && (applicable == "Standard" || applicable == "Modify") && mapCodeToId[code].IsLeaf)
                         {
-                            var criteriaId = mapCodeToId[code];
+                            if (!mapCodeToId[code].IsActive)
+                            {
+                                listWarning.Add(new ResponseFailDto { Row = row, ReasonFail = "Criteria can't be imported to tailor because it had been deleted or deactivated" });
+                                continue;
+                            }
+                            var criteriaId = mapCodeToId[code].Id;
 
                             listToAdd.Add(new ProjectProcessCriteria
                             {
@@ -522,7 +533,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     {
                         await WorkScope.InsertRangeAsync(listToAdd);
                     }
-                    return listToAdd.Count;
+                    else
+                    {
+                        throw new UserFriendlyException("You have to choose at least one field Applicable(Standard/Modify) to import Tailoring");
+                    }
+                    return listWarning;
                 }
             }
         }
@@ -568,7 +583,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 };
             }
             var listIdsFilter = listAllContain
-                .Where(x => (x.Name.ToLower().Contains(input.SearchText.ToLower())) || (x.Code.ToLower().Contains(input.SearchText.ToLower())))
+                .Where(x => x.Name.ToLower().Contains(input.SearchText.Trim().ToLower()) || x.Code.Trim().ToLower().Contains(input.SearchText.Trim().ToLower()))
                 .WhereIf(input.Applicable >= ProjectEnum.Applicable.Standard, x => x.Applicable == input.Applicable)
                 .Select(x => x.Id)
                 .ToList();

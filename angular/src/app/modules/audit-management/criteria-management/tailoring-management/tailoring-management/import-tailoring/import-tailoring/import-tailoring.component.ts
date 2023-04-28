@@ -49,14 +49,18 @@ export class ImportTailoringComponent extends AppComponentBase implements OnInit
     this.projectProcessCriteriaAppService.importProjectProcessCriteriaFromExcel(this.file, this.projectId).
       pipe(catchError(this.projectProcessCriteriaAppService.handleError)).subscribe((res) => {
         if (res.success) {
-          if (res.result > 0) {
-            abp.message.success(`Import Tailoring Successfully ${res.result} Criteria!`, "Import Tailoring From Excel", true);
+          if (res.result.length < 1) {
+            abp.message.success(`Import Tailoring Successfully `, "Import Tailoring From Excel", true);
           }
           else {
-            abp.message.error("Import Tailoring not Successfully ", "Import Tailoring From Excel", true)
+            let message = "";
+            res.result.forEach(element => {
+              message += `<span class="text-left">Row: ${element.row} Error: ${element.reasonFail}</span><br>`;
+            });
+            message = `<div style="display: flex; flex-direction: column; align-items: stretch; overflow-y: auto; max-height: 500px;">${message}</div>`
+            abp.message.warn(message, `Import Tailoring Successfully but`, true);
           }
           this.dialogRef.close();
-
         }
       }, () => { this.isLoading = false })
   }

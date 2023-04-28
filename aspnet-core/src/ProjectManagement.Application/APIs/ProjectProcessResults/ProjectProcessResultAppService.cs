@@ -369,15 +369,19 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                 using (var package = new ExcelPackage(stream))
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var listLeafs = WorkScope.GetAll<ProjectProcessCriteria>()
+                       .Where(x => x.ProjectId == input.ProjectId)
+                       .Select(x => x.ProcessCriteriaId).ToList();
+                    var listCriteria = GetListProcessCriteriaForExport(listLeafs, input.ProjectId).Result.Select(x => x.Code).ToList();
                     var listCodeER = await GetProcessCriteriaCode(input.ProjectId);
                     var lisCodeERString = listCodeER.Select(x => x.Item1.ToLower().Trim());
                     var rowCount = worksheet.Dimension.End.Row;
                     var PPCR = new ProjectProcessCriteriaResult();
-                    if (rowCount < 2)
+                    if (rowCount < 1)
                     {
                         throw new UserFriendlyException("Can not found data on this file");
                     }
-                    if (rowCount - 2 < listCodeER.Count)
+                    if (rowCount - 1 < listCodeER.Count)
                     {
                         throw new UserFriendlyException("Data column is missed");
                     }
@@ -394,7 +398,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                         .ToDictionary(s => s.Name.ToLower().Trim(), k => k.Value);
 
                     var failedList = new List<ResponseFailDto>();
-                    for (int row = 2; row < rowCount; row++)
+                    for (int row = 2; row <= rowCount; row++)
                     {
                         var criteriaCode = worksheet.Cells[row, 1].GetValue<string>();
                         var statusName = worksheet.Cells[row, 3].GetValue<string>();
@@ -405,7 +409,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                             continue;
                         }
                         var criteriaCodeToLower = criteriaCode.ToLower().Trim();
-                        if (!lisCodeERString.Contains(criteriaCodeToLower))
+                        if (!listCriteria.Contains(criteriaCodeToLower))
                         {
                             failedList.Add(new ResponseFailDto { Row = row, ReasonFail = $"Criteria with code = {criteriaCode} does not exist" });
                             continue;
@@ -617,13 +621,13 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     sheetAudit.Cells[$"G{startAudit}"].Value = CommonUtil.ConvertHtmlToPlainText(item.QAExample);
                     startAudit++;
                 }
-                sheetAudit.Cells[$"A2:B{startAudit}"].Style.Font.Bold = true;
-                sheetAudit.Cells[$"A2:B{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells[$"A2:B{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                sheetAudit.Cells[$"C2:C{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells[$"C2:C{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                sheetAudit.Cells[$"D2:G{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells[$"D2:G{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                sheetAudit.Cells[$"A2:B{startAudit - 1}"].Style.Font.Bold = true;
+                sheetAudit.Cells[$"A2:B{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheetAudit.Cells[$"A2:B{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                sheetAudit.Cells[$"C2:C{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheetAudit.Cells[$"C2:C{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheetAudit.Cells[$"D2:G{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheetAudit.Cells[$"D2:G{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheetAudit.Cells.AutoFitColumns();
                 sheetAudit.Column(4).Width = 60;
                 sheetAudit.Column(5).Width = 70;
@@ -730,8 +734,8 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     ProjectName = x.Key.ProjectName,
                     ProjectCode = x.Key.ProjectCode,
                     ProjectType = x.Key.ProjectType,
-                    ClientName = string.IsNullOrEmpty(x.Key.ClientName) ? "" : x.Key.ClientName,
-                    ClientCode = string.IsNullOrEmpty(x.Key.ClientCode) ? "" : x.Key.ClientCode,
+                    ClientName = x.Key.ClientName ?? "",
+                    ClientCode = x.Key.ClientCode ?? "",
                     ProjectStatus = x.Key.ProjectStatus,
                     PMName = x.Key.PMName,
                     PmId = x.Key.PMId,

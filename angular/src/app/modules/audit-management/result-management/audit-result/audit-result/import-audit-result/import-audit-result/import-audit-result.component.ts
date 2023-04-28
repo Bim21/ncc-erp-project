@@ -77,8 +77,8 @@ export class ImportAuditResultComponent extends AppComponentBase implements OnIn
             abp.message.error(message, `Import audit result for project [${item.projectCode}] ${item.projectCode} NOT successful!`, true);
           }
         }
-        this.dialogRef.close();
-      }, () => { this.isLoading = false });
+      });
+      this.dialogRef.close();
   }
   onChangeDate() {
     this.import.auditDate = moment(this.startDate.toISOString()).format('MM-DD-YYYY');

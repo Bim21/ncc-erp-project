@@ -18,17 +18,17 @@ export class AuditCriteriaProcessService extends BaseApiService {
 
 
   public getCriteriaActive():Observable<any> {
-      return this.http.get<any>(this.rootUrl + '/GetAll?IsActive=true&IsLeaf=true');
+      return this.http.post<any>(this.rootUrl + '/GetAll',{isActive:true,isLeaf:true});
     }
   public searchCriteriaActive(searchText?:string):Observable<any> {
-      return this.http.get<any>(this.rootUrl + `/GetAll?IsActive=true&IsLeaf=true`,{ params: new HttpParams().set('SearchText', searchText) });
+      return this.http.post<any>(this.rootUrl + `/GetAll`,{ isActive:true,IsLeaf:true,searchText });
     }
 
   public getAll(): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/GetAll');
+    return this.http.post<any>(this.rootUrl + '/GetAll',{});
   }
   public search(searchText?: string): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/GetAll', { params: new HttpParams().set('SearchText', searchText) });
+    return this.http.post<any>(this.rootUrl + '/GetAll', {searchText});
   }
   public create(item: any): Observable<any> {
     return this.http.post<any>(this.rootUrl + '/Create', item);
