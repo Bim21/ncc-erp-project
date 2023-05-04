@@ -60,9 +60,9 @@ export class ImportTailoringComponent extends AppComponentBase implements OnInit
             message = `<div style="display: flex; flex-direction: column; align-items: stretch; overflow-y: auto; max-height: 500px;">${message}</div>`
             abp.message.warn(message, `Import Tailoring Successfully but`, true);
           }
-          this.dialogRef.close();
         }
       }, () => { this.isLoading = false })
+      this.dialogRef.close();
   }
 
   onSelectChange(event) {

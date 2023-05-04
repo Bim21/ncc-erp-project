@@ -84,6 +84,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
         public async Task<GridResult<GetAllPagingProjectProcessCriteriaDto>> GetAllPaging(GridParam input)
         {
             var listPPCs = WorkScope.GetAll<ProjectProcessCriteria>()
+                .Where(x => x.Project.ProjectType != ProjectEnum.ProjectType.TRAINING)
                 .Select(x => new
                 {
                     ProjectInfor = new
@@ -488,7 +489,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
                     var mapCodeToId = await WorkScope.GetAll<ProcessCriteria>()
-                        .ToDictionaryAsync(x => x.Code.Trim(), y => new { y.Id, y.IsActive, y.IsLeaf});
+                        .ToDictionaryAsync(x => x.Code.Trim(), y => new { y.Id, y.IsActive, y.IsLeaf });
 
                     var rowCount = worksheet.Dimension.End.Row;
                     if (rowCount < 2)
