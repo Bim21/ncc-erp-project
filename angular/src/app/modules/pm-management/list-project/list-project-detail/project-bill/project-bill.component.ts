@@ -28,6 +28,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public userBillList: projectUserBillDto[] = [];
+  private filteredUserBillList: projectUserBillDto[] = [];
   public userForUserBill: UserDto[] = [];
   public parentInvoice: ParentInvoice = new ParentInvoice();
   public isEditUserBill: boolean = false;
@@ -49,6 +50,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     value: item[1]
   }))
   public expandInvoiceSetting: true;
+  public selectedIsCharge: string = "Charge";
   public listProjectOfClient: SubInvoice[] = []
   public listSelectProject: DropDownDataDto[] = []
   public currentProjectInfo: ProjectDto
@@ -79,7 +81,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.getAllProject();
     this.getCurrentProjectInfo();
     this.getProjectBillInfo();
-
+   
   }
   isShowInvoiceSetting(){
     return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_View)
@@ -225,6 +227,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   private getUserBill(): void {
     this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
       this.userBillList = data.result
+      this.filteredUserBillList = data.result.filter(bill => bill.isActive === true);
     })
   }
   public removeUserBill(userBill: projectUserBillDto): void {
@@ -320,6 +323,22 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.getParentInvoice();
     })
   }
+
+  filterByIsCharge() {
+    if (this.selectedIsCharge === 'All') {
+      this.filteredUserBillList = this.userBillList;
+    } else if (this.selectedIsCharge === 'Charge') {
+      this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === true);
+    } else if (this.selectedIsCharge === 'Not Charge') {
+      this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === false);
+    }
+  }
+  
+  changePageSizeCurrent()
+  {
+    this.userBillCurrentPage = 1
+  }
+  
 }
 
 export interface AddSubInvoicesDto {

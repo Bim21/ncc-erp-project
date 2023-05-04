@@ -148,25 +148,25 @@ th {
 }
 
 #current-resource td,
-th{
+th {
     padding: 0;
 }
 
-.ot-noCharge{
+.ot-noCharge {
     color: #ff7136;
 }
 
-::ng-deep .project-menu-item .mat-list-item-content{
+::ng-deep .project-menu-item .mat-list-item-content {
     padding: 0 0 0 16px !important;
 }
 
-.menu-4-icon{
+.menu-4-icon {
     margin-right: 10px;
-    margin-top: 8px ;
+    margin-top: 8px;
     color: #585858;
 }
 
-.time-over{
+.time-over {
     color: darkviolet;
     text-decoration: underline;
     text-decoration-style: double;
@@ -240,7 +240,7 @@ th{
 }
 
 .warning-count-down-time-out cd-timer,
-.warning-count-down-time-out .btn-sm{
+.warning-count-down-time-out .btn-sm {
     color: #e51e25;
 }
 
@@ -258,15 +258,15 @@ th{
 
 .warning-count-down::after:hover {
     -webkit-animation-play-state: paused;
-     animation-play-state: paused;
-     animation: 0;
+    animation-play-state: paused;
+    animation: 0;
 }
 
 @keyframes shake {
-	50%{
+    50% {
         outline: 8px solid gold;
         opacity: 0.6;
-	}
+    }
 
     100% {
         outline: 5px solid gold;
@@ -301,7 +301,8 @@ th{
 ::ng-deep #status-option-weekly-report-tab .mat-form-field-wrapper {
     width: 150px;
 }
-.guide-line:hover{
+
+.guide-line:hover {
     cursor: pointer;
     text-decoration: underline;
 }
@@ -310,11 +311,12 @@ th{
 mat-list-item.checked {
     height: 90px;
 }
+
 .mat-list-item.unchecked {
     height: 90px;
-  }
+}
 
-.checkbox-text{
+.checkbox-text {
     color: #585858;
     font-size: 13px;
     position: relative;
@@ -323,6 +325,7 @@ mat-list-item.checked {
 .inline-block {
     display: inline-block;
 }
+
 .btn-editall-neutral {
     color: #F75200;
     background-color: white;
@@ -333,4 +336,61 @@ mat-list-item.checked {
     color: white;
     background-color: #F75200;
     border: 2px solid;
+}
+
+/* Check box star */
+.star-checkbox {
+    position: relative;
+    display: inline-block;
+}
+
+.star-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.star-checkbox .star:before {
+    content: "\2605";
+    font-size: 25px;
+    color: #ccc;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+.star-checkbox input[type="checkbox"]:checked~.star:before {
+    color: #f7d42a;
+    animation: shakeStar 0.4s;
+    animation-iteration-count: 1;
+}
+
+@keyframes shakeStar {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* hyperlink the text */
+.hyperlink {
+    color: black;
+}
+
+.hyperlink:hover {
+    color: rgb(45, 57, 160);
+    text-decoration: underline;
 }

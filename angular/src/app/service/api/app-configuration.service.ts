@@ -16,17 +16,17 @@ export class AppConfigurationService extends BaseApiService {
   constructor( http: HttpClient) {
     super(http)
   }
-  getConfiguration():Observable<any>{
+  getConfiguration(): Observable<any> {
     return this.http.get(this.rootUrl + '/Get')
   }
-  GetGoogleClientAppId():Observable<any>{
+  GetGoogleClientAppId(): Observable<any> {
     return this.http.get(this.rootUrl + '/GetGoogleClientAppId')
   }
-  editConfiguration(item:any):Observable<any>{
+  editConfiguration(item: any): Observable<any> {
     return this.http.post(this.rootUrl + '/Change', item)
   }
 
-  updateProjectSettingConfig(item: any):Observable<any>{
+  updateProjectSettingConfig(item: any): Observable<any> {
     return this.http.post(this.rootUrl + '/ChangeProjectSetting', item)
   }
 
@@ -34,23 +34,23 @@ export class AppConfigurationService extends BaseApiService {
   /**
    * @param timeCountDown: seconds
    */
-  setTimeCountDown(timeCountDown: number): Observable<ApiResponse<{timeCountDown: number}>> {
-    return this.http.post<any>(this.rootUrl + '/SetTimeCountDown', {timeCountDown});
+  setTimeCountDown(timeCountDown: number): Observable<ApiResponse<{ timeCountDown: number }>> {
+    return this.http.post<any>(this.rootUrl + '/SetTimeCountDown', { timeCountDown });
   }
 
-  getTimeCountDown():Observable<ApiResponse<{timeCountDown: number}>>{
+  getTimeCountDown(): Observable<ApiResponse<{ timeCountDown: number }>> {
     return this.http.get<any>(this.rootUrl + '/GetTimeCountDown')
   }
 
-  checkConnectToTimesheet():Observable<any>{
+  checkConnectToTimesheet(): Observable<any> {
     return this.http.get(this.rootUrl + '/CheckConnectToTimesheet');
   }
 
-  checkConnectToFinfast():Observable<any>{
+  checkConnectToFinfast(): Observable<any> {
     return this.http.get(this.rootUrl + '/CheckConnectToFinfast');
   }
 
-  checkConnectToTalent():Observable<any>{
+  checkConnectToTalent(): Observable<any> {
     return this.http.get(this.rootUrl + '/CheckConnectToTalent');
   }
 
@@ -62,5 +62,15 @@ export class AppConfigurationService extends BaseApiService {
   }
   editAuditScore(item: any):Observable<any>{
     return this.http.post(this.rootUrl + '/SetAuditScore', item);
+  }
+
+  /**
+  * @param guideLine
+  */
+  getGuideLine(): Observable<any> {
+    return this.http.get(this.rootUrl + '/GetGuideLine')
+  }
+  editGuideLine(item: any): Observable<any> {
+    return this.http.post(this.rootUrl + '/SetGuideLine', item);
   }
 }

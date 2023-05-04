@@ -20,6 +20,7 @@ namespace ProjectManagement.Entities
         public PMReportProjectStatus Status { get; set; }
         public DateTime? TimeSendReport { get; set; }
         public ProjectHealth ProjectHealth { get; set; }
+        public bool NecessaryReview { get; set; }
         public long PMId { get; set; }
         [ForeignKey(nameof(PMId))]
         public User PM { get; set; }

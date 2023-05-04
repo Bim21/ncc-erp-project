@@ -72,6 +72,7 @@ namespace ProjectManagement.Authorization
         public const string Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint = "Admin.Configuartions.ViewMaxCountHistoryOfRetroAndReviewPoint";
         public const string Admin_Configuartions_ViewAuditScoreSetting = "Admin.Configuartions.ViewAuditScoreSetting";
         public const string Admin_Configuartions_WeeklyReportTime_Edit = "Admin.Configuartions.WeeklyReportTimeEdit";
+        public const string Admin_Configurations_ViewGuideLineSetting = "Admin.Configurations.ViewGuideLineSetting";
 
         #endregion Configuration
 
@@ -469,6 +470,7 @@ namespace ProjectManagement.Authorization
 
         public const string WeeklyReport_ReportDetail_ChangedResource = "WeeklyReport.ReportDetail.ChangedResource";
         public const string WeeklyReport_ReportDetail_ChangedResource_View = "WeeklyReport.ReportDetail.ChangedResource.View";
+        public const string WeeklyReport_ReportDetail_GuideLine_View = "WeeklyReport.ReportDetail.GuideLine.View";
         #endregion Weekly report
 
         #region Resource Request
@@ -526,6 +528,7 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabPool_AddTempProject = "Resource.TabPool.AddTempProject";
         public const string Resource_TabPool_UpdateSkill = "Resource.TabPool.UpdateSkill";
         public const string Resource_TabPool_EditNote = "Resource.TabPool.EditNote";
+        public const string Resource_TabPool_ProjectDetail = "Resource.TabPool.ProjectDetail";
 
         public const string Resource_TabAllResource = "Resource.TabAllResource";
         public const string Resource_TabAllResource_View = "Resource.TabAllResource.View";
@@ -538,6 +541,7 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabAllResource_CancelMyPlan = "Resource.TabAllResource.CancelMyPlan";
         public const string Resource_TabAllResource_CancelAnyPlan = "Resource.TabAllResource.CancelAnyPlan";
         public const string Resource_TabAllResource_UpdateSkill = "Resource.TabAllResource.UpdateSkill";
+        public const string Resource_TabAllResource_ProjectDetail = "Resource.TabAllResource.ProjectDetail";
 
         public const string Resource_TabVendor = "Resource.TabVendor";
         public const string Resource_TabVendor_View = "Resource.TabVendor.View";
@@ -550,6 +554,7 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabVendor_CancelMyPlan = "Resource.TabVendor.CancelMyPlan";
         public const string Resource_TabVendor_CancelAnyPlan = "Resource.TabVendor.CancelAnyPlan";
         public const string Resource_TabVendor_UpdateSkill = "Resource.TabVendor.UpdateSkill";
+        public const string Resource_TabVendor_ProjectDetail = "Resource.TabVendor.ProjectDetail";
         #endregion Resource
 
         #region Timesheet
@@ -709,6 +714,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint ,
                     PermissionNames.Admin_Configuartions_ViewAuditScoreSetting,
                     PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit,
+                    PermissionNames.Admin_Configurations_ViewGuideLineSetting,
 
                     #endregion Configuration
 
@@ -1105,6 +1111,7 @@ namespace ProjectManagement.Authorization
 
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource ,
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,
+                    PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,
 
                     PermissionNames.ResourceRequest ,
                     PermissionNames.ResourceRequest_View ,
@@ -1161,6 +1168,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabPool_AddTempProject ,
                     PermissionNames.Resource_TabPool_UpdateSkill ,
                     PermissionNames.Resource_TabPool_EditNote ,
+                    PermissionNames.Resource_TabPool_ProjectDetail,
 
                     PermissionNames.Resource_TabAllResource ,
                     PermissionNames.Resource_TabAllResource_View ,
@@ -1173,6 +1181,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabAllResource_CancelMyPlan ,
                     PermissionNames.Resource_TabAllResource_CancelAnyPlan ,
                     PermissionNames.Resource_TabAllResource_UpdateSkill ,
+                    PermissionNames.Resource_TabAllResource_ProjectDetail,
 
                     PermissionNames.Resource_TabVendor ,
                     PermissionNames.Resource_TabVendor_View ,
@@ -1185,6 +1194,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabVendor_CancelMyPlan ,
                     PermissionNames.Resource_TabVendor_CancelAnyPlan ,
                     PermissionNames.Resource_TabVendor_UpdateSkill ,
+                    PermissionNames.Resource_TabVendor_ProjectDetail,
 
                     #endregion Resource
 
@@ -1354,6 +1364,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Max Count History Of Retro And Review Point" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewAuditScoreSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Audit Score For Criteria" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Time Count Down Weekly Report" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Configurations_ViewGuideLineSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Guide Line" },
 
 	             #endregion Configuration
 
@@ -1755,8 +1766,10 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Change Status"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"},
 
                  #endregion Weekly Report
+
 
                  #region ResourceRequest
 
@@ -1815,6 +1828,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_AddTempProject ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add Temp Project"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabPool_EditNote ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabPool_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"},
 
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "All Resource"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
@@ -1827,6 +1841,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_CancelMyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_CancelAnyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabAllResource_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"},
 
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "All Resource"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
@@ -1839,6 +1854,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_CancelMyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel My Plan Only"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_CancelAnyPlan ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Cancel Any Plan"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_ProjectDetail ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"},
 
                  #endregion Resource
 
@@ -2081,6 +2097,9 @@ namespace ProjectManagement.Authorization
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Time Count Down Weekly Report"
+                                        },
+                                         new SystemPermission {
+                                            Name = PermissionNames.Admin_Configurations_ViewGuideLineSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Guide Line"
                                         },
                                     }
                             },
@@ -3162,6 +3181,9 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_ChangedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Changed Resource"
                                         },
+                                         new SystemPermission {
+                                            Name = PermissionNames.WeeklyReport_ReportDetail_GuideLine_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"
+                                        },
                                     }
                             },
                         },
@@ -3315,6 +3337,9 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission {
                                             Name = PermissionNames.Resource_TabPool_EditNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Note"
                                         },
+                                         new SystemPermission {
+                                            Name = PermissionNames.Resource_TabPool_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"
+                                        },
                                     },
                             },
 
@@ -3353,6 +3378,10 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission {
                                             Name = PermissionNames.Resource_TabAllResource_UpdateSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update skill"
                                         },
+
+                                        new SystemPermission {
+                                            Name = PermissionNames.Resource_TabAllResource_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"
+                                        },
                                     },
                             },
                             // Tab Vendor
@@ -3388,6 +3417,9 @@ namespace ProjectManagement.Authorization
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Resource_TabVendor_UpdateSkill, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update skill"
+                                        },
+                                          new SystemPermission {
+                                            Name = PermissionNames.Resource_TabVendor_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"
                                         },
                                     },
                             },

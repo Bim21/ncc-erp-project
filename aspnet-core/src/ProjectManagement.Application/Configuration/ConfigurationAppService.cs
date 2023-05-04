@@ -196,6 +196,32 @@ namespace ProjectManagement.Configuration
             return JsonSerializer.Deserialize<AuditScoreDto>(json);
         }
 
+        [AbpAuthorize(PermissionNames.Admin_Configuartions_Edit)]
+        [HttpPost]
+        public async Task<GuideLineDto> SetGuideLine(GuideLineDto input)
+        {
+            var json = JsonSerializer.Serialize(input);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.GuideLine, json);
+            return input;
+        }
+
+         [AbpAuthorize(
+            PermissionNames.Admin_Configurations_ViewGuideLineSetting,
+            PermissionNames.WeeklyReport_ReportDetail_GuideLine_View
+            )]
+         [HttpGet]
+         public async Task<GuideLineDto> GetGuideLine()
+         {
+             var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.GuideLine);
+
+             if (string.IsNullOrEmpty(json))
+             {
+                 return null;
+             }
+
+             return JsonSerializer.Deserialize<GuideLineDto>(json);
+         }
+
         [HttpGet]
         public async Task<GetResultConnectDto> CheckConnectToTimesheet()
         {

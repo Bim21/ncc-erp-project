@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace ProjectManagement.Configuration.Dto
 {
@@ -54,4 +55,21 @@ namespace ProjectManagement.Configuration.Dto
         public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_RE { get; set; }
         public int PROJECT_PROCESS_CRITERIA_RESULT_STATUS_EX { get; set; }
     }
+
+    public class GuideLineDto
+    {
+        [JsonPropertyName("Issue")]
+        public string Issue { get; set; }
+
+        [JsonPropertyName("Risk")]
+        public string Risk { get; set; }
+
+        [JsonPropertyName("PMNote")]
+        public string PMNote { get; set; }
+
+        [JsonPropertyName("CriteriaStatus")]
+        public string CriteriaStatus { get; set; }
+    }
+
+
 }

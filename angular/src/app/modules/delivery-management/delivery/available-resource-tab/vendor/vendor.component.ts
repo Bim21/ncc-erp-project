@@ -47,6 +47,7 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
   Resource_TabVendor_CancelMyPlan = PERMISSIONS_CONSTANT.Resource_TabVendor_CancelMyPlan
   Resource_TabVendor_CancelAnyPlan = PERMISSIONS_CONSTANT.Resource_TabVendor_CancelAnyPlan
   Resource_TabVendor_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabVendor_UpdateSkill
+  Resource_TabVendor_ProjectDetail = PERMISSIONS_CONSTANT.Resource_TabVendor_ProjectDetail
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function, skill?): void {
     this.isLoading = true;
@@ -248,45 +249,35 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     )
   }
 
-
-
-
   getHistoryProjectsByUserId(user) {
     this.subscription.push(
       this.userInfoService.getHistoryProjectsByUserId(user.userId).pipe(catchError(this.userInfoService.handleError)).subscribe(data => {
-        user.isshowProjectHistory = true
-        let userHisTory = '';
+        user.isshowProjectHistory = true;
         let count = 0;
         let listHistory = data.result;
-        listHistory.forEach(project => {
+        user.userProjectHistory = listHistory.map(project => {
           count++;
           if (count <= 6 || user.showAllHistory) {
-            userHisTory +=
-              `<div class="mb-1 d-flex pointer ${project.allowcatePercentage > 0 ? 'join-project' : 'out-project'}">
-                <div class="col-11 p-0">
-                    <p class="mb-0" >
-                    <strong>${project.projectName}</strong> 
-                    <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
-                    ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
-                    -  <span>${moment(project.startTime).format("DD/MM/YYYY")}</span></p>
-                </div>
-                <div class="col-1">
-                    <span class="badge ${project.allowcatePercentage > 0 ? 'bg-success' : 'bg-secondary'}">${project.allowcatePercentage > 0 ? 'Join' : 'Out'} </span>
-                </div>
-            </div>
-           `
-
+            return {
+              projectName: project.projectName,
+              projectRole: project.projectRole,
+              startTime: moment(project.startTime).format("DD/MM/YYYY"),
+              allowcatePercentage: project.allowcatePercentage > 0,
+              projectId: project.projectId,
+              projectType: project.projectType
+            };
           }
-        });
+        }).filter(project => project !== undefined);
+        
         if (count > 6) {
-          user.showMoreHistory = true
+          user.showMoreHistory = true;
         } else {
           user.showMoreHistory = false;
         }
-        user.userProjectHistory = userHisTory
       })
-    )
+    );
   }
+
   showMoreHistory(user) {
     user.showAllHistory = !user.showAllHistory;
   }
@@ -336,5 +327,21 @@ export class VendorComponent extends PagedListingComponentBase<PlanResourceCompo
     user.projectUserId = user.id 
     user.fullName = projectUser.fullName
     this.showDialogPlanUser('edit', user);
+  }
+
+  viewProjectDetail(project){
+    let routingToUrl:string = (
+       this.permission.isGranted(this.Resource_TabVendor_ProjectDetail)
+   
+     )
+    ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
+    ? "/app/product-project-detail/product-weekly-report" : "/app/product-project-detail/product-project-general"
+    ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
+      id: project.projectId,
+      type: project.projectType, 
+      projectName: project.projectName, 
+      projectCode:" "} }));
+    window.open(url, '_blank');
   }
 }

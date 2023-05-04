@@ -1,4 +1,4 @@
-<section class="content px-2 mt-2"
+<section class="content px-2 mt-2" id="all-resource"
     *ngIf="permission.isGranted(Resource_TabAllResource_View)">
     <div class="container-fluid">
         <div class="">
@@ -113,7 +113,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class=" table-responsive py-4">
+            <div class=" table-responsive py-4 all-resource-table">
                 <div class="fixTableHead">
                     <table [busy]="isLoading" style="border-collapse: collapse;"
                         class="table text-nowrap">
@@ -121,6 +121,7 @@
                             <tr style="border: none;">
                                 <th>#</th>
                                 <th>Employee</th>
+                                <th style="width: 75px;">History</th>
                                 <th>Project</th>
                                 <th style="width: 350px;">Plan</th>
                                 <th>Skills</th>
@@ -142,6 +143,20 @@
                                         </app-user-info>
                                     </div>
                                 </td>
+                                <td class="text-center">
+                                    <div style="display: inline">
+                                        <div>
+                                            <i *ngIf="permission.isGranted(Resource_TabAllResource_ViewHistory)"
+                                                class="fas fa-history fa-lg" (click)="projectHistorUser(item)"
+                                                matTooltip="Xem dự án trước đây"></i>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <i *ngIf="permission.isGranted(Resource_TabAllResource_ViewHistory)"
+                                                class="fa fa-file" (click)="RetroReviewHistoryUser(item)"
+                                                matTooltip="Xem lịch sử của Retro và Review trước đây"></i>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td>
                                     <p *ngFor="let project of
                                         item.workingProjects" class="mb-1">
@@ -149,8 +164,11 @@
                                             *ngIf="project.projectStatus==APP_ENUM.ProjectStatus.Potential"
                                             class="badge bg-info pointer mr-1">
                                             P</span>
-                                        <strong>{{project.projectName}}
+                                        <strong class="hyperlink"
+                                        *ngIf="permission.isGranted(Resource_TabAllResource_ProjectDetail)"
+                                        (click)="viewProjectDetail(project)" >{{project.projectName}}
                                         </strong>
+                                        &nbsp;
                                         <span
                                             [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
                                             {{getByEnum(project.projectRole,
@@ -168,7 +186,7 @@
                                         permission.isGranted(Resource_TabAllResource_ViewHistory)"
                                         matTooltip="View project history"
                                         (click)="getHistoryProjectsByUserId(item)"></i>
-                                    <div *ngIf="item.isshowProjectHistory"
+                                    <!-- <div *ngIf="item.isshowProjectHistory"
                                         [ngClass]="item.showAllHistory == false
                                         ? 'preHistory' : 'history'">
                                         <div *ngIf="item.userProjectHistory &&
@@ -180,7 +198,31 @@
                                             0">
                                             No project history!
                                         </p>
-                                    </div>
+                                    </div> -->
+
+                                    <div *ngIf="item.isshowProjectHistory" [ngClass]="item.showAllHistory == false ? 'preHistory' : 'history'">
+                                        <div *ngFor="let project of item.userProjectHistory"
+                                          class="mb-1 d-flex pointer {{ project.allowcatePercentage ? 'join-project' : 'out-project' }}">
+                                          <div class="col-11 p-0">
+                                            <p class="mb-0">
+                                              <strong *ngIf="permission.isGranted(Resource_TabAllResource_ProjectDetail)" (click)="viewProjectDetail(project)">
+                                                {{ project.projectName }}
+                                              </strong>
+                                              <span class="badge {{ this.APP_CONST.projectUserRole[project.projectRole] }}">
+                                                {{ this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole) }}
+                                              </span>
+                                              - <span>{{ project.startTime }}</span>
+                                            </p>
+                                          </div>
+                                          <div class="col-1">
+                                            <span class="badge {{ project.allowcatePercentage ? 'bg-success' : 'bg-secondary' }}">
+                                              {{ project.allowcatePercentage ? 'Join' : 'Out' }}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <p *ngIf="item.userProjectHistory && item.userProjectHistory.length == 0">No project history!</p>
+                                      </div>
+                                      
 
                                     <i [ngClass]="item.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"
                                         *ngIf="item.isshowProjectHistory == true
@@ -203,8 +245,8 @@
                                                     [matMenuTriggerFor]="planMenu">
                                                     <span
                                                         [ngClass]="plan.onHover?'on-hover-plan':''">
-                                                        <strong class="mr-1">{{
-                                                            plan.projectName }}</strong><strong
+                                                        <strong class="mr-1">{{plan.projectName }}</strong>
+                                                        <strong
                                                             [ngClass]="plan.isPool?'text-secondary'
                                                             : 'text-primary'"
                                                             class=" mr-1">
@@ -222,6 +264,10 @@
                                                     </span>
                                                 </button>
                                                 <mat-menu #planMenu="matMenu">
+                                                    <button *ngIf="permission.isGranted(Resource_TabAllResource_ProjectDetail)"
+                                                     mat-menu-item (click)="viewProjectDetail(plan)">
+                                                     <i class="fas fa-file-alt"></i> View Project Detail
+                                                       </button>
                                                     <button mat-menu-item
                                                         *ngIf="plan.allocatePercentage>
                                                         0 &&

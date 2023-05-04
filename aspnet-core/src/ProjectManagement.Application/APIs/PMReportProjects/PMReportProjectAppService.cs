@@ -39,7 +39,7 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail)]
-        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, WeeklyReportSort sort, ProjectHealth? health, string projectType = "OUTSOURCING")
+        public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, WeeklyReportSort sort, PrioritizeReviewSort sortReview, ProjectHealth? health, string projectType = "OUTSOURCING")
         {
             var query = WorkScope.GetAll<PMReportProject>()
                 .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill && x.Project.IsRequiredWeeklyReport)
@@ -71,33 +71,47 @@ namespace ProjectManagement.APIs.PMReportProjects
                     Seen = x.Seen,
                     TotalNormalWorkingTime = x.TotalNormalWorkingTime,
                     TotalOverTime = x.TotalOverTime,
-                    LastReviewDate = x.LastReviewDate
+                    LastReviewDate = x.LastReviewDate,
+                    NecessaryReview = x.NecessaryReview,
                 });
 
-            if (sort == WeeklyReportSort.Draft_Green_Yellow_Red)
+            switch (sort)
             {
-                return await query
-                        .OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum)
-                        .ToListAsync();
+                case WeeklyReportSort.Draft_Green_Yellow_Red:
+                    query = query.OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum);
+                    break;
+
+                case WeeklyReportSort.Draft_Red_Yellow_Green:
+                    query = query.OrderBy(x => x.StatusEnum).ThenByDescending(x => x.ProjectHealthEnum);
+                    break;
+
+                case WeeklyReportSort.Latest_Review_Last:
+                    query = query.OrderBy(x => x.LastReviewDate);
+                    break;
             }
 
-            if (sort == WeeklyReportSort.Draft_Red_Yellow_Green)
+            switch (sortReview)
             {
-                return await query
-                        .OrderBy(x => x.StatusEnum).ThenByDescending(x => x.ProjectHealthEnum)
-                        .ToListAsync();
-            }
+                case PrioritizeReviewSort.All:
+                    // do nothing
+                    break;
 
-            if (sort == WeeklyReportSort.Latest_Review_Last)
-            {
-                return await query
-                        .OrderBy(x => x.LastReviewDate)
-                        .ToListAsync();
+                case PrioritizeReviewSort.Nothing:
+                    query = query.Where(x => x.NecessaryReview == false && x.Seen == false);
+                    break;
+
+                case PrioritizeReviewSort.NeedReport:
+                    query = query.Where(x => x.NecessaryReview == true && x.Seen == false);
+                    break;
+
+                case PrioritizeReviewSort.Reported:
+                    query = query.Where(x => x.NecessaryReview == true && x.Seen == true);
+                    break;
             }
 
             var list = await query.ToListAsync();
-
             return shuffleList(list);
+
         }
 
         private List<GetPMReportProjectDto> shuffleList(List<GetPMReportProjectDto> list)
@@ -290,7 +304,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                                   PmFullName = x.PM.FullName,
                                   PmUserName = x.PM.UserName,
                                   PmBranch = x.PM.BranchOld,
-                                  PmUserType = x.PM.UserType
+                                  PmUserType = x.PM.UserType,
+                                  NecessaryReview = x.NecessaryReview
                               });
 
             return await query.ToListAsync();
@@ -509,6 +524,14 @@ namespace ProjectManagement.APIs.PMReportProjects
             pmReportProject.Seen = !pmReportProject.Seen;
             await WorkScope.UpdateAsync(pmReportProject);
             return pmReportProject.LastReviewDate;
+        }
+
+        public async Task<bool?> CheckNecessaryReview(long pmReportProjectId)
+        {
+            var pmReportProject = await WorkScope.GetAsync<PMReportProject>(pmReportProjectId);
+            pmReportProject.NecessaryReview = !pmReportProject.NecessaryReview;
+            await WorkScope.UpdateAsync(pmReportProject);
+            return pmReportProject.NecessaryReview;
         }
 
         [HttpGet]

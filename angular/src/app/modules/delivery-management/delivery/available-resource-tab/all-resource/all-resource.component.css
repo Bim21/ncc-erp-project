@@ -2,6 +2,18 @@
     z-index: 0;
 }
 
+
+.all-resource-table i {
+    color: #686868;
+    font-size: 18px;
+}
+
+
+#all-resource .fa-edit,
+#all-resource .fa-plus {
+    font-size: 15px;
+}
+
 @media screen and (max-width: 1260px) {
     .w-infor {
         width: 100% !important;

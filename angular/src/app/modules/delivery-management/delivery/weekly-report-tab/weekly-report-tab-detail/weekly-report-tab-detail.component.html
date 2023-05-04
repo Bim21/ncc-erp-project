@@ -19,7 +19,8 @@
                         <div class="col-10 project-menu-item"
                             [ngClass]="item.status === 'Sent' ? APP_CONST.bgProjectReportStyle[item.projectHealth] : 'grey'">
                             <mat-list-item style="cursor:pointer," id="list" role="item.projectId" (click)="view(item);"
-                                [matTooltip]="item.projectCode" matTooltipPosition="right"  [ngClass]="{'checked': item.seen, 'unchecked': !item.seen}">
+                                [matTooltip]="item.projectCode" matTooltipPosition="right"
+                                [ngClass]="{'checked': item.seen, 'unchecked': !item.seen}">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
                                         <strong>{{item.projectName}}</strong>
@@ -29,11 +30,13 @@
                                         <div class="checkbox-text" title="Latest Review Date">
                                             <div *ngIf="item.seen">
                                                 <div [innerHTML]="iconCheckedDate" class="inline-block"></div>
-                                                {{item.lastReviewDate ? (item.lastReviewDate | date:'dd/MM/yyyy ') : 'Missing Review Date'}}
+                                                {{item.lastReviewDate ? (item.lastReviewDate | date:'dd/MM/yyyy ') :
+                                                'Missing Review Date'}}
                                             </div>
                                             <div *ngIf="!item.seen && item.lastReviewDate">
                                                 <div [innerHTML]="iconCheckedDate" class="inline-block"></div>
-                                                {{item.lastReviewDate ? (item.lastReviewDate | date:'dd/MM/yyyy ' +'') : 'Missing Review Date'}}
+                                                {{item.lastReviewDate ? (item.lastReviewDate | date:'dd/MM/yyyy ' +'') :
+                                                'Missing Review Date'}}
                                             </div>
                                             <div *ngIf="!item.seen && !item.lastReviewDate">
                                                 <div [innerHTML]="iconCheckedDate" class="inline-block"></div>
@@ -44,9 +47,18 @@
                                 </div>
                             </mat-list-item>
                         </div>
-                        <div class="col-2">
-                            <mat-checkbox class="mt-2" [checked]="item.seen == true" (change)="markRead(item)"></mat-checkbox>
+                        <div class="col-2 text-center">
+                            <section class="example-section">
+                                <label class="star-checkbox">
+                                    <input (change)="markReview(item)" [checked]="item.necessaryReview == true"
+                                        type="checkbox">
+                                    <span matTooltip="Prioritize Review" class="star"></span>
+                                </label>
+                            </section>
+                            <mat-checkbox *ngIf="item.necessaryReview" class="mt-2" [checked]="item.seen == true"
+                                (change)="markRead(item)"></mat-checkbox>
                         </div>
+
                     </div>
                 </mat-list>
             </div>
@@ -64,17 +76,20 @@
 
                         <div class="row p-1">
                             <div class="col-8 m-0 p-0 d-flex align-items-baseline">
-                                <strong classs="col-12" style="font-size: 20px;">Criteria status: </strong>
-                                <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()" (click)="editAllRow()">
+                                <strong class="hyperlink" (click)="guideLineCriteriaStatus()" classs="col-12" style="font-size: 20px;">Criteria status: </strong>
+                                <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()"
+                                    (click)="editAllRow()">
                                     <i class="fas fa-pencil-alt mr-1"></i> Edit All</button>
                                 <div *ngIf="isEditingAllRow()" class="pt-1 ml-4">
-                                    <button class="mr-3 submit-btn" style="background: none; border: none" (click)="saveAllUpdate()">
+                                    <button class="mr-3 submit-btn" style="background: none; border: none"
+                                        (click)="saveAllUpdate()">
                                         <i style="color: green" class="fas fa-check fa-2x"></i>
                                     </button>
                                     <i style="color: red" class="fas fa-times fa-2x" (click)="cancelUpdateAll()"></i>
                                 </div>
-                                <mat-checkbox [color]="'primary'" class="pl-3" (change)="showLastWeek(listCriteriaResult,$event.checked)"
-                                    [checked]="isShowLastWeek()">Show all last week</mat-checkbox>
+                                <mat-checkbox [color]="'primary'" class="pl-3"
+                                    (change)="showLastWeek(listCriteriaResult,$event.checked)"
+                                    [checked]="isShowLastWeek()">Show last week</mat-checkbox>
                             </div>
                             <div class="col-4">
                                 <span>Time send report: {{timeSentReport}}</span>
@@ -87,14 +102,17 @@
                                 *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View)">
                                 <div *ngFor="let item of listCriteriaResult let i =index">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <lable style="white-space: normal;" class="text-primary guide-line" (click)="showGuideLine(item)"><strong>{{item.criteriaName}}</strong></lable>
+                                        <lable style="white-space: normal;" class="text-primary guide-line"
+                                            (click)="showGuideLine(item)"><strong>{{item.criteriaName}}</strong></lable>
                                         <div class="d-flex align-items-center">
                                             <ng-container
                                                 *ngIf="(permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) && isActive && !item.editMode)
                                                 ||(permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) && permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit)  && isActive && item.editMode)">
                                                 <mat-form-field [ngClass]="APP_CONST.projectHealthStyle[item.status]"
-                                                    style="margin-left: 10px !important;width: 100px;" class="ml-3" appearance="outline">
-                                                    <mat-select name="flag" placeholder="Select Status" [(ngModel)]="item.status"
+                                                    style="margin-left: 10px !important;width: 100px;" class="ml-3"
+                                                    appearance="outline">
+                                                    <mat-select name="flag" placeholder="Select Status"
+                                                        [(ngModel)]="item.status"
                                                         (ngModelChange)="handleChangeStatus(item)">
                                                         <ng-container *ngFor="let flag of problemIssueList">
                                                             <mat-option style="border: 1px white solid;"
@@ -109,23 +127,32 @@
                                                 </mat-form-field>
                                             </ng-container>
 
-                                            <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) || !isActive"
+                                            <span
+                                                *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus) || !isActive"
                                                 [ngClass]="APP_CONST.projectHealthBGStyle[item.status]">
                                                 {{problemIssueList[item.status - 1]}}</span>
                                             <button mat-button (click)="showCriteriaHistory(item,i)">
-                                                <i class="fas " [ngClass]="item.isShowHistory==false?'fa-eye':'fa-eye-slash'"></i>
+                                                <i class="fas "
+                                                    [ngClass]="item.isShowHistory==false?'fa-eye':'fa-eye-slash'"></i>
                                             </button>
-                                            <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) &&!isEditingAllRow()">
+                                            <div
+                                                *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit) &&!isEditingAllRow()">
                                                 <button *ngIf="!item.editMode && isActive" mat-button
                                                     (click)="handleEditCriteriaResult(i)">
                                                     <i class="fas fa-pencil-alt fa-lg "></i>
                                                 </button>
-                                                <div *ngIf="item.editMode && isActive" class="d-flex align-items-center ">
-                                                    <button class=" mr-3 submit-btn" style="background: none; border: none;" (click)="saveCriteriaResult(item)">
-                                                        <i style="color: green;font-size: 24px;" class="fas fa-check"></i>
+                                                <div *ngIf="item.editMode && isActive"
+                                                    class="d-flex align-items-center ">
+                                                    <button class=" mr-3 submit-btn"
+                                                        style="background: none; border: none;"
+                                                        (click)="saveCriteriaResult(item)">
+                                                        <i style="color: green;font-size: 24px;"
+                                                            class="fas fa-check"></i>
                                                     </button>
-                                                    <button class=" submit-btn" style="background: none; border: none;" (click)="cancelEditCriteriaResult(i)">
-                                                        <i style="color: red; font-size: 24px;" class="fas fa-times" ></i>
+                                                    <button class=" submit-btn" style="background: none; border: none;"
+                                                        (click)="cancelEditCriteriaResult(i)">
+                                                        <i style="color: red; font-size: 24px;"
+                                                            class="fas fa-times"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -135,14 +162,17 @@
 
                                     <div *ngIf="item.editMode && isActive">
                                         <mat-form-field class="w-100" appearance="outline">
-                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" placeholder="Note"
-                                                name="note" [(ngModel)]="item.note" matInput></textarea>
+                                            <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                cdkAutosizeMinRows="2" placeholder="Note" name="note"
+                                                [(ngModel)]="item.note" matInput></textarea>
                                         </mat-form-field>
                                     </div>
-                                    <div *ngIf="item.isShowHistory==true &&oldWeeklyReport"  class="rounded my-4" style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
+                                    <div *ngIf="item.isShowHistory==true &&oldWeeklyReport" class="rounded my-4"
+                                        style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
                                         <div class="d-flex align-items-baseline">
                                             <span>
-                                                <i class="m-2 fas fa-circle fa-lg" [ngClass]="getOldCriteriaHealth(item)"></i>
+                                                <i class="m-2 fas fa-circle fa-lg"
+                                                    [ngClass]="getOldCriteriaHealth(item)"></i>
                                             </span>
                                             <span class="m-2 overflow-auto">
                                                 <strong>{{oldWeeklyReport.pmReportName}}: </strong>
@@ -161,7 +191,7 @@
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
                             <div class="col">
-                                <strong style="font-size: 20px;">PM note: </strong>
+                                <strong class="hyperlink" (click)="guideLinePMNote()" style="font-size: 20px;">PM note: </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2 text-nowrap"
                                     *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
@@ -183,8 +213,8 @@
                                         [(ngModel)]="generalNote" name="notePM" placeholder="General note">{{generalNoteFocus.focus()}}
                                 </textarea>
                                 </mat-form-field>
-                                <div *ngIf="(isShowLastWeek() == true || showPmNote==true ||isShowPMNote()==true)&&oldWeeklyReport" class="rounded my-4"
-                                    style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
+                                <div *ngIf="(isShowLastWeek() == true || showPmNote==true ||isShowPMNote()==true)&&oldWeeklyReport"
+                                    class="rounded my-4" style="border: 1px solid #C9C8C8 ; background-color: #F1F1E5;">
                                     <div class="d-flex align-items-baseline">
                                         <span class="m-2 overflow-auto">
                                             <strong>{{oldWeeklyReport.pmReportName}}: </strong>
@@ -197,11 +227,10 @@
 
                         <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)">
                             <div class="d-flex justify-content-between pt-2">
-                                <strong style="font-size: 20px;">PM Issues:</strong>
+                                <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;">PM Issues:</strong>
                             </div>
 
-                            <table
-                                style="border-collapse: collapse;" class="table table-hover text-nowrap">
+                            <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
                                 <thead class="bg-light">
                                     <tr>
                                         <th *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)">#</th>
@@ -219,8 +248,10 @@
                                         itemsPerPage: itemPerPage,
                                         currentPage: problemCurrentPage
                                         }; let i =index">
-                                        <td *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)" style="width: 26px">
-                                            <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1" [matMenuTriggerFor]="menu3"></i>
+                                        <td *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_SetDone)"
+                                            style="width: 26px">
+                                            <i style="margin-top: 8px ; color: #585858;" class="fas fa-ellipsis-v ml-1"
+                                                [matMenuTriggerFor]="menu3"></i>
 
                                             <mat-menu #menu3="matMenu">
                                                 <button (click)="setDone(problem)" class="mat-menu-item  w-100">
@@ -364,7 +395,8 @@
                                             </th>
                                             <th style="width: 80px; vertical-align: middle;">Role</th>
                                             <th style="width: 80px;">Normal
-                                                <div [matTooltip]="fixedNumber(totalNormalWorkingTime) + 'h of project'
+                                                <div
+                                                    [matTooltip]="fixedNumber(totalNormalWorkingTime) + 'h of project'
                                                         + ' / ' + fixedNumber(totalNormalWorkingTimeOfWeekly) + 'h all'
                                                         + ' / ' + fixedNumber(totalNormalWorkingTimeStandard) + 'h standard' ">
                                                     <strong>({{fixedNumber(totalNormalWorkingTime)}}h</strong> /
@@ -392,11 +424,11 @@
                                     <tbody>
                                         <tr *ngFor="let user of projectCurrentResource; let i =index">
                                             <td class="d-flex justify-content-between" style="border: none;">
-                                                <i *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)" class="fas fa-ellipsis-v ml-1 menu-4-icon"
+                                                <i *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_Release)"
+                                                    class="fas fa-ellipsis-v ml-1 menu-4-icon"
                                                     [matMenuTriggerFor]="menu4"></i>
                                                 <mat-menu #menu4="matMenu">
-                                                    <button
-                                                        [disabled]="projectUserProcess" class="mat-menu-item  w-100"
+                                                    <button [disabled]="projectUserProcess" class="mat-menu-item  w-100"
                                                         (click)="releaseUser(user)">
                                                         <i class="fas fa-sign-out-alt mr-1"></i>Release</button>
                                                 </mat-menu>
@@ -628,7 +660,8 @@
                                                                         [userData]="report">
                                                                     </app-user-info>
 
-                                                                    <i *ngIf="isShowMenuPlannedResource" style="margin-top: 23px ; color: #585858;"
+                                                                    <i *ngIf="isShowMenuPlannedResource"
+                                                                        style="margin-top: 23px ; color: #585858;"
                                                                         class="fas fa-ellipsis-v fa-lg"
                                                                         [matMenuTriggerFor]="menu2"></i>
 

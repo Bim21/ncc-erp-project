@@ -25,8 +25,8 @@ export class PMReportProjectService extends BaseApiService {
   public GetAllPmReportProjectForDropDown(): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/GetAllPmReportProjectForDropDown');
   }
-  public GetAllByPmReport(pmReportId: number, projectType: any, health: any, sort: any): Observable<any> {
-    return this.http.get<any>(this.rootUrl + '/GetAllByPmReport?pmReportId=' + pmReportId+'&projectType='+ projectType + '&health=' + (health == 'ALL'? '': health) + '&sort=' + sort);
+  public GetAllByPmReport(pmReportId: number, projectType: any, health: any, sort: any, sortReview: any): Observable<any> {
+    return this.http.get<any>(this.rootUrl + '/GetAllByPmReport?pmReportId=' + pmReportId+'&projectType='+ projectType + '&health=' + (health == 'ALL'? '': health) + '&sort=' + sort + '&sortReview=' + sortReview);
   }
   public sendReport(projectId: number, pmReportId: number, status: string): Observable<any> {
     return this.http.post<any>(this.rootUrl + `/SendReport?projectId=${projectId}&pmReportId=${pmReportId}&status=${status}`, {});
@@ -36,9 +36,6 @@ export class PMReportProjectService extends BaseApiService {
   }
   public updateHealth(pmReportProjectId: any, projectHealth: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/UpdateHealth?pmReportProjectId=' + pmReportProjectId + '&projectHealth=' + projectHealth)
-  }
-  public reverseDelete(pmReportProjectId: number, { }): Observable<any> {
-    return this.http.post<any>(this.rootUrl + `/ReverseSeen?pmReportProjectId=${pmReportProjectId}`, {});
   }
   public GetAllByProject(projectId: number): Observable<any> {
     return this.http.get<any>(this.rootUrl + `/GetAllByProject?projectId=${projectId}`);
@@ -102,6 +99,13 @@ export class PMReportProjectService extends BaseApiService {
     return this.http.post(this.rootUrl + `/PlanEmployeeJoinProject`,input)
   }
 
+  public reverseDelete(pmReportProjectId: number, { }): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/ReverseSeen?pmReportProjectId=${pmReportProjectId}`, {});
+  }
+  
+  public checkNecessaryReview(pmReportProjectId: number, { }): Observable<any> {
+    return this.http.post<any>(this.rootUrl + `/CheckNecessaryReview?pmReportProjectId=${pmReportProjectId}`, {});
+  }
 
   // Chart api
   public GetTimesheetWeeklyChartOfProject(projectCode:any, startDate: string, endDate:string): Observable<any> {
@@ -129,4 +133,6 @@ export class PMReportProjectService extends BaseApiService {
   public GetEffortMonthlyChartProject(input:any): Observable<any> {
     return this.http.post(this.configURI.timesheetURI +`api/services/app/Public/GetEffortMonthlyChartProject`, input)
   }
+
+ 
 }

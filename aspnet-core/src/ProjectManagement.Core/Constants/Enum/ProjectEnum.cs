@@ -248,6 +248,14 @@
             Latest_Review_Last
         }
 
+        public enum PrioritizeReviewSort
+        {
+            All,
+            Nothing,
+            NeedReport,
+            Reported
+        }
+
         public enum ProjectCriteriaResultStatus
         {
             NotReported = 0,
@@ -268,7 +276,6 @@
             Amber = 2,
             Red = 3
         }
-
         public enum NCStatus
         {
             NC = 1,
@@ -282,5 +289,6 @@
             Standard = 1,
             Modify = 2
         }
+
     }
 }

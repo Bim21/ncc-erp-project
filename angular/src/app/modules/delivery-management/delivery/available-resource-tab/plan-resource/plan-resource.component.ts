@@ -64,6 +64,7 @@ export class PlanResourceComponent
   Resource_TabPool_Release = PERMISSIONS_CONSTANT.Resource_TabPool_Release
   Resource_TabPool_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabPool_UpdateSkill
   Resource_TabPool_EditNote = PERMISSIONS_CONSTANT.Resource_TabPool_EditNote
+  Resource_TabPool_ProjectDetail = PERMISSIONS_CONSTANT.Resource_TabPool_ProjectDetail
   
   protected list(
     request: PagedRequestDto,
@@ -479,16 +480,19 @@ export class PlanResourceComponent
     }, error => {this.isLoading = false})
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
+  viewProjectDetail(project){
+    let routingToUrl:string = (
+       this.permission.isGranted(this.Resource_TabPool_ProjectDetail)
+   
+     )
+    ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
+    ? "/app/product-project-detail/product-weekly-report" : "/app/product-project-detail/product-project-general"
+    ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
+      id: project.projectId,
+      type: project.projectType, 
+      projectName: project.projectName, 
+      projectCode:" "} }));
+    window.open(url, '_blank');
+  }
 }

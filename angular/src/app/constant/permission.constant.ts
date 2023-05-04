@@ -34,6 +34,7 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint: "Admin.Configuartions.ViewMaxCountHistoryOfRetroAndReviewPoint",
        Admin_Configuartions_WeeklyReportTime_Edit: "Admin.Configuartions.WeeklyReportTimeEdit",
        Admin_Configuartions_ViewAuditScoreSetting: "Admin.Configuartions.ViewAuditScoreSetting",
+       Admin_Configurations_ViewGuideLineSetting: "Admin.Configurations.ViewGuideLineSetting",
        // #endregion
 
        // #region Skill
@@ -447,6 +448,7 @@ export const PERMISSIONS_CONSTANT = {
 
        WeeklyReport_ReportDetail_ChangedResource: "WeeklyReport.ReportDetail.ChangedResource",
        WeeklyReport_ReportDetail_ChangedResource_View: "WeeklyReport.ReportDetail.ChangedResource.View",
+       WeeklyReport_ReportDetail_GuideLine_View: "WeeklyReport.ReportDetail.GuideLine.View",
        // #endregion
 
        // #region Resource Request
@@ -500,10 +502,9 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabPool_EditTempProject: "Resource.TabPool.EditTempProject",
        Resource_TabPool_AddTempProject: "Resource.TabPool.AddTempProject",
        Resource_TabPool_Release: "Resource.TabPool.Release",
-
-
        Resource_TabPool_UpdateSkill: "Resource.TabPool.UpdateSkill",
        Resource_TabPool_EditNote: "Resource.TabPool.EditNote",
+       Resource_TabPool_ProjectDetail: "Resource.TabPool.ProjectDetail",
 
        Resource_TabAllResource: "Resource.TabAllResource",
        Resource_TabAllResource_View: "Resource.TabAllResource.View",
@@ -516,6 +517,7 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabAllResource_CancelMyPlan: "Resource.TabAllResource.CancelMyPlan",
        Resource_TabAllResource_CancelAnyPlan: "Resource.TabAllResource.CancelAnyPlan",
        Resource_TabAllResource_UpdateSkill: "Resource.TabAllResource.UpdateSkill",
+       Resource_TabAllResource_ProjectDetail: "Resource.TabAllResource.ProjectDetail",
 
        Resource_TabVendor: "Resource.TabVendor",
        Resource_TabVendor_View: "Resource.TabVendor.View",
@@ -528,6 +530,7 @@ export const PERMISSIONS_CONSTANT = {
        Resource_TabVendor_CancelMyPlan: "Resource.TabVendor.CancelMyPlan",
        Resource_TabVendor_CancelAnyPlan: "Resource.TabVendor.CancelAnyPlan",
        Resource_TabVendor_UpdateSkill: "Resource.TabVendor.UpdateSkill",
+       Resource_TabVendor_ProjectDetail: "Resource.TabVendor.ProjectDetail",
        // #endregion
 
        // #region Timesheet

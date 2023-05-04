@@ -10,7 +10,7 @@
             <i class="fas fa-sticky-note mr-1"></i> Note
         </button>
     </li>
-    <li style="margin-left: 30px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+    <li style="margin-left: 20px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="mt-1" style="font-size: 20px;">
             <strong>
                 {{projectInfo?.projectName}} - {{projectInfo?.clientCode}}
@@ -19,7 +19,7 @@
     </li>
 
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="d-flex align-items-center h-100" style="margin-left: 30px !important;">
+        <div class="d-flex align-items-center h-100" style="margin-left: 20px !important;">
             <span [ngClass]="APP_CONST.projectHealthBGStyle[projectHealth]" class="header-status-wrapper">
                 {{problemIssueList[projectHealth - 1]}}
             </span>
@@ -27,7 +27,7 @@
 
     </li>
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="form-froup row header-report-nav" style="margin-left: 30px!important;">
+        <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Project Type:</mat-label>
                 <mat-select [(ngModel)]="projectType" (selectionChange)="changeProjectType($event.value)">
@@ -40,7 +40,7 @@
 
     </li>
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="form-froup row header-report-nav" style="margin-left: 30px !important;">
+        <div class="form-froup row header-report-nav" style="margin-left: 20px !important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>PM Report: </mat-label>
                 <mat-select [(ngModel)]="pmReport" placeholder="select a report"
@@ -81,7 +81,7 @@
 
 
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="form-froup row header-report-nav" style="margin-left: 30px!important;">
+        <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Status</mat-label>
                 <mat-select [(ngModel)]="filterProjectHealth" (selectionChange)="onChangeFilterProjectHealth()">
@@ -93,7 +93,7 @@
         </div>
     </li>
     <li *ngIf="isShowReportBar" style="cursor: pointer; display: flex; white-space: nowrap;">
-        <div class="form-froup row header-report-nav" style="margin-left: 30px!important;">
+        <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Sort Status:</mat-label>
                 <mat-select [(ngModel)]="filterSort" (selectionChange)="onChangeFilterSort($event.value)">
@@ -106,4 +106,19 @@
         </div>
 
     </li>
+
+    <li *ngIf="isShowReportBar" style="cursor: pointer; display: flex; white-space: nowrap;">
+        <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
+            <mat-form-field appearance="outline" class="ml-2">
+                <mat-label>Review Status:</mat-label>
+                <mat-select [(ngModel)]="filterReviewNeed" (selectionChange)="onChangeFilterReviewNeed($event.value)">
+                    <mat-option *ngFor="let item of filterReviewNeedList" [value]="item">
+                        {{item}}
+                    </mat-option>
+                </mat-select>
+
+            </mat-form-field>
+        </div>
+    </li>
+
 </ul>

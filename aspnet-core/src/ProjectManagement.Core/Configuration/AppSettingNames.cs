@@ -30,5 +30,6 @@
         public const string TrainingRequestChannel = "TrainingRequestChannel";
         public const string MaxCountHistory = "MaxCountHistory";
         public const string ScoreAudit = "ScoreAudit";
+        public const string GuideLine = "GuideLine";
     }
 }

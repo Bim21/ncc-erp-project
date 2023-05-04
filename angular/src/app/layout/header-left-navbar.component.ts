@@ -69,7 +69,16 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     "Latest_Review_Last"
   ]
 
+  filterReviewNeed = this.reportService.filterReviewNeed.getValue();
+  filterReviewNeedList = [
+    "All",
+    "Nothing",
+    "NeedReport",
+    "Reported"
+  ]
+
   private filterSortStorageKey = 'filterSort';
+  private filterReviewNeedStorageKey = 'filterReviewNeed';
 
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService,
@@ -91,8 +100,12 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.projectType = this.route.snapshot.queryParamMap.get("projectType")
 
     const storedFilterSort = localStorage.getItem(this.filterSortStorageKey) || sessionStorage.getItem(this.filterSortStorageKey);
+    const storedFilterReviewNeed = localStorage.getItem(this.filterReviewNeedStorageKey) || sessionStorage.getItem(this.filterReviewNeedStorageKey);
     if (storedFilterSort) {
       this.filterSort = storedFilterSort;
+    }
+    if(storedFilterReviewNeed){
+      this.filterReviewNeed = storedFilterReviewNeed;
     }
 
     this._layoutStore.sidebarExpanded.subscribe((value) => {
@@ -102,6 +115,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     if (this.currentUrl.includes("weeklyReportTabDetail")) {
       this.reportId = this.route.snapshot.queryParamMap.get("id")
       this.filterSort = this.reportService.filterSort.getValue();
+      this.filterReviewNeed = this.reportService.filterReviewNeed.getValue();
       this.isShowReportBar = true
       this.getPmReportList();
       this._layoutStore.setSidebarExpanded(true);
@@ -219,8 +233,16 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   onChangeFilterSort(filterSort){
     this.reportService.changeFilterSort(filterSort);
     this.filterSort = filterSort;
+    //This will keep your filter value stable whenever reloading page
     localStorage.setItem(this.filterSortStorageKey, filterSort);
     sessionStorage.setItem(this.filterSortStorageKey, filterSort);
+  }
+
+  onChangeFilterReviewNeed(filterReviewNeed){
+    this.reportService.changeFilterReviewNeed(filterReviewNeed);
+    this.filterReviewNeed = filterReviewNeed;
+    localStorage.setItem(this.filterReviewNeedStorageKey, filterReviewNeed);
+    sessionStorage.setItem(this.filterReviewNeedStorageKey, filterReviewNeed);
   }
 
   updateHealth(projectHealth) {

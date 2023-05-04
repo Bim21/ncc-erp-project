@@ -19,6 +19,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewDefaultWorkingHourPerDaySetting;
   Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint;
   Admin_Configuartions_ViewAuditScoreSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewAuditScoreSetting;
+  Admin_Configurations_ViewGuideLineSetting = PERMISSIONS_CONSTANT.Admin_Configurations_ViewGuideLineSetting;
 
   configuration = {} as ConfigurationDto;
   googleToken: string = '';
@@ -43,12 +44,15 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isShowDiscordChannel: boolean = false;
   public isEditDiscordChannel: boolean = false;
   public isShowAuditScore: boolean = false;
+  public isShowGuideLineSetting: boolean = false;
   public  timesheetConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  talentConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  hrmConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  finfastConnectResult: GetConnectResultDto = {} as GetConnectResultDto
   public  auditScore: AuditScoreDto = {} as AuditScoreDto;
 
+  public guideLine: GuideLineDto = {} as GuideLineDto ;
+ 
   public listDays: any[] = [
     { value: '2', text: 'Monday' },
     { value: '3', text: 'Tuesday' },
@@ -61,6 +65,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public listHours = [];
   public isEditingKomu: boolean = false;
   public isEditingTimesheet: boolean = false;
+  public isEditingGuideLine: boolean = false;
   constructor(
     private settingService: AppConfigurationService,
     injector: Injector
@@ -78,6 +83,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     this.checkConnectToFinance();
     this.checkConnectToTalent();
     this.getAuditScore();
+    this.getGuideLine();
   }
   getSetting() {
     this.settingService.getConfiguration().subscribe((data) => {
@@ -133,7 +139,20 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
       abp.notify.success('Update project setting successful!');
 
     })
+  }
 
+  getGuideLine(){
+    this.settingService.getGuideLine().subscribe((data) => {
+      this.guideLine = data.result;
+    });
+  }
+
+  saveGuideLine(){
+    this.settingService
+      .editGuideLine(this.guideLine)
+      .subscribe((data) => {
+        abp.notify.success('Edited successfully!');
+      });
   }
 
   getAuditScore(){
@@ -198,4 +217,11 @@ export class AuditScoreDto{
   projecT_SCORE_WHEN_STATUS_AMBER: number
   projecT_SCORE_WHEN_STATUS_GREEN: number
   projecT_SCORE_WHEN_STATUS_RED: number
+}
+
+export class GuideLineDto{
+  issue: string;
+  risk: string;
+  pmNote: string;
+  criteriaStatus: string;
 }

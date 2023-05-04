@@ -50,6 +50,7 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public int TotalNormalWorkingTime { get; set; }
 
         public int TotalOverTime { get; set; }
+        public bool NecessaryReview { get; set; }
 
         public PMReportProjectStatus StatusEnum { get; set; }
         public DateTime? LastReviewDate { get; set; }

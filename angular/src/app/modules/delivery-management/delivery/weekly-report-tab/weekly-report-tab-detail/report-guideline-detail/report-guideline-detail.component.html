@@ -1,13 +1,13 @@
-<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
-    <abp-modal-header
-        [title]="isEditMode ? 'Update Guideline: ' + data.criteriaName : 'Guideline: ' + data.criteriaName"
+<form *ngIf="permission.isGranted(Admin_Configuartions_Edit)" class="form-horizontal" autocomplete="off"
+    #timesheetForm="ngForm" novalidate>
+    <abp-modal-header [title]="isEditMode ? 'Update Guideline: ' + name : 'Guideline: ' + name"
         (onCloseClick)="dialogRef.close()">
 
     </abp-modal-header>
 
     <div class="modal-body" style="max-height: 500px; overflow-y: auto;" *ngIf="!isEditMode">
 
-        <span [innerHTML]="data.guideline | safeHtml">{{data.guideline}}</span>
+        <span [innerHTML]="data.guideline | safeHtml"></span>
     </div>
 
     <div class="modal-body" *ngIf="isEditMode">
