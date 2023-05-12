@@ -52,7 +52,7 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
   public searchText = "";
   public listYear: number[] = [];
   private currentYear = new Date().getFullYear();
-  
+
   // public year=-1;
 
   constructor(public injector: Injector,
@@ -69,14 +69,14 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
 
   active(phase) {
     this.phaseService.Active(phase.id).subscribe(rs => {
-      abp.notify.success("Active phase: " + phase.name)
+      abp.notify.success("Activate phase: " + phase.name)
 
     })
     this.refresh();
   }
   deactive(phase) {
     this.phaseService.DeActive(phase.id).subscribe(rs => {
-      abp.notify.success("DeActive phase: " + phase.name)
+      abp.notify.success("Deactivate phase: " + phase.name)
 
     })
     this.refresh();
@@ -118,7 +118,7 @@ export class PhaseComponent extends PagedListingComponentBase<PhaseComponent> im
   }
   public done(phase) {
     this.phaseService.Done(phase.id).subscribe((res) => {
-      abp.notify.success("Active phase: " + phase.name);
+      abp.notify.success("Activate phase: " + phase.name);
     })
     this.refresh();
   }

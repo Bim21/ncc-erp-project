@@ -11,6 +11,8 @@ import { catchError, finalize } from 'rxjs/operators';
 import { CriteriaManagementComponent } from '../criteria-management.component';
 import { PopupNoteComponent } from '../tailoring-management/popup-note/popup-note.component';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import * as FileSaver from 'file-saver';
+import { ProjectProcessResultAppService } from '@app/service/api/project-process-result.service';
 
 @Component({
   selector: 'app-taloring-project',
@@ -31,6 +33,7 @@ export class TaloringProjectComponent extends PagedListingComponentBase<Taloring
   Audits_Tailoring_Detail_Update= PERMISSIONS_CONSTANT. Audits_Tailoring_Detail_Update
   Audits_Tailoring_Detail_Detele= PERMISSIONS_CONSTANT. Audits_Tailoring_Detail_Detele
   Audits_Tailoring_Update_Project=PERMISSIONS_CONSTANT.Audits_Tailoring_Update_Project
+  Audits_Tailoring_DownLoadTailoringTemplate = PERMISSIONS_CONSTANT.Audits_Tailoring_DownLoadTailoringTemplate
 
   updateTaloring(){
     if(this.permission.isGranted(this.Audits_Tailoring_Update_Project)){
@@ -48,7 +51,13 @@ export class TaloringProjectComponent extends PagedListingComponentBase<Taloring
   hasChild = (_: number, node: PeriodicElement) =>
     !!node.children && node.children.length > 0;
 
-  constructor(injector: Injector, private dialog: MatDialog, private processProjectService: ProjectProcessCriteriaAppService, route:ActivatedRoute, ) {
+  constructor(
+    public injector: Injector,
+    private dialog: MatDialog,
+    private processProjectService: ProjectProcessCriteriaAppService,
+    private projectProcessResultAppService:ProjectProcessResultAppService,
+    route:ActivatedRoute,
+    ) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("projectId"));
     this.projectName=route.snapshot.queryParamMap.get('projectName')
@@ -66,7 +75,11 @@ export class TaloringProjectComponent extends PagedListingComponentBase<Taloring
   getAll() {
     this.processProjectService.getDetail(this.projectId)
     .pipe(catchError(this.processProjectService.handleError))
-    .subscribe(data => this.dataSource.data = data.result.childrens)
+    .subscribe(data => {
+      this.dataSource.data = data.result.childrens,
+      this.treeControl.dataNodes=data.result.childrens
+      this.treeControl.expandAll()
+    })
   }
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
@@ -77,7 +90,12 @@ export class TaloringProjectComponent extends PagedListingComponentBase<Taloring
   }
 
     searchDetail(){
-      this.processProjectService.searchDetail(this.projectId,this.searchText,this.selectedApplicable).pipe(catchError(this.processProjectService.handleError)).subscribe(data=>this.dataSource.data=data.result.childrens)
+      this.processProjectService.searchDetail(this.projectId,this.searchText,this.selectedApplicable).pipe(catchError(this.processProjectService.handleError)).subscribe(
+        data=> {
+          this.dataSource.data=data.result.childrens,
+          this.treeControl.dataNodes=data.result.childrens
+          this.treeControl.expandAll()
+        })
     }
 
   viewNote(node: PeriodicElement){
@@ -115,6 +133,24 @@ export class TaloringProjectComponent extends PagedListingComponentBase<Taloring
         abp.notify.success("Delete criteria successful!");
         this.getAll();
     })
+  }
+
+  s2ab(s) {
+    var buf = new ArrayBuffer(s.length);
+    var view = new Uint8Array(buf);
+    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
+  }
+
+  downloadResultTemplate() {
+    this.projectProcessResultAppService.exportProjectProcessResultTemplate(this.projectId).subscribe(res => {
+      const file = new Blob([this.s2ab(atob(res.result.base64))], {
+        type: "application/vnd.ms-excel;charset=utf-8"
+      });
+      FileSaver.saveAs(file, res.result.fileName);
+      abp.notify.success("Export Template Successfully!");
+      this.dialogRef.close();
+    });
   }
 }
 export interface PeriodicElement {

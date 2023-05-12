@@ -139,7 +139,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
         check = true
       }
     })
-  
+
 
     this.userInfoService
       .getUserPaging(
@@ -293,7 +293,7 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
             `<div class="mb-1 d-flex pointer ${project.allowcatePercentage > 0 ? 'join-project' : 'out-project'}">
               <div class="col-11 p-0">
                   <p class="mb-0" >
-                  <strong>${project.projectName}</strong> 
+                  <strong>${project.projectName}</strong>
                   <span class="badge ${this.APP_CONST.projectUserRole[project.projectRole]}">
                   ${this.getByEnum(project.projectRole, this.APP_ENUM.ProjectUserRole)}</span>
                   -  <span>${moment(project.startTime).format("DD/MM/YYYY")}</span></p>
@@ -322,10 +322,10 @@ export class UsersComponent extends PagedListingComponentBase<UserDto> {
   updateUserActive(user: UserDto, isActive: boolean) {
     this.userInfoService.updateUserActive(user.id, isActive).pipe(catchError(this.userInfoService.handleError)).subscribe(rs => {
       if (isActive) {
-        abp.notify.success(`Update user ${user.fullName} to Active`)
+        abp.notify.success(`Update user ${user.fullName} to Activate`)
       }
       else {
-        abp.notify.success(`Update user ${user.fullName} to InActive`)
+        abp.notify.success(`Update user ${user.fullName} to Inactivate`)
       }
       this.refresh()
     })

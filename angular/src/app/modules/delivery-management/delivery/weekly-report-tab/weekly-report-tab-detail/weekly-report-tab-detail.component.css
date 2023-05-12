@@ -10,6 +10,9 @@
     margin-top: 80%;
 }
 
+.project-code{
+    font-family: 'Fira Code', monospace;
+}
 
 /* .project-list {
   height: 150px;

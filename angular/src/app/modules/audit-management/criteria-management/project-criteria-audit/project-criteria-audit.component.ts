@@ -199,6 +199,7 @@ export class ProjectCriteriaAuditComponent
       .subscribe(([allProcessCriteria,projectProcess])=>{
         this.treeControl.dataNodes=allProcessCriteria.result.childrens;
         this.dataSource.data=allProcessCriteria.result.childrens;
+        this.treeControl.expandAll()
         for(let itemG of this.treeControl.dataNodes) {
           if(projectProcess.result.some(item=> {
             return item.id==itemG.item.id
@@ -242,6 +243,7 @@ export class ProjectCriteriaAuditComponent
       .subscribe(([searchProcessCriteria,projectProcess])=>{
         this.treeControl.dataNodes=searchProcessCriteria.result.childrens;
         this.dataSource.data=searchProcessCriteria.result.childrens;
+        this.treeControl.expandAll()
         for(let itemG of this.treeControl.dataNodes) {
           if(projectProcess.result.some(item=> {
             return item.id==itemG.item.id

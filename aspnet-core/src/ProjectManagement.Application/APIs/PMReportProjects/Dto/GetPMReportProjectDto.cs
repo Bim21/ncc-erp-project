@@ -18,6 +18,7 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public string ProjectCode { get; set; }
 
         public string Status { get; set; }
+        public bool IsActive { get; set; }
 
         public ProjectHealth ProjectHealthEnum { get; set; }
 
@@ -54,5 +55,6 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
 
         public PMReportProjectStatus StatusEnum { get; set; }
         public DateTime? LastReviewDate { get; set; }
+        public string ClientCode { get; set; }
     }
 }

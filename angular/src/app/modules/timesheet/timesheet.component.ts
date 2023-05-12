@@ -20,7 +20,7 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   Timesheets_Delete = PERMISSIONS_CONSTANT.Timesheets_Delete;
   Timesheets_ForceDelete = PERMISSIONS_CONSTANT.Timesheets_ForceDelete;
   Timesheets_CloseAndActive = PERMISSIONS_CONSTANT.Timesheets_CloseAndActive;
-  
+
   public timesheetList: TimesheetDto[] = [];
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', displayName: "Name", comparisions: [0, 6, 7, 8] },
@@ -124,11 +124,11 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
     this.timesheetService.ReverseActive(timesheet.id).pipe(catchError(this.timesheetService.handleError)).subscribe(rs => {
       abp.notify.success("Update timesheet: " + timesheet.name)
       if (timesheet.isActive) {
-        abp.notify.success("DeActive timesheet: " + timesheet.name)
+        abp.notify.success("Deactivate timesheet: " + timesheet.name)
 
       }
       else {
-        abp.notify.success("Active timesheet: " + timesheet.name)
+        abp.notify.success("Activate timesheet: " + timesheet.name)
 
       }
       this.refresh();
@@ -142,8 +142,8 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   }
   showColumnAction(){
     if(
-      this.permission.isGranted(this.Timesheets_Edit) || 
-      this.permission.isGranted(this.Timesheets_Delete) || 
+      this.permission.isGranted(this.Timesheets_Edit) ||
+      this.permission.isGranted(this.Timesheets_Delete) ||
       this.permission.isGranted(this.Timesheets_CloseAndActive)
     )
     {

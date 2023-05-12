@@ -10,6 +10,7 @@ import { ImportTailoringComponent } from './import-tailoring/import-tailoring/im
 import * as FileSaver from 'file-saver';
 import { ProjectProcessResultAppService } from '@app/service/api/project-process-result.service';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+
 @Component({
   selector: 'app-tailoring-management',
   templateUrl: './tailoring-management.component.html',
@@ -125,6 +126,7 @@ export class TailoringManagementComponent extends PagedListingComponentBase<Tail
       this.dialogRef.close();
     });
   }
+
 
   s2ab(s) {
     var buf = new ArrayBuffer(s.length);

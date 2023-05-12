@@ -19,15 +19,16 @@
                         <div class="col-10 project-menu-item"
                             [ngClass]="item.status === 'Sent' ? APP_CONST.bgProjectReportStyle[item.projectHealth] : 'grey'">
                             <mat-list-item style="cursor:pointer," id="list" role="item.projectId" (click)="view(item);"
-                                [matTooltip]="item.projectCode" matTooltipPosition="right"
+                                [matTooltip]="'Project Code - '+ item.projectCode" matTooltipPosition="right"
                                 [ngClass]="{'checked': item.seen, 'unchecked': !item.seen}">
                                 <div style="overflow: hidden; overflow-x: hidden;">
                                     <div class="project-list">
-                                        <strong>{{item.projectName}}</strong>
+                                        <strong>{{item.projectName}} </strong>
                                     </div>
                                     <div class="project-list">
-                                        <div class="email-address">{{item.pmEmailAddress}}</div>
-                                        <div class="checkbox-text" title="Latest Review Date">
+                                        <div class="email-address">{{item.pmEmailAddress}} </div>
+                                        <div class="project-code">{{item.clientCode}} </div>
+                                        <!-- <div class="checkbox-text" title="Latest Review Date">
                                             <div *ngIf="item.seen">
                                                 <div [innerHTML]="iconCheckedDate" class="inline-block"></div>
                                                 {{item.lastReviewDate ? (item.lastReviewDate | date:'dd/MM/yyyy ') :
@@ -42,7 +43,8 @@
                                                 <div [innerHTML]="iconCheckedDate" class="inline-block"></div>
                                                 Yet Reviewed
                                             </div>
-                                        </div>
+                                        </div> -->
+
                                     </div>
                                 </div>
                             </mat-list-item>
@@ -50,13 +52,41 @@
                         <div class="col-2 text-center">
                             <section class="example-section">
                                 <label class="star-checkbox">
-                                    <input (change)="markReview(item)" [checked]="item.necessaryReview == true"
-                                        type="checkbox">
-                                    <span matTooltip="Prioritize Review" class="star"></span>
+                                  <input
+                                    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PrioritizeReview_Check)"
+                                    (change)="markReview(item)"
+                                    [checked]="item.necessaryReview == true"
+                                    [disabled]="item.isActive == false || item.seen == true"
+                                    type="checkbox"
+                                    >
+                                  <span
+                                    matTooltip="Prioritize Review"
+                                    class="star"
+                                    matTooltip="{{!item.isActive ? 'Cannot update Prioritize Review for closed Weekly Report'
+                                    : item.necessaryReview ? 'Click to disable Prioritize Review of project'
+                                    : 'Click to mark project as Prioritize Review'}}"
+                                    >
+                                  </span>
                                 </label>
-                            </section>
-                            <mat-checkbox *ngIf="item.necessaryReview" class="mt-2" [checked]="item.seen == true"
-                                (change)="markRead(item)"></mat-checkbox>
+                              </section>
+                            <mat-checkbox
+                            *ngIf="item.necessaryReview && permission.isGranted(WeeklyReport_ReportDetail_LastReviewDate_Check)"
+                            class="mt-2"
+                            [checked]="item.seen == true"
+                            [disabled]="item.isActive == false"
+                            matTooltip="{{!item.isActive ? 'Cannot update review of closed Weekly Report'
+                            : item.seen ? 'Click to disable review of project'
+                            : 'Click to mark project as reviewed'}}"
+                            (change)="markRead(item)">
+                        </mat-checkbox>
+
+
+                            <!-- <mat-checkbox *ngIf="item.necessaryReview && permission.isGranted(WeeklyReport_ReportDetail_LastReviewDate_Check)"
+                                class="mt-2"
+                                [checked]="item.seen"
+                                (change)="showConfirmModal( item)">
+                            </mat-checkbox> -->
+
                         </div>
 
                     </div>
@@ -76,7 +106,8 @@
 
                         <div class="row p-1">
                             <div class="col-8 m-0 p-0 d-flex align-items-baseline">
-                                <strong class="hyperlink" (click)="guideLineCriteriaStatus()" classs="col-12" style="font-size: 20px;">Criteria status: </strong>
+                                <strong class="hyperlink" (click)="guideLineCriteriaStatus()" classs="col-12"
+                                    style="font-size: 20px;">Criteria status: </strong>
                                 <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()"
                                     (click)="editAllRow()">
                                     <i class="fas fa-pencil-alt mr-1"></i> Edit All</button>
@@ -191,7 +222,8 @@
                         style="display: flex; flex-direction: column; justify-content: space-between; ">
                         <div class="row p-1">
                             <div class="col">
-                                <strong class="hyperlink" (click)="guideLinePMNote()" style="font-size: 20px;">PM note: </strong>
+                                <strong class="hyperlink" (click)="guideLinePMNote()" style="font-size: 20px;">PM note:
+                                </strong>
                                 <div class="d-inline  pt-1 text-right   ml-2 text-nowrap"
                                     *ngIf="permission.isGranted(WeeklyReport_ReportDetail_UpdateNote)">
                                     <i [hidden]="!isActive" *ngIf="!isEditingNote" class="fas fa-edit fa-lg"
@@ -227,7 +259,8 @@
 
                         <div *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)">
                             <div class="d-flex justify-content-between pt-2">
-                                <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;">PM Issues:</strong>
+                                <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;">PM
+                                    Issues:</strong>
                             </div>
 
                             <table style="border-collapse: collapse;" class="table table-hover text-nowrap">

@@ -471,6 +471,9 @@ namespace ProjectManagement.Authorization
         public const string WeeklyReport_ReportDetail_ChangedResource = "WeeklyReport.ReportDetail.ChangedResource";
         public const string WeeklyReport_ReportDetail_ChangedResource_View = "WeeklyReport.ReportDetail.ChangedResource.View";
         public const string WeeklyReport_ReportDetail_GuideLine_View = "WeeklyReport.ReportDetail.GuideLine.View";
+
+        public const string WeeklyReport_ReportDetail_LastReviewDate_Check = "WeeklyReport.ReportDetail.LastReviewDate.Check";
+        public const string WeeklyReport_ReportDetail_PrioritizeReview_Check = "WeeklyReport.ReportDetail.PrioritizeReview.Check";
         #endregion Weekly report
 
         #region Resource Request
@@ -1112,6 +1115,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource ,
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,
+                    PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check ,
+                    PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check ,
 
                     PermissionNames.ResourceRequest ,
                     PermissionNames.ResourceRequest_View ,
@@ -1767,6 +1772,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Change Status"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"},
+
+                 new SystemPermission{ Name = PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Last Review Date"},
+                 new SystemPermission{ Name = PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Prioritize Review"},
 
                  #endregion Weekly Report
 
@@ -3183,6 +3191,12 @@ namespace ProjectManagement.Authorization
                                         },
                                          new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_GuideLine_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"
+                                        },
+                                           new SystemPermission {
+                                            Name = PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Last Review Date Check"
+                                        },
+                                           new SystemPermission {
+                                            Name = PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = " Prioritize Review Check"
                                         },
                                     }
                             },

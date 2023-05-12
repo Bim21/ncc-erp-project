@@ -18,6 +18,7 @@ import { API_BASE_URL } from '@shared/service-proxies/service-proxies';
 import { RootComponent } from './root.component';
 import { AppInitializer } from './app-initializer';
 import { HttpErrorInterceptor } from '@shared/interceptor-errors/http-error.interceptor';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 export function getCurrentLanguage(): string {
   if (abp.localization.currentLanguage.name) {
     return abp.localization.currentLanguage.name;
@@ -39,6 +40,7 @@ export function getCurrentLanguage(): string {
     TabsModule.forRoot(),
     ServiceProxyModule,
     RootRoutingModule,
+    NgbModule,
   ],
   declarations: [RootComponent],
   providers: [

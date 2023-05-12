@@ -156,12 +156,12 @@
                     <button *ngIf="!user.isActive && permission.isGranted(Admin_Users_ActiveAndDeactive)" type="button"
                       class="mat-menu-item  w-100" (click)="updateUserActive(user,true)">
                       <i class="fas fa-check fa-lg mr-1"></i>
-                      Active
+                      Activate
                     </button>
                     <button *ngIf="user.isActive && permission.isGranted(Admin_Users_ActiveAndDeactive)" type="button"
                       class="mat-menu-item  w-100" (click)="updateUserActive(user,false)">
                       <i class="fas fa-times fa-lg mr-1"></i>
-                      DeActive
+                      Deactivate
                     </button>
                     <button
                       *ngIf="permission.isGranted(Admin_Users_DeleteFakeUser) && user.userType == APP_ENUM.UserType.FakeUser"

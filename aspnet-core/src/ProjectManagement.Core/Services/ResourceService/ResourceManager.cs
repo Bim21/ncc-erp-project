@@ -152,6 +152,7 @@ namespace ProjectManagement.Services.ResourceManager
                 }
             }).ToList();
         }
+      
 
         private IQueryable<ProjectUser> QueryCurrentProjectUser(long userId)
         {

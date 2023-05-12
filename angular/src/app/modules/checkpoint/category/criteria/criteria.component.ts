@@ -48,7 +48,7 @@ export class CriteriaComponent extends PagedListingComponentBase<CriteriaCompone
       (result: boolean) => {
         if (result) {
           this.criteriaService.deActiveCriteria(item.id).pipe(catchError(this.criteriaService.handleError)).subscribe((res) => {
-            abp.notify.success("DeActive " + item.name + " successfully!");
+            abp.notify.success("Deactivate " + item.name + " successfully!");
             this.refresh();
           })
         }
@@ -62,7 +62,7 @@ export class CriteriaComponent extends PagedListingComponentBase<CriteriaCompone
       (result: boolean) => {
         if (result) {
           this.criteriaService.activeCriteria(item.id).pipe(catchError(this.criteriaService.handleError)).subscribe((res) => {
-            abp.notify.success("Active " + item.name + " successfully!");
+            abp.notify.success("Activate " + item.name + " successfully!");
             this.refresh();
           })
         }

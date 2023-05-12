@@ -89,6 +89,7 @@ namespace ProjectManagement.APIs.ProcessCriterias
             var entity = ObjectMapper.Map<ProcessCriteria>(input);
             entity.IsActive = true;
             entity.IsLeaf = true;
+            entity.IsApplicable = true;
 
             if (input.ParentId.HasValue)
             {
@@ -172,7 +173,7 @@ namespace ProjectManagement.APIs.ProcessCriterias
                 var parent = await WorkScope.GetAsync<ProcessCriteria>(processCriteria.ParentId.Value);
                 if (!parent.IsActive)
                 {
-                    throw new UserFriendlyException($"You must active its parent to active this criteria!");
+                    throw new UserFriendlyException($"You must activate its parent to activate this criteria!");
                 }
             }
             await WorkScope.UpdateAsync(processCriteria);

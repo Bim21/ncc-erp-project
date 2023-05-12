@@ -449,6 +449,9 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_ChangedResource: "WeeklyReport.ReportDetail.ChangedResource",
        WeeklyReport_ReportDetail_ChangedResource_View: "WeeklyReport.ReportDetail.ChangedResource.View",
        WeeklyReport_ReportDetail_GuideLine_View: "WeeklyReport.ReportDetail.GuideLine.View",
+
+       WeeklyReport_ReportDetail_LastReviewDate_Check: "WeeklyReport.ReportDetail.LastReviewDate.Check",
+       WeeklyReport_ReportDetail_PrioritizeReview_Check: "WeeklyReport.ReportDetail.PrioritizeReview.Check",
        // #endregion
 
        // #region Resource Request

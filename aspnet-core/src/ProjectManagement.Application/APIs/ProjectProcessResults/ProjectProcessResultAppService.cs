@@ -629,9 +629,11 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                 sheetAudit.Cells[$"D2:G{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheetAudit.Cells[$"D2:G{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheetAudit.Cells.AutoFitColumns();
-                sheetAudit.Column(4).Width = 60;
-                sheetAudit.Column(5).Width = 70;
-                sheetAudit.Column(2).Width = 70;
+                sheetAudit.Column(2).Width = 30;
+                sheetAudit.Column(4).Width = 40;
+                sheetAudit.Column(5).Width = 50;
+                sheetAudit.Column(6).Width = 50;
+                sheetAudit.Column(7).Width = 50;
                 sheetAudit.Cells.Style.WrapText = true;
                 return new FileBase64Dto
                 {

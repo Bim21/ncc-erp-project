@@ -39,6 +39,7 @@ import { cloneDeep } from 'lodash';
 import { GuideLineDialogComponent } from '@app/modules/pm-management/list-project/list-project-detail/weekly-report/guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 import { ReportGuidelineDetailComponent } from './report-guideline-detail/report-guideline-detail.component';
 
+import { UpdateConfirmModalComponent } from './update-confirm-modal/update-confirm-modal.component';
 @Component({
   selector: 'app-weekly-report-tab-detail',
   templateUrl: './weekly-report-tab-detail.component.html',
@@ -71,6 +72,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
 
   WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
+  WeeklyReport_ReportDetail_LastReviewDate_Check = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_LastReviewDate_Check;
+  WeeklyReport_ReportDetail_PrioritizeReview_Check = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PrioritizeReview_Check;
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
     // this.pmReportProjectService.GetAllByPmReport(this.pmReportId, request).pipe(finalize(()=>{
@@ -628,6 +631,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     //localStorage.setItem('searchText', this.searchText);
   }
 
+
   public markRead(project) {
     if (project.seen == false) {
       abp.notify.success("Mark Read!");
@@ -648,6 +652,25 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
 
+
+  public showConfirmModal( project) {
+    const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
+        data: {
+            projectName: project.projectName,
+            markReview: project.seen
+        },
+        width: "30%"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        if (result === 'confirm') {
+            this.markRead(project);
+        } else if (result === 'cancel'){
+          project.seen = !project.seen;
+        }
+    });
+}
+
   public markReview(project) {
     if (project.necessaryReview == false) {
       abp.notify.success("Mark Prioritize Review!");
@@ -661,7 +684,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       });
     }
   }
-
 
   setDone(issue) {
     this.pmReportProjectService.SetDoneIssue(issue.id).subscribe((res) => {

@@ -94,12 +94,11 @@
                         <i class="fa fa-plus m-0"></i>
                     </button>
 
-                    <div class="col-lg-2" style="padding-left: 10%;">
+                    <div class="col-lg-2" (click)="$event.stopPropagation()" style="padding-left: 10%;">
                         <div class="input-group">
                             <mat-form-field appearance="outline">
                                 <mat-label>Charge Status</mat-label>
-                                <mat-select [(ngModel)]="selectedIsCharge" (selectionChange)="filterByIsCharge()"
-                                    (click)="$event.stopPropagation()">
+                                <mat-select [(ngModel)]="selectedIsCharge" (selectionChange)="filterByIsCharge()">
                                     <mat-option value="All">All</mat-option>
                                     <mat-option value="Charge">Charge</mat-option>
                                     <mat-option value="Not Charge">No Charge</mat-option>

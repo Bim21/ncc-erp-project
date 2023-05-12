@@ -58,7 +58,7 @@
                 (click)="viewGuiline(node)">
                 <div [matTooltip]="node.item.name"  class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
                 </div>
-                <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">InActive</span>
+                <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">Inactive</span>
                   <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
                 </div>
               </div>
@@ -129,7 +129,7 @@
                   (click)="Inactive(node.item)"
                 >
                   <i style="color: #014c6e" class="fas fa-ban mr-3"></i
-                  >DeActive
+                  >Deactivate
                 </button>
 
                 <button
@@ -143,7 +143,7 @@
                     style="color: #014c6e"
                     class="fas fa-check-circle mr-3"
                   ></i
-                  >Active
+                  >Activate
                 </button>
 
                   <button
@@ -183,7 +183,7 @@
                   (click)="viewGuiline(node)">
                   <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
                   </div>
-                  <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">InActive</span>
+                  <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">Inactive</span>
                     <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
                   </div>
                 </div>
@@ -257,7 +257,7 @@
                       (click)="Inactive(node.item)"
                     >
                       <i style="color: #014c6e" class="fas fa-ban mr-3"></i
-                      >DeActive
+                      >Deactivate
                     </button>
 
                     <button
@@ -271,7 +271,7 @@
                         style="color: #014c6e"
                         class="fas fa-check-circle mr-3"
                       ></i
-                      >Active
+                      >Activate
                     </button>
 
                     <button

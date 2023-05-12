@@ -165,6 +165,33 @@ namespace ProjectManagement.APIs.Public
 
         }
 
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public List<ListPMOfUserDto> GetPMsOfUsers([FromBody] ListInputUserDto input)
+        {
+            var pmList = new List<ListPMOfUserDto>();
+
+            foreach (var email in input.EmailAddresses)
+            {
+                var userId = GetUserIdByEmail(email);
+
+                if (userId == default)
+                {
+                    Logger.Info($"No user by email: {email}");
+                }
+                else
+                {
+                    var pmOfUser = new ListPMOfUserDto
+                    {
+                        EmailAddress = email,
+                        ListPMOfUser = resourceManager.QueryPMOfUser(userId)
+                    };
+                    pmList.Add(pmOfUser);
+                }
+            }
+
+            return pmList;
+        }
 
 
         [HttpGet]

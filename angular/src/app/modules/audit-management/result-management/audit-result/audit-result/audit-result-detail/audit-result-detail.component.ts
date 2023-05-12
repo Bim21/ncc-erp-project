@@ -50,6 +50,8 @@ export class AuditResultDetailComponent extends PagedListingComponentBase<AuditR
         finishedCallback();
       })).subscribe((data) => {
         this.dataSource.data = data.result.childrens
+        this.treeControl.dataNodes=data.result.childrens
+        this.treeControl.expandAll()
         this.showPaging(data.result, pageNumber);
         this.totalScore = data.result.totalScore;
         this.statusFinal = data.result.status;
@@ -109,6 +111,8 @@ export class AuditResultDetailComponent extends PagedListingComponentBase<AuditR
       .pipe(catchError(this.projectProcesCriteriaResultAppService.handleError))
       .subscribe(({ result: { childrens } }) => {
         this.dataSource.data = childrens;
+        this.treeControl.dataNodes= childrens
+        this.treeControl.expandAll()
       });
   }
 

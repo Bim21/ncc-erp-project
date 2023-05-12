@@ -45,12 +45,14 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   public chargeTypeList = [{ name: 'Daily', value: 0 }, { name: 'Monthly', value: 1 }, { name: 'Hourly', value: 2 }];
   public isEditLastInvoiceNumber: boolean = false;
   public isEditDiscount: boolean = false;
+  public maxBillUserCurrentPage = 10;
+  public totalBillList: number;
   public invoiceSettingOptions = Object.entries(this.APP_ENUM.InvoiceSetting).map((item) => ({
     key: item[0],
     value: item[1]
   }))
   public expandInvoiceSetting: true;
-  public selectedIsCharge: string = "Charge";
+  public selectedIsCharge: string = "All" ;
   public listProjectOfClient: SubInvoice[] = []
   public listSelectProject: DropDownDataDto[] = []
   public currentProjectInfo: ProjectDto
@@ -81,7 +83,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.getAllProject();
     this.getCurrentProjectInfo();
     this.getProjectBillInfo();
-   
+    
   }
   isShowInvoiceSetting(){
     return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_View)
@@ -171,21 +173,31 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     newUserBill.createMode = true;
     newUserBill.isActive = true;
     this.userBillProcess = true;
-    this.userBillList.unshift(newUserBill)
+    this.filteredUserBillList.unshift(newUserBill)
+    if( newUserBill.createMode == true){
+      this.filteredUserBillList.length = this.filteredUserBillList.length - 1;
+    }
+
   }
   public saveUserBill(userBill: projectUserBillDto): void {
     delete userBill["createMode"]
     userBill.startTime = moment(userBill.startTime).format("YYYY-MM-DD");
     if (userBill.endTime) {
       userBill.endTime = moment(userBill.endTime).format("YYYY-MM-DD");
-
     }
 
     if (!this.isEditUserBill) {
       userBill.projectId = this.projectId
       this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
+
         abp.notify.success(`Created new user bill`)
-        this.getUserBill();
+        if (userBill.isActive === true) {
+          this.selectedIsCharge = 'Charge';
+          this.getUserBill("Charge");
+        } else {
+          this.selectedIsCharge = 'Not Charge'
+          this.getUserBill("Not Charge");
+        }
         this.userBillProcess = false;
         this.searchUserBill = ""
       }, () => {
@@ -195,7 +207,13 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     else {
       this.projectUserBillService.update(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
         abp.notify.success(`Updated request user bill`)
-        this.getUserBill();
+        if (userBill.isActive === true) {
+          this.selectedIsCharge = 'Charge';
+          this.getUserBill("Charge");
+        } else {
+          this.selectedIsCharge = 'Not Charge'
+          this.getUserBill("Not Charge");
+        }
         this.userBillProcess = false;
         this.isEditUserBill = false;
         this.searchUserBill = ""
@@ -224,12 +242,38 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.isEditUserBill = true;
     // userBill.billRole = this.APP_ENUM.ProjectUserRole[userBill.billRole];
   }
-  private getUserBill(): void {
+  private getUserBill(selectedIsCharge?: string): void {
     this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
       this.userBillList = data.result
-      this.filteredUserBillList = data.result.filter(bill => bill.isActive === true);
+      this.filteredUserBillList = data.result
+      if (selectedIsCharge === 'All') {
+        this.filteredUserBillList = this.userBillList;
+      } else if (selectedIsCharge === 'Charge') {
+        this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === true);
+      } else if (selectedIsCharge === 'Not Charge') {
+        this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === false);
+      }
     })
   }
+
+  filterByIsCharge() {
+    if (this.selectedIsCharge === 'All') {
+      this.getUserBill("All");
+    } else if (this.selectedIsCharge === 'Charge') {
+      this.getUserBill("Charge");
+    } else if (this.selectedIsCharge === 'Not Charge') {
+      this.getUserBill("Not Charge");
+    }
+    this.userBillProcess = false;
+    this.isEditUserBill = false;
+    this.searchUserBill = ""
+  }
+  
+  changePageSizeCurrent()
+  {
+    this.userBillCurrentPage = 1
+  }
+  
   public removeUserBill(userBill: projectUserBillDto): void {
     abp.message.confirm(
       "Delete user bill?",
@@ -238,7 +282,13 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
         if (result) {
           this.projectUserBillService.deleteUserBill(userBill.id).pipe(catchError(this.projectUserBillService.handleError)).subscribe(() => {
             abp.notify.success("Deleted user bill");
-            this.getUserBill();
+            if (userBill.isActive === true) {
+              this.selectedIsCharge = 'Charge';
+              this.getUserBill("Charge");
+            } else {
+              this.selectedIsCharge = 'Not Charge'
+              this.getUserBill("Not Charge");
+            }
           });
         }
       }
@@ -324,21 +374,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
   }
 
-  filterByIsCharge() {
-    if (this.selectedIsCharge === 'All') {
-      this.filteredUserBillList = this.userBillList;
-    } else if (this.selectedIsCharge === 'Charge') {
-      this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === true);
-    } else if (this.selectedIsCharge === 'Not Charge') {
-      this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === false);
-    }
-  }
-  
-  changePageSizeCurrent()
-  {
-    this.userBillCurrentPage = 1
-  }
-  
+ 
 }
 
 export interface AddSubInvoicesDto {

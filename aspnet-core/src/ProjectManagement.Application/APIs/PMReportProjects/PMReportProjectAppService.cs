@@ -73,6 +73,8 @@ namespace ProjectManagement.APIs.PMReportProjects
                     TotalOverTime = x.TotalOverTime,
                     LastReviewDate = x.LastReviewDate,
                     NecessaryReview = x.NecessaryReview,
+                    IsActive = x.PMReport.IsActive,
+                    ClientCode = x.Project.Client.Code,
                 });
 
             switch (sort)
@@ -101,11 +103,11 @@ namespace ProjectManagement.APIs.PMReportProjects
                     break;
 
                 case PrioritizeReviewSort.NeedReport:
-                    query = query.Where(x => x.NecessaryReview == true && x.Seen == false);
+                    query = query.Where(x => x.NecessaryReview == true);
                     break;
 
                 case PrioritizeReviewSort.Reported:
-                    query = query.Where(x => x.NecessaryReview == true && x.Seen == true);
+                    query = query.Where(x => x.Seen == true);
                     break;
             }
 

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using ProjectManagement.APIs.ProjectProcessCriterias.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.Authorization;
@@ -567,7 +568,9 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ParentId = x.ParentId,
                     ProjectProcessCriteriaId = dicCriteriaId.ContainsKey(x.Id) ? dicCriteriaId[x.Id].Id : 0,
                     Applicable = dicCriteriaId.ContainsKey(x.Id) ? dicCriteriaId[x.Id].Applicable : 0
-                }).ToList();
+                })
+                .OrderBy(x => x.Code)
+                .ToList();
             var resultAll = new List<long>();
             foreach (var id in dicCriteriaId.Select(x => x.Key))
             {
@@ -579,7 +582,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
             if (input.GetAll())
             {
                 return new TreeProjectProcessCriteriaDto
-                {
+                {   
                     Childrens = listAllContain.GenerateTree(c => c.Id, c => c.ParentId)
                 };
             }
@@ -660,6 +663,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                         {
                             unitmeasure.Formula.Values.Add(itemApplicable);
                         }
+                        sheetAudit.Cells[$"C{startAudit}"].Value = applicable[0];
                     }
                     if (!i.IsLeaf)
                     {
@@ -674,8 +678,10 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells[$"D2:F{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheetAudit.Cells[$"D2:F{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheetAudit.Cells.AutoFitColumns();
-                sheetAudit.Column(4).Width = 60;
-                sheetAudit.Column(2).Width = 70;
+                sheetAudit.Column(2).Width = 40;
+                sheetAudit.Column(4).Width = 40;
+                sheetAudit.Column(5).Width = 80;
+                sheetAudit.Column(6).Width = 80;
                 sheetAudit.Cells.Style.WrapText = true;
                 return new FileBase64Dto
                 {
@@ -685,6 +691,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 };
             }
         }
+
+
 
         [AbpAuthorize(PermissionNames.Audits_Tailoring_Detail_Update)]
         [HttpPost]

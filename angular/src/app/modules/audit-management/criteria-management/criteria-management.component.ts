@@ -11,6 +11,7 @@ import { ViewGuilineComponent } from "./view-guiline/view-guiline.component";
 import { forkJoin } from 'rxjs';
 import { escape } from "lodash";
 import { PERMISSIONS_CONSTANT } from "@app/constant/permission.constant";
+import { result } from 'lodash-es';
 
 @Component({
   selector: "app-criteria-management",
@@ -81,7 +82,11 @@ export class CriteriaManagementComponent
 
   searchCriteria() {
     this.processCriteriaService.search(this.search).pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>
-      this.dataSource.data = data.result.childrens)
+      {this.dataSource.data = data.result.childrens,
+      this.treeControl.dataNodes=data.result.childrens
+      this.treeControl.expandAll()
+    }
+      )
   }
 
   protected list(request: PagedRequestDto, pageNumber: number, finishedCallback: Function): void {
@@ -90,6 +95,8 @@ export class CriteriaManagementComponent
     })).subscribe((data) => {
 
       this.dataSource.data = data.result.childrens
+      this.treeControl.dataNodes=data.result.childrens
+      this.treeControl.expandAll()
       this.showPaging(data.result, pageNumber);
     }, () => { })
   }
@@ -175,7 +182,7 @@ export class CriteriaManagementComponent
   Inactive(node: ProcessCriteria) {
     this.processCriteriaService.GetAllProcessTailoringContain(node.id).subscribe(rs => {
       if (rs.result.length > 0) {
-        let message = `<span><strong> Deactive <span style="color:#2991BF">${node.code}: ${node.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
+        let message = `<span><strong> Deactivate <span style="color:#2991BF">${node.code}: ${node.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
         rs.result.forEach(element => {
           message += `<span class="text-left"> ${element.code}: ${element.name}</span><br>`;
         });
@@ -186,7 +193,7 @@ export class CriteriaManagementComponent
             if (result) {
               forkJoin([this.processCriteriaService.DeActive(node.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.id)])
                 .pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-                  abp.notify.success("Deactive " + node.name);
+                  abp.notify.success("Deactivate " + node.name);
                   this.refresh()
                 })
 
@@ -196,12 +203,12 @@ export class CriteriaManagementComponent
       }
     })
     abp.message.confirm(
-      "Deactive " + node.name + "?",
+      "Deactivate " + node.name + "?",
       "",
       (result: boolean) => {
         if (result) {
           this.processCriteriaService.DeActive(node.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-            abp.notify.success("Deactive " + node.name);
+            abp.notify.success("Deactivate " + node.name);
             this.refresh()
           });
         }
@@ -211,12 +218,12 @@ export class CriteriaManagementComponent
 
   Active(node: ProcessCriteria) {
     abp.message.confirm(
-      "Active " + node.name + "?",
+      "Activate " + node.name + "?",
       "",
       (result: boolean) => {
         if (result) {
           this.processCriteriaService.Active(node.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-            abp.notify.success("Active " + node.name);
+            abp.notify.success("Activate " + node.name);
             this.refresh()
           });
         }

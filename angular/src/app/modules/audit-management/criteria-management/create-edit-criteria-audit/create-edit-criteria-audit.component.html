@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <div class="form-group d-flex justify-content-between ">
+    <div class="form-group required d-flex justify-content-between ">
       <label for="criteriaName" class="col-form-label"> {{ "Code" }}: </label>
       <div class="w-75 d-flex justify-content-between align-items-center">
         <div >
@@ -99,8 +99,8 @@
 
     <div class="form-group d-flex justify-content-between">
       <div>
-        <label for="criteriaGuidLine"> {{ "Guidline" | localize }}: </label>
-        <p>Paste: Crtl + Shift + v</p>
+        <label for="criteriaGuidLine"> {{ "Guideline" | localize }}: </label>
+        <p>Paste: Ctrl + Shift + v</p>
       </div>
       <div class="w-75">
         <editor
@@ -112,7 +112,9 @@
           menubar: true,
           plugins: ['table', 'code', 'preview', 'media', 'image', 'template'],
           toolbars: ['image'],
-          branding: false
+          branding: false,
+          forced_root_block: false,
+          paste_retain_style_properties: true
         }"
       ></editor>
       </div>
@@ -121,7 +123,7 @@
     <div class="form-group d-flex justify-content-between">
       <div>
         <label for="criteriaGuidLine"> {{ "Example" | localize }}: </label>
-        <p>Paste: Crtl + Shift + v</p>
+        <p>Paste: Ctrl + Shift + v</p>
       </div>
       <div class="w-75">
         <editor
