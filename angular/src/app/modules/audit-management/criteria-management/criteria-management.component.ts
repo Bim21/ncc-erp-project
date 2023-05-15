@@ -67,7 +67,16 @@ export class CriteriaManagementComponent
       disableClose: true,
     });
     show.afterClosed().subscribe((result) => {
-      this.refresh();
+        this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+          this.treeControl.dataNodes=data.result.childrens
+          this.dataSource.data = data.result.childrens
+          if(command=='edit'){
+            this.exp(this.dataSource.data,node.item.parentId)
+          }
+         else{
+            this.exp(this.dataSource.data,result.parentId)
+         }
+      })
     });
   }
 
@@ -78,6 +87,19 @@ export class CriteriaManagementComponent
 
   ngOnInit(): void {
     this.refresh()
+  }
+
+  exp(data, parentId: number): any {
+    data.forEach(node => {
+      if (node.children && node.children.find(c => c.item.parentId == parentId)) {
+        console.log(node)
+        this.treeControl.expand(node);
+        this.exp(this.treeControl.dataNodes, node.item.parentId);
+      } 
+      else if (node.children && node.children.find(c => c.children)) {
+        this.exp(node.children, parentId);
+      }    
+    });
   }
 
   searchCriteria() {
@@ -179,10 +201,10 @@ export class CriteriaManagementComponent
     }
   }
 
-  Inactive(node: ProcessCriteria) {
-    this.processCriteriaService.GetAllProcessTailoringContain(node.id).subscribe(rs => {
+  Inactive(node) {
+    this.processCriteriaService.GetAllProcessTailoringContain(node.item.id).subscribe(rs => {
       if (rs.result.length > 0) {
-        let message = `<span><strong> Deactivate <span style="color:#2991BF">${node.code}: ${node.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
+        let message = `<span><strong> Deactive <span style="color:#2991BF">${node.item.code}: ${node.item.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
         rs.result.forEach(element => {
           message += `<span class="text-left"> ${element.code}: ${element.name}</span><br>`;
         });
@@ -191,40 +213,51 @@ export class CriteriaManagementComponent
         </div>`, "",
           (result: boolean) => {
             if (result) {
-              forkJoin([this.processCriteriaService.DeActive(node.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.id)])
+              forkJoin([this.processCriteriaService.DeActive(node.item.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.item.id)])
                 .pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-                  abp.notify.success("Deactivate " + node.name);
-                  this.refresh()
+                  abp.notify.success("Deactive " + node.item.name);
+                  this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+                    this.treeControl.dataNodes=data.result.childrens
+                    this.dataSource.data = data.result.childrens
+                      this.exp(this.dataSource.data,node.item.parentId)
                 })
-
+              })
             }
           }, true
         );
       }
     })
     abp.message.confirm(
-      "Deactivate " + node.name + "?",
+      "Deactive " + node.item.name + "?",
       "",
       (result: boolean) => {
         if (result) {
-          this.processCriteriaService.DeActive(node.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-            abp.notify.success("Deactivate " + node.name);
-            this.refresh()
+          this.processCriteriaService.DeActive(node.item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
+            abp.notify.success("Deactive " + node.item.name);
+            this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+              this.treeControl.dataNodes=data.result.childrens
+              this.dataSource.data = data.result.childrens
+                this.exp(this.dataSource.data,node.item.parentId)
+          })
           });
         }
       }
     );
   }
 
-  Active(node: ProcessCriteria) {
+  Active(node) {
     abp.message.confirm(
-      "Activate " + node.name + "?",
+      "Active " + node.item.name + "?",
       "",
       (result: boolean) => {
         if (result) {
-          this.processCriteriaService.Active(node.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-            abp.notify.success("Activate " + node.name);
-            this.refresh()
+          this.processCriteriaService.Active(node.item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
+            abp.notify.success("Active " + node.item.name);
+            this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+              this.treeControl.dataNodes=data.result.childrens
+              this.dataSource.data = data.result.childrens
+                this.exp(this.dataSource.data,node.item.parentId)
+          })
           });
         }
       }

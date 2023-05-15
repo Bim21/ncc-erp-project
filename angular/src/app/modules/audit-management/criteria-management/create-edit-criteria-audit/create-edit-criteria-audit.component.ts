@@ -46,22 +46,21 @@ export class CreateEditCriteriaAuditComponent
   }
 
   ngOnInit(): void {
-    this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
-      this.listCriteriaAudit = data.result
-      this.listCriteriaAuditFilter = data.result.filter(x => x.isActive == true);
-      this.maxCode = this.listCriteriaAudit.filter(res => res.level == 1).map(res => { return Number(res.code) }).sort(function (a, b) { return a - b }).pop()
+    this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data=>{
+          this.listCriteriaAudit=data.result
+           this.maxCode= this.listCriteriaAudit.filter(res=> res.level==1).map(res=> {return Number(res.code)}).sort(function(a, b){return a-b}).pop()
 
-      if (this.isCreateCriteria && this.parentCurrent) {
-        this.codeChild = data.result.find(res => res.id == this.data.item.id).maxValueOfListCode + 1
-      }
-      if (this.isCreateCriteria && !this.parentCurrent) {
-        if (this.data.childrens.length > 0) {
-          this.codeChild = this.maxCode + 1
-        }
-        else {
-          this.codeChild = 1
-        }
-      }
+         if(this.isCreateCriteria&& this.parentCurrent){
+          this.codeChild=data.result.find(res=>res.id==this.data.item.id).maxValueOfListCode + 1
+         }
+         if(this.isCreateCriteria && !this.parentCurrent){
+          if(this.data.childrens.length>0){
+            this.codeChild=this.maxCode+1
+          }
+          else{
+            this.codeChild=1
+          }
+         }
     })
 
     if (this.data.command == "edit") {
@@ -83,12 +82,9 @@ export class CreateEditCriteriaAuditComponent
       this.codeParent = this.code.join('.')
     } else {
       this.isCreateCriteria = true;
-      this.parentCurrent = this.data.item.code;
-      this.codeParent = this.data.item.code || '';
-      if (!this.parentCurrent) {
-        this.codeChild = this.data.childrens.length + 1
-      }
-      this.criteriaAudit = { ...this.criteriaAudit, isApplicable: false, parentId: this.data.item.id, name: this.data.name }
+      this.parentCurrent=this.data.item.code;
+      this.codeParent=this.data.item.code|| '';
+      this.criteriaAudit={...this.criteriaAudit,isApplicable:false,parentId:this.data.item.id,name:this.data.name}
     }
   }
 
@@ -135,8 +131,6 @@ export class CreateEditCriteriaAuditComponent
       name: this.criteriaAudit.name
     }
 
-
-
     if (this.data.command == "create") {
       this.processCriteriaService.create(criteriaCreate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
         abp.notify.success("Create Successfully!");
@@ -170,6 +164,9 @@ export class CreateEditCriteriaAuditComponent
     if (e!=null && e < 1) {
       this.codeChild=1
     }
+  }
+  closeDialog(){
+    this.dialogRef.close(this.criteriaAudit);
   }
 }
 

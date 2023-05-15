@@ -126,7 +126,7 @@
                   class="mat-menu-item w-100"
                   style="font-size: 14px"
                   *ngIf="node.item.isActive && permission.isGranted(Audits_Criteria_DeActive)"
-                  (click)="Inactive(node.item)"
+                  (click)="Inactive(node)"
                 >
                   <i style="color: #014c6e" class="fas fa-ban mr-3"></i
                   >Deactivate
@@ -137,7 +137,7 @@
                   class="mat-menu-item w-100"
                   style="font-size: 14px"
                   *ngIf="!node.item.isActive && permission.isGranted(Audits_Criteria_Active)"
-                  (click)="Active(node.item)"
+                  (click)="Active(node)"
                 >
                   <i
                     style="color: #014c6e"
@@ -254,7 +254,7 @@
                       class="mat-menu-item w-100"
                       style="font-size: 14px"
                       *ngIf="node.item.isActive && permission.isGranted(Audits_Criteria_DeActive)"
-                      (click)="Inactive(node.item)"
+                      (click)="Inactive(node)"
                     >
                       <i style="color: #014c6e" class="fas fa-ban mr-3"></i
                       >Deactivate
@@ -265,7 +265,7 @@
                       class="mat-menu-item w-100"
                       style="font-size: 14px"
                       *ngIf="!node.item.isActive && permission.isGranted(Audits_Criteria_Active)"
-                      (click)="Active(node.item)"
+                      (click)="Active(node)"
                     >
                       <i
                         style="color: #014c6e"
