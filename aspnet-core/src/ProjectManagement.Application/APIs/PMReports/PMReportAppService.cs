@@ -208,6 +208,17 @@ namespace ProjectManagement.APIs.PMReports
                 .GroupBy(s => s.ProjectId)
                 .ToDictionary(s => s.Key, s => s.Select(s => s.Issues).ToList());
 
+            var mapImprogressRisks = (await WorkScope.GetAll<PMReportProjectRisk>()
+                .Where(x => x.Status == PMReportProjectRiskStatus.InProgress)
+                .Where(s => s.PMReportProject.PMReportId == lastReportId)
+                .Select(s => new
+                {
+                    s.PMReportProject.ProjectId,
+                    Risks = s
+                }).ToListAsync())
+                .GroupBy(s => s.ProjectId)
+                .ToDictionary(s => s.Key, s => s.Select(s => s.Risks).ToList());
+
             var mapPMNote = (await WorkScope.GetAll<PMReportProject>()
                 .Where(s => s.PMReportId == lastReportId)
                 .Where(s => s.Project.ProjectType == ProjectType.TRAINING)
@@ -254,12 +265,26 @@ namespace ProjectManagement.APIs.PMReports
                     var issues = mapInprogressIssues[project.Id];
                     if (issues != null && !issues.IsEmpty())
                     {
-                        foreach (var issue in issues)
+                        issues.ForEach(x =>
                         {
-                            issue.Id = 0;
-                            issue.PMReportProjectId = pmReportProject.Id;
-                            await WorkScope.InsertAsync(issue);
-                        }
+                            x.Id = 0;
+                            x.PMReportProjectId = pmReportProject.Id;
+                        });
+                        await WorkScope.InsertRangeAsync(issues);
+                    }
+                }
+
+                if (mapImprogressRisks.ContainsKey(project.Id))
+                {
+                    var risks = mapImprogressRisks[project.Id];
+                    if (risks != null && !risks.IsEmpty())
+                    {
+                        risks.ForEach(x =>
+                        {
+                            x.Id = 0;
+                            x.PMReportProjectId = pmReportProject.Id;
+                        });
+                        await WorkScope.InsertRangeAsync(risks);
                     }
                 }
             }

@@ -1,22 +1,15 @@
 ﻿using Abp.Authorization;
-using Abp.Collections.Extensions;
 using Abp.Configuration;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
-using NccCore.Paging;
 using NccCore.Uitls;
-using Newtonsoft.Json;
-using ProjectManagement.APIs.PMReportProjects.Dto;
-using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.APIs.ResourceRequests.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
-using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.Komu;
@@ -40,6 +33,7 @@ namespace ProjectManagement.APIs.ProjectUsers
         private readonly ResourceManager _resourceManager;
         private ISettingManager _settingManager;
         private KomuService _komuService;
+
         public ProjectUserAppService(
             KomuService komuService,
             ResourceManager resourceManager,
@@ -49,6 +43,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             _komuService = komuService;
             _settingManager = settingManager;
         }
+
         [HttpGet]
         public async Task<List<GetProjectUserDto>> GetAllByProject(long projectId, bool viewHistory)
         {
@@ -81,9 +76,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             return await query.ToListAsync();
         }
 
-
-
-
         [HttpGet]
         [AbpAuthorize()]
         public async Task<List<UserOfProjectDto>> GetAllWorkingUserByProject(long projectId, bool viewHistory)
@@ -100,7 +92,6 @@ namespace ProjectManagement.APIs.ProjectUsers
 
             return await query.ToListAsync();
         }
-
 
         [HttpGet]
         [AbpAuthorize()]
@@ -125,7 +116,7 @@ namespace ProjectManagement.APIs.ProjectUsers
             PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromPool)]
         public async Task AddUserToOutSourcingProject(AddResourceToProjectDto input)
         {
-            var allowMoveEmployeeToOtherProject 
+            var allowMoveEmployeeToOtherProject
                 = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_CurrentResource_AddNewResourceFromOtherProject);
             await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
         }
@@ -150,8 +141,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             await _resourceManager.CreatePresentProjectUserAndNofity(input, allowMoveEmployeeToOtherProject);
         }
 
-
-
         [HttpPut]
         [AbpAuthorize()]
         public async Task<IActionResult> UpdateCurrentResourceDetail(UpdateProjectUserDto input)
@@ -169,7 +158,6 @@ namespace ProjectManagement.APIs.ProjectUsers
 
             return new OkObjectResult("Update succesful");
         }
-
 
         [HttpPost]
         [AbpAuthorize()]
@@ -201,7 +189,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         //    await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         //}
 
-
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
             PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject)]
@@ -211,7 +198,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
             await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
-
 
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_ProductProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
@@ -223,7 +209,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
 
-
         [HttpGet]
         [AbpAuthorize(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther,
             PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmPickEmployeeFromPoolToProject)]
@@ -233,8 +218,6 @@ namespace ProjectManagement.APIs.ProjectUsers
             = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_TrainingProjects_ProjectDetail_TabResourceManagement_PlannedResource_ConfirmMoveEmployeeWorkingOnAProjectToOther);
             await _resourceManager.ConfirmJoinProject(projectUserId, startTime, allowConfirmMoveEmployeeToOtherProject);
         }
-
-
 
         [HttpPost]
         [AbpAuthorize()]
@@ -249,7 +232,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         {
             await _resourceManager.AddFuturePU(input);
         }
-
 
         [HttpGet]
         public async Task<List<UserDto>> GetAllProjectUserInProject(long projectId)
@@ -434,7 +416,6 @@ namespace ProjectManagement.APIs.ProjectUsers
         [HttpGet]
         public List<IDNameDto> GetProjectUserRoles()
         {
-
             return Enum.GetValues(typeof(ProjectUserRole))
                              .Cast<ProjectUserRole>()
                              .Select(p => new IDNameDto()
@@ -445,5 +426,12 @@ namespace ProjectManagement.APIs.ProjectUsers
                              .ToList();
         }
 
+        [HttpPut]
+        public async Task EditCurentResourceNote(long id, string note)
+        {
+            var item = WorkScope.Get<ProjectUser>(id);
+            item.Note = note;
+            await WorkScope.UpdateAsync(item);
+        }
     }
 }

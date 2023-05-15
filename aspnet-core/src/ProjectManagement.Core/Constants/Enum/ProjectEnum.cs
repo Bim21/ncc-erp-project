@@ -28,6 +28,12 @@
             Done = 1
         }
 
+        public enum PMReportProjectRiskStatus
+        {
+            InProgress = 0,
+            Done = 1
+        }
+
         public enum PMReportProjectStatus : byte
         {
             Draft = 0,
