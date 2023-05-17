@@ -4,6 +4,7 @@ using Abp.Domain.Uow;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+//using Microsoft.Office.Interop.Excel;
 using NccCore.Extension;
 using NccCore.Paging;
 using OfficeOpenXml;
@@ -23,7 +24,16 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Aspose.Cells;
 using static ProjectManagement.APIs.ProjectProcessResults.Dto.GetProjectProcessResultDto;
+using Range = Aspose.Cells.Range;
+using Microsoft.Office.Interop.Excel;
+using Workbook = Aspose.Cells.Workbook;
+using Microsoft.AspNetCore.Html;
+using Style = Aspose.Cells.Style;
+using Aspose.Cells.Drawing;
+using Aspose.Cells.GridWeb;
+using Aspose.Cells.GridWeb.Data;
 
 namespace ProjectManagement.APIs.ProjectProcessCriterias
 {
@@ -582,7 +592,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
             if (input.GetAll())
             {
                 return new TreeProjectProcessCriteriaDto
-                {   
+                {
                     Childrens = listAllContain.GenerateTree(c => c.Id, c => c.ParentId)
                 };
             }
@@ -603,6 +613,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
             };
         }
 
+        // export excel file using aspose library(Duy)
         [AbpAuthorize(PermissionNames.Audits_Tailoring_DownLoadTemplate)]
         [HttpPost]
         public async Task<FileBase64Dto> DownloadTemplate()
@@ -617,82 +628,161 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     QAExample = y.QAExample,
                     GuildLine = y.GuidLine,
                     Level = y.Level,
-                    ParentId = y.ParentId
+                    ParentId = y.ParentId,
+                    IsApplicable = y.IsApplicable
                 }).OrderBy(x => x.Code).ThenBy(x => x.Level).ToList();
-            using (var wb = new ExcelPackage())
+            using (var wb = new Workbook())
             {
                 var applicable = new List<string>() { "Standard", "Modify", "Not Yet" };
-                var sheetAudit = wb.Workbook.Worksheets.Add("Audit");
+                var sheetAudit = wb.Worksheets[0];
+                sheetAudit.Name = "Audit";
+                var sheetAudit2 = wb.Worksheets[wb.Worksheets.Add()];
+                sheetAudit2.Name = "Audit2";
                 sheetAudit.Cells.Style.Font.Name = "Arial";
                 sheetAudit.Cells.Style.Font.Size = 10;
-                sheetAudit.Cells["A1:F1"].Style.Font.Bold = true;
-                sheetAudit.Cells["A1:F1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells["A1:F1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                sheetAudit.Cells["A1:F1"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                sheetAudit.Cells["A1:F1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(112, 173, 71));
-                sheetAudit.Cells["A1:F1"].Style.Font.Color.SetColor(Color.White);
+
+                Style defaultStyle = sheetAudit.Cells.Style;
+                defaultStyle.VerticalAlignment = TextAlignmentType.Center;
+                sheetAudit.Cells.Style = defaultStyle;
+
+                Range range = sheetAudit.Cells.CreateRange("A1", "F1");
+                Style style = wb.CreateStyle();
+                style.Font.IsBold = true;
+                style.VerticalAlignment = TextAlignmentType.Center;
+                style.HorizontalAlignment = TextAlignmentType.Center;
+                style.Pattern = BackgroundType.Solid;
+                style.ForegroundColor = Color.FromArgb(112, 173, 71);
+                style.Font.Color = Color.White;
+                //Create a StyleFlag object.
+                StyleFlag flg = new StyleFlag();
+                flg.All = true;
+                range.ApplyStyle(style, flg);
+
                 sheetAudit.Cells["A1"].Value = "No";
                 sheetAudit.Cells["B1"].Value = "Criteria";
                 sheetAudit.Cells["C1"].Value = "Applicable?";
                 sheetAudit.Cells["D1"].Value = "Comment";
                 sheetAudit.Cells["E1"].Value = "GuideLine";
                 sheetAudit.Cells["F1"].Value = "Q&A Examples";
-                var startAudit = sheetAudit.Cells["A2"].Start.Row;
+                var startAudit = sheetAudit.Cells["A2"].Row + 1;
+
+                // validation setup
+                // Create a range in the second worksheet.
+                range = sheetAudit2.Cells.CreateRange($"A1", $"A{applicable.Count}");
+
+                // Name the range.
+                range.Name = "MyRange";
+
+                // Fill different cells with data in the range.
+                int start = 0;
+                foreach (var item in applicable)
+                {
+                    range[start++, 0].PutValue(item);
+                }
 
                 foreach (var i in data)
                 {
                     sheetAudit.Cells[$"A{startAudit}"].Value = i.Code;
-                    sheetAudit.Cells[$"B{startAudit}"].Value = i.Level > 1 ? new string('-', i.Level) + i.Name : i.Name;
-                    sheetAudit.Cells[$"E{startAudit}"].Value = CommonUtil.ConvertHtmlToPlainText(i.GuildLine);
-                    sheetAudit.Cells[$"F{startAudit}"].Value = CommonUtil.ConvertHtmlToPlainText(i.QAExample);
+                    sheetAudit.Cells[$"B{startAudit}"].Value = " " + (i.Level > 1 ? new string('-', i.Level) + i.Name : i.Name);
+                    sheetAudit.Cells[$"E{startAudit}"].HtmlString = " " + i.GuildLine.ToString();
+                    sheetAudit.Cells[$"F{startAudit}"].HtmlString = " " + i.QAExample.ToString();
 
                     if (!i.IsLeaf)
                     {
-                        sheetAudit.Cells[$"A{startAudit}:F{startAudit}"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        sheetAudit.Cells[$"A{startAudit}:F{startAudit}"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(218, 241, 243));
+                        range = sheetAudit.Cells.CreateRange($"A{startAudit}", $"F{startAudit}");
+                        style = defaultStyle;
+                        style.Pattern = BackgroundType.Solid;
+                        style.ForegroundColor = Color.FromArgb(218, 241, 243);
+                        range.ApplyStyle(style, flg);
                     }
                     if (!i.ParentId.HasValue && !i.IsLeaf)
                     {
-                        sheetAudit.Cells[$"A{startAudit}:F{startAudit}"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                        sheetAudit.Cells[$"A{startAudit}:F{startAudit}"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+                        range = sheetAudit.Cells.CreateRange($"A{startAudit}", $"F{startAudit}");
+                        style = defaultStyle;
+                        style.Pattern = BackgroundType.Solid;
+                        style.ForegroundColor = Color.FromArgb(155, 194, 230);
+                        range.ApplyStyle(style, flg);
                     }
                     if (i.IsLeaf)
                     {
-                        var unitmeasure = sheetAudit.DataValidations.AddListValidation($"C{startAudit}");
-                        foreach (var itemApplicable in applicable)
-                        {
-                            unitmeasure.Formula.Values.Add(itemApplicable);
-                        }
-                        sheetAudit.Cells[$"C{startAudit}"].Value = applicable[0];
+
+                        sheetAudit.Cells[$"C{startAudit}"].Value = i.IsApplicable == true
+                            ? applicable[0] : applicable[2];
+                        // Get the validations collection.
+                        ValidationCollection validations = sheetAudit.Validations;
+
+                        // Specify the validation area.
+                        CellArea area = new CellArea();
+                        area.StartRow = startAudit - 1;
+                        area.EndRow = startAudit - 1;
+                        area.StartColumn = 2;
+                        area.EndColumn = 2;
+
+                        // Create a new validation to the validations list.
+                        validations.Add(area);
+
+                        // Set the validation type.
+                        validations[0].Type = ValidationType.List;
+                        // Set the operator.
+                        validations[0].Operator = OperatorType.None;
+
+                        // Set the in cell drop down.
+                        validations[0].InCellDropDown = true;
+
+                        // Set the formula1.
+                        validations[0].Formula1 = "=MyRange";
+
+                        // Add the validation area.
+                        validations[0].AddArea(area);
                     }
                     if (!i.IsLeaf)
                     {
-                        sheetAudit.Cells[$"A{startAudit}"].Style.Font.Bold = true;
-                        sheetAudit.Cells[$"B{startAudit}"].Style.Font.Bold = true;
+                        Cell cellA = sheetAudit.Cells[$"A{startAudit}"];
+                        Cell cellB = sheetAudit.Cells[$"B{startAudit}"];
+                        style = sheetAudit.Cells[$"A{startAudit}"].GetStyle();
+                        style.Font.IsBold = true;
+                        cellA.SetStyle(style);
+                        cellB.SetStyle(style);
                     }
+
+                    // Make Cell's Text wrap
+                    Style style1 = sheetAudit.Cells[$"E{startAudit}"].GetStyle();
+                    style1.IsTextWrapped = true;
+                    sheetAudit.Cells[$"E{startAudit}"].SetStyle(style1);
+                    sheetAudit.Cells[$"F{startAudit}"].SetStyle(style1);
+
                     startAudit++;
                 }
 
-                sheetAudit.Cells[$"A2:B{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells[$"A2:B{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                sheetAudit.Cells[$"D2:F{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                sheetAudit.Cells[$"D2:F{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                sheetAudit.Cells.AutoFitColumns();
-                sheetAudit.Column(2).Width = 40;
-                sheetAudit.Column(4).Width = 40;
-                sheetAudit.Column(5).Width = 80;
-                sheetAudit.Column(6).Width = 80;
-                sheetAudit.Cells.Style.WrapText = true;
+                sheetAudit.Cells.SetColumnWidth(1, 40);
+                sheetAudit.Cells.SetColumnWidth(3, 50);
+                sheetAudit.Cells.SetColumnWidth(4, 50);
+                sheetAudit.Cells.SetColumnWidth(5, 50);
+                sheetAudit.Cells.Style.IsTextWrapped = true;
+
+                // hide and protect the second worksheet
+                sheetAudit2.Protect(ProtectionType.All);
+                sheetAudit2.Protection.Password = "123qwe";
+                sheetAudit2.IsVisible = false;
+
+                wb.Settings.CalcMode = CalcModeType.Manual;
+                wb.Settings.ReCalculateOnOpen = false;
+
+                MemoryStream ms = new MemoryStream();
+                wb.Save(ms, SaveFormat.Xlsx);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                byte[] buffer = new byte[ms.Length];
+                buffer = ms.ToArray();
+
                 return new FileBase64Dto
                 {
                     FileName = $"Import Tailoring Template.xlsx",
-                    FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
-                    Base64 = Convert.ToBase64String(wb.GetAsByteArray())
+                    FileType = MimeTypeNames.ApplicationVndMsExcel,
+                    Base64 = Convert.ToBase64String(buffer)
                 };
             }
         }
-
-
 
         [AbpAuthorize(PermissionNames.Audits_Tailoring_Detail_Update)]
         [HttpPost]
