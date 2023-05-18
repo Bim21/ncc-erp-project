@@ -22,12 +22,11 @@ namespace ProjectManagement.Services.ProjectTimesheet
             this.Logger = logger;
         }
 
-        public async Task<long> GetActiveTimesheetId()
+        public async Task<Entities.Timesheet> GetLastTimesheet()
         {
             return await _workScope.GetAll<Entities.Timesheet>()
-                .Where(s => s.IsActive)
                .OrderByDescending(x => x.Year).ThenByDescending(x => x.Month)
-               .Select(x => x.Id)
+               .Select(x => x)
                .FirstOrDefaultAsync();
         }
 
@@ -63,18 +62,18 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
         public async Task CreateTimesheetProjectBill(ProjectUserBill pub, Project project)
         {
-            var activeTimesheetId = await GetActiveTimesheetId();
-            if (activeTimesheetId == default)
+            var activeTimesheet = await GetLastTimesheet();
+            if (!activeTimesheet.IsActive)
             {
                 Logger.LogInformation("CreateTimesheetProjectBill() no activeTimesheetId");
                 return;
             }
             var timesheetproject = await _workScope.GetAll<TimesheetProject>()
-                .Where(x => x.ProjectId == pub.ProjectId && x.TimesheetId == activeTimesheetId)
+                .Where(x => x.ProjectId == pub.ProjectId && x.TimesheetId == activeTimesheet.Id)
                 .FirstOrDefaultAsync();
             if(timesheetproject == default) 
             {
-                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProject ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}");
+                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProject ProjectId={pub.ProjectId}, TimesheetId={activeTimesheet}");
                 return;
             }
             if(timesheetproject.IsComplete.HasValue && timesheetproject.IsComplete.Value==true)
@@ -83,7 +82,7 @@ namespace ProjectManagement.Services.ProjectTimesheet
             }
             var tpb = new TimesheetProjectBill
             {
-                TimesheetId = activeTimesheetId,
+                TimesheetId = activeTimesheet.Id,
                 IsActive = true,
                 BillRate = pub.BillRate,
                 BillRole = pub.BillRole,
@@ -101,8 +100,8 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
         public async Task UpdateTimesheetProjectBill(ProjectUserBill pub)
         {
-            var activeTimesheetId = await GetActiveTimesheetId();
-            if (activeTimesheetId == default)
+            var activeTimesheet = await GetLastTimesheet();
+            if (!activeTimesheet.IsActive)
             {
                 Logger.LogInformation("UpdateTimesheetProjectBill() no activeTimesheetId");
                 return;
@@ -110,21 +109,21 @@ namespace ProjectManagement.Services.ProjectTimesheet
 
             var tpb = await _workScope.GetAll<TimesheetProjectBill>()
                 .Where(s => s.ProjectId == pub.ProjectId)
-                .Where(s => s.TimesheetId == activeTimesheetId)
+                .Where(s => s.TimesheetId == activeTimesheet.Id)
                 .Where(s => s.UserId == pub.UserId)
                 .FirstOrDefaultAsync();
 
             if (tpb == default)
             {
-                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProjectBill ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}, UserId={pub.UserId}");
+                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProjectBill ProjectId={pub.ProjectId}, TimesheetId={activeTimesheet}, UserId={pub.UserId}");
                 return;
             }
             var timesheetproject = await _workScope.GetAll<TimesheetProject>()
-                .Where(x => x.ProjectId == pub.ProjectId && x.TimesheetId == activeTimesheetId)
+                .Where(x => x.ProjectId == pub.ProjectId && x.TimesheetId == activeTimesheet.Id)
                 .FirstOrDefaultAsync();
             if(timesheetproject == default) 
             {
-                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProject ProjectId={pub.ProjectId}, TimesheetId={activeTimesheetId}");
+                Logger.LogInformation($"UpdateTimesheetProjectBill() not found TimesheetProject ProjectId={pub.ProjectId}, TimesheetId={activeTimesheet}");
                 return;
             }
             if(timesheetproject.IsComplete.HasValue && timesheetproject.IsComplete.Value==true)

@@ -16,6 +16,18 @@
 
     <mat-divider></mat-divider>
     <section style="padding-top: 20px;">
+        <div class="example-label">Guideline</div>
+        <p style="overflow-wrap: break-word;" [innerHTML]="data.processCriteria.guidLine"></p>
+    </section>
+
+    <mat-divider></mat-divider>
+    <section style="padding-top: 20px;">
+        <div class="example-label">Q&A Example</div>
+        <p style="overflow-wrap: break-word;" [innerHTML]="data.processCriteria.qaExample"></p>
+    </section>
+
+    <mat-divider></mat-divider>
+    <section style="padding-top: 20px;">
         <div class="example-label">Note</div>
         <p style="overflow-wrap: break-word;">{{data.note }}</p>
     </section>

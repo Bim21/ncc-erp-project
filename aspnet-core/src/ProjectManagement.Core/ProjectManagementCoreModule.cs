@@ -33,6 +33,7 @@ namespace ProjectManagement
             AppRoleConfig.Configure(Configuration.Modules.Zero().RoleManagement);
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
+            Configuration.BackgroundJobs.IsJobExecutionEnabled = true;
         }
 
         public override void Initialize()

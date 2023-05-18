@@ -124,4 +124,7 @@ export class ProjectUserService extends BaseApiService {
       this.rootUrl + `/ConfirmJoinProjectTraining?projectUserId=${projectUserId}&startTime=${startTime}`,
     );
   }
+  EditCurentResourceNote(id, note): Observable<any>{
+    return this.http.put<any>(this.rootUrl + `/EditCurentResourceNote?id=${id}&note=${note}`, null);
+  }
 }

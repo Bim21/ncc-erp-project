@@ -7,6 +7,7 @@ import { Component, OnInit, Injector, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ProjectResourceRequestService } from '@app/service/api/project-resource-request.service';
 import { projectForDM } from '@app/service/model/list-project.dto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-detail',
@@ -16,6 +17,9 @@ import { projectForDM } from '@app/service/model/list-project.dto';
 export class ProjectDetailComponent extends AppComponentBase implements OnInit {
 
   public projectId='';
+  public clientName: string;
+  public clientCode: string;
+  public projectName: string;
   public projectDetail={} as projectForDM;
   public selectedReport ={} as pmReportDto;;
   public searchPmReport: string = "";
@@ -27,13 +31,18 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
     private resourceRequestService: ProjectResourceRequestService,
     public dialogRef: MatDialogRef<ProjectDetailComponent>,
     private reportService: PMReportProjectService,
-    public injector:Injector
+    public injector:Injector,
+    private route: ActivatedRoute,
   ) {super(injector)}
 
   ngOnInit(): void {
     this.projectId=this.data.projectId;
+    this.clientName = this.data.clientName;
+    this.clientCode = this.data.clientCode;
+    this.projectName = this.route.snapshot.queryParamMap.get("projectName")
+
     console.log(this.data)
-   
+
     // this.getProjectDetail();
     this. getAllPmReport();
   }
@@ -44,12 +53,12 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
   }
   public onReportchange(pmReport) {
     this.selectedReport=pmReport;
-    
-  
+
+
    this.getProjectDetail();
    this.show=true;
-  
-  
+
+
   }
   public getAllPmReport() {
     this.reportService.GetAllByProject(Number(this.projectId)).subscribe(data => {
@@ -58,7 +67,7 @@ export class ProjectDetailComponent extends AppComponentBase implements OnInit {
       // this.pmId=this.selectedReport.reportId;
       console.log("id",this.selectedReport )
       this.getProjectDetail();
-     
+
     })
   }
 

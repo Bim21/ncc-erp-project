@@ -9,3 +9,8 @@
     line-height: 1.5 !important;
     color: #212529 !important;
 }
+
+
+.submit-btn:disabled i {
+    color: gray !important;
+}

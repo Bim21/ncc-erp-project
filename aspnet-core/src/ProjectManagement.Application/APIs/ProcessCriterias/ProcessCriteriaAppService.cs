@@ -9,9 +9,11 @@ using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using ProjectManagement.Helper;
 using ProjectManagement.Services.Common;
+using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.APIs.ProcessCriterias
@@ -44,7 +46,9 @@ namespace ProjectManagement.APIs.ProcessCriterias
                     Level = x.Level,
                     ParentId = x.ParentId,
                     QAExample = x.QAExample,
-                }).OrderBy(x => x.Code).ToList();
+                })
+                .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code))
+                .ToList();
 
             if (input.IsGetAll())
             {
@@ -76,15 +80,17 @@ namespace ProjectManagement.APIs.ProcessCriterias
             };
         }
 
+
         [AbpAuthorize(PermissionNames.Audits_Criteria_Create)]
         [HttpPost]
         public async Task<CreateProcessCriteriaDto> Create(CreateProcessCriteriaDto input)
         {
             var exist = await WorkScope.GetAll<ProcessCriteria>().AnyAsync(x => x.Name == input.Name || x.Code == input.Code);
             if (exist)
-                { throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!")); }
-            if (string.IsNullOrEmpty(input.Name.Trim())) {
-                throw new UserFriendlyException(String.Format("Name of ProcessCriteria can't be Null or Empty!")); 
+            { throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!")); }
+            if (string.IsNullOrEmpty(input.Name.Trim()))
+            {
+                throw new UserFriendlyException(String.Format("Name of ProcessCriteria can't be Null or Empty!"));
             }
             var entity = ObjectMapper.Map<ProcessCriteria>(input);
             entity.IsActive = true;
@@ -128,12 +134,43 @@ namespace ProjectManagement.APIs.ProcessCriterias
 
             var exist = await WorkScope.GetAll<ProcessCriteria>().AnyAsync(x => (x.Name == input.Name || x.Code == input.Code) && x.Id != input.Id);
             if (exist)
-                { throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!")); }
-            if (string.IsNullOrEmpty(input.Name.Trim())) {
-                throw new UserFriendlyException(String.Format("Name of ProcessCriteria can't be Null or Empty!")); 
+            { throw new UserFriendlyException(String.Format("Name or Code already exist in ProcessCriteria!")); }
+            if (string.IsNullOrEmpty(input.Name.Trim()))
+            {
+                throw new UserFriendlyException(String.Format("Name of ProcessCriteria can't be Null or Empty!"));
+            }
+            if (input.Code != processCriteria.Code && !processCriteria.IsLeaf)
+            {
+                await RenameChildCode(input);
             }
             await WorkScope.UpdateAsync(ObjectMapper.Map<UpdateProcessCriteriaDto, ProcessCriteria>(input, processCriteria));
             return input;
+        }
+
+        private async Task RenameChildCode(UpdateProcessCriteriaDto input)
+        {
+            var listPCs = WorkScope.GetAll<ProcessCriteria>().ToList();
+            var listChildIds = _commonManager.GetAllChildId(input.Id, listPCs).Distinct();
+            var listChilds = listPCs.Where(x => listChildIds.Contains(x.Id) && x.Id != input.Id).ToList();
+            /* var split = input.Code.Split('.');
+             var countDot = input.Code.Count(x => x == '.');
+             var alterCode = split[countDot];
+             listChilds.ForEach(x =>
+             {
+                 var splitChild =x.Code.Split(".");
+                 splitChild[countDot] = alterCode;
+                 x.Code = string.Join(".", splitChild);
+             });*/
+            var split = input.Code.Split('.');
+            var countDot = split.Length - 1;
+            for (int i = 0; i < listChilds.Count; i++)
+            {
+                var splitChild = listChilds[i].Code.Split(".");
+                splitChild[countDot] = split[countDot];
+                listChilds[i].Code = string.Join(".", splitChild);
+            }
+
+            await WorkScope.UpdateRangeAsync(listChilds);
         }
 
         [AbpAuthorize(PermissionNames.Audits_Criteria_DeActive)]
@@ -336,7 +373,7 @@ namespace ProjectManagement.APIs.ProcessCriterias
                         .Where(y => y.ParentId == x.Id && y.Level >= 1)
                         .Max(x => GetNumberAfterLastDot(x.Code)) : 0
                 })
-                .OrderBy(x => x.Code)
+                .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code))
                 .ToList();
         }
 

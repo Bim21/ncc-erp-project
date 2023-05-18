@@ -1,5 +1,4 @@
 
-
 .wrapper {
   padding: 0.75rem;
 }
@@ -19,7 +18,9 @@
 :host::ng-deep .mat-form-field-wrapper {
   margin: 0 !important;
 }
-
+:host::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin{
+  margin-top: 0;
+}
 .example-tree-invisible {
   display: none;
 }
@@ -31,7 +32,6 @@
   max-width: 100%;
   margin: 0 auto;
   font-size: 16px;
-  line-height: 1;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;

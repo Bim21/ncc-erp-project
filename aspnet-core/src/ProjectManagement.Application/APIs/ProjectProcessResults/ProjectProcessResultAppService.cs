@@ -589,9 +589,13 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                 sheetAudit.Cells["B1"].Value = "Criteria";
                 sheetAudit.Cells["C1"].Value = "NC classification";
                 sheetAudit.Cells["D1"].Value = "Comment";
-                sheetAudit.Cells["E1"].Value = "PM Note";
-                sheetAudit.Cells["F1"].Value = "Guide Line";
+                sheetAudit.Cells["E1"].Value = "Tailoring Note";
+                sheetAudit.Cells["F1"].Value = "Guideline";
                 sheetAudit.Cells["G1"].Value = "Q&A Examples";
+
+                // Freeze the first row
+                sheetAudit.View.FreezePanes(2, 1);
+
                 var startAudit = sheetAudit.Cells["A2"].Start.Row;
                 foreach (var item in input)
                 {

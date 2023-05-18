@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ProjectManagement.APIs.Public.Dto
 {
@@ -16,7 +15,6 @@ namespace ProjectManagement.APIs.Public.Dto
         public bool IsJoin { get; set; }
     }
 
-
     public class GetUserTempInProject
     {
         public string EmailAddress { get; set; }
@@ -26,5 +24,14 @@ namespace ProjectManagement.APIs.Public.Dto
     {
         public string Code { get; set; }
         public List<GetUserTempInProject> ListUserTempInProject { get; set; }
+    }
+
+    public class PMsOfUsersDto
+    {
+        public string UserEmail { get; set; }
+        public string ProjectCode { get; set; }
+        public string ProjectName { get; set; }
+        public string PMEmail { get; set; }
+        public string PMFullName { get; set; }
     }
 }

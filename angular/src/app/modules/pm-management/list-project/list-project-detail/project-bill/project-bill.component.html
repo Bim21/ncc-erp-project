@@ -175,7 +175,7 @@
                                             <input style="min-width: 150px;" class="form-control mt-1"
                                                 #accountName="ngModel" #accountNameEl type="text"
                                                 placeholder="Charge Name" name="accountName"
-                                                [(ngModel)]="bill.accountName" />
+                                                [(ngModel)]="bill.accountName" [value]="bill.billAccountName"/>
 
                                             <abp-validation-summary [control]="accountName" [controlEl]="accountNameEl">
                                             </abp-validation-summary>

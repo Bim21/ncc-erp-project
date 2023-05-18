@@ -12,7 +12,10 @@ import { AppConsts } from '@shared/AppConsts';
 })
 export class UserInfoComponent extends AppComponentBase implements OnInit {
   @Input() userData: UserDto
-  @Input() averagePoint : number
+  @Input() workType:string;
+  @Input() isPool:boolean
+  @Input() averagePoint: number
+  @Input() isWeeklyReport: boolean;
   public user: UserDto
   constructor(injector: Injector) {
     super(injector)

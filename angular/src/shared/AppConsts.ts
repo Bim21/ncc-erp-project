@@ -83,6 +83,11 @@ export class AppConsts {
             InProgress: "badge badge-pill badge-primary",
             Done: "badge badge-pill badge-success",
         }
+    static readonly PMReportProjectRiskStatusStyle =
+        {
+            InProgress: "badge badge-pill badge-primary",
+            Done: "badge badge-pill badge-success",
+        }
     static readonly userBranchStyle = {
         0: "badge badge-pill badge-danger",
         1: "badge badge-pill badge-success",

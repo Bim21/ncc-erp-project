@@ -14,6 +14,7 @@ using ProjectManagement.Configuration.Dto;
 using ProjectManagement.Entities;
 using ProjectManagement.Helper;
 using ProjectManagement.Services.Common;
+using ProjectManagement.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -178,7 +179,9 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
                         ParentId = x.ParentId,
                         QAExample = x.QAExample
                     }
-                }).ToList();
+                })
+                .OrderBy(x => CommonUtil.GetNaturalSortKey(x.ProcessCriteria.Code))
+                .ToList();
             if (input.IsGetAll())
             {
                 return new TreeCriteriaResultDto

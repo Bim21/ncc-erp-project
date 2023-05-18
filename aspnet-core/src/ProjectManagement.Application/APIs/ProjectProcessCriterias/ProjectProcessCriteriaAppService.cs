@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Aspose.Cells;
 using static ProjectManagement.APIs.ProjectProcessResults.Dto.GetProjectProcessResultDto;
@@ -579,7 +580,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ProjectProcessCriteriaId = dicCriteriaId.ContainsKey(x.Id) ? dicCriteriaId[x.Id].Id : 0,
                     Applicable = dicCriteriaId.ContainsKey(x.Id) ? dicCriteriaId[x.Id].Applicable : 0
                 })
-                .OrderBy(x => x.Code)
+                .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code))
                 .ToList();
             var resultAll = new List<long>();
             foreach (var id in dicCriteriaId.Select(x => x.Key))
@@ -662,7 +663,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells["B1"].Value = "Criteria";
                 sheetAudit.Cells["C1"].Value = "Applicable?";
                 sheetAudit.Cells["D1"].Value = "Comment";
-                sheetAudit.Cells["E1"].Value = "GuideLine";
+                sheetAudit.Cells["E1"].Value = "Guideline";
                 sheetAudit.Cells["F1"].Value = "Q&A Examples";
                 var startAudit = sheetAudit.Cells["A2"].Row + 1;
 
@@ -771,9 +772,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 MemoryStream ms = new MemoryStream();
                 wb.Save(ms, SaveFormat.Xlsx);
                 ms.Seek(0, SeekOrigin.Begin);
-
-                byte[] buffer = new byte[ms.Length];
-                buffer = ms.ToArray();
+                var buffer = FileUtils.DeleteXlsxSheet("Evaluation Warning", sheetAudit2.Name, ms);
 
                 return new FileBase64Dto
                 {

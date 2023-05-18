@@ -95,10 +95,10 @@ export class CriteriaManagementComponent
         console.log(node)
         this.treeControl.expand(node);
         this.exp(this.treeControl.dataNodes, node.item.parentId);
-      } 
+      }
       else if (node.children && node.children.find(c => c.children)) {
         this.exp(node.children, parentId);
-      }    
+      }
     });
   }
 
@@ -226,28 +226,30 @@ export class CriteriaManagementComponent
           }, true
         );
       }
-    })
-    abp.message.confirm(
-      "Deactive " + node.item.name + "?",
-      "",
-      (result: boolean) => {
-        if (result) {
-          this.processCriteriaService.DeActive(node.item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-            abp.notify.success("Deactive " + node.item.name);
-            this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
-              this.treeControl.dataNodes=data.result.childrens
-              this.dataSource.data = data.result.childrens
-                this.exp(this.dataSource.data,node.item.parentId)
-          })
-          });
-        }
+      else {
+        abp.message.confirm(
+          "Deactive " + node.item.name + "?",
+          "",
+          (result: boolean) => {
+            if (result) {
+              this.processCriteriaService.DeActive(node.item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
+                abp.notify.success("Deactive " + node.item.name);
+                this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+                  this.treeControl.dataNodes=data.result.childrens
+                  this.dataSource.data = data.result.childrens
+                    this.exp(this.dataSource.data,node.item.parentId)
+              })
+              });
+            }
+          }
+        );
       }
-    );
+    })
   }
 
   Active(node) {
     abp.message.confirm(
-      "Active " + node.item.name + "?",
+      "Activate " + node.item.name + "?",
       "",
       (result: boolean) => {
         if (result) {

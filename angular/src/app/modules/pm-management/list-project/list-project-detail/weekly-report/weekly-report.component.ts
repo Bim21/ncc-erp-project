@@ -2,7 +2,7 @@ import { AddFutureResourceDialogComponent } from './../../../../delivery-managem
 import { GetTimesheetWorkingComponent, WorkingTimeDto } from './../../../../delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/get-timesheet-working/get-timesheet-working.component';
 import { ListProjectService } from '@app/service/api/list-project.service';
 import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
-import { pmReportDto } from './../../../../../service/model/pmReport.dto';
+import { ReportRiskDto, pmReportDto } from './../../../../../service/model/pmReport.dto';
 import { ApproveDialogComponent } from './approve-dialog/approve-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
@@ -43,8 +43,10 @@ import { forkJoin } from 'rxjs';
 import { APP_ENUMS } from '@shared/AppEnums';
 import { CriteriaService } from '@app/service/api/criteria.service';
 import { ProjectCriteriaDto } from '@app/service/model/criteria-category.dto';
-import { log } from 'console';
+import { Console, log } from 'console';
 import { GuideLineDialogComponent } from './guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
+import { PmReportRiskService } from '@app/service/api/pm-report-project-ricks.service';
+import { AddRiskDialogComponent } from './add-risk-dialog/add-risk-dialog.component';
 
 
 @Component({
@@ -88,7 +90,10 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public problemIssueList: string[] = Object.keys(this.APP_ENUM.ProjectHealth);
   public projectRoleList: string[] = Object.keys(this.APP_ENUM.ProjectUserRole);
   public issueStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectIssueStatus)
+  public priorityList:string[] = Object.keys(this.APP_ENUM.Priority)
   public projectHealthList: string[] =  Object.keys(this.APP_ENUM.ProjectHealth);
+  public projectRiskList: ReportRiskDto [] = [];
+  public riskStatusList: string[] = Object.keys(this.APP_ENUM.PMReportProjectRiskStatus);
   pmReportList: pmReportDto[] = [];
   public activeReportId: number;
   public pmReportProjectId: number;
@@ -125,6 +130,12 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   isRefresh: boolean = false
   isStart: boolean = false
 
+  public priority = [
+    {value:this.APP_ENUM.Priority.Low,viewValue:'Low'},
+    {value:this.APP_ENUM.Priority.High,viewValue:'High'},
+    {value:this.APP_ENUM.Priority.Medium,viewValue:'Medium'},
+    {value:this.APP_ENUM.Priority.Critical,viewValue:'Critical'}]
+
   public listCriteria: ProjectCriteriaDto[] = []
   public listCriteriaResult: ProjectCriteriaResultDto[] = []
   public listPreEditCriteriaResult: ProjectCriteriaResultDto[] = [];
@@ -132,6 +143,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public status: string = ''
   public processCriteria: boolean = false;
   public isShowActionPM: boolean;
+  public isShowActionRisk: boolean;
   public isShowOptionNotRp: boolean = true;
   public isValidCriteria: boolean;
 
@@ -160,6 +172,13 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone;
 
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone;
+
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release;
@@ -181,6 +200,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit;
 
   constructor(public pmReportProjectService: PMReportProjectService,
+    public pmReportRiskService: PmReportRiskService,
     private tsProjectService: TimesheetProjectService,
     private reportIssueService: PmReportIssueService, private pmReportService: PmReportService,
     public route: ActivatedRoute,
@@ -199,9 +219,12 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     this.projectType = route.snapshot.queryParamMap.get("type");
 
     this.isShowActionPM = this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit) ||
-    this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete) ||
+      this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Delete) ||
       this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_SetDone) ||
       this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue);
+    this.isShowActionRisk = this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit) ||
+      this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete) ||
+      this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone);
   }
   ngOnInit(): void {
     this.getAllPmReport();
@@ -268,6 +291,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.getProjectInfo();
       this.getFuturereport();
       this.getProjectProblem();
+      this.getRiskOfTheWeek();
       this.getChangedResource();
     })
   }
@@ -514,7 +538,95 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     }
   }
 
+  setDoneRisk(risk){
+    const Risk = {id: risk.id,
+      impact: risk.impact,
+      pmReportProjectId: risk.pmReportProjectId,
+      priority:risk.priority,
+      risk: risk.risk,
+      solution: risk.solution,
+      status:this.APP_ENUM.PMReportProjectRiskStatus.Done}
 
+    this.pmReportRiskService.UpdateReportRisk(Risk).pipe(catchError(this.pmReportRiskService.handleError)).subscribe((res) => {
+      if (res) {
+        abp.notify.success("Update Successfully!")
+      }
+      this.getRiskOfTheWeek();
+    })
+  }
+  setInProgressRisk(risk){
+    const Risk = {id: risk.id,
+      impact: risk.impact,
+      pmReportProjectId: risk.pmReportProjectId,
+      priority:risk.priority,
+      risk: risk.risk,
+      solution: risk.solution,
+      status:this.APP_ENUM.PMReportProjectRiskStatus.InProgress}
+    this.pmReportRiskService.UpdateReportRisk(Risk).pipe(catchError(this.pmReportRiskService.handleError)).subscribe((res) => {
+      if (res) {
+        abp.notify.success("Update Successfully!")
+      }
+      this.getRiskOfTheWeek();
+    })
+  }
+  changePriority(e,risk){
+    this.pmReportRiskService.UpdateReportRisk({...risk,priority:e.value}).pipe(catchError(this.pmReportRiskService.handleError)).subscribe((res) => {
+      if (res) {
+        abp.notify.success("Update Successfully!")
+      }
+      this.getRiskOfTheWeek();
+    })
+  }
+  public getRiskOfTheWeek(){
+    if(this.projectId){
+      this.pmReportRiskService.getRiskOfTheWeek(this.projectId, this.selectedReport.reportId).pipe(catchError( this.pmReportRiskService.handleError)).subscribe(data => {
+        if(data.result){
+          this.projectRiskList = data.result
+        }
+      })
+    }
+  }
+  public addOrEditRisk(command,risk){
+    let data = {}
+    if(command=='edit'){
+        data = {
+          command:command,
+          risk:risk,
+          projectId:this.projectId,
+          pmReportProjectId:this.selectedReport.pmReportProjectId
+        }
+    }
+    else{
+      data= {
+        command:command,
+        projectId:this.projectId,
+        pmReportProjectId:this.selectedReport.pmReportProjectId
+      }
+    }
+    const dialogRef = this.dialog.open(AddRiskDialogComponent, {
+
+      width: "60%",
+      data : data
+
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.getRiskOfTheWeek()
+    })}
+
+  public deleteRisk(risk){
+    abp.message.confirm(
+      "Delete Risk? ",
+      "",
+      (result: boolean) => {
+        if (result) {
+          this.pmReportRiskService.deleteReportRisk(risk.id).pipe(catchError(this.pmReportRiskService.handleError)).subscribe(() => {
+            abp.notify.success("Deleted Risk");
+            this.getRiskOfTheWeek()
+          });
+        }
+      }
+    );
+  }
   public markRead(project) {
     this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
 
@@ -528,7 +640,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     })
 
   }
-
   //weekly
   public addWeekReport() {
     let newReport = {} as projectUserDto
@@ -863,6 +974,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     this.getProjectProblem();
     this.getProjectInfo();
     this.getAllCriteria();
+    this.getRiskOfTheWeek();
     this.isEditingNote = false;
     this.projectHealth = this.APP_ENUM.ProjectHealth[this.selectedReport.projectHealth]
   }
@@ -1265,7 +1377,12 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   isShowChangeInProgressText(issue){
     return this.APP_ENUM.PMReportProjectIssueStatus[issue.status] == this.APP_ENUM.PMReportProjectIssueStatus.Done
   }
-
+  isShowChangeDoneTextRisk(risk){
+    return risk.status == this.APP_ENUM.PMReportProjectRiskStatus.InProgress
+  }
+  isShowChangeInProgressTextRisk(risk){
+    return risk.status == this.APP_ENUM.PMReportProjectRiskStatus.Done
+  }
 
 
 
@@ -1436,6 +1553,10 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         this.getAllCriteria();
       }
     });
+  }
+  validateContent(string): boolean{
+    if(!string){return true}
+    return string.trim()==""
   }
 }
 
