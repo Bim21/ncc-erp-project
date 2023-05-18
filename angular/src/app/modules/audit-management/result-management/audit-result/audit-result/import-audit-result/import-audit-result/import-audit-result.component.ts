@@ -26,6 +26,7 @@ export class ImportAuditResultComponent extends AppComponentBase implements OnIn
   public listProject;
   public startDate: Date;
   ngOnInit(): void {
+    this.startDate = new Date();
     this.getProjectToImportResult();
   }
   getProjectToImportResult() {

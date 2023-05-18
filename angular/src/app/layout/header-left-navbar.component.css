@@ -48,6 +48,16 @@
   justify-content: center;
 }
 
-.project-code{
-  font-family: 'Fira Code', monospace;
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav > li:not(:last-child) {
+  margin-right: 10px;
+}
+
+.navbar-nav > li.spaced-item {
+  margin-right: 30px;
+  width: 200px;
 }

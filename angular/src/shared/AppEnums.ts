@@ -53,6 +53,12 @@ export const APP_ENUMS = {
         InProgress: 0,
         Done: 1
     },
+    PMReportProjectRiskStatus:
+    {
+        InProgress: 0,
+        Done: 1
+    },
+    
     PMReportProjectStatus:
     {
         Draft: 0,

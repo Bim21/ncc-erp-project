@@ -210,7 +210,10 @@ import { ExchangeRateComponent } from './modules/timesheet/timesheet-detail/exch
 import { ExportInvoiceComponent } from './modules/timesheet/timesheet-detail/export-invoice/export-invoice.component';
 import { GuideLineDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 import { ReportGuidelineDetailComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/report-guideline-detail/report-guideline-detail.component';
+import { EditNoteResourceComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/edit-note-resource/edit-note-resource.component';
+import { AddRiskDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/add-risk-dialog/add-risk-dialog.component';
 import { UpdateConfirmModalComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/update-confirm-modal/update-confirm-modal.component';
+import { CloseTimesheetComponent } from './modules/timesheet/close-timesheet/close-timesheet.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -406,7 +409,11 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ViewQaNoteComponent,
     GuideLineDialogComponent,
     ReportGuidelineDetailComponent,
-    UpdateConfirmModalComponent
+    GuideLineDialogComponent,
+    EditNoteResourceComponent,
+    AddRiskDialogComponent,
+    CloseTimesheetComponent,
+    UpdateConfirmModalComponent,
   ],
   imports: [
     CommonModule,

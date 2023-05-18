@@ -112,7 +112,7 @@
                                                 <button *ngIf=" permission.isGranted(Timesheets_CloseAndActive)" class="mat-menu-item  w-100" (click)="changeStatus(item)">
                                     <i *ngIf="!item.isActive" class="fas fa-check fa-lg mr-1"></i>
                                     <i *ngIf="item.isActive" class="fas fa-times fa-lg mr-1"></i>
-                                    {{item.isActive?'Closed':'Active'}}
+                                    {{item.isActive?'Closed':'Activate'}}
                                 </button>
                                             </mat-menu>
                                         </td>

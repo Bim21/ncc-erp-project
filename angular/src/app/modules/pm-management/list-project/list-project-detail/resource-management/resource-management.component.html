@@ -37,6 +37,7 @@
                                 <tr>
                                     <th class="stt">#</th>
                                     <th>Employee</th>
+                                    <th style="width: 150px;">Note</th>
                                     <th>Skills</th>
                                     <th style="width: 150px;">Role</th>
                                     <th style="width: 150px;">Start time</th>
@@ -89,6 +90,22 @@
                                                 style="font-size: 13px;">
                                                 This field is required
                                             </mat-error>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <p PrjResizeContent [collapseLine]="1" style="flex: 1;"
+                                                class="mb-0 p-0  ml-2 max-line-content-1">{{user.note}}
+                                            </p>
+                                            <i style="color: #585858;" class="fas fa-ellipsis-v ml-1"
+                                                [matMenuTriggerFor]="menu3"></i>
+                                            <mat-menu #menu3="matMenu">
+                                                <button class="mat-menu-item  w-100"
+                                                    (click)="editResoureNote(user)">
+                                                    <i class="fas fa-edit mr-2 fa-lg"></i>
+                                                    Edit
+                                                </button>
+                                            </mat-menu>
                                         </div>
                                     </td>
                                     <td style="vertical-align: middle;"> <span

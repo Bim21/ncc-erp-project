@@ -128,5 +128,4 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public GridResult<GetTimesheetDetailDto> ListTimesheetDetail { get; set; }
         public List<TotalMoneyByCurrencyDto> ListTotalAmountByCurrency { get; set; }
     }
-
 }

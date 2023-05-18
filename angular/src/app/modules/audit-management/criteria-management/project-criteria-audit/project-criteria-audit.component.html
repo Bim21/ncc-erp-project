@@ -46,8 +46,8 @@
           (change)="todoLeafItemSelectionToggle(node,true)"
           [disabled]="!permission.isGranted(Audits_Tailoring_Update_Project_Tailoring)">
         </mat-checkbox>
-        <div [matTooltip]="node.item.name" style="margin: auto 0; font-weight: 700;" class="ml-1 d-flex align-items-center">
-          <span class="mr-1"> {{ node.item.code }} </span>
+        <div [matTooltip]="node.item.name" style="margin: auto 0;font-size: 16px;" class="ml-1 d-flex align-items-center">
+          <span class="mr-1"> {{ node.item.code }} &nbsp;</span>
           <span style="flex:1;" class="note">{{ node.item.name }}</span>
         </div>
         </div>
@@ -72,8 +72,8 @@
             [disabled]="!permission.isGranted(Audits_Tailoring_Update_Project_Tailoring)"
             (change)="todoItemSelectionToggle(node,true)">
           </mat-checkbox>
-          <div [matTooltip]="node.item.name" style="margin: auto 0;font-weight: 700;" class="ml-1 d-flex align-items-center">
-            <span class="mr-1"> {{ node.item.code }} </span>
+          <div [matTooltip]="node.item.name" style="margin: auto 0;font-size: 16px;" class="ml-1 d-flex align-items-center">
+            <span class="mr-1"> {{ node.item.code }} &nbsp;</span>
             <span style="flex:1;" class="note">{{ node.item.name }}</span>
           </div>
         </div>

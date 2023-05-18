@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static ProjectManagement.APIs.ProjectProcessResults.Dto.GetProjectProcessResultDto;
 
@@ -569,7 +570,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ProjectProcessCriteriaId = dicCriteriaId.ContainsKey(x.Id) ? dicCriteriaId[x.Id].Id : 0,
                     Applicable = dicCriteriaId.ContainsKey(x.Id) ? dicCriteriaId[x.Id].Applicable : 0
                 })
-                .OrderBy(x => x.Code)
+                .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code))
                 .ToList();
             var resultAll = new List<long>();
             foreach (var id in dicCriteriaId.Select(x => x.Key))
@@ -617,7 +618,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     QAExample = y.QAExample,
                     GuildLine = y.GuidLine,
                     Level = y.Level,
-                    ParentId = y.ParentId
+                    ParentId = y.ParentId,
+                    IsApplicable = y.IsApplicable,
                 }).OrderBy(x => x.Code).ThenBy(x => x.Level).ToList();
             using (var wb = new ExcelPackage())
             {
@@ -635,8 +637,10 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells["B1"].Value = "Criteria";
                 sheetAudit.Cells["C1"].Value = "Applicable?";
                 sheetAudit.Cells["D1"].Value = "Comment";
-                sheetAudit.Cells["E1"].Value = "GuideLine";
+                sheetAudit.Cells["E1"].Value = "Guideline";
                 sheetAudit.Cells["F1"].Value = "Q&A Examples";
+                 // Freeze the first row
+                sheetAudit.View.FreezePanes(2, 1);
                 var startAudit = sheetAudit.Cells["A2"].Start.Row;
 
                 foreach (var i in data)
@@ -663,7 +667,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                         {
                             unitmeasure.Formula.Values.Add(itemApplicable);
                         }
-                        sheetAudit.Cells[$"C{startAudit}"].Value = applicable[0];
+                        sheetAudit.Cells[$"C{startAudit}"].Value = i.IsApplicable ? applicable[0] : applicable[2];
+
                     }
                     if (!i.IsLeaf)
                     {
@@ -673,7 +678,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     startAudit++;
                 }
 
-                sheetAudit.Cells[$"A2:B{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                sheetAudit.Cells[$"A2:C{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheetAudit.Cells[$"A2:B{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
                 sheetAudit.Cells[$"D2:F{startAudit}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
                 sheetAudit.Cells[$"D2:F{startAudit}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;

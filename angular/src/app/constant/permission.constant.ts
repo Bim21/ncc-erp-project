@@ -369,6 +369,13 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_Delete: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.Delete",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_PMProjectIssue_SetDone: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.PMProjectIssue.SetDone",
 
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.View",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Edit",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Delete",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.SetDone",
+
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
        Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release: "Projects.TrainingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release",
@@ -432,6 +439,10 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_PMIssue_View: "WeeklyReport.ReportDetail.PMIssue.View",
        WeeklyReport_ReportDetail_PMIssue_AddMeetingNote: "WeeklyReport.ReportDetail.PMIssue.AddMeetingNote",
        WeeklyReport_ReportDetail_PMIssue_SetDone: "WeeklyReport.ReportDetail.PMIssue.SetDone",
+
+       WeeklyReport_ReportDetail_PMRisk : "WeeklyReport.ReportDetail.PMRisk",
+       WeeklyReport_ReportDetail_PMRisk_View : "WeeklyReport.ReportDetail.PMRisk.View",
+       WeeklyReport_ReportDetail_PMRisk_SetDone : "WeeklyReport.ReportDetail.PMRisk.SetDone",
 
        WeeklyReport_ReportDetail_CurrentResource: "WeeklyReport.ReportDetail.CurrentResource",
        WeeklyReport_ReportDetail_CurrentResource_View: "WeeklyReport.ReportDetail.CurrentResource.View",

@@ -8,6 +8,7 @@ import { TimesheetService } from '@app/service/api/timesheet.service'
 import { catchError, finalize } from 'rxjs/operators';
 import { CreateEditTimesheetComponent } from './create-edit-timesheet/create-edit-timesheet.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CloseTimesheetComponent } from './close-timesheet/close-timesheet.component';
 @Component({
   selector: 'app-timesheet',
   templateUrl: './timesheet.component.html',
@@ -121,18 +122,21 @@ export class TimesheetComponent extends PagedListingComponentBase<TimesheetDto> 
   }
 
   changeStatus(timesheet) {
-    this.timesheetService.ReverseActive(timesheet.id).pipe(catchError(this.timesheetService.handleError)).subscribe(rs => {
-      abp.notify.success("Update timesheet: " + timesheet.name)
-      if (timesheet.isActive) {
-        abp.notify.success("Deactivate timesheet: " + timesheet.name)
-
-      }
-      else {
-        abp.notify.success("Activate timesheet: " + timesheet.name)
-
-      }
-      this.refresh();
-    })
+    if (!timesheet.isActive) {
+      const show = this.dialog.open(CloseTimesheetComponent, {
+        width: "40%",
+        data: timesheet
+      })
+      show.afterClosed().subscribe(() => {
+        this.refresh();
+      })
+    }
+    else {
+      this.timesheetService.ReverseActive(timesheet.id,'').pipe(catchError(this.timesheetService.handleError)).subscribe(rs => {
+        abp.notify.success("DeActive timesheet: " + timesheet.name)
+        this.refresh();
+      })
+    }
   }
 
   colorTSFile(item){

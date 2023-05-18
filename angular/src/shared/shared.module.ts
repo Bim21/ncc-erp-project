@@ -71,6 +71,8 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { ResizeContentDirective } from './directives/resize-content.directive';
+import {ResizableDirective} from './directives/resizable.directive'
+
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
 // import { ErrorPermissionComponent } from './interceptor-errors/error-permission/error-permission.component'
@@ -143,7 +145,8 @@ import { ResizeContentDirective } from './directives/resize-content.directive';
         MainSubInvoiceComponent,
         MultiSelectOptionComponent,
         SafeHtmlPipe,
-        ResizeContentDirective
+        ResizeContentDirective,
+        ResizableDirective
 
     ],
     exports: [
@@ -202,7 +205,8 @@ import { ResizeContentDirective } from './directives/resize-content.directive';
         MultiSelectOptionComponent,
         EditorModule,
         SafeHtmlPipe,
-        ResizeContentDirective
+        ResizeContentDirective,
+        ResizableDirective
 
     ],
     providers: [

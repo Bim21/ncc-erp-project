@@ -1,43 +1,33 @@
 ﻿using Abp.Authorization;
-using Abp.Authorization.Users;
-using Abp.Linq.Extensions;
 using Abp.UI;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
-using NccCore.Uitls;
-using ProjectManagement.APIs.ProjectUserBills.Dto;
-using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.APIs.TS.Dto;
 using ProjectManagement.Authorization;
-using ProjectManagement.Authorization.Roles;
-using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
+using ProjectManagement.Manager.TimesheetManagers;
 using ProjectManagement.Services.ProjectTimesheet;
-using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.TimeSheets
 {
-  /*  [AbpAuthorize]*/
+    /*  [AbpAuthorize]*/
+
     public class TimeSheetAppService : ProjectManagementAppServiceBase
     {
+        private ProjectTimesheetManager _timesheetManager;
+        private readonly CloseTimesheet _closeTimesheet;
 
-        private ProjectTimesheetManager timesheetManager;
-
-
-        public TimeSheetAppService(ProjectTimesheetManager timesheetManager)
+        public TimeSheetAppService(ProjectTimesheetManager timesheetManager, CloseTimesheet closeTimesheet)
         {
-            this.timesheetManager = timesheetManager;
+            _timesheetManager = timesheetManager;
+            _closeTimesheet = closeTimesheet;
         }
 
         [HttpPost]
@@ -68,7 +58,6 @@ namespace ProjectManagement.APIs.TimeSheets
 
                     TotalIsRequiredFile = qtimesheetProject.Where(y => y.TimesheetId == x.Id)
                     .Where(s => s.Project.RequireTimesheetFile).Count(),
-
                 });
 
             return await query.GetGridResult(query, input);
@@ -98,7 +87,6 @@ namespace ProjectManagement.APIs.TimeSheets
                 throw new UserFriendlyException("Total Of Working Day field is required and greater than 0 !");
             }
 
-           
             var nameExist = await WorkScope.GetAll<Timesheet>().AnyAsync(x => x.Name == input.Name);
             if (nameExist)
             {
@@ -111,6 +99,7 @@ namespace ProjectManagement.APIs.TimeSheets
                 throw new UserFriendlyException($"Timesheet {input.Month}-{input.Year} already exist !");
             }
         }
+
         [HttpPost]
         [AbpAuthorize(PermissionNames.Timesheets_Create)]
         public async Task<object> Create(TimesheetDto input)
@@ -129,7 +118,7 @@ namespace ProjectManagement.APIs.TimeSheets
             input.Id = await WorkScope.InsertAndGetIdAsync(timesheet);
             timesheet.Id = input.Id;
 
-            var listPUB = await timesheetManager.GetListProjectUserBillDto(timesheet.Year, timesheet.Month, null);
+            var listPUB = await _timesheetManager.GetListProjectUserBillDto(timesheet.Year, timesheet.Month, null);
 
             var projectIds = listPUB.Select(s => s.ProjectId);
 
@@ -137,7 +126,6 @@ namespace ProjectManagement.APIs.TimeSheets
 
             var listProjectIdToBillInfo = listPUB.GroupBy(s => new { s.ProjectId, s.Discount, s.TransferFee, s.LastInvoiceNumber, s.ParentInvoiceId })
                 .Select(s => new { s.Key.ProjectId, s.Key.Discount, s.Key.TransferFee, s.Key.LastInvoiceNumber, s.Key.ParentInvoiceId, ListBillInfo = s.ToList() });
-
 
             var listTimesheetProjectBill = new List<TimesheetProjectBill>();
             var listTimesheetProject = new List<TimesheetProject>();
@@ -170,7 +158,6 @@ namespace ProjectManagement.APIs.TimeSheets
                 {
                     failList.Add("projectId:" + projectId);
                 }
-                
 
                 foreach (var pub in listBillInfo)
                 {
@@ -194,8 +181,8 @@ namespace ProjectManagement.APIs.TimeSheets
             await WorkScope.InsertRangeAsync(listTimesheetProject);
             await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
             await CurrentUnitOfWork.SaveChangesAsync();
+            _closeTimesheet.CreateReqCloseTimesheetBGJ(timesheet);
             return new { failList, input };
-
         }
 
         [HttpPut]
@@ -252,8 +239,6 @@ namespace ProjectManagement.APIs.TimeSheets
             await ForceDelete(timesheetId);
         }
 
-
-
         [HttpDelete]
         [AbpAuthorize(PermissionNames.Timesheets_ForceDelete)]
         public async Task ForceDelete(long timesheetId)
@@ -271,10 +256,18 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [AbpAuthorize(PermissionNames.Timesheets_CloseAndActive)]
-        public async Task ReverseActive(long id)
+        public async Task ReverseActive(long id, DateTime? closeTime = null)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);
             timesheet.IsActive = !timesheet.IsActive;
+            if (!timesheet.IsActive)
+            {
+                _closeTimesheet.DeleteOldRequestInBackgroundJob(id);
+            }
+            if (timesheet.IsActive && closeTime.HasValue)
+            {
+                _closeTimesheet.ReOpenTimesheet(timesheet, closeTime.Value);
+            }
             await WorkScope.UpdateAsync(timesheet);
         }
 
@@ -302,14 +295,13 @@ namespace ProjectManagement.APIs.TimeSheets
         [HttpGet]
         public List<GetProjectPMNameDto> GetListPMByProjectCode()
         {
-            return  WorkScope.GetAll<Project>()
-                .Select(x => new GetProjectPMNameDto {
+            return WorkScope.GetAll<Project>()
+                .Select(x => new GetProjectPMNameDto
+                {
                     ProjectCode = x.Code,
                     PMEmail = x.PM.EmailAddress
                 })
                 .ToList();
         }
-
     }
 }
-   

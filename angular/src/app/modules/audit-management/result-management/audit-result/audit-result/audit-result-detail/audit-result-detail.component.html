@@ -86,11 +86,8 @@
               <div [matTooltip]="node.item.processCriteria.name" style="margin: auto 0; align-items: center; display: flex; "
                 class="name-criteria">
                 <div class="d-flex">
-                  <span class="mr-4"> {{ node.item.processCriteria.code }} </span>
-                  <span class="note"  style="flex: 1;">
-                    {{ node.item.processCriteria.name }}
-                  </span>
-                  &nbsp;
+                  <span class="hyperlink" (click)="viewPPCRnode(node.item)" style="flex: 1; color: black"> {{ node.item.processCriteria.code }} &nbsp;  {{ node.item.processCriteria.name }}</span>
+
                   <!-- <span>
                                   <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
                                     style="font-size: 15px;" class="fas fa-check-circle"
@@ -161,11 +158,7 @@
                 <div [matTooltip]="node.item.processCriteria.name" style="margin: auto 0; align-items: center; display: flex; "
                 class="name-criteria">
                 <div class="d-flex align-items-center">
-                  <span class="mr-4"> {{ node.item.processCriteria.code }} </span>
-                  <span class="note" style="flex: 1;">
-                    {{ node.item.processCriteria.name }}
-                  </span>
-                  &nbsp;
+                  <span class="hyperlink" (click)="viewPPCRnode(node.item)" style="flex: 1; color: black"> {{ node.item.processCriteria.code }} &nbsp;  {{ node.item.processCriteria.name }}</span>
                   <!-- <span>
                                   <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
                                     style="font-size: 15px;" class="fas fa-check-circle"

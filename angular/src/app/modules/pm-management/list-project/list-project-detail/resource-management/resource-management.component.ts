@@ -25,6 +25,7 @@ import { ResourcePlanDto } from '@app/service/model/resource-plan.dto';
 import { FormPlanUserComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-plan-user/form-plan-user.component';
 import { RequestResourceDto } from '@app/service/model/delivery-management.dto';
 import { FormSetDoneComponent } from '@app/modules/delivery-management/delivery/request-resource-tab/form-set-done/form-set-done.component';
+import { EditNoteResourceComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/edit-note-resource/edit-note-resource.component';
 
 @Component({
   selector: 'app-resource-management',
@@ -716,6 +717,18 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
   changePageSizeCurrent()
   {
     this.userListCurrentPage = 1
+  }
+  public editResoureNote(user) {
+    let ref = this.dialog.open(EditNoteResourceComponent, {
+      width: "600px",
+      data: user
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        user.note=rs
+      }
+    })
+
   }
 }
 

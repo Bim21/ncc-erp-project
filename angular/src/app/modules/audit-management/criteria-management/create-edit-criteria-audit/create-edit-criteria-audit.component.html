@@ -8,7 +8,7 @@
     <abp-modal-header
       *ngIf="data.command == 'create'"
       title="Create Criteria"
-      (onCloseClick)="closeDialog();"
+      (onCloseClick)="dialogRef.close()"
     >
     </abp-modal-header>
     <abp-modal-header
@@ -53,7 +53,7 @@
       <div class="w-75 d-flex justify-content-between align-items-center">
         <div >
           <span>{{ codeParent}} </span>
-          <input [disabled]="!data.item.isLeaf && data.command == 'edit'" type="number" [(ngModel)]="codeChild" name="codeChild"  id="codeChild"  #criteriaNameModel="ngModel" [value]="codeChild"
+          <input type="number" [(ngModel)]="codeChild" name="codeChild"  id="codeChild"  #criteriaNameModel="ngModel" [value]="codeChild"
           #criteriaNameEl  required style="width: 45px;" min="1"
           (ngModelChange)="checkCode($event)"/>
         </div>

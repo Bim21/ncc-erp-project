@@ -5,30 +5,31 @@
         </a>
     </li>
 
-    <li *ngIf="isShowReportBar" class="ml-4 mt-1">
+    <li *ngIf="isShowReportBar" class="ml-4 mt-1" style="margin-left: auto;">
         <button class="btn btn-info text-nowrap" (click)="showDialog()">
-            <i class="fas fa-sticky-note mr-1"></i> Note
+          <i class="fas fa-sticky-note mr-1"></i> Note
         </button>
-    </li>
-    <li style="margin-left: 20px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="mt-1" style="font-size: 20px;">
-            <strong>
-                <p matTooltip="Project Name">{{projectInfo?.projectName}}</p>
-                <p class="project-code" matTooltip="Client Code">[{{projectInfo?.clientCode}}] </p>
-            </strong>
+      </li>
+
+      <li style="margin-left: 20px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block spaced-item">
+        <div class="mt-1" style="font-size: 20px; display: flex;">
+          <strong>
+            <span matTooltip="Project Name" style="margin-right: 10px;">{{projectInfo?.projectName}}</span>
+            <span class="project-code" matTooltip="Client Code">[{{projectInfo?.clientCode}}]</span>
+          </strong>
         </div>
-    </li>
+      </li>
 
 
 
-    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+    <!-- <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="d-flex align-items-center h-100" style="margin-left: 20px !important;">
             <span [ngClass]="APP_CONST.projectHealthBGStyle[projectHealth]" class="header-status-wrapper">
                 {{problemIssueList[projectHealth - 1]}}
             </span>
         </div>
 
-    </li>
+    </li> -->
 
     <li *ngIf="isShowReportBar" style="cursor: pointer; display: flex; white-space: nowrap;">
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
@@ -85,18 +86,6 @@
             </mat-form-field>
         </div>
     </li>
-
-    <li>
-        <div class="mt-1" style="font-size: 21px;" *ngIf="projectName && projectCode">
-            <strong>
-                {{projectName}}
-            </strong> [
-            <span>
-                {{projectCode}}
-            </span> ]
-        </div>
-    </li>
-
 
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">

@@ -1,11 +1,8 @@
-﻿using Abp;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.UI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using NccCore.IoC;
 using ProjectManagement.APIs.Public.Dto;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
@@ -14,10 +11,8 @@ using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
@@ -35,6 +30,7 @@ namespace ProjectManagement.APIs.Public
             this._appConfiguration = appConfiguration;
             _httpContextAccessor = httpContextAccessor;
         }
+
         [HttpGet]
         public async Task<GetURIDto> GetConfigUri()
         {
@@ -44,7 +40,6 @@ namespace ProjectManagement.APIs.Public
                 GoogleClientAppId = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ClientAppId)
             };
         }
-
 
         [AbpAllowAnonymous]
         [HttpGet]
@@ -84,7 +79,6 @@ namespace ProjectManagement.APIs.Public
 
             return resultList;
         }
-
 
         private long GetProjectIdByCode(string projectCode)
         {
@@ -136,8 +130,6 @@ namespace ProjectManagement.APIs.Public
             return results;
         }
 
-
-
         [HttpGet]
         public List<BaseUserInfo> GetAllUser()
         {
@@ -150,6 +142,7 @@ namespace ProjectManagement.APIs.Public
                 AvatarPath = x.AvatarPath
             }).ToList();
         }
+
         [HttpGet]
         public List<PMOfUserDto> GetPMOfUser(string email)
         {
@@ -162,35 +155,6 @@ namespace ProjectManagement.APIs.Public
             }
 
             return resourceManager.QueryPMOfUser(userId);
-
-        }
-
-        [HttpPost]
-        [AbpAllowAnonymous]
-        public List<ListPMOfUserDto> GetPMsOfUsers([FromBody] ListInputUserDto input)
-        {
-            var pmList = new List<ListPMOfUserDto>();
-
-            foreach (var email in input.EmailAddresses)
-            {
-                var userId = GetUserIdByEmail(email);
-
-                if (userId == default)
-                {
-                    Logger.Info($"No user by email: {email}");
-                }
-                else
-                {
-                    var pmOfUser = new ListPMOfUserDto
-                    {
-                        EmailAddress = email,
-                        ListPMOfUser = resourceManager.QueryPMOfUser(userId)
-                    };
-                    pmList.Add(pmOfUser);
-                }
-            }
-
-            return pmList;
         }
 
 
@@ -211,6 +175,37 @@ namespace ProjectManagement.APIs.Public
             result.IsConnected = true;
             result.Message = "Connected";
             return result;
-        }     
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public List<PMsOfUsersDto> GetListPMsOfUsers(List<string> emails)
+        {
+            var result = WorkScope.GetAll<ProjectUser>()
+                .Where(x => emails.Contains(x.User.EmailAddress) )
+                .Where(s => s.Status == ProjectUserStatus.Present && s.AllocatePercentage > 0)
+                            .Where(s => s.Project.Status == ProjectStatus.InProgress)
+                .Select(x => new PMsOfUsersDto
+                {
+                    UserEmail = x.User.EmailAddress,
+                    PMEmail = x.Project.PM.EmailAddress,
+                    ProjectCode = x.Project.Code,
+                    PMFullName = x.Project.PM.FullName,
+                    ProjectName = x.Project.Name,
+                }).ToList();
+            var PMs= WorkScope.GetAll<Project>()
+                .Where(x=>emails.Contains(x.PM.EmailAddress))
+                .Where(s => s.Status == ProjectStatus.InProgress)
+                .Select(x => new PMsOfUsersDto
+                {
+                    UserEmail = x.PM.EmailAddress,
+                    PMEmail = x.PM.EmailAddress,
+                    ProjectCode = x.Code,
+                    PMFullName = x.PM.FullName,
+                    ProjectName = x.Name,
+                }).ToList();
+            result.AddRange(PMs);
+            return result.Distinct().ToList();
+        }
     }
 }
