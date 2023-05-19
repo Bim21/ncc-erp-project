@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PmReportRiskService } from '@app/service/api/pm-report-project-ricks.service';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -14,9 +14,9 @@ export class AddRiskDialogComponent extends AppComponentBase implements OnInit {
   APP_ENUM = APP_ENUMS
   public riskStatusList: string[] = Object.keys(APP_ENUMS.PMReportProjectRiskStatus);
   riskForm=new FormGroup({
-    risk : new FormControl('',Validators.required),
-    impact : new FormControl('',Validators.required),
-    solution : new FormControl('',Validators.required),
+    risk : new FormControl('',[Validators.required, this.emptyLinesValiadtor]),
+    impact : new FormControl('',[Validators.required, this.emptyLinesValiadtor]),
+    solution : new FormControl('',[Validators.required, this.emptyLinesValiadtor]),
   })
 
   id: number
@@ -45,6 +45,17 @@ export class AddRiskDialogComponent extends AppComponentBase implements OnInit {
       this.currentPriority = this.data.risk.priority
     }
   }
+  get controls() {
+    return this.riskForm.controls;
+  }
+  emptyLinesValiadtor(control:FormControl):{[s:string]:boolean} | null {
+    let content = control.value.replaceAll(/&nbsp;/gm,'')
+    .trim().split(" ").join("").replaceAll('<p></p>','').trim();
+    if(content == "" || content == null) {
+      return  {'emptyLines': true}
+    }
+    return null;
+    }
   changeStatus(e) {
     this.currentStatus = e.value
   }

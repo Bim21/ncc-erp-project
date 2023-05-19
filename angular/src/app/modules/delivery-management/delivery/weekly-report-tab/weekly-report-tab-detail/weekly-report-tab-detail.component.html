@@ -686,7 +686,7 @@
                                 <mat-expansion-panel-header class="m-0" #issues (click)="isShowIssues=!isShowIssues">
                                     <mat-panel-title>
                                         <span (click)="$event.stopPropagation();">
-                                            <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;">Issues </strong>
+                                            <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;">Issues </strong>&nbsp;
                                             <strong style="font-size: 20px;" class="text-danger">({{problemList?.length}})</strong>
                                         </span>
                                     </mat-panel-title>
@@ -791,7 +791,7 @@
                             <mat-expansion-panel [expanded]="isShowRisks">
                                 <mat-expansion-panel-header class="m-0" #panelH (click)="isShowRisks=!isShowRisks ">
                                     <mat-panel-title>
-                                        <strong style="font-size: 20px;">Risks</strong> &nbsp;
+                                        <strong style="font-size: 20px;">Risks </strong> &nbsp;
                                         <strong style="font-size: 20px; " class="text-danger">({{projectRiskList?.length}})</strong>
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
@@ -835,18 +835,18 @@
                                                     </mat-menu>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 250px;">
-                                                    <span PrjResizeContent [collapseLine]="2"
-                                                        class="mb-0 p-0  ml-2 max-line-content-2" [innerHTML]="problem.risk"></span>
+                                                    <div PrjResizeContent [collapseLine]="2"
+                                                        class="mb-0 p-0  ml-2 max-line-content-2" [innerHTML]="problem.risk"></div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">
-                                                    <span PrjResizeContent [collapseLine]="2"
+                                                    <div PrjResizeContent [collapseLine]="2"
                                                         class="mb-0 p-0  ml-2 max-line-content-2"
-                                                        [innerHTML]="problem.impact"></span>
+                                                        [innerHTML]="problem.impact"></div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">
-                                                    <span PrjResizeContent [collapseLine]="2"
+                                                    <div PrjResizeContent [collapseLine]="2"
                                                         class="mb-0 p-0  ml-2 max-line-content-2"
-                                                        [innerHTML]="problem.solution"></span>
+                                                        [innerHTML]="problem.solution"></div>
                                                 </td>
                                                 <td style="white-space: normal" class="text-center">
                                                     <span style="border-radius: 99px; padding: 2px 8px;font-size: 14px;"
