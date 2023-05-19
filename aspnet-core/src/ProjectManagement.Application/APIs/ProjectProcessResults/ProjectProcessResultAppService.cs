@@ -571,6 +571,89 @@ namespace ProjectManagement.APIs.ProjectProcessResults
             return await ExportProjectProcessCriteriaToExcel(listCriteria, new GetProjectInfoDto { ProjectCode = projectInfor.Code, ProjectName = projectInfor.Name });
         }
 
+        #region export excel(Hoang)
+        //private async Task<FileBase64Dto> ExportProjectProcessCriteriaToExcel(List<GetProcessCriteriaTemplateDto> input, GetProjectInfoDto project)
+        //{
+        //    using (var wb = new ExcelPackage())
+        //    {
+        //        var NCStatus = Enum.GetValues(typeof(NCStatus))
+        //            .Cast<NCStatus>()
+        //            .Select(v => v.ToString())
+        //            .ToList();
+        //        var sheetAudit = wb.Workbook.Worksheets.Add("Audit");
+        //        sheetAudit.Cells.Style.Font.Name = "Arial";
+        //        sheetAudit.Cells.Style.Font.Size = 10;
+        //        sheetAudit.Cells["A1:G1"].Style.Font.Bold = true;
+        //        sheetAudit.Cells["A1:G1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+        //        sheetAudit.Cells["A1:G1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+        //        sheetAudit.Cells["A1:G1"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //        sheetAudit.Cells["A1:G1"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(112, 173, 71));
+        //        sheetAudit.Cells["A1:G1"].Style.Font.Color.SetColor(Color.White);
+        //        sheetAudit.Cells["A1"].Value = "Code";
+        //        sheetAudit.Cells["B1"].Value = "Criteria";
+        //        sheetAudit.Cells["C1"].Value = "NC classification";
+        //        sheetAudit.Cells["D1"].Value = "Comment";
+        //        sheetAudit.Cells["E1"].Value = "Tailoring Note";
+        //        sheetAudit.Cells["F1"].Value = "Guideline";
+        //        sheetAudit.Cells["G1"].Value = "Q&A Examples";
+
+        //        // Freeze the first row
+        //        sheetAudit.View.FreezePanes(2, 1);
+
+        //        var startAudit = sheetAudit.Cells["A2"].Start.Row;
+        //        foreach (var item in input)
+        //        {
+        //            if (!item.IsLeaf)
+        //            {
+        //                sheetAudit.Cells[$"A{startAudit}:G{startAudit}"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //                sheetAudit.Cells[$"A{startAudit}:G{startAudit}"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(218, 241, 243));
+        //            }
+        //            if (!item.ParentId.HasValue && !item.IsLeaf)
+        //            {
+        //                sheetAudit.Cells[$"A{startAudit}:G{startAudit}"].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+        //                sheetAudit.Cells[$"A{startAudit}:G{startAudit}"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(155, 194, 230));
+        //            }
+        //            sheetAudit.Cells[$"A{startAudit}"].Value = item.Code;
+        //            sheetAudit.Cells[$"B{startAudit}"].Value = item.Name;
+        //            if (item.IsLeaf)
+        //            {
+        //                var unitmeasure = sheetAudit.DataValidations.AddListValidation($"C{startAudit}");
+        //                foreach (var itemNC in NCStatus)
+        //                {
+        //                    unitmeasure.Formula.Values.Add(itemNC);
+        //                }
+        //            }
+        //            sheetAudit.Cells[$"D{startAudit}"].Value = "";
+        //            sheetAudit.Cells[$"E{startAudit}"].Value = CommonUtil.ConvertHtmlToPlainText(item.PmNote);
+        //            sheetAudit.Cells[$"F{startAudit}"].Value = CommonUtil.ConvertHtmlToPlainText(item.GuidLine);
+        //            sheetAudit.Cells[$"G{startAudit}"].Value = CommonUtil.ConvertHtmlToPlainText(item.QAExample);
+        //            startAudit++;
+        //        }
+        //        sheetAudit.Cells[$"A2:B{startAudit - 1}"].Style.Font.Bold = true;
+        //        sheetAudit.Cells[$"A2:B{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+        //        sheetAudit.Cells[$"A2:B{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+        //        sheetAudit.Cells[$"C2:C{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+        //        sheetAudit.Cells[$"C2:C{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+        //        sheetAudit.Cells[$"D2:G{startAudit - 1}"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+        //        sheetAudit.Cells[$"D2:G{startAudit - 1}"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+        //        sheetAudit.Cells.AutoFitColumns();
+        //        sheetAudit.Column(2).Width = 30;
+        //        sheetAudit.Column(4).Width = 40;
+        //        sheetAudit.Column(5).Width = 50;
+        //        sheetAudit.Column(6).Width = 50;
+        //        sheetAudit.Column(7).Width = 50;
+        //        sheetAudit.Cells.Style.WrapText = true;
+        //        return new FileBase64Dto
+        //        {
+        //            FileName = $"Audit [{project.ProjectCode}] {project.ProjectName}.xlsx",
+        //            FileType = MimeTypeNames.ApplicationVndOpenxmlformatsOfficedocumentSpreadsheetmlSheet,
+        //            Base64 = Convert.ToBase64String(wb.GetAsByteArray())
+        //        };
+        //    }
+        //}
+        #endregion
+
+        // export excel file, using Aspose library(duy)
         private async Task<FileBase64Dto> ExportProjectProcessCriteriaToExcel(List<GetProcessCriteriaTemplateDto> input, GetProjectInfoDto project)
         {
             using (var wb = new Workbook())
@@ -684,13 +767,20 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     sheetAudit.Cells[$"F{startAudit}"].HtmlString = item.GuidLine.HasValue() ? " " + item.GuidLine : " ";
                     sheetAudit.Cells[$"G{startAudit}"].HtmlString = item.QAExample.HasValue() ? " " + item.QAExample : " ";
 
-                    // Make Cell's Text wrap
-                    Style style1 = sheetAudit.Cells[$"E{startAudit}"].GetStyle();
-                    style1.IsTextWrapped = true;
-                    sheetAudit.Cells[$"D{startAudit}"].SetStyle(style1);
-                    sheetAudit.Cells[$"E{startAudit}"].SetStyle(style1);
-                    sheetAudit.Cells[$"F{startAudit}"].SetStyle(style1);
-                    sheetAudit.Cells[$"G{startAudit}"].SetStyle(style1);
+                    // Set Cell's Style
+                    Style styleWrap = sheetAudit.Cells[$"A{startAudit}"].GetStyle();
+                    Style styleHorizonCenter = sheetAudit.Cells[$"C{startAudit}"].GetStyle();
+                    Style styleBold = sheetAudit.Cells[$"E{startAudit}"].GetStyle();
+                    Range rangeFull = sheetAudit.Cells.CreateRange($"A{startAudit}", $"G{startAudit}");
+                    Range rangeAB = sheetAudit.Cells.CreateRange($"A{startAudit}", $"B{startAudit}");
+
+                    styleWrap.IsTextWrapped = true;
+                    styleHorizonCenter.HorizontalAlignment = TextAlignmentType.Center;
+                    styleBold.Font.IsBold = true;
+
+                    rangeAB.SetStyle(styleBold);
+                    rangeFull.SetStyle(styleWrap);
+                    sheetAudit.Cells[$"C{startAudit}"].SetStyle(styleHorizonCenter);
 
                     startAudit++;
                 }
