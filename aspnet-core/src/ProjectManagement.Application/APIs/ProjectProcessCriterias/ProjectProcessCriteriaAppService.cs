@@ -759,7 +759,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells.SetColumnWidth(3, 50);
                 sheetAudit.Cells.SetColumnWidth(4, 50);
                 sheetAudit.Cells.SetColumnWidth(5, 50);
-                sheetAudit.Cells.Style.IsTextWrapped = true;
+                //sheetAudit.Cells.Style.IsTextWrapped = true;
 
                 // hide and protect the second worksheet
                 sheetAudit2.Protect(ProtectionType.All);
