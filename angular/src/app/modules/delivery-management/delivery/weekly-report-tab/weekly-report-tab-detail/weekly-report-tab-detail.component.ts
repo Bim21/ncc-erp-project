@@ -333,6 +333,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
         }
+
+        this.isShowPmNote = this.generalNote ? true : false
         this.getLastWeek();
         this.getAllCriteria();
         this.getProjectInfo();
@@ -566,11 +568,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.searchUser = ""
     this.getTimeCountDown(true);
     this.showPmNote = false;
-    this.isShowIssues=false;
-    this.isShowPmNote = false;
-    this.isShowRisks=false
+    this.isShowPmNote = this.generalNote ? true: false
   }
-
 
   public getChangedResource() {
     if (this.projectId) {
@@ -643,6 +642,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
+        this.isShowIssues = this.problemList.length > 0;
       })
     }
   }
@@ -650,7 +650,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if(this.projectId){
       this.pmReportRiskService.getRiskOfTheWeek(this.projectId, this.pmReportId).pipe(catchError( this.pmReportRiskService.handleError)).subscribe(data => {
         if(data.result){
-          this.projectRiskList = data.result
+          this.projectRiskList = data.result;
+          this.isShowRisks = this.projectRiskList.length >0
         }
       })
     }

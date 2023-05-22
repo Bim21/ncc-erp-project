@@ -643,7 +643,7 @@
                         </div>
 
                         <div class=" card ">
-                            <mat-expansion-panel [expanded]="isShowPmNote || generalNote">
+                            <mat-expansion-panel [expanded]="isShowPmNote">
                                 <mat-expansion-panel-header class="m-0" #pmNote (click)="isShowPmNote=!isShowPmNote">
                                     <mat-panel-title>
                                         <strong style="font-size: 20px;" class="hyperlink" (click)="$event.stopPropagation();guideLinePMNote()">PM note</strong>
@@ -687,7 +687,7 @@
                         </div>
 
                         <div class=" card " *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)">
-                            <mat-expansion-panel [expanded]="isShowIssues || problemList.length >0 ">
+                            <mat-expansion-panel [expanded]="isShowIssues ">
                                 <mat-expansion-panel-header class="m-0" #issues (click)="isShowIssues=!isShowIssues">
                                     <mat-panel-title>
                                         <span (click)="$event.stopPropagation();">
@@ -793,7 +793,7 @@
                         </div>
 
                         <div class=" card " *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PMRisk_View)">
-                            <mat-expansion-panel [expanded]="isShowRisks || projectRiskList.length>0">
+                            <mat-expansion-panel [expanded]="isShowRisks">
                                 <mat-expansion-panel-header class="m-0" #panelH (click)="isShowRisks=!isShowRisks ">
                                     <mat-panel-title>
                                         <strong style="font-size: 20px;">Risks </strong> &nbsp;
