@@ -198,6 +198,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public bgFlag: string = 'bg-success'
   public status: string = 'Green'
   public processCriteria: boolean = false
+  public isResultConfirmModal: boolean;
 
   public guideLine: any;
   public priority = [
@@ -690,6 +691,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getRiskOfTheWeek();
     })
   }
+
   public search() {
     let value = this.searchText;
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
@@ -706,17 +708,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   public markRead(project) {
     if (project.seen == false) {
-      abp.notify.success("Mark Read!");
+      abp.notify.success("Mark Reviewed!");
       this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
         project.seen = !project.seen;
+        this.isResultConfirmModal = true;
         if (project.seen) {
           project.lastReviewDate = new Date();
         }
       });
     } else {
-      abp.notify.warn("Mark Unread!");
+      abp.notify.warn("Un-Mark Reviewed!");
       this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
         project.seen = !project.seen;
+        this.isResultConfirmModal = false;
         if (project.lastReviewDate != null) {
           project.lastReviewDate = res.result.format('DD/MM/YYYY hh:mm:ss');
         }
@@ -724,24 +728,26 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
 
-
-  public showConfirmModal( project) {
-    const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
+  public showConfirmModal(event, project) {
+    event.preventDefault();
+    if(project.isActive == true){
+      const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
         data: {
-            projectName: project.projectName,
-            markReview: project.seen
+          projectName: project.projectName,
+          markReview: project.seen
         },
-        width: "30%"
-    });
+        width: '30%'
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(result => {
         if (result === 'confirm') {
-            this.markRead(project);
-        } else if (result === 'cancel'){
-          project.seen = !project.seen;
+          this.markRead(project);
+        } else if (result === 'cancel') {
         }
-    });
-}
+      });
+    }
+  }
+
 
   public markReview(project) {
     if (project.necessaryReview == false) {

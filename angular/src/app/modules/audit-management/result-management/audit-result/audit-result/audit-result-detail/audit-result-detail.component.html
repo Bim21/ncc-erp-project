@@ -85,11 +85,11 @@
             <div class="item-criteria d-flex justify-content-end">
               <div  style="margin: auto 0; align-items: center; display: flex; flex: 1;"
               class="name-criteria">
-              <div class="d-flex hyperlink"  (click)="viewPPCRnode(node.item)"  style="font-size: 16px;color: black; ">
+              <div class="d-flex hyperlink"  (click)="viewPPCRnode(node.item, 'viewFromName')"  style="font-size: 16px;color: black; ">
                 <span class="d-flex align-items-center" style="min-width: 20px;">{{ node.item.processCriteria.code }} </span>
-                <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.processCriteria.name  }} 
+                <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.processCriteria.name  }}
                 </div>
-                 
+
                   <!-- <span>
                                   <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
                                     style="font-size: 15px;" class="fas fa-check-circle"
@@ -159,9 +159,9 @@
               <div class="item-criteria">
                 <div  style="margin: auto 0; align-items: center; display: flex; flex: 1;"
                 class="name-criteria">
-                <div class="d-flex hyperlink"  (click)="viewPPCRnode(node.item)"  style="font-size: 16px;color: black; ">
+                <div class="d-flex hyperlink"  (click)="viewPPCRnode(node.item, 'viewFromName')"  style="font-size: 16px;color: black; ">
                   <span class="d-flex align-items-center " style="min-width: 20px;">{{ node.item.processCriteria.code }} </span>
-                  <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.processCriteria.name  }} 
+                  <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.processCriteria.name  }}
                   </div>
                   <!-- <span>
                                   <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"

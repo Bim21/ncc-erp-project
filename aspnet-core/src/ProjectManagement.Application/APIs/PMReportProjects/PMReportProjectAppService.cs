@@ -102,11 +102,11 @@ namespace ProjectManagement.APIs.PMReportProjects
                     query = query.Where(x => x.NecessaryReview == false && x.Seen == false);
                     break;
 
-                case PrioritizeReviewSort.NeedReport:
+                case PrioritizeReviewSort.Need_Review:
                     query = query.Where(x => x.NecessaryReview == true);
                     break;
 
-                case PrioritizeReviewSort.Reported:
+                case PrioritizeReviewSort.Reviewed:
                     query = query.Where(x => x.Seen == true);
                     break;
             }
