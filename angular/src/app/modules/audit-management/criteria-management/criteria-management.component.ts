@@ -176,7 +176,11 @@ export class CriteriaManagementComponent
                     forkJoin([this.processCriteriaService.delete(node.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.id)])
                       .pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
                         abp.notify.success("Delete " + node.name);
-                        this.refresh()
+                        this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+                          this.treeControl.dataNodes=data.result.childrens
+                          this.dataSource.data = data.result.childrens
+                          this.treeControl.expandAll()
+                      })
                       })
                   }
                 }, true
@@ -190,8 +194,12 @@ export class CriteriaManagementComponent
                   if (result) {
                     this.processCriteriaService.delete(node.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
                       abp.notify.success("Deleted " + node.name);
-                      this.refresh()
-                    });
+                      this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+                        this.treeControl.dataNodes=data.result.childrens
+                        this.dataSource.data = data.result.childrens
+                        this.treeControl.expandAll()
+                    })
+                    })
                   }
                 }
               );

@@ -154,12 +154,22 @@
       Cancel
     </button>
     <button
+    *ngIf="data.command == 'edit'"
       name="btn-save"
       class="btn btn-primary btn-action"
       [disabled]="!resourceRequestForm.valid || isLoading"
       (click)="SaveAndClose()"
     >
-      Save
+      Update
+    </button>
+    <button
+    *ngIf="data.command == 'create'"
+      name="btn-save"
+      class="btn btn-primary btn-action"
+      [disabled]="!resourceRequestForm.valid || isLoading"
+      (click)="SaveAndClose()"
+    >
+      Create
     </button></div>
 
   </div>

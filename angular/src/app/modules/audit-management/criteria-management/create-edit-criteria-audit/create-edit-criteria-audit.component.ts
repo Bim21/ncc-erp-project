@@ -33,6 +33,11 @@ export class CreateEditCriteriaAuditComponent
   code=[];
   maxCode: number
   oldCode = '';
+  oldName = '';
+  oldGuideline = '';
+  oldExample= ''
+  
+
 
   public Audits_Criteria_ChangeApplicable = PERMISSIONS_CONSTANT.Audits_Criteria_ChangeApplicable
 
@@ -47,26 +52,12 @@ export class CreateEditCriteriaAuditComponent
   }
 
   ngOnInit(): void {
-    this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
-      this.listCriteriaAudit = data.result
-      this.listCriteriaAuditFilter = data.result.filter(x => x.isActive == true);
-      this.maxCode = this.listCriteriaAudit.filter(res => res.level == 1).map(res => { return Number(res.code) }).sort(function (a, b) { return a - b }).pop()
-
-      if (this.isCreateCriteria && this.parentCurrent) {
-        this.codeChild = data.result.find(res => res.id == this.data.item.id).maxValueOfListCode + 1
-      }
-      if (this.isCreateCriteria && !this.parentCurrent) {
-        if (this.data.childrens.length > 0) {
-          this.codeChild = this.maxCode + 1
-        }
-        else {
-          this.codeChild = 1
-        }
-      }
-    })
-
     if (this.data.command == "edit") {
       this.oldCode = this.data.item.code
+      this.oldCode = this.data.item.code
+      this.oldName=this.data.item.name
+      this.oldGuideline=this.data.item.guidLine
+      this.oldExample=this.data.item.qaExample
       this.isCreateCriteria = false;
       if (this.data.item.parentId) {
         this.processCriteriaService.getCriteriaById(this.data.item.parentId).pipe(catchError(this.processCriteriaService.handleError)).subscribe(res => {
@@ -87,11 +78,27 @@ export class CreateEditCriteriaAuditComponent
       this.isCreateCriteria = true;
       this.parentCurrent = this.data.item.code;
       this.codeParent = this.data.item.code || '';
-      if (!this.parentCurrent) {
-        this.codeChild = this.data.childrens.length + 1
-      }
+      
       this.criteriaAudit = { ...this.criteriaAudit, isApplicable: false, parentId: this.data.item.id, name: this.data.name }
     }
+    
+    this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
+      this.listCriteriaAudit = data.result
+      this.listCriteriaAuditFilter = data.result.filter(x => x.isActive == true);
+      this.maxCode = this.listCriteriaAudit.filter(res => res.level == 1).map(res => { return Number(res.code) }).sort(function (a, b) { return a - b }).pop()
+
+      if (this.isCreateCriteria && this.parentCurrent) {
+        this.codeChild = data.result.find(res => res.id == this.data.item.id).maxValueOfListCode + 1
+      }
+      if (this.isCreateCriteria && !this.parentCurrent) {
+        if (this.data.childrens.length > 0) {
+          this.codeChild = this.maxCode + 1
+        }
+        else {
+          this.codeChild = 1
+        }
+      }
+    })
   }
 
   changeParent(e) {
@@ -119,8 +126,6 @@ export class CreateEditCriteriaAuditComponent
   }
 
   SaveAndClose() {
-    console.log(this.oldCode);
-
     const criteriaCreate = {
       code: this.codeParent ? (this.codeParent + '.' + this.codeChild) : this.codeChild,
       name: this.criteriaAudit.name,
@@ -138,6 +143,8 @@ export class CreateEditCriteriaAuditComponent
       id: this.criteriaAudit.id,
       name: this.criteriaAudit.name
     }
+
+
 
 
 
@@ -164,28 +171,61 @@ export class CreateEditCriteriaAuditComponent
         }
       }, () => { this.isLoading = false })
     } else {
+
+      const listAtrCriteriaChange = []
+      if(criteriaCreate.name != this.oldName){
+        listAtrCriteriaChange.push('Name')
+      }
+      if(criteriaCreate.guidLine!= this.oldGuideline){
+        listAtrCriteriaChange.push('Guideline')
+      }
+      if(criteriaCreate.qaExample!= this.oldExample){
+        listAtrCriteriaChange.push('QaExample')
+      }
+
       if (criteriaUpdate.code != this.oldCode) {
-        abp.message.confirm("Code is change! Do you want to update Code for all descendants ", "", (result: boolean) => {
+        abp.message.confirm(" Code of all descendants will be updated accordingly ", "", (result: boolean) => {
           if (result) {
-            this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
-              abp.notify.success("Update Successfully!");
-              this.dialogRef.close(this.criteriaAudit);
-            }, () => { this.isLoading = false })
+            if(listAtrCriteriaChange.length>0){
+              const message = listAtrCriteriaChange.join(', ') + ', Code' + ' Update Successfully!'
+              this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
+                abp.notify.success(message);
+                this.dialogRef.close(this.criteriaAudit);
+              }, () => { this.isLoading = false })
+            }
+            else{
+              this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
+                abp.notify.success('Code Update Successfully!');
+                this.dialogRef.close(this.criteriaAudit);
+              }, () => { this.isLoading = false })
           }
+        }
           else {
             criteriaUpdate.code = this.oldCode;
-            this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
-              abp.notify.success("Update Successfully!");
+            if(listAtrCriteriaChange.length>0){
+              const message = listAtrCriteriaChange.join(', ') +  ' Update Successfully!'
+              this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
+                abp.notify.success(message);
+                this.dialogRef.close(this.criteriaAudit);
+              }, () => { this.isLoading = false })
+            }
+            else{
               this.dialogRef.close(this.criteriaAudit);
-            }, () => { this.isLoading = false })
+            }
           }
         })
       }
       else {
-        this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
-          abp.notify.success("Update Successfully!");
+        if(listAtrCriteriaChange.length>0){
+          const message = listAtrCriteriaChange.join(', ') +  ' Update Successfully!'
+          this.processCriteriaService.update(criteriaUpdate).pipe(catchError(this.processCriteriaService.handleError)).subscribe((res) => {
+            abp.notify.success(message);
+            this.dialogRef.close(this.criteriaAudit);
+          }, () => { this.isLoading = false })
+        }
+        else{
           this.dialogRef.close(this.criteriaAudit);
-        }, () => { this.isLoading = false })
+        }
       }
     }
   }
