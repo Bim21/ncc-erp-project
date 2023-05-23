@@ -146,16 +146,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditingAutomationNote: boolean = false
   public generalNote: string = "";
   public automationNote: string = "";
-  public isShowPmNote:boolean=true;
-  public isShowIssues:boolean=true;
-  public isShowCurrentResource:boolean = true;
+  public isShowPmNote:boolean=false;
+  public isShowIssues:boolean=false;
+  public isShowCurrentResource:boolean = false;
   public isShowSupportUser:boolean = false;
   public isShowBillInfo:boolean = true;
   public isShowTimesheet:boolean = true;
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
-  public isShowRisks: boolean = true;
+  public isShowRisks: boolean = false;
   public projectInfo = {} as ProjectInfoDto
   public projectCurrentResource: any = []
   public projectCurrentSupportUser: any = []
@@ -333,6 +333,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
         }
+
+        this.isShowPmNote = this.generalNote ? true : false
         this.getLastWeek();
         this.getAllCriteria();
         this.getProjectInfo();
@@ -566,8 +568,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.searchUser = ""
     this.getTimeCountDown(true);
     this.showPmNote = false;
+    this.isShowPmNote = this.generalNote ? true: false
   }
-
 
   public getChangedResource() {
     if (this.projectId) {
@@ -640,6 +642,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
+        this.isShowIssues = this.problemList.length > 0;
       })
     }
   }
@@ -647,7 +650,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if(this.projectId){
       this.pmReportRiskService.getRiskOfTheWeek(this.projectId, this.pmReportId).pipe(catchError( this.pmReportRiskService.handleError)).subscribe(data => {
         if(data.result){
-          this.projectRiskList = data.result
+          this.projectRiskList = data.result;
+          this.isShowRisks = this.projectRiskList.length >0
         }
       })
     }

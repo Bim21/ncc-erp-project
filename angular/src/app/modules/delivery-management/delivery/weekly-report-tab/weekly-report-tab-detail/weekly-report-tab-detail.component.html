@@ -125,12 +125,18 @@
                 <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_View)">
                     <mat-expansion-panel [expanded]="isShowFutureList">
                         <mat-expansion-panel-header class="m-0" (click)="isShowFutureList=!isShowFutureList">
-                            <h5 class="d-inline-block mb-2 font-weight-bold">Planned Resource</h5>
-                                        &nbsp;<strong style="font-size: 18px;" class="text-danger">({{futureReportList?.length}})</strong>
-                            <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
+                            <strong style="font-size: 20px;">Planned Resource</strong> &nbsp;
+                            <strong style="font-size: 18px;" class="text-danger">({{futureReportList?.length}})</strong>
+                            <button class="btn bg-blue ml-3 btn-sm mb-2"
+                                *ngIf=" permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan) && isActive"
+                                    [hidden]="processFuture || !isShowFutureList "
+                                    (click)="addPlanResource(); $event.stopPropagation()">
+                                <i class="fa fa-plus  m-0"></i>
+                            </button>
+                            <!-- <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
                                 *ngIf=" permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan) && isActive"
                                 [hidden]="processFuture || !isShowFutureList "
-                                (click)="addPlanResource(); $event.stopPropagation()"></i>
+                                (click)="addPlanResource(); $event.stopPropagation()"></i> -->
 
                         </mat-expansion-panel-header>
                         <div class="table-responsive px-4 pb-4">
@@ -286,9 +292,8 @@
                 <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ChangedResource)">
                     <mat-expansion-panel [expanded]="isShowWeeklyList">
                         <mat-expansion-panel-header class="m-0" (click)="isShowWeeklyList=!isShowWeeklyList">
-
-                            <h5 class="d-inline-block mb-2 font-weight-bold">Changed Resource</h5>
-                            &nbsp;<strong style="font-size: 18px;"class="text-danger">({{weeklyReportList?.length}})</strong>
+                            <strong style="font-size: 20px;">Changed Resource</strong> &nbsp;
+                            <strong style="font-size: 18px;"class="text-danger">({{weeklyReportList?.length}})</strong>
                         </mat-expansion-panel-header>
 
 
@@ -416,8 +421,8 @@
                 <div class="card" id="support-resource"
                     *ngIf="permission.isGranted(WeeklyReport_ReportDetail_CurrentResource_View)">
                     <mat-expansion-panel [expanded]="isShowSupportUser">
-                        <mat-expansion-panel-header class="m-0 align-items-baseline" (click)="isShowSupportUser=!isShowSupportUser">
-                            <h5 class="d-inline-block mb-2 font-weight-bold">Support User</h5>&nbsp;
+                        <mat-expansion-panel-header class="m-0 " (click)="isShowSupportUser=!isShowSupportUser">
+                            <strong style="font-size: 20px;">Support User</strong> &nbsp;
                             <strong style="font-size: 20px;" class="text-danger">({{projectCurrentSupportUser?.length}})</strong>
                         </mat-expansion-panel-header>
                         <div class="card-body">
@@ -682,7 +687,7 @@
                         </div>
 
                         <div class=" card " *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_View)">
-                            <mat-expansion-panel [expanded]="isShowIssues">
+                            <mat-expansion-panel [expanded]="isShowIssues ">
                                 <mat-expansion-panel-header class="m-0" #issues (click)="isShowIssues=!isShowIssues">
                                     <mat-panel-title>
                                         <span (click)="$event.stopPropagation();">
@@ -725,25 +730,25 @@
                                                     </mat-menu>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 250px;">
-                                                    <span PrjResizeContent [collapseLine]="2"
+                                                    <div PrjResizeContent [collapseLine]="2"
                                                         class="mb-0 p-0  ml-2 max-line-content-2"
-                                                        [innerHTML]="problem.description"></span>
+                                                        [innerHTML]="problem.description"></div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">
-                                                    <span PrjResizeContent [collapseLine]="2"
+                                                    <div PrjResizeContent [collapseLine]="2"
                                                         class="mb-0 p-0  ml-2 max-line-content-2"
-                                                        [innerHTML]="problem.impact"></span>
+                                                        [innerHTML]="problem.impact"></div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">
-                                                    <span PrjResizeContent [collapseLine]="2"
+                                                    <div PrjResizeContent [collapseLine]="2"
                                                         class="mb-0 p-0  ml-2 max-line-content-2"
-                                                        [innerHTML]="problem.solution"></span>
+                                                        [innerHTML]="problem.solution"></div>
                                                 </td>
                                                 <td style="white-space: normal;max-width: 200px;">
                                                     <div class="d-flex">
-                                                        <span PrjResizeContent [collapseLine]="2"
+                                                        <div PrjResizeContent [collapseLine]="2"
                                                             class="mb-0 p-0  ml-2 max-line-content-2"
-                                                            [innerHTML]="problem.meetingSolution"></span>
+                                                            [innerHTML]="problem.meetingSolution"></div>
                                                         <div class="col-1 center-item">
                                                             <i class="fas fa-edit mr-1"
                                                                 *ngIf="permission.isGranted(WeeklyReport_ReportDetail_Issue_AddMeetingNote) && isActive"
@@ -849,7 +854,7 @@
                                                         [innerHTML]="problem.solution"></div>
                                                 </td>
                                                 <td style="white-space: normal" class="text-center">
-                                                    <span style="border-radius: 99px; padding: 2px 8px;font-size: 14px;"
+                                                    <span  style="border-radius: 99px; padding: 0.25em 0.6em;font-size: 75%; font-weight: 700;"
                                                         [ngClass]="APP_CONST.priorityRequest[problem.priority] ">{{
                                                         priorityList[problem.priority] }}</span>
                                                 </td>
