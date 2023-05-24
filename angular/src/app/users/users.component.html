@@ -62,132 +62,135 @@
           </div>
         </div>
         <div class="card-body table-responsive p-0">
-          <table name="tbl_User" class="table text-nowrap" [busy]="isLoading">
-            <thead class="bg-light">
-              <tr>
-                <th class="stt">#</th>
-                <th>{{ "User" | localize }}</th>
-                <th>Role</th>
-                <th>Projects</th>
-                <th>Skills</th>
-                <th>{{ "IsActive" | localize }}</th>
-                <th class="col-action-menu">{{ "Actions" | localize }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="
-                  let user of users
-                    | paginate
-                      : {
-                          id: 'server',
-                          itemsPerPage: pageSize,
-                          currentPage: pageNumber,
-                          totalItems: totalItems
-                        }
-                ; let i =index">
-                <td class="text-center">{{i+1}}</td>
-                <td>
-                  <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
-                    branchColor:user.branchColor,
-                        branchDisplayName:user.branchDisplayName,
-                  userType:user.userType,emailAddress:user.emailAddress, avatarFullPath:user.avatarFullPath,
-                  position: user.position,
-                  positionColor: user.positionColor,
-                  positionName: user.positionName,
-                userLevel:user.userLevel}"></app-user-info>
-                </td>
-                <td style="width: 100px; text-align: center;">
-                  <p class="mb-1" *ngFor="let role of user.roleNames">
-                    {{role}} </p>
-                </td>
-
-                <td>
-                  <p *ngFor="let project of user.workingProjects" class="mb-1">
-                    <strong>{{project.projectName}} </strong> <strong [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong>&nbsp;
-                    <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
-                      {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
-                      <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date: "dd/MM/yyyy"}}</span>
-
-                  </p>
-                  <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!user.isshowProjectHistory" matTooltip="View project history"
-                    (click)="getHistoryProjectsByUserId(user)"></i>
-                  <div *ngIf="user.isshowProjectHistory" [ngClass]="user.showAllHistory == false ? 'preHistory' : 'history'">
-                    <div  *ngIf="user.userProjectHistory && user.userProjectHistory.length > 0" [innerHTML]="user.userProjectHistory" style="white-space: nowrap;"></div>
-
-                    <p *ngIf="!user.userProjectHistory || user.userProjectHistory.length == 0">
-                      No project history!
+          <div class="fixHead">
+            <table name="tbl_User" class="table text-nowrap" [busy]="isLoading">
+              <thead class="bg-light">
+                <tr>
+                  <th class="stt">#</th>
+                  <th>{{ "User" | localize }}</th>
+                  <th>Role</th>
+                  <th>Projects</th>
+                  <th>Skills</th>
+                  <th>{{ "IsActive" | localize }}</th>
+                  <th class="col-action-menu">{{ "Actions" | localize }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="
+                    let user of users
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }
+                  ; let i =index">
+                  <td class="text-center">{{i+1}}</td>
+                  <td>
+                    <app-user-info [userData]="{fullName:user.fullName,branch:user.branch,
+                      branchColor:user.branchColor,
+                          branchDisplayName:user.branchDisplayName,
+                    userType:user.userType,emailAddress:user.emailAddress, avatarFullPath:user.avatarFullPath,
+                    position: user.position,
+                    positionColor: user.positionColor,
+                    positionName: user.positionName,
+                  userLevel:user.userLevel}"></app-user-info>
+                  </td>
+                  <td style="width: 100px; text-align: center;">
+                    <p class="mb-1" *ngFor="let role of user.roleNames">
+                      {{role}} </p>
+                  </td>
+  
+                  <td>
+                    <p *ngFor="let project of user.workingProjects" class="mb-1">
+                      <strong>{{project.projectName}} </strong> <strong [ngClass]="project.isPool ? 'text-secondary' : 'text-primary'">{{project.workType}}</strong>&nbsp;
+                      <span [ngClass]="APP_CONST.projectUserRole[project.projectRole]">
+                        {{getByEnum(project.projectRole, APP_ENUM.ProjectUserRole)}}</span>
+                        <span> - </span><span style="font-size: 15px; color: #494d50">{{project.startTime | date: "dd/MM/yyyy"}}</span>
+  
                     </p>
-                  </div>
-                  <i [ngClass]="user.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="user.isshowProjectHistory == true && user.showMoreHistory"
-                    (click)="showMoreHistory(user);getHistoryProjectsByUserId(user)"></i>
-                </td>
-                <td style="width: 200px;">
-                  <p class="mb-1" *ngFor="let skill of user.userSkills; let i=index">- {{skill.skillName}} </p>
-                </td>
-                <td class="text-center" style="width: 100px;">
-                  <div class="custom-control custom-checkbox">
-                    <input *ngIf="user.isActive" type="checkbox" class="custom-control-input" disabled
-                      [checked]="user.isActive" />
-                    <label *ngIf="user.isActive" class="custom-control-label"></label>
-
-                  </div>
-                  <span *ngIf="!user.isActive">Đã nghỉ việc</span>
-                </td>
-                <td class="text-center" >
-                  <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
-                    <i class="fas fa-bars fa-lg"></i>
-                  </button>
-                  <mat-menu #menu="matMenu" class="p-2">
-                    <button *ngIf="permission.isGranted(Admin_Users_Edit)" type="button" class="mat-menu-item  w-100"
-                      (click)="editUser(user)">
-                      <i class="fas fa-pencil-alt fa-lg mr-1"></i>
-                      {{'Edit' | localize }}
+                    <i class=" fas fa-history pointer" style="color: #6b7278;" *ngIf="!user.isshowProjectHistory" matTooltip="View project history"
+                      (click)="getHistoryProjectsByUserId(user)"></i>
+                    <div *ngIf="user.isshowProjectHistory" [ngClass]="user.showAllHistory == false ? 'preHistory' : 'history'">
+                      <div  *ngIf="user.userProjectHistory && user.userProjectHistory.length > 0" [innerHTML]="user.userProjectHistory" style="white-space: nowrap;"></div>
+  
+                      <p *ngIf="!user.userProjectHistory || user.userProjectHistory.length == 0">
+                        No project history!
+                      </p>
+                    </div>
+                    <i [ngClass]="user.showAllHistory ? 'fas fa-chevron-up' :'fa fa-ellipsis-h'"  *ngIf="user.isshowProjectHistory == true && user.showMoreHistory"
+                      (click)="showMoreHistory(user);getHistoryProjectsByUserId(user)"></i>
+                  </td>
+                  <td style="width: 200px;">
+                    <p class="mb-1" *ngFor="let skill of user.userSkills; let i=index">- {{skill.skillName}} </p>
+                  </td>
+                  <td class="text-center" style="width: 100px;">
+                    <div class="custom-control custom-checkbox">
+                      <input *ngIf="user.isActive" type="checkbox" class="custom-control-input" disabled
+                        [checked]="user.isActive" />
+                      <label *ngIf="user.isActive" class="custom-control-label"></label>
+  
+                    </div>
+                    <span *ngIf="!user.isActive">Đã nghỉ việc</span>
+                  </td>
+                  <td class="text-center" >
+                    <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
+                      <i class="fas fa-bars fa-lg"></i>
                     </button>
-                    <button *ngIf="permission.isGranted(Admin_Users_UpdateSkill)" type="button" class="mat-menu-item  w-100"
-                    (click)="updateUserSkill(user)">
+                    <mat-menu #menu="matMenu" class="p-2">
+                      <button *ngIf="permission.isGranted(Admin_Users_Edit)" type="button" class="mat-menu-item  w-100"
+                        (click)="editUser(user)">
+                        <i class="fas fa-pencil-alt fa-lg mr-1"></i>
+                        {{'Edit' | localize }}
+                      </button>
+                      <button *ngIf="permission.isGranted(Admin_Users_UpdateSkill)" type="button" class="mat-menu-item  w-100"
+                      (click)="updateUserSkill(user)">
+                      <i class="fas fa-edit fa-lg mr-1"></i>
+                      Update skill
+                    </button>
+                    <button *ngIf="permission.isGranted(Admin_Users_UpdateRole)" type="button" class="mat-menu-item  w-100"
+                    (click)="updateUserRole(user)">
                     <i class="fas fa-edit fa-lg mr-1"></i>
-                    Update skill
+                    Update Roles
                   </button>
-                  <button *ngIf="permission.isGranted(Admin_Users_UpdateRole)" type="button" class="mat-menu-item  w-100"
-                  (click)="updateUserRole(user)">
-                  <i class="fas fa-edit fa-lg mr-1"></i>
-                  Update Roles
-                </button>
-                    <button *ngIf="!user.isActive && permission.isGranted(Admin_Users_ActiveAndDeactive)" type="button"
-                      class="mat-menu-item  w-100" (click)="updateUserActive(user,true)">
-                      <i class="fas fa-check fa-lg mr-1"></i>
-                      Activate
-                    </button>
-                    <button *ngIf="user.isActive && permission.isGranted(Admin_Users_ActiveAndDeactive)" type="button"
-                      class="mat-menu-item  w-100" (click)="updateUserActive(user,false)">
-                      <i class="fas fa-times fa-lg mr-1"></i>
-                      Deactivate
-                    </button>
-                    <button
-                      *ngIf="permission.isGranted(Admin_Users_DeleteFakeUser) && user.userType == APP_ENUM.UserType.FakeUser"
-                      type="button" class="mat-menu-item  w-100" (click)="deleteFakeUser(user)">
-                      <i class="fas fa-trash fa-lg mr-1"></i>
-                      Delete
-                    </button>
-                    <button *ngIf="permission.isGranted(Admin_Users_UploadAvatar)" class="mat-menu-item  w-100"
-                      (click)="upLoadAvatar(user)">
-                      <i class="fas fa-upload fa-lg mr-1"></i>
-                      {{ "Upload Avatar" | localize }}
-                    </button>
-
-                    <button *ngIf="this.permission.isGranted(Admin_Users_ResetPassword)" type="button"
-                      class="mat-menu-item  w-100" (click)="resetPassword(user)">
-                      <i class="fas fa-lock fa-lg mr-1"></i>
-                      {{ "ResetPassword" | localize }}
-                    </button>
-
-                  </mat-menu>
-
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                      <button *ngIf="!user.isActive && permission.isGranted(Admin_Users_ActiveAndDeactive)" type="button"
+                        class="mat-menu-item  w-100" (click)="updateUserActive(user,true)">
+                        <i class="fas fa-check fa-lg mr-1"></i>
+                        Activate
+                      </button>
+                      <button *ngIf="user.isActive && permission.isGranted(Admin_Users_ActiveAndDeactive)" type="button"
+                        class="mat-menu-item  w-100" (click)="updateUserActive(user,false)">
+                        <i class="fas fa-times fa-lg mr-1"></i>
+                        Deactivate
+                      </button>
+                      <button
+                        *ngIf="permission.isGranted(Admin_Users_DeleteFakeUser) && user.userType == APP_ENUM.UserType.FakeUser"
+                        type="button" class="mat-menu-item  w-100" (click)="deleteFakeUser(user)">
+                        <i class="fas fa-trash fa-lg mr-1"></i>
+                        Delete
+                      </button>
+                      <button *ngIf="permission.isGranted(Admin_Users_UploadAvatar)" class="mat-menu-item  w-100"
+                        (click)="upLoadAvatar(user)">
+                        <i class="fas fa-upload fa-lg mr-1"></i>
+                        {{ "Upload Avatar" | localize }}
+                      </button>
+  
+                      <button *ngIf="this.permission.isGranted(Admin_Users_ResetPassword)" type="button"
+                        class="mat-menu-item  w-100" (click)="resetPassword(user)">
+                        <i class="fas fa-lock fa-lg mr-1"></i>
+                        {{ "ResetPassword" | localize }}
+                      </button>
+  
+                    </mat-menu>
+  
+  
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
         </div>
         <div class="card-footer bg-light border-top">
           <div class="row">
