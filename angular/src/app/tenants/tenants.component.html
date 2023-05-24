@@ -131,62 +131,65 @@
           </div>
         </div>
         <div class="card-body table-responsive p-0">
-          <table name="tbl_tenant" class="table table-hover text-nowrap" [busy]="isLoading">
-            <thead class="bg-light">
-              <tr>
-                <th>{{ "TenancyName" | localize }}</th>
-                <th>{{ "Name" | localize }}</th>
-                <th>{{ "IsActive" | localize }}</th>
-                <th style="width: 200px;">{{ "Actions" | localize }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="
-                  let tenant of tenants
-                    | paginate
-                      : {
-                          id: 'server',
-                          itemsPerPage: pageSize,
-                          currentPage: pageNumber,
-                          totalItems: totalItems
-                        }
-                "
-              >
-                <td>{{ tenant.tenancyName }}</td>
-                <td>{{ tenant.name }}</td>
-                <td>
-                  <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      disabled
-                      [checked]="tenant.isActive"
-                    />
-                    <label class="custom-control-label"></label>
-                  </div>
-                </td>
-                <td>
-                  <button *ngIf="permission.isGranted(Admin_Tenants_Edit)"
-                    type="button"
-                    class="btn btn-sm bg-secondary"
-                    (click)="editTenant(tenant)"
-                  >
-                    <i class="fas fa-pencil-alt"></i>
-                    {{ "Edit" | localize }}
-                  </button>
-                  <button *ngIf="permission.isGranted(Admin_Tenants_Delete)"
-                    type="button"
-                    class="btn btn-sm bg-danger mx-2"
-                    (click)="delete(tenant)"
-                  >
-                    <i class="fas fa-trash"></i>
-                    {{ "Delete" | localize }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="fixHead">
+            <table name="tbl_tenant" class="table table-hover text-nowrap" [busy]="isLoading">
+              <thead class="bg-light">
+                <tr>
+                  <th>{{ "TenancyName" | localize }}</th>
+                  <th>{{ "Name" | localize }}</th>
+                  <th>{{ "IsActive" | localize }}</th>
+                  <th style="width: 200px;">{{ "Actions" | localize }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let tenant of tenants
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }
+                  "
+                >
+                  <td>{{ tenant.tenancyName }}</td>
+                  <td>{{ tenant.name }}</td>
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        disabled
+                        [checked]="tenant.isActive"
+                      />
+                      <label class="custom-control-label"></label>
+                    </div>
+                  </td>
+                  <td>
+                    <button *ngIf="permission.isGranted(Admin_Tenants_Edit)"
+                      type="button"
+                      class="btn btn-sm bg-secondary"
+                      (click)="editTenant(tenant)"
+                    >
+                      <i class="fas fa-pencil-alt"></i>
+                      {{ "Edit" | localize }}
+                    </button>
+                    <button *ngIf="permission.isGranted(Admin_Tenants_Delete)"
+                      type="button"
+                      class="btn btn-sm bg-danger mx-2"
+                      (click)="delete(tenant)"
+                    >
+                      <i class="fas fa-trash"></i>
+                      {{ "Delete" | localize }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+       
         </div>
         <div class="card-footer bg-light border-top">
           <div class="row">

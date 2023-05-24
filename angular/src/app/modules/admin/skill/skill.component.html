@@ -59,42 +59,45 @@
                 </div>
             </div>
             <div class="card-body table-responsive p-4">
-                <table name="tbl-skill" style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
-                    <thead class="bg-light">
-                        <tr>
-                            <th>STT</th>
-                            <th>Name</th>
-                            <th *ngIf="permission.isGranted(Admin_Skills_Edit) || permission.isGranted(Admin_Skills_Delete)">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of skillList |paginate
-                            : {
-                                id: 'server',
-                                itemsPerPage: pageSize,
-                                currentPage: pageNumber,
-                                totalItems: totalItems
-                              }; let i = index">
-                            <td class="text-center stt"><span>{{ i +1 }}</span></td>
-                            <td class="text-center">{{item.name}}</td>
-                            <td style="width: 200px;" class="text-center" *ngIf="permission.isGranted(Admin_Skills_Edit) || permission.isGranted(Admin_Skills_Delete)">
-                                <button *ngIf="permission.isGranted(Admin_Skills_Edit)"
-                                    class="btn btn-sm bg-secondary mr-1"
-                                    (click)="editSkill(item);$event.stopPropagation()">
-                                    <i class="fas fa-pencil-alt"></i>
-
-                                    Edit
-                                </button>
-                                <button *ngIf="permission.isGranted(Admin_Skills_Delete)"
-                                    class="btn btn-sm bg-danger ml-1" (click)="delete(item);$event.stopPropagation()"
-                                    #deleteBtn>
-                                    <i class="fas fa-trash"></i>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="fixHead">
+                    <table name="tbl-skill" style="border-collapse: collapse;" class="table table-hover text-nowrap" [busy]="isLoading">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Name</th>
+                                <th *ngIf="permission.isGranted(Admin_Skills_Edit) || permission.isGranted(Admin_Skills_Delete)">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of skillList |paginate
+                                : {
+                                    id: 'server',
+                                    itemsPerPage: pageSize,
+                                    currentPage: pageNumber,
+                                    totalItems: totalItems
+                                  }; let i = index">
+                                <td class="text-center stt"><span>{{ i +1 }}</span></td>
+                                <td class="text-center">{{item.name}}</td>
+                                <td style="width: 200px;" class="text-center" *ngIf="permission.isGranted(Admin_Skills_Edit) || permission.isGranted(Admin_Skills_Delete)">
+                                    <button *ngIf="permission.isGranted(Admin_Skills_Edit)"
+                                        class="btn btn-sm bg-secondary mr-1"
+                                        (click)="editSkill(item);$event.stopPropagation()">
+                                        <i class="fas fa-pencil-alt"></i>
+    
+                                        Edit
+                                    </button>
+                                    <button *ngIf="permission.isGranted(Admin_Skills_Delete)"
+                                        class="btn btn-sm bg-danger ml-1" (click)="delete(item);$event.stopPropagation()"
+                                        #deleteBtn>
+                                        <i class="fas fa-trash"></i>
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
             <div class="card-footer bg-light border-top">
                 <div class="row">

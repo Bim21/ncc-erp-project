@@ -886,8 +886,8 @@
                             <mat-expansion-panel [expanded]="isShowCurrentResource">
                                 <mat-expansion-panel-header class="m-0" #resource
                                     (click)="isShowCurrentResource=!isShowCurrentResource">
-                                    <mat-panel-title class="align-items-baseline">
-                                        <h5 class="d-inline-block mb-2 font-weight-bold">Current Resource</h5>&nbsp;
+                                    <mat-panel-title class="align-items-baseline d-flex align-items-center">
+                                        <strong style="font-size: 20px; ">Current Resource</strong>&nbsp;
                                         <strong style="font-size: 20px;"
                                             class="text-danger">({{projectCurrentResource?.length}})</strong>
                                         <span style="font-size: 20px; margin-left: 21px; font-weight: bold;">Charged

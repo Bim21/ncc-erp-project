@@ -22,7 +22,8 @@ class PagedTenantsRequestDto extends PagedRequestDto {
 
 @Component({
   templateUrl: './tenants.component.html',
-  animations: [appModuleAnimation()]
+  animations: [appModuleAnimation()],
+  styleUrls: ['./tenants.component.css']
 })
 export class TenantsComponent extends PagedListingComponentBase<TenantDto> {
   Admin_Tenants_Create = PERMISSIONS_CONSTANT.Admin_Tenants_Create;

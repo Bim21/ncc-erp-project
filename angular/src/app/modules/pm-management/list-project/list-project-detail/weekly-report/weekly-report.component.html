@@ -128,7 +128,7 @@
                                     (click)="isEditingNote = true"></i>
                                     <i *ngIf="isEditingNote" style="color: green ;" class="fas fa-check fa-lg"
                                     (click)="updateNote()"></i>
-                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote()" style="color: red;"
+                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote()" style="color: red; margin-left: 15px;"
                                         class="fas fa-times fa-lg mr-2"></i>
                             </div>
                         </mat-panel-title>
@@ -540,7 +540,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive px-2">
-                            <h5 class="d-inline-block mb-2 font-weight-bold">Timesheet</h5>
+                            <strong style="font-size: 20px;font-family: Roboto, 'Helvetica Neue', sans-serif;">Timesheet</strong>
                             <div style="width: 100%; height: 190px;" id="timesheet-chart">
                             </div>
                         </div>
@@ -550,7 +550,7 @@
                     <div class=" card">
                         <div class="card-body">
                             <div class="table-responsive px-2">
-                                <h5 class="d-inline-block mb-2 font-weight-bold">Bill info</h5>
+                                <strong style="font-size: 20px; font-family: Roboto, 'Helvetica Neue', sans-serif;">Bill info</strong>
                                 <div style="width: 100%; height: 190px;" id="bill-chart">
 
                                 </div>
