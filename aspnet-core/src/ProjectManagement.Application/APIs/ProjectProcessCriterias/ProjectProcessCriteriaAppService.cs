@@ -513,10 +513,12 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     var listToAdd = new List<ProjectProcessCriteria>();
                     var listWarning = new List<ResponseFailDto>();
                     var listCriteriaIds = new List<long>();
-                    for (int row = 2; row < rowCount; row++)
+                    for (int row = 2; row <= rowCount; row++)
                     {
                         //Code không tồn tại, code null, code sai => trả ra thông báo lỗi Row n: Code number is not exsit or null
+                        var code2 = worksheet.Cells[row, 1].Value;
                         var code = worksheet.Cells[row, 1].Value.ToString().Trim();
+
                         if (string.IsNullOrEmpty(code) || !mapCodeToId.ContainsKey(code))
                         {
                             listWarning.Add(new ResponseFailDto { Row = row, ReasonFail = "Code number is not exsit or null" });
