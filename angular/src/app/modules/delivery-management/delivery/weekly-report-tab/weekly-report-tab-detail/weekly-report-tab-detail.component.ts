@@ -1698,7 +1698,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           break;
       }
 
-      if (guideline) {
+      if (guideline !== undefined) {  // Change this line
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
             name: command,
@@ -1707,6 +1707,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           },
           width: "60%"
         });
+
+        show.afterClosed().subscribe((updatedGuideline) => {
+          if (updatedGuideline) {
+            this.refresh();
+          }
+        });
+      } else {
+        // Display the dialog with empty content
+        const show = this.dialog.open(ReportGuidelineDetailComponent, {
+          data: {
+            name: command,
+            guideline: "",  // Provide an empty string as guideline
+            item: guideLineItem
+          },
+          width: "60%"
+        });
+
 
         show.afterClosed().subscribe((updatedGuideline) => {
           if (updatedGuideline) {

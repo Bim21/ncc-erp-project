@@ -37,7 +37,7 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
   @Input() item: any;
 
   ngOnInit(): void {
-    this.guideline = this.data.guideline;
+    this.guideline = this.data.guideline || "";
     this.name = this.data.name;
     this.guideLineItem = this.data.item;
 
