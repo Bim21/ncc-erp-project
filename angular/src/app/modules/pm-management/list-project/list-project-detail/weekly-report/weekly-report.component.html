@@ -160,7 +160,7 @@
                                     <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;color: #000;">Issues </strong> 
                                     <strong style="font-size: 20px;" class="text-danger">({{problemList?.length}})</strong>
                                 </div>
-                                <div style="width: 85%;">
+                                <div style="width: 88%;">
                                     <button
                                     *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
                                     [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addIssueReport()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
@@ -321,7 +321,7 @@
                                 <strong style="font-size: 20px;color: #000;" class="hyperlink" (click)="$event.stopPropagation();guideLineRisk()">Risks </strong> &nbsp;
                                 <strong style="font-size: 20px; " class="text-danger">({{projectRiskList?.length}})</strong>
                            </div>
-                           <div style="width: 85%;">
+                           <div style="width: 88%;">
                                 <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue) && selectedReport.isActive " 
                                 (click)="addOrEditRisk('create');$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2"
                                 style="padding: 0px 5px;margin-bottom: 0 !important;">
@@ -563,7 +563,7 @@
                             <div class="card"
                                 *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View)">
                                 <mat-expansion-panel [expanded]="isShowFutureList">
-                                    <mat-expansion-panel-header class="m-0 d-flex align-items-center"
+                                    <mat-expansion-panel-header class="m-0 d-flex align-items-center "
                                         (click)="isShowFutureList=!isShowFutureList">
                                         <strong style="font-size: 20px;">Planned Resource</strong> &nbsp;
                                         <strong style="font-size: 20px;" class="text-danger">({{futureReportList?.length}})</strong>
@@ -885,10 +885,10 @@
                                                         [matTooltip]="overTimeNoCharge1 + 'h total OT NoCharge' + ' / ' + totalOverTime1 + 'h total OT'">
                                                         (
                                                         <strong [ngClass]="overTimeNoCharge1>0?'text-warning':''"
-                                                            style="font-size: 17px;">{{overTimeNoCharge1}}h
+                                                            style="font-size: 14px;">{{overTimeNoCharge1}}h
                                                         </strong>/
                                                         <strong [ngClass]="totalOverTime1>0?'text-danger':''"
-                                                            style="font-size: 17px;">{{totalOverTime1}}h
+                                                            style="font-size: 14px;">{{totalOverTime1}}h
                                                         </strong>
                                                         )
                                                     </div>
