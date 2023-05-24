@@ -117,13 +117,14 @@
 
                 <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_View)">
                     <mat-expansion-panel [expanded]="isShowFutureList">
-                        <mat-expansion-panel-header class="m-0" (click)="isShowFutureList=!isShowFutureList">
+                        <mat-expansion-panel-header class="m-0 d-flex align-items-center" (click)="isShowFutureList=!isShowFutureList">
                             <strong style="font-size: 20px;">Planned Resource</strong> &nbsp;
                             <strong style="font-size: 18px;" class="text-danger">({{futureReportList?.length}})</strong>
                             <button class="btn bg-blue ml-3 btn-sm mb-2"
                                 *ngIf=" permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan) && isActive"
                                 [hidden]="processFuture || !isShowFutureList "
-                                (click)="addPlanResource(); $event.stopPropagation()">
+                                (click)="addPlanResource(); $event.stopPropagation()"
+                                style="padding: 0 5px;margin-bottom: 0 !important;">
                                 <i class="fa fa-plus  m-0"></i>
                             </button>
                             <!-- <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"

@@ -37,7 +37,7 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
   @Input() item: any;
 
   ngOnInit(): void {
-    this.guideline = this.data.guideline || "";
+    this.guideline = this.data.guidelineContent || "";
     this.name = this.data.name;
     this.guideLineItem = this.data.item;
 
@@ -49,16 +49,16 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
     if (updatedGuideline) {
       switch (this.name) {
         case "Criteria Status":
-          updatedGuideline.criteriaStatus = this.data.guideline;
+          updatedGuideline.criteriaStatus = this.data.guidelineContent ;
           break;
         case "Issue":
-          updatedGuideline.issue = this.data.guideline;
+          updatedGuideline.issue = this.data.guidelineContent ;
           break;
         case "Risk":
-          updatedGuideline.risk = this.data.guideline;
+          updatedGuideline.risk = this.data.guidelineContent ;
           break;
         case "PM Note":
-          updatedGuideline.pmNote = this.data.guideline;
+          updatedGuideline.pmNote = this.data.guidelineContent ;
           break;
       }
     }
