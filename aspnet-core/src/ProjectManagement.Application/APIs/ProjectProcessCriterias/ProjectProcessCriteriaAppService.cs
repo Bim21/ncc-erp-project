@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Uow;
 using Abp.UI;
@@ -766,6 +767,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 }
 
                 sheetAudit.Cells.SetColumnWidth(1, 40);
+                sheetAudit.Cells.SetColumnWidth(2, 10);
                 sheetAudit.Cells.SetColumnWidth(3, 50);
                 sheetAudit.Cells.SetColumnWidth(4, 50);
                 sheetAudit.Cells.SetColumnWidth(5, 50);
