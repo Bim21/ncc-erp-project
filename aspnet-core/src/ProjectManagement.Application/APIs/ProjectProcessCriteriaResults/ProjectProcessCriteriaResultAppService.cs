@@ -151,6 +151,9 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
             var dicItem = WorkScope.GetAll<ProjectProcessCriteriaResult>()
                 .Where(x => x.ProjectProcessResultId == input.ProjectProcessResultId && x.ProjectId == input.ProjectId)
                 .ToDictionary(x => x.ProcessCriteriaId, y => new { y.Status, y.Score, y.Note, y.Id });
+            var dicPPCs = WorkScope.GetAll<ProjectProcessCriteria>()
+                .Where(x => x.ProjectId == input.ProjectId)
+                .ToDictionary(x => x.ProcessCriteriaId, y => new {y.Applicable, y.Note});
             var idsContain = new List<long>();
             foreach (var x in dicItem.Select(y => y.Key))
             {
@@ -178,7 +181,9 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults
                         Name = x.Name,
                         ParentId = x.ParentId,
                         QAExample = x.QAExample
-                    }
+                    },
+                    Applicable = dicPPCs.ContainsKey(x.Id) ? dicPPCs[x.Id].Applicable : Applicable.Standard,
+                    TailoringNote = dicPPCs.ContainsKey(x.Id) ? dicPPCs[x.Id].Note : "",
                 })
                 .OrderBy(x => CommonUtil.GetNaturalSortKey(x.ProcessCriteria.Code))
                 .ToList();

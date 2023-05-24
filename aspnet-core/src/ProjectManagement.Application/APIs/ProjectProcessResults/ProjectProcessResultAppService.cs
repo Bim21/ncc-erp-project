@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using static ProjectManagement.APIs.ProjectProcessResults.Dto.GetProjectProcessResultDto;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -565,7 +566,8 @@ namespace ProjectManagement.APIs.ProjectProcessResults
         {
             var listLeaf = WorkScope.GetAll<ProjectProcessCriteria>()
                 .Where(x => x.ProjectId == projectID)
-                .Select(x => x.ProcessCriteriaId).ToList();
+                .Select(x => x.ProcessCriteriaId)
+                .ToList();
             var projectInfor = WorkScope.Get<Project>(projectID);
             var listCriteria = await GetListProcessCriteriaForExport(listLeaf, projectID);
             return await ExportProjectProcessCriteriaToExcel(listCriteria, new GetProjectInfoDto { ProjectCode = projectInfor.Code, ProjectName = projectInfor.Name });
@@ -701,6 +703,8 @@ namespace ProjectManagement.APIs.ProjectProcessResults
 
                 // Name the range.
                 range.Name = "MyRange";
+                // Freeze the first row and first two columns
+                sheetAudit.FreezePanes(1, 2, 1, 2);
 
                 // Fill different cells with data in the range.
                 int start = 0;
@@ -825,8 +829,7 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                 listID.AddRange(_commonManager.GetAllParentId(item, listAllCriteria));
             }
             listID = listID.Distinct().ToList();
-            return await WorkScope.GetAll<ProcessCriteria>()
-                .OrderBy(x => x.Code).ThenBy(x => x.Level)
+            return WorkScope.GetAll<ProcessCriteria>()
                 .Where(x => listID.Contains(x.Id))
                 .Select(x => new GetProcessCriteriaTemplateDto
                 {
@@ -841,7 +844,9 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     PmNote = dicIdPmNote.ContainsKey(x.Id) ? dicIdPmNote[x.Id] : "",
                     ParentId = x.ParentId,
                     QAExample = x.QAExample,
-                }).ToListAsync();
+                })
+                .ToList()
+                .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code)).ToList();
         }
 
         private List<long> ConvertTree(IEnumerable<TreeItem<GetProcessCriteriaDto>> tree)

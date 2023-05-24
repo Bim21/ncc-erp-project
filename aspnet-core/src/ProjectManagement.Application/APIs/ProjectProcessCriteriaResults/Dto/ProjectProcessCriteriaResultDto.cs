@@ -16,6 +16,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriteriaResults.Dto
         public NCStatus Status { get; set; }
         public int Score { get; set; }
         public string Note { get; set; }
+        public string TailoringNote { get; set; }
+        public Applicable Applicable { get; set; }
 
         public virtual GetProcessCriteriaDto ProcessCriteria { get; set; }
     }

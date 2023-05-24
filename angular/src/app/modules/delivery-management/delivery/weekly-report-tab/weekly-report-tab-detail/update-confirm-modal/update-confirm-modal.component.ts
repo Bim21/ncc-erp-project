@@ -30,8 +30,20 @@ export class UpdateConfirmModalComponent extends AppComponentBase implements OnI
     this.dialogRef.close('confirm');
   }
 
+  // onCancel() {
+  //   this.dialogRef.close('cancel');
+  // }
+
   onCancel() {
+    if (this.data.markReview) {
+      // If data.markReview is true, keep the checkbox checked and do not change the data
+      this.isChecked = true;
+    } else {
+      // If data.markReview is false, uncheck the checkbox and do not change the data
+      this.isChecked = false;
+    }
     this.dialogRef.close('cancel');
   }
+
 
 }

@@ -258,8 +258,8 @@
         {
             All,
             Nothing,
-            NeedReport,
-            Reported
+            Need_Review,
+            Reviewed
         }
 
         public enum ProjectCriteriaResultStatus

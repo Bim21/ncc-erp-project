@@ -20,7 +20,7 @@ export class AddRiskDialogComponent extends AppComponentBase implements OnInit {
   })
 
   id: number
-  currentStatus = this.APP_ENUM.PMReportProjectRiskStatus.Done;
+  currentStatus = this.APP_ENUM.PMReportProjectRiskStatus.InProgress;
   currentPriority = this.APP_ENUM.Priority.Medium;
   public priority = [
     { value: this.APP_ENUM.Priority.Low, viewValue: 'Low' },

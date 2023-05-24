@@ -4,7 +4,7 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { GetAllProjectProcessCriteriaDto } from '@app/service/model/project-process-criteria.dto'
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
 import { catchError, finalize } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { ProjectProcessCriteriaResultAppService } from "@app/service/api/project-process-criteria-result.service";
@@ -120,18 +120,24 @@ export class AuditResultDetailComponent extends PagedListingComponentBase<AuditR
     return this.NC_STATUS[this.selectedNCStatus.toUpperCase()];
   }
 
-
-  viewPPCRnode(node) {
-    const dialogRef = this.dialog.open(ViewAuditResultDetailComponent, {
+  viewPPCRnode(node, contentType?: string) {
+    const dialogConfig: MatDialogConfig<any> = {
       panelClass: 'my-dialog',
-      width:"60%",
-      data: node
-    });
+      width: "60%",
+      data: {
+        node: node,
+        contentType: contentType
+      }
+    };
+
+    const dialogRef = this.dialog.open(ViewAuditResultDetailComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       //console.log(`Dialog result: ${result}`);
     });
   }
+
+
 
   editProjectProcessCriteria(node) {
     const dialogRef = this.dialog.open(EditAuditResultDetailComponent, {

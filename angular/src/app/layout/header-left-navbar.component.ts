@@ -73,8 +73,8 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   filterReviewNeedList = [
     "All",
     "Nothing",
-    "NeedReport",
-    "Reported"
+    "Need_Review",
+    "Reviewed"
   ]
 
   private filterSortStorageKey = 'filterSort';

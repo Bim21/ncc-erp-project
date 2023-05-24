@@ -42,18 +42,20 @@
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle [style.marginLeft] = "node.level * 40 + 'px'"  style="background-color:rgb(245, 242, 242) ">
         <button mat-icon-button disabled></button>
         <div class="d-flex">
-          <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
+          <mat-checkbox class="checklist-leaf-node d-flex align-items-center" [checked]="checklistSelection.isSelected(node)"
           (change)="todoLeafItemSelectionToggle(node,true)"
           [disabled]="!permission.isGranted(Audits_Tailoring_Update_Project_Tailoring)">
         </mat-checkbox>
-        <div [matTooltip]="node.item.name" style="margin: auto 0;font-size: 16px;" class="ml-1 d-flex align-items-center">
-          <span class="mr-1"> {{ node.item.code }} &nbsp;</span>
-          <span style="flex:1;" class="note">{{ node.item.name }}</span>
+        <div class="d-flex"  style="font-size: 16px; margin-left: 38px;">
+          <span class="d-flex align-items-center">{{ node.item.code }} </span>
+                  <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.name }} 
+          <i *ngIf="node.item.isApplicable" [style.color]="'#28a745'" style="font-size: 14px;" class="ml-2 fas fa-check-circle"></i>
+          </div>
         </div>
         </div>
 
 
-        <i *ngIf="node.item.isApplicable" [style.color]="'#28a745'" style="font-size: 20px;" class="ml-2 fas fa-check-circle"></i>
+        
       </mat-tree-node>
 
       <mat-tree-node *matTreeNodeDef="let node; when: hasChild" [style.marginLeft] = "node.level * 40 + 'px'"  style="background-color:#c4dfec ">
@@ -68,13 +70,14 @@
               ></ng-template>
         </button>
         <div class="d-flex">
-          <mat-checkbox [checked]="descendantsAllSelected(node)" [indeterminate]="descendantsPartiallySelected(node)"
+          <mat-checkbox class="d-flex align-items-center" [checked]="descendantsAllSelected(node)" [indeterminate]="descendantsPartiallySelected(node)"
             [disabled]="!permission.isGranted(Audits_Tailoring_Update_Project_Tailoring)"
             (change)="todoItemSelectionToggle(node,true)">
           </mat-checkbox>
-          <div [matTooltip]="node.item.name" style="margin: auto 0;font-size: 16px;" class="ml-1 d-flex align-items-center">
-            <span class="mr-1"> {{ node.item.code }} &nbsp;</span>
-            <span style="flex:1;" class="note">{{ node.item.name }}</span>
+          <div class="d-flex"  style="font-size: 16px;margin-left: 38px;">
+            <span class="d-flex align-items-center">{{ node.item.code }} </span>
+            <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.name }} 
+            </div>
           </div>
         </div>
       </mat-tree-node>

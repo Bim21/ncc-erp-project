@@ -146,16 +146,16 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public isEditingAutomationNote: boolean = false
   public generalNote: string = "";
   public automationNote: string = "";
-  public isShowPmNote:boolean=true;
-  public isShowIssues:boolean=true;
-  public isShowCurrentResource:boolean = true;
+  public isShowPmNote:boolean=false;
+  public isShowIssues:boolean=false;
+  public isShowCurrentResource:boolean = false;
   public isShowSupportUser:boolean = false;
   public isShowBillInfo:boolean = true;
   public isShowTimesheet:boolean = true;
   public isShowProblemList: boolean = false;
   public isShowWeeklyList: boolean = false;
   public isShowFutureList: boolean = false;
-  public isShowRisks: boolean = true;
+  public isShowRisks: boolean = false;
   public projectInfo = {} as ProjectInfoDto
   public projectCurrentResource: any = []
   public projectCurrentSupportUser: any = []
@@ -198,6 +198,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public bgFlag: string = 'bg-success'
   public status: string = 'Green'
   public processCriteria: boolean = false
+  public isResultConfirmModal: boolean;
 
   public guideLine: any;
   public priority = [
@@ -333,6 +334,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         if (this.pmReportProjectList[0]) {
           this.pmReportProjectList[0].setBackground = true
         }
+
+        this.isShowPmNote = this.generalNote ? true : false
         this.getLastWeek();
         this.getAllCriteria();
         this.getProjectInfo();
@@ -566,8 +569,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.searchUser = ""
     this.getTimeCountDown(true);
     this.showPmNote = false;
+    this.isShowPmNote = this.generalNote ? true: false
   }
-
 
   public getChangedResource() {
     if (this.projectId) {
@@ -640,6 +643,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
+        this.isShowIssues = this.problemList.length > 0;
       })
     }
   }
@@ -647,7 +651,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     if(this.projectId){
       this.pmReportRiskService.getRiskOfTheWeek(this.projectId, this.pmReportId).pipe(catchError( this.pmReportRiskService.handleError)).subscribe(data => {
         if(data.result){
-          this.projectRiskList = data.result
+          this.projectRiskList = data.result;
+          this.isShowRisks = this.projectRiskList.length >0
         }
       })
     }
@@ -686,6 +691,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getRiskOfTheWeek();
     })
   }
+
   public search() {
     let value = this.searchText;
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
@@ -702,17 +708,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   public markRead(project) {
     if (project.seen == false) {
-      abp.notify.success("Mark Read!");
+      abp.notify.success("Mark Reviewed!");
       this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
         project.seen = !project.seen;
+        this.isResultConfirmModal = true;
         if (project.seen) {
           project.lastReviewDate = new Date();
         }
       });
     } else {
-      abp.notify.warn("Mark Unread!");
+      abp.notify.warn("Un-Mark Reviewed!");
       this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
         project.seen = !project.seen;
+        this.isResultConfirmModal = false;
         if (project.lastReviewDate != null) {
           project.lastReviewDate = res.result.format('DD/MM/YYYY hh:mm:ss');
         }
@@ -720,24 +728,26 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
 
-
-  public showConfirmModal( project) {
-    const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
+  public showConfirmModal(event, project) {
+    event.preventDefault();
+    if(project.isActive == true){
+      const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
         data: {
-            projectName: project.projectName,
-            markReview: project.seen
+          projectName: project.projectName,
+          markReview: project.seen
         },
-        width: "30%"
-    });
+        width: '30%'
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(result => {
         if (result === 'confirm') {
-            this.markRead(project);
-        } else if (result === 'cancel'){
-          project.seen = !project.seen;
+          this.markRead(project);
+        } else if (result === 'cancel') {
         }
-    });
-}
+      });
+    }
+  }
+
 
   public markReview(project) {
     if (project.necessaryReview == false) {
@@ -1688,7 +1698,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           break;
       }
 
-      if (guideline) {
+      if (guideline !== undefined) {  // Change this line
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
             name: command,
@@ -1697,6 +1707,23 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           },
           width: "60%"
         });
+
+        show.afterClosed().subscribe((updatedGuideline) => {
+          if (updatedGuideline) {
+            this.refresh();
+          }
+        });
+      } else {
+        // Display the dialog with empty content
+        const show = this.dialog.open(ReportGuidelineDetailComponent, {
+          data: {
+            name: command,
+            guideline: "",  // Provide an empty string as guideline
+            item: guideLineItem
+          },
+          width: "60%"
+        });
+
 
         show.afterClosed().subscribe((updatedGuideline) => {
           if (updatedGuideline) {

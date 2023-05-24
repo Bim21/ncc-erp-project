@@ -45,19 +45,22 @@
             <button mat-icon-button disabled></button>
             <div class="d-flex justify-content-end align-items-center" style="flex: 1;">
               <div style="flex:1;" class=" d-flex align-items-center">
-                <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
-                </div>
-                <div style="flex :1;min-width: fit-content;"> <i *ngIf="node.item.isApplicable"
+                <div class="d-flex align-items-center"  style="font-size: 16px;">
+                  <span class="d-flex align-items-center">{{ node.item.code }} </span>
+                  <div style="margin-left: 38px; word-break: break-word; padding-right: 45px;">  {{ node.item.name }} 
+                  <i *ngIf="node.item.isApplicable"
                     [style.color]="'#28a745'" style="font-size: 15px; " class="fas fa-check-circle ml-2">
                   </i>
                   <span *ngIf="node.item.applicable==2" style="font-size: 13px;"
                     class=" ml-2 badge badge-pill badge-info">
                     Modify</span>
+                  </div>
                 </div>
+             
               </div>
-              <span *ngIf="permission.isGranted(Audits_Tailoring_Detail_ViewNote)" class="note pointer ml-2"
+              <span *ngIf="permission.isGranted(Audits_Tailoring_Detail_ViewNote)" class="note pointer ml-2 hyperlink text-center"
                 [innerHTML]="node.item.note| safeHtml" (click)="viewNote(node)"
-                style="width: 200px;margin-right: 200px;"></span>
+                style="width: 350px;margin-left:100px !important; margin-right: 40px;"></span>
 
               <div class="action">
                 <button mat-button [matMenuTriggerFor]="menu" [disabled]="processProblem">
@@ -94,16 +97,18 @@
               </button>
 
               <div style="flex:1;" class="d-flex align-items-center">
-                <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
-                </div>
-                <div style="flex :1;min-width: fit-content;">
-                  <!-- <i *ngIf="node.item.isApplicable" [style.color]="'#28a745'"
+                <div class="d-flex"  style="font-size: 16px;">
+                  <span class="d-flex align-items-center">{{ node.item.code }} </span>
+                  <div style="margin-left: 38px; word-break: break-word; padding-right: 45px;">  {{ node.item.name }} 
+                        <!-- <i *ngIf="node.item.isApplicable" [style.color]="'#28a745'"
                       style="font-size: 15px; " class="fas fa-check-circle">
                     </i> -->
-                  <span *ngIf="node.item.applicable==2" style="font-size: 13px;"
+                    <span *ngIf="node.item.applicable==2" style="font-size: 13px;"
                     class=" ml-4 badge badge-pill badge-info">
                     Modify</span>
+                  </div>
                 </div>
+
               </div>
             </div>
             <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
