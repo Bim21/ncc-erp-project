@@ -117,13 +117,14 @@
 
                 <div class="card" *ngIf="permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_View)">
                     <mat-expansion-panel [expanded]="isShowFutureList">
-                        <mat-expansion-panel-header class="m-0" (click)="isShowFutureList=!isShowFutureList">
+                        <mat-expansion-panel-header class="m-0 d-flex align-items-center" (click)="isShowFutureList=!isShowFutureList">
                             <strong style="font-size: 20px;">Planned Resource</strong> &nbsp;
-                            <strong style="font-size: 18px;" class="text-danger">({{futureReportList?.length}})</strong>
+                            <strong style="font-size: 20px;" class="text-danger">({{futureReportList?.length}})</strong>
                             <button class="btn bg-blue ml-3 btn-sm mb-2"
                                 *ngIf=" permission.isGranted(WeeklyReport_ReportDetail_PlannedResource_CreateNewPlan) && isActive"
                                 [hidden]="processFuture || !isShowFutureList "
-                                (click)="addPlanResource(); $event.stopPropagation()">
+                                (click)="addPlanResource(); $event.stopPropagation()"
+                                style="padding: 0 5px;margin-bottom: 0 !important;">
                                 <i class="fa fa-plus  m-0"></i>
                             </button>
                             <!-- <i class="fa fa-plus fa-lg ml-2 mt-2 text-primary"
@@ -288,7 +289,7 @@
                         <mat-expansion-panel-header class="m-0" (click)="isShowWeeklyList=!isShowWeeklyList">
 
                             <strong style="font-size: 20px;">Changed Resource</strong> &nbsp;
-                            <strong style="font-size: 18px;" class="text-danger">({{weeklyReportList?.length}})</strong>
+                            <strong style="font-size: 20px;" class="text-danger">({{weeklyReportList?.length}})</strong>
                         </mat-expansion-panel-header>
 
 
@@ -693,7 +694,7 @@
                                     <mat-panel-title>
                                         <span (click)="$event.stopPropagation();">
                                             <strong class="hyperlink" (click)="guideLineIssue()"
-                                                style="font-size: 20px;">Issues </strong>
+                                                style="font-size: 20px;">Issues </strong> &nbsp;
                                             <strong style="font-size: 20px;"
                                                 class="text-danger">({{problemList?.length}})</strong>
                                         </span>
@@ -889,7 +890,7 @@
                                         <h5 class="d-inline-block mb-2 font-weight-bold">Current Resource</h5>&nbsp;
                                         <strong style="font-size: 20px;"
                                             class="text-danger">({{projectCurrentResource?.length}})</strong>
-                                        <span style="font-size: 19px; margin-left: 21px; font-weight: bold;">Charged
+                                        <span style="font-size: 20px; margin-left: 21px; font-weight: bold;">Charged
                                             accounts <strong
                                                 class="text-danger">({{projectInfo.totalBill}})</strong></span>
                                     </mat-panel-title>

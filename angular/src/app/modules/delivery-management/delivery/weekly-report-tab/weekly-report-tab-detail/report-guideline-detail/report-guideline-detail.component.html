@@ -7,7 +7,7 @@
 
     <div class="modal-body" style="max-height: 500px; overflow-y: auto;" *ngIf="!isEditMode">
 
-        <span [innerHTML]="data.guideline | safeHtml"></span>
+        <span [innerHTML]="data.guidelineContent  | safeHtml"></span>
     </div>
 
     <div class="modal-body" *ngIf="isEditMode">
@@ -25,8 +25,8 @@
                                     menubar: true,
                                     plugins: ['table','code','preview','media', 'image', 'template'],
                                     toolbars: ['image']
-                                    }" [(ngModel)]="data.guideline" #criteriaNameModel="ngModel" #criteriaNameEl
-                    name="guideline" initialValue="{{data.guideline}}">
+                                    }" [(ngModel)]="data.guidelineContent " #criteriaNameModel="ngModel" #criteriaNameEl
+                    name="guideline" initialValue="{{data.guidelineContent }}">
                 </editor>
             </div>
         </div>

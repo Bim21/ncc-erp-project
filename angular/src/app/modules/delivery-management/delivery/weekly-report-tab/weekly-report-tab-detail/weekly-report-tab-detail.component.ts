@@ -1680,30 +1680,29 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.settingService.getGuideLine().subscribe((data) => {
       const guideLine = data.result;
 
-      let guideline = "";
-      let guideLineItem = data.result;
+      let guidelineContent = "";
 
       switch (command) {
         case "Criteria Status":
-          guideline = guideLine.criteriaStatus;
+          guidelineContent= guideLine.criteriaStatus;
           break;
         case "Issue":
-          guideline = guideLine.issue;
+          guidelineContent= guideLine.issue;
           break;
         case "Risk":
-          guideline = guideLine.risk;
+          guidelineContent = guideLine.risk;
           break;
         case "PM Note":
-          guideline = guideLine.pmNote;
+          guidelineContent= guideLine.pmNote;
           break;
       }
 
-      if (guideline !== undefined) {  // Change this line
+      if (guidelineContent) {  // Change this line
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
             name: command,
-            guideline,
-            item: guideLineItem
+            guidelineContent,
+            item: guideLine
           },
           width: "60%"
         });
@@ -1718,8 +1717,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
             name: command,
-            guideline: "",  // Provide an empty string as guideline
-            item: guideLineItem
+            guidelineContent: "",  // Provide an empty string as guideline
+            item: guideLine
           },
           width: "60%"
         });
