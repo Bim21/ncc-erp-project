@@ -516,7 +516,6 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     for (int row = 2; row <= rowCount; row++)
                     {
                         //Code không tồn tại, code null, code sai => trả ra thông báo lỗi Row n: Code number is not exsit or null
-                        var code2 = worksheet.Cells[row, 1].Value;
                         var code = worksheet.Cells[row, 1].Value.ToString().Trim();
 
                         if (string.IsNullOrEmpty(code) || !mapCodeToId.ContainsKey(code))
@@ -635,12 +634,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ParentId = y.ParentId,
                     IsApplicable = y.IsApplicable,
                 })
-                 //.OrderBy(x => CommonUtil.GetNaturalSortKey( x.Code))
-                 //.ToList();
-                 .OrderBy(x => x.Code).ThenBy(x => x.Level).ToList();
-            //using (var wb = new ExcelPackage())
-            //        IsApplicable = y.IsApplicable
-            //    })
+                 .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code)).ToList();
 
             using (var wb = new Workbook())
             {
