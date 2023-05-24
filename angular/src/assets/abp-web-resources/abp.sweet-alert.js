@@ -43,7 +43,7 @@ var abp = abp || {};
     return showMessage("error", message, title, isHtml, options);
   };
 
-  abp.message.confirm = function (message, titleOrCallback, callback, isHtml, options) {
+  abp.message.confirm = function (message, titleOrCallback, callback, options) {
     var title = undefined;
 
     if (typeof titleOrCallback === "function") {
@@ -58,8 +58,9 @@ var abp = abp || {};
     options.confirmButtonText = options.confirmButtonText || abp.localization.abpWeb("Yes");
     options.cancelButtonText = options.cancelButtonText || abp.localization.abpWeb("Cancel");
     options.showCancelButton = true;
+    options.isHtml = false
 
-    if (isHtml) {
+    if (options.isHtml) {
       options.html = message;
     } else {
       options.text = message;

@@ -249,7 +249,7 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
             if (rs) {
               this.AddUserToProject(user)
             }
-          }, true)
+          }, {isHtml:true})
         }
       })
     }

@@ -155,14 +155,18 @@
                 <mat-expansion-panel [expanded]="isShowIssues ">
                     <mat-expansion-panel-header class="m-0" #issues (click)="isShowIssues=!isShowIssues">
                         <mat-panel-title>
-                            <span (click)="$event.stopPropagation();" class="d-flex align-items-center">
-                                <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;color: #000;">Issues </strong>
-                                <strong style="font-size: 20px;" class="text-danger">({{problemList?.length}})</strong>
-                                <button
-                                *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
-                                [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addIssueReport()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
-                                <i class="fa fa-plus m-0"></i>
-                                </button>
+                            <span (click)="$event.stopPropagation();" class="d-flex align-items-center justify-content-end w-100">
+                                <div style="flex: 1;">
+                                    <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;color: #000;">Issues </strong> 
+                                    <strong style="font-size: 20px;" class="text-danger">({{problemList?.length}})</strong>
+                                </div>
+                                <div style="width: 85%;">
+                                    <button
+                                    *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
+                                    [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addIssueReport()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
+                                    <i class="fa fa-plus m-0"></i>
+                                    </button>
+                                </div>
                             </span>
                         </mat-panel-title>
                   
@@ -312,14 +316,18 @@
             <div class=" card " *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View)">
                 <mat-expansion-panel [expanded]="isShowRisks">
                     <mat-expansion-panel-header class="m-0" #panelH (click)="isShowRisks=!isShowRisks ">
-                        <mat-panel-title class="d-flex align-items-center">
-                            <strong style="font-size: 20px;color: #000;" class="hyperlink" (click)="$event.stopPropagation();guideLineRisk()">Risks </strong> &nbsp;
-                            <strong style="font-size: 20px; " class="text-danger">({{projectRiskList?.length}})</strong>
-                            <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue) && selectedReport.isActive " 
-                             (click)="addOrEditRisk('create');$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2"
-                             style="padding: 0px 5px;margin-bottom: 0 !important;">
+                        <mat-panel-title class="d-flex align-items-center justify-content-end">
+                           <div style="flex: 1;">
+                                <strong style="font-size: 20px;color: #000;" class="hyperlink" (click)="$event.stopPropagation();guideLineRisk()">Risks </strong> &nbsp;
+                                <strong style="font-size: 20px; " class="text-danger">({{projectRiskList?.length}})</strong>
+                           </div>
+                           <div style="width: 85%;">
+                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue) && selectedReport.isActive " 
+                                (click)="addOrEditRisk('create');$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2"
+                                style="padding: 0px 5px;margin-bottom: 0 !important;">
                                 <i  class="fa fa-plus m-0"></i>
-                            </button>
+                                 </button>
+                           </div>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <div class="px-4 fixTableHead" style="max-height: none;">
@@ -358,7 +366,7 @@
                                     </td>
                                     <td style="white-space: normal" class="text-center">
                                         <span
-                                             style="border-radius: 99px; padding: 1.5px 7px;font-size: 12px; font-weight: 700;"
+                                             style="border-radius: 99px; padding: 1px 7px;font-size: 12px; font-weight: 700;"
                                             [ngClass]="APP_CONST.priorityRequest[problem.priority] "
                                             >{{ priorityList[problem.priority] }}</span>
                                     </td>
@@ -446,10 +454,10 @@
                                             [matTooltip]="overTimeNoCharge + 'h total OT NoCharge' + ' / ' + totalOverTime + 'h total OT'">
                                             (
                                             <strong [ngClass]="overTimeNoCharge>0?'text-warning':''"
-                                                style="font-size: 17px;">{{overTimeNoCharge}}h
+                                                style="font-size: 14px;">{{overTimeNoCharge}}h
                                             </strong>/
                                             <strong [ngClass]="totalOverTime>0?'text-danger':''"
-                                                style="font-size: 17px;">{{totalOverTime}}h
+                                                style="font-size: 14px;">{{totalOverTime}}h
                                             </strong>
                                             )
                                         </div>
@@ -558,7 +566,7 @@
                                     <mat-expansion-panel-header class="m-0 d-flex align-items-center"
                                         (click)="isShowFutureList=!isShowFutureList">
                                         <strong style="font-size: 20px;">Planned Resource</strong> &nbsp;
-                                        <strong style="font-size: 18px;" class="text-danger">({{futureReportList?.length}})</strong>
+                                        <strong style="font-size: 20px;" class="text-danger">({{futureReportList?.length}})</strong>
                                         <button class="btn bg-blue ml-3 btn-sm mb-2"
                                         *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_CreateNewPlan) && selectedReport.isActive"
                                                 [hidden]="processFuture || !isShowFutureList "
@@ -729,7 +737,7 @@
                                     <mat-expansion-panel-header class="m-0"
                                         (click)="isShowWeeklyList=!isShowWeeklyList">
                                         <strong style="font-size: 20px;">Changed Resource</strong> &nbsp;
-                                        <strong style="font-size: 18px;"class="text-danger">({{weeklyReportList?.length}})</strong>
+                                        <strong style="font-size: 20px;"class="text-danger">({{weeklyReportList?.length}})</strong>
                                     </mat-expansion-panel-header>
                                     <div class=" table-responsive px-4 pb-4">
                                         <table style="border-collapse: collapse;" class="table table-hover text-nowrap">
