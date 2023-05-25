@@ -37,19 +37,19 @@
     <mat-divider></mat-divider>
     <section style="padding-top: 20px;">
       <div class="example-label">Guideline</div>
-      <p style="overflow-wrap: break-word;" [innerHTML]="data.node.processCriteria.guidLine"></p>
+      <p style="overflow-wrap: break-word;" [innerHTML]="data.node.processCriteria.guidLine | safeHtml"></p>
     </section>
 
     <mat-divider></mat-divider>
     <section style="padding-top: 20px;">
       <div class="example-label">Q&A Example</div>
-      <p style="overflow-wrap: break-word;" [innerHTML]="data.node.processCriteria.qaExample"></p>
+      <p style="overflow-wrap: break-word;" [innerHTML]="data.node.processCriteria.qaExample | safeHtml"></p>
     </section>
 
     <mat-divider></mat-divider>
     <section style="padding-top: 20px;">
       <div class="example-label">Tailoring note</div>
-      <p style="overflow-wrap: break-word;" [innerHTML]="data.node.tailoringNote"></p>
+      <p style="overflow-wrap: break-word;" [innerHTML]="data.node.tailoringNote | safeHtml"></p>
     </section>
 
     <mat-divider></mat-divider>

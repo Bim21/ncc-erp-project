@@ -302,15 +302,15 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   //          `;
   //         }
   //       });
-  
+
   //       if (count > 6) {
   //         user.showMoreHistory = true;
   //       } else {
   //         user.showMoreHistory = false;
   //       }
-  
+
   //       user.userProjectHistory = userHisTory;
-  
+
   //     })
   //   );
   // }
@@ -334,7 +334,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
             };
           }
         }).filter(project => project !== undefined);
-        
+
         if (count > 6) {
           user.showMoreHistory = true;
         } else {
@@ -343,8 +343,8 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       })
     );
   }
-  
-  
+
+
 
   showMoreHistory(user) {
     user.showAllHistory = !user.showAllHistory;
