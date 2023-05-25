@@ -172,7 +172,7 @@
 
                                         <div *ngIf="bill.createMode">
 
-                                            <input style="min-width: 150px;" class="form-control mt-1"
+                                            <input style="min-width: 120px;" class="form-control mt-1"
                                                 #accountName="ngModel" #accountNameEl type="text"
                                                 placeholder="Charge Name" name="accountName"
                                                 [(ngModel)]="bill.accountName" [value]="bill.billAccountName"/>
@@ -202,7 +202,7 @@
                                             number:'1.0':'en-US'}}
                                         </span>
                                         <div *ngIf="bill.createMode">
-                                            <input style="min-width: 125px;" required class="form-control mt-1"
+                                            <input style="min-width: 100px;" required class="form-control mt-1"
                                                 #billRate="ngModel" #billRateEl type="text" mask="separator"
                                                 thousandSeparator="." placeholder="number *"
                                                 [(ngModel)]="bill.billRate">
@@ -266,7 +266,7 @@
                                     </td>
                                     <td style="white-space: pre-line;
                                                 word-break: break-all;
-                                                min-width: 150px;
+                                                min-width: 125px;
                                                 text-align: left;">
                                         <div class="d-flex" style="align-items: center">
                                             <div style="width: 90%">
@@ -282,7 +282,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style="min-width: 156px;">
                                         <div *ngIf="!bill.createMode">
                                             <button
                                                 *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_Edit)"
