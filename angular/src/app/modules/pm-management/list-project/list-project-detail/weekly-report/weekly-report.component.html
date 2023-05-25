@@ -122,18 +122,18 @@
                         <mat-panel-title>
                             <strong style="font-size: 20px; color: #000;" class="hyperlink" (click)="$event.stopPropagation();guideLinePMNote()">PM note</strong>
                             <div class="d-inline ml-2 pt-1 text-right row">
-                                <i [hidden]="!selectedReport.isActive || selectedReport.pmReportProjectId==0"
+                                <i [hidden]="!selectedReport.isActive || selectedReport.pmReportProjectId==0 ||  !isShowPmNote"
                                     *ngIf="!isEditingNote && permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_UpdateNote)"
                                     class="fas fa-edit fa-lg ml-2" style="font-size: 17px;"
-                                    (click)="isEditingNote = true"></i>
+                                    (click)="isEditingNote = true;$event.stopPropagation()"></i>
                                     <i *ngIf="isEditingNote" style="color: green ;" class="fas fa-check fa-lg"
-                                    (click)="updateNote()"></i>
-                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote()" style="color: red; margin-left: 15px;"
+                                    (click)="updateNote();$event.stopPropagation()"></i>
+                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote();$event.stopPropagation()" style="color: red; margin-left: 15px;"
                                         class="fas fa-times fa-lg mr-2"></i>
                             </div>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <div class="row p-1 pl-4">
+                    <div class="row p-1 px-4">
                         <div class="col">
                             <p *ngIf="!isEditingNote"
                                 style="word-wrap: break-word; white-space: pre-line;font-size: 18px;text-align: justify;"
@@ -318,7 +318,7 @@
                     <mat-expansion-panel-header class="m-0" #panelH (click)="isShowRisks=!isShowRisks ">
                         <mat-panel-title class="d-flex align-items-center justify-content-end">
                            <div style="flex: 1;">
-                                <strong style="font-size: 20px;color: #000;" class="hyperlink" (click)="$event.stopPropagation();guideLineRisk()">Risks </strong> &nbsp;
+                                <strong style="font-size: 20px;color: #000;" class="hyperlink" (click)="$event.stopPropagation();guideLineRisk()">Risks </strong> 
                                 <strong style="font-size: 20px; " class="text-danger">({{projectRiskList?.length}})</strong>
                            </div>
                            <div style="width: 88%;">
@@ -496,6 +496,7 @@
                                                 [matMenuTriggerFor]="menu3"></i>
                                             <mat-menu #menu3="matMenu">
                                                 <button class="mat-menu-item  w-100"
+                                                *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note)"
                                                     (click)="editResoureNote(user)">
                                                     <i class="fas fa-edit mr-2 fa-lg"></i>
                                                     Edit

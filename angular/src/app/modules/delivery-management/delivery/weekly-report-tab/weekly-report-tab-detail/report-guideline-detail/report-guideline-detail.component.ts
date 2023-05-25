@@ -22,7 +22,7 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
   public guideLineItem: any;
 
   WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
-
+  WeeklyReport_ReportDetail_GuideLine_Update = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_Update;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,

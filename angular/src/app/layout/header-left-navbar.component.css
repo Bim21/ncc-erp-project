@@ -50,7 +50,7 @@
 
 .navbar-nav {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .navbar-nav > li:not(:last-child) {

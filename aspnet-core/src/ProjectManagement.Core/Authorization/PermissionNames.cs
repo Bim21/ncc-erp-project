@@ -201,6 +201,7 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Update.Note";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.View";
@@ -469,6 +470,7 @@ namespace ProjectManagement.Authorization
         public const string WeeklyReport_ReportDetail_CurrentResource = "WeeklyReport.ReportDetail.CurrentResource";
         public const string WeeklyReport_ReportDetail_CurrentResource_View = "WeeklyReport.ReportDetail.CurrentResource.View";
         public const string WeeklyReport_ReportDetail_CurrentResource_Release = "WeeklyReport.ReportDetail.CurrentResource.Release";
+        public const string WeeklyReport_ReportDetail_CurrentResource_Update_Note = "WeeklyReport.ReportDetail.CurrentResource.Update.Note";
 
         public const string WeeklyReport_ReportDetail_PlannedResource = "WeeklyReport.ReportDetail.PlannedResource";
         public const string WeeklyReport_ReportDetail_PlannedResource_View = "WeeklyReport.ReportDetail.PlannedResource.View";
@@ -482,6 +484,7 @@ namespace ProjectManagement.Authorization
         public const string WeeklyReport_ReportDetail_ChangedResource = "WeeklyReport.ReportDetail.ChangedResource";
         public const string WeeklyReport_ReportDetail_ChangedResource_View = "WeeklyReport.ReportDetail.ChangedResource.View";
         public const string WeeklyReport_ReportDetail_GuideLine_View = "WeeklyReport.ReportDetail.GuideLine.View";
+        public const string WeeklyReport_ReportDetail_GuideLine_Update = "WeeklyReport.ReportDetail.GuideLine.Update";
 
         public const string WeeklyReport_ReportDetail_LastReviewDate_Check = "WeeklyReport.ReportDetail.LastReviewDate.Check";
         public const string WeeklyReport_ReportDetail_PrioritizeReview_Check = "WeeklyReport.ReportDetail.PrioritizeReview.Check";
@@ -859,6 +862,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note ,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View ,
@@ -1124,6 +1128,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource ,
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release ,
+                    PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Update_Note ,
 
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource ,
                     PermissionNames.WeeklyReport_ReportDetail_PlannedResource_View ,
@@ -1137,6 +1142,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource ,
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,
+                    PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update,
                     PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check ,
                     PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check ,
 
@@ -1523,6 +1529,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
+                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
@@ -1787,6 +1794,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Current Resource" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release" },
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Update_Note, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note" },
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_PlannedResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
@@ -1805,6 +1813,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Change Status"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"},
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update GuideLine"},
 
                  new SystemPermission{ Name = PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Last Review Date"},
                  new SystemPermission{ Name = PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Prioritize Review"},
@@ -2517,6 +2526,9 @@ namespace ProjectManagement.Authorization
                                                                             new SystemPermission {
                                                                                 Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"
                                                                             },
+                                                                             new SystemPermission {
+                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"
+                                                                            },
                                                                         },
                                                                 },
                                                                 new SystemPermission {
@@ -3223,6 +3235,9 @@ namespace ProjectManagement.Authorization
                                                     new SystemPermission {
                                                         Name = PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Release, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Release"
                                                     },
+                                                      new SystemPermission {
+                                                        Name = PermissionNames.WeeklyReport_ReportDetail_CurrentResource_Update_Note, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note"
+                                                    },
                                                 }
                                         }, new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_PlannedResource, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planned Resource",
@@ -3255,6 +3270,9 @@ namespace ProjectManagement.Authorization
                                         },
                                          new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_GuideLine_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"
+                                        },
+                                          new SystemPermission {
+                                            Name = PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update GuideLine"
                                         },
                                            new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Last Review Date Check"

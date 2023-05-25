@@ -11,25 +11,33 @@
         </button>
       </li>
 
-      <li style="margin-left: 20px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block spaced-item">
+    <li style="margin-left: 20px;" *ngIf="!isShowReportBar" class="nav-item d-none d-sm-inline-block spaced-item">
         <div class="mt-1" style="font-size: 20px; display: flex;">
-          <strong>
-            <span matTooltip="Project Name" style="margin-right: 10px;">{{projectInfo?.projectName}}</span>
-            <span class="project-code" matTooltip="Client Code">[{{projectInfo?.clientCode}}]</span>
-          </strong>
+            <strong>
+                <span style="margin-right: 10px;">{{projectCode}} {{projectName}}</span>
+            </strong>
         </div>
-      </li>
+    </li>
+
+    <li style="margin-left: 20px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block spaced-item">
+        <div class="mt-1" style="font-size: 20px; display: flex;">
+            <strong>
+                <span matTooltip="Project Name" style="margin-right: 10px;">{{projectInfo?.projectName}}</span>
+                <span class="project-code" matTooltip="Client Code">[{{projectInfo?.clientCode}}]</span>
+            </strong>
+        </div>
+    </li>
 
 
 
     <!-- <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
-        <div class="d-flex align-items-center h-100" style="margin-left: 20px !important;">
-            <span [ngClass]="APP_CONST.projectHealthBGStyle[projectHealth]" class="header-status-wrapper">
-                {{problemIssueList[projectHealth - 1]}}
-            </span>
-        </div>
-
-    </li> -->
+            <div class="d-flex align-items-center h-100" style="margin-left: 20px !important;">
+                <span [ngClass]="APP_CONST.projectHealthBGStyle[projectHealth]" class="header-status-wrapper">
+                    {{problemIssueList[projectHealth - 1]}}
+                </span>
+            </div>
+    
+        </li> -->
 
     <li *ngIf="isShowReportBar" style="cursor: pointer; display: flex; white-space: nowrap;">
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
