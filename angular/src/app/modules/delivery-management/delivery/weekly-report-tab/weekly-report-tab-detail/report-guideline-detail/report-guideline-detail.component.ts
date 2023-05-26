@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { catchError } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PERMISSIONS_CONSTANT } from './../../../../../../constant/permission.constant';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppConfigurationService } from '@app/service/api/app-configuration.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { AppConfigurationService } from '@app/service/api/app-configuration.serv
 })
 export class ReportGuidelineDetailComponent extends AppComponentBase implements OnInit {
 
-  Admin_Configuartions_Edit = PERMISSIONS_CONSTANT.Admin_Configuartions_Edit;
+  WeeklyReport_ReportDetail_GuideLine_Update = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_Update;
 
   isEditMode = false;
   public trustedHtml: SafeHtml;
@@ -22,7 +22,6 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
   public guideLineItem: any;
 
   WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
-  WeeklyReport_ReportDetail_GuideLine_Update = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_Update;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,

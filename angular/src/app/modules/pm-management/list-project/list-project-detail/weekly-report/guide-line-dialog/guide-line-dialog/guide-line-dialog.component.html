@@ -1,4 +1,4 @@
-<form class="form-horizontal" autocomplete="off" #timesheetForm="ngForm" novalidate>
+<form class="form-horizontal"  *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline)" autocomplete="off" #timesheetForm="ngForm" novalidate>
     <abp-modal-header
         [title]="isEditMode ? 'Update Guideline: ' + data.criteriaName : 'Guideline: ' + data.criteriaName"
         (onCloseClick)="dialogRef.close()">
@@ -33,10 +33,10 @@
 
     </div>
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
-        <button mat-raised-button color="primary" *ngIf="!isEditMode" (click)="isEditMode = true">Edit</button>
+        <button mat-raised-button color="primary" *ngIf="!isEditMode && permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline)" (click)="isEditMode = true">Edit</button>
         <button mat-raised-button color="primary" *ngIf="isEditMode" (click)="isEditMode = false">View</button>
         <button mat-raised-button color="accent" class="saving-btn" mat-button
             [disabled]="!timesheetForm.form.valid ||isLoading" (click)="SaveAndClose()" *ngIf="isEditMode">Save</button>
-        <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button>
+        <!-- <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button> -->
     </div>
 </form>

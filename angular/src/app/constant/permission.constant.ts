@@ -435,6 +435,8 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_ProjectHealthCriteria_View: "WeeklyReport.ReportDetail.ProjectHealthCriteria.View",
        WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus: "WeeklyReport.ReportDetail.ProjectHealthCriteria.ChangeStatus",
        WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit: "WeeklyReport.ReportDetail.ProjectHealthCriteria.Edit",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline: "WeeklyReport.ReportDetail.ProjectHealthCriteria.View.Guideline",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline: "WeeklyReport.ReportDetail.ProjectHealthCriteria.Update.Guideline",
 
        WeeklyReport_ReportDetail_PMIssue: "WeeklyReport.ReportDetail.PMIssue",
        WeeklyReport_ReportDetail_PMIssue_View: "WeeklyReport.ReportDetail.PMIssue.View",

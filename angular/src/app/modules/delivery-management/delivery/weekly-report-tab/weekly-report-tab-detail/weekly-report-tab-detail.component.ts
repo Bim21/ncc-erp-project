@@ -1,4 +1,4 @@
-import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ApproveDialogComponent } from './../../../../pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
@@ -77,6 +77,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View
   WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
   WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline
 
   WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
   WeeklyReport_ReportDetail_LastReviewDate_Check = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_LastReviewDate_Check;

@@ -457,6 +457,8 @@ namespace ProjectManagement.Authorization
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_View = "WeeklyReport.ReportDetail.ProjectHealthCriteria.View";
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = "WeeklyReport.ReportDetail.ProjectHealthCriteria.ChangeStatus";
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = "WeeklyReport.ReportDetail.ProjectHealthCriteria.Edit";
+        public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = "WeeklyReport.ReportDetail.ProjectHealthCriteria.View.Guideline";
+        public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline = "WeeklyReport.ReportDetail.ProjectHealthCriteria.Update.Guideline";
 
         public const string WeeklyReport_ReportDetail_PMIssue = "WeeklyReport.ReportDetail.PMIssue";
         public const string WeeklyReport_ReportDetail_PMIssue_View = "WeeklyReport.ReportDetail.PMIssue.View";
@@ -1116,6 +1118,13 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_UpdateNote ,
                     //PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth ,
 
+                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria,
+                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View,
+                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus,
+                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit,
+                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline,
+                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline,
+
                     PermissionNames.WeeklyReport_ReportDetail_PMIssue ,
                     PermissionNames.WeeklyReport_ReportDetail_PMIssue_View ,
                     PermissionNames.WeeklyReport_ReportDetail_PMIssue_AddMeetingNote ,
@@ -1142,7 +1151,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource ,
                     PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,
                     PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,
-                    PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update,
+                    PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update ,
                     PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check ,
                     PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check ,
 
@@ -1521,7 +1530,7 @@ namespace ProjectManagement.Authorization
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Project Risk" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Risk " },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Risk" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
@@ -1814,6 +1823,8 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update GuideLine"},
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Guideline (Criteria status)"},
+                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Guideline (Criteria status)"},
 
                  new SystemPermission{ Name = PermissionNames.WeeklyReport_ReportDetail_LastReviewDate_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Last Review Date"},
                  new SystemPermission{ Name = PermissionNames.WeeklyReport_ReportDetail_PrioritizeReview_Check, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Prioritize Review"},
@@ -3198,6 +3209,12 @@ namespace ProjectManagement.Authorization
                                                     },
                                                     new SystemPermission {
                                                         Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Change Status"
+                                                    },
+                                                    new SystemPermission {
+                                                        Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Guideline (Criteria status)"
+                                                    },
+                                                    new SystemPermission {
+                                                        Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Guideline (Criteria status)"
                                                     },
                                                 }
                                         },
