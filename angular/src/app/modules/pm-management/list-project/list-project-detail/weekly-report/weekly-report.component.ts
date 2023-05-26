@@ -109,7 +109,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public isShowCurrentResource:boolean = false;
   public isShowSupportUser = false;
   public processFuture: boolean = false;
-  public processProblem: boolean = false
+  public processProblem: boolean = false;
   public processWeekly: boolean = false;
   public createdDate = new Date();
   public projectId: number;
@@ -181,7 +181,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View;
-  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone;
@@ -484,12 +484,17 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     );
     }
 
-  getProjectInfo() {
+  getProjectInfo(cancel?:boolean) {
     this.isLoading = true;
     if (this.selectedReport.pmReportProjectId) {
       this.pmReportProjectService.GetInfoProject(this.selectedReport.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
-        this.isShowPmNote = this.projectInfo.pmNote ? true : false
+        if(cancel){
+          this.isShowPmNote=true
+        }
+        else{
+          this.isShowPmNote = this.projectInfo.pmNote ? true : false
+        }
         this.isLoading = false;
         this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
@@ -623,7 +628,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.getRiskOfTheWeek()
+      if(result){
+        this.getRiskOfTheWeek()
+      }
     })}
 
   public deleteRisk(risk){
@@ -904,8 +911,8 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   }
   public cancelUpdateNote() {
     this.isEditingNote = false;
-    this.allowSendReport = this.projectInfo.pmNote ? true : false
-    this.getProjectInfo();
+    this.allowSendReport = this.projectInfo.pmNote ? true : false;
+    this.getProjectInfo(true);
   }
 
   public editResoureNote(user) {

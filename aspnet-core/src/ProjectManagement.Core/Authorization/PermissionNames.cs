@@ -193,7 +193,7 @@ namespace ProjectManagement.Authorization
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.View";
-        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk";
+        public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Edit";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Delete";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone = "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.SetDone";
@@ -854,7 +854,7 @@ namespace ProjectManagement.Authorization
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View ,
-                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue ,
+                    PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone ,
@@ -1521,7 +1521,7 @@ namespace ProjectManagement.Authorization
 
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "PM Project Risk" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Issue" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Add New Risk " },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Set Done" },
@@ -2504,7 +2504,7 @@ namespace ProjectManagement.Authorization
                                                                                 Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"
                                                                             },
                                                                             new SystemPermission {
-                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"
+                                                                                Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"
                                                                             },
                                                                             new SystemPermission {
                                                                                 Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit "

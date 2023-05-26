@@ -372,7 +372,7 @@ export const PERMISSIONS_CONSTANT = {
 
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.View",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Edit",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Delete",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.SetDone",

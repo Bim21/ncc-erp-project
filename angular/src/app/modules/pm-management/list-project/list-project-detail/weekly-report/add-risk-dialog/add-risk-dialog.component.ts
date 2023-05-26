@@ -75,7 +75,7 @@ export class AddRiskDialogComponent extends AppComponentBase implements OnInit {
       }
       this.pmReportRiskService.createReportRisk(this.data.projectId, risk).pipe(catchError(this.pmReportRiskService.handleError)).subscribe(res => {
         abp.notify.success("Create Risk Successfully!")
-        this.dialogRef.close();
+        this.dialogRef.close(res);
       })
     }
     else {
@@ -91,7 +91,7 @@ export class AddRiskDialogComponent extends AppComponentBase implements OnInit {
       this.pmReportRiskService.UpdateReportRisk(risk).pipe(catchError(this.pmReportRiskService.handleError)).subscribe((res) => {
         if (res) {
           abp.notify.success("Update Successfully!")
-          this.dialogRef.close();
+          this.dialogRef.close(res);
         }
 
       })

@@ -127,8 +127,8 @@
                                     class="fas fa-edit fa-lg ml-2" style="font-size: 17px;"
                                     (click)="isEditingNote = true;$event.stopPropagation()"></i>
                                     <i *ngIf="isEditingNote" style="color: green ;" class="fas fa-check fa-lg"
-                                    (click)="updateNote();$event.stopPropagation()"></i>
-                                    <i *ngIf="isEditingNote" (click)="cancelUpdateNote();$event.stopPropagation()" style="color: red; margin-left: 15px;"
+                                    (click)="$event.stopPropagation();updateNote()"></i>
+                                    <i *ngIf="isEditingNote" (click)="$event.stopPropagation();cancelUpdateNote()" style="color: red; margin-left: 15px;"
                                         class="fas fa-times fa-lg mr-2"></i>
                             </div>
                         </mat-panel-title>
@@ -152,18 +152,18 @@
             </div>
 
             <div class=" card "  *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_View)">
-                <mat-expansion-panel [expanded]="isShowIssues ">
+                <mat-expansion-panel [expanded]="isShowIssues">
                     <mat-expansion-panel-header class="m-0" #issues (click)="isShowIssues=!isShowIssues">
                         <mat-panel-title>
-                            <span (click)="$event.stopPropagation();" class="d-flex align-items-center justify-content-end w-100">
+                            <span  class="d-flex align-items-center justify-content-end w-100">
                                 <div style="flex: 1;">
-                                    <strong class="hyperlink" (click)="guideLineIssue()" style="font-size: 20px;color: #000;">Issues </strong> 
+                                    <strong class="hyperlink" (click)="guideLineIssue();$event.stopPropagation()" style="font-size: 20px;color: #000;">Issues </strong> 
                                     <strong style="font-size: 20px;" class="text-danger">({{problemList?.length}})</strong>
                                 </div>
                                 <div style="width: 88%;">
                                     <button
                                     *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
-                                    [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addIssueReport()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
+                                    [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addIssueReport();$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
                                     <i class="fa fa-plus m-0"></i>
                                     </button>
                                 </div>
@@ -322,8 +322,8 @@
                                 <strong style="font-size: 20px; " class="text-danger">({{projectRiskList?.length}})</strong>
                            </div>
                            <div style="width: 88%;">
-                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue) && selectedReport.isActive " 
-                                (click)="addOrEditRisk('create');$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2"
+                                <button *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk) && selectedReport.isActive " 
+                                (click)="addOrEditRisk('create');$event.stopPropagation()" [hidden]="selectedReport.pmReportProjectId==0" class="btn bg-blue ml-3 btn-sm mb-2"
                                 style="padding: 0px 5px;margin-bottom: 0 !important;">
                                 <i  class="fa fa-plus m-0"></i>
                                  </button>
@@ -428,7 +428,7 @@
                                 class="text-danger">({{projectCurrentResource?.length}})</strong> &nbsp;&nbsp;&nbsp;&nbsp;
                             <strong style="font-size: 20px;">Charged accounts</strong> &nbsp;
                             <strong style="font-size: 20px;"
-                                class="text-danger">({{projectInfo.totalBill}})</strong>
+                                class="text-danger">({{projectInfo.totalBill || 0}})</strong>
 
                         </mat-panel-title>
                     </mat-expansion-panel-header>
