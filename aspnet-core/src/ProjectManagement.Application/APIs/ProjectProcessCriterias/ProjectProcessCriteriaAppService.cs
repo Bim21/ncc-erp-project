@@ -634,7 +634,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 })
                 .OrderBy(x => CommonUtil.GetNaturalSortKey( x.Code))
                 .ToList();
-            using (var wb = new ExcelPackage())
+            using (var wb = new Workbook())
             {
                 var applicable = new List<string>() { "Standard", "Modify", "Not Yet" };
                 var sheetAudit = wb.Worksheets[0];
