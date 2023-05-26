@@ -160,7 +160,9 @@ button {
      margin-top: 80%;
  }
 
-
+:host ::ng-deep .mat-content{
+    align-items: center;
+}
  /* .project-list {
   height: 150px;
   padding-top: 20px;

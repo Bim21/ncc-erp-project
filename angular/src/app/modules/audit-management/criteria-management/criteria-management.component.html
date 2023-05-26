@@ -2,7 +2,7 @@
   <section>
     <div class="row">
       <div class="col-6">
-        <h2>Criteria</h2>
+        <h4 style="color: #014C6E;">Criteria</h4>
       </div>
     </div>
   </section>
@@ -56,18 +56,20 @@
             <div class="item-criteria">
               <div style="margin: auto 0;cursor: pointer;" class="name-criteria d-flex align-items-center"
                 (click)="viewGuiline(node)">
-                <div [matTooltip]="node.item.name"  class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
-                </div>
-                <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">Inactive</span>
-                  <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                <div class="d-flex"  style="font-size: 16px; ">
+                  <span class="d-flex align-items-center">{{ node.item.code }} </span>
+                  <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.name }} 
+                    <span *ngIf="!node.item.isActive" class="label-inactive">Inactive</span>
+                    <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                  </div>
                 </div>
               </div>
-
 
               <div class="custom-control custom-checkbox applicable">
                 <mat-checkbox
 
                   class="example-margin"
+                  style="margin-left: 50px;"
                   matTooltip="Is Applicable"
                   aria-label="Button that displays a tooltip when focused or hovered over"
                   [checked]="node.item.isApplicable"
@@ -77,7 +79,7 @@
                 ></mat-checkbox>
               </div>
 
-              <div class="action">
+              <div class="action d-flex align-items-center">
                 <button
                   mat-button
                   [matMenuTriggerFor]="menu"
@@ -181,10 +183,12 @@
               <div class="item-criteria">
                 <div style="margin: auto 0;cursor: pointer;" class="name-criteria d-flex align-items-center"
                   (click)="viewGuiline(node)">
-                  <div [matTooltip]="node.item.name" class="note">{{ node.item.code }} &nbsp;{{ node.item.name }}
-                  </div>
-                  <div style="flex :1;min-width: fit-content;"><span *ngIf="!node.item.isActive" class="label-inactive">Inactive</span>
-                    <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                  <div class="d-flex"  style="font-size: 16px; ">
+                    <span class="d-flex align-items-center">{{ node.item.code }} </span>
+                    <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.name }} 
+                      <span *ngIf="!node.item.isActive" class="label-inactive">Inactive</span>
+                      <i *ngIf="node.item.isLeaf" class="fas fa-leaf pl-2" style="color: #2ec610;"></i>
+                    </div>
                   </div>
                 </div>
 
@@ -202,7 +206,7 @@
                   ></mat-checkbox>
                 </div> -->
 
-                <div class="action">
+                <div class="action d-flex align-items-center">
                   <button
                     mat-button
                     [matMenuTriggerFor]="menu"

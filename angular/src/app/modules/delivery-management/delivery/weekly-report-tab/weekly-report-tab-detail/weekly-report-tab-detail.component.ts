@@ -1,4 +1,4 @@
-import { PERMISSIONS_CONSTANT } from './../../../../../constant/permission.constant';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { ProjectResourceRequestService } from './../../../../../service/api/project-resource-request.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ApproveDialogComponent } from './../../../../pm-management/list-project/list-project-detail/weekly-report/approve-dialog/approve-dialog.component';
@@ -72,10 +72,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   WeeklyReport_ReportDetail_PlannedResource_CancelPlan = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_PlannedResource_CancelPlan;
   WeeklyReport_ReportDetail_ChangedResource = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ChangedResource;
   Admin_Configuartions_WeeklyReportTime_Edit = PERMISSIONS_CONSTANT.Admin_Configuartions_WeeklyReportTime_Edit;
+  WeeklyReport_ReportDetail_CurrentResource_Update_Note = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_Update_Note;
 
   WeeklyReport_ReportDetail_ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View
   WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
   WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline
 
   WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
   WeeklyReport_ReportDetail_LastReviewDate_Check = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_LastReviewDate_Check;
@@ -198,6 +200,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public bgFlag: string = 'bg-success'
   public status: string = 'Green'
   public processCriteria: boolean = false
+  public isResultConfirmModal: boolean;
 
   public guideLine: any;
   public priority = [
@@ -690,6 +693,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getRiskOfTheWeek();
     })
   }
+
   public search() {
     let value = this.searchText;
     this.pmReportProjectList = this.tempPmReportProjectList.filter((item) => {
@@ -706,17 +710,19 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
   public markRead(project) {
     if (project.seen == false) {
-      abp.notify.success("Mark Read!");
+      abp.notify.success("Mark Reviewed!");
       this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
         project.seen = !project.seen;
+        this.isResultConfirmModal = true;
         if (project.seen) {
           project.lastReviewDate = new Date();
         }
       });
     } else {
-      abp.notify.warn("Mark Unread!");
+      abp.notify.warn("Un-Mark Reviewed!");
       this.pmReportProjectService.reverseDelete(project.id, {}).subscribe((res) => {
         project.seen = !project.seen;
+        this.isResultConfirmModal = false;
         if (project.lastReviewDate != null) {
           project.lastReviewDate = res.result.format('DD/MM/YYYY hh:mm:ss');
         }
@@ -724,24 +730,26 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
 
-
-  public showConfirmModal( project) {
-    const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
+  public showConfirmModal(event, project) {
+    event.preventDefault();
+    if(project.isActive == true){
+      const dialogRef = this.dialog.open(UpdateConfirmModalComponent, {
         data: {
-            projectName: project.projectName,
-            markReview: project.seen
+          projectName: project.projectName,
+          markReview: project.seen
         },
-        width: "30%"
-    });
+        width: '30%'
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(result => {
         if (result === 'confirm') {
-            this.markRead(project);
-        } else if (result === 'cancel'){
-          project.seen = !project.seen;
+          this.markRead(project);
+        } else if (result === 'cancel') {
         }
-    });
-}
+      });
+    }
+  }
+
 
   public markReview(project) {
     if (project.necessaryReview == false) {
@@ -1674,33 +1682,49 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.settingService.getGuideLine().subscribe((data) => {
       const guideLine = data.result;
 
-      let guideline = "";
-      let guideLineItem = data.result;
+      let guidelineContent = "";
 
       switch (command) {
         case "Criteria Status":
-          guideline = guideLine.criteriaStatus;
+          guidelineContent= guideLine.criteriaStatus;
           break;
         case "Issue":
-          guideline = guideLine.issue;
+          guidelineContent= guideLine.issue;
           break;
         case "Risk":
-          guideline = guideLine.risk;
+          guidelineContent = guideLine.risk;
           break;
         case "PM Note":
-          guideline = guideLine.pmNote;
+          guidelineContent= guideLine.pmNote;
           break;
       }
 
-      if (guideline) {
+      if (guidelineContent) {  // Change this line
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
             name: command,
-            guideline,
-            item: guideLineItem
+            guidelineContent,
+            item: guideLine
           },
           width: "60%"
         });
+
+        show.afterClosed().subscribe((updatedGuideline) => {
+          if (updatedGuideline) {
+            this.refresh();
+          }
+        });
+      } else {
+        // Display the dialog with empty content
+        const show = this.dialog.open(ReportGuidelineDetailComponent, {
+          data: {
+            name: command,
+            guidelineContent: "",  // Provide an empty string as guideline
+            item: guideLine
+          },
+          width: "60%"
+        });
+
 
         show.afterClosed().subscribe((updatedGuideline) => {
           if (updatedGuideline) {

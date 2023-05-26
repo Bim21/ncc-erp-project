@@ -9,9 +9,27 @@
 :host::ng-deep .mat-checkbox-inner-container.mat-checkbox-inner-container-no-side-margin {
     margin-top: 80%;
 }
-
+:host ::ng-deep .mat-content{
+    align-items: center;
+}
 .project-code{
-    font-family: 'Fira Code', monospace;
+    display: block;
+    max-width: 40%;
+    font-size: 14px;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+}
+
+.flex-container {
+    display: flex;
+}
+
+
+:host::ng-deep .mat-drawer-side.mat-drawer-end{
+    border-left: none;
 }
 :host::ng-deep .mat-drawer-side.mat-drawer-end{
     border-left: none;
@@ -23,7 +41,7 @@
 } */
 
 .project-list {
-    /* width: 100%; */
+    width: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
     cursor: pointer;
@@ -341,6 +359,7 @@ mat-list-item.checked {
     color: #585858;
     font-size: 13px;
     position: relative;
+    margin-left: auto;
 }
 
 .inline-block {

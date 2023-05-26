@@ -196,7 +196,10 @@ namespace ProjectManagement.Configuration
             return JsonSerializer.Deserialize<AuditScoreDto>(json);
         }
 
-        [AbpAuthorize(PermissionNames.Admin_Configuartions_Edit)]
+        [AbpAuthorize(
+            PermissionNames.Admin_Configuartions_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update
+            )]
         [HttpPost]
         public async Task<GuideLineDto> SetGuideLine(GuideLineDto input)
         {

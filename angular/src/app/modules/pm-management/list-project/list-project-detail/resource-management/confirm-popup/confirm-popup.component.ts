@@ -111,7 +111,7 @@ export class ConfirmPopupComponent extends AppComponentBase implements OnInit {
             this.confirmJoin()
           }
         }
-      }, true)
+      }, {isHtml:true})
     }
   }
   

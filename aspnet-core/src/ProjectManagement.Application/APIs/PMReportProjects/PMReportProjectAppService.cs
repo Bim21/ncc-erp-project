@@ -104,11 +104,11 @@ namespace ProjectManagement.APIs.PMReportProjects
                     query = query.Where(x => x.NecessaryReview == false && x.Seen == false);
                     break;
 
-                case PrioritizeReviewSort.NeedReport:
+                case PrioritizeReviewSort.Need_Review:
                     query = query.Where(x => x.NecessaryReview == true);
                     break;
 
-                case PrioritizeReviewSort.Reported:
+                case PrioritizeReviewSort.Reviewed:
                     query = query.Where(x => x.Seen == true);
                     break;
             }
@@ -603,22 +603,26 @@ namespace ProjectManagement.APIs.PMReportProjects
 
         [HttpGet]
         [AbpAuthorize()]
-        public async Task<List<EmailNamePMDto>> GetUnSentWeeklyReportPMs()
+        public async Task<List<PMUnsentWeeklyReportDto>> GetUnSentWeeklyReportPMs()
         {
-            var idPmReport = WorkScope.GetAll<PMReport>()
-                .OrderByDescending(x => x.CreationTime).Select(x => x.Id).FirstOrDefault();
-            return await (from report in WorkScope.GetAll<PMReportProject>()
-                                   .Include(p => p.PM)
-                          where report.PMReportId == idPmReport
-                          && report.Status == 0
-                          select new EmailNamePMDto
-                          {
-                              EmailAddress = report.PM.EmailAddress,
-                              Name = report.PM.Name,
-                              Surname = report.PM.Surname,
-                              //UserName = report.PM.UserName,
-                              FullName = report.PM.FullName
-                          }).ToListAsync();
+            int index = 1;
+            var list = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.PMReport.IsActive
+                    && x.Status == PMReportProjectStatus.Draft
+                    && x.Project.IsRequiredWeeklyReport)
+                .Select(x => new PMUnsentWeeklyReportDto
+                {
+                    Index = 0,
+                    ProjectName = x.Project.Name,
+                    WeeklyName = x.PMReport.Name,
+                    EmailAddress = x.PM.EmailAddress,
+                    Name = x.PM.Name,
+                    Surname = x.PM.Surname,
+                    FullName = x.PM.FullName,
+                    UserName = x.PM.UserName
+                }).ToList();
+            list.ForEach(i => i.Index = index++);
+            return list;
         }
     }
 }

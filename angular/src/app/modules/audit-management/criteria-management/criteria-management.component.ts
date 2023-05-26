@@ -143,7 +143,7 @@ export class CriteriaManagementComponent
                         this.refresh()
                       })
                   }
-                }, true
+                }, {isHtml:true}
               );
             }
             else {
@@ -176,10 +176,14 @@ export class CriteriaManagementComponent
                     forkJoin([this.processCriteriaService.delete(node.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.id)])
                       .pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
                         abp.notify.success("Delete " + node.name);
-                        this.refresh()
+                        this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+                          this.treeControl.dataNodes=data.result.childrens
+                          this.dataSource.data = data.result.childrens
+                          this.treeControl.expandAll()
+                      })
                       })
                   }
-                }, true
+                }, {isHtml:true}
               );
             }
             else {
@@ -190,8 +194,12 @@ export class CriteriaManagementComponent
                   if (result) {
                     this.processCriteriaService.delete(node.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
                       abp.notify.success("Deleted " + node.name);
-                      this.refresh()
-                    });
+                      this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
+                        this.treeControl.dataNodes=data.result.childrens
+                        this.dataSource.data = data.result.childrens
+                        this.treeControl.expandAll()
+                    })
+                    })
                   }
                 }
               );
@@ -204,7 +212,7 @@ export class CriteriaManagementComponent
   Inactive(node) {
     this.processCriteriaService.GetAllProcessTailoringContain(node.item.id).subscribe(rs => {
       if (rs.result.length > 0) {
-        let message = `<span><strong> Deactive <span style="color:#2991BF">${node.item.code}: ${node.item.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
+        let message = `<span><strong> Deactivate <span style="color:#2991BF">${node.item.code}: ${node.item.name}</span> will REMOVE these criteria below from tailoring</strong></span><br>`;
         rs.result.forEach(element => {
           message += `<span class="text-left"> ${element.code}: ${element.name}</span><br>`;
         });
@@ -215,7 +223,7 @@ export class CriteriaManagementComponent
             if (result) {
               forkJoin([this.processCriteriaService.DeActive(node.item.id), this.processCriteriaService.RemoveCriteriaFromTailoring(node.item.id)])
                 .pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-                  abp.notify.success("Deactive " + node.item.name);
+                  abp.notify.success("Deactivate " + node.item.name);
                   this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
                     this.treeControl.dataNodes=data.result.childrens
                     this.dataSource.data = data.result.childrens
@@ -223,17 +231,17 @@ export class CriteriaManagementComponent
                 })
               })
             }
-          }, true
+          }, {isHtml:true}
         );
       }
       else {
         abp.message.confirm(
-          "Deactive " + node.item.name + "?",
+          "Deactivate " + node.item.name + "?",
           "",
           (result: boolean) => {
             if (result) {
               this.processCriteriaService.DeActive(node.item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-                abp.notify.success("Deactive " + node.item.name);
+                abp.notify.success("Deactivate " + node.item.name);
                 this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
                   this.treeControl.dataNodes=data.result.childrens
                   this.dataSource.data = data.result.childrens
@@ -254,7 +262,7 @@ export class CriteriaManagementComponent
       (result: boolean) => {
         if (result) {
           this.processCriteriaService.Active(node.item.id).pipe(catchError(this.processCriteriaService.handleError)).subscribe(() => {
-            abp.notify.success("Active " + node.item.name);
+            abp.notify.success("Activate " + node.item.name);
             this.processCriteriaService.getAll().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data =>{
               this.treeControl.dataNodes=data.result.childrens
               this.dataSource.data = data.result.childrens

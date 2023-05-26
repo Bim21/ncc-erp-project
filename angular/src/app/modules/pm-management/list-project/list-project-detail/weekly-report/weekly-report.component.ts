@@ -47,6 +47,9 @@ import { Console, log } from 'console';
 import { GuideLineDialogComponent } from './guide-line-dialog/guide-line-dialog/guide-line-dialog.component';
 import { PmReportRiskService } from '@app/service/api/pm-report-project-ricks.service';
 import { AddRiskDialogComponent } from './add-risk-dialog/add-risk-dialog.component';
+import { ReportGuidelineDetailComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/report-guideline-detail/report-guideline-detail.component';
+import { EditNoteResourceComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/edit-note-resource/edit-note-resource.component';
+import { AppConfigurationService } from '@app/service/api/app-configuration.service';
 
 
 @Component({
@@ -100,8 +103,13 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   public isEditWeeklyReport: boolean = false;
   public isEditFutureReport: boolean = false;
   public isEditProblem: boolean = false;
+  public isShowPmNote:boolean=false;
+  public isShowIssues:boolean=false;
+  public isShowRisks: boolean = false;
+  public isShowCurrentResource:boolean = false;
+  public isShowSupportUser = false;
   public processFuture: boolean = false;
-  public processProblem: boolean = false
+  public processProblem: boolean = false;
   public processWeekly: boolean = false;
   public createdDate = new Date();
   public projectId: number;
@@ -123,7 +131,6 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   totalNormalWorkingTime: number = 0;
   totalOverTime: number = 0;
   sidebarExpanded: boolean;
-  isShowCurrentResource: boolean = true;
   searchUser: string = ""
   isTimmerCounting: boolean = false
   isStopCounting: boolean = false
@@ -174,7 +181,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View;
-  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone;
@@ -182,6 +189,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note;
 
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View;
@@ -213,6 +221,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     private reportService: PMReportProjectService,
     private pjCriteriaService: CriteriaService,
     private pjCriteriaResultService: ProjectCriteriaResultService,
+    private settingService: AppConfigurationService,
   ) {
     super(injector);
     this.projectId = Number(route.snapshot.queryParamMap.get("id"));
@@ -293,6 +302,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.getProjectProblem();
       this.getRiskOfTheWeek();
       this.getChangedResource();
+      
     })
   }
 
@@ -474,11 +484,17 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     );
     }
 
-  getProjectInfo() {
+  getProjectInfo(cancel?:boolean) {
     this.isLoading = true;
     if (this.selectedReport.pmReportProjectId) {
       this.pmReportProjectService.GetInfoProject(this.selectedReport.pmReportProjectId).pipe(catchError(this.pmReportProjectService.handleError)).subscribe(data => {
         this.projectInfo = data.result
+        if(cancel){
+          this.isShowPmNote=true
+        }
+        else{
+          this.isShowPmNote = this.projectInfo.pmNote ? true : false
+        }
         this.isLoading = false;
         this.getDataForBillChart(this.projectInfo.projectCode)
         this.getCurrentResourceOfProject(this.projectInfo.projectCode);
@@ -534,6 +550,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
         }
         this.isShowProblemList = this.problemList.length == 0 ? false : true;
+        this.isShowIssues = this.problemList.length > 0;
       })
     }
   }
@@ -582,6 +599,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       this.pmReportRiskService.getRiskOfTheWeek(this.projectId, this.selectedReport.reportId).pipe(catchError( this.pmReportRiskService.handleError)).subscribe(data => {
         if(data.result){
           this.projectRiskList = data.result
+          this.isShowRisks = this.projectRiskList.length >0
         }
       })
     }
@@ -610,7 +628,9 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
 
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.getRiskOfTheWeek()
+      if(result){
+        this.getRiskOfTheWeek()
+      }
     })}
 
   public deleteRisk(risk){
@@ -815,6 +835,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     newIssue.status = this.defaultStatus;
     this.problemList.unshift(newIssue)
     this.processProblem = true;
+    this.isShowIssues = this.problemList.length > 0;
   }
 
   public saveProblemReport(problem: projectProblemDto) {
@@ -884,16 +905,28 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     this.reportService.updateNote(this.projectInfo.pmNote, this.selectedReport.pmReportProjectId).pipe(catchError(this.reportService.handleError)).subscribe(rs => {
       abp.notify.success("Update successful!")
       this.isEditingNote = false;
+      this.isShowPmNote = true;
       this.allowSendReport = this.projectInfo.pmNote ? true : false
     })
   }
   public cancelUpdateNote() {
     this.isEditingNote = false;
-    this.allowSendReport = this.projectInfo.pmNote ? true : false
-    this.getProjectInfo();
+    this.allowSendReport = this.projectInfo.pmNote ? true : false;
+    this.getProjectInfo(true);
   }
 
+  public editResoureNote(user) {
+    let ref = this.dialog.open(EditNoteResourceComponent, {
+      width: "600px",
+      data: user
+    })
+    ref.afterClosed().subscribe(rs => {
+      if (rs) {
+        user.note=rs
+      }
+    })
 
+  }
 
 
   public updateAutoNote() {
@@ -1516,6 +1549,75 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
       })
     }
 
+    public showGuideLineHeader(command: string) {
+      this.settingService.getGuideLine().subscribe((data) => {
+        const guideLine = data.result;
+  
+        let guidelineContent = "";
+  
+        switch (command) {
+          case "Criteria Status":
+            guidelineContent = guideLine.criteriaStatus;
+            break;
+          case "Issue":
+            guidelineContent = guideLine.issue;
+            break;
+          case "Risk":
+            guidelineContent = guideLine.risk;
+            break;
+          case "PM Note":
+            guidelineContent = guideLine.pmNote;
+            break;
+        }
+  
+        if (guidelineContent) {  // Change this line
+          const show = this.dialog.open(ReportGuidelineDetailComponent, {
+            data: {
+              name: command,
+              guidelineContent,
+              item: guideLine
+            },
+            width: "60%"
+          });
+  
+          show.afterClosed().subscribe((updatedGuideline) => {
+            if (updatedGuideline) {
+              this.refresh();
+            }
+          });
+        } else {
+          // Display the dialog with empty content
+          const show = this.dialog.open(ReportGuidelineDetailComponent, {
+            data: {
+              name: command,
+              guidelineContent: "",  // Provide an empty string as guideline
+              item: guideLine
+            },
+            width: "60%"
+          });
+  
+  
+          show.afterClosed().subscribe((updatedGuideline) => {
+            if (updatedGuideline) {
+              this.refresh();
+            }
+          });
+        }
+      });
+    }
+  
+    public guideLineCriteriaStatus() {
+      this.showGuideLineHeader("Criteria Status")
+    }
+    public guideLinePMNote() {
+      this.showGuideLineHeader("PM Note")
+    }
+    public guideLineRisk() {
+      this.showGuideLineHeader("Risk")
+    }
+    public guideLineIssue() {
+      this.showGuideLineHeader("Issue")
+    }
   public isEditingAllRow() {
     return this.listCriteriaResult.find(s => !s.editMode) == undefined && this.selectedReport.isActive;
   }

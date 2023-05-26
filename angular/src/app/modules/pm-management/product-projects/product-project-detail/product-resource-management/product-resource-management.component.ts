@@ -246,7 +246,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
             if (rs) {
               this.AddUserToProject(user)
             }
-          }, true)
+          }, {isHtml:true})
         }
       })
     }

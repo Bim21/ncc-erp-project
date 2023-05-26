@@ -52,7 +52,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     value: item[1]
   }))
   public expandInvoiceSetting: true;
-  public selectedIsCharge: string = "All" ;
+  public selectedIsCharge: string = "Charge" ;
   public listProjectOfClient: SubInvoice[] = []
   public listSelectProject: DropDownDataDto[] = []
   public currentProjectInfo: ProjectDto
@@ -83,7 +83,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.getAllProject();
     this.getCurrentProjectInfo();
     this.getProjectBillInfo();
-    
+
   }
   isShowInvoiceSetting(){
     return this.isGranted(PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabBillInfo_InvoiceSetting_View)
@@ -175,7 +175,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.userBillProcess = true;
     this.filteredUserBillList.unshift(newUserBill)
     if( newUserBill.createMode == true){
-      this.filteredUserBillList.length = this.filteredUserBillList.length - 1;
+      this.filteredUserBillList.length = this.filteredUserBillList.length;
     }
 
   }
@@ -191,12 +191,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
       this.projectUserBillService.create(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
 
         abp.notify.success(`Created new user bill`)
-        if (userBill.isActive === true) {
-          this.selectedIsCharge = 'Charge';
-          this.getUserBill("Charge");
-        } else {
-          this.selectedIsCharge = 'Not Charge'
+        if(this.selectedIsCharge === 'Not Charge'){
           this.getUserBill("Not Charge");
+        }else if (this.selectedIsCharge === 'All') {
+          this.getUserBill("All");
+        }else{
+          this.getUserBill("Charge");
         }
         this.userBillProcess = false;
         this.searchUserBill = ""
@@ -207,12 +207,19 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     else {
       this.projectUserBillService.update(userBill).pipe(catchError(this.projectUserBillService.handleError)).subscribe(res => {
         abp.notify.success(`Updated request user bill`)
-        if (userBill.isActive === true) {
-          this.selectedIsCharge = 'Charge';
-          this.getUserBill("Charge");
-        } else {
-          this.selectedIsCharge = 'Not Charge'
+        // if (userBill.isActive === true) {
+        //   this.selectedIsCharge = 'Charge';
+        //   this.getUserBill("Charge");
+        // } else {
+        //   this.selectedIsCharge = 'Not Charge'
+        //   this.getUserBill("Not Charge");
+        // }
+        if(this.selectedIsCharge === 'Not Charge'){
           this.getUserBill("Not Charge");
+        }else if (this.selectedIsCharge === 'All') {
+          this.getUserBill("All");
+        }else{
+          this.getUserBill("Charge");
         }
         this.userBillProcess = false;
         this.isEditUserBill = false;
@@ -245,7 +252,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
   private getUserBill(selectedIsCharge?: string): void {
     this.projectUserBillService.getAllUserBill(this.projectId).pipe(catchError(this.projectUserBillService.handleError)).subscribe(data => {
       this.userBillList = data.result
-      this.filteredUserBillList = data.result
+      this.filteredUserBillList = this.userBillList.filter(bill => bill.isActive === true);
       if (selectedIsCharge === 'All') {
         this.filteredUserBillList = this.userBillList;
       } else if (selectedIsCharge === 'Charge') {
@@ -268,12 +275,12 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     this.isEditUserBill = false;
     this.searchUserBill = ""
   }
-  
+
   changePageSizeCurrent()
   {
     this.userBillCurrentPage = 1
   }
-  
+
   public removeUserBill(userBill: projectUserBillDto): void {
     abp.message.confirm(
       "Delete user bill?",
@@ -282,13 +289,15 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
         if (result) {
           this.projectUserBillService.deleteUserBill(userBill.id).pipe(catchError(this.projectUserBillService.handleError)).subscribe(() => {
             abp.notify.success("Deleted user bill");
-            if (userBill.isActive === true) {
-              this.selectedIsCharge = 'Charge';
-              this.getUserBill("Charge");
-            } else {
-              this.selectedIsCharge = 'Not Charge'
+            if(this.selectedIsCharge === 'Not Charge'){
               this.getUserBill("Not Charge");
+            }else if (this.selectedIsCharge === 'All') {
+              this.getUserBill("All");
+            }else{
+              this.getUserBill("Charge");
             }
+            // this.selectedIsCharge = 'Charge';
+            // this.getUserBill("Charge");
           });
         }
       }
@@ -374,7 +383,7 @@ export class ProjectBillComponent extends AppComponentBase implements OnInit {
     })
   }
 
- 
+
 }
 
 export interface AddSubInvoicesDto {

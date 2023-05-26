@@ -252,7 +252,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
             if (rs) {
               this.AddUserToProject(user)
             }
-          }, true)
+          }, {isHtml:true})
         }
       })
     }

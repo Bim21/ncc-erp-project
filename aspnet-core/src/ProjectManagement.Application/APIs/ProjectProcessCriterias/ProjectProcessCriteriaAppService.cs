@@ -630,9 +630,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     GuildLine = y.GuidLine,
                     Level = y.Level,
                     ParentId = y.ParentId,
-                    IsApplicable = y.IsApplicable
-                }).OrderBy(x => x.Code).ThenBy(x => x.Level).ToList();
-            using (var wb = new Workbook())
+                    IsApplicable = y.IsApplicable,
+                })
+                .OrderBy(x => CommonUtil.GetNaturalSortKey( x.Code))
+                .ToList();
+            using (var wb = new ExcelPackage())
             {
                 var applicable = new List<string>() { "Standard", "Modify", "Not Yet" };
                 var sheetAudit = wb.Worksheets[0];
@@ -662,7 +664,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells["A1"].Value = "No";
                 sheetAudit.Cells["B1"].Value = "Criteria";
                 sheetAudit.Cells["C1"].Value = "Applicable?";
-                sheetAudit.Cells["D1"].Value = "Comment";
+                sheetAudit.Cells["D1"].Value = "Tailoring Note";
                 sheetAudit.Cells["E1"].Value = "Guideline";
                 sheetAudit.Cells["F1"].Value = "Q&A Examples";
                 var startAudit = sheetAudit.Cells["A2"].Row + 1;

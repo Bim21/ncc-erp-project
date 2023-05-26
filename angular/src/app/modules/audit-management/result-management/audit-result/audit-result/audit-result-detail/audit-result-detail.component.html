@@ -51,8 +51,8 @@
 
 
           <div class="col text-right">
-            <span style="color: #014C6E;font-size: x-large;"  class="mr-2">Total Score:<strong  style="font-size: x-large;">  {{totalScore}}</strong></span>
-            <span class="px-3" style="font-size: x-large; font-weight: 500;"  [ngClass]="APP_CONST.auditStatus[statusFinal]">
+            <span style="color: #014C6E;font-size: 21px;"  class="mr-2">Total Score:<strong  style="font-size: 21px;">  {{totalScore}}</strong></span>
+            <span class="px-3" style="font-size:21px; font-weight: 500;"  [ngClass]="APP_CONST.auditStatus[statusFinal]">
               {{auditStatusList[statusFinal-1]}}</span>
           </div>
 
@@ -83,10 +83,12 @@
           <li style="background-color: rgb(239, 239, 239);" class="mat-tree-node">
             <button mat-icon-button disabled></button>
             <div class="item-criteria d-flex justify-content-end">
-              <div [matTooltip]="node.item.processCriteria.name" style="margin: auto 0; align-items: center; display: flex; "
-                class="name-criteria">
-                <div class="d-flex">
-                  <span class="hyperlink" (click)="viewPPCRnode(node.item)" style="flex: 1; color: black"> {{ node.item.processCriteria.code }} &nbsp;  {{ node.item.processCriteria.name }}</span>
+              <div  style="margin: auto 0; align-items: center; display: flex; flex: 1;"
+              class="name-criteria">
+              <div class="d-flex hyperlink"  (click)="viewPPCRnode(node.item, 'viewFromName')"  style="font-size: 16px;color: black; ">
+                <span class="d-flex align-items-center" style="min-width: 20px;">{{ node.item.processCriteria.code }} </span>
+                <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.processCriteria.name  }}
+                </div>
 
                   <!-- <span>
                                   <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
@@ -125,7 +127,7 @@
                 <span> {{node.item.score}} </span>
               </div>
 
-              <div class="note" style="width: 150px;">
+              <div class="note" style="width: 400px;text-align: center;">
                 <span *ngIf= "permission.isGranted(Audits_Results_Detail_ViewNote)" class="hyperlink"  (click)="viewPPCRnode(node.item)"> {{ node.item.note }} </span>
               </div>
 
@@ -155,10 +157,12 @@
               </button>
 
               <div class="item-criteria">
-                <div [matTooltip]="node.item.processCriteria.name" style="margin: auto 0; align-items: center; display: flex; "
+                <div  style="margin: auto 0; align-items: center; display: flex; flex: 1;"
                 class="name-criteria">
-                <div class="d-flex align-items-center">
-                  <span class="hyperlink" (click)="viewPPCRnode(node.item)" style="flex: 1; color: black"> {{ node.item.processCriteria.code }} &nbsp;  {{ node.item.processCriteria.name }}</span>
+                <div class="d-flex hyperlink"  (click)="viewPPCRnode(node.item, 'viewFromName')"  style="font-size: 16px;color: black; ">
+                  <span class="d-flex align-items-center " style="min-width: 20px;">{{ node.item.processCriteria.code }} </span>
+                  <div style="margin-left: 19px; word-break: break-word; padding-right: 45px;">  {{ node.item.processCriteria.name  }}
+                  </div>
                   <!-- <span>
                                   <i *ngIf="node.item.processCriteria.isApplicable" [style.color]="'#28a745'"
                                     style="font-size: 15px;" class="fas fa-check-circle"
