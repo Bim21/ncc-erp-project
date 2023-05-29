@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Uow;
 using Abp.UI;
@@ -512,10 +513,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     var listToAdd = new List<ProjectProcessCriteria>();
                     var listWarning = new List<ResponseFailDto>();
                     var listCriteriaIds = new List<long>();
-                    for (int row = 2; row < rowCount; row++)
+                    for (int row = 2; row <= rowCount; row++)
                     {
                         //Code không tồn tại, code null, code sai => trả ra thông báo lỗi Row n: Code number is not exsit or null
                         var code = worksheet.Cells[row, 1].Value.ToString().Trim();
+
                         if (string.IsNullOrEmpty(code) || !mapCodeToId.ContainsKey(code))
                         {
                             listWarning.Add(new ResponseFailDto { Row = row, ReasonFail = "Code number is not exsit or null" });
@@ -632,8 +634,8 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                     ParentId = y.ParentId,
                     IsApplicable = y.IsApplicable,
                 })
-                .OrderBy(x => CommonUtil.GetNaturalSortKey( x.Code))
-                .ToList();
+                 .OrderBy(x => CommonUtil.GetNaturalSortKey(x.Code)).ToList();
+
             using (var wb = new Workbook())
             {
                 var applicable = new List<string>() { "Standard", "Modify", "Not Yet" };
@@ -667,8 +669,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells["D1"].Value = "Tailoring Note";
                 sheetAudit.Cells["E1"].Value = "Guideline";
                 sheetAudit.Cells["F1"].Value = "Q&A Examples";
-                var startAudit = sheetAudit.Cells["A2"].Row + 1;
 
+                // Freeze the first row and first two columns
+                sheetAudit.FreezePanes(1, 2, 1, 2);
+
+                var startAudit = sheetAudit.Cells["A2"].Row + 1;
                 // validation setup
                 // Create a range in the second worksheet.
                 range = sheetAudit2.Cells.CreateRange($"A1", $"A{applicable.Count}");
@@ -758,6 +763,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 }
 
                 sheetAudit.Cells.SetColumnWidth(1, 40);
+                sheetAudit.Cells.SetColumnWidth(2, 10);
                 sheetAudit.Cells.SetColumnWidth(3, 50);
                 sheetAudit.Cells.SetColumnWidth(4, 50);
                 sheetAudit.Cells.SetColumnWidth(5, 50);

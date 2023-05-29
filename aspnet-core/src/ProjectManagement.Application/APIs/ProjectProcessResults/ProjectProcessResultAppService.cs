@@ -703,6 +703,8 @@ namespace ProjectManagement.APIs.ProjectProcessResults
 
                 // Name the range.
                 range.Name = "MyRange";
+                // Freeze the first row and first two columns
+                sheetAudit.FreezePanes(1, 2, 1, 2);
 
                 // Fill different cells with data in the range.
                 int start = 0;

@@ -78,7 +78,7 @@
                                 <mat-checkbox
                                     *ngIf=" permission.isGranted(WeeklyReport_ReportDetail_LastReviewDate_Check) "
                                     class="mt-2" [checked]="item.seen" [disabled]="item.isActive == false" matTooltip="{{!item.isActive ? 'Cannot update review of closed Weekly Report'
-                                                 : item.seen ? 'Click to mark project as not reviewed'
+                                                 : item.seen ? 'Click mark project as not reviewed'
                                                  : 'Click to mark project as reviewed'}}"
                                     (click)="showConfirmModal($event, item)">
                                 </mat-checkbox>
