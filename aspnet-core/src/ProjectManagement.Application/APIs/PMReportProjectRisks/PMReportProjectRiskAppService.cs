@@ -38,7 +38,7 @@ namespace ProjectManagement.APIs.PMReportProjectRisks
         }
 
         [HttpPost]
-        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue)]
+        [AbpAuthorize(PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk)]
         public async Task<PMReportProjectRiskDto> Create(PMReportProjectRiskDto input, long projectId)
         {
             var pmReportProjectActive = await WorkScope.GetAll<PMReportProject>().Where(x => x.PMReport.IsActive && x.ProjectId == projectId).FirstOrDefaultAsync();

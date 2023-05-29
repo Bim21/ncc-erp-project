@@ -79,7 +79,7 @@ export class CreateEditCriteriaAuditComponent
       this.parentCurrent = this.data.item.code;
       this.codeParent = this.data.item.code || '';
       
-      this.criteriaAudit = { ...this.criteriaAudit, isApplicable: false, parentId: this.data.item.id, name: this.data.name }
+      this.criteriaAudit = { ...this.criteriaAudit, isApplicable: true, parentId: this.data.item.id, name: this.data.name }
     }
     
     this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
@@ -165,7 +165,9 @@ export class CreateEditCriteriaAuditComponent
               this.codeChild = this.maxCode + 1
             }
           })
+
           this.criteriaAudit.name = '';
+          this.criteriaAudit.isApplicable=true;
           this.tinyMCE1.setValue('')
           this.tinyMCE2.setValue('')
         }
@@ -213,7 +215,7 @@ export class CreateEditCriteriaAuditComponent
               this.dialogRef.close(this.criteriaAudit);
             }
           }
-        })
+        },{ confirmButtonText: abp.localization.abpWeb("Update")})
       }
       else {
         if(listAtrCriteriaChange.length>0){

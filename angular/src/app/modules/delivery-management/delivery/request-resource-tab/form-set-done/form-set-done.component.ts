@@ -64,7 +64,7 @@ export class FormSetDoneComponent extends AppComponentBase implements OnInit {
               abp.notify.success(`Confirmed for user ${this.planUserInfo.employee.fullName} join project`)
             })
         }
-      }, true)
+      }, {isHtml:true})
     }
   }
 

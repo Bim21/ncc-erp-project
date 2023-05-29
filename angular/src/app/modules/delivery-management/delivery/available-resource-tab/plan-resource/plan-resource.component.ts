@@ -353,7 +353,7 @@ export class PlanResourceComponent
 
         }
       }
-      , true
+      , {isHtml:true}
     )
   }
   ngOnDestroy(): void {

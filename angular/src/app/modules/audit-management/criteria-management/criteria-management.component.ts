@@ -143,7 +143,7 @@ export class CriteriaManagementComponent
                         this.refresh()
                       })
                   }
-                }, true
+                }, {isHtml:true}
               );
             }
             else {
@@ -183,7 +183,7 @@ export class CriteriaManagementComponent
                       })
                       })
                   }
-                }, true
+                }, {isHtml:true}
               );
             }
             else {
@@ -231,7 +231,7 @@ export class CriteriaManagementComponent
                 })
               })
             }
-          }, true
+          }, {isHtml:true}
         );
       }
       else {

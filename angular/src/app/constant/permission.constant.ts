@@ -168,6 +168,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.View",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Release: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Release",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_CurrentResource_Update_Note: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.CurrentResource.Update.Note",
 
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PlannedResource_View: "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PlannedResource.View",
@@ -371,7 +372,7 @@ export const PERMISSIONS_CONSTANT = {
 
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.View",
-       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewIssue : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk",
+       Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_AddNewRisk : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.AddNewRisk",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Edit : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Edit",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_Delete : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.Delete",
        Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_SetDone : "Projects.OutsourcingProjects.ProjectDetail.TabWeeklyReport.PMProjectRisk.SetDone",
@@ -434,6 +435,8 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_ProjectHealthCriteria_View: "WeeklyReport.ReportDetail.ProjectHealthCriteria.View",
        WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus: "WeeklyReport.ReportDetail.ProjectHealthCriteria.ChangeStatus",
        WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit: "WeeklyReport.ReportDetail.ProjectHealthCriteria.Edit",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline: "WeeklyReport.ReportDetail.ProjectHealthCriteria.View.Guideline",
+       WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline: "WeeklyReport.ReportDetail.ProjectHealthCriteria.Update.Guideline",
 
        WeeklyReport_ReportDetail_PMIssue: "WeeklyReport.ReportDetail.PMIssue",
        WeeklyReport_ReportDetail_PMIssue_View: "WeeklyReport.ReportDetail.PMIssue.View",
@@ -447,6 +450,7 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_CurrentResource: "WeeklyReport.ReportDetail.CurrentResource",
        WeeklyReport_ReportDetail_CurrentResource_View: "WeeklyReport.ReportDetail.CurrentResource.View",
        WeeklyReport_ReportDetail_CurrentResource_Release: "WeeklyReport.ReportDetail.CurrentResource.Release",
+       WeeklyReport_ReportDetail_CurrentResource_Update_Note: "WeeklyReport.ReportDetail.CurrentResource.Update.Note",
 
        WeeklyReport_ReportDetail_PlannedResource: "WeeklyReport.ReportDetail.PlannedResource",
        WeeklyReport_ReportDetail_PlannedResource_View: "WeeklyReport.ReportDetail.PlannedResource.View",
@@ -460,6 +464,7 @@ export const PERMISSIONS_CONSTANT = {
        WeeklyReport_ReportDetail_ChangedResource: "WeeklyReport.ReportDetail.ChangedResource",
        WeeklyReport_ReportDetail_ChangedResource_View: "WeeklyReport.ReportDetail.ChangedResource.View",
        WeeklyReport_ReportDetail_GuideLine_View: "WeeklyReport.ReportDetail.GuideLine.View",
+       WeeklyReport_ReportDetail_GuideLine_Update: "WeeklyReport.ReportDetail.GuideLine.Update",
 
        WeeklyReport_ReportDetail_LastReviewDate_Check: "WeeklyReport.ReportDetail.LastReviewDate.Check",
        WeeklyReport_ReportDetail_PrioritizeReview_Check: "WeeklyReport.ReportDetail.PrioritizeReview.Check",

@@ -5,6 +5,7 @@ import { ProjectCriteriaDto, CriteriaDto, CriteriaCategoryDto } from './../../..
 import { CriteriaService } from '@app/service/api/criteria.service';
 import { AppComponentBase } from '@shared/app-component-base';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 @Component({
   selector: 'app-guide-line-dialog',
@@ -17,6 +18,8 @@ export class GuideLineDialogComponent extends AppComponentBase implements OnInit
   public criteria = {} as ProjectCriteriaDto;
   public trustedHtml: SafeHtml;
 
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,

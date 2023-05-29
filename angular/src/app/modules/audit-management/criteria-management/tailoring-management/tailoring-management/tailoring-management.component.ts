@@ -89,7 +89,7 @@ export class TailoringManagementComponent extends PagedListingComponentBase<Tail
         }
       });
       }
-    },true)
+    },{isHtml:true})
   }
 
   navigateTaloringProject(tailoring) {

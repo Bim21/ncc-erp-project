@@ -181,7 +181,7 @@ namespace ProjectManagement.APIs.TimeSheets
             await WorkScope.InsertRangeAsync(listTimesheetProject);
             await WorkScope.InsertRangeAsync(listTimesheetProjectBill);
             await CurrentUnitOfWork.SaveChangesAsync();
-            _closeTimesheet.CreateReqCloseTimesheetBGJ(timesheet);
+            //_closeTimesheet.CreateReqCloseTimesheetBGJ(timesheet);
             return new { failList, input };
         }
 
@@ -256,18 +256,10 @@ namespace ProjectManagement.APIs.TimeSheets
         }
 
         [AbpAuthorize(PermissionNames.Timesheets_CloseAndActive)]
-        public async Task ReverseActive(long id, DateTime? closeTime = null)
+        public async Task ReverseActive(long id)
         {
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);
             timesheet.IsActive = !timesheet.IsActive;
-            if (!timesheet.IsActive)
-            {
-                _closeTimesheet.DeleteOldRequestInBackgroundJob(id);
-            }
-            if (timesheet.IsActive && closeTime.HasValue)
-            {
-                _closeTimesheet.ReOpenTimesheet(timesheet, closeTime.Value);
-            }
             await WorkScope.UpdateAsync(timesheet);
         }
 

@@ -15,7 +15,7 @@ import { PositionDto } from '@app/service/model/position.dto';
 @Component({
   selector: 'app-position',
   templateUrl: './position.component.html',
-  //styleUrls: ['./position.component.css']
+  styleUrls: ['./position.component.css']
 })
 export class PositionComponent extends PagedListingComponentBase<PositionComponent> implements OnInit {
   [x: string]: any;
