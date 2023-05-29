@@ -9,12 +9,14 @@ using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
+using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
+using ProjectManagement.Users.Dto;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
@@ -597,6 +599,30 @@ namespace ProjectManagement.APIs.PMReportProjects
             pmReportProject.AutomationNote = input.Note;
             await WorkScope.UpdateAsync(pmReportProject);
             return input;
+        }
+
+        [HttpGet]
+        [AbpAuthorize()]
+        public async Task<List<PMUnsentWeeklyReportDto>> GetUnSentWeeklyReportPMs()
+        {
+            int index = 1;
+            var list = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.PMReport.IsActive
+                    && x.Status == PMReportProjectStatus.Draft
+                    && x.Project.IsRequiredWeeklyReport)
+                .Select(x => new PMUnsentWeeklyReportDto
+                {
+                    Index = 0,
+                    ProjectName = x.Project.Name,
+                    WeeklyName = x.PMReport.Name,
+                    EmailAddress = x.PM.EmailAddress,
+                    Name = x.PM.Name,
+                    Surname = x.PM.Surname,
+                    FullName = x.PM.FullName,
+                    UserName = x.PM.UserName
+                }).ToList();
+            list.ForEach(i => i.Index = index++);
+            return list;
         }
     }
 }
