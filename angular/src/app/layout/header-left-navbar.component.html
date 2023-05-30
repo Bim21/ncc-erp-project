@@ -13,7 +13,7 @@
 
     <li style="margin-left: 20px; min-width: 250px;" *ngIf="!isShowReportBar" class="nav-item d-none d-sm-inline-block spaced-item">
         <div class="mt-1" style="font-size: 20px; display: flex;">
-            <strong>
+            <strong >
                 <span style="margin-right: 10px;"> {{projectName}}&nbsp; &nbsp;{{projectCode? '[': ''}}   {{projectCode}}  {{projectCode? ']': ''}} </span>
             </strong>
         </div>
@@ -21,9 +21,9 @@
 
     <li style="margin-left: 20px;" *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block spaced-item">
         <div class="mt-1" style="font-size: 20px; display: flex;">
-            <strong>
-                <span matTooltip="Project Name" style="margin-right: 10px;">{{projectInfo?.projectName}}</span>
-                <span class="project-code" matTooltip="Client Code">[{{projectInfo?.clientCode}}]</span>
+            <strong class="css-width-long">
+                <span [matTooltip]="projectInfo?.projectName" style="margin-right: 10px;">{{projectInfo?.projectName}}</span>
+                <span  class="project-code" [matTooltip]="projectInfo?.clientCode">[{{projectInfo?.clientCode}}]</span>
             </strong>
         </div>
     </li>

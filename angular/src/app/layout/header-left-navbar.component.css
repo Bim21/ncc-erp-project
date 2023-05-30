@@ -61,3 +61,13 @@
   margin-right: 30px;
   width: 200px;
 }
+.css-width-long{
+    display: block;
+    display: -webkit-box;
+    max-width: 100%;
+    margin: 0 auto;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
