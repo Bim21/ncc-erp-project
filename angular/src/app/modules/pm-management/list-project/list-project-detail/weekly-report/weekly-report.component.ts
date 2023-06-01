@@ -595,7 +595,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     })
   }
   public getRiskOfTheWeek(){
-    if(this.projectId){
+    if(this.projectId && this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_PMProjectRisk_View)){
       this.pmReportRiskService.getRiskOfTheWeek(this.projectId, this.selectedReport.reportId).pipe(catchError( this.pmReportRiskService.handleError)).subscribe(data => {
         if(data.result){
           this.projectRiskList = data.result
