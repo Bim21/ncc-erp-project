@@ -1040,8 +1040,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 }
                 var sheetDetailTimesheet = CopySheet(excelPackageIn.Workbook, "Detail", nameSheetDetailTimesheet);
                 sheetDetailTimesheet.Cells["B2:E2"].Value = $"TIMESHEET OF {timesheetDetailOfUser.FullName.ToUpper()} IN {timesheetDetailOfUser.ProjectName.ToUpper()}"; ;
-
                 var tsTable = sheetDetailTimesheet.Tables.First();
+                if (timesheetDetailOfUser.TimesheetDetails.Count <= 0)
+                {
+                    continue;
+                }
                 var tsTableStart = tsTable.Address.Start;
                 sheetDetailTimesheet.InsertRow(tsTableStart.Row + 1, timesheetDetailOfUser.TimesheetDetails.Count - 1, tsTableStart.Row + timesheetDetailOfUser.TimesheetDetails.Count);
                 int rowIndex = tsTableStart.Row + 1;
