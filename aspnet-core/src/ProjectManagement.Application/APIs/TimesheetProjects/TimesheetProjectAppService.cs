@@ -1043,8 +1043,6 @@ namespace ProjectManagement.APIs.TimesheetProjects
                 var tsTable = sheetDetailTimesheet.Tables.First();
                 if (timesheetDetailOfUser.TimesheetDetails.Count <= 0)
                 {
-                    tsTable.ShowFilter = false;
-                    tsTable.ShowRowStripes = false;
                     continue;
                 }
                 var tsTableStart = tsTable.Address.Start;
