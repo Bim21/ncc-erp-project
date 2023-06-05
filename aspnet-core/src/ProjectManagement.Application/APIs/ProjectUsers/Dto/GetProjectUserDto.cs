@@ -30,5 +30,6 @@ namespace ProjectManagement.APIs.ProjectUsers.Dto
         public UserType UserType { get; set; }
         public Branch Branch { get; set; }
         public string Note { get; set; }
+        public string PMName { get; set; }
     }
 }

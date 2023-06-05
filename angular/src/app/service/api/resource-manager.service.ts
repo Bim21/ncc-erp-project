@@ -18,7 +18,7 @@ export class ResourceManagerService extends BaseApiService{
   }
 
 
-  
+
   public GetVendorResource(
     request: PagedRequestDto
   ): Observable<any> {

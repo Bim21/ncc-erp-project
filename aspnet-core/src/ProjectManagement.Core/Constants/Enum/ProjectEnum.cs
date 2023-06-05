@@ -218,6 +218,15 @@
             Vendor = 5
         }
 
+        public enum PlanStatus
+        {
+            All = 1,
+            AllPlan = 2,
+            PlanningJoin = 3,
+            PlanningOut = 4,
+            NoPlan = 5
+        }
+
         public enum Branch
         {
             HaNoi = 0,

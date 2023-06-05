@@ -2,6 +2,7 @@
 using Abp.Configuration;
 using Abp.Linq.Extensions;
 using Abp.Runtime.Session;
+using Abp.Timing;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.ResourceManager
@@ -778,7 +780,29 @@ namespace ProjectManagement.Services.ResourceManager
                            .ToList(),
                        });
 
-            return quser;
+            var result = quser.ToList();
+            switch (input.PlanStatus)
+            {
+                case PlanStatus.All:
+                    //do nothing
+                    break;
+                case PlanStatus.AllPlan:
+                    result = result.Where(x => x.PlanProjects.Count > 0).ToList();
+                    break;
+
+                case PlanStatus.PlanningJoin:
+                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage <= 100 && x.AllocatePercentage > 0 )).ToList();
+                    break;
+
+                case PlanStatus.PlanningOut:
+                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage == 0 )).ToList();
+                    break;
+
+                case PlanStatus.NoPlan:
+                    result = result.Where(x => x.PlanProjects.Count == 0).ToList();
+                    break;
+            }
+            return result.AsQueryable();
         }
 
         public IQueryable<long> queryUserIdsHaveAnySkill(List<long> skillIds)
@@ -934,9 +958,10 @@ namespace ProjectManagement.Services.ResourceManager
         public async Task<GridResult<GetAllResourceDto>> GetResources(InputGetResourceDto input, bool isVendor)
         {
             var query = await QueryAllResource(input, isVendor);
+
             if (input.SkillIds == null || input.SkillIds.IsEmpty())
             {
-                return await query.GetGridResult(query, input);
+                return query.GetGridResultSync(query, input);
             }
             if (input.SkillIds.Count() == 1 || !input.IsAndCondition)
             {
@@ -945,13 +970,14 @@ namespace ProjectManagement.Services.ResourceManager
                         join userId in querySkillUserIds on u.UserId equals userId
                         select u;
 
-                return await query.GetGridResult(query, input);
+                return  query.GetGridResultSync(query, input);
             }
 
             var userIdsHaveAllSkill = await getUserIdsHaveAllSkill(input.SkillIds);
             query = query.Where(s => userIdsHaveAllSkill.Contains(s.UserId));
 
-            return await query.GetGridResult(query, input);
+
+            return  query.GetGridResultSync(query, input);
         }
 
         public void SendKomu(StringBuilder komuMessage, string projectCode)

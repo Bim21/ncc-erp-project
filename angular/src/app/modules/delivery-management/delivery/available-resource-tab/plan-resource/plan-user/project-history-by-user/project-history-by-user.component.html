@@ -8,14 +8,16 @@
         <tr style="border: none">
           <th class="stt">#</th>
           <th>Project Name</th>
+          <th>PM Name</th>
           <th style="width: 100px;">Join/Out</th>
-          <th style="width: 100px;">Start time</th>
+          <th style="width: 120px;">Start time</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of projectsHistoryUser; let i= index">
           <td>{{i+1}}</td>
           <td><strong>{{ item.projectName }}</strong></td>
+          <td><strong>{{ item.pmName }}</strong></td>
           <td class="text-center"><span [ngClass]="item.allocatePercentage > 0 ? 'text-success' : 'text-danger' "> {{
               item.allocatePercentage > 0?'Join':'Out'}}</span>
           </td>

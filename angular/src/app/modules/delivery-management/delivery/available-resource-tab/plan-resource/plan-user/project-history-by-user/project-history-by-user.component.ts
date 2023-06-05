@@ -46,7 +46,7 @@ export class ProjectHistoryByUserComponent
       .pipe(catchError(this.projectUserService.handleError))
       .subscribe((data) => {
         this.projectsHistoryUser = data.result;
-        this.isLoading = false
+        this.isLoading = false;
       });
   }
   ngOnDestroy() {

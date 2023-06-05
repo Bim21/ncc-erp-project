@@ -39,6 +39,7 @@ export interface IProjectHistoryUser {
   branch: number;
   note: string;
   id: number;
+  pMName: string;
 }
 
 export class projectUserDto {
