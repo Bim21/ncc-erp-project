@@ -265,8 +265,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
               this.refresh()
             });
           }
-        },
-        true
+        }, {isHtml:true}
       );
     });
   }

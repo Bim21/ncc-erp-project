@@ -58,7 +58,6 @@ var abp = abp || {};
     options.confirmButtonText = options.confirmButtonText || abp.localization.abpWeb("Yes");
     options.cancelButtonText = options.cancelButtonText || abp.localization.abpWeb("Cancel");
     options.showCancelButton = true;
-    options.isHtml = false
 
     if (options.isHtml) {
       options.html = message;

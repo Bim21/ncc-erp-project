@@ -345,8 +345,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
               this.refresh()
             });
           }
-        },
-        true
+        }, {isHtml:true}
       );
     });
   }

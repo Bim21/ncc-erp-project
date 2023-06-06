@@ -1,5 +1,5 @@
-<div class="wrapper" *ngIf="permission.isGranted(Audits_Criteria)">
-  <section>
+<div class="wrapper" style="min-height: 94vh; margin-bottom: 0;" *ngIf="permission.isGranted(Audits_Criteria)">
+  <section style="position: sticky; top: 0; z-index: 2;">
     <div class="row">
       <div class="col-6">
         <h4 style="color: #014C6E;">Criteria</h4>
@@ -7,8 +7,8 @@
     </div>
   </section>
   <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">
+    <div class="card" style="margin-bottom: 0;">
+      <div class="card-header" style="position: sticky; top: 0; z-index: 2;">
         <div class="row">
           <div class="col-lg-4 col-md-12">
             <div class="input-group">
@@ -42,6 +42,7 @@
       </div>
 
       <mat-tree
+      style="max-height: calc(80vh);overflow-y: scroll;"
         [dataSource]="dataSource"
         [treeControl]="treeControl"
         class="example-tree px-2"

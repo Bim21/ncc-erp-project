@@ -434,8 +434,7 @@ export class ProductResourceManagementComponent extends AppComponentBase impleme
             this.getPlannedtUser()
           })
         }
-      },
-      true
+      }, {isHtml:true}
     )
   }
 

@@ -1383,8 +1383,7 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
             this.getFuturereport()
           })
         }
-      },
-      true
+      }, {isHtml:true}
     )
   }
 

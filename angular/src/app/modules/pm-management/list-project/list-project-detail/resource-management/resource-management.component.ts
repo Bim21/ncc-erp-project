@@ -441,8 +441,7 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
             this.getPlannedtUser()
           })
         }
-      },
-      true
+      }, {isHtml:true}
     )
   }
 

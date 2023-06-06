@@ -1233,8 +1233,7 @@ export class TrainingWeeklyReportComponent extends AppComponentBase implements O
             this.getFuturereport()
           })
         }
-      },
-      true
+      }, {isHtml:true}
     )
   }
 

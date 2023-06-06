@@ -1242,8 +1242,7 @@ export class ProductWeeklyReportComponent extends AppComponentBase implements On
             this.getFuturereport()
           })
         }
-      },
-      true
+      }, {isHtml:true}
     )
   }
 

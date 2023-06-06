@@ -261,8 +261,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
               this.refresh()
             });
           }
-        },
-        true
+        }, {isHtml:true}
       );
     });
   }

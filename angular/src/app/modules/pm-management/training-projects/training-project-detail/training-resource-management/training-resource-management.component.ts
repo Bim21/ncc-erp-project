@@ -437,8 +437,8 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
             this.getPlannedtUser()
           })
         }
-      },
-      true
+      }, {isHtml:true}
+
     )
   }
 

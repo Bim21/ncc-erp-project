@@ -1445,8 +1445,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             this.getFuturereport()
           })
         }
-      },
-      true
+      }, {isHtml:true}
     )
   }
 
