@@ -74,6 +74,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   Admin_Configuartions_WeeklyReportTime_Edit = PERMISSIONS_CONSTANT.Admin_Configuartions_WeeklyReportTime_Edit;
   WeeklyReport_ReportDetail_CurrentResource_Update_Note = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_CurrentResource_Update_Note;
 
+  WeeklyReport_ReportDetail_ProjectHealthCriteria = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria
   WeeklyReport_ReportDetail_ProjectHealthCriteria_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View
   WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus
   WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
@@ -286,7 +287,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getTimeCountDown();
     }
 
-    this.getGuideLineConfiguration();
+    // if (this.permission.isGranted(this.WeeklyReport_ReportDetail_GuideLine_View)) {
+    //   this.getGuideLineConfiguration();
+    // }
   }
 
   public startTimmer() {
@@ -1650,6 +1653,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public showGuideLine(ProjectCriteria) {
+
     if (ProjectCriteria) {
       const show = this.dialog.open(GuideLineDialogComponent, {
         data: {
@@ -1685,20 +1689,20 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
       switch (command) {
         case "Criteria Status":
-          guidelineContent= guideLine.criteriaStatus;
+          guidelineContent = guideLine.criteriaStatus;
           break;
         case "Issue":
-          guidelineContent= guideLine.issue;
+          guidelineContent = guideLine.issue;
           break;
         case "Risk":
           guidelineContent = guideLine.risk;
           break;
         case "PM Note":
-          guidelineContent= guideLine.pmNote;
+          guidelineContent = guideLine.pmNote;
           break;
       }
 
-      if (guidelineContent) {  // Change this line
+      if (guidelineContent) {
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
             name: command,

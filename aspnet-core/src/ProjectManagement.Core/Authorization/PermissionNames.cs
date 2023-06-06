@@ -454,7 +454,6 @@ namespace ProjectManagement.Authorization
         //public const string WeeklyReport_ReportDetail_UpdateProjectHealth = "WeeklyReport.ReportDetail.UpdateProjectHealth";
 
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria = "WeeklyReport.ReportDetail.ProjectHealthCriteria";
-        public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_View = "WeeklyReport.ReportDetail.ProjectHealthCriteria.View";
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus = "WeeklyReport.ReportDetail.ProjectHealthCriteria.ChangeStatus";
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = "WeeklyReport.ReportDetail.ProjectHealthCriteria.Edit";
         public const string WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = "WeeklyReport.ReportDetail.ProjectHealthCriteria.View.Guideline";
@@ -1119,7 +1118,6 @@ namespace ProjectManagement.Authorization
                     //PermissionNames.WeeklyReport_ReportDetail_UpdateProjectHealth ,
 
                     PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria,
-                    PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View,
                     PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus,
                     PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit,
                     PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline,
@@ -1818,7 +1816,6 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ChangedResource_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
 
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Health Criteria"},
-                 new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_ChangeStatus ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Change Status"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"},
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_GuideLine_View ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View GuideLine"},
@@ -3201,9 +3198,7 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Health Criteria",
                                                 Childrens = new List < SystemPermission > () {
-                                                    new SystemPermission {
-                                                        Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View"
-                                                    },
+                                                  
                                                     new SystemPermission {
                                                         Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"
                                                     },

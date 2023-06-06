@@ -20,6 +20,7 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
   public guideline: any;
   public name: string;
   public guideLineItem: any;
+  public previousGuideline;
 
   WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
   constructor(
@@ -40,6 +41,16 @@ export class ReportGuidelineDetailComponent extends AppComponentBase implements 
     this.name = this.data.name;
     this.guideLineItem = this.data.item;
 
+  }
+
+  startEdit() {
+    this.isEditMode = true;
+    this.previousGuideline = this.data.guidelineContent;
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+    this.data.guidelineContent = this.previousGuideline;
   }
 
   SaveAndClose() {

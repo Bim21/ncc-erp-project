@@ -1,4 +1,5 @@
 ﻿using Abp.Authorization;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
@@ -85,21 +86,28 @@ namespace ProjectManagement.APIs.ProjectCriteriaResults
             };
         }
 
+        [AbpAuthorize()]
         [HttpGet]
         public async Task<List<GetProjectCriteriaResultDto>> GetAll(long pmReportId, long projectId)
         {
+            var allowViewProjectHealthCriteria = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria);
+            var allowViewGuidelineProjectHealthCriteriaWRRD = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline);
+            if (!allowViewProjectHealthCriteria)
+            {
+                throw new UserFriendlyException("You are not allow to view Project Criteria Health!");
+            }
             return await WorkScope.GetAll<ProjectCriteriaResult>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
-                .Select(x => new GetProjectCriteriaResultDto
-                {
-                    CriteriaName = x.ProjectCriteria.Name,
-                    Guideline = x.ProjectCriteria.Guideline,
-                    Id = x.Id,
-                    Note = x.Note,
-                    PMReportId = x.PMReportId,
-                    ProjectId = x.ProjectId,
-                    Status = x.Status,
-                    ProjectCriteriaId = x.ProjectCriteriaId
-                }).ToListAsync();
+               .Select(x => new GetProjectCriteriaResultDto
+               {
+                   CriteriaName = x.ProjectCriteria.Name,
+                   Guideline = allowViewGuidelineProjectHealthCriteriaWRRD ? x.ProjectCriteria.Guideline : null,
+                   Id = x.Id,
+                   Note = x.Note,
+                   PMReportId = x.PMReportId,
+                   ProjectId = x.ProjectId,
+                   Status = x.Status,
+                   ProjectCriteriaId = x.ProjectCriteriaId
+               }).ToListAsync();
         }
 
         [AbpAuthorize(

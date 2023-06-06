@@ -25,18 +25,22 @@
                                     menubar: true,
                                     plugins: ['table','code','preview','media', 'image', 'template'],
                                     toolbars: ['image']
-                                    }" [(ngModel)]="data.guidelineContent " #criteriaNameModel="ngModel" #criteriaNameEl
-                    name="guideline" initialValue="{{data.guidelineContent }}">
+                                    }" [(ngModel)]="data.guidelineContent " #criteriaNameModel="ngModel"
+                    #criteriaNameEl name="guideline" initialValue="previousGuideline{{data.guidelineContent }}">
                 </editor>
             </div>
         </div>
 
     </div>
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
-        <button mat-raised-button color="primary" *ngIf="!isEditMode && permission.isGranted(WeeklyReport_ReportDetail_GuideLine_Update)" (click)="isEditMode = true">Edit</button>
-        <button mat-raised-button color="primary" *ngIf="isEditMode" (click)="isEditMode = false">View</button>
+        <button mat-raised-button color="primary"
+            *ngIf="!isEditMode && permission.isGranted(WeeklyReport_ReportDetail_GuideLine_Update)"
+            (click)="startEdit()">Edit</button>
+
         <button mat-raised-button color="accent" class="saving-btn" mat-button
             [disabled]="!timesheetForm.form.valid ||isLoading" (click)="SaveAndClose()" *ngIf="isEditMode">Save</button>
+        <button class="btn btn-default cancel-banks" *ngIf="isEditMode" mat-raised-button
+            (click)="cancelEdit()">Cancel</button>
 
     </div>
 </form>

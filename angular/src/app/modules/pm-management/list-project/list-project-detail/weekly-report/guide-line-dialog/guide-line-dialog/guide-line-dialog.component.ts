@@ -6,6 +6,7 @@ import { CriteriaService } from '@app/service/api/criteria.service';
 import { AppComponentBase } from '@shared/app-component-base';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-guide-line-dialog',
@@ -17,15 +18,18 @@ export class GuideLineDialogComponent extends AppComponentBase implements OnInit
   isEditMode = false;
   public criteria = {} as ProjectCriteriaDto;
   public trustedHtml: SafeHtml;
+  public previousGuideline;
 
   WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline
   WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public injector: Injector,
     public dialogRef: MatDialogRef<GuideLineDialogComponent>,
     private criteriaService: CriteriaService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {
     super(injector);
     this.trustedHtml = this.sanitizer.bypassSecurityTrustHtml(this.data.guideline);
@@ -36,6 +40,17 @@ export class GuideLineDialogComponent extends AppComponentBase implements OnInit
   ngOnInit(): void {
     this.criteria = this.item;
   }
+
+  startEdit() {
+    this.isEditMode = true;
+    this.previousGuideline = this.data.guideline;
+  }
+
+  cancelEdit() {
+    this.isEditMode = false;
+    this.data.guideline = this.previousGuideline;
+  }
+
 
   SaveAndClose() {
     const criteriaToUpdate = { ...this.criteria }; // create a copy of the criteria object to avoid mutating the original data
@@ -50,6 +65,7 @@ export class GuideLineDialogComponent extends AppComponentBase implements OnInit
         if (res.success) {
           abp.notify.success("Update Successfully!");
           this.dialogRef.close(criteriaToUpdate);
+          //this.isEditMode = false;
         }
       }, () => { this.isLoading = false });
   }

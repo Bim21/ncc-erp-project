@@ -197,25 +197,34 @@ namespace ProjectManagement.Configuration
         }
 
         [AbpAuthorize(
-            PermissionNames.Admin_Configuartions_Edit,
-            PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update
+            //PermissionNames.Admin_Configuartions_Edit,
             )]
         [HttpPost]
         public async Task<GuideLineDto> SetGuideLine(GuideLineDto input)
         {
+            var allowUpdateGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update);
+            if (!allowUpdateGuideline)
+            {
+                throw new UserFriendlyException("You are not allow to update this guideline!");
+            }
             var json = JsonSerializer.Serialize(input);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.GuideLine, json);
             return input;
         }
 
-         [AbpAuthorize(
-            PermissionNames.Admin_Configurations_ViewGuideLineSetting,
-            PermissionNames.WeeklyReport_ReportDetail_GuideLine_View
-            )]
-         [HttpGet]
+
+        [AbpAuthorize(
+          //PermissionNames.Admin_Configurations_ViewGuideLineSetting
+          )]
+        [HttpGet]
          public async Task<GuideLineDto> GetGuideLine()
          {
-             var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.GuideLine);
+            var allowViewGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_View);
+            if (!allowViewGuideline)
+            {
+                throw new UserFriendlyException("You are not allow to view this guideline!");
+            }
+            var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.GuideLine);
 
              if (string.IsNullOrEmpty(json))
              {

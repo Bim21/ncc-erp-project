@@ -1,8 +1,8 @@
-<form class="form-horizontal"  *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline)" autocomplete="off" #timesheetForm="ngForm" novalidate>
+<form class="form-horizontal"
+    *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline)" autocomplete="off"
+    #timesheetForm="ngForm" novalidate>
     <abp-modal-header
-        [title]="isEditMode ? 'Update Guideline: ' + data.criteriaName : 'Guideline: ' + data.criteriaName"
-        (onCloseClick)="dialogRef.close()">
-
+        [title]="isEditMode ? 'Update Guideline: ' + data.criteriaName : 'Guideline: ' + data.criteriaName" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
 
     <div class="modal-body" style="max-height: 500px; overflow-y: auto;" *ngIf="!isEditMode">
@@ -26,17 +26,23 @@
                                     plugins: ['table','code','preview','media', 'image', 'template'],
                                     toolbars: ['image']
                                     }" [(ngModel)]="data.guideline" #criteriaNameModel="ngModel" #criteriaNameEl
-                    name="guideline" initialValue="{{data.guideline}}">
+                    name="guideline" [initialValue]="previousGuideline">
                 </editor>
             </div>
         </div>
 
     </div>
     <div align="end" class="mat-dialog-actions" mat-dialog-actions="">
-        <button mat-raised-button color="primary" *ngIf="!isEditMode && permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline)" (click)="isEditMode = true">Edit</button>
-        <button mat-raised-button color="primary" *ngIf="isEditMode" (click)="isEditMode = false">View</button>
+        <button mat-raised-button color="primary"
+            *ngIf="!isEditMode && permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline)"
+            (click)="startEdit()">
+            Edit
+        </button>
+
+        <!-- <button mat-raised-button color="primary" *ngIf="isEditMode" (click)="isEditMode = false">View</button> -->
         <button mat-raised-button color="accent" class="saving-btn" mat-button
             [disabled]="!timesheetForm.form.valid ||isLoading" (click)="SaveAndClose()" *ngIf="isEditMode">Save</button>
-        <!-- <button class="btn btn-default cancel-banks" mat-raised-button mat-dialog-close>Cancel</button> -->
+        <button class="btn btn-default cancel-banks" *ngIf="isEditMode" mat-raised-button
+            (click)="cancelEdit()">Cancel</button>
     </div>
 </form>
