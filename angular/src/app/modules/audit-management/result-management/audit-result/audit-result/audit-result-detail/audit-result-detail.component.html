@@ -1,5 +1,5 @@
-<div class="wrapper" *ngIf="permission.isGranted(Audits_Results_Detail)">
-  <section>
+<div class="wrapper" *ngIf="permission.isGranted(Audits_Results_Detail)" style="min-height: 94vh; margin-bottom: 0;padding-bottom: 0;">
+  <section style="position: sticky; top: 0; z-index: 2;">
     <div class="row">
       <div class="col-10 d-flex">
         <h4>Quality Audit Result Project: &nbsp;</h4>
@@ -18,7 +18,7 @@
     </div>
   </section>
   <div class="container-fluid">
-    <div class="card">
+    <div class="card" style="margin-bottom: 0;">
       <div class="card-header">
         <div class="row align-items-center">
 
@@ -61,7 +61,7 @@
 
 
     </div>
-    <div class="card">
+    <div class="card" style="margin-bottom: 0;">
 
       <table style="border-collapse: collapse;" style="margin-bottom: 0;" class="table table-hover text-nowrap"
       [busy]="isLoading">
@@ -78,7 +78,7 @@
     </table>
 
 
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree px-2 pb-2">
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree px-2 pb-2" style="max-height: 75vh;overflow: overlay;" >
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
           <li style="background-color: rgb(239, 239, 239);" class="mat-tree-node">
             <button mat-icon-button disabled></button>

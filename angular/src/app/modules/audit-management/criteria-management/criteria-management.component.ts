@@ -63,7 +63,7 @@ export class CriteriaManagementComponent
         childrens: (node ? node.children : this.dataSource.data)
       },
       width: "60%",
-      height: "70%",
+      height: "72%",
       disableClose: true,
     });
     show.afterClosed().subscribe((result) => {

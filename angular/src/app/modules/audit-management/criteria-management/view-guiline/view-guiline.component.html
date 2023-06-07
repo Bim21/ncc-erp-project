@@ -9,13 +9,15 @@
   >
   </abp-modal-header>
   </div>
-
-<div style="padding: 15px;"><div >
-  <h5 style="font-weight: 600;">Guideline:</h5>
-  <div [innerHTML]="data.item.guidLine | safeHtml"></div>
-</div>
-<div>
-  <h5 style="font-weight: 600;">Q&A Example:</h5>
-  <div [innerHTML]="data.item.qaExample| safeHtml"></div>
-</div></div>
+     <div style="height: 37vh; overflow-x: hidden;">
+        <div style="padding: 15px;"><div >
+          <h5 style="font-weight: 600;">Guideline:</h5>
+          <div [innerHTML]="data.item.guidLine | safeHtml"></div>
+        </div>
+            <div>
+                <h5 style="font-weight: 600;">Q&A Example:</h5>
+                <div [innerHTML]="data.item.qaExample| safeHtml"></div>
+            </div>
+        </div>
+     </div>
 </div>

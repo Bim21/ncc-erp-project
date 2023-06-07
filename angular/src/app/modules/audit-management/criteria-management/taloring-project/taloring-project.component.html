@@ -1,7 +1,14 @@
-<div *ngIf="permission.isGranted(Audits_Tailoring_Detail)" class="wrapper">
+<div *ngIf="permission.isGranted(Audits_Tailoring_Detail)"  style="min-height: 94vh; margin-bottom: 0; padding-bottom: 0;" class="wrapper">
+  <section style="position: sticky; top: 0; z-index: 2;">
+    <div class="row">
+      <div class="col-6">
+        <h4 style="color: #014C6E;">Project tailoring details</h4>
+      </div>
+    </div>
+  </section>
   <div class="container-fluid">
-    <div class="card">
-      <div class="card-header">
+    <div class="card" style="margin-bottom: 0;">
+      <div class="card-header" style="position: sticky; top: 0; z-index: 2;">
         <div class="row justify-content-between">
           <div class="col-lg-6 col-md-12 d-flex">
             <div class="input-group mr-2">
@@ -39,7 +46,7 @@
         </div>
       </div>
 
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree px-2">
+      <mat-tree  style="max-height: 80vh;overflow-y: scroll;" [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree px-2">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle style="background-color: rgb(239, 239, 239)">
           <li class="mat-tree-node d-flex">
             <button mat-icon-button disabled></button>
