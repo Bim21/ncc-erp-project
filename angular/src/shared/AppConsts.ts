@@ -174,4 +174,10 @@ export class AppConsts {
         'bg-success',
         'bg-danger'
     ]
+    static readonly priorityRisk = [
+        'bg-success',
+        'bg-primary',
+        'bg-warning',
+        'bg-danger',
+    ]
 }

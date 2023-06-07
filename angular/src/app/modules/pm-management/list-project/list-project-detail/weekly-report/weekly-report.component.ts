@@ -207,6 +207,10 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
   ProjectHealthCriteria_ChangeStatus = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_ChangeStatus;
   ProjectHealthCriteria_Edit = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectHealthCriteria_Edit;
 
+  WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline
+
+  WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View;
+
   constructor(public pmReportProjectService: PMReportProjectService,
     public pmReportRiskService: PmReportRiskService,
     private tsProjectService: TimesheetProjectService,
@@ -1541,11 +1545,24 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
         }
       })
     }
-  showGuideLine(item) {
-    const show = this.dialog.open(GuideLineDialogComponent,{
-      width: "60%",
-      data:item
-      })
+  showGuideLine(ProjectCriteria) {
+    if (ProjectCriteria) {
+      const show = this.dialog.open(GuideLineDialogComponent, {
+        data: {
+          id: ProjectCriteria.projectCriteriaId,
+          guideline: ProjectCriteria.guideline,
+          criteriaName: ProjectCriteria.criteriaName,
+          isActive: ProjectCriteria.isActive
+        },
+        width: "60%"
+      });
+
+      show.afterClosed().subscribe((res) => {
+        if (res) {
+          ProjectCriteria.guideline = res.guideline;
+        }
+      });
+    }
     }
 
     public showGuideLineHeader(command: string) {

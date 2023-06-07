@@ -333,3 +333,11 @@ button {
      background-color: #F75200;
      border: 2px solid;
  }
+ .hyperlink {
+    color: black;
+}
+
+.hyperlink:hover {
+    color: rgb(45, 57, 160);
+    text-decoration: underline;
+}
