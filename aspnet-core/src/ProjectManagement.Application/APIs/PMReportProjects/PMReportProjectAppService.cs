@@ -81,6 +81,9 @@ namespace ProjectManagement.APIs.PMReportProjects
 
             switch (sort)
             {
+                case WeeklyReportSort.No_Order:
+                    //do nothing
+                    break;
                 case WeeklyReportSort.Draft_Green_Yellow_Red:
                     query = query.OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum);
                     break;
@@ -114,7 +117,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             }
 
             var list = await query.ToListAsync();
-            return shuffleList(list);
+            return list;
 
         }
 

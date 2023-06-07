@@ -624,7 +624,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-0 p-0  ml-2" *ngIf="!item.editMode">{{item.note}}</div>
+                                        <div class="mb-0 p-0  ml-2 break-word" *ngIf="!item.editMode">{{item.note}}</div>
                                         <div *ngIf="item.editMode && isActive">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize"

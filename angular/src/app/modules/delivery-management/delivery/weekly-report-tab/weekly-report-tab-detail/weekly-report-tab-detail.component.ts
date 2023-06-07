@@ -421,6 +421,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   public cancelEditCriteriaResult(index: number) {
+    this.listCriteriaResult[index].note = this.listPreEditCriteriaResult[index].note;
+    this.listCriteriaResult[index].status = this.listPreEditCriteriaResult[index].status;
     this.listCriteriaResult[index].editMode = false;
     this.processCriteria = false;
     this.setTotalHealth();
