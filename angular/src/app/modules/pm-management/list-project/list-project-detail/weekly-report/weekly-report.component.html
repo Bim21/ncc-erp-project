@@ -71,7 +71,9 @@
                     <div *ngFor="let item of listCriteriaResult let i =index">
                         <div class="d-flex justify-content-between align-items-center">
                             <lable *ngIf="permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline)" style="white-space: normal;" class="text-primary guide-line"
-                                (click)="showGuideLine(item)"><strong>{{item.criteriaName}}</strong>
+                                (click)="showGuideLine(item)">
+                                <strong>{{item.criteriaName}}</strong> &nbsp;
+                                <i class="fas fa-question-circle "></i> 
                             </lable>
                             <lable *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline)"
                                 ><strong>{{item.criteriaName}}</strong>
