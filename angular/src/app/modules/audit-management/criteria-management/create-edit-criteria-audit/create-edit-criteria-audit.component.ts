@@ -156,7 +156,8 @@ export class CreateEditCriteriaAuditComponent
         }
         else {
           this.processCriteriaService.getForDropDown().pipe(catchError(this.processCriteriaService.handleError)).subscribe(data => {
-            this.listCriteriaAudit = data.result
+            this.listCriteriaAudit = data.result;
+            this.listCriteriaAuditFilter = data.result.filter(x => x.isActive == true);
             this.maxCode = this.listCriteriaAudit.filter(res => res.level == 1).map(res => { return Number(res.code) }).sort(function (a, b) { return a - b }).pop()
             if (this.parentCurrent) {
               this.codeChild = data.result.find(res => res.code == this.parentCurrent).maxValueOfListCode + 1

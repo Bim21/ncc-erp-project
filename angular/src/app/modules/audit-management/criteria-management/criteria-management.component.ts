@@ -284,8 +284,7 @@ export class CriteriaManagementComponent
   viewGuiline(node): void {
     const dialogRef = this.dialog.open(ViewGuilineComponent, {
        panelClass: 'my-dialog',
-      width: '45%',
-      height: '50%',
+      width: '60%',
       data: node,
     });
 
