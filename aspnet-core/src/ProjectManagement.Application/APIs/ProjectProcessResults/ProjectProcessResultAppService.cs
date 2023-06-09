@@ -2,7 +2,6 @@
 using Abp.Collections.Extensions;
 using Abp.Domain.Uow;
 using Abp.UI;
-using Amazon.Runtime;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -666,13 +665,13 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     .ToList();
                 var sheetAudit = wb.Worksheets[0];
                 sheetAudit.Name = "Audit";
-                sheetAudit.Cells.Style.Font.Name = "Arial";
-                sheetAudit.Cells.Style.Font.Size = 10;
                 var sheetAudit2 = wb.Worksheets[wb.Worksheets.Add()];
                 sheetAudit2.Name = "Audit2";
 
                 Style defaultStyle = sheetAudit.Cells.Style;
                 defaultStyle.VerticalAlignment = TextAlignmentType.Center;
+                defaultStyle.Font.Name = "Arial";
+                defaultStyle.Font.Size = 10;
                 sheetAudit.Cells.Style = defaultStyle;
 
                 Range range = sheetAudit.Cells.CreateRange("A1", "G1");
@@ -739,6 +738,11 @@ namespace ProjectManagement.APIs.ProjectProcessResults
                     sheetAudit.Cells[$"B{startAudit}"].SetStyle(style);
                     if (item.IsLeaf)
                     {
+                        style = sheetAudit.Cells[$"A{startAudit}"].GetStyle();
+                        style.Font.IsBold = false;
+                        sheetAudit.Cells[$"A{startAudit}"].SetStyle(style);
+                        sheetAudit.Cells[$"B{startAudit}"].SetStyle(style);
+
                         // Get the validations collection.
                         ValidationCollection validations = sheetAudit.Validations;
 

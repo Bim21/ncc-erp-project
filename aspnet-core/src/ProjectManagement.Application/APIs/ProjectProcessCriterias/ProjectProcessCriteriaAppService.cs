@@ -1,5 +1,4 @@
 ﻿using Abp.Authorization;
-using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Uow;
 using Abp.UI;
@@ -9,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using NccCore.Extension;
 using NccCore.Paging;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 using ProjectManagement.APIs.ProjectProcessCriterias.Dto;
 using ProjectManagement.APIs.TimesheetProjects.Dto;
 using ProjectManagement.Authorization;
@@ -24,18 +22,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Aspose.Cells;
 using static ProjectManagement.APIs.ProjectProcessResults.Dto.GetProjectProcessResultDto;
 using Range = Aspose.Cells.Range;
-using Microsoft.Office.Interop.Excel;
 using Workbook = Aspose.Cells.Workbook;
-using Microsoft.AspNetCore.Html;
 using Style = Aspose.Cells.Style;
-using Aspose.Cells.Drawing;
-using Aspose.Cells.GridWeb;
-using Aspose.Cells.GridWeb.Data;
 
 namespace ProjectManagement.APIs.ProjectProcessCriterias
 {
@@ -643,11 +635,11 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Name = "Audit";
                 var sheetAudit2 = wb.Worksheets[wb.Worksheets.Add()];
                 sheetAudit2.Name = "Audit2";
-                sheetAudit.Cells.Style.Font.Name = "Arial";
-                sheetAudit.Cells.Style.Font.Size = 10;
 
                 Style defaultStyle = sheetAudit.Cells.Style;
                 defaultStyle.VerticalAlignment = TextAlignmentType.Center;
+                defaultStyle.Font.Size = 10;
+                defaultStyle.Font.Name = "Aerial";
                 sheetAudit.Cells.Style = defaultStyle;
 
                 Range range = sheetAudit.Cells.CreateRange("A1", "F1");
@@ -673,7 +665,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 // Freeze the first row and first two columns
                 sheetAudit.FreezePanes(1, 2, 1, 2);
 
-                var startAudit = sheetAudit.Cells["A2"].Row + 1;
+                var startAudit = sheetAudit.Cells["A2"].Row + 1;// first row index == 0
                 // validation setup
                 // Create a range in the second worksheet.
                 range = sheetAudit2.Cells.CreateRange($"A1", $"A{applicable.Count}");
@@ -690,30 +682,23 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
 
                 foreach (var i in data)
                 {
+                    //set value for cell A,B
                     sheetAudit.Cells[$"A{startAudit}"].Value = i.Code;
                     sheetAudit.Cells[$"B{startAudit}"].Value = " " + (i.Level > 1 ? new string('-', i.Level) + i.Name : i.Name);
+                    //set value for cell E,F
                     sheetAudit.Cells[$"E{startAudit}"].HtmlString = " " + i.GuildLine.ToString();
                     sheetAudit.Cells[$"F{startAudit}"].HtmlString = " " + i.QAExample.ToString();
 
-                    if (!i.IsLeaf)
-                    {
-                        range = sheetAudit.Cells.CreateRange($"A{startAudit}", $"F{startAudit}");
-                        style = defaultStyle;
-                        style.Pattern = BackgroundType.Solid;
-                        style.ForegroundColor = Color.FromArgb(218, 241, 243);
-                        range.ApplyStyle(style, flg);
-                    }
-                    if (!i.ParentId.HasValue && !i.IsLeaf)
-                    {
-                        range = sheetAudit.Cells.CreateRange($"A{startAudit}", $"F{startAudit}");
-                        style = defaultStyle;
-                        style.Pattern = BackgroundType.Solid;
-                        style.ForegroundColor = Color.FromArgb(155, 194, 230);
-                        range.ApplyStyle(style, flg);
-                    }
-                    if (i.IsLeaf)
-                    {
+                    // Make Cell's Text wrap
+                    Style style1 = sheetAudit.Cells[$"D{startAudit}"].GetStyle();
+                    style1.IsTextWrapped = true;
+                    sheetAudit.Cells[$"E{startAudit}"].SetStyle(style1);
+                    sheetAudit.Cells[$"F{startAudit}"].SetStyle(style1);
+                    sheetAudit.Cells[$"B{startAudit}"].SetStyle(style1);
+                    sheetAudit.Cells[$"D{startAudit}"].SetStyle(style1);
 
+                    if (i.IsLeaf) // white
+                    {
                         sheetAudit.Cells[$"C{startAudit}"].Value = i.IsApplicable == true
                             ? applicable[0] : applicable[2];
                         // Get the validations collection.
@@ -743,7 +728,28 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                         // Add the validation area.
                         validations[0].AddArea(area);
                     }
-                    if (!i.IsLeaf)
+
+                    ///////////////////////////////////
+                    if (!i.IsLeaf)// dark or light blue
+                    {
+                        range = sheetAudit.Cells.CreateRange($"A{startAudit}", $"F{startAudit}");
+                        //style = defaultStyle;
+                        style = sheetAudit.Cells[$"D{startAudit}"].GetStyle(); ;
+                        style.Pattern = BackgroundType.Solid;
+                        style.ForegroundColor = Color.FromArgb(218, 241, 243);
+                        range.ApplyStyle(style, flg);
+                    }
+                    if (!i.ParentId.HasValue && !i.IsLeaf)// dark blue
+                    {
+                        range = sheetAudit.Cells.CreateRange($"A{startAudit}", $"F{startAudit}");
+                        //style = defaultStyle;
+                        style = sheetAudit.Cells[$"D{startAudit}"].GetStyle(); ;
+                        style.Pattern = BackgroundType.Solid;
+                        style.ForegroundColor = Color.FromArgb(155, 194, 230);
+                        range.ApplyStyle(style, flg);
+                    }
+
+                    if (!i.IsLeaf) // dark or light blue
                     {
                         Cell cellA = sheetAudit.Cells[$"A{startAudit}"];
                         Cell cellB = sheetAudit.Cells[$"B{startAudit}"];
@@ -752,13 +758,6 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                         cellA.SetStyle(style);
                         cellB.SetStyle(style);
                     }
-
-                    // Make Cell's Text wrap
-                    Style style1 = sheetAudit.Cells[$"E{startAudit}"].GetStyle();
-                    style1.IsTextWrapped = true;
-                    sheetAudit.Cells[$"E{startAudit}"].SetStyle(style1);
-                    sheetAudit.Cells[$"F{startAudit}"].SetStyle(style1);
-
                     startAudit++;
                 }
 
@@ -767,7 +766,6 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 sheetAudit.Cells.SetColumnWidth(3, 50);
                 sheetAudit.Cells.SetColumnWidth(4, 50);
                 sheetAudit.Cells.SetColumnWidth(5, 50);
-                //sheetAudit.Cells.Style.IsTextWrapped = true;
 
                 // hide and protect the second worksheet
                 sheetAudit2.Protect(ProtectionType.All);
@@ -781,6 +779,7 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
                 wb.Save(ms, SaveFormat.Xlsx);
                 ms.Seek(0, SeekOrigin.Begin);
                 var buffer = FileUtils.DeleteXlsxSheet("Evaluation Warning", sheetAudit2.Name, ms);
+
 
                 return new FileBase64Dto
                 {
@@ -800,5 +799,6 @@ namespace ProjectManagement.APIs.ProjectProcessCriterias
             item.Applicable = input.Applicable;
             await WorkScope.UpdateAsync(item);
         }
+
     }
 }
