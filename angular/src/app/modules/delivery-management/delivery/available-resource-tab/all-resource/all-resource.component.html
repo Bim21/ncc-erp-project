@@ -83,20 +83,20 @@
                             <i class="fas fa-times fa-lg ml-2 mt-2" *ngIf="selectedSkillId?.length > 0"
                                 (click)="selectedSkillId = null; refresh()"></i>
                         </div>
+
                         <div class="col-12 col-md-4 mt-1 d-flex align-items-center mb-3">
                             <mat-form-field appearance="outline" class="flex-grow-1">
                                 <mat-label>Planned Resource:</mat-label>
-                                <mat-select placeholder="Select plan status" [(ngModel)]="selectedIsPlanned"
-                                    (selectionChange)="getDataPage(1)">
+                                <mat-select placeholder="Select plan status" [(ngModel)]="selectedIsPlanned" (selectionChange)="getDataPage(1)">
                                     <mat-option *ngFor="let plan of planStatusList" [value]="plan.value">
                                         {{ plan.displayName }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
+                            <i class="fas fa-times fa-lg ml-2 mt-2" *ngIf="selectedIsPlanned > 1" (click)="applyPlanFilter()"></i>
                         </div>
 
                     </div>
-
 
                 </div>
             </div>

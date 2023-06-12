@@ -208,12 +208,17 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   }
 
   planStatusList = [
-    { value: PlanStatus.All, displayName: 'All' },
-    { value: PlanStatus.AllPlan, displayName: 'All plans' },
+    { value: PlanStatus.AllPlan, displayName: 'Has plans' },
     { value: PlanStatus.PlanningJoin, displayName: 'Planning join' },
     { value: PlanStatus.PlanningOut, displayName: 'Planning out' },
     { value: PlanStatus.NoPlan, displayName: 'No plan' }
   ];
+
+  applyPlanFilter() {
+    this.selectedIsPlanned = PlanStatus.All;
+    this.isFilterSelected = false;
+    this.getDataPage(1);
+}
 
   getAllBranchs() {
     this.branchService.getAllNotPagging().subscribe((data) => {
