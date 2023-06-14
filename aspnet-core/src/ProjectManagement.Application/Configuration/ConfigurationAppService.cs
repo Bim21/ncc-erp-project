@@ -203,11 +203,6 @@ namespace ProjectManagement.Configuration
         [HttpPost]
         public async Task<GuideLineDto> SetGuideLine(GuideLineDto input)
         {
-            /* var allowUpdateGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update);
-             if (!allowUpdateGuideline)
-             {
-                 throw new AbpAuthorizationException("You are not allow to update this guideline!");
-             }*/
             var json = JsonSerializer.Serialize(input);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.GuideLine, json);
             return input;
