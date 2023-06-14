@@ -90,16 +90,12 @@ namespace ProjectManagement.APIs.ProjectCriterias
         }
 
         [AbpAuthorize(
-            PermissionNames.Admin_Criteria_Edit
+            PermissionNames.Admin_Criteria_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline
             )]
         [HttpPut]
         public async Task<CreateProjectCriteriaDto> Update(CreateProjectCriteriaDto input)
         {
-            var allowUpdateGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Update_Guideline);
-            if (!allowUpdateGuideline)
-            {
-                throw new UserFriendlyException("You are not allow to update this guideline!");
-            }
             var prjCriteria = await WorkScope.GetAsync<ProjectCriteria>(input.Id);
 
             var isExist = await WorkScope.GetAll<ProjectCriteria>().AnyAsync(x => x.Id != input.Id && x.Name == input.Name);

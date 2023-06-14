@@ -86,16 +86,12 @@ namespace ProjectManagement.APIs.ProjectCriteriaResults
             };
         }
 
-        [AbpAuthorize()]
+        [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria)]
         [HttpGet]
         public async Task<List<GetProjectCriteriaResultDto>> GetAll(long pmReportId, long projectId)
         {
-            var allowViewProjectHealthCriteria = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria);
             var allowViewGuidelineProjectHealthCriteriaWRRD = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_View_Guideline);
-            if (!allowViewProjectHealthCriteria)
-            {
-                throw new UserFriendlyException("You are not allow to view Project Criteria Health!");
-            }
+
             return await WorkScope.GetAll<ProjectCriteriaResult>().Where(x => x.ProjectId == projectId && x.PMReportId == pmReportId)
                .Select(x => new GetProjectCriteriaResultDto
                {

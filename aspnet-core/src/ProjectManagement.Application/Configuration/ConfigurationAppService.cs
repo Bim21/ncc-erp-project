@@ -89,7 +89,7 @@ namespace ProjectManagement.Configuration
                 TalentUriFE = _appConfiguration.GetValue<string>("TalentService:FEAddress"),
                 TalentSecurityCode = _appConfiguration.GetValue<string>("TalentService:SecurityCode"),
                 MaxCountHistory = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory),
-                
+
             };
         }
 
@@ -162,7 +162,7 @@ namespace ProjectManagement.Configuration
         {
             return new WeeklyReportSettingDto
             {
-                TimeCountDown =  Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimeCountDown))
+                TimeCountDown = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimeCountDown))
             };
         }
         [AbpAuthorize(PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit)]
@@ -198,15 +198,16 @@ namespace ProjectManagement.Configuration
 
         [AbpAuthorize(
             //PermissionNames.Admin_Configuartions_Edit,
+            PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update
             )]
         [HttpPost]
         public async Task<GuideLineDto> SetGuideLine(GuideLineDto input)
         {
-            var allowUpdateGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update);
-            if (!allowUpdateGuideline)
-            {
-                throw new UserFriendlyException("You are not allow to update this guideline!");
-            }
+            /* var allowUpdateGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_Update);
+             if (!allowUpdateGuideline)
+             {
+                 throw new AbpAuthorizationException("You are not allow to update this guideline!");
+             }*/
             var json = JsonSerializer.Serialize(input);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.GuideLine, json);
             return input;
@@ -215,24 +216,20 @@ namespace ProjectManagement.Configuration
 
         [AbpAuthorize(
           //PermissionNames.Admin_Configurations_ViewGuideLineSetting
+          PermissionNames.WeeklyReport_ReportDetail_GuideLine_View
           )]
         [HttpGet]
-         public async Task<GuideLineDto> GetGuideLine()
-         {
-            var allowViewGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_View);
-            if (!allowViewGuideline)
-            {
-                throw new UserFriendlyException("You are not allow to view this guideline!");
-            }
+        public async Task<GuideLineDto> GetGuideLine()
+        {
             var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.GuideLine);
 
-             if (string.IsNullOrEmpty(json))
-             {
-                 return null;
-             }
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
 
-             return JsonSerializer.Deserialize<GuideLineDto>(json);
-         }
+            return JsonSerializer.Deserialize<GuideLineDto>(json);
+        }
 
         [HttpGet]
         public async Task<GetResultConnectDto> CheckConnectToTimesheet()

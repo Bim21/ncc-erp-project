@@ -287,9 +287,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.getTimeCountDown();
     }
 
-    // if (this.permission.isGranted(this.WeeklyReport_ReportDetail_GuideLine_View)) {
-    //   this.getGuideLineConfiguration();
-    // }
+    this.getGuideLineConfiguration();
   }
 
   public startTimmer() {
@@ -1676,11 +1674,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
 
   getGuideLineConfiguration() {
+    if (this.permission.isGranted(this.WeeklyReport_ReportDetail_GuideLine_View)) {
     this.settingService.getGuideLine().subscribe((data) => {
-      if (this.permission.isGranted(this.WeeklyReport_ReportDetail_GuideLine_View)) {
         this.guideLine = data.result;
-      }
     });
+  }
   }
 
   public showGuideLineHeader(command: string) {
