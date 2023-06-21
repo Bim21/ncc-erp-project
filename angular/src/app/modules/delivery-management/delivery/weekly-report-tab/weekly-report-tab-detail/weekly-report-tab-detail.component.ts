@@ -1717,7 +1717,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
             this.refresh();
           }
         });
-      } else {
+      }  else {
         // Display the dialog with empty content
         const show = this.dialog.open(ReportGuidelineDetailComponent, {
           data: {
@@ -1728,13 +1728,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           width: "60%"
         });
 
-
         show.afterClosed().subscribe((updatedGuideline) => {
           if (updatedGuideline) {
             this.refresh();
           }
         });
-      }
+      } 
     });
   }
 

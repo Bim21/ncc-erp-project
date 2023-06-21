@@ -3,26 +3,28 @@ using Abp.Linq.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NccCore.Extension;
 using NccCore.Uitls;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
 using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
-using ProjectManagement.Authorization.Users;
 using ProjectManagement.Entities;
+using ProjectManagement.Services.Komu;
+using ProjectManagement.Services.PmReports;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
 using ProjectManagement.Services.ResourceService.Dto;
 using ProjectManagement.Services.Timesheet;
 using ProjectManagement.Services.Timesheet.Dto;
-using ProjectManagement.Users.Dto;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
+using PMUnsentWeeklyReportDto = ProjectManagement.Services.PmReports.Dto.PMUnsentWeeklyReportDto;
 
 namespace ProjectManagement.APIs.PMReportProjects
 {
@@ -32,11 +34,14 @@ namespace ProjectManagement.APIs.PMReportProjects
         private readonly TimesheetService _timesheetService;
 
         private readonly ResourceManager _resourceManager;
+        private readonly PmReportManager _pmReport;
 
-        public PMReportProjectAppService(TimesheetService timesheetService, ResourceManager resourceManager)
+        public PMReportProjectAppService(TimesheetService timesheetService,
+            ResourceManager resourceManager, PmReportManager pmReport)
         {
             _timesheetService = timesheetService;
             _resourceManager = resourceManager;
+            _pmReport = pmReport;
         }
 
         [HttpGet]
@@ -604,28 +609,13 @@ namespace ProjectManagement.APIs.PMReportProjects
             return input;
         }
 
+        // get all pm unsent weekly report
         [HttpGet]
         [AbpAuthorize()]
-        public async Task<List<PMUnsentWeeklyReportDto>> GetUnSentWeeklyReportPMs()
+        public async Task<List<PMUnsentWeeklyReportDto>> GetPMsUnSentWeeklyReport()
         {
-            int index = 1;
-            var list = WorkScope.GetAll<PMReportProject>()
-                .Where(x => x.PMReport.IsActive
-                    && x.Status == PMReportProjectStatus.Draft
-                    && x.Project.IsRequiredWeeklyReport)
-                .Select(x => new PMUnsentWeeklyReportDto
-                {
-                    Index = 0,
-                    ProjectName = x.Project.Name,
-                    WeeklyName = x.PMReport.Name,
-                    EmailAddress = x.PM.EmailAddress,
-                    Name = x.PM.Name,
-                    Surname = x.PM.Surname,
-                    FullName = x.PM.FullName,
-                    UserName = x.PM.UserName
-                }).ToList();
-            list.ForEach(i => i.Index = index++);
-            return list;
+            return await _pmReport.GetPMsUnsentWeeklyReport();
         }
+
     }
 }

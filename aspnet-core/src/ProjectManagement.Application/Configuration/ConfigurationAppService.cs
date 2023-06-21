@@ -3,27 +3,23 @@ using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Runtime.Session;
 using Abp.UI;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ProjectManagement.Authorization;
 using ProjectManagement.Configuration.Dto;
 using ProjectManagement.Services.CheckConnectDto;
 using ProjectManagement.Services.Finance;
-using ProjectManagement.Services.Finance.Dto;
 using ProjectManagement.Services.HRM;
-using ProjectManagement.Services.HRM.Dto;
-using ProjectManagement.Services.ProjectTimesheet;
-using ProjectManagement.Services.ProjectTimesheet.Dto;
-using ProjectManagement.Services.ResourceRequestService.Dto;
 using ProjectManagement.Services.Talent;
-using ProjectManagement.Services.Talent.Dtos;
 using ProjectManagement.Services.Timesheet;
-using ProjectManagement.Services.Timesheet.Dto;
-using System.Net.Http;
-using System.Net.NetworkInformation;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 using System.Text.Json;
+using System.Collections.Generic;
+using Castle.Core.Internal;
+using OfficeOpenXml.FormulaParsing.Utilities;
+using System.Text.RegularExpressions;
+using System.Linq;
+using NccCore.Extension;
 
 namespace ProjectManagement.Configuration
 {
@@ -35,6 +31,8 @@ namespace ProjectManagement.Configuration
         private readonly HRMService _hrmService;
         private readonly FinfastService _finfastService;
         private readonly TimesheetService _timesheetService;
+        private readonly string defaultTime = "17:00";
+        private readonly Days defaultDayOfWeek = Days.Tue; // tuesday
 
         public ConfigurationAppService(IConfiguration appConfiguration,
             TalentService talentService,
@@ -89,7 +87,7 @@ namespace ProjectManagement.Configuration
                 TalentUriFE = _appConfiguration.GetValue<string>("TalentService:FEAddress"),
                 TalentSecurityCode = _appConfiguration.GetValue<string>("TalentService:SecurityCode"),
                 MaxCountHistory = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory),
-
+                InformPm = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.InformPm)
             };
         }
 
@@ -117,7 +115,9 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.HRMSecretCode) ||
                 string.IsNullOrEmpty(input.KomuRoom) ||
                 string.IsNullOrEmpty(input.DefaultWorkingHours) ||
-                string.IsNullOrEmpty(input.MaxCountHistory)
+                string.IsNullOrEmpty(input.MaxCountHistory) ||
+                string.IsNullOrEmpty(input.InformPm)
+
                 )
             {
                 throw new UserFriendlyException("All setting values need to be completed");
@@ -145,6 +145,7 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.DefaultWorkingHours, input.DefaultWorkingHours);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TrainingRequestChannel, input.TrainingRequestChannel);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.MaxCountHistory, input.MaxCountHistory);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.InformPm, input.InformPm);
             return input;
         }
 
@@ -216,6 +217,11 @@ namespace ProjectManagement.Configuration
         [HttpGet]
         public async Task<GuideLineDto> GetGuideLine()
         {
+            var allowViewGuideline = await PermissionChecker.IsGrantedAsync(PermissionNames.WeeklyReport_ReportDetail_GuideLine_View);
+            if (!allowViewGuideline)
+            {
+                throw new UserFriendlyException("You are not allow to view this guideline!");
+            }
             var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.GuideLine);
 
             if (string.IsNullOrEmpty(json))
@@ -240,6 +246,43 @@ namespace ProjectManagement.Configuration
         public async Task<GetResultConnectDto> CheckConnectToFinfast()
         {
             return await _finfastService.CheckConnectToFinance();
+        }
+
+        [AbpAuthorize(
+           PermissionNames.Admin_Configuartions_Edit
+           )]
+        [HttpPost]
+        public async Task<InformPmDto> SetInformPm(InformPmDto input)
+        {
+            List<CheckDateTime> newList = new List<CheckDateTime>();
+            ValidationDateTime(input.CheckDateTimes);
+            var json = JsonSerializer.Serialize(input);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.InformPm, json);
+            return input;
+        }
+
+        private void ValidationDateTime(List<CheckDateTime> checkDateTimes)
+        {
+            DateTime dtime;
+            if (checkDateTimes.Any(c => !c.Time.HasValue() || c.Day < (int)Days.Sun || c.Day > (int)Days.Sat
+                || !DateTime.TryParse(c.Time.Trim(), out dtime))) throw new UserFriendlyException("Time can not empty!");
+            var listDuplicate = checkDateTimes.GroupBy(c => new { c.Time, c.Day }).ToList();
+            if (listDuplicate.Count != checkDateTimes.Count) throw new UserFriendlyException("Time and day can not be duplicated!!");
+        }
+
+        [AbpAuthorize(
+           PermissionNames.Admin_Configurations_ViewInformPmSetting
+           )]
+        [HttpGet]
+        public async Task<InformPmDto> GetInformPm()
+        {
+            var json = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.InformPm);
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+            var inform = JsonSerializer.Deserialize<InformPmDto>(json);
+            return inform;
         }
     }
 }

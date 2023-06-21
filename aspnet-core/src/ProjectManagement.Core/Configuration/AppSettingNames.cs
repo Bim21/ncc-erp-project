@@ -31,5 +31,6 @@
         public const string MaxCountHistory = "MaxCountHistory";
         public const string ScoreAudit = "ScoreAudit";
         public const string GuideLine = "GuideLine";
+        public const string InformPm = "InformPmDateTime";
     }
 }

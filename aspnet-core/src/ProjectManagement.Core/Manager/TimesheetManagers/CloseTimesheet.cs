@@ -4,10 +4,7 @@ using NccCore.IoC;
 using ProjectManagement.BackgroundJobs;
 using ProjectManagement.Entities;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using System.Threading.Tasks;
 using Abp.Timing;
 
 namespace ProjectManagement.Manager.TimesheetManagers
@@ -39,7 +36,7 @@ namespace ProjectManagement.Manager.TimesheetManagers
             //        timesheetBGJ, BackgroundJobPriority.High, TimeSpan.FromMinutes(delays));
         }
 
-        public void ReOpenTimesheet(Timesheet timesheet ,DateTime closeTime)
+        public void ReOpenTimesheet(Timesheet timesheet, DateTime closeTime)
         {
             DeleteOldRequestInBackgroundJob(timesheet.Id);
             var timesheetBGJ = new TimesheetBGJDto
@@ -70,7 +67,7 @@ namespace ProjectManagement.Manager.TimesheetManagers
 
         public void DeactiveTimesheet(long timesheetId)
         {
-            var item =  WorkScope.Get<Timesheet>(timesheetId);
+            var item = WorkScope.Get<Timesheet>(timesheetId);
             item.IsActive = false;
         }
     }

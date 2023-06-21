@@ -1,11 +1,6 @@
 ﻿using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {

@@ -1,14 +1,8 @@
 ﻿using Abp.Application.Services.Dto;
-using Abp.Authorization.Users;
 using Abp.AutoMapper;
-using NccCore.Anotations;
-using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.APIs.PMReportProjects.Dto
@@ -35,5 +29,26 @@ namespace ProjectManagement.APIs.PMReportProjects.Dto
         public string Surname { get; set; }
         public string FullName { get; set; }
         public string UserName { get; set; }
+    }
+
+    public class PMDiscordChanelIdDto
+    {
+        public List<PMUnsentWeeklyReportDto> list { get; set; }
+        public string DiscordChannelId { get; set; }
+    }
+
+    public class CheckDateTimeDto
+    {
+        public bool IsCheck { get; set; }
+        public DateTime Time { get; set; }
+        public Days Day { get; set; }
+
+    }
+
+    public class InformPmDto
+    {
+        public string ChannelId { get; set; }
+        public List<CheckDateTimeDto> CheckDateTimes { get; set; }
+       
     }
 }

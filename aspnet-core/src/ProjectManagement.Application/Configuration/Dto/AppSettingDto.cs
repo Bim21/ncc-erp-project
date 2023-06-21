@@ -35,6 +35,7 @@ namespace ProjectManagement.Configuration.Dto
         public string TalentUriFE { get; set; }
         public string TalentSecurityCode { get; set; }
         public string MaxCountHistory { get; set; }
+        public string InformPm { get; set; }
     }
 
     public class ProjectSetting
@@ -71,5 +72,18 @@ namespace ProjectManagement.Configuration.Dto
         public string CriteriaStatus { get; set; }
     }
 
+    // setting time to inform pm send weekly report
+    public class InformPmDto
+    {
+        // channel id
+        public string ChannelId { get; set; }
+        public List<CheckDateTime> CheckDateTimes { get; set; }
+    }
 
+    public class CheckDateTime
+    {
+        public bool IsCheck { get; set; }
+        public string Time { get; set; }
+        public int Day { get; set; }
+    }
 }

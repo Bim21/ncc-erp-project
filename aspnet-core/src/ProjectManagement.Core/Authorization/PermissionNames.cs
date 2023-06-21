@@ -73,6 +73,7 @@ namespace ProjectManagement.Authorization
         public const string Admin_Configuartions_ViewAuditScoreSetting = "Admin.Configuartions.ViewAuditScoreSetting";
         public const string Admin_Configuartions_WeeklyReportTime_Edit = "Admin.Configuartions.WeeklyReportTimeEdit";
         public const string Admin_Configurations_ViewGuideLineSetting = "Admin.Configurations.ViewGuideLineSetting";
+        public const string Admin_Configurations_ViewInformPmSetting = "Admin.Configurations.ViewInformPmSetting";
 
         #endregion Configuration
 
@@ -441,12 +442,16 @@ namespace ProjectManagement.Authorization
 
         #region Weekly report
 
+
         public const string WeeklyReport = "WeeklyReport";
         public const string WeeklyReport_View = "WeeklyReport.View";
         public const string WeeklyReport_CloseAndAddNew = "WeeklyReport.CloseAndAddNew";
         public const string WeeklyReport_CollectTimesheet = "WeeklyReport.CollectTimesheet";
         public const string WeeklyReport_Rename = "WeeklyReport.Rename";
         public const string WeeklyReport_ViewInfo = "WeeklyReport.ViewInfo";
+
+        public const string WeeklyReport_InformPM = "WeeklyReport.InformPM";
+        public const string WeeklyReport_InformPM_View = "WeeklyReport.InformPM.View";
 
         public const string WeeklyReport_ReportDetail = "WeeklyReport.ReportDetail";
         public const string WeeklyReport_ReportDetail_View = "WeeklyReport.ReportDetail.View";
@@ -733,6 +738,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Admin_Configuartions_ViewAuditScoreSetting,
                     PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit,
                     PermissionNames.Admin_Configurations_ViewGuideLineSetting,
+                    PermissionNames.Admin_Configurations_ViewInformPmSetting,
 
                     #endregion Configuration
 
@@ -1104,13 +1110,16 @@ namespace ProjectManagement.Authorization
                     #endregion Project
 
                     #region Weekly report
-
+                    
                     PermissionNames.WeeklyReport ,
                     PermissionNames.WeeklyReport_View ,
                     PermissionNames.WeeklyReport_CloseAndAddNew ,
                     PermissionNames.WeeklyReport_CollectTimesheet ,
                     PermissionNames.WeeklyReport_Rename ,
                     PermissionNames.WeeklyReport_ViewInfo ,
+
+                    PermissionNames.WeeklyReport_InformPM ,
+                    PermissionNames.WeeklyReport_InformPM_View ,
 
                     PermissionNames.WeeklyReport_ReportDetail ,
                     PermissionNames.WeeklyReport_ReportDetail_View ,
@@ -1308,7 +1317,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Audits_Tailoring_Detail_Detele ,
                     PermissionNames.Audits_Tailoring_Update_Project ,
                     PermissionNames.Audits_Tailoring_Update_Project_Tailoring ,
-                    
+
 
                     PermissionNames.Audits_Results ,
                     PermissionNames.Audits_Results_DownLoad_Template,
@@ -1405,6 +1414,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_ViewAuditScoreSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Audit Score For Criteria" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit Time Count Down Weekly Report" },
                  new SystemPermission{ Name =  PermissionNames.Admin_Configurations_ViewGuideLineSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Guide Line" },
+                 new SystemPermission{ Name =  PermissionNames.Admin_Configurations_ViewInformPmSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Inform PM Setting" },
 
 	             #endregion Configuration
 
@@ -1784,6 +1794,9 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_Rename, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Rename" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ViewInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Wiew Info" },
 
+                new SystemPermission{ Name =  PermissionNames.WeeklyReport_InformPM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Inform Pm" },
+                new SystemPermission{ Name =  PermissionNames.WeeklyReport_InformPM_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Inform Pm" },
+
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Report Detail" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.WeeklyReport_ReportDetail_UpdateNote, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Note" },
@@ -2158,6 +2171,9 @@ namespace ProjectManagement.Authorization
                                         },
                                          new SystemPermission {
                                             Name = PermissionNames.Admin_Configurations_ViewGuideLineSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Guide Line"
+                                        },
+                                          new SystemPermission {
+                                            Name = PermissionNames.Admin_Configurations_ViewInformPmSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Inform PM Setting"
                                         },
                                     }
                             },
@@ -3186,6 +3202,13 @@ namespace ProjectManagement.Authorization
                                 Name = PermissionNames.WeeklyReport_ViewInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Info"
                             },
                             new SystemPermission {
+                                Name = PermissionNames.WeeklyReport_InformPM, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Inform Pm",
+                                Childrens = new List<SystemPermission>()
+                                {
+                                    new SystemPermission {Name = PermissionNames.WeeklyReport_InformPM_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Inform Pm"},
+                                }
+                            },
+                            new SystemPermission {
                                 Name = PermissionNames.WeeklyReport_ReportDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Report Detail",
                                     Childrens = new List < SystemPermission > () {
                                         new SystemPermission {
@@ -3198,7 +3221,7 @@ namespace ProjectManagement.Authorization
                                         new SystemPermission {
                                             Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Health Criteria",
                                                 Childrens = new List < SystemPermission > () {
-                                                  
+
                                                     new SystemPermission {
                                                         Name = PermissionNames.WeeklyReport_ReportDetail_ProjectHealthCriteria_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit"
                                                     },

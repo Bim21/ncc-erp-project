@@ -1,12 +1,9 @@
-﻿
-using Abp.Configuration;
-using Abp.Runtime.Session;
+﻿using Abp.Runtime.Session;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ProjectManagement.Constants;
 using ProjectManagement.Services.Komu.KomuDto;
+using ProjectManagement.Utils;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -19,15 +16,16 @@ namespace ProjectManagement.Services.Komu
         private readonly string _channelIdDevMode;
         private bool _enableSendToKomu = false;
         private const string serviceName = "KomuService";
+        private int MAX_LENGTH = 2000;
 
         public KomuService(
-            HttpClient httpClient, 
-            ILogger<KomuService> logger, 
+            HttpClient httpClient,
+            ILogger<KomuService> logger,
             IConfiguration configuration,
             IAbpSession abpSession
-        ) : base(httpClient,configuration,logger, abpSession, serviceName)
+        ) : base(httpClient, configuration, logger, abpSession, serviceName)
         {
-             _channelIdDevMode = configuration.GetValue<string>($"{serviceName}:DevModeChannelId");
+            _channelIdDevMode = configuration.GetValue<string>($"{serviceName}:DevModeChannelId");
             var _isNotifyToKomu = configuration.GetValue<string>($"{serviceName}:EnableKomuNotification");
             _enableSendToKomu = _isNotifyToKomu == "true";
         }
@@ -39,6 +37,17 @@ namespace ProjectManagement.Services.Komu
 
             return default;
         }
+
+        public async Task<ulong?> GetKomuUserId(string userName)
+        {
+            var komuUser = await PostAsync<KomuUserDto>(KomuUrlConstant.KOMU_USERID, new { username = userName });
+            if (komuUser != null)
+                return (ulong?)komuUser.KomuUserId;
+
+            return default;
+
+        }
+
         public void NotifyToChannel(KomuMessage input, string channelType)
         {
             if (!_enableSendToKomu)
@@ -47,12 +56,12 @@ namespace ProjectManagement.Services.Komu
             }
 
             if (!string.IsNullOrEmpty(_channelIdDevMode))
-            {                
-                 Post(ChannelTypeConstant.KOMU_CHANNELID, new { message = input.Message, channelid = _channelIdDevMode });
+            {
+                Post(ChannelTypeConstant.KOMU_CHANNELID, new { message = input.Message, channelid = _channelIdDevMode });
             }
             else
             {
-                 Post(channelType, input);
+                Post(channelType, input);
             }
         }
 
@@ -67,5 +76,20 @@ namespace ProjectManagement.Services.Komu
             Post(ChannelTypeConstant.KOMU_CHANNELID, new { message = input.Message, channelid = channelIdToSend });
 
         }
+
+        public async Task NotifyToChannelAwait(string[] arrMessage, string channelId)
+        {
+            if (_enableSendToKomu != true)
+            {
+                logger.LogInformation("_isNotifyToKomu=" + _enableSendToKomu + " => stop");
+                return;
+            }
+            var listMessage = CommonUtil.SeparateMessage(arrMessage, MAX_LENGTH, "\n");
+            foreach (var message in listMessage)
+            {
+                await PostAsync<dynamic>(KomuUrlConstant.KOMU_CHANNELID, new { message = message, channelid = channelId });
+            }
+        }
+
     }
 }

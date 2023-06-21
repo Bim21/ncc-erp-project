@@ -1,8 +1,8 @@
 ﻿using Abp.Timing;
-using OfficeOpenXml;
 using ProjectManagement.Constants;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using static ProjectManagement.Constants.Enum.ClientEnum;
@@ -160,13 +160,6 @@ namespace ProjectManagement.Utils
         {
             return allocatePercentage > 0 ? "**JOIN**" : "**OUT**";
         }
-
-        //public static string GetWorkingStatusMessage(ProjectUser pu)
-        //{
-        //    if (pu != null)
-        //    {
-        //    }
-        //}
 
         public static string UserLevelName(UserLevel level)
         {
@@ -360,7 +353,7 @@ namespace ProjectManagement.Utils
             }
             return "Outsourcing";
         }
-        public static Applicable GetPPCApplicable (string apllicable)
+        public static Applicable GetPPCApplicable(string apllicable)
         {
             return Enum.Parse<Applicable>(apllicable);
         }
@@ -408,6 +401,50 @@ namespace ProjectManagement.Utils
         public static string GetNaturalSortKey(string value)
         {
             return Regex.Replace(value, "[0-9]+", match => match.Value.PadLeft(10, '0'));
+        }
+
+        public static List<string> SeparateMessage(string message, int maxlength, string separteStr)
+        {
+            if (message.Length <= maxlength)
+            {
+                return new List<string> { message };
+            }
+
+            var arr = message.Split(separteStr);
+
+            return SeparateMessage(arr, maxlength, separteStr);
+        }
+
+        public static List<string> SeparateMessage(string[] arrMessage, int maxlength, string separteStr)
+        {
+            int totalLength = 0;
+            var sb = new StringBuilder();
+            var resultList = new List<string>();
+
+            for (int i = 0; i < arrMessage.Length; i++)
+            {
+                var item = arrMessage[i];
+                if (totalLength + item.Length < maxlength)
+                {
+                    sb.Append(item);
+                    sb.Append(separteStr);
+                    totalLength += item.Length + separteStr.Length;
+                }
+                else
+                {
+                    resultList.Add(sb.ToString());
+                    sb.Clear();
+                    sb.Append(item);
+                    sb.Append(separteStr);
+                    totalLength = item.Length + separteStr.Length;
+                }
+                if (i == arrMessage.Length - 1)
+                {
+                    resultList.Add(sb.ToString());
+                }
+            }
+
+            return resultList;
         }
 
     }
