@@ -2,6 +2,9 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppConfigurationService } from '../../../service/api/app-configuration.service';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AppConsts } from '@shared/AppConsts';
+
 @Component({
   selector: 'app-configuration',
   templateUrl: './configuration.component.html',
@@ -20,6 +23,8 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewMaxCountHistoryOfRetroAndReviewPoint;
   Admin_Configuartions_ViewAuditScoreSetting = PERMISSIONS_CONSTANT.Admin_Configuartions_ViewAuditScoreSetting;
   Admin_Configurations_ViewGuideLineSetting = PERMISSIONS_CONSTANT.Admin_Configurations_ViewGuideLineSetting;
+  Admin_Configurations_ViewInformPmSetting = PERMISSIONS_CONSTANT.Admin_Configurations_ViewInformPmSetting;
+  WeeklyReport_ReportDetail_GuideLine_View = PERMISSIONS_CONSTANT.WeeklyReport_ReportDetail_GuideLine_View
 
   configuration = {} as ConfigurationDto;
   googleToken: string = '';
@@ -32,6 +37,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditDefaultWorkingHours: boolean = false;
   public isEditMaxCountHistory: boolean = false;
   public isEditAuditScore: boolean = false;
+  public isEditSendTime: boolean = false;
   public isShowKomuSetting: boolean = false;
   public isExpandingProjectSetting: boolean = false;
   public isShowHRMSetting: boolean = false;
@@ -50,27 +56,36 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public  hrmConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  finfastConnectResult: GetConnectResultDto = {} as GetConnectResultDto
   public  auditScore: AuditScoreDto = {} as AuditScoreDto;
-
   public guideLine: GuideLineDto = {} as GuideLineDto ;
+  public ChannelId:string=''
+
+  public listday= AppConsts.listDay
  
   public listDays: any[] = [
-    { value: '2', text: 'Monday' },
-    { value: '3', text: 'Tuesday' },
-    { value: '4', text: 'Wednesday' },
-    { value: '5', text: 'Thursday' },
-    { value: '6', text: 'Friday' },
-    { value: '7', text: 'Saturday' },
-    { value: '8', text: 'Sunday' },
+    { value: 1, text: 'Monday' },
+    { value: 2, text: 'Tuesday' },
+    { value: 3, text: 'Wednesday' },
+    { value: 4, text: 'Thursday' },
+    { value: 5, text: 'Friday' },
+    { value: 6, text: 'Saturday' },
+    { value: 0, text: 'Sunday' },
   ];
   public listHours = [];
   public isEditingKomu: boolean = false;
   public isEditingTimesheet: boolean = false;
   public isEditingGuideLine: boolean = false;
-  constructor(
+
+
+  form : FormGroup
+
+  constructor(private fb: FormBuilder,
     private settingService: AppConfigurationService,
     injector: Injector
   ) {
     super(injector);
+    this.form = this.fb.group({
+      credentials: this.fb.array([])
+    });
   }
 
   ngOnInit(): void {
@@ -83,7 +98,10 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     this.checkConnectToFinance();
     this.checkConnectToTalent();
     this.getAuditScore();
-    this.getGuideLine();
+    // this.getGuideLine();
+    if(this.permission.isGranted(this.Admin_Configurations_ViewInformPmSetting)){
+    this.getSendTime()
+    }
   }
   getSetting() {
     this.settingService.getConfiguration().subscribe((data) => {
@@ -141,24 +159,25 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
     })
   }
 
-  getGuideLine(){
-    this.settingService.getGuideLine().subscribe((data) => {
-      this.guideLine = data.result;
-    });
-  }
+  // getGuideLine(){
+  //   if(this.permission.isGranted(this.WeeklyReport_ReportDetail_GuideLine_View)){
+  //     this.settingService.getGuideLine().subscribe((data) => {
+  //       this.guideLine = data.result;
+  //     });
+  //   }
+  // }
 
-  saveGuideLine(){
-    this.settingService
-      .editGuideLine(this.guideLine)
-      .subscribe((data) => {
-        abp.notify.success('Edited successfully!');
-      });
-  }
+  // saveGuideLine(){
+  //   this.settingService
+  //     .editGuideLine(this.guideLine)
+  //     .subscribe((data) => {
+  //       abp.notify.success('Edited successfully!');
+  //     });
+  // }
 
   getAuditScore(){
     this.settingService.getAuditScore().subscribe((data) => {
       this.auditScore = data.result;
-      console.log(data.result)
     });
   }
   saveAuditScore(){
@@ -169,6 +188,64 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
       });
   }
 
+  addTime(){
+    this.credentials.push( this.fb.group({
+      IsCheck: true, 
+      Time: ['',Validators.required],
+      Day: 2
+    }))
+  }
+
+  getSendTime(){
+      this.settingService.getTimeSend().subscribe((data:any) => {
+        this.ChannelId = data.result.channelId;
+        this.credentials.clear()
+        data.result.checkDateTimes.forEach(item =>{
+          const cred = this.fb.group({
+            IsCheck: item.isCheck,
+            Time: [item.time,Validators.required],
+            Day: item.day
+          })
+         this.credentials.push(cred)
+        })
+      });
+  }
+  removeItem(i){
+  this.credentials.removeAt(i)
+
+  }
+  saveSendTime(){
+    this.settingService
+      .setTimeSend({ChannelId: this.ChannelId,CheckDateTimes:this.form.value.credentials})
+      .subscribe((data) => {
+        this.isEditSendTime = !this.isEditSendTime
+        abp.notify.success('Edited successfully!');
+      });
+  }
+  get credentials(){
+   return this.form.controls.credentials as FormArray;
+  }
+
+  checkDisabledSave(){
+    if(( this.credentials.value.some(item=>{
+      return item.IsCheck == true
+    }) && !this.ChannelId) || this.form.invalid){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+  checkRequiredChannelId(){
+    if( this.credentials.value.some(item=>{
+      return item.IsCheck == true
+    }) && !this.ChannelId && this.isEditSendTime){
+      return  true
+    }
+    else{
+      return false
+    }
+  }
 }
 export class ConfigurationDto {
   clientAppId: string;
@@ -224,4 +301,10 @@ export class GuideLineDto{
   risk: string;
   pmNote: string;
   criteriaStatus: string;
+}
+
+export class TimeSendDto {
+  isCheck : boolean;
+  time: string;
+  day:string;
 }

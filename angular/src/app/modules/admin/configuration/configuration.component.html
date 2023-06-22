@@ -536,6 +536,72 @@
         </div>
       </mat-expansion-panel>
     </div>
+    
+    <div class="card" *ngIf="permission.isGranted(Admin_Configurations_ViewInformPmSetting)">
+      <mat-expansion-panel [expanded]="isShowSendTime">
+        <mat-expansion-panel-header (click)="isShowSendTime = !isShowSendTime" class="panel-header">
+          <mat-panel-title>
+              <p class="title">{{"Notify PM of sending weekly report to Discord channel"}}</p>
+            <div class="edit-save" *ngIf="isShowSendTime">
+              <a *ngIf="permission.isGranted(Admin_Configuartions_Edit)" href="javascript:;" class="btn bg-blue mr-3"
+                (click)="isEditSendTime = !isEditSendTime;$event.stopPropagation();" [hidden]="isEditSendTime">
+                <i class="fas fa-edit"></i>
+                Edit
+              </a>
+              <a href="javascript:;" class="btn bg-secondary"
+                (click)=" getSendTime();isEditSendTime = !isEditSendTime;$event.stopPropagation()"
+                [hidden]="!isEditSendTime">
+                Cancel
+              </a>
+              <button href="javascript:;" class="btn btn-primary btn-action ml-3" [disabled]="checkDisabledSave()" ng-disabled=""
+                (click)="saveSendTime();$event.stopPropagation()"
+                [hidden]="!isEditSendTime">
+                Save
+              </button>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row mb-2">
+          <div class="col col-12 col-md-12">
+            <mat-form-field class="w-50 mt-2">
+              <input [disabled]="!isEditSendTime" class="w-100" name="ChannelId" matInput placeholder="Channel ID" 
+                [(ngModel)]="ChannelId" #channelID [required]="checkRequiredChannelId()"/>
+            </mat-form-field>
+            <p style="color: #f44336;font-size: 10.5px;"*ngIf="checkRequiredChannelId()">This field is required</p>
+          </div>
+        </div>
+        <button mat-raised-button  *ngIf="isEditSendTime" (click) = 'addTime()' class="mb-2">
+          <i style="font-size: 24px;color: #28a745;" class="fa fa-plus-circle"></i> &nbsp; <span>Add notify time!</span>
+        </button>
+        <form [formGroup]="form">
+          <div formArrayName="credentials">
+            <div class="row mb-2 w-50"  *ngFor="let creds of credentials.controls; let i = index;" [formGroupName]="i">
+              <div class="d-flex justify-content-between w-100 align-items-baseline">
+                <mat-checkbox style="position: relative;top: 10px;" formControlName="IsCheck" class="col-2" [disabled]="!isEditSendTime" #check>Check!</mat-checkbox>
+                <div class="w-25">
+                    <input [ngClass]="{editTime:isEditSendTime}"  class="w-100 inputTime" [readonly]="!isEditSendTime"   type="time" formControlName="Time"  />
+                    <p style="color: #f44336;font-size: 10.5px;" *ngIf="form.controls.credentials.controls[i].get('Time').invalid 
+                    && (form.controls.credentials.controls[i].get('Time').dirty || form.controls.credentials.controls[i].get('Time').touched)
+                    && form.controls.credentials.controls[i].get('Time').errors?.required"
+                    >This field is required</p>
+                </div>
+                <div class="w-25">
+                  <mat-form-field >
+                    <mat-label>Week day</mat-label>
+                    <mat-select [disabled]="!isEditSendTime"  formControlName="Day" #day>
+                      <mat-option *ngFor="let item of listDays" [value] = 'item.value'> {{item.text}} </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <button style="border: none;background: transparent;" *ngIf="isEditSendTime"  (click)="$event.preventDefault();removeItem(i)"> <i style="color: #9e9e9e;font-size: 20px;" class="fas fa-trash"></i></button>
+              </div>
+          </div>
+          </div>
+      
+        </form>
+          
+      </mat-expansion-panel>
+    </div>
 
      <!-- GuideLine Configuration -->
      <!-- <div class="card" *ngIf="permission.isGranted(Admin_Configurations_ViewGuideLineSetting)">

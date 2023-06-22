@@ -73,4 +73,15 @@ export class AppConfigurationService extends BaseApiService {
   editGuideLine(item: any): Observable<any> {
     return this.http.post(this.rootUrl + '/SetGuideLine', item);
   }
+
+    /**
+   * @param timeSend
+   */
+
+  getTimeSend(){
+    return this.http.get(this.rootUrl + '/GetInformPm')
+  }
+  setTimeSend(timeSend){
+    return this.http.post(this.rootUrl + '/SetInformPm',timeSend)
+  }
 }

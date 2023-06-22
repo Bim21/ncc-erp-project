@@ -1,6 +1,6 @@
 
 import { AppComponentBase } from "@shared/app-component-base";
-import { Component, Inject, Injector, OnInit } from "@angular/core";
+import { Component, Inject, Injector, OnInit, Renderer2 } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ProcessCriteria } from "@app/service/model/process-criteria-audit.dto";
 import { AuditCriteriaProcessService } from "@app/service/api/audit-criteria-process.service";
@@ -8,6 +8,7 @@ import { catchError } from "rxjs/operators";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FormControl } from "@angular/forms";
 import { PERMISSIONS_CONSTANT } from "@app/constant/permission.constant";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-create-edit-criteria-audit",
@@ -41,7 +42,7 @@ export class CreateEditCriteriaAuditComponent
 
   public Audits_Criteria_ChangeApplicable = PERMISSIONS_CONSTANT.Audits_Criteria_ChangeApplicable
 
-  constructor(
+  constructor(private renderer: Renderer2,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CreateEditCriteriaAuditComponent>,
     private processCriteriaService: AuditCriteriaProcessService,
@@ -101,11 +102,23 @@ export class CreateEditCriteriaAuditComponent
     })
   }
 
+  ngAfterViewInit() {
+    if(this.parentCurrent){
+    setTimeout(() => {
+      var elem = this.renderer.selectRootElement('#criteriaName');
+      elem.focus();
+    }, 500);
+  }
+  }
   changeParent(e) {
     this.parentCurrent= e.value
     this.codeParent= e.value
     this.criteriaAudit.parentId=this.listCriteriaAudit.find(res=>res.code==e.value).id
     this.codeChild=this.listCriteriaAudit.find(res=>res.code==e.value).maxValueOfListCode + 1
+    setTimeout(() => {
+      var elem = this.renderer.selectRootElement('#criteriaName');
+      elem.focus();
+    }, 500);
   }
 
   setCheckedCreateAnother(){

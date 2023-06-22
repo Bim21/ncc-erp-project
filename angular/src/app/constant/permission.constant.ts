@@ -35,6 +35,7 @@ export const PERMISSIONS_CONSTANT = {
        Admin_Configuartions_WeeklyReportTime_Edit: "Admin.Configuartions.WeeklyReportTimeEdit",
        Admin_Configuartions_ViewAuditScoreSetting: "Admin.Configuartions.ViewAuditScoreSetting",
        Admin_Configurations_ViewGuideLineSetting: "Admin.Configurations.ViewGuideLineSetting",
+       Admin_Configurations_ViewInformPmSetting:"Admin.Configurations.ViewInformPmSetting",
        // #endregion
 
        // #region Skill
