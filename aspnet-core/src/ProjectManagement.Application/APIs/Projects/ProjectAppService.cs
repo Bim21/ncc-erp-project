@@ -60,6 +60,7 @@ namespace ProjectManagement.APIs.Projects
         {
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ViewAllProject);
             bool hasViewBillPermission = PermissionChecker.IsGranted(PermissionNames.Projects_OutsourcingProjects_ViewBillInfo);
+            bool hasViewBillAccountPermission = PermissionChecker.IsGranted(PermissionNames.Projects_OutsourcingProjects_ViewBillAccount);
 
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
@@ -114,14 +115,14 @@ namespace ProjectManagement.APIs.Projects
                             DateSendReport = l.TimeSendReport.Value.Date,
                             RequireTimesheetFile = p.RequireTimesheetFile,
                             IsRequiredWeeklyReport = p.IsRequiredWeeklyReport,
-                            BillInfo = hasViewBillPermission ? WorkScope.GetAll<ProjectUserBill>()
+                            BillInfo = hasViewBillPermission || hasViewBillAccountPermission ? WorkScope.GetAll<ProjectUserBill>()
                             .Where(b => b.ProjectId == p.Id)
                             .Where(b => b.isActive)
                             .OrderByDescending(b => b.CreationTime)
                                     .Select(b => new GetBillInfoDto
                                     {
                                         BillRole = b.BillRole,
-                                        BillRate = b.BillRate,
+                                        BillRate = hasViewBillPermission ? b.BillRate : float.NaN ,
                                         StartTime = b.StartTime,
                                         EndTime = b.EndTime.Value,
                                         isActive = b.isActive,

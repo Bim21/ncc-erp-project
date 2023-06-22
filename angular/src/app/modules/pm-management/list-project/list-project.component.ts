@@ -36,6 +36,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
   Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
   Projects_OutsourcingProjects_ViewBillInfo = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillInfo
+  Projects_OutsourcingProjects_ViewBillAccount = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillAccount
   Projects_OutsourcingProjects_CheckProjectInvoiceSetting = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_CheckProjectInvoiceSetting
   Projects_OutsourcingProjects_UpdateRequireWeeklyReport= PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_UpdateRequireWeeklyReport
 
@@ -63,6 +64,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   public pmId = -1;
   public searchPM: string = "";
   public isShowBillInfo:boolean = false
+  public isShowAccount:boolean = false
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger;
   contextMenuPosition = { x: '0px', y: '0px' };

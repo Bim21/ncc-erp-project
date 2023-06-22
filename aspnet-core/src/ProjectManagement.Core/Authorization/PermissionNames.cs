@@ -137,6 +137,7 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_ViewAllProject = "Projects.OutsourcingProjects.ViewAllProject";
         public const string Projects_OutsourcingProjects_ViewMyProjectOnly = "Projects.OutsourcingProjects.ViewMyProjectOnly";
         public const string Projects_OutsourcingProjects_ViewBillInfo = "Projects.OutsourcingProjects.ViewBillInfo";
+        public const string Projects_OutsourcingProjects_ViewBillAccount = "Projects.OutsourcingProjects.ViewBillAccount";
         public const string Projects_OutsourcingProjects_Create = "Projects.OutsourcingProjects.Create";
         public const string Projects_OutsourcingProjects_Edit = "Projects.OutsourcingProjects.Edit";
         public const string Projects_OutsourcingProjects_Delete = "Projects.OutsourcingProjects.Delete";
@@ -805,7 +806,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_ViewAllProject ,
                     PermissionNames.Projects_OutsourcingProjects_ViewMyProjectOnly ,
                     PermissionNames.Projects_OutsourcingProjects_ViewBillInfo ,
-
+                    PermissionNames.Projects_OutsourcingProjects_ViewBillAccount ,
                     PermissionNames.Projects_OutsourcingProjects_Create ,
                     PermissionNames.Projects_OutsourcingProjects_Edit ,
                     PermissionNames.Projects_OutsourcingProjects_Delete ,
@@ -1482,6 +1483,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewAllProject, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View All Project" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewMyProjectOnly ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View My Project Only" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewBillInfo ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Bill Info" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewBillAccount ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Bill Account" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
@@ -2349,6 +2351,9 @@ namespace ProjectManagement.Authorization
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Projects_OutsourcingProjects_ViewBillInfo, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Bill Info"
+                                        },
+                                          new SystemPermission {
+                                            Name = PermissionNames.Projects_OutsourcingProjects_ViewBillAccount, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Bill Account"
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Projects_OutsourcingProjects_Create, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Create"

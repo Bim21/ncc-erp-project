@@ -25,7 +25,7 @@
 
             <div class="card-header">
                 <div class="row g-3">
-                    <div class="input-group col-6 pt-1">
+                    <div class="input-group col-4 pt-1">
                         <div class="input-group-prepend">
                             <button name="btn-search" type="button" class="btn bg-blue" (click)="searchProject()">
                                 <i class="fas fa-search"></i>
@@ -41,7 +41,7 @@
                         </div>
 
                     </div>
-                    <div class="col-6 ">
+                    <div class="col-8 ">
                         <div class="row filter-wrap">
 
                             <div class="col-5 search-pm text-right">
@@ -67,7 +67,7 @@
                                 </mat-form-field>
 
                             </div>
-                            <div class="col-5 search-status pr-2">
+                            <div class="col-3 search-status pr-2">
                                 <!-- <label class="mt-3 label-status"><span class="pr-2">Trạng thái:</span></label> -->
                                 <mat-form-field appearance="outline" class="listStatus">
                                     <mat-label>Status</mat-label>
@@ -80,9 +80,14 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
+
+                            <div class="col-2" style="margin-top: 10px;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillAccount)">
+                                <mat-checkbox name="cbx-showBillAccount" [(ngModel)]="isShowAccount" >Show bill Account</mat-checkbox>
+                            </div>
                             <div class="col-2" style="margin-top: 10px;" *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo)">
                                     <mat-checkbox name="cbx-showBillInfo" [(ngModel)]="isShowBillInfo">Show bill info</mat-checkbox>
                             </div>
+                            
 
                         </div>
                     </div>
@@ -118,7 +123,7 @@
                                 <th>#</th>
                                 <th>Projects</th>
                                 <th>{{'PM' | localize}}</th>
-                                <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo) && isShowBillInfo">Bill info</th>
+                                <th *ngIf="isShowBillInfo || isShowAccount"> {{isShowBillInfo && isShowAccount ? 'Bill info/Bill account' : isShowBillInfo && !isShowAccount ? 'Bill info' : 'Bill account' }}</th>
                                 <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_UpdateRequireWeeklyReport)" style="width: 50px;">RequireWR</th>
                                 <th style="width: 110px;">Time</th>
                                 <th style="width: 50px;">Is charged</th>
@@ -184,20 +189,16 @@
                                         </app-user-info>
                                     </div>
                                 </td>
-                                <td *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewBillInfo) && isShowBillInfo">
+                                <td *ngIf="isShowBillInfo || isShowAccount">
                                     <strong *ngIf="filterBillInfo(project).length>0" style="color: red;">Total:{{project.billInfo.length}}</strong>
-                                    <div *ngFor="let bill of filterBillInfo(project) let j = index;" matTooltip="{{
-                                                                            (bill.fullName + ' ['+bill.billRole +'] '
-                                                                                                    +'charged from '+ (bill.startTime | date:'dd/MM/yyyy')  + ( bill.endTime? ' to '+ (bill.endTime | date:'dd/MM/yyyy') : '')
-                                                                                                + ' with rate: '+ (bill.billRate | number:'1.0') +' '+ (project.currencyName | lowercase)+'/' + getChargeType(project.chargeType))
-                                                                                            }}">
+                                    <div *ngFor="let bill of filterBillInfo(project) let j = index;">
                                         <strong>{{j+1}}. </strong><strong>{{bill.fullName}} </strong>
-                                        <span
+                                        <span 
                                             >[{{bill.billRole}}]
                                         </span>
-                                        <strong
+                                        <strong *ngIf="isShowBillInfo"
                                             class="text-danger"> {{bill.billRate | number: "1.0"}} </strong>
-                                        <span
+                                        <span  *ngIf="isShowBillInfo"
                                             >{{project.currencyName
                                             | lowercase}}/{{getChargeType(project.chargeType)}}</span>
                                     </div>
