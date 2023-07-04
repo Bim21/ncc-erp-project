@@ -58,6 +58,11 @@ export const APP_ENUMS = {
         InProgress: 0,
         Done: 1
     },
+    PMReportProjectIssue:
+    {
+        InProgress: "InProgress",
+        Done: "Done"
+    },
     
     PMReportProjectStatus:
     {

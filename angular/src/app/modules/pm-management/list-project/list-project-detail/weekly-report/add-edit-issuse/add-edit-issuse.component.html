@@ -1,4 +1,4 @@
-<form class="form-horizontal" autocomplete="off" [formGroup]="riskForm">
+<form class="form-horizontal" autocomplete="off" [formGroup]="issueForm">
     <abp-modal-header title="Create Risk" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
 
@@ -6,11 +6,11 @@
 
         <div class="form-group row required">
             <label class="col-md-3 col-form-label" for="">
-                Risk
+                Issue
             </label>
             <div class="col-md-9">
                 <editor class="w-100"
-                formControlName="risk"
+                formControlName="description"
                  [init]="{
                     height:100,
                     menubar: true,
@@ -60,6 +60,24 @@
                 </editor>
             </div>
         </div>
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="">
+              Meeting Solution
+            </label>
+            <div class="col-md-9">
+                <editor class="w-100"
+                formControlName="meetingSolution"
+                 [init]="{
+                    height:100,
+                    menubar: true,
+                    plugins: ['table', 'code', 'preview', 'media', 'image', 'template'],
+                    toolbars: ['image'],
+                    branding: false
+                                    }" 
+                                   >
+                </editor>
+            </div>
+        </div>
         <div class="form-group row ">
             <label class="col-md-3 col-form-label" for="">
                 Status
@@ -67,30 +85,18 @@
             <div class="col-md-9">
                 <mat-form-field appearance="outline">
                     <mat-select [value]="currentStatus" (selectionChange)="changeStatus($event)">
-                        <mat-option *ngFor="let status of rickStatusList" [value]="status.value">
+                        <mat-option *ngFor="let status of issueStatusList" [value]="status.value">
                             {{status.view}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
 
         </div>
-        <div class="form-group row ">
-            <label class="col-md-3 col-form-label" for="">
-                Priority
-            </label>
-            <div class="col-md-9">
-                <mat-form-field appearance="outline">
-                    <mat-select [value]="currentPriority" (selectionChange)="changePriority($event)">
-                        <mat-option [value]="item.value" *ngFor="let item of priority">{{ item.viewValue
-                            }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
     </div>
     <div align="end" class="row justify-content-end" style="margin-right: 36px;">
         <button class="btn btn-secondary btn-action mr-3" mat-dialog-close>Cancel</button>
-        <button class="btn btn-primary btn-action" [disabled]=" !riskForm.valid"
+        <button class="btn btn-primary btn-action" [disabled]=" !issueForm.valid"
             (click)="SaveAndClose()">Save</button>
     </div>
 </form>
+
