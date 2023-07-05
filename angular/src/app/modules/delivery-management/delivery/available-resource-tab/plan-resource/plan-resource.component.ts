@@ -65,6 +65,12 @@ export class PlanResourceComponent
   Resource_TabPool_UpdateSkill = PERMISSIONS_CONSTANT.Resource_TabPool_UpdateSkill
   Resource_TabPool_EditNote = PERMISSIONS_CONSTANT.Resource_TabPool_EditNote
   Resource_TabPool_ProjectDetail = PERMISSIONS_CONSTANT.Resource_TabPool_ProjectDetail
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View
   
   protected list(
     request: PagedRequestDto,
@@ -481,18 +487,34 @@ export class PlanResourceComponent
   }
 
   viewProjectDetail(project){
-    let routingToUrl:string = (
-       this.permission.isGranted(this.Resource_TabPool_ProjectDetail)
-   
-     )
-    ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
+    let routingToUrl: string = ''
+
+    console.log(project.projectType)
+    if( project.projectType == 5 ){
+      routingToUrl = (this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport)
+      && this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View))
+     ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
+    } 
+
+    else if ( project.projectType == 3){
+      routingToUrl= (this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport)
+     && this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View))
     ? "/app/product-project-detail/product-weekly-report" : "/app/product-project-detail/product-project-general"
-    ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
-    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], { queryParams: {
-      id: project.projectId,
-      type: project.projectType, 
-      projectName: project.projectName, 
-      projectCode:" "} }));
+    }
+
+    else {
+      routingToUrl = (this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport)
+      && this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View))
+     ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
+    }
+    const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], {
+      queryParams: {
+        id: project.projectId,
+        type: project.projectType,
+        projectName: project.projectName,
+        projectCode: " "
+      }
+    }));
     window.open(url, '_blank');
   }
 }
