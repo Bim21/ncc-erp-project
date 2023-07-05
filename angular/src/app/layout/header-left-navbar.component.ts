@@ -103,9 +103,11 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     const storedFilterReviewNeed = sessionStorage.getItem(this.filterReviewNeedStorageKey);
     if (storedFilterSort) {
       this.filterSort = storedFilterSort;
+      this.reportService.changeFilter({filterSort:this.filterSort, reviewNeed:this.filterReviewNeed, filterProjectHealth:this.filterProjectHealth});
     }
     if(storedFilterReviewNeed){
       this.filterReviewNeed = storedFilterReviewNeed;
+      this.reportService.changeFilter({filterSort:this.filterSort, reviewNeed:this.filterReviewNeed, filterProjectHealth:this.filterProjectHealth});
     }
 
     this._layoutStore.sidebarExpanded.subscribe((value) => {
@@ -114,8 +116,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.currentUrl = this.router.url
     if (this.currentUrl.includes("weeklyReportTabDetail")) {
       this.reportId = this.route.snapshot.queryParamMap.get("id")
-      this.filterSort = this.reportService.filterSort.getValue();
-      this.filterReviewNeed = this.reportService.filterReviewNeed.getValue();
       this.isShowReportBar = true
       this.getPmReportList();
       this._layoutStore.setSidebarExpanded(true);
