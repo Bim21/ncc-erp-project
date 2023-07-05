@@ -265,7 +265,10 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
     delete user["createMode"]
     this.projectUserService.AddUserToOutSourcingProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
       this.getProjectUser();
+      this.getPlannedtUser();
+      this.getResourceRequestList();
       abp.notify.success(`Added new employee to project`);
+      
       this.projectUserProcess = false
       this.searchUser = "";
     },
@@ -398,8 +401,9 @@ export class ResourceManagementComponent extends AppComponentBase implements OnI
       })
       ref.afterClosed().subscribe(rs => {
         if (rs) {
-          this.getPlannedtUser()
           this.getProjectUser()
+          this.getPlannedtUser()
+          this.getResourceRequestList()
         }
       })
     }

@@ -2,7 +2,6 @@
 using Abp.Configuration;
 using Abp.Linq.Extensions;
 using Abp.Runtime.Session;
-using Abp.Timing;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +27,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.ResourceManager
@@ -338,7 +336,24 @@ namespace ProjectManagement.Services.ResourceManager
             };
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, projectToJoin, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject, joinPU);
 
-            await _workScope.InsertAsync(joinPU);
+            //// set done project user plan
+            var projectUser = _workScope.GetAll<ProjectUser>()
+                .Where(p => p.UserId == input.UserId && p.ProjectId == input.ProjectId
+                && p.Status == ProjectUserStatus.Future).FirstOrDefault();
+            if (projectUser != null)
+            {
+                projectUser.IsPool = input.IsPool;
+                projectUser.UserId = input.UserId;
+                projectUser.ProjectId = input.ProjectId;
+                projectUser.Status = ProjectUserStatus.Present;
+                projectUser.AllocatePercentage = 100;
+                projectUser.StartTime = input.StartTime;
+                projectUser.PMReportId = activeReportId;
+                projectUser.ProjectRole = input.ProjectRole;
+                await _workScope.UpdateAsync(projectUser);
+            }
+            else
+                await _workScope.InsertAsync(joinPU);
 
             if (projectToJoin.ProjectCode == AppConsts.CHO_NGHI_PROJECT_CODE)
             {
@@ -353,7 +368,22 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
             }
+            // if this user in Resource Request => set done 
 
+            if (projectUser != null && projectUser.ResourceRequestId != null)
+            {
+                var resourceRequest = _workScope.GetAll<ResourceRequest>()
+             .Where(s => s.Id == projectUser.ResourceRequestId).FirstOrDefault();
+                resourceRequest.Status = ResourceRequestStatus.DONE;
+                resourceRequest.TimeDone = DateTimeUtils.GetNow();
+                await _workScope.UpdateAsync(resourceRequest);
+
+                var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
+                 .Where(s => s.Id == resourceRequest.Id)
+                 .FirstOrDefaultAsync();
+
+                nofityKomuDoneResourceRequest(listRequestDto, sessionUser, projectToJoin);
+            }
 
             return joinPU;
         }
