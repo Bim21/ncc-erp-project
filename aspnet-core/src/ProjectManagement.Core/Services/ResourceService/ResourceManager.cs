@@ -89,7 +89,7 @@ namespace ProjectManagement.Services.ResourceManager
                 ProjectId = s.ProjectId,
                 UserId = s.UserId,
                 AvatarPath = s.User.AvatarPath,
-                FullName = s.User.FullName, 
+                FullName = s.User.FullName,
                 EmailAddress = s.User.EmailAddress,
                 Branch = s.User.BranchOld,
                 UserLevel = s.User.UserLevel,
@@ -154,7 +154,7 @@ namespace ProjectManagement.Services.ResourceManager
                 }
             }).ToList();
         }
-      
+
 
         private IQueryable<ProjectUser> QueryCurrentProjectUser(long userId)
         {
@@ -189,7 +189,7 @@ namespace ProjectManagement.Services.ResourceManager
         public async Task<ProjectTypeAndPMEmailDto> GetProjectTypeAndPM(long projectId)
         {
             return await _workScope.GetAll<Project>()
-                .Select(s => new {s.ProjectType, s.Id, s.PM.EmailAddress})
+                .Select(s => new { s.ProjectType, s.Id, s.PM.EmailAddress })
                 .Where(s => s.Id == projectId)
                 .Select(s => new ProjectTypeAndPMEmailDto
                 {
@@ -353,7 +353,7 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
             }
-            
+
 
             return joinPU;
         }
@@ -449,7 +449,7 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime);
             }
-            
+
 
             return confirmPUExt;
         }
@@ -741,8 +741,10 @@ namespace ProjectManagement.Services.ResourceManager
                            StarRate = x.StarRate,
                            UserSkills = x.UserSkills.Select(s => new UserSkillDto
                            {
+                               UserId = s.UserId,
                                SkillId = s.SkillId,
-                               SkillName = s.Skill.Name
+                               SkillName = s.Skill.Name,
+                               SkillRank = s.SkillRank
                            }).ToList(),
 
                            PlanProjects = x.ProjectUsers
@@ -791,11 +793,11 @@ namespace ProjectManagement.Services.ResourceManager
                     break;
 
                 case PlanStatus.PlanningJoin:
-                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage <= 100 && x.AllocatePercentage > 0 )).ToList();
+                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage <= 100 && x.AllocatePercentage > 0)).ToList();
                     break;
 
                 case PlanStatus.PlanningOut:
-                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage == 0 )).ToList();
+                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage == 0)).ToList();
                     break;
 
                 case PlanStatus.NoPlan:
@@ -891,8 +893,10 @@ namespace ProjectManagement.Services.ResourceManager
                            PoolNote = u.PoolNote,
                            UserSkills = u.UserSkills.Select(s => new UserSkillDto
                            {
+                               UserId = s.UserId,
                                SkillId = s.SkillId,
-                               SkillName = s.Skill.Name
+                               SkillName = s.Skill.Name,
+                               SkillRank = s.SkillRank
                            }).ToList(),
 
                            PlannedProjects = u.ProjectUsers
@@ -970,14 +974,14 @@ namespace ProjectManagement.Services.ResourceManager
                         join userId in querySkillUserIds on u.UserId equals userId
                         select u;
 
-                return  query.GetGridResultSync(query, input);
+                return query.GetGridResultSync(query, input);
             }
 
             var userIdsHaveAllSkill = await getUserIdsHaveAllSkill(input.SkillIds);
             query = query.Where(s => userIdsHaveAllSkill.Contains(s.UserId));
 
 
-            return  query.GetGridResultSync(query, input);
+            return query.GetGridResultSync(query, input);
         }
 
         public void SendKomu(StringBuilder komuMessage, string projectCode)
@@ -1147,9 +1151,9 @@ namespace ProjectManagement.Services.ResourceManager
                 maxCount = 12;
             }
             return await _timesheetService.GetRetroReviewInternHistories(
-                new InputRetroReviewInternHistoriesDto 
-                { 
-                    Emails = emails, 
+                new InputRetroReviewInternHistoriesDto
+                {
+                    Emails = emails,
                     MaxCountHistory = maxCount
                 });
         }
