@@ -1,7 +1,7 @@
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { pmReportProjectHealthDto} from './../service/model/pmReport.dto';
 import { ProjectInfoDto } from './../service/model/project.dto';
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, HostListener } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ActivationEnd, NavigationEnd, NavigationStart, Router, Event as NavigationEvent } from '@angular/router';
 import { AddReportNoteComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/add-report-note/add-report-note.component';
@@ -83,9 +83,9 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   constructor(public _layoutStore: LayoutStoreService, private router: Router, injector: Injector,
     private dialog: MatDialog, private route: ActivatedRoute, public reportService: PmReportService,
     private pmReportProjectService: PMReportProjectService) {
-    super(injector)
-  }
+    super(injector);
 
+  }
 
   ngOnInit(): void {
 
@@ -99,8 +99,8 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
     this.projectType = this.route.snapshot.queryParamMap.get("projectType")
 
-    const storedFilterSort = localStorage.getItem(this.filterSortStorageKey) || sessionStorage.getItem(this.filterSortStorageKey);
-    const storedFilterReviewNeed = localStorage.getItem(this.filterReviewNeedStorageKey) || sessionStorage.getItem(this.filterReviewNeedStorageKey);
+    const storedFilterSort =  sessionStorage.getItem(this.filterSortStorageKey);
+    const storedFilterReviewNeed = sessionStorage.getItem(this.filterReviewNeedStorageKey);
     if (storedFilterSort) {
       this.filterSort = storedFilterSort;
     }
@@ -221,28 +221,16 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.reportService.changeProjectType(type)
   }
 
-  onChangeFilterProjectHealth(){
-    this.reportService.changeFilterProjectHealth(this.filterProjectHealth);
-  }
 
   changeProjectHealth(pmReportProjectId,projectHealth) {
     let data = {pmReportProjectId,projectHealth} as pmReportProjectHealthDto;
     this.reportService.changeProjectHealth(data)
   }
 
-  onChangeFilterSort(filterSort){
-    this.reportService.changeFilterSort(filterSort);
-    this.filterSort = filterSort;
-    //This will keep your filter value stable whenever reloading page
-    localStorage.setItem(this.filterSortStorageKey, filterSort);
-    sessionStorage.setItem(this.filterSortStorageKey, filterSort);
-  }
-
-  onChangeFilterReviewNeed(filterReviewNeed){
-    this.reportService.changeFilterReviewNeed(filterReviewNeed);
-    this.filterReviewNeed = filterReviewNeed;
-    localStorage.setItem(this.filterReviewNeedStorageKey, filterReviewNeed);
-    sessionStorage.setItem(this.filterReviewNeedStorageKey, filterReviewNeed);
+  onChangeFilter(){
+    this.reportService.changeFilter({filterSort:this.filterSort, reviewNeed:this.filterReviewNeed, filterProjectHealth:this.filterProjectHealth});
+    sessionStorage.setItem(this.filterSortStorageKey, this.filterSort);
+    sessionStorage.setItem(this.filterReviewNeedStorageKey, this.filterReviewNeed);
   }
 
   updateHealth(projectHealth) {
