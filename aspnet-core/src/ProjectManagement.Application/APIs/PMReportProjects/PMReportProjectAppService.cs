@@ -88,6 +88,7 @@ namespace ProjectManagement.APIs.PMReportProjects
             {
                 case WeeklyReportSort.No_Order:
                     //do nothing
+                    query = query.OrderBy(q => true);
                     break;
                 case WeeklyReportSort.Draft_Green_Yellow_Red:
                     query = query.OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum);
@@ -101,7 +102,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     query = query.OrderBy(x => x.LastReviewDate);
                     break;
             }
-
+            query = ((IOrderedQueryable<GetPMReportProjectDto>)query).ThenBy(q => q.PmEmailAddress).ThenBy(p => p.ProjectName);
             switch (sortReview)
             {
                 case PrioritizeReviewSort.All:
