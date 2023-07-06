@@ -40,3 +40,15 @@ table { height: 1px; } /* Will be ignored, don't worry. */
 tr { height: 100%; }
 td { height: 100%; }
 td > div { height: 100%; }
+.crimson{
+    color:crimson !important
+}
+.grey{
+    color: grey !important;
+}
+.orange{
+    color: orange !important;
+}
+.yellow{
+    color: yellow !important;
+}

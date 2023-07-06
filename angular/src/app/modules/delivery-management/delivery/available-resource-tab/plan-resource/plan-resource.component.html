@@ -84,7 +84,7 @@
                                 <th style="width: 75px;">History</th>
                                 <th>Planned Projects</th>
                                 <th>Temp Project</th>
-                                <th style="width: 150px;">Skills</th>
+                                <th style="width: 200px;">Skills</th>
                                 <th style="min-width: 220px;">Note</th>
                                 <th style="width: 100px;">Start Pool</th>
                             </tr>
@@ -245,12 +245,14 @@
                                     </div>
 
                                 </td>
-                                <td style="white-space: normal; max-width: 150px">
+                                <td style="white-space: normal; max-width: 200px">
                                     <div class="d-flex" style="align-items: center;">
-                                        <div style="width: 90%">
+                                        <div style="width: 200px">
                                             <p class="m-0" *ngFor="let item of item.userSkills">
-                                                - {{item.skillName}}
-
+                                                - {{item.skillName}} &nbsp;
+                                                <span *ngIf="item.skillRank">( {{item.skillRank}} <i class="fa fa-star"
+                                                      [ngClass] = '{crimson: item.skillRank == 5, grey:item.skillRank ==1 || item.skillRank == 2,yellow:item.skillRank == 3 ,orange:item.skillRank == 4}' style="
+                                                      font-size: 13px;"></i>  )</span>
                                             </p>
                                             <!-- {{ skillsCommas(item.listSkills) }} -->
                                         </div>

@@ -132,7 +132,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       }
     });
 
-    this.selectedIsPlanned = 2;
+    this.selectedIsPlanned = 1;
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
