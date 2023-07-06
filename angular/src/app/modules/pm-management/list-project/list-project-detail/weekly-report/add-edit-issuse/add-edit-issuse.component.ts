@@ -35,12 +35,10 @@ export class AddEditIssuseComponent extends AppComponentBase implements OnInit  
 
   issueStatusList = [{ value: this.APP_ENUM.PMReportProjectIssueStatus.Done, view: 'Done' }, { value: this.APP_ENUM.PMReportProjectIssueStatus.InProgress, view: 'InProgress' }]
   ngOnInit(): void {
-    console.log(this.data)
     if (this.data.command == 'edit') {
       this.issueForm.setValue({...this.issueForm.value,description:this.data.issue.description,solution:this.data.issue.solution,impact:this.data.issue.impact,meetingSolution:this.data.issue.meetingSolution}),
       this.id = this.data.issue.id;
       this.currentStatus = this.APP_ENUM.PMReportProjectIssueStatus[this.data.issue.status];
-      console.log( this.currentStatus)
     }
   }
   get controls() {

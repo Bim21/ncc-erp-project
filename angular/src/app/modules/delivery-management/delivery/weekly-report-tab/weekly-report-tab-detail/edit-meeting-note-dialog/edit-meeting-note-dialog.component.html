@@ -1,12 +1,20 @@
-<form class="form-horizontal" id="edit-note-form" autocomplete="off" #reportNote="ngForm">
+<form class="form-horizontal" id="edit-note-form" autocomplete="off" #reportNote="ngForm" [formGroup]="formEditMeetingNote">
     <abp-modal-header title="Edit Meeting Note" class="pt-0" (onCloseClick)="dialogRef.close()">
     </abp-modal-header>
     <div class="modal-body">
         <div class="form-group row">
             <label for="">Note:</label>
-            <mat-form-field class="w-100" appearance="outline">
-                <textarea #meetingNote cdkTextareaAutosize #autosize="cdkTextareaAutosize" style="max-height: 68vh; overflow: auto;" name="note" rows="3" matInput placeholder="Leave a comment..." [(ngModel)]="projectIssue.note">{{meetingNote.focus()}}</textarea>
-            </mat-form-field>
+            <editor class="w-100"
+            formControlName="meetingSolution"
+             [init]="{
+                height:100,
+                menubar: true,
+                plugins: ['table', 'code', 'preview', 'media', 'image', 'template'],
+                toolbars: ['image'],
+                branding: false
+                                }" 
+                               >
+            </editor>
         </div>
     </div>
     <div style="background-color: white;" align="end" class="d-flex justify-content-end">
