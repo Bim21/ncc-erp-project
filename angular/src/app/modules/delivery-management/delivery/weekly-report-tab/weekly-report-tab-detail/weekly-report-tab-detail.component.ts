@@ -278,7 +278,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
 
       this.getTimeCountDown();
     }
-
     this.getGuideLineConfiguration();
   }
 
@@ -313,9 +312,9 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isStopCounting = false
     this.isRefresh = false
   }
-  public getPmReportProject() {
+ public getPmReportProject() {
     if (this.router.url.includes("weeklyReportTabDetail") && this.pmReportId) {
-      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort,this.sortReview)
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort,this.sortReview)
       .subscribe((data => {
         this.pmReportProjectList = data.result
         this.tempPmReportProjectList = data.result;
