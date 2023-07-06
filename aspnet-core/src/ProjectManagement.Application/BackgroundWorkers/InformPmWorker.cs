@@ -13,8 +13,7 @@ using ProjectManagement.Configuration;
 using ProjectManagement.Configuration.Dto;
 using NccCore.Uitls;
 using ProjectManagement.Services.PmReports;
-using System.Globalization;
-using static ProjectManagement.Constants.Enum.ProjectEnum;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace ProjectManagement.BackgroundWorkers
 {
@@ -35,28 +34,22 @@ namespace ProjectManagement.BackgroundWorkers
         [UnitOfWork]
         protected override async void DoWork()
         {
-            var list = _pmReport.GetPMsUnsentWeeklyReport();
             // get time setting in database
             string json = SettingManager.GetSettingValueForApplication(AppSettingNames.InformPm);
-            if (!string.IsNullOrEmpty(json))
-            {
-                InformPmDto inform = JsonConvert.DeserializeObject<InformPmDto>(json);
+            if (string.IsNullOrEmpty(json)) return;
 
-                foreach (var item in inform.CheckDateTimes)
-                {
-                    if (item.IsCheck && IsRightNow(item.Day, item.Time))
-                    {
-                        Inform(await list, inform.ChannelId);
-                        break;
-                    }
-                }
-            }
+            InformPmDto inform = JsonConvert.DeserializeObject<InformPmDto>(json);
+
+            if (CheckSendTime(inform.CheckDateTimes))
+                Inform(await _pmReport.GetPMsUnsentWeeklyReport(), inform.ChannelId);
         }
 
-        private bool IsRightNow(int day, string time)
+        private bool CheckSendTime(List<CheckDateTime> checks)
         {
             string now = DateTime.Now.ToString("HH:mm");
-            return (int)DateTimeUtils.GetNow().DayOfWeek == day && time == now;
+            if (checks.Any(c => c.IsCheck && (int)DateTimeUtils.GetNow().DayOfWeek == c.Day && c.Time == now))
+                return true;
+            return false;
         }
 
         private async void Inform(List<PMUnsentWeeklyReportDto> list, string channelId)
@@ -73,6 +66,7 @@ namespace ProjectManagement.BackgroundWorkers
             await _komu.NotifyToChannelAwait(messages, channelId);
         }
 
-        private string GetTagPm(PMUnsentWeeklyReportDto data) => data.KomuId.HasValue ? $"<@{data.KomuId}>" : $"**{data.EmailAddress}**";
+        private string GetTagPm(PMUnsentWeeklyReportDto data) => "${" + data.EmailAddress.Trim().Split('@')[0] + "}";
+        //=> data.KomuId.HasValue ? $"<@{data.KomuId}>" : $"**{data.EmailAddress}**";
     }
 }
