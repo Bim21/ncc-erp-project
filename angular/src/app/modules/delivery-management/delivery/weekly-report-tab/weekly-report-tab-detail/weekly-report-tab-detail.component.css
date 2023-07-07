@@ -169,12 +169,17 @@ cd-timer {
     cursor: pointer;
 }
 
-
+.changeWidth{
+    width: 42% !important
+}
 
 .table-vertical {
     margin-top: 20px;
 }
 
+.widthFull{
+    width: 100% !important;
+}
 .badge {
     height: fit-content;
 }

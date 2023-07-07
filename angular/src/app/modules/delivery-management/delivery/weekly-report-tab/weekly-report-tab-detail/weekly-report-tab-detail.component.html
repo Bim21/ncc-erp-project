@@ -93,7 +93,7 @@
             </div>
         </div>
     </mat-drawer>
-    <mat-drawer #drawerRight mode="side" opened position="end" class="pt-3"
+    <mat-drawer #drawerRight mode="side" opened position="end" class="pt-3" [ngClass] = "{changeWidth:drawerLeft}"
         style="width: 35%;background-color: #fafafa;">
         <div class="position-relative; px-2">
             <div>
@@ -517,8 +517,7 @@
             </div>
         </div>
     </mat-drawer>
-
-    <div class="row pt-3 pr-3 ml-2" style="position: relative;"
+    <div class="row pt-3 pr-3 ml-2" style="position: relative;" 
         *ngIf="permission.isGranted(WeeklyReport_ReportDetail_View)" #tref>
         <div id="right-content" [ngClass]="sidebarExpanded?'expand-content':''" style="width: 100%;">
             <section class="content ">
@@ -531,11 +530,11 @@
 
                                     <span *ngIf="permission.isGranted(WeeklyReport_ReportDetail_GuideLine_View)">
                                         <strong class="hyperlink" (click)="guideLineCriteriaStatus()" style="font-size: 20px;">Criteria status</strong>
-                                      </span>
+                                    </span>
 
-                                      <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_GuideLine_View)">
+                                    <span *ngIf="!permission.isGranted(WeeklyReport_ReportDetail_GuideLine_View)">
                                         <strong style="font-size: 20px;">Criteria status </strong>
-                                      </span>
+                                    </span>
 
                                     <button class="btn btn-editall-neutral ml-2" *ngIf="isShowEditAllBtn()"
                                         (click)="editAllRow()">
@@ -1110,7 +1109,7 @@
                         <div class="d-flex p-2 align-items-center"
                             style="background: #0d6efd;border-radius: 4px;color: #fff; position: fixed;top: 9%;left: 42%;cursor: all-scroll;"
                             cdkDrag>
-                            <i style=" font-size: 24px" (click)="drawer.toggle()" class="fas fa-chevron-left"></i>&nbsp;
+                            <i style=" font-size: 24px" (click)="drawer.toggle();drawerLeft=!drawerLeft" class="fas fa-chevron-left"></i>&nbsp;
                             <span style="font-weight: 600;" class="mx-1">
                             </span>&nbsp;
                             <i style=" font-size: 24px;" (click)="drawerRight.toggle()"

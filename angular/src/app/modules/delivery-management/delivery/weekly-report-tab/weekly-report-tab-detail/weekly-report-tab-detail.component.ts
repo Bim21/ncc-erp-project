@@ -132,6 +132,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   public sortReview: string = "All";
   public weeklyReportStatus: string;
   public recentDate: string;
+  public drawerLeft=false
+  public drawerRight=true
   public iconCheckedDate: string = "<i class='fas fa-calendar-check'></i>&nbsp;";
   public resizableGrabWidth= -400;
 
