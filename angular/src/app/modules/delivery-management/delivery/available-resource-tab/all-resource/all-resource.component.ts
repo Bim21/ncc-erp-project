@@ -435,7 +435,6 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
 
     let routingToUrl: string = ''
 
-    console.log(project.projectType)
     if( project.projectType == 5 ){
       routingToUrl = (this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport)
       && this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View))
@@ -458,7 +457,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
         id: project.projectId,
         type: project.projectType,
         projectName: project.projectName,
-        projectCode: " "
+        projectCode: project.projectCode
       }
     }));
     window.open(url, '_blank');
