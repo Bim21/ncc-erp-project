@@ -791,7 +791,8 @@ namespace ProjectManagement.Services.ResourceManager
                                StartTime = pu.StartTime,
                                IsPool = pu.IsPool,
                                AllocatePercentage = pu.AllocatePercentage,
-                               ProjectType = pu.Project.ProjectType
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -809,7 +810,8 @@ namespace ProjectManagement.Services.ResourceManager
                                 PmName = pu.Project.PM.Name,
                                 StartTime = pu.StartTime,
                                 IsPool = pu.IsPool,
-                                ProjectType = pu.Project.ProjectType
+                                ProjectType = pu.Project.ProjectType,
+                                ProjectCode = pu.Project.Code
                             })
                            .ToList(),
                        });
@@ -946,7 +948,8 @@ namespace ProjectManagement.Services.ResourceManager
                                Id = pu.Id,
                                AllocatePercentage = pu.AllocatePercentage,
                                IsPool = pu.IsPool,
-                               ProjectType = pu.Project.ProjectType
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -963,7 +966,8 @@ namespace ProjectManagement.Services.ResourceManager
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                Id = pu.Id,
-                               ProjectType = pu.Project.ProjectType
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
