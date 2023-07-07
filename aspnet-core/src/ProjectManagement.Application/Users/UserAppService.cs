@@ -112,7 +112,7 @@ namespace ProjectManagement.Users
 
                             Id = u.Id,
                             EmailAddress = u.EmailAddress,
-                            AvatarPath = u.AvatarPath == null? "": u.AvatarPath,
+                            AvatarPath = u.AvatarPath == null ? "" : u.AvatarPath,
                             UserType = u.UserType,
                             PositionId = u.PositionId,
                             PositionColor = u.Position.Color,
@@ -122,7 +122,7 @@ namespace ProjectManagement.Users
                             BranchColor = u.Branch.Color,
                             BranchDisplayName = u.Branch.DisplayName,
                             IsActive = u.IsActive,
-                            FullName = u.Name+ " " + u.Surname,
+                            FullName = u.Name + " " + u.Surname,
                             CreationTime = u.CreationTime,
                             RoleNames = _roleManager.Roles
                             .Where(r => u.Roles
@@ -187,28 +187,38 @@ namespace ProjectManagement.Users
 
         public async Task updateUserSkill(UpdateUserSkillDto input)
         {
+            var user = await _workScope.GetAsync<User>(input.UserId);
+            if (user == default)
+                throw new UserFriendlyException($"Can not found user with Id = {input.UserId}");
+            // check exception
+            if (input.UserSkills.Any(i => i.SkillRank < SkillRank.None || i.SkillRank > SkillRank.Expert))
+                throw new UserFriendlyException("Skill rank must be from 1 to 5!");
             var userSkills = await _workScope.GetAll<UserSkill>().Where(x => x.UserId == input.UserId).ToListAsync();
             var currenUserSkillId = userSkills.Select(x => x.SkillId);
 
-            var deleteSkillId = currenUserSkillId.Except(input.UserSkills);
+            var deleteSkillId = currenUserSkillId.Except(input.UserSkills.Select(u => u.SkillId));
             var listSkillDelete = userSkills.Where(x => deleteSkillId.Contains(x.SkillId));
-            var listSkillInsert = input.UserSkills.Where(x => !currenUserSkillId.Contains(x));
+            var listSkillInsert = input.UserSkills.Where(x => !currenUserSkillId.Contains(x.SkillId));
+            var listSkillUpdate = input.UserSkills.Where(x => !listSkillInsert.Contains(x));
 
             foreach (var item in listSkillDelete)
             {
                 await _workScope.DeleteAsync<UserSkill>(item);
             }
 
-            foreach (var item in listSkillInsert)
-            {
-                var userSkill = new UserSkill
-                {
-                    UserId = input.UserId,
-                    SkillId = item
-                };
-                await _workScope.InsertAndGetIdAsync(userSkill);
-            }
+            var userSkillInserts = listSkillInsert.Select(x => new UserSkill
+            { UserId = input.UserId, SkillId = x.SkillId, SkillRank = x.SkillRank });
+            await _workScope.InsertRangeAsync(userSkillInserts);
 
+            var userSkillUpdates = new List<UserSkill>();
+            foreach (var item in listSkillUpdate)
+            {
+                var userSkill = _workScope.GetAll<UserSkill>()
+                .Where(u => u.UserId == input.UserId && u.SkillId == item.SkillId).FirstOrDefault();
+                userSkill.SkillRank = item.SkillRank;
+                userSkillUpdates.Add(userSkill);
+            }
+            await _workScope.UpdateRangeAsync(userSkillUpdates);
         }
 
 
@@ -361,7 +371,7 @@ namespace ProjectManagement.Users
             var userAndBranch = await _workScope
                 .GetAll<User>()
                 .Where(s => s.EmailAddress == email)
-                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : ""})
+                .Select(s => new { User = s, BranchName = s.Branch != null ? s.Branch.Name : "" })
                 .FirstOrDefaultAsync();
 
             if (userAndBranch == null)
@@ -879,7 +889,7 @@ namespace ProjectManagement.Users
                 {
                     user.StarRate = item.StarRate;
                     user.UserLevel = item.Level;
-                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff )
+                    if (user.UserLevel >= UserLevel.FresherMinus && item.Type == CommonUtil.TimeSheetUserType.Staff)
                     {
                         user.UserType = UserType.ProbationaryStaff;
                     }

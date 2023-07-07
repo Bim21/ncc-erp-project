@@ -32,6 +32,11 @@ export class PmReportService extends BaseApiService {
   public filterReviewNeed = new BehaviorSubject('All');
   currentFilterReviewNeed = this.filterReviewNeed.asObservable();
 
+  public filterObservable :BehaviorSubject<Filter> = new BehaviorSubject({reviewNeed:'ALL',filterSort:'No_Order',filterProjectHealth:'ALL'});
+  currentFilter = this.filterObservable.asObservable();
+
+  
+
   constructor(http: HttpClient) { super(http) }
   public closeReport(id: any): Observable<any> {
     return this.http.get<any>(this.rootUrl + '/CloseReport?pmReportId=' + id);
@@ -71,8 +76,16 @@ export class PmReportService extends BaseApiService {
   changeFilterSort(message: string){
     this.filterSort.next(message)
   }
+  changeFilter(message){
+    this.filterObservable.next(message)
+  }
 
   changeFilterReviewNeed(message: string){
     this.filterReviewNeed.next(message)
   }
+}
+export interface Filter {
+  filterSort: string,
+  reviewNeed:string,
+  filterProjectHealth:string
 }

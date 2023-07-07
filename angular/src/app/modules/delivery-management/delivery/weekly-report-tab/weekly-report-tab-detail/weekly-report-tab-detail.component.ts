@@ -269,24 +269,15 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.sidebarExpanded = value;
       });
 
-      this.pmReportService.filterProjectHealth.subscribe(projectStatus => {
-        this.projectStatus = projectStatus;
+      this.pmReportService.filterObservable.subscribe(typeSort => {
+        this.sortReview = typeSort.reviewNeed;
+        this.typeSort = typeSort.filterSort;
+        this.projectStatus = typeSort.filterProjectHealth
         this.getPmReportProject();
       });
-
-      this.pmReportService.filterSort.subscribe(typeSort => {
-        this.typeSort = typeSort;
-        this.getPmReportProject();
-      });
-
-      this.pmReportService.filterReviewNeed.subscribe(sortReview => {
-        this.sortReview = sortReview;
-        this.getPmReportProject();
-      })
 
       this.getTimeCountDown();
     }
-
     this.getGuideLineConfiguration();
   }
 
@@ -321,11 +312,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.isStopCounting = false
     this.isRefresh = false
   }
-  public getPmReportProject(): void {
+ public getPmReportProject() {
     if (this.router.url.includes("weeklyReportTabDetail") && this.pmReportId) {
-      this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort,this.sortReview)
+    this.pmReportProjectService.GetAllByPmReport(this.pmReportId, this.projectType, this.projectStatus, this.typeSort,this.sortReview)
       .subscribe((data => {
-        this.pmReportProjectList = data.result;
+        this.pmReportProjectList = data.result
         this.tempPmReportProjectList = data.result;
         this.projectId = this.pmReportProjectList[0]?.projectId
         this.generalNote = this.pmReportProjectList[0]?.note
@@ -338,15 +329,35 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.pmReportProjectList[0].setBackground = true
         }
 
-        this.isShowPmNote = this.generalNote ? true : false
-        this.getLastWeek();
-        this.getAllCriteria();
-        this.getProjectInfo();
-        this.getChangedResource();
-        this.getFuturereport();
-        this.getProjectProblem();
-        this.getRiskOfTheWeek()
-        this.search()
+        if(this.projectId){
+          this.getLastWeek();
+          this.getAllCriteria();
+          this.getProjectInfo();
+          this.getChangedResource();
+          this.getFuturereport();
+          this.getProjectProblem();
+          this.getRiskOfTheWeek()
+          this.search()
+           this.isShowPmNote = this.generalNote ? true : false
+        }
+        else{
+          this.isShowIssues=false;
+          this.isShowRisks=false;
+          this.isShowPmNote=false;
+          this.isShowSupportUser=false;
+          this.isShowFutureList=false;
+          this.isShowWeeklyList=false;
+          this.futureReportList= [];
+          this.weeklyReportList = [];
+          this.projectCurrentSupportUser = [];
+          this.listCriteriaResult = [];
+          this.generalNote = '';
+          this.problemList = [];
+          this.projectRiskList = [];
+          this.projectCurrentResource = [];
+          this.projectInfo.totalBill= 0;
+        }
+
       }))
     }
   }
@@ -1835,7 +1846,10 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.showPmNote = !this.showPmNote;
     }
   }
-  fixedNumber(num: number) {
+  fixedNumber(num?:number) {
+    if(!num){
+      return 0
+    }
     if (num % 1 !== 0) {
       return Number(num.toFixed(2));
     }

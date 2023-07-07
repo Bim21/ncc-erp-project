@@ -21,7 +21,10 @@ namespace ProjectManagement.Services.ResourceManager.Dto
         public long PMReportId { get; set; }
         public ProjectUserStatus Status { get; set; }
         public bool IsPool { get; set; }
-        public string ProjectRoleName { get
+        public string ProjectCode { get; set; }
+        public string ProjectRoleName
+        {
+            get
             {
                 return CommonUtil.ToString(this.ProjectRole);
             }

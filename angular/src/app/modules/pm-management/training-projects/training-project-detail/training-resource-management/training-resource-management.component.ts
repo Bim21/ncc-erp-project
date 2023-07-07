@@ -261,7 +261,9 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
     user.projectId = this.projectId
     delete user["createMode"]
     this.projectUserService.AddUserToOutSourcingProject(user).pipe(catchError(this.projectUserService.handleError)).subscribe(data => {
-      this.getProjectUser();
+      this.getProjectUser()
+      this.getPlannedtUser()
+      this.getResourceRequestList()
       abp.notify.success(`Added new employee to project`);
       this.projectUserProcess = false
       this.searchUser = "";
@@ -395,8 +397,9 @@ export class TrainingResourceManagementComponent extends AppComponentBase implem
       })
       ref.afterClosed().subscribe(rs => {
         if (rs) {
-          this.getPlannedtUser()
           this.getProjectUser()
+          this.getPlannedtUser()
+          this.getResourceRequestList()
         }
       })
     }

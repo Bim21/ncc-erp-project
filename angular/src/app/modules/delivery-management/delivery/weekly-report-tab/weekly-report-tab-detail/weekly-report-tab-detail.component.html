@@ -16,6 +16,7 @@
                 </div>
 
                 <div style="margin-bottom: 20px;">
+                    <p style="margin-left: 8px; font-size: 20px; margin-top: 20px; font-weight: 600;" *ngIf="pmReportProjectList.length < 1">No data !</p>
                     <mat-list *ngFor="let item of pmReportProjectList">
                         <div class="row sidebar-item" style="flex: 1;"
                             [ngClass]="item.setBackground == true ? 'projectActive' : ''">
