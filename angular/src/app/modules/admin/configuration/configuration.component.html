@@ -383,7 +383,7 @@
           <mat-panel-title>
             <p class="title">{{"Discord channels"}}</p>
             <div class="edit-save" *ngIf="isShowDiscordChannel">
-              <button class="btn bg-blue mr-3"
+              <button *ngIf="permission.isGranted(Admin_Configuartions_Edit)" class="btn bg-blue mr-3" 
                 (click)="isEditDiscordChannel = !isEditDiscordChannel; clientId.focus();$event.stopPropagation()"
                 [hidden]="isEditDiscordChannel">
                 <i class="fas fa-edit"></i>

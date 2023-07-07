@@ -41,7 +41,10 @@
                                         </mat-radio-group>
                                     </div>
                                     <mat-option *ngFor="let skill of listSkills" [value]="skill.id">
-                                        {{skill.name}}
+                                        {{skill.name}} &nbsp;
+                                        <span *ngIf="skill.skillRank">(  {{skill.skillRank}} <i class="fa fa-star" 
+                                            [ngClass] = '{crimson: skill.skillRank == 5, grey:skill.skillRank ==1 || skill.skillRank == 2,yellow:skill.skillRank == 3 ,orange:skill.skillRank == 4}' style="
+                                            font-size: 13px;"></i> )</span>
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>

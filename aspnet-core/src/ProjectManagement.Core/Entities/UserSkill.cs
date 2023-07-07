@@ -1,10 +1,8 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using ProjectManagement.Authorization.Users;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Entities
 {
@@ -17,5 +15,6 @@ namespace ProjectManagement.Entities
         public long UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
+        public SkillRank SkillRank { get; set; }
     }
 }
