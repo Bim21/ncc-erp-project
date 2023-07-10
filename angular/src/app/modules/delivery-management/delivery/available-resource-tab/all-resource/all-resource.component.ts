@@ -138,7 +138,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       }
     });
 
-    this.selectedIsPlanned = 2;
+    this.selectedIsPlanned = 1;
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
@@ -457,7 +457,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
         id: project.projectId,
         type: project.projectType,
         projectName: project.projectName,
-        projectCode: " "
+        projectCode: project.projectCode
       }
     }));
     window.open(url, '_blank');

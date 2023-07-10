@@ -510,7 +510,7 @@ export class PlanResourceComponent
         id: project.projectId,
         type: project.projectType,
         projectName: project.projectName,
-        projectCode: " "
+        projectCode: project.projectCode
       }
     }));
     window.open(url, '_blank');
