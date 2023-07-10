@@ -488,8 +488,6 @@ export class PlanResourceComponent
 
   viewProjectDetail(project){
     let routingToUrl: string = ''
-
-    console.log(project.projectType)
     if( project.projectType == 5 ){
       routingToUrl = (this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport)
       && this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View))
