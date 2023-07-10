@@ -790,7 +790,9 @@ namespace ProjectManagement.Services.ResourceManager
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                IsPool = pu.IsPool,
-                               AllocatePercentage = pu.AllocatePercentage
+                               AllocatePercentage = pu.AllocatePercentage,
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -807,7 +809,9 @@ namespace ProjectManagement.Services.ResourceManager
                                 ProjectStatus = pu.Project.Status,
                                 PmName = pu.Project.PM.Name,
                                 StartTime = pu.StartTime,
-                                IsPool = pu.IsPool
+                                IsPool = pu.IsPool,
+                                ProjectType = pu.Project.ProjectType,
+                                ProjectCode = pu.Project.Code
                             })
                            .ToList(),
                        });
@@ -943,7 +947,9 @@ namespace ProjectManagement.Services.ResourceManager
                                StartTime = pu.StartTime,
                                Id = pu.Id,
                                AllocatePercentage = pu.AllocatePercentage,
-                               IsPool = pu.IsPool
+                               IsPool = pu.IsPool,
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -960,6 +966,8 @@ namespace ProjectManagement.Services.ResourceManager
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                Id = pu.Id,
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
