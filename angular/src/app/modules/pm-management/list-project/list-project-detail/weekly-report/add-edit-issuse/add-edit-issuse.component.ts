@@ -19,9 +19,9 @@ export class AddEditIssuseComponent extends AppComponentBase implements OnInit  
   APP_ENUM = APP_ENUMS
   issueForm=new FormGroup({
     description: new FormControl('',[Validators.required, this.emptyLinesValiadtor]),
-    impact : new FormControl('',[Validators.required,]),
-    solution : new FormControl('',[Validators.required, ]),
-    meetingSolution : new FormControl('',[Validators.required, ]),
+    impact : new FormControl('',),
+    solution : new FormControl(''),
+    meetingSolution : new FormControl(''),
   })
 
   id: number

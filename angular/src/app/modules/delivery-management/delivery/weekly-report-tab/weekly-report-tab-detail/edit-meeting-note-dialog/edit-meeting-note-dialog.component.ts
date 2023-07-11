@@ -21,7 +21,6 @@ export class EditMeetingNoteDialogComponent extends AppComponentBase implements 
     meetingSolution: new FormControl('')
   })
   ngOnInit(): void {
-    console.log(this.data)
       this.formEditMeetingNote.setValue({...this.formEditMeetingNote.value,meetingSolution: this.data.note})
   }
   saveAndClose() {
