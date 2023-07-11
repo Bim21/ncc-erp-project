@@ -26,8 +26,10 @@ export class EditMeetingNoteDialogComponent extends AppComponentBase implements 
   saveAndClose() {
     const projectIssue = {...this.data,note:this.formEditMeetingNote.value.meetingSolution}
     this.reportIssueService.EditMeetingNote(projectIssue ).subscribe(rs =>{
-      abp.notify.success("Edited Meeting solution")
-      this.dialogRef.close(true)
+      if(rs){
+        abp.notify.success("Edited Meeting solution")
+        this.dialogRef.close(true)
+      }
     })
   }
 }
