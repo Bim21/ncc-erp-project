@@ -306,7 +306,7 @@
                   </p>
                 </td>
                 <td class="text-center">
-                  {{ item.projectName }}
+                 <span class="link" (click)="showProject(item)"> {{ item.projectName }} </span>
                   <br />
                   <span
                     [ngClass]="

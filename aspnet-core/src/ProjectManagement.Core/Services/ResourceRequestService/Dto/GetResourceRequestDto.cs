@@ -34,6 +34,7 @@ namespace ProjectManagement.Services.ResourceRequestService.Dto
         public string ProjectName { get; set; }
         public ProjectType ProjectType { get; set; }
         public ProjectStatus ProjectStatus { get; set; }
+        public string ProjectCode { get; set; }
 
         public int Quantity { get; set; }
 

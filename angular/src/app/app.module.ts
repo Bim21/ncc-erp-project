@@ -214,6 +214,7 @@ import { EditNoteResourceComponent } from './modules/delivery-management/deliver
 import { AddRiskDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/add-risk-dialog/add-risk-dialog.component';
 import { UpdateConfirmModalComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/update-confirm-modal/update-confirm-modal.component';
 import { CloseTimesheetComponent } from './modules/timesheet/close-timesheet/close-timesheet.component';
+import { ProjectDescriptionPopupComponent } from './modules/delivery-management/delivery/request-resource-tab/project-description-popup/project-description-popup.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -414,6 +415,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     AddRiskDialogComponent,
     CloseTimesheetComponent,
     UpdateConfirmModalComponent,
+    ProjectDescriptionPopupComponent,
   ],
   imports: [
     CommonModule,
