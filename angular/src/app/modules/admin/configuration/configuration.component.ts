@@ -3,7 +3,6 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 import { AppConfigurationService } from '../../../service/api/app-configuration.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AppConsts } from '@shared/AppConsts';
 
 @Component({
   selector: 'app-configuration',
@@ -59,7 +58,6 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public guideLine: GuideLineDto = {} as GuideLineDto ;
   public ChannelId:string=''
 
-  public listday= AppConsts.listDay
  
   public listDays: any[] = [
     { value: 1, text: 'Monday' },

@@ -2,7 +2,6 @@
 using Abp.Configuration;
 using Abp.Linq.Extensions;
 using Abp.Runtime.Session;
-using Abp.Timing;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +27,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
 
 namespace ProjectManagement.Services.ResourceManager
@@ -89,7 +87,7 @@ namespace ProjectManagement.Services.ResourceManager
                 ProjectId = s.ProjectId,
                 UserId = s.UserId,
                 AvatarPath = s.User.AvatarPath,
-                FullName = s.User.FullName, 
+                FullName = s.User.FullName,
                 EmailAddress = s.User.EmailAddress,
                 Branch = s.User.BranchOld,
                 UserLevel = s.User.UserLevel,
@@ -154,7 +152,7 @@ namespace ProjectManagement.Services.ResourceManager
                 }
             }).ToList();
         }
-      
+
 
         private IQueryable<ProjectUser> QueryCurrentProjectUser(long userId)
         {
@@ -189,7 +187,7 @@ namespace ProjectManagement.Services.ResourceManager
         public async Task<ProjectTypeAndPMEmailDto> GetProjectTypeAndPM(long projectId)
         {
             return await _workScope.GetAll<Project>()
-                .Select(s => new {s.ProjectType, s.Id, s.PM.EmailAddress})
+                .Select(s => new { s.ProjectType, s.Id, s.PM.EmailAddress })
                 .Where(s => s.Id == projectId)
                 .Select(s => new ProjectTypeAndPMEmailDto
                 {
@@ -338,7 +336,24 @@ namespace ProjectManagement.Services.ResourceManager
             };
             var sbKomuMessage = await releaseUserFromAllWorkingProjects(sessionUser, employee, projectToJoin, activeReportId, input.IsPool, allowConfirmMoveEmployeeToOtherProject, joinPU);
 
-            await _workScope.InsertAsync(joinPU);
+            //// set done project user plan
+            var projectUser = _workScope.GetAll<ProjectUser>()
+                .Where(p => p.UserId == input.UserId && p.ProjectId == input.ProjectId
+                && p.Status == ProjectUserStatus.Future).FirstOrDefault();
+            if (projectUser != null)
+            {
+                projectUser.IsPool = input.IsPool;
+                projectUser.UserId = input.UserId;
+                projectUser.ProjectId = input.ProjectId;
+                projectUser.Status = ProjectUserStatus.Present;
+                projectUser.AllocatePercentage = 100;
+                projectUser.StartTime = input.StartTime;
+                projectUser.PMReportId = activeReportId;
+                projectUser.ProjectRole = input.ProjectRole;
+                await _workScope.UpdateAsync(projectUser);
+            }
+            else
+                await _workScope.InsertAsync(joinPU);
 
             if (projectToJoin.ProjectCode == AppConsts.CHO_NGHI_PROJECT_CODE)
             {
@@ -353,7 +368,22 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 UserJoinProjectInTimesheetTool(projectToJoin.ProjectCode, employee.EmailAddress, joinPU.IsPool, joinPU.ProjectRole, input.StartTime);
             }
-            
+            // if this user in Resource Request => set done 
+
+            if (projectUser != null && projectUser.ResourceRequestId != null)
+            {
+                var resourceRequest = _workScope.GetAll<ResourceRequest>()
+             .Where(s => s.Id == projectUser.ResourceRequestId).FirstOrDefault();
+                resourceRequest.Status = ResourceRequestStatus.DONE;
+                resourceRequest.TimeDone = DateTimeUtils.GetNow();
+                await _workScope.UpdateAsync(resourceRequest);
+
+                var listRequestDto = await _resourceRequestManager.IQGetResourceRequest()
+                 .Where(s => s.Id == resourceRequest.Id)
+                 .FirstOrDefaultAsync();
+
+                nofityKomuDoneResourceRequest(listRequestDto, sessionUser, projectToJoin);
+            }
 
             return joinPU;
         }
@@ -449,7 +479,7 @@ namespace ProjectManagement.Services.ResourceManager
             {
                 UserJoinProjectInTimesheetTool(futurePU.Project.Code, futurePU.User.EmailAddress, futurePU.IsPool, futurePU.ProjectRole, startTime);
             }
-            
+
 
             return confirmPUExt;
         }
@@ -741,8 +771,10 @@ namespace ProjectManagement.Services.ResourceManager
                            StarRate = x.StarRate,
                            UserSkills = x.UserSkills.Select(s => new UserSkillDto
                            {
+                               UserId = s.UserId,
                                SkillId = s.SkillId,
-                               SkillName = s.Skill.Name
+                               SkillName = s.Skill.Name,
+                               SkillRank = s.SkillRank
                            }).ToList(),
 
                            PlanProjects = x.ProjectUsers
@@ -758,7 +790,9 @@ namespace ProjectManagement.Services.ResourceManager
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                IsPool = pu.IsPool,
-                               AllocatePercentage = pu.AllocatePercentage
+                               AllocatePercentage = pu.AllocatePercentage,
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -775,7 +809,9 @@ namespace ProjectManagement.Services.ResourceManager
                                 ProjectStatus = pu.Project.Status,
                                 PmName = pu.Project.PM.Name,
                                 StartTime = pu.StartTime,
-                                IsPool = pu.IsPool
+                                IsPool = pu.IsPool,
+                                ProjectType = pu.Project.ProjectType,
+                                ProjectCode = pu.Project.Code
                             })
                            .ToList(),
                        });
@@ -791,11 +827,11 @@ namespace ProjectManagement.Services.ResourceManager
                     break;
 
                 case PlanStatus.PlanningJoin:
-                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage <= 100 && x.AllocatePercentage > 0 )).ToList();
+                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage <= 100 && x.AllocatePercentage > 0)).ToList();
                     break;
 
                 case PlanStatus.PlanningOut:
-                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage == 0 )).ToList();
+                    result = result.Where(x => x.PlanProjects.Any(x => x.AllocatePercentage == 0)).ToList();
                     break;
 
                 case PlanStatus.NoPlan:
@@ -891,8 +927,10 @@ namespace ProjectManagement.Services.ResourceManager
                            PoolNote = u.PoolNote,
                            UserSkills = u.UserSkills.Select(s => new UserSkillDto
                            {
+                               UserId = s.UserId,
                                SkillId = s.SkillId,
-                               SkillName = s.Skill.Name
+                               SkillName = s.Skill.Name,
+                               SkillRank = s.SkillRank
                            }).ToList(),
 
                            PlannedProjects = u.ProjectUsers
@@ -909,7 +947,9 @@ namespace ProjectManagement.Services.ResourceManager
                                StartTime = pu.StartTime,
                                Id = pu.Id,
                                AllocatePercentage = pu.AllocatePercentage,
-                               IsPool = pu.IsPool
+                               IsPool = pu.IsPool,
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -926,6 +966,8 @@ namespace ProjectManagement.Services.ResourceManager
                                PmName = pu.Project.PM.Name,
                                StartTime = pu.StartTime,
                                Id = pu.Id,
+                               ProjectType = pu.Project.ProjectType,
+                               ProjectCode = pu.Project.Code
                            })
                            .ToList(),
 
@@ -970,14 +1012,14 @@ namespace ProjectManagement.Services.ResourceManager
                         join userId in querySkillUserIds on u.UserId equals userId
                         select u;
 
-                return  query.GetGridResultSync(query, input);
+                return query.GetGridResultSync(query, input);
             }
 
             var userIdsHaveAllSkill = await getUserIdsHaveAllSkill(input.SkillIds);
             query = query.Where(s => userIdsHaveAllSkill.Contains(s.UserId));
 
 
-            return  query.GetGridResultSync(query, input);
+            return query.GetGridResultSync(query, input);
         }
 
         public void SendKomu(StringBuilder komuMessage, string projectCode)
@@ -1147,9 +1189,9 @@ namespace ProjectManagement.Services.ResourceManager
                 maxCount = 12;
             }
             return await _timesheetService.GetRetroReviewInternHistories(
-                new InputRetroReviewInternHistoriesDto 
-                { 
-                    Emails = emails, 
+                new InputRetroReviewInternHistoriesDto
+                {
+                    Emails = emails,
                     MaxCountHistory = maxCount
                 });
         }

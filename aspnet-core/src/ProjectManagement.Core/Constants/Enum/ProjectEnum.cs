@@ -316,5 +316,14 @@
             Sat = 6
         }
 
+        public enum SkillRank
+        {
+            None = 0,
+            Novice = 1,
+            AdvancedBeginner = 2,
+            Intermediate = 3,
+            Proficient = 4,
+            Expert = 5
+        }
     }
 }

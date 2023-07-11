@@ -19,6 +19,7 @@ import { SkillDto } from '@app/service/model/list-project.dto';
 import { FormPlanUserComponent } from './form-plan-user/form-plan-user.component';
 import * as moment from 'moment';
 import { IDNameDto } from '@app/service/model/id-name.dto';
+import { ProjectDescriptionPopupComponent } from './project-description-popup/project-description-popup.component';
 
 @Component({
   selector: 'app-request-resource-tab',
@@ -164,6 +165,17 @@ export class RequestResourceTabComponent extends PagedListingComponentBase<Reque
     })
   }
 
+  showProject(item){
+      const show = this.dialog.open(ProjectDescriptionPopupComponent , {
+        width: "800px",
+        maxHeight: '90vh',
+        data:item
+      })
+      show.afterClosed().subscribe(rs => {
+       
+      });
+    }
+  
   cancelRequest(request: RequestResourceDto) {
     abp.message.confirm(
       'Are you sure cancel request for project: ' + request.projectName,

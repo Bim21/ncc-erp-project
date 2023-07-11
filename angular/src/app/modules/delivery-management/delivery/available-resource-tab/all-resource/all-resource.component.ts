@@ -52,6 +52,12 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   public selectedIsPlanned: number;
   public listPlans: string[] = [];
 
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport;
+  Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View;
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport
+  Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport
+  Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View
   Resource_TabAllResource_View = PERMISSIONS_CONSTANT.Resource_TabAllResource_View
   Resource_TabAllResource_ViewHistory = PERMISSIONS_CONSTANT.Resource_TabAllResource_ViewHistory
   Resource_TabAllResource_CreatePlan = PERMISSIONS_CONSTANT.Resource_TabAllResource_CreatePlan
@@ -132,7 +138,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
       }
     });
 
-    this.selectedIsPlanned = 2;
+    this.selectedIsPlanned = 1;
   }
   showDialogPlanUser(command: string, user: any) {
     let item = {
@@ -426,20 +432,32 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
   }
 
   viewProjectDetail(project) {
-    console.log(project);
 
-    let routingToUrl: string = (
-      this.permission.isGranted(this.Resource_TabAllResource_ProjectDetail)
-    )
-      ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
-        ? "/app/product-project-detail/product-weekly-report" : "/app/product-project-detail/product-project-general"
-          ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
+    let routingToUrl: string = ''
+
+    if( project.projectType == 5 ){
+      routingToUrl = (this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport)
+      && this.permission.isGranted(this.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View))
+     ? "/app/training-project-detail/training-weekly-report" : "/app/training-project-detail/training-project-general"
+    } 
+
+    else if ( project.projectType == 3){
+      routingToUrl= (this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport)
+     && this.permission.isGranted(this.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View))
+    ? "/app/product-project-detail/product-weekly-report" : "/app/product-project-detail/product-project-general"
+    }
+
+    else {
+      routingToUrl = (this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport)
+      && this.permission.isGranted(this.Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_View))
+     ? "/app/list-project-detail/weeklyreport" : "/app/list-project-detail/list-project-general"
+    }
     const url = this.router.serializeUrl(this.router.createUrlTree([routingToUrl], {
       queryParams: {
         id: project.projectId,
         type: project.projectType,
         projectName: project.projectName,
-        projectCode: " "
+        projectCode: project.projectCode
       }
     }));
     window.open(url, '_blank');

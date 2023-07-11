@@ -43,7 +43,7 @@
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Review Status:</mat-label>
-                <mat-select [(ngModel)]="filterReviewNeed" (selectionChange)="onChangeFilterReviewNeed($event.value)">
+                <mat-select [(ngModel)]="filterReviewNeed" (selectionChange)="onChangeFilter()">
                     <mat-option *ngFor="let item of filterReviewNeedList" [value]="item">
                         {{item}}
                     </mat-option>
@@ -99,7 +99,7 @@
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Status</mat-label>
-                <mat-select [(ngModel)]="filterProjectHealth" (selectionChange)="onChangeFilterProjectHealth()">
+                <mat-select [(ngModel)]="filterProjectHealth" (selectionChange)="onChangeFilter()">
                     <mat-option *ngFor="let item of projectHeathList" [value]="item.value">
                         {{item.displayName}}
                     </mat-option>
@@ -111,7 +111,7 @@
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Sort Status:</mat-label>
-                <mat-select [(ngModel)]="filterSort" (selectionChange)="onChangeFilterSort($event.value)">
+                <mat-select [(ngModel)]="filterSort" (selectionChange)="onChangeFilter()">
                     <mat-option *ngFor="let item of filterSortList" [value]="item">
                         {{item}}
                     </mat-option>

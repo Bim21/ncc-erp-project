@@ -21,7 +21,7 @@ namespace ProjectManagement.Services.ResourceRequestService
         public ResourceRequestManager(IWorkScope workScope)
         {
             _workScope = workScope;
-           
+
         }
 
         public IQueryable<GetResourceRequestDto> IQGetResourceRequest()
@@ -51,6 +51,7 @@ namespace ProjectManagement.Services.ResourceRequestService
                             CreationTime = request.CreationTime,
 
                             Quantity = request.Quantity,
+                            ProjectCode = request.Project.Code,
 
                             Skills = request.ResourceRequestSkills.Select(p => new ResourceRequestSkillDto() { Id = p.SkillId, Name = p.Skill.Name }).ToList(),
                             PlanUserInfo = request.ProjectUsers.OrderByDescending(q => q.CreationTime).Select(s => new PlanUserInfoDto
