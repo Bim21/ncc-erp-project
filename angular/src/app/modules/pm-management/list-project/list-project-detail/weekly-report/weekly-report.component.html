@@ -201,7 +201,7 @@
                                 <div style="width: calc(88% - 5px);">
                                     <button
                                     *ngIf=" permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_AddNewIssue) && selectedReport.isActive"
-                                    [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addIssueReport();$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
+                                    [hidden]="processProblem || selectedReport.pmReportProjectId==0" (click)="addOrEditIssue('create');$event.stopPropagation()" class="btn bg-blue ml-3 btn-sm mb-2" style="padding: 0px 5px; margin-bottom: 0 !important;">
                                     <i class="fa fa-plus m-0"></i>
                                     </button>
                                 </div>
@@ -315,7 +315,7 @@
                                         <mat-menu #menuAction="matMenu" class="p-2">
                                             <button
                                                 *ngIf="permission.isGranted(Projects_OutsourcingProjects_ProjectDetail_TabWeeklyReport_ProjectIssue_Edit)"
-                                                (click)="updateReportIssue(problem)" class="mat-menu-item  w-100">
+                                                (click)="addOrEditIssue('edit',problem)" class="mat-menu-item  w-100">
                                                 <i class="fas fa-pencil-alt mr-2 fa-lg "></i>
                                                 Edit
                                             </button>

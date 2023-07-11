@@ -12,7 +12,6 @@ import { catchError } from 'rxjs/operators';
 })
 export class AddRiskDialogComponent extends AppComponentBase implements OnInit {
   APP_ENUM = APP_ENUMS
-  public riskStatusList: string[] = Object.keys(APP_ENUMS.PMReportProjectRiskStatus);
   riskForm=new FormGroup({
     risk : new FormControl('',[Validators.required, this.emptyLinesValiadtor]),
     impact : new FormControl('',[Validators.required, this.emptyLinesValiadtor]),

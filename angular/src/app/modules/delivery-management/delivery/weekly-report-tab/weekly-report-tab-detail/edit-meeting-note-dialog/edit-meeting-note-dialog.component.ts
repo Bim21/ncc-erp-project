@@ -1,4 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PmReportIssueService } from '@app/service/api/pm-report-issue.service';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -16,14 +17,19 @@ export class EditMeetingNoteDialogComponent extends AppComponentBase implements 
     super(injector)
   }
 
+  formEditMeetingNote = new FormGroup({
+    meetingSolution: new FormControl('')
+  })
   ngOnInit(): void {
-    this.projectIssue = this.data
+      this.formEditMeetingNote.setValue({...this.formEditMeetingNote.value,meetingSolution: this.data.note})
   }
   saveAndClose() {
-   
-    this.reportIssueService.EditMeetingNote(this.projectIssue).subscribe(rs =>{
-      abp.notify.success("Edited Meeting solution")
-      this.dialogRef.close(true)
+    const projectIssue = {...this.data,note:this.formEditMeetingNote.value.meetingSolution}
+    this.reportIssueService.EditMeetingNote(projectIssue ).subscribe(rs =>{
+      if(rs){
+        abp.notify.success("Edited Meeting solution")
+        this.dialogRef.close(true)
+      }
     })
   }
 }

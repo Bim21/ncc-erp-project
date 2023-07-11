@@ -50,6 +50,7 @@ import { AddRiskDialogComponent } from './add-risk-dialog/add-risk-dialog.compon
 import { ReportGuidelineDetailComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/report-guideline-detail/report-guideline-detail.component';
 import { EditNoteResourceComponent } from '@app/modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/edit-note-resource/edit-note-resource.component';
 import { AppConfigurationService } from '@app/service/api/app-configuration.service';
+import { AddEditIssuseComponent } from './add-edit-issuse/add-edit-issuse.component';
 
 
 @Component({
@@ -634,6 +635,34 @@ export class WeeklyReportComponent extends PagedListingComponentBase<WeeklyRepor
     dialogRef.afterClosed().subscribe(result => {
       if(result){
         this.getRiskOfTheWeek()
+      }
+    })}
+  public addOrEditIssue(command,issue){
+    let data = {}
+    if(command=='edit'){
+        data = {
+          command:command,
+          issue:issue,
+          projectId:this.projectId,
+          pmReportProjectId:this.selectedReport.pmReportProjectId
+        }
+    }
+    else{
+      data= {
+        command:command,
+        projectId:this.projectId,
+        pmReportProjectId:this.selectedReport.pmReportProjectId
+      }
+    }
+    const dialogRef = this.dialog.open(AddEditIssuseComponent, {
+
+      width: "60%",
+      data : data
+
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.getProjectProblem()
       }
     })}
 
