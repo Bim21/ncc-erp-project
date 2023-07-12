@@ -469,12 +469,13 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     }
   }
 
-  public saveCriteriaResult(item: ProjectCriteriaResultDto) {
+  public saveCriteriaResult(item: ProjectCriteriaResultDto,index:number) {
     item.pmReportId = this.pmReportId;
     if (item.id) {
       this.pjCriteriaResultService.update(item).subscribe(res => {
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
+        this.listPreEditCriteriaResult[index].note = item.note
         this.processCriteria = false;
         if (res.success === true) {
           item.note = res.result.note;
@@ -1792,6 +1793,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
   }
   cancelUpdateAll() {
     this.listCriteriaResult = cloneDeep(this.listPreEditCriteriaResult);
+    this.listCriteriaResult.forEach(s => s.editMode = false);
     for (let index = 0; index < this.listCriteriaResult.length; index++) {
       this.listCriteriaResult[index].isShowHistory = this.oldShowHistoryStatus[index].isShowHistory;
     }
@@ -1800,6 +1802,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
     this.pjCriteriaResultService.updateAllCriteriaResult(this.listCriteriaResult).subscribe(res => {
       if (res.success) {
         abp.notify.success(`Update successfully`);
+        this.listPreEditCriteriaResult = cloneDeep(this.listCriteriaResult);
         this.getAllCriteria(true);
         this.getProjectProblem();
       }
