@@ -213,7 +213,6 @@ import { ReportGuidelineDetailComponent } from './modules/delivery-management/de
 import { EditNoteResourceComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/edit-note-resource/edit-note-resource.component';
 import { AddRiskDialogComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/add-risk-dialog/add-risk-dialog.component';
 import { UpdateConfirmModalComponent } from './modules/delivery-management/delivery/weekly-report-tab/weekly-report-tab-detail/update-confirm-modal/update-confirm-modal.component';
-import { CloseTimesheetComponent } from './modules/timesheet/close-timesheet/close-timesheet.component';
 import { ProjectDescriptionPopupComponent } from './modules/delivery-management/delivery/request-resource-tab/project-description-popup/project-description-popup.component';
 import { AddEditIssuseComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/add-edit-issuse/add-edit-issuse.component';
 import { ActiveTimesheetProjectComponent } from './modules/timesheet/timesheet-detail/active-timesheet-project/active-timesheet-project.component';
