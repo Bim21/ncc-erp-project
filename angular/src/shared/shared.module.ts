@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders  } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -71,7 +71,8 @@ import { MultiSelectOptionComponent } from './components/multi-select-option/mul
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { ResizeContentDirective } from './directives/resize-content.directive';
-import {ResizableDirective} from './directives/resizable.directive'
+import { ResizableDirective } from './directives/resizable.directive'
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 // import {DialogComponentModule} from './dialog-component/dialog-component.module';
@@ -124,7 +125,9 @@ import {ResizableDirective} from './directives/resizable.directive'
         NgxStarsModule,
         DragDropModule,
         ReactiveFormsModule,
-        EditorModule
+        EditorModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
 
     ],
     declarations: [
@@ -206,12 +209,16 @@ import {ResizableDirective} from './directives/resizable.directive'
         EditorModule,
         SafeHtmlPipe,
         ResizeContentDirective,
-        ResizableDirective
+        ResizableDirective,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
 
     ],
     providers: [
         { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
-    ]
+    ],schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+    ],
 })
 export class SharedModule {
     static forRoot(): ModuleWithProviders<SharedModule> {

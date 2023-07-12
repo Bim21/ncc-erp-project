@@ -22,6 +22,7 @@ import { EditTimesheetProjectDialogComponent } from './edit-timesheet-project-di
 import { ProjectUserBillService } from '@app/service/api/project-user-bill.service';
 import { ExchangeRateComponent } from './exchange-rate/exchange-rate/exchange-rate.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActiveTimesheetProjectComponent } from './active-timesheet-project/active-timesheet-project.component';
 
 
 @Component({
@@ -97,8 +98,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public timesheetId: any;
   public isActive: boolean;
   public createdInvoice: boolean;
-  public listExportInvoice: any[] = [];
-  public listExportInvoiceChargeType: any[] = [];
+  public listExportInvoice = [];
+  public listExportInvoiceChargeType = [];
   public isMonthlyToDaily = false;
   public clientId: number = -1;
   public isShowButtonAction: boolean;
@@ -116,6 +117,8 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
   public totalAmount: number;
   public listTotalAmountByCurrency: TotalAmountByCurrencyDto[] = [];
   public sending: boolean = false;
+  public canExportInvoice = false;
+  public listActiveTimesheetProject = [];
   @ViewChild(MatMenuTrigger)
   menu: MatMenuTrigger
   contextMenuPosition = { x: '0', y: '0' }
@@ -435,38 +438,51 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
     if (!event.checked) {
       let index = this.listExportInvoice.indexOf(event.source.value.projectId);
       let indexChargeType = this.listExportInvoiceChargeType.indexOf(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);
-      if (index > -1){
+      if (index > -1) {
         this.listExportInvoice.splice(index, 1);
       }
-      if (indexChargeType > -1){
+      if (indexChargeType > -1) {
         this.listExportInvoiceChargeType.splice(indexChargeType, 1);
       }
+      this.listActiveTimesheetProject.splice(index, 1);
+      this.checkExportInvoice(this.listActiveTimesheetProject)
     }
     else {
       let checkClientId = event.source.value.clientId;
       let checkCurrency = event.source.value.currency;
-      if (this.listExportInvoice.length > 0 && this.clientIdInvoice != checkClientId) {
-        abp.notify.warn("Cannot export invoices for different clients!")
-        event.checked = false;
-        event.source._checked = false
-        return;
-      }
-      if (this.listExportInvoice.length > 0 && this.currency != checkCurrency) {
-        abp.notify.warn("Cannot export invoices for different currencies!")
-        event.checked = false;
-        event.source._checked = false
-        return;
-      }
       this.currency = checkCurrency;
       this.clientIdInvoice = checkClientId;
       this.listExportInvoice.push(event.source.value.projectId);
       this.listExportInvoiceChargeType.push(chargeTypeProject ? this.APP_ENUM.ChargeType.Monthly : event.source.value.chargeType);
+      this.listActiveTimesheetProject.push(item);
+      this.checkExportInvoice(this.listActiveTimesheetProject)
     }
-    if(this.listExportInvoiceChargeType.indexOf(this.APP_ENUM.ChargeType.Monthly) !== -1){
+    if (this.listExportInvoiceChargeType.indexOf(this.APP_ENUM.ChargeType.Monthly) !== -1) {
       this.isMonthlyToDaily = true;
     }
-    else{
+    else {
       this.isMonthlyToDaily = false;
+    }
+  }
+  checkExportInvoice(listActiveTimesheetProject) {
+    if (listActiveTimesheetProject.length > 0) {
+      let countClient = listActiveTimesheetProject.reduce((r: any, a: any) => {
+        r[a.clientId] = r[a.clientId] || [];
+        r[a.clientId].push(a);
+        return r;
+      }, {});
+      let countCurrency = listActiveTimesheetProject.reduce((r: any, a: any) => {
+        r[a.currency] = r[a.currency] || [];
+        r[a.currency].push(a);
+        return r;
+      }, {});
+      if (Object.keys(countClient).length > 1 || Object.keys(countCurrency).length) {
+        this.canExportInvoice = false;
+      }
+      if (Object.keys(countClient).length == 1 && Object.keys(countCurrency).length == 1) { this.canExportInvoice = true }
+    }
+    else {
+      this.canExportInvoice = false;
     }
   }
 
@@ -655,6 +671,18 @@ export class TimesheetDetailComponent extends PagedListingComponentBase<Timeshee
       autoFocus: false
     })
     show.afterClosed().subscribe((res) => {
+      this.refresh();
+    })
+  }
+  selectActiveProject() {
+    const show = this.dialog.open(ActiveTimesheetProjectComponent, {
+      width: "60%",
+      data: {
+        timesheetId: this.timesheetId,
+        listActiveTimesheetProject: this.listActiveTimesheetProject
+      }
+    })
+    show.afterClosed().subscribe(() => {
       this.refresh();
     })
   }

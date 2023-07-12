@@ -140,7 +140,7 @@ namespace ProjectManagement.Web.Host.Startup
             );
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app,  ILoggerFactory loggerFactory)
         {
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
@@ -154,7 +154,7 @@ namespace ProjectManagement.Web.Host.Startup
 
             app.UseAbpRequestLocalization();
 
-
+          
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<AbpCommonHub>("/signalr");

@@ -20,6 +20,7 @@ using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
 using ProjectManagement.Entities;
 using ProjectManagement.Helper;
+using ProjectManagement.Manager.TimesheetProjectManager;
 using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Net.MimeTypes;
 using ProjectManagement.Services.ExchangeRate;
@@ -47,22 +48,15 @@ namespace ProjectManagement.APIs.TimesheetProjects
     public class TimesheetProjectAppService : ProjectManagementAppServiceBase
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
-
         private readonly FinfastService _financeService;
-
         private ISettingManager _settingManager;
-
         private KomuService _komuService;
-
         private readonly string templateFolder = Path.Combine("wwwroot", "template");
-
         private readonly ProjectTimesheetManager _timesheetManager;
-
         private readonly TimesheetService _timesheetService;
-
         private readonly UploadFileService _uploadFileService;
-
         private readonly ExchangeRateService _exchangeRateService = new ExchangeRateService();
+        private readonly ReactiveTimesheetProject _reactiveTimesheetProject;
 
         public TimesheetProjectAppService(
             IWebHostEnvironment environment,
@@ -71,7 +65,8 @@ namespace ProjectManagement.APIs.TimesheetProjects
             ISettingManager settingManager,
             ProjectTimesheetManager timesheetManager,
             TimesheetService timesheetService,
-            UploadFileService uploadFileService)
+            UploadFileService uploadFileService,
+            ReactiveTimesheetProject activeTimesheetProject)
         {
             _hostingEnvironment = environment;
             _financeService = financeService;
@@ -80,6 +75,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
             _timesheetManager = timesheetManager;
             _timesheetService = timesheetService;
             _uploadFileService = uploadFileService;
+            _reactiveTimesheetProject = activeTimesheetProject;
         }
 
         [HttpGet]
@@ -273,7 +269,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     MainProjectId = tsp.ParentInvoiceId,
                     PaymentDueBy = tsp.Project.Client.PaymentDueBy,
                     StartDate = tsp.Project.StartTime,
-                    EndDate = tsp.Project.EndTime
+                    EndDate = tsp.Project.EndTime,
+                    IsActive = tsp.IsActive,
+                    ProjectType = tsp.Project.ProjectType,
+                    ProjectStatus = tsp.Project.Status,
+                    CloseTime = _reactiveTimesheetProject.GetCloseTimeBackgroundJob(tsp.Id)
                 }).OrderByDescending(x => x.ClientId);
             }
             else
@@ -326,7 +326,11 @@ namespace ProjectManagement.APIs.TimesheetProjects
                     TransferFee = tsp.TransferFee,
                     MainProjectId = tsp.ParentInvoiceId,
                     StartDate = tsp.Project.StartTime,
-                    EndDate = tsp.Project.EndTime
+                    EndDate = tsp.Project.EndTime,
+                    IsActive = tsp.IsActive,
+                    ProjectType = tsp.Project.ProjectType,
+                    ProjectStatus = tsp.Project.Status,
+                    CloseTime = _reactiveTimesheetProject.GetCloseTimeBackgroundJob(tsp.Id)
                 }).OrderByDescending(x => x.ClientId);
             }
         }
@@ -882,7 +886,7 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<FileBase64Dto> ExportInvoiceForTax(InputExportInvoiceDto input)
         {
             var dataInvoice = await GetInvoiceData(input);
-            var dataTimesheetDetail = await GetTimesheetDetailData(dataInvoice);
+            List<TimesheetDetailUser> dataTimesheetDetail = await GetTimesheetDetailData(dataInvoice);
 
             var templateFilePath = Path.Combine(templateFolder, "Invoice.xlsx");
 
@@ -1527,6 +1531,34 @@ namespace ProjectManagement.APIs.TimesheetProjects
         public async Task<Object> GetExchangeRate(string date, string baseCurrency, string symbols, int places)
         {
             return await _exchangeRateService.GetExchangeRate(date, baseCurrency, symbols, places);
+        }
+
+        [HttpPost]
+        public async Task ReActiveTimesheetProject(ReactiveTimesheetProjectDto input)
+        {
+            input.TimesheetProjectIds.ForEach(x =>
+            {
+                _reactiveTimesheetProject.CreateReqDeActiveTimesheetProjectBGJ(x, input.CloseDate);
+            });
+            var listItem = WorkScope.GetAll<TimesheetProject>()
+               .Where(x => input.TimesheetProjectIds.Contains(x.Id)).ToList();
+            listItem.ForEach(x =>
+            {
+                x.IsActive = true;
+            });
+            WorkScope.UpdateRange(listItem);
+        }
+
+        [HttpPost]
+        public async Task DeActiveTimesheetProject(List<long> ids)
+        {
+            foreach (var id in ids)
+            {
+                var item = await WorkScope.GetAsync<TimesheetProject>(id);
+                _reactiveTimesheetProject.DeleteOldRequestInBackgroundJob(id);
+                item.IsActive = false;
+                await WorkScope.UpdateAsync(item);
+            }
         }
     }
 }

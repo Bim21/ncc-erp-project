@@ -1,16 +1,15 @@
 ﻿using Abp.Application.Services.Dto;
 using NccCore.Anotations;
+using NccCore.Extension;
 using NccCore.Paging;
+using ProjectManagement.APIs.ProjectUserBills.Dto;
 using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
+using ProjectManagement.Services.Finance.Dto;
 using ProjectManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
-using ProjectManagement.APIs.ProjectUserBills.Dto;
-using NccCore.Extension;
-using NccCore.Uitls;
-using ProjectManagement.Services.Finance.Dto;
 
 namespace ProjectManagement.APIs.Timesheets.Dto
 {
@@ -49,7 +48,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         //public string? ParentName { get; set; }
         //public long? ParentInvoiceId { get; set; }
         public IEnumerable<SubInvoiceDto> SubInvoices { get; set; }
-            
+
         public string Currency
         {
             get
@@ -84,6 +83,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public string PmBranchDisplayName { get; set; }
         public double TotalAmountProjectBillInfomation => GetIntoMoneyProject();
         public double RoundTotalAmountProjectBillInfomation => CommonUtil.Round(TotalAmountProjectBillInfomation);
+
         private double GetIntoMoneyProject()
         {
             if (this.ProjectBillInfomation == null || ProjectBillInfomation.IsEmpty())
@@ -92,7 +92,7 @@ namespace ProjectManagement.APIs.Timesheets.Dto
             }
 
             double amount = ProjectBillInfomation.Sum(x => x.Amount);
-            
+
             if (amount > 0)
             {
                 return (100 - Discount) / 100 * amount + TransferFee;
@@ -105,13 +105,17 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long? MainProjectId { get; set; }
         public string MainProjectName { get; set; }
         public List<IdNameDto> SubProjects { get; set; }
-        public List<string> SubProjectNames => SubProjects != null ? SubProjects.Select(s => s.Name).ToList() : null;        
+        public List<string> SubProjectNames => SubProjects != null ? SubProjects.Select(s => s.Name).ToList() : null;
         public List<long> SubProjectIds => SubProjects != null ? SubProjects.Select(s => s.Id).ToList() : null;
 
         public byte PaymentDueBy { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public bool IsActive { get; set; }
 
+        public ProjectType ProjectType { get; set; }
+        public ProjectStatus ProjectStatus { get; set; }
+        public string CloseTime { get; set; }
     }
 
     public class IdNameDto
@@ -119,9 +123,6 @@ namespace ProjectManagement.APIs.Timesheets.Dto
         public long Id { get; set; }
         public string Name { get; set; }
     }
-
-
-
 
     public class ResultTimesheetDetail
     {

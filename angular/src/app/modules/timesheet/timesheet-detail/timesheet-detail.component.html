@@ -1,7 +1,7 @@
 <section class="content-header pb-1">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6" id="title-page-tsdetail" style="font-size: 1.5rem;">
+      <div class="col-3" id="title-page-tsdetail" style="font-size: 1.5rem;">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a routerLink="/app/timesheet">Timesheets</a></li>
@@ -9,19 +9,29 @@
           </ol>
         </nav>
       </div>
-      <div class="col-6 text-right">
+      <div class="col text-right">
         <div class="d-flex justify-content-end">
           <div class="mr-2">
-            <div class="form-group form-float">
-              <button class="btn btn-export-all-project" *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceAllProject)"
-              (click)="confirmExport()">
-                Export Invoice All Project
-              </button>
-              <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice)"
-                [disabled]="listExportInvoice?.length <= 0" type="submit" class="btn bg-success mr-2"
-                [matMenuTriggerFor]="actionsMenu">
-                Export Invoice
-              </button>
+            <div class="form-group form-float d-flex">
+              <div>
+                <button *ngIf="!isActive" class="btn bg-success mr-2" (click)="selectActiveProject()"
+                  [disabled]="listActiveTimesheetProject?.length<=0">
+                  Active
+                </button>
+              </div>
+              <div class=" mr-2">
+                <button class="btn btn-export-all-project"
+                  *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceAllProject)" (click)="confirmExport()">
+                  Export Invoice All Project
+                </button>
+              </div>
+              <div class="mr-2" [matTooltip]="!canExportInvoice?'Chưa chọn Project hoặc không cùng Currency / Client':''">
+                <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoice)"
+                  [disabled]="listExportInvoice?.length <= 0 || !canExportInvoice" type="submit" class="btn bg-success"
+                  [matMenuTriggerFor]="actionsMenu">
+                  Export Invoice
+                </button>
+              </div>
             </div>
 
             <mat-menu #actionsMenu="matMenu">
@@ -64,9 +74,9 @@
             </mat-menu>
           </div>
           <div class="mr-2">
-            <div class="form-group form-float">
+            <div class="form-group form-float" [matTooltip] ="!canExportInvoice?'Chưa chọn Project, không cùng Currency hoặc Client':''">
               <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_ExportInvoiceForTax)"
-                [disabled]="listExportInvoice?.length <= 0" type="submit" class="btn bg-info mr-2"
+                [disabled]="listExportInvoice?.length <= 0 || !canExportInvoice" type="submit" class="btn bg-info mr-2"
                 [matMenuTriggerFor]="actionsExportInvoiceForTax">
                 Export Invoice For Tax
               </button>
@@ -238,6 +248,7 @@
                   <b *ngIf="!permission.isGranted(Projects_OutsourcingProjects_ProjectDetail)" class="mb-0">
                     {{ item.projectName }}
                   </b>
+                  <i *ngIf="item.isActive" class="fas fa-hourglass fa-spin ml-1"></i>
                   <p class="mb-0">{{item.clientCode}}</p>
                   <span>PM: <b>{{item.pmFullName}}</b></span>
                 </td>
@@ -335,13 +346,13 @@
                     <i class="fas fa-bars fa-lg" style="margin-top:1px"></i>
                   </button>
                   <mat-menu #menu="matMenu" class="p-2">
-                    <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateBill) && isActive"
+                    <button *ngIf="(permission.isGranted(Timesheets_TimesheetDetail_UpdateBill) && isActive) || item.isActive"
                       class="btn mat-menu-item w-100" (click)="viewBillDetail(item, updateAction.UpdateBillInfo)"
                       #importFileBtn>
                       <i class="fas fa-edit"></i>
                       Update Bill
                     </button>
-                    <button *ngIf="permission.isGranted(Timesheets_TimesheetDetail_UpdateTimsheet) && isActive"
+                    <button *ngIf="(permission.isGranted(Timesheets_TimesheetDetail_UpdateTimsheet) && isActive) || item.isActive"
                       class="btn mat-menu-item w-100" (click)="viewBillDetail(item, updateAction.UpdateTimesheet)"
                       #updateTs>
                       <i class="fas fa-edit"></i>
@@ -403,7 +414,7 @@
                       <span>(Monthly to daily)</span>
                     </button>
                     <!-- <button  *ngIf="
-                    permission.isGranted(Timesheets_TimesheetDetail_UpdateNote) && isActive
+                    (permission.isGranted(Timesheets_TimesheetDetail_UpdateNote) && isActive) || item.isActive
                   "
                       class="btn mat-menu-item w-100" (click)="editTimesheet(item);"
                     >
@@ -411,7 +422,7 @@
                       Note
                     </button> -->
                     <button *ngIf="
-                        permission.isGranted(Timesheets_TimesheetDetail_Delete) && isActive
+                        (permission.isGranted(Timesheets_TimesheetDetail_Delete) && isActive )|| item.isActive
                       " class="btn mat-menu-item w-100" (click)="delete(item);" #deleteBtn>
                       <i class="fas fa-trash mr-1"></i>
                       Delete

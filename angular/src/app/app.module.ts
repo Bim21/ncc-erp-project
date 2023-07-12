@@ -14,7 +14,7 @@ import { CreateChecklistItemComponent } from "./modules/checklist-management/che
 import { CreateEditChecklistTitleComponent } from "./modules/checklist-management/checklist-title/create-edit-checklist-title/create-edit-checklist-title.component";
 import { ChecklistTitleComponent } from "./modules/checklist-management/checklist-title/checklist-title.component";
 import { FilterComponent } from "./../shared/filter/filter.component";
-import { NgModule } from "@angular/core";
+import { NgModule  } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClient, HttpClientJsonpModule } from "@angular/common/http";
@@ -216,6 +216,7 @@ import { UpdateConfirmModalComponent } from './modules/delivery-management/deliv
 import { CloseTimesheetComponent } from './modules/timesheet/close-timesheet/close-timesheet.component';
 import { ProjectDescriptionPopupComponent } from './modules/delivery-management/delivery/request-resource-tab/project-description-popup/project-description-popup.component';
 import { AddEditIssuseComponent } from './modules/pm-management/list-project/list-project-detail/weekly-report/add-edit-issuse/add-edit-issuse.component';
+import { ActiveTimesheetProjectComponent } from './modules/timesheet/timesheet-detail/active-timesheet-project/active-timesheet-project.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -414,10 +415,10 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     GuideLineDialogComponent,
     EditNoteResourceComponent,
     AddRiskDialogComponent,
-    CloseTimesheetComponent,
     UpdateConfirmModalComponent,
     ProjectDescriptionPopupComponent,
     AddEditIssuseComponent,
+    ActiveTimesheetProjectComponent,
   ],
   imports: [
     CommonModule,

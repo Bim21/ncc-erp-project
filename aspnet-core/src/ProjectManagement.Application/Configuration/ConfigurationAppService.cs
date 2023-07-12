@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +18,8 @@ using OfficeOpenXml.FormulaParsing.Utilities;
 using System.Text.RegularExpressions;
 using System.Linq;
 using NccCore.Extension;
+using System.Threading.Tasks;
+using System;
 
 namespace ProjectManagement.Configuration
 {
@@ -46,6 +46,7 @@ namespace ProjectManagement.Configuration
             _finfastService = finfastService;
             _timesheetService = timesheetService;
         }
+
         public async Task ChangeUiTheme(ChangeUiThemeInput input)
         {
             await SettingManager.ChangeSettingForUserAsync(AbpSession.ToUserIdentifier(), AppSettingNames.UiTheme, input.Theme);
@@ -87,7 +88,8 @@ namespace ProjectManagement.Configuration
                 TalentUriFE = _appConfiguration.GetValue<string>("TalentService:FEAddress"),
                 TalentSecurityCode = _appConfiguration.GetValue<string>("TalentService:SecurityCode"),
                 MaxCountHistory = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.MaxCountHistory),
-                InformPm = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.InformPm)
+                InformPm = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.InformPm),
+                ActiveTimesheetProjectPeriod = await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ActiveTimesheetProjectPeriod)
             };
         }
 
@@ -116,12 +118,13 @@ namespace ProjectManagement.Configuration
                 string.IsNullOrEmpty(input.KomuRoom) ||
                 string.IsNullOrEmpty(input.DefaultWorkingHours) ||
                 string.IsNullOrEmpty(input.MaxCountHistory) ||
-                string.IsNullOrEmpty(input.InformPm)
+                string.IsNullOrEmpty(input.InformPm) ||
 
+                string.IsNullOrEmpty(input.MaxCountHistory) ||
+                string.IsNullOrEmpty(input.ActiveTimesheetProjectPeriod)
                 )
             {
                 throw new UserFriendlyException("All setting values need to be completed");
-
             }
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ClientAppId, input.ClientAppId);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.FinanceUri, input.FinanceUri);
@@ -146,6 +149,7 @@ namespace ProjectManagement.Configuration
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.TrainingRequestChannel, input.TrainingRequestChannel);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.MaxCountHistory, input.MaxCountHistory);
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.InformPm, input.InformPm);
+            await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.ActiveTimesheetProjectPeriod, input.ActiveTimesheetProjectPeriod);
             return input;
         }
 
@@ -154,7 +158,6 @@ namespace ProjectManagement.Configuration
         {
             await SettingManager.ChangeSettingForApplicationAsync(AppSettingNames.SecurityCode, input.SecurityCode);
             return input;
-
         }
 
         [AbpAllowAnonymous]
@@ -166,6 +169,7 @@ namespace ProjectManagement.Configuration
                 TimeCountDown = Convert.ToInt32(await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.TimeCountDown))
             };
         }
+
         [AbpAuthorize(PermissionNames.Admin_Configuartions_WeeklyReportTime_Edit)]
         [HttpPost]
         public async Task<WeeklyReportSettingDto> SetTimeCountDown(WeeklyReportSettingDto input)
@@ -237,11 +241,13 @@ namespace ProjectManagement.Configuration
         {
             return await _timesheetService.CheckConnectToTimesheet();
         }
+
         [HttpGet]
         public async Task<GetResultConnectDto> CheckConnectToTalent()
         {
             return await _talentService.CheckConnectToTalent();
         }
+
         [HttpGet]
         public async Task<GetResultConnectDto> CheckConnectToFinfast()
         {
@@ -283,6 +289,12 @@ namespace ProjectManagement.Configuration
             }
             var inform = JsonSerializer.Deserialize<InformPmDto>(json);
             return inform;
+        }
+
+        [HttpGet]
+        public async Task<string> GetActiveTimesheetProjectPeriod()
+        {
+            return await SettingManager.GetSettingValueForApplicationAsync(AppSettingNames.ActiveTimesheetProjectPeriod);
         }
     }
 }

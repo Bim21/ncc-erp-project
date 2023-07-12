@@ -3,7 +3,6 @@ using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Runtime.Session;
 using ProjectManagement.Manager.TimesheetManagers;
-using System;
 
 namespace ProjectManagement.BackgroundJobs
 {
@@ -19,8 +18,9 @@ namespace ProjectManagement.BackgroundJobs
             _abpSession = abpSession;
             _unitOfWork = unitOfWork;
         }
+
         [UnitOfWork]
-        public override async void Execute(TimesheetBGJDto args)
+        public override void Execute(TimesheetBGJDto args)
         {
             _abpSession.Use(args.TenantId, args.CurrentUserLoginId);
             var uow = _unitOfWork.Current;

@@ -124,3 +124,6 @@ button.special span{
   color:white;
   margin-right: 8px;
 }
+:host .fixTableHead{
+  max-height: 65vh;
+}

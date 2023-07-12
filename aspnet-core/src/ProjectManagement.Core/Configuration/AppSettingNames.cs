@@ -14,7 +14,7 @@
         public const string AutoUpdateProjectInfoToTimesheetTool = "AutoUpdateProjectInfoToTimesheetTool";
         public const string HRMUri = "App.HRMUri";
         public const string HRMSecretCode = "App.HRMSecretCode";
-        public const string CanSendDay= "App.CanSendDay";
+        public const string CanSendDay = "App.CanSendDay";
         public const string CanSendHour = "App.CanSendHour";
         public const string ExpiredDay = "App.ExpiredDay";
         public const string ExpiredHour = "App.ExpiredHour";
@@ -31,6 +31,7 @@
         public const string MaxCountHistory = "MaxCountHistory";
         public const string ScoreAudit = "ScoreAudit";
         public const string GuideLine = "GuideLine";
+        public const string ActiveTimesheetProjectPeriod = "ActiveTimesheetProject";
         public const string InformPm = "InformPmDateTime";
     }
 }

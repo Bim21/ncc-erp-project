@@ -1,10 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace ProjectManagement.Entities
 {
@@ -30,5 +27,6 @@ namespace ProjectManagement.Entities
         public float Discount { get; set; }
         public float WorkingDay { get; set; }
         public long? ParentInvoiceId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

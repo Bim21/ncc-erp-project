@@ -9,6 +9,7 @@ using ProjectManagement.APIs.TS.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
 using ProjectManagement.Manager.TimesheetManagers;
+using ProjectManagement.Manager.TimesheetProjectManager;
 using ProjectManagement.Services.ProjectTimesheet;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,14 @@ namespace ProjectManagement.APIs.TimeSheets
     {
         private ProjectTimesheetManager _timesheetManager;
         private readonly CloseTimesheet _closeTimesheet;
+        private readonly ReactiveTimesheetProject _reActiveTimeSheetproject;
 
-        public TimeSheetAppService(ProjectTimesheetManager timesheetManager, CloseTimesheet closeTimesheet)
+        public TimeSheetAppService(ProjectTimesheetManager timesheetManager, CloseTimesheet closeTimesheet,
+            ReactiveTimesheetProject reactiveTimesheetProject)
         {
             _timesheetManager = timesheetManager;
             _closeTimesheet = closeTimesheet;
+            _reActiveTimeSheetproject = reactiveTimesheetProject;
         }
 
         [HttpPost]
@@ -261,6 +265,15 @@ namespace ProjectManagement.APIs.TimeSheets
             var timesheet = await WorkScope.GetAsync<Timesheet>(id);
             timesheet.IsActive = !timesheet.IsActive;
             await WorkScope.UpdateAsync(timesheet);
+            // delete all re-close background job of timesheetproject in this timesheet
+            if (timesheet.IsActive)
+            {
+                WorkScope.GetAll<TimesheetProject>().Where(tp => tp.TimesheetId == id)
+                    .ToList().ForEach(tsp => {
+                        _reActiveTimeSheetproject.DeleteOldRequestInBackgroundJob(tsp.Id);
+                        tsp.IsActive = false;
+                        });
+            }
         }
 
         [AbpAllowAnonymous]

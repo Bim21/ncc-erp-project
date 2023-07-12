@@ -1,11 +1,11 @@
 ﻿using Abp.BackgroundJobs;
 using Abp.Domain.Repositories;
+using Abp.Timing;
 using NccCore.IoC;
 using ProjectManagement.BackgroundJobs;
 using ProjectManagement.Entities;
 using System;
 using System.Linq;
-using Abp.Timing;
 
 namespace ProjectManagement.Manager.TimesheetManagers
 {
@@ -13,11 +13,13 @@ namespace ProjectManagement.Manager.TimesheetManagers
     {
         private readonly IRepository<BackgroundJobInfo, long> _storeJob;
         private readonly IBackgroundJobManager _backgroundJobManager;
+
         public CloseTimesheet(IWorkScope workScope, IRepository<BackgroundJobInfo, long> storeJob, IBackgroundJobManager backgroundJobManager) : base(workScope)
         {
             _storeJob = storeJob;
             _backgroundJobManager = backgroundJobManager;
         }
+
         public void CreateReqCloseTimesheetBGJ(Timesheet timesheet)
         {
             DeleteOldRequestInBackgroundJob(timesheet.Id);

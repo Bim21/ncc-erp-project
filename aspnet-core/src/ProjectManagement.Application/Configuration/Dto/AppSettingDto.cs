@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ProjectManagement.Configuration.Dto
@@ -36,16 +33,19 @@ namespace ProjectManagement.Configuration.Dto
         public string TalentSecurityCode { get; set; }
         public string MaxCountHistory { get; set; }
         public string InformPm { get; set; }
+        public string ActiveTimesheetProjectPeriod { get; set; }
     }
 
     public class ProjectSetting
     {
         public string SecurityCode { get; set; }
     }
+
     public class WeeklyReportSettingDto
     {
         public int TimeCountDown { get; set; } //s
     }
+
     public class AuditScoreDto
     {
         public int GIVEN_SCORE { get; set; }

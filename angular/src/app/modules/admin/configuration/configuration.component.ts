@@ -37,6 +37,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditMaxCountHistory: boolean = false;
   public isEditAuditScore: boolean = false;
   public isEditSendTime: boolean = false;
+  public isEditActiveTimesheetProjectPeriod = false;
   public isShowKomuSetting: boolean = false;
   public isExpandingProjectSetting: boolean = false;
   public isShowHRMSetting: boolean = false;
@@ -50,6 +51,7 @@ export class ConfigurationComponent extends AppComponentBase implements OnInit {
   public isEditDiscordChannel: boolean = false;
   public isShowAuditScore: boolean = false;
   public isShowGuideLineSetting: boolean = false;
+  public isShowActiveTimesheetProjectPeriod = false;
   public  timesheetConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  talentConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
   public  hrmConnectResult: GetConnectResultDto = {} as GetConnectResultDto;
@@ -272,6 +274,7 @@ export class ConfigurationDto {
   talentUriFE: string;
   talentSecurityCode: string;
   maxCountHistory: number;
+  activeTimesheetProjectPeriod:number
 }
 
 export class ProjectSetting{
