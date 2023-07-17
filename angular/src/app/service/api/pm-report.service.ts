@@ -78,10 +78,6 @@ export class PmReportService extends BaseApiService {
     this.filterObservable.next(message)
   }
 
-  changeFilter(message){
-    this.filterObservable.next(message)
-  }
-
   changeFilterReviewNeed(message: string){
     this.filterReviewNeed.next(message)
   }
