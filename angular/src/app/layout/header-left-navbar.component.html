@@ -53,11 +53,11 @@
         </div>
     </li>
 
-    <!-- <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
+    <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav" style="margin-left: 20px!important;">
             <mat-form-field appearance="outline" class="ml-2">
                 <mat-label>Project Type:</mat-label>
-                <mat-select [(ngModel)]="projectType" (selectionChange)="changeProjectType($event.value)">
+                <mat-select [(ngModel)]="projectType" (selectionChange)="onChangeFilter()">
                     <mat-option *ngFor="let type of projectTypeList" [value]="type">
                         {{type}}
                     </mat-option>
@@ -65,7 +65,7 @@
             </mat-form-field>
         </div>
 
-    </li> -->
+    </li>
     <li *ngIf="isShowReportBar" class="nav-item d-none d-sm-inline-block ">
         <div class="form-froup row header-report-nav" style="margin-left: 20px !important;">
             <mat-form-field appearance="outline" class="ml-2">

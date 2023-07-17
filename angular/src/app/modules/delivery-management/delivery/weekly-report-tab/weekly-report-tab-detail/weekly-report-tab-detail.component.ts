@@ -254,11 +254,11 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         }
       }
       );
-      this.pmReportService.currentProjectType.subscribe(projectType => {
-        this.projectType = projectType;
-        this.getPmReportProject();
-      }
-      );
+      // this.pmReportService.currentProjectType.subscribe(projectType => {
+      //   this.projectType = projectType;
+      //   this.getPmReportProject();
+      // }
+      // );
       this.pmReportId = this.route.snapshot.queryParamMap.get('id');
       this.isActive = this.route.snapshot.queryParamMap.get('isActive') == "true";
       let projectTypeFromUrl = this.route.snapshot.queryParamMap.get('projectType')
@@ -275,6 +275,7 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         this.sortReview = typeSort.reviewNeed;
         this.typeSort = typeSort.filterSort;
         this.projectStatus = typeSort.filterProjectHealth
+        this.projectType = typeSort.projectType
         this.getPmReportProject();
       });
 
@@ -359,7 +360,6 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
           this.projectCurrentResource = [];
           this.projectInfo.totalBill= 0;
         }
-
       }))
     }
   }

@@ -26,5 +26,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public string OtherProblems { get; set; }
         public string NewKnowledge { get; set; }
         public string Evaluation { get; set; }
+        public bool IsRequiredWeeklyReport { get; set; }
     }
 }

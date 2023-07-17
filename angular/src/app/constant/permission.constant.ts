@@ -116,7 +116,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_OutsourcingProjects_Close: "Projects.OutsourcingProjects.Close",
        Projects_OutsourcingProjects_ProjectDetail: "Projects.OutsourcingProjects.ProjectDetail",
        Projects_OutsourcingProjects_CheckProjectInvoiceSetting: "Projects.OutsourcingProjects.CheckProjectInvoiceSetting",
-       Projects_OutsourcingProjects_UpdateRequireWeeklyReport: "Projects.OutsourcingProjects.UpdateRequireWeeklyReport",
+       Projects_OutsourcingProjects_ViewRequireWeeklyReport: "Projects.OutsourcingProjects.ViewRequireWeeklyReport",
 
        Projects_OutsourcingProjects_ProjectDetail_TabGeneral: "Projects.OutsourcingProjects.ProjectDetail.TabGeneral",
        Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View: "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.View",
@@ -221,6 +221,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_ProductProjects_Delete: "Projects.ProductProjects.Delete",
        Projects_ProductProjects_Close: "Projects.ProductProjects.Close",
        Projects_ProductProjects_ProjectDetail: "Projects.ProductProjects.ProjectDetail",
+       Projects_ProductProjects_ViewRequireWeeklyReport : "Projects.ProductProjects.ViewRequireWeeklyReport",
 
        Projects_ProductProjects_ProjectDetail_TabGeneral: "Projects.ProductProjects.ProjectDetail.TabGeneral",
        Projects_ProductProjects_ProjectDetail_TabGeneral_View: "Projects.ProductProjects.ProjectDetail.TabGeneral.View",
@@ -321,6 +322,7 @@ export const PERMISSIONS_CONSTANT = {
        Projects_TrainingProjects_Delete: "Projects.TrainingProjects.Delete",
        Projects_TrainingProjects_Close: "Projects.TrainingProjects.Close",
        Projects_TrainingProjects_ProjectDetail: "Projects.TrainingProjects.ProjectDetail",
+       Projects_TrainingProjects_ViewRequireWeeklyReport: "Projects.TrainingProjects.ViewRequireWeeklyReport",
 
        Projects_TrainingProjects_ProjectDetail_TabGeneral: "Projects.TrainingProjects.ProjectDetail.TabGeneral",
        Projects_TrainingProjects_ProjectDetail_TabGeneral_View: "Projects.TrainingProjects.ProjectDetail.TabGeneral.View",

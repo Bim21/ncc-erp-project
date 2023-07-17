@@ -29,6 +29,7 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
   Projects_TrainingProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail;
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport
   Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ProjectDetail_TabWeeklyReport_View
+  Projects_TrainingProjects_ViewRequireWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ViewRequireWeeklyReport
   
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
@@ -171,7 +172,8 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
         pmId: item.pmId,
         id: item.id,
         status: item.status,
-        clientId: item.clientId
+        clientId: item.clientId,
+        isRequiredWeeklyReport: item.isRequiredWeeklyReport
       }
     }
     const dialogRef = this.dialog.open(CreateEditTrainingProjectComponent, {
@@ -280,5 +282,11 @@ export class TrainingProjectsComponent extends PagedListingComponentBase<Trainin
       projectName: project.name, 
       projectCode: project.code} }));
     window.open(url, '_blank');
+  }
+  changeRequireWeeklyReport(item) {
+    this.projectService.changeRequireWeeklyReport(item.id).subscribe((res) => {
+      item.isRequiredWeeklyReport = res.result;
+      abp.notify.success("Change require weekly report sucessful!")
+    });
   }
 }

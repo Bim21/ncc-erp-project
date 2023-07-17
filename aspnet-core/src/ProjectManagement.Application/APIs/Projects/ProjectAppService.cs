@@ -642,6 +642,7 @@ namespace ProjectManagement.APIs.Projects
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
                             Evaluation = l.Note,
+                            IsRequiredWeeklyReport = p.IsRequiredWeeklyReport
                         };
             return await query.GetGridResult(query, input);
         }
@@ -824,7 +825,8 @@ namespace ProjectManagement.APIs.Projects
                             PmBranchDisplayName = p.PM.Branch.DisplayName,
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
-                            DateSendReport = l.TimeSendReport.Value.Date
+                            DateSendReport = l.TimeSendReport.Value.Date,
+                            IsRequiredWeeklyReport = p.IsRequiredWeeklyReport
                         };
             return await query.GetGridResult(query, input);
         }

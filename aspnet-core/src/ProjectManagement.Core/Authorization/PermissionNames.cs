@@ -144,7 +144,7 @@ namespace ProjectManagement.Authorization
         public const string Projects_OutsourcingProjects_Close = "Projects.OutsourcingProjects.Close";
         public const string Projects_OutsourcingProjects_ProjectDetail = "Projects.OutsourcingProjects.ProjectDetail";
         public const string Projects_OutsourcingProjects_CheckProjectInvoiceSetting = "Projects.OutsourcingProjects.CheckProjectInvoiceSetting";
-        public const string Projects_OutsourcingProjects_UpdateRequireWeeklyReport = "Projects.OutsourcingProjects.UpdateRequireWeeklyReport";
+        public const string Projects_OutsourcingProjects_ViewRequireWeeklyReport = "Projects.OutsourcingProjects.ViewRequireWeeklyReport";
 
         public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral";
         public const string Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View = "Projects.OutsourcingProjects.ProjectDetail.TabGeneral.View";
@@ -254,6 +254,7 @@ namespace ProjectManagement.Authorization
         public const string Projects_ProductProjects_Delete = "Projects.ProductProjects.Delete";
         public const string Projects_ProductProjects_Close = "Projects.ProductProjects.Close";
         public const string Projects_ProductProjects_ProjectDetail = "Projects.ProductProjects.ProjectDetail";
+        public const string Projects_ProductProjects_ViewRequireWeeklyReport = "Projects.ProductProjects.ViewRequireWeeklyReport";
 
         public const string Projects_ProductProjects_ProjectDetail_TabGeneral = "Projects.ProductProjects.ProjectDetail.TabGeneral";
         public const string Projects_ProductProjects_ProjectDetail_TabGeneral_View = "Projects.ProductProjects.ProjectDetail.TabGeneral.View";
@@ -351,6 +352,7 @@ namespace ProjectManagement.Authorization
         public const string Projects_TrainingProjects_Delete = "Projects.TrainingProjects.Delete";
         public const string Projects_TrainingProjects_Close = "Projects.TrainingProjects.Close";
         public const string Projects_TrainingProjects_ProjectDetail = "Projects.TrainingProjects.ProjectDetail";
+        public const string Projects_TrainingProjects_ViewRequireWeeklyReport = "Projects.TrainingProjects.ViewRequireWeeklyReport";
 
         public const string Projects_TrainingProjects_ProjectDetail_TabGeneral = "Projects.TrainingProjects.ProjectDetail.TabGeneral";
         public const string Projects_TrainingProjects_ProjectDetail_TabGeneral_View = "Projects.TrainingProjects.ProjectDetail.TabGeneral.View";
@@ -813,7 +815,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_OutsourcingProjects_Close ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail ,
                     PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting,
-                    PermissionNames.Projects_OutsourcingProjects_UpdateRequireWeeklyReport,
+                    PermissionNames.Projects_OutsourcingProjects_ViewRequireWeeklyReport,
 
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral ,
                     PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View ,
@@ -918,6 +920,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_ProductProjects ,
                     PermissionNames.Projects_ProductProjects_ViewAllProject ,
                     PermissionNames.Projects_ProductProjects_ViewMyProjectOnly ,
+                    PermissionNames.Projects_ProductProjects_ViewRequireWeeklyReport,
 
                     PermissionNames.Projects_ProductProjects_Create ,
                     PermissionNames.Projects_ProductProjects_Edit ,
@@ -1016,6 +1019,7 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Projects_TrainingProjects ,
                     PermissionNames.Projects_TrainingProjects_ViewAllProject ,
                     PermissionNames.Projects_TrainingProjects_ViewMyProjectOnly ,
+                    PermissionNames.Projects_TrainingProjects_ViewRequireWeeklyReport,
 
                     PermissionNames.Projects_TrainingProjects_Create ,
                     PermissionNames.Projects_TrainingProjects_Edit ,
@@ -1490,7 +1494,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Require WeeklyReport" },
-                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_UpdateRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Project Invoice Setting" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ViewRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Project Invoice Setting" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
                  new SystemPermission{ Name =  PermissionNames.Projects_OutsourcingProjects_ProjectDetail_TabGeneral_Edit, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Edit" },
@@ -1599,6 +1603,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ViewRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Require WeeklyReport" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
                  new SystemPermission{ Name =  PermissionNames.Projects_ProductProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
@@ -1697,6 +1702,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_Delete, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Delete" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Close" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail" },
+                 new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ViewRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Require WeeklyReport" },
 
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab General" },
                  new SystemPermission{ Name =  PermissionNames.Projects_TrainingProjects_ProjectDetail_TabGeneral_View, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View" },
@@ -2371,7 +2377,7 @@ namespace ProjectManagement.Authorization
                                             Name = PermissionNames.Projects_OutsourcingProjects_CheckProjectInvoiceSetting, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Check Project Invoice Setting"
                                         },
                                         new SystemPermission {
-                                            Name = PermissionNames.Projects_OutsourcingProjects_UpdateRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Require WeeklyReport"
+                                            Name = PermissionNames.Projects_OutsourcingProjects_ViewRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Require WeeklyReport"
                                         },
                                         new SystemPermission {
                                             Name = PermissionNames.Projects_OutsourcingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail",
@@ -2685,6 +2691,9 @@ namespace ProjectManagement.Authorization
                                 Name = PermissionNames.Projects_ProductProjects_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "close"
                             },
                             new SystemPermission {
+                                Name = PermissionNames.Projects_ProductProjects_ViewRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Require WeeklyReport"
+                            },
+                            new SystemPermission {
                                 Name = PermissionNames.Projects_ProductProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail",
                                     Childrens = new List < SystemPermission > () {
                                         new SystemPermission {
@@ -2944,6 +2953,9 @@ namespace ProjectManagement.Authorization
                             },
                             new SystemPermission {
                                 Name = PermissionNames.Projects_TrainingProjects_Close, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "close"
+                            },
+                            new SystemPermission {
+                                Name = PermissionNames.Projects_TrainingProjects_ViewRequireWeeklyReport, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "View Require WeeklyReport"
                             },
                             new SystemPermission {
                                 Name = PermissionNames.Projects_TrainingProjects_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail",

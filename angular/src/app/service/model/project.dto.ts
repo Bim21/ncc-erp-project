@@ -9,6 +9,7 @@ export class ProjectDto {
   isCharge?: boolean;
   pmId: number;
   id?: number;
+  isRequiredWeeklyReport:boolean;
 }
 export interface ResponseWrapper<T> {
   result: T;
@@ -154,6 +155,7 @@ export class TrainingProjectDto {
   dateSendReport?: string;
   evaluation?: string;
   id: number;
+  isRequiredWeeklyReport:boolean;
 }
 export class ProductProjectDto {
   name: string;

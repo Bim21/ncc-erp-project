@@ -124,7 +124,8 @@
                                 <th>Projects</th>
                                 <th>{{'PM' | localize}}</th>
                                 <th *ngIf="isShowBillInfo || isShowAccount"> {{isShowBillInfo && isShowAccount ? 'Bill info/Bill account' : isShowBillInfo && !isShowAccount ? 'Bill info' : 'Bill account' }}</th>
-                                <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_UpdateRequireWeeklyReport)" style="width: 50px;">RequireWR</th>
+                               
+                                <th *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewRequireWeeklyReport)" style="width: 50px;">RequireWR</th>
                                 <th style="width: 110px;">Time</th>
                                 <th style="width: 50px;">Is charged</th>
                                 <th style="width: 100px;">Status</th>
@@ -210,7 +211,7 @@
 
                                 </td>
 
-                                <td *ngIf="permission.isGranted(Projects_OutsourcingProjects_UpdateRequireWeeklyReport)" class="text-center">
+                                <td *ngIf="permission.isGranted(Projects_OutsourcingProjects_ViewRequireWeeklyReport)" class="text-center">
                                     <mat-checkbox class="is-charged-checkbox" (click)="changeRequireWeeklyReport(project)" color="primary" [ngModel]="project.isRequiredWeeklyReport">
                                     </mat-checkbox>
                                 </td>

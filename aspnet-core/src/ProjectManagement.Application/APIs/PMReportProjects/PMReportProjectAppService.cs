@@ -3,7 +3,6 @@ using Abp.Linq.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using NccCore.Extension;
 using NccCore.Uitls;
 using ProjectManagement.APIs.PMReportProjectIssues.Dto;
@@ -11,7 +10,7 @@ using ProjectManagement.APIs.PMReportProjects.Dto;
 using ProjectManagement.APIs.ProjectUsers.Dto;
 using ProjectManagement.Authorization;
 using ProjectManagement.Entities;
-using ProjectManagement.Services.Komu;
+using ProjectManagement.NccCore.Helper;
 using ProjectManagement.Services.PmReports;
 using ProjectManagement.Services.ResourceManager;
 using ProjectManagement.Services.ResourceManager.Dto;
@@ -70,7 +69,7 @@ namespace ProjectManagement.APIs.PMReportProjects
                     Note = x.Note,
                     AutomationNote = x.AutomationNote,
                     PmBranch = x.PM.BranchOld,
-                    PmEmailAddress = x.PM.EmailAddress,
+                    PmEmailAddress = UserHelper.GetUserName(x.PM.EmailAddress),
                     PmAvatarPath = x.PM.AvatarPath,
                     PmFullName = x.PM.Name + " " + x.PM.Surname,
                     PmUserName = x.PM.UserName,

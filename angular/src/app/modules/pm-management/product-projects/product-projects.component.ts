@@ -28,7 +28,7 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
   Projects_ProductProjects_ProjectDetail = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail;
   Projects_ProductProjects_ProjectDetail_TabWeeklyReport = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport
   Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View = PERMISSIONS_CONSTANT.Projects_ProductProjects_ProjectDetail_TabWeeklyReport_View
-
+  Projects_ProductProjects_ViewRequireWeeklyReport = PERMISSIONS_CONSTANT.Projects_ProductProjects_ViewRequireWeeklyReport
   public readonly FILTER_CONFIG: InputFilterDto[] = [
     { propertyName: 'name', comparisions: [0, 6, 7, 8], displayName: "Tên dự án", },
     { propertyName: 'dateSendReport', comparisions: [0, 1, 2, 3, 4], displayName: "Thời gian gửi report", filterType: 1 },
@@ -173,7 +173,8 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
         pmId: item.pmId,
         id: item.id,
         status: item.status,
-        clientId: item.clientId
+        clientId: item.clientId,
+        isRequiredWeeklyReport: item.isRequiredWeeklyReport
       }
     }
     const dialogRef = this.dialog.open(CreateEditProductProjectComponent, {
@@ -277,5 +278,10 @@ export class ProductProjectsComponent extends PagedListingComponentBase<any> imp
       projectCode: project.code} }));
       window.open(url, '_blank');
   }
-
+  changeRequireWeeklyReport(item) {
+    this.projectService.changeRequireWeeklyReport(item.id).subscribe((res) => {
+      item.isRequiredWeeklyReport = res.result;
+      abp.notify.success("Change require weekly report sucessful!")
+    });
+  }
 }

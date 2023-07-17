@@ -38,7 +38,7 @@ export class ListProjectComponent extends PagedListingComponentBase<any> impleme
   Projects_OutsourcingProjects_ViewBillInfo = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillInfo
   Projects_OutsourcingProjects_ViewBillAccount = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewBillAccount
   Projects_OutsourcingProjects_CheckProjectInvoiceSetting = PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_CheckProjectInvoiceSetting
-  Projects_OutsourcingProjects_UpdateRequireWeeklyReport= PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_UpdateRequireWeeklyReport
+  Projects_OutsourcingProjects_ViewRequireWeeklyReport= PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewRequireWeeklyReport
 
 
   statusFilterList = [{ displayName: "Not Closed", value: 3 },

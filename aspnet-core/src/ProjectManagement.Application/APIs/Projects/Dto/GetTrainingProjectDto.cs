@@ -40,5 +40,6 @@ namespace ProjectManagement.APIs.Projects.Dto
         public long? PositionId { get; set; }
         public string PositionColor { get; set; }
         public string PositionName { get; set; }
+        public bool IsRequiredWeeklyReport { get; set; }
     }
 }

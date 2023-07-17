@@ -10,7 +10,7 @@
   >
   </abp-modal-header>
   <div class="modal-body row" id="modal-bill-info">
-    <div class="col-11 row mb-1" *ngIf="billDetail.length != 0">
+    <div class="col-11 row mb-1" *ngIf="billDetail.length != 0 &&  billDetail.length != 1">
 
       <button
         class="btn btn-editall-neutral ml-2"
@@ -68,14 +68,14 @@
             <tr>
               <th class="stt">#</th>
               <th style="width: 350px;">Employee</th>
-              <th style="width: 250px;">Charge Name</th>
+              <th style="width: 200px;">Charge Name</th>
               <th style="width: 150px;">Charge Role</th>
               <th style="width: 100px;" *ngIf="isShowRate()">Rate<br>({{getCurrencyName()}})</th>
               <th style="width: 50px;">Charge Type</th>
-              <th style="width: 100px; white-space: break-spaces;">Working Day</th>
+              <th style="width: 90px; white-space: break-spaces;">Working Day</th>
               <th style="width: 50px;">Is Charge</th>
               <th>Note</th>
-              <th>Action</th>
+              <th style="width: 190px;">Action</th>
             </tr>
           </thead>
           <h5 *ngIf="billDetail.length == 0" class="text-center mt-2">
@@ -167,7 +167,7 @@
                 </span>
                 <div *ngIf="bill.isEditing">
                   <input
-                    style="min-width: 110px"
+                    style="min-width: 80px"
                     required
                     class="form-control mt-1"
                     [name]="i + 'billrate'"
@@ -270,8 +270,8 @@
               </td>
 
               <!-- Action -->
-              <td class="text-center" *ngIf="!isEditingAllRow()">
-                <div *ngIf="!bill.isEditing">
+              <td class="text-center" *ngIf="!isEditingAllRow() || billDetail.length == 1" >
+                <div *ngIf="!bill.isEditing" style="width: 156px;">
                   <button *ngIf="isShowEditBtnOnRow()"
                     [disabled]="data.billInfo.isComplete || isEditingAnyRow()"
                     class="btn btn-sm btn-edit-neutral mr-1 mt-3"

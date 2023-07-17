@@ -106,7 +106,7 @@
                                 <th style="width: 70px;">#</th>
                                 <th style="width: 250px;">Projects</th>
                                 <th style="width: 400px;">{{'PM' | localize}}</th>
-
+                                <th *ngIf="permission.isGranted(Projects_ProductProjects_ViewRequireWeeklyReport)" style="width: 50px;">RequireWR</th>
                                 <th style="width: 110px;">Time</th>
                                 <th style="width: 100px;">Status</th>
                                 <th style="width: 120px;">
@@ -160,6 +160,11 @@
                                 userType:project.pmUserType,emailAddress:project.pmEmailAddress, avatarFullPath:project.pmAvatarFullPath}">
                                         </app-user-info>
                                     </div>
+                                </td>
+
+                                <td *ngIf="permission.isGranted(Projects_ProductProjects_ViewRequireWeeklyReport)"  class="text-center">
+                                    <mat-checkbox class="is-charged-checkbox" (click)="changeRequireWeeklyReport(project)" color="primary" [ngModel]="project.isRequiredWeeklyReport">
+                                    </mat-checkbox>
                                 </td>
 
                                 <td class="text-center" >
