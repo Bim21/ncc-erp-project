@@ -10,6 +10,7 @@ import { Component, OnInit, Injector, Inject } from '@angular/core';
 import { ClientDto } from './../../../../service/model/list-project.dto';
 import { ClientService } from './../../../../service/api/client.service';
 import * as moment from 'moment';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 @Component({
   selector: 'app-create-edit-training-project',
   templateUrl: './create-edit-training-project.component.html',
@@ -34,6 +35,8 @@ export class CreateEditTrainingProjectComponent extends AppComponentBase impleme
   ) {
     super(injector)
    }
+
+   Projects_TrainingProjects_ViewRequireWeeklyReport = PERMISSIONS_CONSTANT.Projects_TrainingProjects_ViewRequireWeeklyReport
 
    ngOnInit(): void {
     this.getAllPM();

@@ -16,10 +16,13 @@ import { AppComponentBase } from '@shared/app-component-base';
 
 import { catchError } from 'rxjs/operators';
 import * as moment from 'moment';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 @Component({
   selector: 'app-create-edit-list-project',
   templateUrl: './create-edit-list-project.component.html',
   styleUrls: ['./create-edit-list-project.component.css']
+
+
 })
 export class CreateEditListProjectComponent extends AppComponentBase implements OnInit {
   public project = {} as ProjectDto;
@@ -51,6 +54,8 @@ export class CreateEditListProjectComponent extends AppComponentBase implements 
       }
     ))
   }
+
+  Projects_OutsourcingProjects_ViewRequireWeeklyReport= PERMISSIONS_CONSTANT.Projects_OutsourcingProjects_ViewRequireWeeklyReport
 
   ngOnInit(): void {
     this.getAllPM();

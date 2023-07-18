@@ -89,7 +89,7 @@
                 </mat-error>
             </div>
         </div>
-        <div class="form-group row">
+        <div *ngIf="data.command =='create' || permission.isGranted(Projects_ProductProjects_ViewRequireWeeklyReport)" class="form-group row">
             <label class="col-md-3 col-form-label" for="isRequiredWeeklyReport"></label>
             <div class="col-md-9 pt-2">
                 <mat-checkbox name="{{data.command == 'create'?'ipt-isRequiredWeeklyReport':'ipt-isRequiredWeeklyReport-edit'}}" [(ngModel)]="project.isRequiredWeeklyReport" name="isRequiredWeeklyReport">

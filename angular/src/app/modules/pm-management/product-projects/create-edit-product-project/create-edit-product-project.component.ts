@@ -11,6 +11,7 @@ import { UserDto } from './../../../../../shared/service-proxies/service-proxies
 import { AppComponentBase } from '@shared/app-component-base';
 import { Component, Inject, OnInit, Injector } from '@angular/core';
 import * as moment from 'moment';
+import { PERMISSIONS_CONSTANT } from '@app/constant/permission.constant';
 
 @Component({
   selector: 'app-create-edit-product-project',
@@ -36,6 +37,8 @@ export class CreateEditProductProjectComponent extends AppComponentBase implemen
   ) {
     super(injector)
   }
+
+  Projects_ProductProjects_ViewRequireWeeklyReport = PERMISSIONS_CONSTANT.Projects_ProductProjects_ViewRequireWeeklyReport
 
   ngOnInit(): void {
     this.getAllPM();
