@@ -134,4 +134,5 @@ export class ReviewRetroInfoDto{
   isRetro: boolean
   startDate: string
   projectName: string
+  note:string
 }

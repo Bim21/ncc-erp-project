@@ -475,11 +475,12 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
       this.pjCriteriaResultService.update(item).subscribe(res => {
         abp.notify.success(`Update ${item.criteriaName} successfully`);
         item.editMode = false;
-        this.listPreEditCriteriaResult[index].note = item.note
         this.processCriteria = false;
         if (res.success === true) {
           item.note = res.result.note;
           item.status = res.result.status;
+          this.listPreEditCriteriaResult[index].note = item.note;
+          this.listPreEditCriteriaResult[index].status = item.status;
           this.setTotalHealth();
           this.getProjectProblem();
         }
@@ -491,6 +492,8 @@ export class WeeklyReportTabDetailComponent extends PagedListingComponentBase<We
         item.editMode = false;
         this.processCriteria = false;
         if (res.success === true) {
+          this.listPreEditCriteriaResult[index].note = item.note;
+          this.listPreEditCriteriaResult[index].status = item.status;
           item.id = res.result.id;
           item.note = res.result.note;
           item.status = res.result.status;

@@ -39,7 +39,6 @@ export class RetroReviewHistoryByUserComponent extends AppComponentBase
     private appConfigurationService: AppConfigurationService
   ) {
     super(injector);
-    console.log(data)
     this.emailAddress = data.item.emailAddress
   }
   ngOnInit(): void {

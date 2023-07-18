@@ -492,7 +492,7 @@ export class AllResourceComponent extends PagedListingComponentBase<any> impleme
     };
 
     const show = this.dialog.open(RetroReviewHistoryByUserComponent, {
-      width: '800px',
+      width: '1000px',
       disableClose: true,
       data: {
         item: userInfo,
