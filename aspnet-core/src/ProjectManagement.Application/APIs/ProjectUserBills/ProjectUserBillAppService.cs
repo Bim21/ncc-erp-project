@@ -1,24 +1,20 @@
 ﻿using Abp.Authorization;
+using Abp.Collections.Extensions;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using NccCore.Extension;
 using NccCore.Paging;
 using NccCore.Uitls;
-using ProjectManagement.APIs.Projects.Dto;
 using ProjectManagement.APIs.ProjectUserBills.Dto;
-using ProjectManagement.APIs.TimeSheetProjectBills;
-using ProjectManagement.APIs.TimeSheetProjectBills.Dto;
 using ProjectManagement.APIs.Timesheets.Dto;
 using ProjectManagement.Authorization;
-using ProjectManagement.Authorization.Users;
-using ProjectManagement.Constants.Enum;
 using ProjectManagement.Entities;
 using ProjectManagement.Services.ProjectTimesheet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectManagement.Constants.Enum.ProjectEnum;
@@ -92,6 +88,87 @@ namespace ProjectManagement.APIs.ProjectUserBills
         private async Task<Project> GetProjectById(long projectId)
         {
             return await WorkScope.GetAll<Project>().FirstOrDefaultAsync(x => x.Id == projectId);
+        }
+
+        [HttpGet]
+        public async Task<List<ProjectUserAccountPlanningDto>> GetAllProjectUserBill()
+        {
+            var query = await WorkScope.GetAll<ProjectUserBill>()
+                .Include(x => x.Project)
+                .Select(x => new ProjectUserAccountPlanningDto
+                {
+                    Id = x.ProjectId,
+                    Name = x.Project.Name,
+                })
+                .Distinct()
+                .ToListAsync();
+
+            return query;
+        }
+
+        // duy
+        [HttpPost]
+        [AbpAuthorize(PermissionNames.Resource_TabPlanningBillAcccount)]
+        public async Task<GridResult<BillInfoDto>> GetAllPlanningBillInfo(InputGetBillInfoDto input)
+        {
+            // paging user id 
+            var projectUserBills = WorkScope.All<ProjectUserBill>()
+                .Include(p => p.User).Include(p => p.Project)
+                .Select(x => new
+                {
+                    UserInfor = new GetUserBillDto
+                    {
+                        UserId = x.UserId,
+                        UserName = x.User.Name,
+                        AvatarPath = x.User.AvatarPath,
+                        FullName = x.User.FullName,
+                        Branch = x.User.BranchOld,
+                        BranchColor = x.User.Branch.Color,
+                        BranchDisplayName = x.User.Branch.DisplayName,
+                        PositionId = x.User.PositionId,
+                        PositionName = x.User.Position.ShortName,
+                        PositionColor = x.User.Position.Color,
+                        EmailAddress = x.User.EmailAddress,
+                        UserType = x.User.UserType,
+                        UserLevel = x.User.UserLevel,
+                    },
+                    Project = new GetProjectBillDto
+                    {
+                        ProjectId = x.ProjectId,
+                        ProjectName = x.Project.Name,
+                        AccountName = x.AccountName,
+                        //BillRole = x.BillRole,
+                        BillRate = float.NaN,
+                        StartTime = x.StartTime,
+                        EndTime = x.EndTime,
+                        Note = x.Note,
+                        shadowNote = x.shadowNote,
+                        isActive = x.isActive,
+                        ChargeType = x.ChargeType.HasValue ? x.ChargeType.Value : x.Project.ChargeType,
+                    }
+                })
+                    .WhereIf(input.ProjectId != null, x => x.Project.ProjectId == input.ProjectId)
+                    .WhereIf(!string.IsNullOrEmpty(input.SearchText), x =>
+                        (x.UserInfor.UserName.Trim().ToLower().Contains(input.SearchText.Trim().ToLower())) ||
+                        (x.UserInfor.FullName.Trim().ToLower().Contains(input.SearchText.Trim().ToLower())) ||
+                        (x.UserInfor.EmailAddress.Trim().ToLower().Contains(input.SearchText.Trim().ToLower())) ||
+                        (x.Project.ProjectName.Trim().ToLower().Contains(input.SearchText.Trim().ToLower())))
+                    .WhereIf(input.ChargeStatus == ChargeStatus.IsCharge, x => x.Project.isActive == true)
+                    .WhereIf(input.ChargeStatus == ChargeStatus.IsNotCharge, x => x.Project.isActive == false)
+                    .AsEnumerable().GroupBy(p => p.UserInfor.UserId)
+                    .Select(group => new BillInfoDto
+                    {
+                        UserInfor = group.First().UserInfor,
+                        Projects = group.Select(g => g.Project).ToList()
+                    })
+                    .Where(x => x.Projects.Any(x => (
+                        input.StartDate <= x.EndTime && x.EndTime <= input.EndDate
+                        || input.StartDate <= x.StartTime && x.StartTime <= input.EndDate)))
+                    .WhereIf(input.JoinOutStatus == JoinOutStatus.IsJoin,
+                        x => x.Projects.Any(x => (input.StartDate <= x.StartTime && x.StartTime <= input.EndDate)))
+                    .WhereIf(input.JoinOutStatus == JoinOutStatus.IsOut,
+                        x => x.Projects.Any(x => (input.StartDate <= x.EndTime && x.EndTime <= input.EndDate))).AsQueryable();
+            return projectUserBills.GetGridResultSync(projectUserBills, input.GirdParam);
         }
 
         /// <summary>
@@ -261,7 +338,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                 input.Note = projectUserBill.Note;
             }
             var entity = ObjectMapper.Map(input, projectUserBill);
-            
+
             await WorkScope.UpdateAsync(entity);
 
             await this.timesheetManager.UpdateTimesheetProjectBill(entity);
@@ -319,14 +396,14 @@ namespace ProjectManagement.APIs.ProjectUserBills
                     ProjectName = x.Name,
                     ParentId = x.ParentInvoiceId,
                     ParentName = x.ParentInvoiceId.HasValue ?
-                        listProjectAll.FirstOrDefault(pa=>pa.ProjectId==x.ParentInvoiceId.Value).Name : null,
+                        listProjectAll.FirstOrDefault(pa => pa.ProjectId == x.ParentInvoiceId.Value).Name : null,
                 }).ToList();
         }
         [HttpGet]
         public async Task<ParentInvoiceDto> GetParentInvoiceByProject(long projectId)
         {
             var listProjectAll = GetAllProject();
-            return  listProjectAll
+            return listProjectAll
                 .Where(s => s.ProjectId == projectId)
                 .Select(s => new ParentInvoiceDto
                 {
@@ -363,7 +440,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
                 subProject.ParentInvoiceId = null;
                 listProject.Add(subProject);
             }
-            foreach(var projectId in input.SubInvoiceIds)
+            foreach (var projectId in input.SubInvoiceIds)
             {
                 var subInvoice = await WorkScope.GetAsync<Project>(projectId);
                 subInvoice.ParentInvoiceId = input.ParentInvoiceId;
@@ -402,7 +479,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
 
                 if (input.SubProjectIds != null && !input.SubProjectIds.IsEmpty())
                 {
-                    
+
                     var subProjects = WorkScope.GetAll<Project>().Where(s => input.SubProjectIds.Contains(s.Id)).ToList();
                     subProjects.ForEach(p =>
                     {
@@ -424,7 +501,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
             }
 
             CurrentUnitOfWork.SaveChanges();
-                     
+
         }
 
         [HttpGet]
@@ -437,7 +514,7 @@ namespace ProjectManagement.APIs.ProjectUserBills
              .ToList();
 
             var sb = new StringBuilder();
-            foreach(var project in listProject)
+            foreach (var project in listProject)
             {
                 if (project.ParentInvoiceId.HasValue)
                 {

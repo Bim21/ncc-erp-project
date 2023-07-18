@@ -581,6 +581,8 @@ namespace ProjectManagement.Authorization
         public const string Resource_TabVendor_CancelAnyPlan = "Resource.TabVendor.CancelAnyPlan";
         public const string Resource_TabVendor_UpdateSkill = "Resource.TabVendor.UpdateSkill";
         public const string Resource_TabVendor_ProjectDetail = "Resource.TabVendor.ProjectDetail";
+
+        public const string Resource_TabPlanningBillAcccount = "Resource.TabPlanning.BillAccount";
         #endregion Resource
 
         #region Timesheet
@@ -1249,6 +1251,8 @@ namespace ProjectManagement.Authorization
                     PermissionNames.Resource_TabVendor_CancelAnyPlan ,
                     PermissionNames.Resource_TabVendor_UpdateSkill ,
                     PermissionNames.Resource_TabVendor_ProjectDetail,
+
+                    PermissionNames.Resource_TabPlanningBillAcccount,
 
                     #endregion Resource
 
@@ -1935,6 +1939,7 @@ namespace ProjectManagement.Authorization
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_UpdateSkill ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Update Skill"},
                  new SystemPermission{ Name =  PermissionNames.Resource_TabVendor_ProjectDetail ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"},
 
+                 new SystemPermission{ Name =  PermissionNames.Resource_TabPlanningBillAcccount ,MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Planning Bill Account"},
                  #endregion Resource
 
                  #region Timesheet
@@ -3570,6 +3575,10 @@ namespace ProjectManagement.Authorization
                                             Name = PermissionNames.Resource_TabVendor_ProjectDetail, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Project Detail"
                                         },
                                     },
+                            },
+                            // Tab Planning Bill Account
+                            new SystemPermission {
+                                Name = PermissionNames.Resource_TabPlanningBillAcccount, MultiTenancySides = MultiTenancySides.Host | MultiTenancySides.Tenant, DisplayName = "Tab Planning Bill Account",
                             },
                         }
                 },

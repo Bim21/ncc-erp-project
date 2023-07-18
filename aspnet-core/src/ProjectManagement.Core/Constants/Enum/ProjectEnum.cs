@@ -325,5 +325,18 @@
             Proficient = 4,
             Expert = 5
         }
+        public enum JoinOutStatus
+        {
+            All = 1,
+            IsJoin = 2,
+            IsOut = 3
+        }
+        
+        public enum ChargeStatus
+        {
+            All = 1,
+            IsCharge = 2,
+            IsNotCharge = 3
+        }
     }
 }
