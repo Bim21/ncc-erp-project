@@ -97,7 +97,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
 
     this.projectName = this.route.snapshot.queryParamMap.get("projectName")
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
-    this.projectType = this.route.snapshot.queryParamMap.get("projectType")
+
 
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
@@ -105,9 +105,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
     this.currentUrl = this.router.url
     if (this.currentUrl.includes("weeklyReportTabDetail")) {
       this.reportId = this.route.snapshot.queryParamMap.get("id")
-      this.filterSort = this.reportService.filterSort.getValue();
-      this.filterReviewNeed = this.reportService.filterReviewNeed.getValue();
-      this.projectType = this.reportService.projectType.getValue()
       this.isShowReportBar = true
       this.getPmReportList();
       this._layoutStore.setSidebarExpanded(true);
@@ -131,7 +128,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
           }
           else {
             this.isShowReportBar = false;
-            this.projectType = this.reportService.projectType.getValue();
             // this.reportService.changeProjectType("OUTSOURCING")
           }
           if(this.isShowReportBar){
