@@ -61,6 +61,7 @@ namespace ProjectManagement.APIs.Projects
             bool isViewAll = await PermissionChecker.IsGrantedAsync(PermissionNames.Projects_OutsourcingProjects_ViewAllProject);
             bool hasViewBillPermission = PermissionChecker.IsGranted(PermissionNames.Projects_OutsourcingProjects_ViewBillInfo);
             bool hasViewBillAccountPermission = PermissionChecker.IsGranted(PermissionNames.Projects_OutsourcingProjects_ViewBillAccount);
+            bool hasViewRequireWRPermission = PermissionChecker.IsGranted(PermissionNames.Projects_OutsourcingProjects_ViewRequireWeeklyReport);
 
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
@@ -114,7 +115,7 @@ namespace ProjectManagement.APIs.Projects
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
                             RequireTimesheetFile = p.RequireTimesheetFile,
-                            IsRequiredWeeklyReport = p.IsRequiredWeeklyReport,
+                            IsRequiredWeeklyReport = hasViewRequireWRPermission ? p.IsRequiredWeeklyReport : default(bool?),
                             BillInfo = hasViewBillPermission || hasViewBillAccountPermission ? WorkScope.GetAll<ProjectUserBill>()
                             .Where(b => b.ProjectId == p.Id)
                             .Where(b => b.isActive)
@@ -122,7 +123,7 @@ namespace ProjectManagement.APIs.Projects
                                     .Select(b => new GetBillInfoDto
                                     {
                                         BillRole = b.BillRole,
-                                        BillRate = hasViewBillPermission ? b.BillRate : float.NaN ,
+                                        BillRate = hasViewBillPermission ? b.BillRate : float.NaN,
                                         StartTime = b.StartTime,
                                         EndTime = b.EndTime.Value,
                                         isActive = b.isActive,
@@ -599,6 +600,7 @@ namespace ProjectManagement.APIs.Projects
         {
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
+            bool hasViewRequireWRPermission = PermissionChecker.IsGranted(PermissionNames.Projects_TrainingProjects_ViewRequireWeeklyReport);
             int valueStatus = -1;
             if (filterStatus != null)
             {
@@ -642,7 +644,7 @@ namespace ProjectManagement.APIs.Projects
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
                             Evaluation = l.Note,
-                            IsRequiredWeeklyReport = p.IsRequiredWeeklyReport
+                            IsRequiredWeeklyReport = hasViewRequireWRPermission ? p.IsRequiredWeeklyReport : default(bool?)
                         };
             return await query.GetGridResult(query, input);
         }
@@ -785,6 +787,7 @@ namespace ProjectManagement.APIs.Projects
         {
             var filterStatus = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "status") : null;
             var filterPmId = input.FilterItems != null ? input.FilterItems.FirstOrDefault(x => x.PropertyName == "pmId" && Convert.ToInt64(x.Value) == -1) : null;
+            bool hasViewRequireWRPermission = PermissionChecker.IsGranted(PermissionNames.Projects_ProductProjects_ViewRequireWeeklyReport);
             int valueStatus = -1;
             if (filterStatus != null)
             {
@@ -826,7 +829,7 @@ namespace ProjectManagement.APIs.Projects
                             IsSent = l.Status,
                             TimeSendReport = l.TimeSendReport,
                             DateSendReport = l.TimeSendReport.Value.Date,
-                            IsRequiredWeeklyReport = p.IsRequiredWeeklyReport
+                            IsRequiredWeeklyReport = hasViewRequireWRPermission ? p.IsRequiredWeeklyReport : default(bool?),
                         };
             return await query.GetGridResult(query, input);
         }

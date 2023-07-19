@@ -47,83 +47,82 @@ namespace ProjectManagement.APIs.PMReportProjects
         [AbpAuthorize(PermissionNames.WeeklyReport_ReportDetail)]
         public async Task<List<GetPMReportProjectDto>> GetAllByPmReport(long pmReportId, WeeklyReportSort sort, PrioritizeReviewSort sortReview, ProjectHealth? health, string projectType = "OUTSOURCING")
         {
-                var query = WorkScope.GetAll<PMReportProject>()
-                    .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill && x.Project.IsRequiredWeeklyReport)
-                    .WhereIf(health.HasValue, x => x.ProjectHealth == health.Value)
-                    .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
-                    .WhereIf(projectType == "TRAINING", x => x.Project.ProjectType == ProjectType.TRAINING)
-                    .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT)
-                    .Select(x => new GetPMReportProjectDto
-                    {
-                        Id = x.Id,
-                        PMReportId = x.PMReportId,
-                        PMReportName = x.PMReport.Name,
-                        ProjectId = x.ProjectId,
-                        ProjectName = x.Project.Name,
-                        ProjectCode = x.Project.Code,
-                        Status = x.Status.ToString(),
-                        StatusEnum = x.Status,
-                        ProjectHealthEnum = x.ProjectHealth,
-                        PMId = x.PMId,
-                        PmName = x.PM.Name,
-                        Note = x.Note,
-                        AutomationNote = x.AutomationNote,
-                        PmBranch = x.PM.BranchOld,
-                        PmEmailAddress = x.PM.EmailAddress,
-                        PmAvatarPath = x.PM.AvatarPath,
-                        PmFullName = x.PM.Name + " " + x.PM.Surname,
-                        PmUserName = x.PM.UserName,
-                        PmUserType = x.PM.UserType,
-                        Seen = x.Seen,
-                        TotalNormalWorkingTime = x.TotalNormalWorkingTime,
-                        TotalOverTime = x.TotalOverTime,
-                        LastReviewDate = x.LastReviewDate,
-                        NecessaryReview = x.NecessaryReview,
-                        IsActive = x.PMReport.IsActive,
-                        ClientCode = x.Project.Client.Code,
-                    });
-
-                switch (sort)
+            var query = WorkScope.GetAll<PMReportProject>()
+                .Where(x => x.PMReportId == pmReportId && x.Project.ProjectType != ProjectType.NoBill && x.Project.IsRequiredWeeklyReport)
+                .WhereIf(health.HasValue, x => x.ProjectHealth == health.Value)
+                .WhereIf(projectType == "PRODUCT", x => x.Project.ProjectType == ProjectType.PRODUCT)
+                .WhereIf(projectType == "TRAINING", x => x.Project.ProjectType == ProjectType.TRAINING)
+                .WhereIf(projectType == "OUTSOURCING", x => x.Project.ProjectType != ProjectType.TRAINING && x.Project.ProjectType != ProjectType.PRODUCT)
+                .Select(x => new GetPMReportProjectDto
                 {
-                    case WeeklyReportSort.No_Order:
-                        //do nothing
-                        query = query.OrderBy(q => true);
-                        break;
-                    case WeeklyReportSort.Draft_Green_Yellow_Red:
-                        query = query.OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum);
-                        break;
+                    Id = x.Id,
+                    PMReportId = x.PMReportId,
+                    PMReportName = x.PMReport.Name,
+                    ProjectId = x.ProjectId,
+                    ProjectName = x.Project.Name,
+                    ProjectCode = x.Project.Code,
+                    Status = x.Status.ToString(),
+                    StatusEnum = x.Status,
+                    ProjectHealthEnum = x.ProjectHealth,
+                    PMId = x.PMId,
+                    PmName = x.PM.Name,
+                    Note = x.Note,
+                    AutomationNote = x.AutomationNote,
+                    PmBranch = x.PM.BranchOld,
+                    PmEmailAddress = x.PM.EmailAddress,
+                    PmAvatarPath = x.PM.AvatarPath,
+                    PmFullName = x.PM.Name + " " + x.PM.Surname,
+                    PmUserName = x.PM.UserName,
+                    PmUserType = x.PM.UserType,
+                    Seen = x.Seen,
+                    TotalNormalWorkingTime = x.TotalNormalWorkingTime,
+                    TotalOverTime = x.TotalOverTime,
+                    LastReviewDate = x.LastReviewDate,
+                    NecessaryReview = x.NecessaryReview,
+                    IsActive = x.PMReport.IsActive,
+                    ClientCode = x.Project.Client.Code,
+                });
 
-                    case WeeklyReportSort.Draft_Red_Yellow_Green:
-                        query = query.OrderBy(x => x.StatusEnum).ThenByDescending(x => x.ProjectHealthEnum);
-                        break;
+            switch (sort)
+            {
+                case WeeklyReportSort.No_Order:
+                    //do nothing
+                    query = query.OrderBy(q => true);
+                    break;
+                case WeeklyReportSort.Draft_Green_Yellow_Red:
+                    query = query.OrderBy(x => x.StatusEnum).ThenBy(x => x.ProjectHealthEnum);
+                    break;
 
-                    case WeeklyReportSort.Latest_Review_Last:
-                        query = query.OrderBy(x => x.LastReviewDate);
-                        break;
-                }
+                case WeeklyReportSort.Draft_Red_Yellow_Green:
+                    query = query.OrderBy(x => x.StatusEnum).ThenByDescending(x => x.ProjectHealthEnum);
+                    break;
 
-                switch (sortReview)
-                {
-                    case PrioritizeReviewSort.All:
-                        // do nothing
-                        break;
+                case WeeklyReportSort.Latest_Review_Last:
+                    query = query.OrderBy(x => x.LastReviewDate);
+                    break;
+            }
+            query = ((IOrderedQueryable<GetPMReportProjectDto>)query).ThenBy(q => q.PmEmailAddress).ThenBy(p => p.ProjectName);
+            switch (sortReview)
+            {
+                case PrioritizeReviewSort.All:
+                    // do nothing
+                    break;
 
-                    case PrioritizeReviewSort.Nothing:
-                        query = query.Where(x => x.NecessaryReview == false && x.Seen == false);
-                        break;
+                case PrioritizeReviewSort.Nothing:
+                    query = query.Where(x => x.NecessaryReview == false && x.Seen == false);
+                    break;
 
-                    case PrioritizeReviewSort.Need_Review:
-                        query = query.Where(x => x.NecessaryReview == true);
-                        break;
+                case PrioritizeReviewSort.Need_Review:
+                    query = query.Where(x => x.NecessaryReview == true);
+                    break;
 
-                    case PrioritizeReviewSort.Reviewed:
-                        query = query.Where(x => x.Seen == true);
-                        break;
-                }
-                query = ((IOrderedQueryable<GetPMReportProjectDto>)query).ThenBy(q => q.PmEmailAddress).ThenBy(p => p.ProjectName);
-                var list = (query.AsEnumerable())
-                    .Select(x => { x.PmEmailAddress = UserHelper.GetUserName(x.PmEmailAddress); return x; });
-                return list.ToList();
+                case PrioritizeReviewSort.Reviewed:
+                    query = query.Where(x => x.Seen == true);
+                    break;
+            }
+            var list = (query.AsEnumerable())
+                .Select(x => { x.PmEmailAddress = UserHelper.GetUserName(x.PmEmailAddress); return x; });
+            return list.ToList();
         }
 
         private List<GetPMReportProjectDto> shuffleList(List<GetPMReportProjectDto> list)
