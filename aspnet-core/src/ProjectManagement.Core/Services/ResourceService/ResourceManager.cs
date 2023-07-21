@@ -9,6 +9,7 @@ using NccCore.Extension;
 using NccCore.IoC;
 using NccCore.Paging;
 using NccCore.Uitls;
+using ProjectManagement.Authorization;
 using ProjectManagement.Authorization.Users;
 using ProjectManagement.Configuration;
 using ProjectManagement.Constants;
@@ -744,6 +745,18 @@ namespace ProjectManagement.Services.ResourceManager
 
         public async Task<IQueryable<GetAllResourceDto>> QueryAllResource(InputGetResourceDto input, bool isVendor)
         {
+
+
+            // get current user and view user level permission
+            // if user level = intern => all show no matter the permission
+            var listLoginUserPM = _workScope.GetAll<ProjectUser>()
+                .Where(pu => pu.Project.Status != ProjectStatus.Closed
+                    && (pu.Status == ProjectUserStatus.Present && pu.AllocatePercentage > 0
+                    || pu.Status == ProjectUserStatus.Future))
+                .Where(pu => pu.UserId == AbpSession.UserId.GetValueOrDefault() && pu.ProjectRole == 0 || pu.Project.PMId == AbpSession.UserId.GetValueOrDefault()
+                    ).Select(pu => pu.Id);
+            var hasViewUserLevelPermission = PermissionChecker.IsGranted(PermissionNames.Resource_ViewUserLevel);
+
             var activeReportId = await GetActiveReportId();
             var quser = _workScope.GetAll<User>()
                        .Where(x => x.IsActive)
@@ -766,7 +779,10 @@ namespace ProjectManagement.Services.ResourceManager
                            PositionId = x.PositionId,
                            PositionColor = x.Position.Color,
                            PositionName = x.Position.ShortName,
-                           UserLevel = x.UserLevel,
+                           UserLevel = hasViewUserLevelPermission || x.UserLevel >= UserLevel.Intern_0
+                                && x.UserLevel <= UserLevel.Intern_3 ? x.UserLevel :
+                                _workScope.GetAll<ProjectUser>().Any(pu => pu.UserId == x.Id
+                                && listLoginUserPM.Contains(pu.Id)) ? x.UserLevel : default(UserLevel?),
                            AvatarPath = x.AvatarPath,
                            StarRate = x.StarRate,
                            UserSkills = x.UserSkills.Select(s => new UserSkillDto
@@ -891,6 +907,17 @@ namespace ProjectManagement.Services.ResourceManager
 
         public async Task<GridResult<GetAllPoolResourceDto>> GetAllPoolResource(InputGetResourceDto input)
         {
+
+            // get current user and view user level permission
+            // if user level = intern => all show no matter the permission
+            var listLoginUserPM = _workScope.GetAll<ProjectUser>()
+                .Where(pu => pu.Project.Status != ProjectStatus.Closed
+                    && (pu.Status == ProjectUserStatus.Present && pu.AllocatePercentage > 0
+                    || pu.Status == ProjectUserStatus.Future))
+                .Where(pu => pu.UserId == AbpSession.UserId.GetValueOrDefault() && pu.ProjectRole == 0 || pu.Project.PMId == AbpSession.UserId.GetValueOrDefault()
+                    ).Select(pu => pu.Id);
+            var hasViewUserLevelPermission = PermissionChecker.IsGranted(PermissionNames.Resource_ViewUserLevel);
+
             var now = DateTimeUtils.GetNow().Date;
             var activeReportId = await GetActiveReportId();
 
@@ -918,7 +945,10 @@ namespace ProjectManagement.Services.ResourceManager
                            BranchId = u.BranchId,
                            BranchColor = u.Branch.Color,
                            BranchDisplayName = u.Branch.DisplayName,
-                           UserLevel = u.UserLevel,
+                           UserLevel = hasViewUserLevelPermission || u.UserLevel >= UserLevel.Intern_0
+                                && u.UserLevel <= UserLevel.Intern_3 ? u.UserLevel : _workScope.GetAll<ProjectUser>()
+                                .Any(pu => pu.UserId == u.Id && listLoginUserPM.Contains(pu.Id))
+                                ? u.UserLevel : default(UserLevel?),
                            PositionId = u.PositionId,
                            PositionColor = u.Position.Color,
                            PositionName = u.Position.ShortName,

@@ -512,6 +512,7 @@ export const PERMISSIONS_CONSTANT = {
 
        // #region Resource
        Resource: "Resource",
+       Resource_ViewUserLevel:"Resource.ViewUserLevel",
        Resource_TabPool: "Resource.TabPool",
        Resource_TabPool_View: "Resource.TabPool.View",
        Resource_TabPool_ViewHistory: "Resource.TabPool.ViewHistory",
