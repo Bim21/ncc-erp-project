@@ -42,6 +42,7 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   pmReportProjectId:string
   public searchPmReport: string ="";
   public selectedNumberStatus: number;
+
   projectType = this.reportService.projectType.getValue();
 
   projectTypeList = [
@@ -88,7 +89,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
   }
 
   ngOnInit(): void {
-
     this.projectInfo.projectName = this.route.snapshot.queryParamMap.get("name")
     this.projectInfo.clientName = this.route.snapshot.queryParamMap.get("client")
     this.projectInfo.clientCode = this.route.snapshot.queryParamMap.get("clientCode")
@@ -97,7 +97,6 @@ export class HeaderLeftNavbarComponent extends AppComponentBase implements OnIni
 
     this.projectName = this.route.snapshot.queryParamMap.get("projectName")
     this.projectCode = this.route.snapshot.queryParamMap.get("projectCode")
-
 
     this._layoutStore.sidebarExpanded.subscribe((value) => {
       this.sidebarExpanded = value;
