@@ -628,7 +628,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="break-word" *ngIf="!item.editMode"  [innerHTML]="item.note| safeHtml"></div>
+                                        <div class="break-word" *ngIf="!item.editMode" [innerHTML]="item.note| safeHtml"></div>
                                         <div *ngIf="item.editMode && isActive">
                                             <editor
                                             id=""
@@ -653,8 +653,7 @@
                                                 </span>
                                                 <span class="m-2 overflow-auto d-flex">
                                                     <strong>{{oldWeeklyReport.pmReportName}}: </strong>
-                                                    <span PrjResizeContent 
-                                                        class="mb-0 p-0  ml-2"  [innerHTML]="getOldNote(item) | safeHtml"></span>
+                                                    <span class="mb-0 p-0  ml-2" [innerHTML]="getOldNote(item) | safeHtml"></span>
                                                 </span>
                                             </div>
                                         </div>
@@ -711,7 +710,7 @@
                                             <div class="d-flex align-items-baseline">
                                                 <span class="m-2 overflow-auto">
                                                     <strong>{{oldWeeklyReport.pmReportName}}: </strong>
-                                                    <span  [innerHTML]="oldWeeklyReport.note| safeHtml "></span> 
+                                                    <span  [innerHTML]="oldWeeklyReport.note| safeHtml "></span>
                                                 </span>
                                             </div>
                                         </div>
