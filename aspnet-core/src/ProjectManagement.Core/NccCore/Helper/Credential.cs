@@ -46,12 +46,6 @@ namespace NccCore.Helper
                 userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     //GoogleClientSecrets.Load(stream).Secrets,
                     new ClientSecrets
-                    {
-                        *//* ClientId= "314651631994-hlaeiklrcejuvc62n15k7tnsds6iemn9.apps.googleusercontent.com",
-                         ClientSecret= "JGrvfB5zBvT47A0o7Z-tm61T"*//*
-                        ClientId = settingManager.GetSettingValueForApplication(AppSettingNames.ClientId),
-                        ClientSecret = settingManager.GetSettingValueForApplication(AppSettingNames.ClientSecretId),
-                    },
                     Scopes,
                     $"{user}",
                     CancellationToken.None,
